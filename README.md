@@ -1,7 +1,7 @@
 ## Broadband Forum YANG Modules
 
 ### 2017-03-13: [TR-355c1](https://www.broadband-forum.org/technical/download/TR-355_Corrigendum-1.pdf) YANG Modules for FTTdp Management
-*Tag: [v1.0.1-TR-355c1](../browse?at=refs%2Ftags%2Fv1.0.0-TR-355c1)*
+*Tag: [v1.0.1-TR-355c1](../browse?at=refs%2Ftags%2Fv1.0.1-TR-355c1)*
 
 Various corrections to existing modules and sub-modules. Some of these corrections are not fully backwards compatible.
 
