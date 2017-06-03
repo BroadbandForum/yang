@@ -1,11 +1,12 @@
 module bbf-yang-types {
   yang-version 1.1;
+
   namespace "urn:bbf:yang:bbf-yang-types";
   prefix bbf-yang;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Project Stream";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
@@ -14,24 +15,26 @@ module bbf-yang-types {
      Editor:      Joey Boyd, ADTRAN
                   <mailto:joey.boyd@adtran.com>
 
-     Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
+     Editor:      Ludwig Pauwels, Nokia
+                  <mailto:ludwig.pauwels@nokia.com>
 
-     Editor:      William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>
+     PS Leader:   Michael Shaffer, Nokia
+                  <mailto:michael.shaffer@nokia.com>
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
-
-     WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+     PS Leader:   William Lupton, Broadband Forum
+                  <mailto:wlupton@broadband-forum.org>";
 
   description
-    "This module contains a collection of YANG definitions for
-     common types used throughout BBF defined models.
+    "This module contains a collection of YANG definitions for 
+     supporting the Broadband Forum requirements on reusable data
+     types as applicable to access network equipment. As such, this 
+     module is specific to access network equipment (e.g., 
+     BBF-specified Access Nodes and FTTdp DPUs).
 
-     Copyright (c) 2016, Broadband Forum
-     All rights reserved.
+     Specifically, this module defines common types used throughout 
+     BBF data models.
+
+     Copyright (c) 2017, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -71,9 +74,19 @@ module bbf-yang-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355; see
+     This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2017-05-08 {
+    description
+      "Initial revision.
+       * Approval Date:    see revision date above.
+       * Publication Date: 2017-06-02.";
+    reference
+      "TR-383: Common YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-383.pdf>";
+  }
   revision 2016-07-18 {
     description
       "Initial revision.
@@ -85,13 +98,31 @@ module bbf-yang-types {
                         TR-355.pdf>";
   }
 
+  typedef name-string {
+    type string {
+      length "1..64";
+    }
+    description
+      "Used where a string is needed which has a maximum length of 
+       64 characters and a minimum length of 1 character.";
+  }
+
+  typedef percent {
+    type uint8 {
+      range "0..100";
+    }
+    description
+      "A percentage.";
+  }
+
   typedef performance-counter32 {
     type uint32;
     description
       "A performance-counter32 type represents a non-negative
-       integer which may increase but shall never exceed a maximum
+       integer which may increase but MUST never exceed a maximum
        value.  The maximum value can not be greater than 2^32-1
        (4294967295 decimal).
+
        The value of a performance-counter32 has its maximum value
        whenever the information being modeled is greater than or
        equal to its maximum value.";
@@ -110,7 +141,7 @@ module bbf-yang-types {
     }
     description
       "A performance-counter32-or-inactive type represents a 
-       non-negative integer which may increase but shall never
+       non-negative integer which may increase but MUST never
        exceed a maximum value.  The maximum value can not be 
        greater than 2^32-1 (4294967295 decimal).
        The value of a performance-counter32-or-inactive has its
@@ -120,9 +151,42 @@ module bbf-yang-types {
        is not active on the line.";
   }
 
+  typedef performance-counter64 {
+    type uint64;
+    description
+      "A performance-counter64 type represents a non-negative
+       integer which may increase but MUST never exceed a maximum
+       value.  The maximum value can not be greater than 2^64-1.
+       The value of a performance-counter64 has its maximum value
+       whenever the information being modeled is greater than or
+       equal to its maximum value.";
+  }
+
+  typedef string-ascii63-or-empty {
+    type string {
+      length "0..63";
+      pattern '[ -~]*'; // allows the 95 printable ASCII characters
+    }
+    description
+      "Used where a string is needed which has a maximum length of 
+       63 characters and also allows for a null string (length = 0).
+       The character set is limited to the 95 printable ascii 
+       characters as defined in https://en.wikipedia.org/wiki/ASCII.";
+  }
+
   typedef string-ascii64 {
     type string {
       length "1..64";
+      pattern '[ -~]*';
+    }
+    description
+      "Used where a string is represented using at least 1 and no more
+       than 64 ASCII characters.";
+  }
+
+  typedef string-ascii64-or-empty {
+    type string {
+      length "0..64";
       pattern '[ -~]*';
     }
     description

@@ -1,5 +1,25 @@
 ## Broadband Forum YANG Modules
 
+### 2017-05-08: [TR-383](https://www.broadband-forum.org/technical/download/TR-383.pdf): Common YANG Modules for Access Networks
+*Tags: [v2.0.0-TR-383](https://github.com/BroadbandForum/yang/tree/v2.0.0-TR-383)*
+
+TR-383 defines YANG data models for the management of Broadband Forum specified access network equipment used across many deployment scenarios. Broadband Forum-specified access network equipment comprises Access Nodes and FTTdp DPUs. There is no assumption for BBF YANG modules to apply globally, e.g. to apply to access network equipment other than BBF Access Nodes and FTTdp DPUs, or to apply to core network equipment.
+
+TR-383 YANG data models cover the following common areas (see [TR-383](https://www.broadband-forum.org/technical/download/TR-383.pdf) for a full listing of modules and submodules):
+
+* DHCP
+* Equipment
+* Ethernet
+* Layer 2 forwarding
+* Interfaces
+* PPPoE
+* QoS
+* Sub-interfaces
+* Subscribers
+* Types
+
+Where appropriate, these YANG modules augment IETF YANG modules.
+
 ### 2017-05-05: [WT-385_draft1]: ITU-T PON YANG Modules
 *Tags: [v2.0.0-WT-383-draft1](https://github.com/BroadbandForum/yang/tree/v2.0.0-WT-383-draft1), [v3.0.0-WT-385-draft1](https://github.com/BroadbandForum/yang/tree/v3.0.0-WT-385-draft1)*
 
