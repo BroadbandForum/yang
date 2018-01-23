@@ -4,33 +4,37 @@ submodule bbf-selt-processing-derived-parameter-body {
     prefix bbf-selt;
   }
 
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+
   include bbf-selt-pmd-measurement-parameter-body;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
                   <mailto:kkerpez@assia-inc.com>
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     Editor:      Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+                  <mailto:sven.ooghe@nokia.com>
+
+     WA Director: Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>";
 
   description
     "This submodule contains a collection of YANG definitions for
      SELT-P derived parameters.
 
-     Copyright (c) 2016, 2017 Broadband Forum
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +74,19 @@ submodule bbf-selt-processing-derived-parameter-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c1; see
+     This version of this YANG module is part of TR-355c2; see
      the TR itself for full legal notices.";
 
+  revision 2017-11-27 {
+    description
+      "Corrigendum 2 (fixes to the previous revision).
+       * Approval Date:    see revision date above.
+       * Publication Date: 2018-01-19.";
+    reference
+      "TR-355c2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Corrigendum_2.pdf>";
+  }
   revision 2017-03-13 {
     description
       "Corrigendum 1 (fixes to the initial revision).
@@ -116,7 +130,7 @@ submodule bbf-selt-processing-derived-parameter-body {
        upstream directions";
 
     leaf capacity-estimate {
-      type boolean;
+      type bbf-yang:data-rate32;
       description
         "This parameter represents a best-effort estimate of the 
          achievable net data rate (in kbit/s) on the loop under test,
@@ -256,7 +270,7 @@ submodule bbf-selt-processing-derived-parameter-body {
          as delimited by either a loop termination, or the presence 
          of a bridged tap.
 
-         NOTE 1 – Two cables with different gauges/cable-types 
+         NOTE 1 - Two cables with different gauges/cable-types 
                   connected in series are considered as a single loop
                   segment.
 
@@ -273,7 +287,7 @@ submodule bbf-selt-processing-derived-parameter-body {
             represent bridged taps, each branching off from the main 
             loop at the same point.
 
-         NOTE 2 – Identification of a bridged tap branching off on a 
+         NOTE 2 - Identification of a bridged tap branching off on a 
                   bridged tap is not supported by this parameter.
                   A single loop segment is specified with two 
                   sub-parameters: loop segment length (see clause 
@@ -297,7 +311,7 @@ submodule bbf-selt-processing-derived-parameter-body {
           "The attenuation characteristics group size (TFlog_G) is a 
            reported parameter identifying the attenuation 
            characteristics, TFlog(f), at a frequency spacing equal to 
-           TFlog_G × Df with Df = 4.3125 kHz. TFlog_G has three valid 
+           TFlog_G x Df with Df = 4.3125 kHz. TFlog_G has three valid 
            values: 1, 2, and 12. The attenuation characteristics group
            size needs only to be reported if the option for extended 
            bandwidth SELT is applied.";
@@ -325,7 +339,7 @@ submodule bbf-selt-processing-derived-parameter-body {
          The function TFlog(f) consists of an array of values 
          TFlog(i * TFlog_G * Df), with Df = 4.3125 kHz. 
 
-         NOTE – In the case where the instantiation of the LT unit is
+         NOTE - In the case where the instantiation of the LT unit is
                 the same as the instantiation of the xTU transceiver 
                 unit, this value may be independent of the subcarrier
                 spacing used for the xDSL DMT modulation.
@@ -342,7 +356,7 @@ submodule bbf-selt-processing-derived-parameter-body {
            4.3125 kHz, 8.625 kHz, or 51.75 kHz respectively. 
 
          The range of valid values for TFlog(i * Df) is from +6.0 dB 
-         down to –96.2 dB, with a granularity of 0.1 dB (represented
+         down to -96.2 dB, with a granularity of 0.1 dB (represented
          as values 0 to 1022). A special value, 1023, is used to 
          indicate that no measurement could be done for this 
          subcarrier because the attenuation is out of the range that 

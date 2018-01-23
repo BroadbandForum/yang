@@ -6,30 +6,30 @@ submodule bbf-vdsl-xtu-line-threshold-profile-body {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
                   <mailto:kkerpez@assia-inc.com>
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     Editor:      Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+                  <mailto:sven.ooghe@nokia.com>
+
+     WA Director: Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>";
 
   description
     "This submodule contains a collection of YANG definitions for 
      managing Broadband Forum TR-252i3 clause 8.1 xDSL Line Threshold
      Template.
 
-     Copyright (c) 2016, 2017 Broadband Forum
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -69,9 +69,19 @@ submodule bbf-vdsl-xtu-line-threshold-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c1; see
+     This version of this YANG module is part of TR-355c2; see
      the TR itself for full legal notices.";
 
+  revision 2017-11-27 {
+    description
+      "Corrigendum 2 (fixes to the previous revision).
+       * Approval Date:    see revision date above.
+       * Publication Date: 2018-01-19.";
+    reference
+      "TR-355c2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Corrigendum_2.pdf>";
+  }
   revision 2017-03-13 {
     description
       "Corrigendum 1 (fixes to the initial revision).
@@ -198,7 +208,8 @@ submodule bbf-vdsl-xtu-line-threshold-profile-body {
          leftr defect (see clause 11.1.12 of ITU-T G.998.4)
          for the definition of this threshold). 
          The value is coded as a fraction of the NDR with valid
-         range from 0.01 to 0.99 in increments of 0.01. 
+         range from 0.00 to 0.99 in increments of 0.01.
+         The value 0.00 implies no leftr-defects are declared. 
          A special value of (enum etr-default-threshold) means the
          ETR shall be used as the default threshold for declaring a
          leftr defect.";

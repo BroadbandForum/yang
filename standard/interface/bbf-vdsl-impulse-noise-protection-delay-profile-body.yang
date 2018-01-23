@@ -6,30 +6,30 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
                   <mailto:kkerpez@assia-inc.com>
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     Editor:      Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+                  <mailto:sven.ooghe@nokia.com>
+
+     WA Director: Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>";
 
   description
     "This submodule contains a collection of YANG definitions for 
      managing Broadband Forum TR-252i3 clause 5.7 DSL Quality 
      Management related profiles; INP-Delay Profile.
 
-     Copyright (c) 2016, 2017 Broadband Forum
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -69,9 +69,19 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c1; see
+     This version of this YANG module is part of TR-355c2; see
      the TR itself for full legal notices.";
 
+  revision 2017-11-27 {
+    description
+      "Corrigendum 2 (fixes to the previous revision).
+       * Approval Date:    see revision date above.
+       * Publication Date: 2018-01-19.";
+    reference
+      "TR-355c2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Corrigendum_2.pdf>";
+  }
   revision 2017-03-13 {
     description
       "Corrigendum 1 (fixes to the initial revision).
@@ -302,7 +312,7 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
       description
         "If retransmission is used in a given transmit direction,
          this parameter specifies the SHINE ratio (see [ITU-T
-         G.998.4] for detailed definition). The values range from
+         G.998.4] for detailed definition). The values range from 0
          to 0.100 in increments of 0.001.";
       reference
         "ITU-T G.997.1 clause 7.3.2.15 SHINERATIO_RTX";
@@ -430,6 +440,13 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
          policy selection (CIPOLICY) and ITU-T G.993.2
          clause 12.3.7 Channel initialization policies.";
     }
+  } // end grouping impulse-noise-protection-delay-profile
+
+  grouping impulse-noise-protection-delay-profile-downstream {
+
+    description
+      "The INP-Delay profile contains INP-Delay parameters
+       for each downstream channel.";
 
     leaf mdosplit {
       type union {
@@ -490,8 +507,8 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
       }
       default "0";
       description
-        "This parameter specifies the method to be used for the
-         calculation of the ATTNDR in the downstream and upstream
+        "This downstream parameter specifies the method to be used for
+         the calculation of the ATTNDR in the downstream and upstream
          direction. The parameter can take three values 0, 1 and
          2. For detailed definition see ITU-T G.993.2 clause
          11.4.1.1.7. The default is enum 0, corresponding to
@@ -533,5 +550,132 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
         "ITU-T G.997.1 clause 7.3.1.15.2 ATTNDR
          MAXDELAYOCTET-split parameter (ATTNDR_MDOSPLIT)";
     }
-  } // end grouping impulse-noise-protection-delay-profile
+  }
+
+  grouping impulse-noise-protection-delay-profile-upstream {
+
+    description
+      "The INP-Delay profile contains INP-Delay parameters
+       for each upstream channel.";
+
+    leaf mdosplit {
+      type union {
+        type uint8 {
+          range "0 | 5..95 | 100";
+        }
+        type enumeration {
+          enum "vendor-discretionary" {
+            description
+              "Indicates that that the VTU-O is allowed to use a
+               vendor discretionary algorithm.";
+          }
+        }
+      }
+      units "percent";
+      default "vendor-discretionary";
+      status deprecated;
+      description
+        "The value of downstream and upstream MDOSPLIT must add to 
+         100%. As such, configuration of the downstream MDOSPLIT is
+         sufficient as the upstream will always be 100 minus the
+         downstream MDOSPLIT. For this reason, this node has been 
+         deprecated.
+
+         The line configuration parameter MAXDELAYOCTET-split
+         (MDOSPLIT) defines the percentage of the
+         MAXDELAYOCTET_ext if operating in G.998.4 or
+         MAXDELAYOCTET in other cases allocated to the downstream
+         direction. All of the remaining MAXDELAYOCTET or
+         MAXDELAYOCTET_ext will be allocated for use in the
+         upstream direction. The detailed specification is in
+         ITU-T G.993.2 and G.998.4.
+         MDOSPLIT will be expressed as a percentage, with valid
+         range from 5 percent to 95 percent inclusive, in steps
+         of 1 percent. The value 0% is valid only if the maximum
+         downstream interleaving delay is configured with the
+         special value S1 (see clause 7.3.2.2/G.997.1) and
+         retransmission is disabled in the downstream direction.
+         The value 100% is valid only if the maximum upstream
+         interleaving delay is configured with the special value
+         S1 (see clause 7.3.2.2 of ITU-T G.997.1) and
+         retransmission is disabled in the upstream direction.
+         A special value (enum vendor-discretionary) indicates
+         that the VTU-O is allowed to use a vendor discretionary
+         algorithm.";
+      reference
+        "ITU-T G.997.1 clause 7.3.1.14 MAXDELAYOCTET-split
+         parameter (MDOSPLIT)";
+    }
+
+    leaf attndr-method {
+      type enumeration {
+        enum "0" {
+          description
+            "basic method";
+        }
+        enum "1" {
+          description
+            "improved method using INP_min0";
+        }
+        enum "2" {
+          description
+            "improved method assuming INP_min0=0";
+        }
+      }
+      default "0";
+      status deprecated;
+      description
+        "ATTNDR_METHOD is only valid for the downstream direction and
+         is now deprecated for the upstream. Any configured value for
+         upstream ATTNDR_METHOD is to be ignored.
+
+         This downstream parameter specifies the method to be used for
+         the calculation of the ATTNDR in the downstream and upstream
+         direction. The parameter can take three values 0, 1 and
+         2. For detailed definition see ITU-T G.993.2 clause
+         11.4.1.1.7. The default is enum 0, corresponding to
+         the basic method.";
+      reference
+        "ITU-T G.997.1 clause 7.3.1.15.1 ATTNDR Method
+         (ATTNDR_METHOD)";
+    }
+
+    leaf attndr-mdosplit {
+      type union {
+        type uint8 {
+          range "0 | 5..95 | 100";
+        }
+        type enumeration {
+          enum "vendor-discretionary" {
+            description
+              "Indicates that the VTU-O is allowed to use a vendor
+               discretionary algorithm.";
+          }
+        }
+      }
+      units "percent";
+      default "vendor-discretionary";
+      status deprecated;
+      description
+        "ATTNDR_MDOSPLIT is only valid for the downstream direction 
+         and is now deprecated for the upstream. Any configured value 
+         for upstream ATTNDR_MDOSPLIT is to be ignored.
+
+         The line configuration parameter ATTNDR_MDOSPLIT defines
+         the percentage of the MAXDELAYOCTET_ext if operating in
+         G.998.4 or MAXDELAYOCTET in other cases allocated to the
+         downstream direction to be used in the improved method
+         for calculation of the ATTNDR. All of the remaining
+         MAXDELAYOCTET_ext or MAXDELAYOCTET will be allocated for
+         use in the upstream direction. The detailed
+         specification is in ITU-T G.993.2 and G.998.4.
+         The valid values are identical to the values of the line
+         configuration parameter MDOSPLIT. A special value
+         (enum vendor-discretionary) indicates that the VTU-O is
+         allowed to use a vendor discretionary algorithm.";
+      reference
+        "ITU-T G.997.1 clause 7.3.1.15.2 ATTNDR
+         MAXDELAYOCTET-split parameter (ATTNDR_MDOSPLIT)";
+    }
+  }
 } // end submodule impulse-noise-protection-delay-profile-body

@@ -23,29 +23,29 @@ submodule bbf-vdsl-quality-profiles {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
                   <mailto:kkerpez@assia-inc.com>
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     Editor:      Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+                  <mailto:sven.ooghe@nokia.com>
+
+     WA Director: Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>";
 
   description
     "This submodule contains a collection of YANG definitions for
      managing VDSL quality profiles.
 
-     Copyright (c) 2016, 2017 Broadband Forum
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -85,9 +85,19 @@ submodule bbf-vdsl-quality-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c1; see
+     This version of this YANG module is part of TR-355c2; see
      the TR itself for full legal notices.";
 
+  revision 2017-11-27 {
+    description
+      "Corrigendum 2 (fixes to the previous revision).
+       * Approval Date:    see revision date above.
+       * Publication Date: 2018-01-19.";
+    reference
+      "TR-355c2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Corrigendum_2.pdf>";
+  }
   revision 2017-03-13 {
     description
       "Corrigendum 1 (fixes to the initial revision).
@@ -125,60 +135,6 @@ submodule bbf-vdsl-quality-profiles {
     }
     description
       "INP-Delay Profile identifier.";
-  }
-
-  typedef virtual-noise-profile-ref {
-    type leafref {
-      path '/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:virtual-noise-'
-         + 'profile/bbf-vdsl:name';
-    }
-    description
-      "Virtual Noise Profile identifier.";
-  }
-
-  typedef sos-profile-ref {
-    type leafref {
-      path '/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:sos-profile/'
-         + 'bbf-vdsl:name';
-    }
-    description
-      "SOS Profile identifier.";
-  }
-
-  typedef impulse-noise-monitoring-profile-ref {
-    type leafref {
-      path '/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:impulse-noise-'
-         + 'monitoring-profile/bbf-vdsl:name';
-    }
-    description
-      "INM Profile identifier.";
-  }
-
-  typedef re-initialization-policy-profile-ref {
-    type leafref {
-      path '/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:re-'
-         + 'initialization-policy-profile/bbf-vdsl:name';
-    }
-    description
-      "Re-Initialization Policy Profile identifier.";
-  }
-
-  typedef vectoring-profile-ref {
-    type leafref {
-      path '/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:vectoring-'
-         + 'profile/bbf-vdsl:name';
-    }
-    description
-      "Vectoring Profile identifier.";
-  }
-
-  typedef data-gathering-profile-ref {
-    type leafref {
-      path '/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:data-'
-         + 'gathering-profile/bbf-vdsl:name';
-    }
-    description
-      "Data Gathering Profile identifier.";
   }
 
   // 5.7 DSL Quality Management related profiles
@@ -225,11 +181,13 @@ submodule bbf-vdsl-quality-profiles {
         description
           "Downstream INP-Delay Profile.";
         uses impulse-noise-protection-delay-profile;
+        uses impulse-noise-protection-delay-profile-downstream;
       }
       container upstream {
         description
           "Upstream INP-Delay Profile.";
         uses impulse-noise-protection-delay-profile;
+        uses impulse-noise-protection-delay-profile-upstream;
       }
     }
 

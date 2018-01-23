@@ -67,12 +67,12 @@ module: ietf-interfaces
     |     |     |  |  +--rw bbf-vdsl:downstream-power-back-off-profile       bbf-vdsl:downstream-power-back-off-profile-ref
     |     |     |  |  +--rw bbf-vdsl:radio-frequency-interference-profile    bbf-vdsl:radio-frequency-interference-profile-ref
     |     |     |  |  +--rw bbf-vdsl:noise-margin-profile                    bbf-vdsl:noise-margin-profile-ref
-    |     |     |  |  +--rw bbf-vdsl:virtual-noise-profile                   bbf-vdsl:virtual-noise-profile-ref {virtual-noise}?
-    |     |     |  |  +--rw bbf-vdsl:sos-profile                             bbf-vdsl:sos-profile-ref {sos}?
-    |     |     |  |  +--rw bbf-vdsl:impulse-noise-monitoring-profile        bbf-vdsl:impulse-noise-monitoring-profile-ref {impulse-noise-monitoring}?
-    |     |     |  |  +--rw bbf-vdsl:re-initialization-policy-profile        bbf-vdsl:re-initialization-policy-profile-ref {re-initialization-policy}?
-    |     |     |  |  +--rw bbf-vdsl:vectoring-profile                       bbf-vdsl:vectoring-profile-ref {vectoring}?
-    |     |     |  |  +--rw bbf-vdsl:data-gathering-profile                  bbf-vdsl:data-gathering-profile-ref {data-gathering}?
+    |     |     |  |  +--rw bbf-vdsl:virtual-noise-profile                   -> /vdsl/quality/virtual-noise-profile/name {virtual-noise}?
+    |     |     |  |  +--rw bbf-vdsl:sos-profile                             -> /vdsl/quality/sos-profile/name {sos}?
+    |     |     |  |  +--rw bbf-vdsl:impulse-noise-monitoring-profile        -> /vdsl/quality/impulse-noise-monitoring-profile/name {impulse-noise-monitoring}?
+    |     |     |  |  +--rw bbf-vdsl:re-initialization-policy-profile        -> /vdsl/quality/re-initialization-policy-profile/name {re-initialization-policy}?
+    |     |     |  |  +--rw bbf-vdsl:vectoring-profile                       -> /vdsl/quality/vectoring-profile/name {vectoring}?
+    |     |     |  |  +--rw bbf-vdsl:data-gathering-profile                  -> /vdsl/quality/data-gathering-profile/name {data-gathering}?
     |     |     |  +--:(bbf-vdsl:indirect-attachment-mode)
     |     |     |     +--rw bbf-vdsl:line-config-vector?                     bbf-vdsl:line-config-vector-ref
     |     |     +--rw bbf-vdsl:threshold-template?                     bbf-vdsl:threshold-template-ref
@@ -659,7 +659,7 @@ module: ietf-interfaces
           |     |  +--ro bbf-vdsl:xdsl-transmission-system?               xts-descriptor
           |     |  +--ro bbf-vdsl:line-power-management-state?            enumeration
           |     |  +--ro bbf-vdsl:initialization-success-failure-cause?   enumeration
-          |     |  +--ro bbf-vdsl:snr-margin?                             union
+          |     |  o--ro bbf-vdsl:snr-margin?                             union
           |     |  +--ro bbf-vdsl:profile?                                profiles
           |     |  +--ro bbf-vdsl:limitmask?                              limitmask-descriptor
           |     |  +--ro bbf-vdsl:us0mask?                                us0mask-descriptor
@@ -687,13 +687,14 @@ module: ietf-interfaces
           |     |  |  |  +--ro bbf-vdsl:actual-ra-mode?             enumeration
           |     |  |  |  +--ro bbf-vdsl:rxthrh?                     uint8
           |     |  |  |  +--ro bbf-vdsl:actual-inp-roc?             uint8
-          |     |  |  |  +--ro bbf-vdsl:snr-margin-roc?             int16
+          |     |  |  |  +--ro bbf-vdsl:snr-margin-roc?             union
           |     |  |  |  +--ro bbf-vdsl:stamp-olr?                  time-stamp-or-undefined
           |     |  |  |  +--ro bbf-vdsl:actual-ripolicy?            enumeration
           |     |  |  |  +--ro bbf-vdsl:rtx-used?                   enumeration
           |     |  |  |  +--ro bbf-vdsl:attndr-actual-inp?          uint16
           |     |  |  |  +--ro bbf-vdsl:attndr-actual-inp-rein?     uint8
           |     |  |  |  +--ro bbf-vdsl:attndr-actual-delay?        uint8
+          |     |  |  |  +--ro bbf-vdsl:snr-margin?                 union
           |     |  |  +--ro bbf-vdsl:band-status
           |     |  |     +--ro bbf-vdsl:line-attenuation* [band]
           |     |  |     |  +--ro bbf-vdsl:band           uint8
@@ -721,13 +722,14 @@ module: ietf-interfaces
           |     |     |  +--ro bbf-vdsl:actual-ra-mode?             enumeration
           |     |     |  +--ro bbf-vdsl:rxthrh?                     uint8
           |     |     |  +--ro bbf-vdsl:actual-inp-roc?             uint8
-          |     |     |  +--ro bbf-vdsl:snr-margin-roc?             int16
+          |     |     |  +--ro bbf-vdsl:snr-margin-roc?             union
           |     |     |  +--ro bbf-vdsl:stamp-olr?                  time-stamp-or-undefined
           |     |     |  +--ro bbf-vdsl:actual-ripolicy?            enumeration
           |     |     |  +--ro bbf-vdsl:rtx-used?                   enumeration
           |     |     |  +--ro bbf-vdsl:attndr-actual-inp?          uint16
           |     |     |  +--ro bbf-vdsl:attndr-actual-inp-rein?     uint8
           |     |     |  +--ro bbf-vdsl:attndr-actual-delay?        uint8
+          |     |     |  +--ro bbf-vdsl:snr-margin?                 union
           |     |     +--ro bbf-vdsl:upstream
           |     |     |  +--ro bbf-vdsl:last-transmitted-state?            uint8
           |     |     |  +--ro bbf-vdsl:actual-psd?                        union
@@ -1125,9 +1127,9 @@ module: ietf-interfaces
                 |  +--ro bbf-selt:tflog?     per-sub-carrier-uint16
                 +--ro bbf-selt:missing-micro-filter?          boolean
                 +--ro bbf-selt:downstream
-                |  +--ro bbf-selt:capacity-estimate?   boolean
+                |  +--ro bbf-selt:capacity-estimate?   bbf-yang:data-rate32
                 +--ro bbf-selt:upstream
-                   +--ro bbf-selt:capacity-estimate?   boolean
+                   +--ro bbf-selt:capacity-estimate?   bbf-yang:data-rate32
 module: bbf-fast
     +--rw fast
        +--rw service
@@ -1489,9 +1491,9 @@ module: bbf-vdsl
        |  |     +--rw rein-inter-arrival-time-rtx?       enumeration
        |  |     +--rw maximum-delay-variation?           union
        |  |     +--rw channel-initialization-policy?     enumeration
-       |  |     +--rw mdosplit?                          union
-       |  |     +--rw attndr-method?                     enumeration
-       |  |     +--rw attndr-mdosplit?                   union
+       |  |     x--rw mdosplit?                          union
+       |  |     x--rw attndr-method?                     enumeration
+       |  |     x--rw attndr-mdosplit?                   union
        |  +--rw virtual-noise-profile* [name] {virtual-noise}?
        |  |  +--rw name          bbf-yang:string-ascii64
        |  |  +--rw downstream
@@ -1533,23 +1535,27 @@ module: bbf-vdsl
        |  +--rw impulse-noise-monitoring-profile* [name] {impulse-noise-monitoring}?
        |  |  +--rw name          bbf-yang:string-ascii64
        |  |  +--rw downstream
-       |  |  |  +--rw inmiato?          uint16
-       |  |  |  +--rw inmiats?          uint8
-       |  |  |  +--rw inmcc?            uint8
-       |  |  |  +--rw inm-inpeq-mode?   enumeration
+       |  |  |  +--rw inmiato?            uint16
+       |  |  |  +--rw inmiats?            uint8
+       |  |  |  +--rw inmcc?              uint8
+       |  |  |  +--rw inm-inpeq-mode?     enumeration
+       |  |  |  +--rw inm-inpeq-format?   enumeration
+       |  |  |  +--rw inm-enable?         boolean
        |  |  +--rw upstream
-       |  |     +--rw inmiato?          uint16
-       |  |     +--rw inmiats?          uint8
-       |  |     +--rw inmcc?            uint8
-       |  |     +--rw inm-inpeq-mode?   enumeration
+       |  |     +--rw inmiato?            uint16
+       |  |     +--rw inmiats?            uint8
+       |  |     +--rw inmcc?              uint8
+       |  |     +--rw inm-inpeq-mode?     enumeration
+       |  |     +--rw inm-inpeq-format?   enumeration
+       |  |     +--rw inm-enable?         boolean
        |  +--rw re-initialization-policy-profile* [name] {re-initialization-policy}?
        |  |  +--rw name          bbf-yang:string-ascii64
        |  |  +--rw downstream
        |  |  |  +--rw ripolicy?                uint8
-       |  |  |  +--ro reinit-time-threshold?   uint8
+       |  |  |  +--rw reinit-time-threshold?   uint8
        |  |  +--rw upstream
        |  |     +--rw ripolicy?                uint8
-       |  |     +--ro reinit-time-threshold?   uint8
+       |  |     +--rw reinit-time-threshold?   uint8
        |  +--rw vectoring-profile* [name] {vectoring}?
        |  |  +--rw name                  bbf-yang:string-ascii64
        |  |  +--rw vector-mode-enable?   union
@@ -1623,12 +1629,12 @@ module: bbf-vdsl
              +--rw downstream-power-back-off-profile       bbf-vdsl:downstream-power-back-off-profile-ref
              +--rw radio-frequency-interference-profile    bbf-vdsl:radio-frequency-interference-profile-ref
              +--rw noise-margin-profile                    bbf-vdsl:noise-margin-profile-ref
-             +--rw virtual-noise-profile                   bbf-vdsl:virtual-noise-profile-ref {virtual-noise}?
-             +--rw sos-profile                             bbf-vdsl:sos-profile-ref {sos}?
-             +--rw impulse-noise-monitoring-profile        bbf-vdsl:impulse-noise-monitoring-profile-ref {impulse-noise-monitoring}?
-             +--rw re-initialization-policy-profile        bbf-vdsl:re-initialization-policy-profile-ref {re-initialization-policy}?
-             +--rw vectoring-profile                       bbf-vdsl:vectoring-profile-ref {vectoring}?
-             +--rw data-gathering-profile                  bbf-vdsl:data-gathering-profile-ref {data-gathering}?
+             +--rw virtual-noise-profile                   -> /vdsl/quality/virtual-noise-profile/name {virtual-noise}?
+             +--rw sos-profile                             -> /vdsl/quality/sos-profile/name {sos}?
+             +--rw impulse-noise-monitoring-profile        -> /vdsl/quality/impulse-noise-monitoring-profile/name {impulse-noise-monitoring}?
+             +--rw re-initialization-policy-profile        -> /vdsl/quality/re-initialization-policy-profile/name {re-initialization-policy}?
+             +--rw vectoring-profile                       -> /vdsl/quality/vectoring-profile/name {vectoring}?
+             +--rw data-gathering-profile                  -> /vdsl/quality/data-gathering-profile/name {data-gathering}?
 module: bbf-melt
     +--rw melt
        +--rw profiles

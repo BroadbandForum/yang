@@ -6,29 +6,29 @@ submodule bbf-selt-pmd-measurement-parameter-body {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
                   <mailto:kkerpez@assia-inc.com>
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     Editor:      Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+                  <mailto:sven.ooghe@nokia.com>
+
+     WA Director: Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>";
 
   description
     "This submodule contains a collection of YANG definitions for
      SELT-PMD measurement parameters.
 
-     Copyright (c) 2016, 2017 Broadband Forum
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +68,19 @@ submodule bbf-selt-pmd-measurement-parameter-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c1; see
+     This version of this YANG module is part of TR-355c2; see
      the TR itself for full legal notices.";
 
+  revision 2017-11-27 {
+    description
+      "Corrigendum 2 (fixes to the previous revision).
+       * Approval Date:    see revision date above.
+       * Publication Date: 2018-01-19.";
+    reference
+      "TR-355c2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Corrigendum_2.pdf>";
+  }
   revision 2017-03-13 {
     description
       "Corrigendum 1 (fixes to the initial revision).
@@ -155,10 +165,10 @@ submodule bbf-selt-pmd-measurement-parameter-body {
         description
           "The SELT uncalibrated echo response group size (SELT-UER_G)
            is a reported parameter identifying the UER frequency 
-           spacing, which is equal to SELT-UER_G × Df with Df = 
+           spacing, which is equal to SELT-UER_G x Df with Df = 
            4.3125 kHz. SELT-UER_G has three valid values: 1, 2, and 
-           12. Section A.2.2.1 refers to SELT-UER_G as the “UER 
-           granularity parameter, UER_G.” The SELT uncalibrated echo 
+           12. Section A.2.2.1 refers to SELT-UER_G as the UER 
+           granularity parameter, UER_G. The SELT uncalibrated echo 
            response group size need only be reported if the option for
            extended bandwidth SELT is applied.";
       }
@@ -177,7 +187,7 @@ submodule bbf-selt-pmd-measurement-parameter-body {
          represented in linear format by a scale factor and a 
          normalized complex number a(i)+j*b(i), where i is a frequency
          index i ranging from 0 to NSC-1, the subcarrier spacing, 
-         Df = 4.3125 kHz, and (NSC-1) × UER_G × Df is the highest 
+         Df = 4.3125 kHz, and (NSC-1) x UER_G x Df is the highest 
          frequency supported by the SELT-PMD functionality. 
 
          If the option for extended bandwidth SELT is not applied, 
@@ -256,7 +266,7 @@ submodule bbf-selt-pmd-measurement-parameter-body {
         description
           "The SELT quiet line noise group size (SELTQLN_G) is a 
            reported parameter identifying the SELTQLN frequency 
-           spacing, which is equal to SELTQLN_G × Df with Df = 4.3125 
+           spacing, which is equal to SELTQLN_G x Df with Df = 4.3125 
            kHz. SELTQLN_G has three valid values: 1, 2, and 12.
 
            The SELT quiet line noise group size need only be reported 
@@ -272,9 +282,9 @@ submodule bbf-selt-pmd-measurement-parameter-body {
       description
         "The SELT quiet line noise provides the quiet line noise PSD 
          as measured by the SELT-PMD function (see clause A.1.1.2) for
-         each sub-carrier frequency i × SELTQLN_G × Df where i ranges 
+         each sub-carrier frequency i x SELTQLN_G x Df where i ranges 
          from 0 to NSC-1, Df = 4.3125 kHz, and 
-         (NSC-1) × SELTQLN_G × Df is the highest frequency supported 
+         (NSC-1) x SELTQLN_G x Df is the highest frequency supported 
          by the SELT-PMD functionality. 
 
          If the option for extended bandwidth SELT is not applied, 
@@ -294,11 +304,11 @@ submodule bbf-selt-pmd-measurement-parameter-body {
            spacing of 4.3125 kHz,  8.625 kHz, or of 51.75 kHz 
            respectively.
 
-         SELT quiet line noise SELTQLN(i × SELTQLN_G × Df) shall be 
+         SELT quiet line noise SELTQLN(i x SELTQLN_G x Df) shall be 
          represented as an 8 bit unsigned integer n(i), where i is the
          subcarrier index i = 0 to NSC-1. The value of 
-         SELTQLN(i × SELTQLN_G × Df) shall be defined as 
-         SELTQLN(i × SELTQLN_G × Df ) = -23 - (n(i)/2) dBm/Hz. This 
+         SELTQLN(i x SELTQLN_G x Df) shall be defined as 
+         SELTQLN(i x SELTQLN_G x Df ) = -23 - (n(i)/2) dBm/Hz. This 
          data format supports a SELTQLN(f) granularity of 0.5 dB and 
          an SELTQLN(f) dynamic range of -150 to -23 dBm/Hz.";
       reference

@@ -6,34 +6,30 @@ submodule bbf-vdsl-impulse-noise-monitoring-profile-body {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
                   <mailto:kkerpez@assia-inc.com>
 
-     Editor:      William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>
-
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     Editor:      Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+                  <mailto:sven.ooghe@nokia.com>
+
+     WA Director: Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>";
 
   description
     "This submodule contains a collection of YANG definitions for 
      managing common Broadband Forum TR-252i3 clause 5.7 DSL Quality 
      Management related profiles; INM Profile.
 
-     Copyright (c) 2016, Broadband Forum
-     All rights reserved.
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -73,9 +69,19 @@ submodule bbf-vdsl-impulse-noise-monitoring-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355; see
+     This version of this YANG module is part of TR-355c2; see
      the TR itself for full legal notices.";
 
+  revision 2017-11-27 {
+    description
+      "Corrigendum 2 (fixes to the previous revision).
+       * Approval Date:    see revision date above.
+       * Publication Date: 2018-01-19.";
+    reference
+      "TR-355c2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Corrigendum_2.pdf>";
+  }
   revision 2016-07-18 {
     description
       "Initial revision.
@@ -184,6 +190,34 @@ submodule bbf-vdsl-impulse-noise-monitoring-profile-body {
       reference
         "ITU-T G.997.1 clause 7.3.1.9.4 INM equivalent INP mode
          (INM_INPEQ_MODE)";
+    }
+
+    leaf inm-inpeq-format {
+      type enumeration {
+        enum "0" {
+          description
+            "Linear scale as defined in ITU-T G.997.1 clause 
+             7.3.1.9.5.";
+        }
+        enum "1" {
+          description
+            "Logarithmic scale as defined in ITU-T G.997.1 clause 
+             7.3.1.9.5.";
+        }
+      }
+      default "0";
+      description
+        "Defines the way the scale is configured for the INM_INPEQ 
+         histogram.";
+      reference
+        "ITU-T G.993.2 clause 11.4.2.2.6";
+    }
+
+    leaf inm-enable {
+      type boolean;
+      default "false";
+      description
+        "If true, enables Impulse Noise Monitoring (INM).";
     }
   } // end grouping impulse-noise-monitoring-profile
 } // end submodule impulse-noise-monitoring-profile-body

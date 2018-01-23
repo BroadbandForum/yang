@@ -8,30 +8,30 @@ submodule bbf-vdsl-virtual-noise-profile-body {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
                   <mailto:kkerpez@assia-inc.com>
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     Editor:      Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+                  <mailto:sven.ooghe@nokia.com>
+
+     WA Director: Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>";
 
   description
     "This submodule contains a collection of YANG definitions for 
      managing Broadband Forum TR-252i3 5.7 DSL Quality Management 
      related profiles; Virtual Noise Profile.
 
-     Copyright (c) 2016, 2017 Broadband Forum
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -71,9 +71,19 @@ submodule bbf-vdsl-virtual-noise-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c1; see
+     This version of this YANG module is part of TR-355c2; see
      the TR itself for full legal notices.";
 
+  revision 2017-11-27 {
+    description
+      "Corrigendum 2 (fixes to the previous revision).
+       * Approval Date:    see revision date above.
+       * Publication Date: 2018-01-19.";
+    reference
+      "TR-355c2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Corrigendum_2.pdf>";
+  }
   revision 2017-03-13 {
     description
       "Corrigendum 1 (fixes to the initial revision).
@@ -100,7 +110,6 @@ submodule bbf-vdsl-virtual-noise-profile-body {
       "Specifies the format of the Virtual Noise (VN) PSD.";
     list psdmask {
       key "sub-carrier";
-      max-elements 32;
       leaf sub-carrier {
         type sub-carrier-index;
         description
@@ -142,7 +151,15 @@ submodule bbf-vdsl-virtual-noise-profile-body {
     description
       "Configuration parameters for downstream Virtual Noise (VN).";
     container virtual-noise {
-      uses vn-descriptor;
+      must "count(psdmask) != 1" {
+        description
+          "There must be either 0 or 2 to 32 PSD masks defined.";
+      }
+      uses vn-descriptor {
+        refine "psdmask" {
+          max-elements 32;
+        }
+      }
       description
         "This configuration parameter VN defines the transmitter
          referred virtual noise (TXREFVN). The TXREFVN is
@@ -216,7 +233,15 @@ submodule bbf-vdsl-virtual-noise-profile-body {
       "Configuration parameters for upstream Virtual Noise (VN).";
 
     container virtual-noise {
-      uses vn-descriptor;
+      must "count(psdmask) != 1" {
+        description
+          "There must be either 0 or 2 to 16 PSD masks defined.";
+      }
+      uses vn-descriptor {
+        refine "psdmask" {
+          max-elements 16;
+        }
+      }
       description
         "This configuration parameter VN defines the transmitter
          referred virtual noise (TXREFVN). The TXREFVN is
@@ -229,7 +254,7 @@ submodule bbf-vdsl-virtual-noise-profile-body {
          unsigned integer. The noise level ranges from -40 dBm/Hz
          to -140 dBm/Hz in steps of 0.5 dBm/Hz. A special value
          of (enum zero-watts-per-hz) indicates a noise level of
-         0 W/Hz. The maximum number of breakpoints is 32.
+         0 W/Hz. The maximum number of breakpoints is 16.
          The default is an empty list, corresponding to no virtual
          noise defined.";
       reference

@@ -7,29 +7,29 @@ submodule bbf-selt-processing-profile-body {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
                   <mailto:kkerpez@assia-inc.com>
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     Editor:      Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+                  <mailto:sven.ooghe@nokia.com>
+
+     WA Director: Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>";
 
   description
     "This submodule contains a collection of YANG definitions for
      managing processing profiles.
 
-     Copyright (c) 2016, 2017 Broadband Forum
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -69,9 +69,19 @@ submodule bbf-selt-processing-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c1; see
+     This version of this YANG module is part of TR-355c2; see
      the TR itself for full legal notices.";
 
+  revision 2017-11-27 {
+    description
+      "Corrigendum 2 (fixes to the previous revision).
+       * Approval Date:    see revision date above.
+       * Publication Date: 2018-01-19.";
+    reference
+      "TR-355c2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Corrigendum_2.pdf>";
+  }
   revision 2017-03-13 {
     description
       "Corrigendum 1 (fixes to the initial revision).
@@ -130,7 +140,7 @@ submodule bbf-selt-processing-profile-body {
          set of breakpoints. Each breakpoint shall consist of a 
          frequency index, tn, and a signal PSD level 
          (expressed in dBm/Hz). The parameter shall be a set of 
-         breakpoints represented by [(t1, PSD1), (t2, PSD2), …, 
+         breakpoints represented by [(t1, PSD1), (t2, PSD2), ..., 
          (tN, PSDN)], where t1 and tN represent, respectively, the 
          lower frequency of the lowest band over which the capacity 
          estimate is to be calculated, and the highest frequency of 
@@ -139,8 +149,8 @@ submodule bbf-selt-processing-profile-body {
          multi-band xDSL, the set of breakpoints shall describe the 
          stopbands situated inbetween passbands. 
 
-         NOTE – Stopbands may be described as brickwall stopbands 
-                using the lowest valid value (–200 dBm/Hz) or may be 
+         NOTE - Stopbands may be described as brickwall stopbands 
+                using the lowest valid value (-200 dBm/Hz) or may be 
                 described more elaborately.
 
          The breakpoints shall be defined so that tn < tn+1 for n = 1
@@ -150,7 +160,7 @@ submodule bbf-selt-processing-profile-body {
          modulation of the xDSL.
 
          The range of valid values for index tn is 0 to 8191 in steps
-         of 1. The range of valid values for PSD is –30 to –200 
+         of 1. The range of valid values for PSD is -30 to -200 
          dBm/Hz in steps of 0.1 dBm/Hz. 
 
          The maximum number of breakpoints in downstream is 48, 
@@ -191,7 +201,7 @@ submodule bbf-selt-processing-profile-body {
          set of breakpoints. Each breakpoint shall consist of a 
          frequency index tn and a signal PSD level (expressed in 
          dBm/Hz). The parameter shall be a set of breakpoints that 
-         are represented by [(t1, PSD1), (t2, PSD2), … ,(tN, PSDN)], 
+         are represented by [(t1, PSD1), (t2, PSD2), ... ,(tN, PSDN)],
          where t1 and tN are, respectively, the lower frequency of 
          the lowest band over which the capacity estimate is to be 
          calculated, and the highest frequency of highest band over 
@@ -212,7 +222,7 @@ submodule bbf-selt-processing-profile-body {
          modulation of the xDSL.
 
          The range of valid values for index tn is 0 to 8191, in 
-         steps of 1. The range of valid values for PSD is –30 to –200
+         steps of 1. The range of valid values for PSD is -30 to -200
          dBm/Hz, in steps of 0.1 dBm/Hz
 
          The maximum number of breakpoints in downstream is 128, and 

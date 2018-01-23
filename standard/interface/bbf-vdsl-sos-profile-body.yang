@@ -6,30 +6,30 @@ submodule bbf-vdsl-sos-profile-body {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
                   <mailto:kkerpez@assia-inc.com>
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     Editor:      Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+                  <mailto:sven.ooghe@nokia.com>
+
+     WA Director: Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>";
 
   description
     "This submodule contains a collection of YANG definitions for 
      managing Broadband Forum TR-252i3 clause 5.7 DSL Quality 
      Management related profiles; SOS Profile.
 
-     Copyright (c) 2016, 2017 Broadband Forum
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -69,9 +69,19 @@ submodule bbf-vdsl-sos-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c1; see
+     This version of this YANG module is part of TR-355c2; see
      the TR itself for full legal notices.";
 
+  revision 2017-11-27 {
+    description
+      "Corrigendum 2 (fixes to the previous revision).
+       * Approval Date:    see revision date above.
+       * Publication Date: 2018-01-19.";
+    reference
+      "TR-355c2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Corrigendum_2.pdf>";
+  }
   revision 2017-03-13 {
     description
       "Corrigendum 1 (fixes to the initial revision).
@@ -131,7 +141,11 @@ submodule bbf-vdsl-sos-profile-body {
          values configured in the MIB for the following parameters:
          SOS-NTONES, SOS-CRC, SOS-TIME.
          The valid range of values is from 64 ms to
-         16,320 ms in steps of 64 ms.";
+         16,320 ms in steps of 64 ms.
+
+         If any of the nodes 'sos-time', 'sos-ntones', or 'sos-crc'
+         are configured to be 'disabled', then the behavior is the 
+         same as 'sos-time' being disabled.";
       reference
         "ITU-T G.997.1 clause 7.3.1.10.1 Downstream SOS time
          window (SOS-TIME-ds) and clause 7.3.1.10.2 Upstream SOS
@@ -165,7 +179,11 @@ submodule bbf-vdsl-sos-profile-body {
          range of values is from 1 to 100 in steps of 1.
          The special value (enum disabled) indicates that the
          standard SOS triggering criteria are disabled as described
-         in clause 13.4.3.2 of [ITU-T G.993.2].";
+         in clause 13.4.3.2 of [ITU-T G.993.2].
+
+         If any of the nodes 'sos-time', 'sos-ntones', or 'sos-crc'
+         are configured to be 'disabled', then the behavior is the 
+         same as 'sos-time' being disabled.";
       reference
         "ITU-T G.997.1 clause 7.3.1.10.3 Downstream minimum
          percentage of degraded tones (SOS-NTONES-ds) and clause
@@ -200,7 +218,11 @@ submodule bbf-vdsl-sos-profile-body {
          0.02. Additionally, the special value (enum disabled)
          indicates that the standard SOS triggering criteria are
          disabled as described in clause 13.4.3.2 of
-         [ITU-T G.993.2].";
+         [ITU-T G.993.2].
+
+         If any of the nodes 'sos-time', 'sos-ntones', or 'sos-crc'
+         are configured to be 'disabled', then the behavior is the 
+         same as 'sos-time' being disabled.";
       reference
         "ITU-T G.997.1 clause 7.3.1.10.5 Downstream minimum
          number of normalized CRC anomalies (SOS-CRC-ds) and

@@ -13,30 +13,30 @@ module bbf-fastdsl {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
                   <mailto:kkerpez@assia-inc.com>
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     Editor:      Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+                  <mailto:sven.ooghe@nokia.com>
+
+     WA Director: Joey Boyd, ADTRAN
+                  <mailto:joey.boyd@adtran.com>";
 
   description
     "This module contains a collection of YANG definitions for 
      an interface which may support one or more DSL or G.fast
      technologies
 
-     Copyright (c) 2016, 2017 Broadband Forum
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -76,9 +76,19 @@ module bbf-fastdsl {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c1; see
+     This version of this YANG module is part of TR-355c2; see
      the TR itself for full legal notices.";
 
+  revision 2017-11-27 {
+    description
+      "Corrigendum 2 (fixes to the previous revision).
+       * Approval Date:    see revision date above.
+       * Publication Date: 2018-01-19.";
+    reference
+      "TR-355c2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Corrigendum_2.pdf>";
+  }
   revision 2017-03-13 {
     description
       "Corrigendum 1 (fixes to the initial revision).
@@ -102,7 +112,7 @@ module bbf-fastdsl {
 
   identity fastdsl-mode {
     description
-      "Base identity for FastDSL modes";
+      "Base identity for FastDSL modes.";
   }
 
   identity mode-fast {
@@ -114,7 +124,7 @@ module bbf-fastdsl {
   identity mode-vdsl {
     base fastdsl-mode;
     description
-      "ITU-T G.993.2 VDSL2 or derived technology";
+      "ITU-T G.993.2 VDSL2 or derived technology.";
   }
 
   typedef fastdsl-mode-ref {
@@ -122,13 +132,13 @@ module bbf-fastdsl {
       base fastdsl-mode;
     }
     description
-      "Reference to an FastDSL mode of operation";
+      "Reference to an FastDSL mode of operation.";
   }
 
   augment '/if:interfaces/if:interface' {
     when "if:type = 'ianaift:fastdsl'" {
       description
-        "Only applicable when the interface type is 'fastdsl'";
+        "Only applicable when the interface type is 'fastdsl'.";
     }
     description
       "Data nodes for the configuration of FastDSL lines.";
@@ -137,7 +147,7 @@ module bbf-fastdsl {
       presence
         "If present, indicates that the interface is able to operate
          according to the appropriate ITU-T specification for one
-         or more DSL or G.fast technologies";
+         or more DSL or G.fast technologies.";
       description
         "Line configuration data for FastDSL interfaces.";
 
@@ -148,18 +158,18 @@ module bbf-fastdsl {
            (../configured-mode = ../supported-mode)" {
           description
             "If configured modes of operation are specified, each
-             mode must be part of the supported modes";
+             mode must be part of the supported modes.";
         }
         config false;
         description
-          "Supported mode(s) of operation";
+          "Supported mode(s) of operation.";
       }
 
       leaf-list configured-mode {
         type fastdsl-mode-ref;
         description
-          "Configured mode(s) of operation. An empty list indicates
-           that the configured mode is undetermined";
+          "Configured mode(s) of operation. If no elements exist, the 
+           configured mode is undetermined.";
       }
     }
   }
@@ -167,7 +177,7 @@ module bbf-fastdsl {
   augment '/if:interfaces-state/if:interface' {
     when "if:type = 'ianaift:fastdsl'" {
       description
-        "Only applicable when the interface type is 'fastdsl'";
+        "Only applicable when the interface type is 'fastdsl'.";
     }
     description
       "Data nodes for the operational state of FastDSL lines.";
@@ -176,7 +186,7 @@ module bbf-fastdsl {
       presence
         "If present, indicates that the interface is able to operate
          according to the appropriate ITU-T specification for one
-         or more DSL or G.fast technologies";
+         or more DSL or G.fast technologies.";
       description
         "Line state data for FAST interfaces.";
 
@@ -187,7 +197,7 @@ module bbf-fastdsl {
               description
                 "The current mode of operation is undetermined. This 
                  is most likely due to the fact that G.hs has not 
-                 completed the first time";
+                 completed the first time.";
             }
           }
           type fastdsl-mode-ref;
