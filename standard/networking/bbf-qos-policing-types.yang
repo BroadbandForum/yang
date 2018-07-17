@@ -1,15 +1,8 @@
-module bbf-interfaces-statistics-management {
-
+module bbf-qos-policing-types {
   yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-qos-policing-types";
 
-  namespace "urn:bbf:yang:bbf-interfaces-statistics-management";
-
-  prefix bbf-if-ctrs;
-
-
-  import ietf-interfaces {
-    prefix if;
-  }
+  prefix bbf-qos-plc-tp;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -33,13 +26,13 @@ module bbf-interfaces-statistics-management {
 
   description
     "This module contains a collection of YANG definitions for 
-     supporting the Broadband Forum requirements on interface 
-     management as applicable to access network equipment. As such, 
-     this module is specific to access network equipment (e.g., 
-     BBF-specified Access Nodes and FTTdp DPUs).
+     supporting the Broadband Forum requirements on the management of
+     Quality of Service (QoS) as applicable to access network 
+     equipment. As such, this module is specific to access network 
+     equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module augments ietf-interfaces with a reset
-     action for statistics.
+     Specifically, this module contains common types used for 
+     management of Policers.
 
      Copyright (c) 2017-2018, Broadband Forum
 
@@ -94,30 +87,74 @@ module bbf-interfaces-statistics-management {
                <https://www.broadband-forum.org/technical/download/
                         TR-383_Amendment-1.pdf>";
   }
-  revision 2017-05-08 {
+  revision 2017-04-25 {
     description
       "Initial revision.
        * Approval Date:    see revision date above.
-       * Publication Date: 2017-06-02.";
+       * Publication Date: yyyy-mm-dd.";
     reference
       "TR-383: Common YANG Modules
                <https://www.broadband-forum.org/technical/download/
                         TR-383.pdf>";
   }
 
-  augment '/if:interfaces-state/if:interface' {
+  typedef information-rate {
+    type uint64;
+    units "bits per second";
     description
-      "The 'interfaces' list in the 'interfaces-state' container  
-       contains counters, grouped in the container 'statistics'.
-       This augment provides the action to reset these 
-       counters.";
+      "Information rate in bits per second.";
+  }
 
-    action reset-statistics {
-      description
-        "When this action is invoked, the counters of this
-         interface which are defined and/or augmented to the 
-         container interfaces-state/interface/statistics are 
-         cleared.";
+  typedef burst-size {
+    type uint32;
+    units "bytes";
+    description
+      "Burst size in bytes.";
+  }
+
+  typedef coupling-flag {
+    type uint8 {
+      range "0..1";
     }
+    description
+      "The Coupling Flag (CF) allows the choice between two modes of
+       operation of the rate enforcement algorithm.
+
+       When CF is set to 0, the long term average rate of Service
+       Frames that are declared Yellow is bound by EIR.
+
+       When CF is set to 1, the long term average rate of Service
+       Frames that are declared Yellow is bound by CIR+EIR depending 
+       on the volume of offered Service Frames which are declared 
+       Green.
+
+       In both cases, the burst size of Service Frames which are
+       declared Yellow is bound by EBS.";
+    reference
+      "MEF 10.3";
+  }
+
+  typedef color-mode {
+    type enumeration {
+      enum "color-aware" {
+        description
+          "A Policer property where a pre-determined level of 
+           compliance for each Service Frame is taken into account 
+           when determining the level of compliance for each Service 
+           Frame.";
+      }
+      enum "color-blind" {
+        description
+          "A Policer property where a pre-determined level of 
+           compliance for each Service Frame, if present, is ignored 
+           when determining the level of compliance for each Service 
+           Frame.";
+      }
+    }
+    description
+      "The Color Mode (CM) indicates the type of color awareness which
+       is employed by the Policer.";
+    reference
+      "MEF 10.3, Section 12.1";
   }
 }

@@ -1,13 +1,19 @@
 ## Broadband Forum YANG Modules
 
+### 2018-07-13: [TR-383a1](https://www.broadband-forum.org/technical/download/TR-383_Amendment-1.pdf)
+*Tag: [v2.1.0-TR-383a1](https://github.com/BroadbandForum/yang/tree/v2.1.0-TR-383a1)*
+
+* Extend functionality of Layer 2 forwarding and QoS models 
+* Add new model for Layer 2 multicast management
+* Remove models which depended on an early draft of ietf-hardware (these will be published again in a subsequent release based on the revision of ietf-hardware contained in [RFC 8348](https://tools.ietf.org/html/rfc8348))
+
 ### 2017-11-27: [TR-355c2](https://www.broadband-forum.org/technical/download/TR-355_Corrigendum-2.pdf) YANG Modules for FTTdp Management
 *Tag: [v1.0.2-TR-355c2](https://github.com/BroadbandForum/yang/tree/v1.0.2-TR-355c2)*
 
 Various corrections to existing modules and sub-modules. Some of these corrections are not fully backwards compatible.
 
-
 ### 2017-05-08: [TR-383](https://www.broadband-forum.org/technical/download/TR-383.pdf): Common YANG Modules for Access Networks
-*Tags: [v2.0.0-TR-383](https://github.com/BroadbandForum/yang/tree/v2.0.0-TR-383)*
+*Tag: [v2.0.0-TR-383](https://github.com/BroadbandForum/yang/tree/v2.0.0-TR-383)*
 
 TR-383 defines YANG data models for the management of Broadband Forum specified access network equipment used across many deployment scenarios. Broadband Forum-specified access network equipment comprises Access Nodes and FTTdp DPUs. There is no assumption for BBF YANG modules to apply globally, e.g. to apply to access network equipment other than BBF Access Nodes and FTTdp DPUs, or to apply to core network equipment.
 

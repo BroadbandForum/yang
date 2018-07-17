@@ -18,23 +18,23 @@ module bbf-interfaces-performance-management {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Project Stream";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
 
      Editor:      Ludwig Pauwels, Nokia
-                  <mailto:ludwig.pauwels@nokia.com>
 
-     PS Leader:   Michael Shaffer, Nokia
-                  <mailto:michael.shaffer@nokia.com>
+     PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>";
+     PS Leader:   Ken Kerpez, ASSIA
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
 
   description
     "This module contains a collection of YANG definitions for 
@@ -47,7 +47,7 @@ module bbf-interfaces-performance-management {
      statistics defined by the IETF interfaces data model, 
      ietf-interfaces (RFC7223).
 
-     Copyright (c) 2017, Broadband Forum
+     Copyright (c) 2017-2018, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -90,6 +90,16 @@ module bbf-interfaces-performance-management {
      This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2018-07-13 {
+    description
+      "Initial revision.
+       * Approval Date:    2018-06-04.
+       * Publication Date: see revision date above.";
+    reference
+      "TR-383: Common YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-383_Amendment-1.pdf>";
+  }
   revision 2017-05-08 {
     description
       "Initial revision.
@@ -104,7 +114,7 @@ module bbf-interfaces-performance-management {
   feature performance-24hr {
     description
       "Indicates that collection of 24 hour performance intervals
-       is supported";
+       is supported.";
   }
 
   typedef performance-15min-interval {
@@ -200,7 +210,7 @@ module bbf-interfaces-performance-management {
       type performance-15min-interval;
       description
         "The total number of 15-minute PM intervals for which data 
-         was collected. ";
+         was collected.";
     }
 
     leaf non-valid-intervals {
@@ -234,7 +244,7 @@ module bbf-interfaces-performance-management {
   grouping interface-performance-counters {
     description
       "Counters associated with current and historical 15 minute and
-       24 hour performance counters";
+       24 hour performance counters.";
 
     leaf in-octets {
       type bbf-yang:performance-counter64;
@@ -392,11 +402,11 @@ module bbf-interfaces-performance-management {
 
   augment '/if:interfaces/if:interface' {
     description
-      "Data nodes for the performance configuration parameters";
+      "Data nodes for the performance configuration parameters.";
 
     container performance {
       description
-        "Performance parameters";
+        "Performance parameters.";
 
       leaf enable {
         type boolean;
@@ -408,22 +418,23 @@ module bbf-interfaces-performance-management {
            i.e. 15 minutes statistics and 24 hours statistics, 
            and for both there are current statistics and history 
            data.
-           If false then there are no performance statistics.";
+
+           If false, then there are no performance statistics.";
       }
     }
   }
 
   augment '/if:interfaces-state/if:interface' {
     description
-      "Data nodes for the performance status parameters";
+      "Data nodes for the performance status parameters.";
 
     container performance {
       description
-        "Performance parameters";
+        "Performance parameters.";
 
       container intervals-15min {
         description
-          "15 minute interval performance history";
+          "15 minute interval performance history.";
 
         container current {
           description
@@ -456,7 +467,7 @@ module bbf-interfaces-performance-management {
       container intervals-24hr {
         if-feature "performance-24hr";
         description
-          "24 hour interval performance history";
+          "24 hour interval performance history.";
 
         container current {
           description

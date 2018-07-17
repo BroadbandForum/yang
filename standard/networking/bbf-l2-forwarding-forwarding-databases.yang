@@ -17,29 +17,29 @@ submodule bbf-l2-forwarding-forwarding-databases {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Project Stream";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
 
      Editor:      Ludwig Pauwels, Nokia
-                  <mailto:ludwig.pauwels@nokia.com>
 
-     PS Leader:   Michael Shaffer, Nokia
-                  <mailto:michael.shaffer@nokia.com>
+     PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>";
+     PS Leader:   Ken Kerpez, ASSIA
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
 
   description
     "This submodule contains a collection of YANG definitions for 
      managing forwarding databases.
 
-     Copyright (c) 2017, Broadband Forum
+     Copyright (c) 2017-2018, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -82,6 +82,16 @@ submodule bbf-l2-forwarding-forwarding-databases {
      This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2018-07-13 {
+    description
+      "Initial revision.
+       * Approval Date:    2018-06-04.
+       * Publication Date: see revision date above.";
+    reference
+      "TR-383: Common YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-383_Amendment-1.pdf>";
+  }
   revision 2017-05-08 {
     description
       "Initial revision.
@@ -104,25 +114,17 @@ submodule bbf-l2-forwarding-forwarding-databases {
        by multiple forwarders.";
   }
 
-  typedef forwarding-database-ref {
-    type leafref {
-      path '/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarding-databases/'
-         + 'bbf-l2-fwd:forwarding-database/bbf-l2-fwd:name';
-    }
+  feature mac-learning {
     description
-      "This type is used by data models that need to reference
-       configured forwarding databases.";
+      "This feature indicates whether the network element supports MAC
+       learning.";
   }
 
-  typedef forwarding-database-state-ref {
-    type leafref {
-      path '/bbf-l2-fwd:forwarding-state/bbf-l2-fwd:forwarding-'
-         + 'databases/bbf-l2-fwd:forwarding-database/bbf-l2-fwd:'
-         + 'name';
-    }
+  feature read-system-fdb-capacity {
     description
-      "This type is used by data models that need to reference the 
-       operational present forwarding databases.";
+      "Provides the system's capacity for forwarding databases, i.e. 
+       the total number of entries for all forwarding databases 
+       together.";
   }
 
   augment '/bbf-l2-fwd:forwarding' {
@@ -155,6 +157,7 @@ submodule bbf-l2-forwarding-forwarding-databases {
         }
 
         leaf aging-timer {
+          if-feature "mac-learning";
           type uint32;
           units "seconds";
           default "300";
@@ -220,6 +223,7 @@ submodule bbf-l2-forwarding-forwarding-databases {
             }
 
             case allowed-to-learn-on {
+              if-feature "mac-learning";
               choice allow-to-learn-on {
                 description
                   "The source MAC address of the frame can be learned
@@ -300,6 +304,15 @@ submodule bbf-l2-forwarding-forwarding-databases {
          To support this concept it is possible to have multiple 
          forwarders assigned to a single FDB.";
 
+      leaf max-number-mac-addresses {
+        if-feature "read-system-fdb-capacity";
+        type uint32;
+        description
+          "Provides the system's capacity for forwarding databases, 
+           i.e. the total number of entries for all forwarding 
+           databases together.";
+      }
+
       list forwarding-database {
         key "name";
         description
@@ -331,9 +344,9 @@ submodule bbf-l2-forwarding-forwarding-databases {
             choice learned-on {
               description
                 "In case of a shared forwarding database the MAC 
-                 address is learned on an 'Ethernet-like' interface
+                 address is stored on an 'Ethernet-like' interface
                  In case of a not-shared forwarding database the MAC
-                 address is learned on a forwarder port of the single 
+                 address is stored on a forwarder port of the single 
                  forwarder that uses the forwarding database.";
 
               case forwarder-port {
@@ -362,7 +375,11 @@ submodule bbf-l2-forwarding-forwarding-databases {
         "Forwarder objects relative to forwarding databases.";
 
       leaf forwarding-database {
-        type forwarding-database-state-ref;
+        type leafref {
+          path '/bbf-l2-fwd:forwarding-state/bbf-l2-fwd:forwarding-'
+             + 'databases/bbf-l2-fwd:forwarding-database/bbf-l2-'
+             + 'fwd:name';
+        }
         description
           "A reference to a forwarding database associated with a 
            forwarder.";

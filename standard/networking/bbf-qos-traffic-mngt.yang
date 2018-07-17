@@ -16,25 +16,29 @@ module bbf-qos-traffic-mngt {
     prefix bbf-yang;
   }
 
+  import bbf-qos-types {
+    prefix bbf-qos-t;
+  }
+
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Project Stream";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
 
      Editor:      Ludwig Pauwels, Nokia
-                  <mailto:ludwig.pauwels@nokia.com>
 
-     PS Leader:   Michael Shaffer, Nokia
-                  <mailto:michael.shaffer@nokia.com>
+     PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>";
+     PS Leader:   Ken Kerpez, ASSIA
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
 
   description
     "This module contains a collection of YANG definitions for 
@@ -46,7 +50,7 @@ module bbf-qos-traffic-mngt {
      Specifically, this module contains a collection of functions for 
      QoS traffic management (TM).
 
-     Copyright (c) 2017, Broadband Forum
+     Copyright (c) 2017-2018, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -89,6 +93,16 @@ module bbf-qos-traffic-mngt {
      This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2018-07-13 {
+    description
+      "Initial revision.
+       * Approval Date:    2018-06-04.
+       * Publication Date: see revision date above.";
+    reference
+      "TR-383: Common YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-383_Amendment-1.pdf>";
+  }
   revision 2017-05-08 {
     description
       "Initial revision.
@@ -123,16 +137,6 @@ module bbf-qos-traffic-mngt {
        its value does NOT represent the priority of the queue itself.
        This queue-id value is determined by means of a 
        traffic-class-id to queue-id mapping profile.";
-  }
-
-  typedef traffic-class-id {
-    type uint32 {
-      range "0..7";
-    }
-    description
-      "The identifier of a traffic class. A traffic class refers to
-       a set of packets that are processed with the same Quality of 
-       Service characteristic.";
   }
 
   typedef scheduling-priority {
@@ -266,7 +270,7 @@ module bbf-qos-traffic-mngt {
            maps each of the traffic-class-ids to a queue-id.";
 
         leaf traffic-class-id {
-          type traffic-class-id;
+          type bbf-qos-t:traffic-class-id;
           description
             "A traffic-class-id.";
         }
@@ -290,7 +294,7 @@ module bbf-qos-traffic-mngt {
       leaf name {
         type bbf-yang:string-ascii64;
         description
-          "The name of a bac-entry.";
+          "The name of a BAC entry.";
       }
 
       leaf max-queue-size {
@@ -427,7 +431,7 @@ module bbf-qos-traffic-mngt {
 
   grouping bac-ref {
     description
-      "A reference to a bac-entry.";
+      "A reference to a BAC entry.";
 
     leaf bac-name {
       type leafref {

@@ -1,14 +1,7 @@
-module bbf-interfaces-statistics-management {
-
+submodule bbf-mgmd-configuration-interface-to-router {
   yang-version 1.1;
-
-  namespace "urn:bbf:yang:bbf-interfaces-statistics-management";
-
-  prefix bbf-if-ctrs;
-
-
-  import ietf-interfaces {
-    prefix if;
+  belongs-to bbf-mgmd {
+    prefix bbf-mgmd-c-i2r;
   }
 
   organization
@@ -33,13 +26,11 @@ module bbf-interfaces-statistics-management {
 
   description
     "This module contains a collection of YANG definitions for 
-     supporting the Broadband Forum requirements on interface 
-     management as applicable to access network equipment. As such, 
-     this module is specific to access network equipment (e.g., 
-     BBF-specified Access Nodes and FTTdp DPUs).
-
-     Specifically, this module augments ietf-interfaces with a reset
-     action for statistics.
+     supporting the Multicast Group Membership Discovery (MGMD) 
+     Protocols. In particular, it describes configuration objects used
+     for managing the Internet Group Management Protocol (IGMP) and 
+     the Multicast Listener Discovery (MLD) protocol on interfaces 
+     that connect to multicast routers.
 
      Copyright (c) 2017-2018, Broadband Forum
 
@@ -94,30 +85,50 @@ module bbf-interfaces-statistics-management {
                <https://www.broadband-forum.org/technical/download/
                         TR-383_Amendment-1.pdf>";
   }
-  revision 2017-05-08 {
+  revision 2017-03-28 {
     description
       "Initial revision.
        * Approval Date:    see revision date above.
-       * Publication Date: 2017-06-02.";
+       * Publication Date: yyyy-mm-dd.";
     reference
       "TR-383: Common YANG Modules
                <https://www.broadband-forum.org/technical/download/
                         TR-383.pdf>";
   }
 
-  augment '/if:interfaces-state/if:interface' {
+  grouping interface-to-router {
     description
-      "The 'interfaces' list in the 'interfaces-state' container  
-       contains counters, grouped in the container 'statistics'.
-       This augment provides the action to reset these 
-       counters.";
+      "Grouping of objects used for configuring the Internet Group 
+       Management Protocol (IGMP) and the Multicast Listener Discovery
+       (MLD) protocol on interfaces that connect multicast routers.";
 
-    action reset-statistics {
+    leaf unsolicited-report-interval {
+      type uint32 {
+        range "1..255";
+      }
+      units "0.1 seconds";
+      default "10";
       description
-        "When this action is invoked, the counters of this
-         interface which are defined and/or augmented to the 
-         container interfaces-state/interface/statistics are 
-         cleared.";
+        "The interval between repetitions of a host's initial report
+         of interest in a multicast address.";
+      reference
+        "RFC 3376 Section 8.11;
+         RFC 3810 Section 9.11";
+    }
+
+    leaf robustness {
+      type uint32 {
+        range "1..255";
+      }
+      default "2";
+      description
+        "The robustness variable allows tuning for the expected packet
+         loss on a subnet. If a subnet is expected to be lossy, the
+         robustness variable may be increased. IGMP and MLD are robust
+         to (robustness variable - 1) packet losses.";
+      reference
+        "RFC 3376 Section 8.1; 
+         RFC 5519 mgmdHostInterfaceVersion3Robustness";
     }
   }
 }

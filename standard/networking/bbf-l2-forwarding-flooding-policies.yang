@@ -21,29 +21,29 @@ submodule bbf-l2-forwarding-flooding-policies {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Project Stream";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
 
      Editor:      Ludwig Pauwels, Nokia
-                  <mailto:ludwig.pauwels@nokia.com>
 
-     PS Leader:   Michael Shaffer, Nokia
-                  <mailto:michael.shaffer@nokia.com>
+     PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>";
+     PS Leader:   Ken Kerpez, ASSIA
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
 
   description
     "This submodule contains a collection of YANG definitions for 
      managing flooding policies.
 
-     Copyright (c) 2017, Broadband Forum
+     Copyright (c) 2017-2018, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -86,6 +86,16 @@ submodule bbf-l2-forwarding-flooding-policies {
      This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2018-07-13 {
+    description
+      "Initial revision.
+       * Approval Date:    2018-06-04.
+       * Publication Date: see revision date above.";
+    reference
+      "TR-383: Common YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-383_Amendment-1.pdf>";
+  }
   revision 2017-05-08 {
     description
       "Initial revision.
@@ -105,16 +115,6 @@ submodule bbf-l2-forwarding-flooding-policies {
   feature flooding-policies-profiles {
     description
       "Indicates support for flooding policies profiles.";
-  }
-
-  typedef flooding-policies-profile-ref {
-    type leafref {
-      path '/bbf-l2-fwd:forwarding/bbf-l2-fwd:flooding-policies-'
-         + 'profiles/bbf-l2-fwd:flooding-policies-profile/bbf-l2-'
-         + 'fwd:name';
-    }
-    description
-      "A reference to a flooding policies profile.";
   }
 
   augment '/bbf-l2-fwd:forwarding' {
@@ -214,7 +214,7 @@ submodule bbf-l2-forwarding-flooding-policies {
               leaf discard {
                 type empty;
                 description
-                  "The frame shall be discarded.";
+                  "The frame will be discarded.";
               }
             }
 
@@ -271,9 +271,13 @@ submodule bbf-l2-forwarding-flooding-policies {
           "Provides alternative ways to define flooding policies.";
 
         case profile-based {
+          if-feature "flooding-policies-profiles";
           leaf flooding-policies-profile {
-            if-feature "flooding-policies-profiles";
-            type flooding-policies-profile-ref;
+            type leafref {
+              path '/bbf-l2-fwd:forwarding/bbf-l2-fwd:flooding-'
+                 + 'policies-profiles/bbf-l2-fwd:flooding-policies-'
+                 + 'profile/bbf-l2-fwd:name';
+            }
             description
               "A reference to a flooding policies profile.";
           }

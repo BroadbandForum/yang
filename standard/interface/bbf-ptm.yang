@@ -1,14 +1,16 @@
-module bbf-interfaces-statistics-management {
-
+module bbf-ptm {
   yang-version 1.1;
 
-  namespace "urn:bbf:yang:bbf-interfaces-statistics-management";
+  namespace "urn:bbf:yang:bbf-ptm";
 
-  prefix bbf-if-ctrs;
-
+  prefix bbf-ptm;
 
   import ietf-interfaces {
     prefix if;
+  }
+
+  import iana-if-type {
+    prefix ianaift;
   }
 
   organization
@@ -38,8 +40,9 @@ module bbf-interfaces-statistics-management {
      this module is specific to access network equipment (e.g., 
      BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module augments ietf-interfaces with a reset
-     action for statistics.
+     Specifically, this module augments the IETF interfaces data 
+     model, ietf-interfaces (RFC7223), with nodes for managing 
+     Packet Transfer Mode (PTM) interfaces.
 
      Copyright (c) 2017-2018, Broadband Forum
 
@@ -94,30 +97,84 @@ module bbf-interfaces-statistics-management {
                <https://www.broadband-forum.org/technical/download/
                         TR-383_Amendment-1.pdf>";
   }
-  revision 2017-05-08 {
+  revision 2017-03-13 {
     description
       "Initial revision.
        * Approval Date:    see revision date above.
-       * Publication Date: 2017-06-02.";
+       * Publication Date: yyyy-mm-dd.";
     reference
       "TR-383: Common YANG Modules
                <https://www.broadband-forum.org/technical/download/
                         TR-383.pdf>";
   }
 
-  augment '/if:interfaces-state/if:interface' {
-    description
-      "The 'interfaces' list in the 'interfaces-state' container  
-       contains counters, grouped in the container 'statistics'.
-       This augment provides the action to reset these 
-       counters.";
-
-    action reset-statistics {
+  augment '/if:interfaces/if:interface' {
+    when 'derived-from-or-self(if:type, "ianaift:ptm")' {
       description
-        "When this action is invoked, the counters of this
-         interface which are defined and/or augmented to the 
-         container interfaces-state/interface/statistics are 
-         cleared.";
+        "Common data that defines the relationship between the PTM 
+         interface and its lower-layer interface.";
+    }
+
+    description
+      "Add a reference to a lower-layer interface that is of the type 
+       PTM.";
+
+    container ptm {
+      description
+        "Links the PTM interface to a lower-layer interface.";
+
+      leaf lower-layer-if {
+        type if:interface-ref;
+
+        must
+          "derived-from-or-self(
+           /if:interfaces/if:interface[if:name = current()]
+           /if:type,'ianaift:fastdsl')";
+
+        mandatory true;
+
+        description
+          "References the lower-layer interface.
+           The lower-layer must be of the type fastdsl.";
+      }
+    }
+  }
+
+  grouping ptm-interface-ref {
+    description
+      "A reference to a PTM interface configuration data.";
+    leaf interface {
+      type if:interface-ref;
+
+      must
+        "derived-from-or-self(/if:interfaces/
+         if:interface[if:name = current()]/if:type,
+         'ianaift:ptm')" {
+        description
+          "The referenced interface must be of the type PTM.";
+      }
+
+      description
+        "A reference to a PTM interface's configuration data.";
+    }
+  }
+
+  grouping ptm-interface-state-ref {
+    description
+      "A reference to a PTM interface state data.";
+    leaf interface {
+      type if:interface-state-ref;
+
+      must
+        "derived-from-or-self(/if:interfaces-state/
+         if:interface[if:name = current()]/if:type,
+         'ianaift:ptm')" {
+        description
+          "The referenced interface must be of the type PTM.";
+      }
+
+      description
+        "A reference to a PTM interface's state data.";
     }
   }
 }

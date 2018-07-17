@@ -26,23 +26,23 @@ module bbf-sub-interface-tagging {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Project Stream";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
 
      Editor:      Ludwig Pauwels, Nokia
-                  <mailto:ludwig.pauwels@nokia.com>
 
-     PS Leader:   Michael Shaffer, Nokia
-                  <mailto:michael.shaffer@nokia.com>
+     PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>";
+     PS Leader:   Ken Kerpez, ASSIA
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
 
   description
     "This module contains a collection of YANG definitions for 
@@ -54,7 +54,7 @@ module bbf-sub-interface-tagging {
      Specifically, this module defines the ingress and egress tagging 
      of a VLAN sub-interface.
 
-     Copyright (c) 2017, Broadband Forum
+     Copyright (c) 2017-2018, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -97,6 +97,16 @@ module bbf-sub-interface-tagging {
      This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2018-07-13 {
+    description
+      "Initial revision.
+       * Approval Date:    2018-06-04.
+       * Publication Date: see revision date above.";
+    reference
+      "TR-383: Common YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-383_Amendment-1.pdf>";
+  }
   revision 2017-05-08 {
     description
       "Initial revision.
@@ -106,6 +116,18 @@ module bbf-sub-interface-tagging {
       "TR-383: Common YANG Modules
                <https://www.broadband-forum.org/technical/download/
                         TR-383.pdf>";
+  }
+
+  feature copy-vlan-id-from-tag-index {
+    description
+      "Indicates support for copying the VLAN ID from a specified 
+       tag index.";
+  }
+
+  feature write-pbit-value-in-vlan-tag {
+    description
+      "Indicates support for writing a configurable PBIT bits value 
+       into a VLAN tag.";
   }
 
   grouping pbit-marking {
@@ -147,6 +169,18 @@ module bbf-sub-interface-tagging {
           type bbf-classif:tag-index;
           description
             "Specifies from which tag the PBIT bits MUST be copied.";
+        }
+      }
+
+      case write-pbit-value {
+        if-feature "write-pbit-value-in-vlan-tag";
+        description
+          "Write a PBIT value into the tag.";
+
+        leaf write-pbit {
+          type bbf-dot1qt:pbit;
+          description
+            "Specified PBIT value to write into the tag.";
         }
       }
     }
@@ -193,6 +227,23 @@ module bbf-sub-interface-tagging {
             "Specifies from which tag the DEI bit MUST be copied.";
         }
       }
+
+      case write-dei-1 {
+        description
+          "Tagged and priority-tagged frames contain a DEI bit.
+           Untagged frames do not contain a DEI bit.
+
+           Write-dei-1 provides a simple method to identify what DEI
+           MUST be inserted in the output frame that can be applied to
+           all frame types. More advanced methods can be provided via 
+           other dei-action cases.";
+
+        leaf write-dei-1 {
+          type empty;
+          description
+            "Push DEI=1 in the tag.";
+        }
+      }
     }
   }
 
@@ -207,21 +258,46 @@ module bbf-sub-interface-tagging {
          a single VLAN-ID.";
 
       leaf tag-type {
-        type bbf-dot1qt:dot1q-tag-type;
-
+        type union {
+          type bbf-dot1qt:dot1q-tag-type;
+          type uint16;
+        }
         mandatory true;
-
         description
           "VLAN tag type.";
       }
 
       leaf vlan-id {
-        type bbf-dot1qt:vlan-id-or-0;
-
+        type union {
+          type bbf-dot1qt:vlan-id-or-0;
+          type enumeration {
+            enum "vlan-id-from-tag-index" {
+              if-feature "copy-vlan-id-from-tag-index";
+              description
+                "The VLAN ID is derived from one of the ingress
+                 tags as specified by 'vlan-id-from-tag-index'.";
+            }
+          }
+        }
         mandatory true;
-
         description
-          "The VLAN-ID or the value 0 (priority-tagged).";
+          "The VLAN-ID, the value 0 (priority-tagged) or configure
+           to derive from an existing tag.";
+      }
+
+      leaf vlan-id-from-tag-index-or-discard {
+        when "../vlan-id = 'vlan-id-from-tag-index'" {
+          description
+            "Only applicable when the 'vlan-id' is configured to 
+             be derived from a tag index.";
+        }
+        if-feature "copy-vlan-id-from-tag-index";
+        type bbf-classif:tag-index;
+        mandatory true;
+        description
+          "Specifies from which tag the VLAN ID is be copied. If the
+           specified input tag does not exist, the packet is 
+           discarded.";
       }
 
       uses pbit-marking;
@@ -262,7 +338,7 @@ module bbf-sub-interface-tagging {
          * Only allow a push of an inner tag if an outer tag is also
          * being pushed.
          */
-        must ". != 0 or count(../../push-tag[index = 0]/index) > 0" {
+        must "(count(../../push-tag[index = 0]) > 0)" {
           error-message
             "An inner tag can only be pushed if an outer tag is also 
              specified.";

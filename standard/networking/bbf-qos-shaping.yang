@@ -1,14 +1,19 @@
-module bbf-interfaces-statistics-management {
-
+module bbf-qos-shaping {
   yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-qos-shaping";
 
-  namespace "urn:bbf:yang:bbf-interfaces-statistics-management";
+  prefix bbf-qos-shap;
 
-  prefix bbf-if-ctrs;
-
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
 
   import ietf-interfaces {
     prefix if;
+  }
+
+  import bbf-qos-traffic-mngt {
+    prefix bbf-qos-tm;
   }
 
   organization
@@ -33,13 +38,12 @@ module bbf-interfaces-statistics-management {
 
   description
     "This module contains a collection of YANG definitions for 
-     supporting the Broadband Forum requirements on interface 
-     management as applicable to access network equipment. As such, 
-     this module is specific to access network equipment (e.g., 
-     BBF-specified Access Nodes and FTTdp DPUs).
+     supporting the Broadband Forum requirements on the management of
+     Quality of Service (QoS) as applicable to access network 
+     equipment. As such, this module is specific to access network 
+     equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module augments ietf-interfaces with a reset
-     action for statistics.
+     Specifically, this module contains shaping configuration data.
 
      Copyright (c) 2017-2018, Broadband Forum
 
@@ -94,30 +98,86 @@ module bbf-interfaces-statistics-management {
                <https://www.broadband-forum.org/technical/download/
                         TR-383_Amendment-1.pdf>";
   }
-  revision 2017-05-08 {
+
+  augment '/bbf-qos-tm:tm-profiles' {
     description
-      "Initial revision.
-       * Approval Date:    see revision date above.
-       * Publication Date: 2017-06-02.";
-    reference
-      "TR-383: Common YANG Modules
-               <https://www.broadband-forum.org/technical/download/
-                        TR-383.pdf>";
+      "Augment the traffic management profile to add shaper
+       configuration.";
+
+    list shaper-profile {
+      key "name";
+
+      description
+        "A list of shaper profiles.";
+
+      leaf name {
+        type bbf-yang:string-ascii64;
+
+        description
+          "The name of a shaper profile.";
+      }
+
+      choice shaper-type {
+        mandatory true;
+
+        description
+          "Choice of shaper types.";
+
+        case single-token-bucket {
+          description
+            "Applicable when the shaper type is single token.";
+
+          container single-token-bucket {
+            description
+              "Management objects associated with single token.";
+
+            leaf pir {
+              type uint32;
+              units "kbits per second";
+              description
+                "The Peak Information Rate, in kilobits per 
+                 second.";
+            }
+
+            leaf pbs {
+              type uint32;
+              units "bytes";
+              description
+                "The Peak Burst Size, in bytes.";
+            }
+          }
+        }
+      }
+    }
   }
 
-  augment '/if:interfaces-state/if:interface' {
+  grouping shaper-profile-ref {
     description
-      "The 'interfaces' list in the 'interfaces-state' container  
-       contains counters, grouped in the container 'statistics'.
-       This augment provides the action to reset these 
-       counters.";
+      "A reference to a shaper profile.";
 
-    action reset-statistics {
+    leaf shaper-name {
+      type leafref {
+        path '/bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/'
+           + 'bbf-qos-shap:name';
+      }
       description
-        "When this action is invoked, the counters of this
-         interface which are defined and/or augmented to the 
-         container interfaces-state/interface/statistics are 
-         cleared.";
+        "An absolute reference to a shaper profile.";
     }
+  }
+
+  augment '/if:interfaces/if:interface/bbf-qos-tm:tm-root' {
+    description
+      "Augments the traffic management root with a reference to a 
+       shaper profile.";
+    uses shaper-profile-ref;
+  }
+
+  augment '/if:interfaces/if:interface/bbf-qos-tm:tm-root/bbf-qos-'
+        + 'tm:children-type/bbf-qos-tm:queues/bbf-qos-tm:queue/bbf-'
+        + 'qos-tm:queue-scheduling-cfg-type/bbf-qos-tm:inline' {
+    description
+      "Augments the queues defined within the traffic management root 
+       with a reference to a shaper profile.";
+    uses shaper-profile-ref;
   }
 }

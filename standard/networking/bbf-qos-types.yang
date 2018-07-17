@@ -1,15 +1,8 @@
-module bbf-interfaces-statistics-management {
-
+module bbf-qos-types {
   yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-qos-types";
 
-  namespace "urn:bbf:yang:bbf-interfaces-statistics-management";
-
-  prefix bbf-if-ctrs;
-
-
-  import ietf-interfaces {
-    prefix if;
-  }
+  prefix bbf-qos-t;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -33,13 +26,13 @@ module bbf-interfaces-statistics-management {
 
   description
     "This module contains a collection of YANG definitions for 
-     supporting the Broadband Forum requirements on interface 
-     management as applicable to access network equipment. As such, 
-     this module is specific to access network equipment (e.g., 
-     BBF-specified Access Nodes and FTTdp DPUs).
+     supporting the Broadband Forum requirements on the management of
+     Quality of Service (QoS) as applicable to access network 
+     equipment. As such, this module is specific to access network 
+     equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module augments ietf-interfaces with a reset
-     action for statistics.
+     Specifically, this module contains type definitions used in 
+     multiple QoS modules.
 
      Copyright (c) 2017-2018, Broadband Forum
 
@@ -94,30 +87,14 @@ module bbf-interfaces-statistics-management {
                <https://www.broadband-forum.org/technical/download/
                         TR-383_Amendment-1.pdf>";
   }
-  revision 2017-05-08 {
-    description
-      "Initial revision.
-       * Approval Date:    see revision date above.
-       * Publication Date: 2017-06-02.";
-    reference
-      "TR-383: Common YANG Modules
-               <https://www.broadband-forum.org/technical/download/
-                        TR-383.pdf>";
-  }
 
-  augment '/if:interfaces-state/if:interface' {
-    description
-      "The 'interfaces' list in the 'interfaces-state' container  
-       contains counters, grouped in the container 'statistics'.
-       This augment provides the action to reset these 
-       counters.";
-
-    action reset-statistics {
-      description
-        "When this action is invoked, the counters of this
-         interface which are defined and/or augmented to the 
-         container interfaces-state/interface/statistics are 
-         cleared.";
+  typedef traffic-class-id {
+    type uint32 {
+      range "0..7";
     }
+    description
+      "The identifier of a traffic class. A traffic class refers to
+       a set of packets that are processed with the same Quality of 
+       Service characteristic.";
   }
 }

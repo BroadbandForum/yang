@@ -20,29 +20,29 @@ module bbf-qos-classifiers {
     prefix bbf-classif;
   }
 
-  import bbf-qos-traffic-mngt {
-    prefix bbf-qostm;
+  import bbf-qos-types {
+    prefix bbf-qos-t;
   }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Project Stream";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
 
      Editor:      Ludwig Pauwels, Nokia
-                  <mailto:ludwig.pauwels@nokia.com>
 
-     PS Leader:   Michael Shaffer, Nokia
-                  <mailto:michael.shaffer@nokia.com>
+     PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>";
+     PS Leader:   Ken Kerpez, ASSIA
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
 
   description
     "This module contains a collection of YANG definitions for 
@@ -54,7 +54,7 @@ module bbf-qos-classifiers {
      Specifically, this module contains a collection of classifiers 
      used by policies applied to packets.
 
-     Copyright (c) 2017, Broadband Forum
+     Copyright (c) 2017-2018, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -97,6 +97,16 @@ module bbf-qos-classifiers {
      This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2018-07-13 {
+    description
+      "Initial revision.
+       * Approval Date:    2018-06-04.
+       * Publication Date: see revision date above.";
+    reference
+      "TR-383: Common YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-383_Amendment-1.pdf>";
+  }
   revision 2017-05-08 {
     description
       "Initial revision.
@@ -106,12 +116,6 @@ module bbf-qos-classifiers {
       "TR-383: Common YANG Modules
                <https://www.broadband-forum.org/technical/download/
                         TR-383.pdf>";
-  }
-
-  feature classifier-profiles {
-    description
-      "Indicates support for the configuration of classifiers as
-       reusable profiles.";
   }
 
   typedef qos-pbit-marking-index {
@@ -179,6 +183,33 @@ module bbf-qos-classifiers {
       "The action-type identity indicating the system shall generate 
        a value for the Differentiated Services Code Point (DSCP) 
        bits.";
+  }
+
+  identity action-scope {
+    description
+      "This base identity type defines action scopes.";
+  }
+
+  identity vlan-sub-interface {
+    base action-scope;
+    description
+      "The scope of the action is the VLAN sub-interface.";
+  }
+
+  identity ethernet-interface {
+    base action-scope;
+    description
+      "The scope of the action is the Ethernet like interface.
+       This encompasses all VLAN sub-interfaces within the
+       Ethernet like interface in scope.";
+  }
+
+  typedef action-scope {
+    type identityref {
+      base action-scope;
+    }
+    description
+      "The scope of the action.";
   }
 
   grouping pbit-marking {
@@ -337,7 +368,7 @@ module bbf-qos-classifiers {
                 "Only applicable when the action-type is 
                  scheduling-traffic-class.";
             }
-            type bbf-qostm:traffic-class-id;
+            type bbf-qos-t:traffic-class-id;
             description
               "Define the traffic class for scheduling.";
           }
@@ -347,7 +378,6 @@ module bbf-qos-classifiers {
   }
 
   container classifiers {
-    if-feature "classifier-profiles";
     description
       "List of classifier entries.";
 

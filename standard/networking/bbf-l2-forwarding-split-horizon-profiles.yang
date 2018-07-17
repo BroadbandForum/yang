@@ -17,29 +17,29 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Project Stream";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
 
      Editor:      Ludwig Pauwels, Nokia
-                  <mailto:ludwig.pauwels@nokia.com>
 
-     PS Leader:   Michael Shaffer, Nokia
-                  <mailto:michael.shaffer@nokia.com>
+     PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>";
+     PS Leader:   Ken Kerpez, ASSIA
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
 
   description
     "This submodule contains a collection of YANG definitions for 
      managing split horizon profiles.
 
-     Copyright (c) 2017, Broadband Forum
+     Copyright (c) 2017-2018, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -82,6 +82,16 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
      This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2018-07-13 {
+    description
+      "Initial revision.
+       * Approval Date:    2018-06-04.
+       * Publication Date: see revision date above.";
+    reference
+      "TR-383: Common YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-383_Amendment-1.pdf>";
+  }
   revision 2017-05-08 {
     description
       "Initial revision.
@@ -96,16 +106,6 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
   feature split-horizon-profiles {
     description
       "Indicates support for split horizon profiles.";
-  }
-
-  typedef split-horizon-profile-ref {
-    type leafref {
-      path '/bbf-l2-fwd:forwarding/bbf-l2-fwd:split-horizon-'
-         + 'profiles/bbf-l2-fwd:split-horizon-profile/bbf-l2-fwd:'
-         + 'name';
-    }
-    description
-      "A reference to a split horizon profile.";
   }
 
   augment '/bbf-l2-fwd:forwarding' {
@@ -179,7 +179,11 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
          other of its forwarder ports.";
 
       leaf split-horizon-profile {
-        type split-horizon-profile-ref;
+        type leafref {
+          path '/bbf-l2-fwd:forwarding/bbf-l2-fwd:split-horizon-'
+             + 'profiles/bbf-l2-fwd:split-horizon-profile/bbf-l2-'
+             + 'fwd:name';
+        }
         description
           "A reference to a split horizon profile associated with a 
            forwarder.";
