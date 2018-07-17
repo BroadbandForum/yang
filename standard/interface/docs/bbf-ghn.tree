@@ -1,0 +1,328 @@
+module: ietf-interfaces
+    +--rw interfaces
+    |  +--rw interface* [name]
+    |     +--rw name                        string
+    |     +--rw description?                string
+    |     +--rw type                        identityref
+    |     +--rw enabled?                    boolean
+    |     +--rw link-up-down-trap-enable?   enumeration {if-mib}?
+    |     +--rw bbf-ghn:ghn-interface!
+    |        +--rw bbf-ghn:domain
+    |        |  +--rw (bbf-ghn:profile-config)?
+    |        |     +--:(bbf-ghn:no-profiles-attached)
+    |        |     |  +--rw bbf-ghn:no-profiles-attached?   empty
+    |        |     +--:(bbf-ghn:direct-attachment-mode)
+    |        |     |  +--rw bbf-ghn:scheduling-profile      scheduling-profile-ref
+    |        |     |  +--rw bbf-ghn:security-profile        security-profile-ref
+    |        |     |  +--rw bbf-ghn:dba-profile             dba-profile-ref
+    |        |     +--:(bbf-ghn:indirect-attachment-mode)
+    |        |        +--rw bbf-ghn:domain-config-vector    domain-config-vector-ref
+    |        +--rw bbf-ghn:node* [node-mac-address]
+    |           +--rw bbf-ghn:node-mac-address    yang:mac-address
+    |           +--rw bbf-ghn:node
+    |           |  +--rw (bbf-ghn:profile-config)?
+    |           |     +--:(bbf-ghn:no-profiles-attached)
+    |           |     |  +--rw bbf-ghn:no-profiles-attached?   empty
+    |           |     +--:(bbf-ghn:direct-attachment-mode)
+    |           |     |  +--rw bbf-ghn:node-id-profile         node-id-profile-ref
+    |           |     +--:(bbf-ghn:indirect-attachment-mode)
+    |           |        +--rw bbf-ghn:node-config-vector      node-config-vector-ref
+    |           +--rw bbf-ghn:link* [device-id]
+    |              +--rw bbf-ghn:device-id                     bbf-ghn:device-id
+    |              +--rw (bbf-ghn:profile-config)?
+    |                 +--:(bbf-ghn:no-profiles-attached)
+    |                 |  +--rw bbf-ghn:no-profiles-attached?         empty
+    |                 +--:(bbf-ghn:direct-attachment-mode)
+    |                 |  +--rw bbf-ghn:line-spectrum-profile         line-spectrum-profile-ref
+    |                 |  +--rw bbf-ghn:channel-estimation-profile    channel-estimation-profile-ref
+    |                 +--:(bbf-ghn:indirect-attachment-mode)
+    |                    +--rw bbf-ghn:link-config-vector            link-config-vector-ref
+    +--ro interfaces-state
+       +--ro interface* [name]
+          +--ro name                     string
+          +--ro type                     identityref
+          +--ro admin-status             enumeration {if-mib}?
+          +--ro oper-status              enumeration
+          +--ro last-change?             yang:date-and-time
+          +--ro if-index                 int32 {if-mib}?
+          +--ro phys-address?            yang:phys-address
+          +--ro higher-layer-if*         interface-state-ref
+          +--ro lower-layer-if*          interface-state-ref
+          +--ro speed?                   yang:gauge64
+          +--ro statistics
+          |  +--ro discontinuity-time    yang:date-and-time
+          |  +--ro in-octets?            yang:counter64
+          |  +--ro in-unicast-pkts?      yang:counter64
+          |  +--ro in-broadcast-pkts?    yang:counter64
+          |  +--ro in-multicast-pkts?    yang:counter64
+          |  +--ro in-discards?          yang:counter32
+          |  +--ro in-errors?            yang:counter32
+          |  +--ro in-unknown-protos?    yang:counter32
+          |  +--ro out-octets?           yang:counter64
+          |  +--ro out-unicast-pkts?     yang:counter64
+          |  +--ro out-broadcast-pkts?   yang:counter64
+          |  +--ro out-multicast-pkts?   yang:counter64
+          |  +--ro out-discards?         yang:counter32
+          |  +--ro out-errors?           yang:counter32
+          +--ro bbf-ghn:ghn-interface!
+             +--ro bbf-ghn:domain
+             |  +--ro bbf-ghn:status
+             |     +--ro bbf-ghn:domain-scheduling
+             |     |  +--ro bbf-ghn:mac-cycle-duration?   bbf-ghn:cycle-duration
+             |     +--ro bbf-ghn:domain-information
+             |     |  +--ro bbf-ghn:domain-name?                  bbf-ghn:domain-name
+             |     |  +--ro bbf-ghn:dni?                          bbf-ghn:dni
+             |     |  +--ro bbf-ghn:minimum-supported-bandplan?   bbf-ghn:bandplan
+             |     |  +--ro bbf-ghn:maximum-supported-bandplan?   bbf-ghn:bandplan
+             |     +--ro bbf-ghn:domain-topology
+             |     |  +--ro bbf-ghn:topology-update-interval?   uint8
+             |     +--ro bbf-ghn:security
+             |        +--ro bbf-ghn:encryption-enabled?   boolean
+             |        +--ro bbf-ghn:target-domains*       bbf-yang:string-ascii64
+             +--ro bbf-ghn:node* [node-mac-address]
+             |  +--ro bbf-ghn:node-mac-address    yang:mac-address
+             |  +--ro bbf-ghn:node
+             |  |  +--ro bbf-ghn:status
+             |  |  |  +--ro bbf-ghn:is-dm?                            boolean
+             |  |  |  +--ro bbf-ghn:device-id?                        bbf-ghn:device-id
+             |  |  |  +--ro bbf-ghn:dm-capable?                       boolean
+             |  |  |  +--ro bbf-ghn:sc-capable?                       boolean
+             |  |  |  +--ro bbf-ghn:bandplan?                         bbf-ghn:bandplan
+             |  |  |  +--ro bbf-ghn:is-sc?                            boolean
+             |  |  |  +--ro bbf-ghn:medium?                           bbf-ghn:medium
+             |  |  |  +--ro bbf-ghn:medium-access-type?               bbf-ghn:medium-access
+             |  |  |  +--ro bbf-ghn:up-time?                          last-event
+             |  |  |  +--ro bbf-ghn:boot-count?                       bbf-ghn:event-counter32-or-unknown
+             |  |  |  +--ro bbf-ghn:last-forced-resignation
+             |  |  |  |  +--ro bbf-ghn:event-time?    yang:date-and-time
+             |  |  |  |  +--ro bbf-ghn:event-cause?   bbf-ghn:forced-resignation-cause
+             |  |  |  +--ro bbf-ghn:last-unsuccessful-registration
+             |  |  |  |  +--ro bbf-ghn:event-time?    yang:date-and-time
+             |  |  |  |  +--ro bbf-ghn:event-cause?   bbf-ghn:unsuccessful-registration-cause
+             |  |  |  +--ro bbf-ghn:aat
+             |  |  |     +--ro bbf-ghn:laat* [mac-entry]
+             |  |  |     |  +--ro bbf-ghn:mac-entry    yang:mac-address
+             |  |  |     |  +--ro bbf-ghn:mac-type?    bbf-ghn:mac-address
+             |  |  |     +--ro bbf-ghn:raat* [mac-entry]
+             |  |  |        +--ro bbf-ghn:mac-entry    yang:mac-address
+             |  |  |        +--ro bbf-ghn:mac-type?    bbf-ghn:mac-address
+             |  |  +--ro bbf-ghn:inventory
+             |  |  |  +--ro bbf-ghn:certified-vendor-id?     bbf-yang:string-ascii64
+             |  |  |  +--ro bbf-ghn:certification-version?   bbf-yang:string-ascii64
+             |  |  |  +--ro bbf-ghn:self-test-passed?        boolean
+             |  |  |  +--ro bbf-ghn:system-serial-number?    bbf-yang:string-ascii64
+             |  |  |  +--ro bbf-ghn:node-mac-address?        yang:mac-address
+             |  |  |  +--ro bbf-ghn:software-version?        bbf-yang:string-ascii64
+             |  |  |  +--ro bbf-ghn:hardware-version?        bbf-yang:string-ascii64
+             |  |  |  +--ro bbf-ghn:manufacturer-oui?        bbf-ghn:oui
+             |  |  |  +--ro bbf-ghn:model-name?              bbf-yang:string-ascii64
+             |  |  +--ro bbf-ghn:performance
+             |  |     +--ro bbf-ghn:intervals-15min
+             |  |     |  +--ro bbf-ghn:current
+             |  |     |  |  +--ro bbf-ghn:measured-time?                 uint32
+             |  |     |  |  +--ro bbf-ghn:initializations?               bbf-yang:performance-counter32-or-inactive
+             |  |     |  |  +--ro bbf-ghn:master-domain-losses?          bbf-yang:performance-counter32-or-inactive
+             |  |     |  |  +--ro bbf-ghn:maps-lost?                     bbf-yang:performance-counter32-or-inactive
+             |  |     |  |  +--ro bbf-ghn:registrations?                 bbf-yang:performance-counter32-or-inactive
+             |  |     |  |  +--ro bbf-ghn:re-registrations?              bbf-yang:performance-counter32-or-inactive
+             |  |     |  |  +--ro bbf-ghn:transmission-queue-overflow?   bbf-yang:performance-counter32-or-inactive
+             |  |     |  +--ro bbf-ghn:number-of-intervals?   performance-15min-interval
+             |  |     |  +--ro bbf-ghn:non-valid-intervals?   performance-15min-interval
+             |  |     |  +--ro bbf-ghn:history* [interval-number]
+             |  |     |     +--ro bbf-ghn:interval-number                performance-15min-history-interval
+             |  |     |     +--ro bbf-ghn:measured-time?                 uint32
+             |  |     |     +--ro bbf-ghn:invalid-data-flag?             boolean
+             |  |     |     +--ro bbf-ghn:time-stamp?                    yang:date-and-time
+             |  |     |     +--ro bbf-ghn:initializations?               bbf-yang:performance-counter32-or-inactive
+             |  |     |     +--ro bbf-ghn:master-domain-losses?          bbf-yang:performance-counter32-or-inactive
+             |  |     |     +--ro bbf-ghn:maps-lost?                     bbf-yang:performance-counter32-or-inactive
+             |  |     |     +--ro bbf-ghn:registrations?                 bbf-yang:performance-counter32-or-inactive
+             |  |     |     +--ro bbf-ghn:re-registrations?              bbf-yang:performance-counter32-or-inactive
+             |  |     |     +--ro bbf-ghn:transmission-queue-overflow?   bbf-yang:performance-counter32-or-inactive
+             |  |     +--ro bbf-ghn:intervals-24hr {performance-24hr}?
+             |  |        +--ro bbf-ghn:current
+             |  |        |  +--ro bbf-ghn:measured-time?                 uint32
+             |  |        |  +--ro bbf-ghn:initializations?               bbf-yang:performance-counter32-or-inactive
+             |  |        |  +--ro bbf-ghn:master-domain-losses?          bbf-yang:performance-counter32-or-inactive
+             |  |        |  +--ro bbf-ghn:maps-lost?                     bbf-yang:performance-counter32-or-inactive
+             |  |        |  +--ro bbf-ghn:registrations?                 bbf-yang:performance-counter32-or-inactive
+             |  |        |  +--ro bbf-ghn:re-registrations?              bbf-yang:performance-counter32-or-inactive
+             |  |        |  +--ro bbf-ghn:transmission-queue-overflow?   bbf-yang:performance-counter32-or-inactive
+             |  |        +--ro bbf-ghn:number-of-intervals?   performance-24hr-interval
+             |  |        +--ro bbf-ghn:non-valid-intervals?   performance-24hr-interval
+             |  |        +--ro bbf-ghn:history* [interval-number]
+             |  |           +--ro bbf-ghn:interval-number                performance-24hr-history-interval
+             |  |           +--ro bbf-ghn:measured-time?                 uint32
+             |  |           +--ro bbf-ghn:invalid-data-flag?             boolean
+             |  |           +--ro bbf-ghn:time-stamp?                    yang:date-and-time
+             |  |           +--ro bbf-ghn:initializations?               bbf-yang:performance-counter32-or-inactive
+             |  |           +--ro bbf-ghn:master-domain-losses?          bbf-yang:performance-counter32-or-inactive
+             |  |           +--ro bbf-ghn:maps-lost?                     bbf-yang:performance-counter32-or-inactive
+             |  |           +--ro bbf-ghn:registrations?                 bbf-yang:performance-counter32-or-inactive
+             |  |           +--ro bbf-ghn:re-registrations?              bbf-yang:performance-counter32-or-inactive
+             |  |           +--ro bbf-ghn:transmission-queue-overflow?   bbf-yang:performance-counter32-or-inactive
+             |  +--ro bbf-ghn:link* [device-id]
+             |     +--ro bbf-ghn:device-id      bbf-ghn:device-id
+             |     +--ro bbf-ghn:status
+             |     |  +--ro bbf-ghn:rates
+             |     |  |  +--ro bbf-ghn:maximum-bit-rate?         bbf-yang:data-rate32-or-undetermined
+             |     |  |  +--ro bbf-ghn:out-estimated-phy-rate?   bbf-yang:data-rate32-or-undetermined
+             |     |  |  +--ro bbf-ghn:in-estimated-phy-rate?    bbf-yang:data-rate32-or-undetermined
+             |     |  |  +--ro bbf-ghn:out-phy-rate?             bbf-yang:data-rate32-or-undetermined
+             |     |  |  +--ro bbf-ghn:in-phy-rate?              bbf-yang:data-rate32-or-undetermined
+             |     |  +--ro bbf-ghn:channel
+             |     |     +--ro bbf-ghn:sub-carrier-grouping?   bbf-ghn:sub-carrier-grouping
+             |     |     +--ro bbf-ghn:port* [port-number]
+             |     |     |  +--ro bbf-ghn:port-number    uint8
+             |     |     |  +--ro bbf-ghn:tidx-min?      bbf-ghn:tid
+             |     |     |  +--ro bbf-ghn:tidx-max?      bbf-ghn:tid
+             |     |     |  +--ro bbf-ghn:bpc?           bbf-ghn:bpc
+             |     |     +--ro bbf-ghn:spectrum
+             |     |        +--ro bbf-ghn:sub-carrier-mask* [notch-number]
+             |     |        |  +--ro bbf-ghn:notch-number     number-of-sub-carrier-mask
+             |     |        |  +--ro bbf-ghn:lowest-index?    bbf-ghn:tid
+             |     |        |  +--ro bbf-ghn:highest-index?   bbf-ghn:tid
+             |     |        +--ro bbf-ghn:radio-amateur-mask* [notch-number]
+             |     |           +--ro bbf-ghn:notch-number     number-of-radio-amateur-mask
+             |     |           +--ro bbf-ghn:lowest-index?    bbf-ghn:tid
+             |     |           +--ro bbf-ghn:highest-index?   bbf-ghn:tid
+             |     +--ro bbf-ghn:performance
+             |        +--ro bbf-ghn:intervals-15min
+             |        |  +--ro bbf-ghn:current
+             |        |  |  +--ro bbf-ghn:measured-time?                uint32
+             |        |  |  +--ro bbf-ghn:initializations?              bbf-yang:performance-counter32-or-inactive
+             |        |  |  +--ro bbf-ghn:out-management-bytes?         bbf-yang:performance-counter32-or-inactive
+             |        |  |  +--ro bbf-ghn:out-management-packets?       bbf-yang:performance-counter32-or-inactive
+             |        |  |  +--ro bbf-ghn:in-valid-phy-headers?         bbf-yang:performance-counter32-or-inactive
+             |        |  |  +--ro bbf-ghn:in-invalid-phy-headers?       bbf-yang:performance-counter32-or-inactive
+             |        |  |  +--ro bbf-ghn:in-phy-frames?                bbf-yang:performance-counter32-or-inactive
+             |        |  |  +--ro bbf-ghn:out-phy-frames?               bbf-yang:performance-counter32-or-inactive
+             |        |  |  +--ro bbf-ghn:in-lpdu-frames?               bbf-yang:performance-counter32-or-inactive
+             |        |  |  +--ro bbf-ghn:out-lpdu-frames?              bbf-yang:performance-counter32-or-inactive
+             |        |  |  +--ro bbf-ghn:out-resent-lpdu-frames?       bbf-yang:performance-counter32-or-inactive
+             |        |  |  +--ro bbf-ghn:in-crc-errored-lpdu-frames?   bbf-yang:performance-counter32-or-inactive
+             |        |  |  +--ro bbf-ghn:in-llc-frames?                bbf-yang:performance-counter32-or-inactive
+             |        |  |  +--ro bbf-ghn:out-llc-frames?               bbf-yang:performance-counter32-or-inactive
+             |        |  |  +--ro bbf-ghn:in-crc-errored-llc-frames?    bbf-yang:performance-counter32-or-inactive
+             |        |  |  +--ro bbf-ghn:in-mic-errored-llc-frames?    bbf-yang:performance-counter32-or-inactive
+             |        |  +--ro bbf-ghn:number-of-intervals?   performance-15min-interval
+             |        |  +--ro bbf-ghn:non-valid-intervals?   performance-15min-interval
+             |        |  +--ro bbf-ghn:history* [interval-number]
+             |        |     +--ro bbf-ghn:interval-number               performance-15min-history-interval
+             |        |     +--ro bbf-ghn:measured-time?                uint32
+             |        |     +--ro bbf-ghn:invalid-data-flag?            boolean
+             |        |     +--ro bbf-ghn:time-stamp?                   yang:date-and-time
+             |        |     +--ro bbf-ghn:initializations?              bbf-yang:performance-counter32-or-inactive
+             |        |     +--ro bbf-ghn:out-management-bytes?         bbf-yang:performance-counter32-or-inactive
+             |        |     +--ro bbf-ghn:out-management-packets?       bbf-yang:performance-counter32-or-inactive
+             |        |     +--ro bbf-ghn:in-valid-phy-headers?         bbf-yang:performance-counter32-or-inactive
+             |        |     +--ro bbf-ghn:in-invalid-phy-headers?       bbf-yang:performance-counter32-or-inactive
+             |        |     +--ro bbf-ghn:in-phy-frames?                bbf-yang:performance-counter32-or-inactive
+             |        |     +--ro bbf-ghn:out-phy-frames?               bbf-yang:performance-counter32-or-inactive
+             |        |     +--ro bbf-ghn:in-lpdu-frames?               bbf-yang:performance-counter32-or-inactive
+             |        |     +--ro bbf-ghn:out-lpdu-frames?              bbf-yang:performance-counter32-or-inactive
+             |        |     +--ro bbf-ghn:out-resent-lpdu-frames?       bbf-yang:performance-counter32-or-inactive
+             |        |     +--ro bbf-ghn:in-crc-errored-lpdu-frames?   bbf-yang:performance-counter32-or-inactive
+             |        |     +--ro bbf-ghn:in-llc-frames?                bbf-yang:performance-counter32-or-inactive
+             |        |     +--ro bbf-ghn:out-llc-frames?               bbf-yang:performance-counter32-or-inactive
+             |        |     +--ro bbf-ghn:in-crc-errored-llc-frames?    bbf-yang:performance-counter32-or-inactive
+             |        |     +--ro bbf-ghn:in-mic-errored-llc-frames?    bbf-yang:performance-counter32-or-inactive
+             |        +--ro bbf-ghn:intervals-24hr {performance-24hr}?
+             |           +--ro bbf-ghn:current
+             |           |  +--ro bbf-ghn:measured-time?                uint32
+             |           |  +--ro bbf-ghn:initializations?              bbf-yang:performance-counter32-or-inactive
+             |           |  +--ro bbf-ghn:out-management-bytes?         bbf-yang:performance-counter32-or-inactive
+             |           |  +--ro bbf-ghn:out-management-packets?       bbf-yang:performance-counter32-or-inactive
+             |           |  +--ro bbf-ghn:in-valid-phy-headers?         bbf-yang:performance-counter32-or-inactive
+             |           |  +--ro bbf-ghn:in-invalid-phy-headers?       bbf-yang:performance-counter32-or-inactive
+             |           |  +--ro bbf-ghn:in-phy-frames?                bbf-yang:performance-counter32-or-inactive
+             |           |  +--ro bbf-ghn:out-phy-frames?               bbf-yang:performance-counter32-or-inactive
+             |           |  +--ro bbf-ghn:in-lpdu-frames?               bbf-yang:performance-counter32-or-inactive
+             |           |  +--ro bbf-ghn:out-lpdu-frames?              bbf-yang:performance-counter32-or-inactive
+             |           |  +--ro bbf-ghn:out-resent-lpdu-frames?       bbf-yang:performance-counter32-or-inactive
+             |           |  +--ro bbf-ghn:in-crc-errored-lpdu-frames?   bbf-yang:performance-counter32-or-inactive
+             |           |  +--ro bbf-ghn:in-llc-frames?                bbf-yang:performance-counter32-or-inactive
+             |           |  +--ro bbf-ghn:out-llc-frames?               bbf-yang:performance-counter32-or-inactive
+             |           |  +--ro bbf-ghn:in-crc-errored-llc-frames?    bbf-yang:performance-counter32-or-inactive
+             |           |  +--ro bbf-ghn:in-mic-errored-llc-frames?    bbf-yang:performance-counter32-or-inactive
+             |           +--ro bbf-ghn:number-of-intervals?   performance-24hr-interval
+             |           +--ro bbf-ghn:non-valid-intervals?   performance-24hr-interval
+             |           +--ro bbf-ghn:history* [interval-number]
+             |              +--ro bbf-ghn:interval-number               performance-24hr-history-interval
+             |              +--ro bbf-ghn:measured-time?                uint32
+             |              +--ro bbf-ghn:invalid-data-flag?            boolean
+             |              +--ro bbf-ghn:time-stamp?                   yang:date-and-time
+             |              +--ro bbf-ghn:initializations?              bbf-yang:performance-counter32-or-inactive
+             |              +--ro bbf-ghn:out-management-bytes?         bbf-yang:performance-counter32-or-inactive
+             |              +--ro bbf-ghn:out-management-packets?       bbf-yang:performance-counter32-or-inactive
+             |              +--ro bbf-ghn:in-valid-phy-headers?         bbf-yang:performance-counter32-or-inactive
+             |              +--ro bbf-ghn:in-invalid-phy-headers?       bbf-yang:performance-counter32-or-inactive
+             |              +--ro bbf-ghn:in-phy-frames?                bbf-yang:performance-counter32-or-inactive
+             |              +--ro bbf-ghn:out-phy-frames?               bbf-yang:performance-counter32-or-inactive
+             |              +--ro bbf-ghn:in-lpdu-frames?               bbf-yang:performance-counter32-or-inactive
+             |              +--ro bbf-ghn:out-lpdu-frames?              bbf-yang:performance-counter32-or-inactive
+             |              +--ro bbf-ghn:out-resent-lpdu-frames?       bbf-yang:performance-counter32-or-inactive
+             |              +--ro bbf-ghn:in-crc-errored-lpdu-frames?   bbf-yang:performance-counter32-or-inactive
+             |              +--ro bbf-ghn:in-llc-frames?                bbf-yang:performance-counter32-or-inactive
+             |              +--ro bbf-ghn:out-llc-frames?               bbf-yang:performance-counter32-or-inactive
+             |              +--ro bbf-ghn:in-crc-errored-llc-frames?    bbf-yang:performance-counter32-or-inactive
+             |              +--ro bbf-ghn:in-mic-errored-llc-frames?    bbf-yang:performance-counter32-or-inactive
+             +--ro bbf-ghn:local-node-info
+                +--ro bbf-ghn:local-node-mac?   yang:mac-address
+module: bbf-ghn
+    +--rw ghn
+       +--rw domain
+       |  +--rw scheduling-profile* [name]
+       |  |  +--rw name                        string
+       |  |  +--rw mac-cycle-duration?         bbf-ghn:cycle-duration
+       |  |  +--rw split-ratio?                uint8
+       |  |  +--rw topology-update-interval?   uint8
+       |  +--rw security-profile* [name]
+       |  |  +--rw name                  string
+       |  |  +--rw encryption-enabled?   boolean
+       |  |  +--rw encryption-mode?      bbf-ghn:encryption-mode
+       |  |  +--rw mic-size?             uint8
+       |  |  +--rw target-domains*       bbf-yang:string-ascii64
+       |  +--rw dba-profile* [name]
+       |  |  +--rw name           string
+       |  |  +--rw split-ratio?   percentage-or-inactive
+       |  +--rw domain-id-profile* [name]
+       |     +--rw name                          string
+       |     +--rw domain-name?                  bbf-ghn:domain-name
+       |     +--rw minimum-supported-bandplan?   bbf-ghn:bandplan
+       |     +--rw maximum-supported-bandplan?   bbf-ghn:bandplan
+       +--rw node
+       |  +--rw node-id-profile* [name]
+       |     +--rw name                  string
+       |     +--rw force-dm?             boolean
+       |     +--rw force-sc?             boolean
+       |     +--rw bandplan?             bbf-ghn:bandplan
+       |     +--rw medium?               bbf-ghn:medium
+       |     +--rw medium-access-type?   bbf-ghn:medium-access
+       +--rw link
+       |  +--rw line-spectrum-profile* [name]
+       |  |  +--rw name                  string
+       |  |  +--rw sub-carrier-mask* [notch-number]
+       |  |  |  +--rw notch-number     number-of-sub-carrier-mask
+       |  |  |  +--rw lowest-index?    bbf-ghn:tid
+       |  |  |  +--rw highest-index?   bbf-ghn:tid
+       |  |  +--rw radio-amateur-mask* [notch-number]
+       |  |     +--rw notch-number     number-of-radio-amateur-mask
+       |  |     +--rw lowest-index?    bbf-ghn:tid
+       |  |     +--rw highest-index?   bbf-ghn:tid
+       |  +--rw channel-estimation-profile* [name]
+       |     +--rw name                     string
+       |     +--rw minimum-grouping-size?   group-size
+       +--rw vectors
+          +--rw domain-config-vector* [name]
+          |  +--rw name                  bbf-yang-types:string-ascii64
+          |  +--rw scheduling-profile    scheduling-profile-ref
+          |  +--rw security-profile      security-profile-ref
+          |  +--rw dba-profile           dba-profile-ref
+          +--rw node-config-vector* [name]
+          |  +--rw name               bbf-yang-types:string-ascii64
+          |  +--rw node-id-profile    node-id-profile-ref
+          +--rw link-config-vector* [name]
+             +--rw name                          bbf-yang-types:string-ascii64
+             +--rw line-spectrum-profile         line-spectrum-profile-ref
+             +--rw channel-estimation-profile    channel-estimation-profile-ref
