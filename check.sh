@@ -8,7 +8,7 @@ bbf_dir="standard/bbf"
 cwd=`pwd`
 
 cd $bbf_dir
-to_check=`find standard draft -depth 1 -type d`
+to_check=`find standard draft -mindepth 1 -maxdepth 1 -type d`
 cd $cwd
 
 pyang_flags="--strict --max-line-length=70 --lint --lint-modulename-prefix=bbf --lint-namespace-prefix=urn:bbf:yang: --verbose --path=$cwd/$ietf_dir --path=$cwd/$bbf_dir"
