@@ -8,35 +8,33 @@ submodule bbf-fast-data-rate-profile-body {
     prefix bbf-yang;
   }
 
+  include bbf-fast-base;
+
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
 
-     Editor:      William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>
+     Editor:      Joey Boyd, ADTRAN
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+
+     WA Director: Joey Boyd, ADTRAN";
 
   description
     "This submodule contains a collection of YANG definitions for
      managing data rate profiles.
 
-     Copyright (c) 2016, Broadband Forum
-     All rights reserved.
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -76,8 +74,19 @@ submodule bbf-fast-data-rate-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355; see
+     This version of this YANG module is part of TR-355a1; see
      the TR itself for full legal notices.";
+
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
 
   revision 2016-07-18 {
     description
@@ -108,7 +117,7 @@ submodule bbf-fast-data-rate-profile-body {
 
     leaf minimum-expected-throughput {
       type bbf-yang:data-rate32;
-      must '. < ../maximum-net-data-rate' {
+      must ". < ../maximum-net-data-rate" {
         description
           "The minimum expected throughput must be less than the 
            maximum net data rate";
@@ -123,7 +132,7 @@ submodule bbf-fast-data-rate-profile-body {
 
     leaf maximum-gamma-data-rate {
       type bbf-yang:data-rate32;
-      must '. >= ../minimum-gamma-data-rate' {
+      must ". >= ../minimum-gamma-data-rate" {
         description
           "The maximum gamma data rate must be greater than or equal 
            to the mimimum gamma data rate";
@@ -139,7 +148,7 @@ submodule bbf-fast-data-rate-profile-body {
 
     leaf minimum-gamma-data-rate {
       type bbf-yang:data-rate32;
-      must '. <= ../maximum-gamma-data-rate' {
+      must ". <= ../maximum-gamma-data-rate" {
         description
           "The minimum gamma data rate must be less than or equal to
            the maximum gamma data rate";
@@ -153,6 +162,53 @@ submodule bbf-fast-data-rate-profile-body {
          crossing alert occurs.";
       reference
         "ITU-T G.997.2 clause 7.2.1.4 (MINGDR).";
+    }
+
+    container dynamic-time-assignment {
+      if-feature "dta";
+      description
+        "Configuruation of Dynamic Time Assignment (DTA).";
+
+      leaf minimum-expected-throughput {
+        type bbf-yang:data-rate32;
+        must ". < ../maximum-net-data-rate" {
+          description
+            "The minimum expected throughput for DTA must
+             be less than the maximum net data rate for DTA.";
+        }
+        default "0";
+        description
+          "Defines the value of the minimum expected
+           throughput for DTA operation to constrain
+           the dynamic range of Mds requested by the DRA.
+
+           If 'dta-allowed' in the TDD profile is equal to 'cdta',
+           then a value less than or equal to the minimum expected
+           throughput without DTA operation must be configured.";
+        reference
+          "ITU-T G.9701 clause T.2.7.";
+      }
+
+
+      leaf maximum-net-data-rate {
+        type bbf-yang:data-rate32;
+        default "4294967295";
+        description
+          "Defines the value of the maximum NDR for DTA operation.";
+        reference
+          "ITU-T G.9701 clause D.5.7.5, X.6.7.5 and T.2.8";
+      }
+    }
+
+    leaf low-andeftr-threshold {
+      if-feature "andeftr";
+      type bbf-yang:data-rate32;
+      default "0";
+      description
+        "Defines the value of the low All NOI with Data symbols
+         Error-Free Throughput Rate threshold.";
+      reference
+        "ITU-T G.997.2 clause 7.2.4.1 (LOW-ANDEFTR-THRESHOLD)";
     }
   }
 

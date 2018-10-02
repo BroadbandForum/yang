@@ -19,16 +19,16 @@ submodule bbf-selt-processing-derived-parameter-body {
      should be directed to <mailto:help@broadband-forum.org>.
 
      Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
 
      Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
+
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>
 
-     WA Director: Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>";
+     WA Director: Joey Boyd, ADTRAN";
 
   description
     "This submodule contains a collection of YANG definitions for
@@ -74,9 +74,19 @@ submodule bbf-selt-processing-derived-parameter-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c2; see
+     This version of this YANG module is part of TR-355a1; see
      the TR itself for full legal notices.";
 
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
   revision 2017-11-27 {
     description
       "Corrigendum 2 (fixes to the previous revision).
@@ -116,12 +126,13 @@ submodule bbf-selt-processing-derived-parameter-body {
 
   typedef per-sub-carrier-uint16 {
     type binary {
-      length "16384";
+      length "0..16384";
     }
     description
       "A binary type where each pair of octets represents data 
-       belonging to a sub-carrier. The first pair represents 
-       sub-carrier 0 and the last represents sub-carrier 8191.";
+       belonging to a sub-carrier group. The first pair represents 
+       sub-carrier group 0 and the last represents sub-carrier 
+       group (length/2 - 1).";
   }
 
   grouping downstream-upstream-derived-parameters {
@@ -303,7 +314,6 @@ submodule bbf-selt-processing-derived-parameter-body {
 
     container attenuation-characteristics {
       leaf tflog-g {
-        if-feature "extended-bandwidth-selt-tflog";
         type uint8 {
           range "1 | 2 | 12";
         }
@@ -312,9 +322,7 @@ submodule bbf-selt-processing-derived-parameter-body {
            reported parameter identifying the attenuation 
            characteristics, TFlog(f), at a frequency spacing equal to 
            TFlog_G x Df with Df = 4.3125 kHz. TFlog_G has three valid 
-           values: 1, 2, and 12. The attenuation characteristics group
-           size needs only to be reported if the option for extended 
-           bandwidth SELT is applied.";
+           values: 1, 2, and 12.";
       }
 
       leaf tflog {
@@ -346,14 +354,10 @@ submodule bbf-selt-processing-derived-parameter-body {
 
          The range of valid values for the index i is 0 to 8191.
 
-         If the option for extended bandwidth SELT is not applied, 
-         then TFlog_G = 1.
-
-         If the option for extended bandwidth SELT is applied, then:
-           The attenuation characteristics group size, TFlog_G, has 
-           three valid values: 1, 2, and 12, indicating whether the 
-           measurements were performed using a subcarrier spacing of 
-           4.3125 kHz, 8.625 kHz, or 51.75 kHz respectively. 
+         The attenuation characteristics group size, TFlog_G, has 
+         three valid values: 1, 2, and 12, indicating whether the 
+         measurements were performed using a subcarrier spacing of 
+         4.3125 kHz, 8.625 kHz, or 51.75 kHz respectively. 
 
          The range of valid values for TFlog(i * Df) is from +6.0 dB 
          down to -96.2 dB, with a granularity of 0.1 dB (represented

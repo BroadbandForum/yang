@@ -14,10 +14,18 @@
       <selt xmlns="urn:bbf:yang:bbf-selt">
         <pmd-profile/>
         <processing-profile/>
-        <selt-pmd-control>
+        <pmd-control>
           <uer-measurement-enable-c>False</uer-measurement-enable-c>
           <qln-measurement-enable-c>False</qln-measurement-enable-c>
-        </selt-pmd-control>
+        </pmd-control>
+        <no-profiles-attached/>
+        <direct-attachment-mode>
+          <pmd-profile/>
+          <processing-profile/>
+          <pmd-control>
+            <pmd-control>disable</pmd-control>
+          </pmd-control>
+        </direct-attachment-mode>
       </selt>
     </interface>
   </interfaces>
@@ -53,6 +61,11 @@
         <operational-mode/>
       </line>
       <selt xmlns="urn:bbf:yang:bbf-selt">
+        <pmd-status>
+          <selt-status-c/>
+          <uer-results-c/>
+          <qln-results-c/>
+        </pmd-status>
         <pmd-measurement-parameters>
           <c>
             <uncalibrated-echo-response>

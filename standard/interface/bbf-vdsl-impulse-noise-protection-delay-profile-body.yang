@@ -13,16 +13,16 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
      should be directed to <mailto:help@broadband-forum.org>.
 
      Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
 
      Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
+
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>
 
-     WA Director: Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>";
+     WA Director: Joey Boyd, ADTRAN";
 
   description
     "This submodule contains a collection of YANG definitions for 
@@ -69,9 +69,19 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c2; see
+     This version of this YANG module is part of TR-355a1; see
      the TR itself for full legal notices.";
 
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
   revision 2017-11-27 {
     description
       "Corrigendum 2 (fixes to the previous revision).
@@ -241,7 +251,7 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
 
     leaf minimum-delay-rtx {
       type uint8 {
-        range "0..63";
+        range "0..62";
       }
       units "millisecond";
       must ". < ../maximum-delay-rtx" {
@@ -255,7 +265,7 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
          this parameter specifies the minimum for the
          instantaneous delay due to the effect of retransmission
          only (see [ITU-T G.998.4] for detailed specification).
-         The delay ranges from 0 to 63 ms by steps of 1 ms.";
+         The delay ranges from 0 to 62 ms by steps of 1 ms.";
       reference
         "ITU-T G.997.1 clause 7.3.2.12 Minimum delay for
          retransmission (DELAYMIN_RTX)";
@@ -611,15 +621,15 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
       type enumeration {
         enum "0" {
           description
-            "basic method";
+            "Basic method.";
         }
         enum "1" {
           description
-            "improved method using INP_min0";
+            "Improved method using INP_min0.";
         }
         enum "2" {
           description
-            "improved method assuming INP_min0=0";
+            "Improved method assuming INP_min0=0.";
         }
       }
       default "0";

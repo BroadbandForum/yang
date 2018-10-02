@@ -8,6 +8,8 @@ submodule bbf-vdsl-data-rate-profile-body {
     prefix bbf-yang;
   }
 
+  include bbf-vdsl-base;
+
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
@@ -17,16 +19,16 @@ submodule bbf-vdsl-data-rate-profile-body {
      should be directed to <mailto:help@broadband-forum.org>.
 
      Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
 
      Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
+
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>
 
-     WA Director: Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>";
+     WA Director: Joey Boyd, ADTRAN";
 
   description
     "This submodule contains a collection of YANG definitions for 
@@ -73,9 +75,19 @@ submodule bbf-vdsl-data-rate-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c2; see
+     This version of this YANG module is part of TR-355a1; see
      the TR itself for full legal notices.";
 
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
   revision 2017-11-27 {
     description
       "Corrigendum 2 (fixes to the previous revision).
@@ -110,7 +122,7 @@ submodule bbf-vdsl-data-rate-profile-body {
   grouping data-rate-profile {
 
     description
-      "Data rate profile for upstream and downstream";
+      "Data rate profile for upstream and downstream.";
 
     leaf minimum-net-data-rate {
       type bbf-yang:data-rate32;
@@ -166,15 +178,15 @@ submodule bbf-vdsl-data-rate-profile-body {
       type enumeration {
         enum "1e-3" {
           description
-            "bit error ratio 10^-3";
+            "Bit error ratio 10^-3.";
         }
         enum "1e-5" {
           description
-            "bit error ratio 10^-5";
+            "Bit error ratio 10^-5.";
         }
         enum "1e-7" {
           description
-            "bit error ratio 10^-7";
+            "Bit error ratio 10^-7.";
         }
       }
       default "1e-7";
@@ -316,6 +328,37 @@ submodule bbf-vdsl-data-rate-profile-body {
       reference
         "ITU-T G.997.1 clause 7.3.2.19.2 Target expected
          throughput for retransmission (TARGET_ETR)";
+    }
+
+    leaf leftr-defect-threshold {
+      if-feature "data-rate-profile-leftr";
+      type union {
+        type uint8 {
+          range "0..99";
+        }
+        type enumeration {
+          enum "etr-default-threshold" {
+            description
+              "Indicates that the ETR shall be used as the default
+               threshold for declaring a leftr defect.";
+          }
+        }
+      }
+      units "0.01";
+      default "etr-default-threshold";
+      description
+        "If retransmission is used in a given transmit direction,
+         LEFTR_THRESH specifies the threshold for declaring a 
+         leftr defect (see clause 11.1.12 of ITU-T G.998.4)
+         for the definition of this threshold). 
+         The value is coded as a fraction of the NDR with valid
+         range from 0.00 to 0.99 in increments of 0.01.
+         The value 0.00 implies no leftr-defects are declared. 
+         A special value of (enum etr-default-threshold) means the
+         ETR shall be used as the default threshold for declaring a
+         leftr defect.";
+      reference
+        "ITU-T G.997.1 clause 7.3.1.12.";
     }
   } // end grouping data-rate-profile
 } // end submodule data-rate-profile-body

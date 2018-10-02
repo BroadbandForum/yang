@@ -16,34 +16,30 @@ submodule bbf-vdsl-xtu-line-performance-body {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
 
-     Editor:      William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>
+     Editor:      Joey Boyd, ADTRAN
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+
+     WA Director: Joey Boyd, ADTRAN";
 
   description
     "This submodule contains a collection of YANG definitions for 
      managing Broadband Forum TR-252i3 clause 7.1 xTU Line 
      Performance.
 
-     Copyright (c) 2016, Broadband Forum
-     All rights reserved.
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -83,9 +79,19 @@ submodule bbf-vdsl-xtu-line-performance-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355; see
+     This version of this YANG module is part of TR-355a1; see
      the TR itself for full legal notices.";
 
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
   revision 2016-07-18 {
     description
       "Initial revision.
@@ -194,7 +200,7 @@ submodule bbf-vdsl-xtu-line-performance-body {
           "Identifies the INMAINPEQ histogram bin";
       }
       leaf inminpeq-l {
-        type bbf-yang:performance-counter32;
+        type bbf-yang:performance-counter32-or-inactive;
         description
           "count of the near-end INMAINPEQ anomalies";
       }
@@ -202,19 +208,27 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "This parameter is a count of the near-end INMAINPEQi
          anomalies occurring on the line during the accumulation
          period. This parameter is subject to inhibiting - see
-         ITU-T G.997.1 clause 7.2.7.13.";
+         ITU-T G.997.1 clause 7.2.7.13.
+
+         A special value (enum inactive) indicates that this
+         counter is not active on the line. This occurs when the
+         feature 'impulse-noise-monitoring' is not supported.";
       reference
         "ITU-T G.997.1 clause 7.2.1.4.1 INM INPEQ histogram 1..17
          (INMINPEQ1..17-L)";
     }
 
     leaf inmme-l {
-      type bbf-yang:performance-counter32;
+      type bbf-yang:performance-counter32-or-inactive;
       description
         "This parameter is a count of the near-end INMAME
          anomalies occurring on the line during the accumulation
          period. This parameter is subject to inhibiting - see
-         ITU-T G.997.1 clause 7.2.7.13.";
+         ITU-T G.997.1 clause 7.2.7.13.
+
+         A special value (enum inactive) indicates that this
+         counter is not active on the line. This occurs when the
+         feature 'impulse-noise-monitoring' is not supported.";
       reference
         "ITU-T G.997.1 clause 7.2.1.4.2 INM total measurement
          (INMME-L)";
@@ -230,7 +244,7 @@ submodule bbf-vdsl-xtu-line-performance-body {
           "Identifies the INMAIAT histogram bin";
       }
       leaf inmiat-l {
-        type bbf-yang:performance-counter32;
+        type bbf-yang:performance-counter32-or-inactive;
         description
           "Count of the near-end INMAIAT anomalies";
       }
@@ -238,28 +252,35 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "This parameter is a count of the near-end INMAIATi
          anomalies occurring on the line during the accumulation
          period. This parameter is subject to inhibiting - see
-         ITU-T G.997.1 clause 7.2.7.13.";
+         ITU-T G.997.1 clause 7.2.7.13.
+
+         A special value (enum inactive) indicates that this
+         counter is not active on the line. This occurs when the
+         feature 'impulse-noise-monitoring' is not supported.";
       reference
         "ITU-T G.997.1 clause 7.2.1.4.3 INM IAT histogram 0..7
          (INMIAT0..7-L)";
     }
 
     leaf sos-success-ne {
-      type bbf-yang:performance-counter32;
+      type bbf-yang:performance-counter32-or-inactive;
       description
         "This parameter is a count of the total number of
          successful SOS procedures initiated by the near-end xTU
          on the line during the accumulation period. Parameter
          procedures will be as defined in ITU-T G.997.1 clause
          7.2.7. Successful SOS is defined in clause 12.1.4 of
-         [ITU-T G.993.2].";
+         [ITU-T G.993.2].
+
+         A special value (enum inactive) indicates that this
+         counter is not active on the line. This occurs when the
+         feature 'sos' is not supported.";
       reference
         "ITU-T G.997.1 clause 7.2.1.6.1 Near-end successful SOS
          count (SOS-SUCCESS-NE)";
     }
 
     leaf leftr-defects-seconds-counter-ne {
-      // only defined in upstream
       type bbf-yang:performance-counter32;
       description
         "Near-end line leftr defects seconds counter. If
@@ -267,14 +288,13 @@ submodule bbf-vdsl-xtu-line-performance-body {
          this parameter is a count of the seconds with a near-end
          ''leftr'' defect present (see clause 11.4.1 of [ITU-T
          G.998.4] for the definition of this counter).
-         This near-end counter is only defined in upstream.";
+         This near-end counter is only defined for upstream.";
       reference
         "ITU-T G.997.1 clause 7.2.1.1.6 leftr defects seconds
          counter";
     }
 
     leaf error-free-bits-counter-ne {
-      // only defined in upstream
       type bbf-yang:performance-counter32;
       description
         "Near-end line error-free bits counter. If retransmission
@@ -283,13 +303,12 @@ submodule bbf-vdsl-xtu-line-performance-body {
          Beta1 reference point, divided by 65536 = 2^16 (see
          clause 11.4.2 of [ITU-T G.998.4] for the definition of
          this counter).
-         This near-end counter is only defined in upstream.";
+         This near-end counter is only defined for upstream.";
       reference
         "ITU-T G.997.1 clause 7.2.1.1.7 Error-free bits counter";
     }
 
     leaf minimum-error-free-throughput-ne {
-      // only defined upstream
       type bbf-yang:performance-counter32;
       units "bit/s";
       description
@@ -299,14 +318,12 @@ submodule bbf-vdsl-xtu-line-performance-body {
          observed over the 15-min or 24-hour accumulation period
          (see clause 11.4.3 of [ITU-T G.998.4] for the definition
          of this parameter). The value is reported in bit/s.
-         This near-end value is only defined in upstream.";
+         This near-end value is only defined for upstream.";
       reference
         "ITU-T G.997.1 clause 7.2.1.1.8 Minimum error-free
          throughput (MINEFTR)";
     }
 
-    // below xtu-c parameters were in 
-    // bbf-vdsl-xtu-c-line-performance.yang
     leaf full-initializations {
       type bbf-yang:performance-counter32;
       description
@@ -334,20 +351,24 @@ submodule bbf-vdsl-xtu-line-performance-body {
     }
 
     leaf short-initializations {
-      type bbf-yang:performance-counter32;
+      type bbf-yang:performance-counter32-or-inactive;
       description
         "This parameter is a count of the total number of fast
          retrains or short initializations attempted on the line
          (successful and failed) during the accumulation period.
          Parameter procedures are defined in ITU-T G997.1 clause
-         7.2.7.";
+         7.2.7.
+
+         A special value (enum inactive) indicates that this
+         counter is not active on the line as this is only applicable
+         when running in an ADSL mode of operation.";
       reference
         "ITU-T G.997.1 clause 7.2.1.3.3 Short initialization
          count";
     }
 
     leaf failed-short-initializations {
-      type bbf-yang:performance-counter32;
+      type bbf-yang:performance-counter32-or-inactive;
       description
         "This performance parameter is a count of the total
          number of failed fast retrains or short initializations
@@ -357,7 +378,11 @@ submodule bbf-vdsl-xtu-line-performance-body {
          procedure, e.g., when: A CRC error is detected, a
          time-out occurs, or a fast retrain profile is unknown.
          Parameter procedures are defined in ITU-T G997.1 clause
-         7.2.7.";
+         7.2.7.
+
+         A special value (enum inactive) indicates that this
+         counter is not active on the line as this is only applicable
+         when running in an ADSL mode of operation.";
       reference
         "ITU-T G.997.1 clause 7.2.1.3.4 Failed short
          initialization count";
@@ -369,10 +394,8 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "This parameter is a count of the number of lpr_intrpt
          anomalies occurring during the accumulation period.
          Those anomalies are defined in clause 11.3.1.1 of [ITU-T
-         G.993.2]. Only the counters on the current and previous
-         24-hours intervals are supported. A special value
-         (enum inactive) indicates that this counter is not active
-         on the line.
+         G.993.2]. A special value (enum inactive) indicates that this
+         counter is not active on the line.
          Threshold reports for this counter are not specified.";
       reference
         "ITU-T G.997.1 clause 7.2.1.8.1 Loss-of-power
@@ -385,10 +408,8 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "This parameter is a count of the number of hri_intrpt
          anomalies occurring during the accumulation period.
          Those anomalies are defined in clause 11.3.1.1 of [ITU-T
-         G.993.2]. Only the counters on the current and previous
-         24-hours intervals are supported. A special value 
-         (enum inactive) indicates that this counter is not active
-         on the line.
+         G.993.2]. A special value (enum inactive) indicates that this
+         counter is not active on the line.
          Threshold reports for this counter are not specified.";
       reference
         "ITU-T G.997.1 clause 7.2.1.8.2 Host-Reinit interruption
@@ -401,10 +422,8 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "This parameter is a count of the number of spont_intrpt
          anomalies occurring during the accumulation period.
          Those defects are defined in clause 11.3.1.1 of [ITU-T
-         G.993.2]. Only the counters on the current and previous
-         24-hours intervals are supported. A special value
-         (enum inactive) indicates that this counter is not active
-         on the line.
+         G.993.2]. A special value (enum inactive) indicates that this
+         counter is not active on the line.
          Threshold reports are specified for the 24-hour interval
          counter only.";
       reference
@@ -412,7 +431,6 @@ submodule bbf-vdsl-xtu-line-performance-body {
          count (SPONT_INTRPT)";
     }
 
-    // below three counters (los, lof, lpr) are from bbf2016.024
     leaf loss-of-signal {
       type bbf-yang:performance-counter32;
       description
@@ -541,9 +559,13 @@ submodule bbf-vdsl-xtu-line-performance-body {
           "Identifies the INMAINPEQ histogram bin";
       }
       leaf inminpeq-lfe {
-        type bbf-yang:performance-counter32;
+        type bbf-yang:performance-counter32-or-inactive;
         description
-          "Count of the far-end INMAINPEQ anomalies";
+          "Count of the far-end INMAINPEQ anomalies.
+
+           A special value (enum inactive) indicates that this
+           counter is not active on the line. This occurs when the
+           feature 'impulse-noise-monitoring' is not supported.";
       }
       description
         "This parameter is a count of the far-end INMAINPEQi
@@ -556,12 +578,16 @@ submodule bbf-vdsl-xtu-line-performance-body {
     }
 
     leaf inmme-lfe {
-      type bbf-yang:performance-counter32;
+      type bbf-yang:performance-counter32-or-inactive;
       description
         "This parameter is a count of the far-end INMAME
          anomalies occurring on the line during the accumulation
          period. This parameter is subject to inhibiting - see
-         ITU-T G.997.1 clause 7.2.7.13.";
+         ITU-T G.997.1 clause 7.2.7.13.
+
+         A special value (enum inactive) indicates that this
+         counter is not active on the line. This occurs when the
+         feature 'impulse-noise-monitoring' is not supported.";
       reference
         "ITU-T G.997.1 clause 7.2.1.5.2 INM total measurement
          (INMME-LFE)";
@@ -577,9 +603,13 @@ submodule bbf-vdsl-xtu-line-performance-body {
           "Identifies the INMAIAT histogram bin";
       }
       leaf inmiat-lfe {
-        type bbf-yang:performance-counter32;
+        type bbf-yang:performance-counter32-or-inactive;
         description
-          "Count of the far-end INMAIAT anomalies";
+          "Count of the far-end INMAIAT anomalies.
+
+           A special value (enum inactive) indicates that this
+           counter is not active on the line. This occurs when the
+           feature 'impulse-noise-monitoring' is not supported.";
       }
       description
         "This parameter is a count of the far-end INMAIATi
@@ -592,21 +622,24 @@ submodule bbf-vdsl-xtu-line-performance-body {
     }
 
     leaf sos-success-fe {
-      type bbf-yang:performance-counter32;
+      type bbf-yang:performance-counter32-or-inactive;
       description
         "This parameter is a count of the total number of
          successful SOS procedures initiated by the far-end xTU
          on the line during the accumulation period. Parameter
          procedures will be as defined in ITU-T G.997.1 clause
          7.2.7. Successful SOS is defined in clause 12.1.4 of
-         [ITU-T G.993.2].";
+         [ITU-T G.993.2].
+
+         A special value (enum inactive) indicates that this
+         counter is not active on the line. This occurs when the
+         feature 'sos' is not supported.";
       reference
         "ITU-T G.997.1 clause 7.2.1.7.1 Far-end successful SOS
          count (SOS-SUCCESS-FE)";
     }
 
     leaf leftr-defects-seconds-counter-lfe {
-      // only defined in downstream
       type bbf-yang:performance-counter32;
       description
         "Far-end line leftr defects seconds counter. If
@@ -614,14 +647,13 @@ submodule bbf-vdsl-xtu-line-performance-body {
          this parameter is a count of the seconds with a far-end
          leftr defect present (see clause 11.4.1 of [ITU-T
          G.998.4] for the definition of this counter).
-         The far-end counter is only defined in downstream.";
+         The far-end counter is only defined for downstream.";
       reference
         "ITU-T G.997.1 clause 7.2.1.2.6 leftr defects seconds
          counter";
     }
 
     leaf error-free-bits-counter-lfe {
-      // only defined downstream
       type bbf-yang:performance-counter32;
       description
         "Far-end line error-free bits counter. If retransmission
@@ -630,12 +662,11 @@ submodule bbf-vdsl-xtu-line-performance-body {
          Beta1 reference point, divided by 65536 = 2^16 (see
          clause 11.4.2 of [ITU-T G.998.4] for the definition of
          this counter).
-         This far-end counter is only defined in downstream.";
+         This far-end counter is only defined for downstream.";
       reference
         "ITU-T G.997.1 clause 7.2.1.2.7 Error-free bits counter";
     }
 
-    // only defined downstream
     leaf minimum-error-free-throughput-lfe {
       type bbf-yang:performance-counter32;
       units "bit/s";
@@ -646,13 +677,12 @@ submodule bbf-vdsl-xtu-line-performance-body {
          observed over the 15-min or 24-hour accumulation period
          (see clause 11.4.3 of [ITU-T G.998.4] for the definition
          of this parameter). The value is reported in bit/s.
-         This far-end value is only defined in downstream.";
+         This far-end value is only defined for downstream.";
       reference
         "ITU-T G.997.1 clause 7.2.1.2.8 Minimum error-free
          throughput (MINEFTR)";
     }
 
-    // below three counters (los, lof, lpr) are from bbf2016.024
     leaf loss-of-signal-fe {
       type bbf-yang:performance-counter32;
       description

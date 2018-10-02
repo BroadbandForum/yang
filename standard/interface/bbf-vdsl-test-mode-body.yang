@@ -15,16 +15,16 @@ submodule bbf-vdsl-test-mode-body {
      should be directed to <mailto:help@broadband-forum.org>.
 
      Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
 
      Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
+
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>
 
-     WA Director: Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>";
+     WA Director: Joey Boyd, ADTRAN";
 
   description
     "This submodule contains a collection of YANG definitions for 
@@ -70,9 +70,19 @@ submodule bbf-vdsl-test-mode-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c2; see
+     This version of this YANG module is part of TR-355a1; see
      the TR itself for full legal notices.";
 
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
   revision 2017-11-27 {
     description
       "Corrigendum 2 (fixes to the previous revision).
@@ -192,7 +202,18 @@ submodule bbf-vdsl-test-mode-body {
           "This configuration parameter defines whether the line
            should be forced into the loop diagnostic mode by the
            near-end xTU on this line. The default is no loop 
-           diagnostic mode forced, corresponding to enum 2.";
+           diagnostic mode forced, corresponding to enum 2.
+
+           Upon completion of the loop diagnostics mode procedures,
+           the xTUs return to the IDLE state. The loop diagnostic mode
+           data are available at least until the loop diagnostics mode
+           is no longer forced (i.e., until a value different from 
+           enum 1 is configured). When the loop diagnostics mode is no
+           longer forced, the xTUs resume normal operation.
+
+           A configuration change to enum '0' or enum '2' (i.e., to
+           loop diagnostics mode no longer forced) is required before
+           forcing the line again into loop diagnostics mode.";
         reference
           "ITU-T G.997.1 clause 7.3.1.1.8 Loop diagnostic mode
            forced (LDSF)";
@@ -232,6 +253,7 @@ submodule bbf-vdsl-test-mode-body {
           range "0..1";
         }
         default "0";
+        status deprecated;
         description
           "This parameter is defined to force an update of the
            near-end test parameters that can be updated during
@@ -248,7 +270,19 @@ submodule bbf-vdsl-test-mode-body {
            The 3-minute period starts since the last time the flag
            was set (externally or by an autonomous process in the
            system). This applies only to the elements maintained in
-           the AN.";
+           the AN.
+
+           A configuration change back to 0 is required before 
+           initiating another update.";
+        reference
+          "ITU-T G.997.1 clause 7.5.1.36.1 Update request flag for
+           near-end test parameters (UPDATE-TEST-NE)";
+      }
+
+      action update-near-end-test {
+        description
+          "Forces an update of the test parameters that can be
+           updated during showtime.";
         reference
           "ITU-T G.997.1 clause 7.5.1.36.1 Update request flag for
            near-end test parameters (UPDATE-TEST-NE)";
@@ -277,6 +311,7 @@ submodule bbf-vdsl-test-mode-body {
           range "0..1";
         }
         default "0";
+        status deprecated;
         description
           "This parameter is defined to force an update of the
            far-end test parameters that can be updated during
@@ -293,7 +328,19 @@ submodule bbf-vdsl-test-mode-body {
            The 3-minute period starts since the last time the flag
            was set (externally or by an autonomous process in the
            system). This applies only to the elements maintained in
-           the AN.";
+           the AN.
+
+           A configuration change back to 0 is required before 
+           initiating another update.";
+        reference
+          "ITU-T G.997.1 clause 7.5.1.36.2 Update request flag for
+           far-end test parameters (UPDATE-TEST-FE)";
+      }
+
+      action update-far-end-test {
+        description
+          "Forces an update of the test parameters that can be
+           updated during showtime.";
         reference
           "ITU-T G.997.1 clause 7.5.1.36.2 Update request flag for
            far-end test parameters (UPDATE-TEST-FE)";

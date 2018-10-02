@@ -9,41 +9,47 @@ submodule bbf-vdsl-threshold-management {
     prefix bbf-yang;
   }
 
+  import bbf-fastdsl {
+    prefix bbf-fastdsl;
+  }
+
+  import ietf-interfaces {
+    prefix if;
+  }
+
   include bbf-vdsl-base-body;
   include bbf-vdsl-xtu-line-threshold-profile-body;
   include bbf-vdsl-xtu-channel-threshold-profile-body;
+  include bbf-vdsl-threshold-crossing-alert-body;
+  include bbf-vdsl-performance-management;
 
   include bbf-vdsl-base;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
 
-     Editor:      William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>
+     Editor:      Joey Boyd, ADTRAN
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+
+     WA Director: Joey Boyd, ADTRAN";
 
   description
     "This submodule contains a collection of YANG definitions for
      managing performance thresholds for VDSL interfaces.
 
-     Copyright (c) 2016, Broadband Forum
-     All rights reserved.
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -83,9 +89,19 @@ submodule bbf-vdsl-threshold-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355; see
+     This version of this YANG module is part of TR-355a1; see
      the TR itself for full legal notices.";
 
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
   revision 2016-07-18 {
     description
       "Initial revision.
@@ -115,18 +131,15 @@ submodule bbf-vdsl-threshold-management {
       "xTU Channel Threshold Profile name.";
   }
 
-  // 8 Object model for xDSL Performance Threshold Management
 
   augment '/bbf-vdsl:vdsl/bbf-vdsl:thresholds' {
     description
-      "8 xDSL Performance Threshold Management.";
-
-    // 8.2 xTU Line Threshold Profile
+      "xDSL Performance Threshold Management.";
 
     list line-threshold-profile {
       key "name";
       description
-        "8.2 xTU Line Threshold Profiles.";
+        "xTU Line Threshold Profiles.";
 
       leaf name {
         type bbf-yang:string-ascii64;
@@ -137,12 +150,10 @@ submodule bbf-vdsl-threshold-management {
       uses line-threshold-profile;
     }
 
-    // 8.3 xTU Channel Threshold Profile
-
     list channel-threshold-profile {
       key "name";
       description
-        "8.3 xTU Channel Threshold Profiles.";
+        "xTU Channel Threshold Profiles.";
 
       leaf name {
         type bbf-yang:string-ascii64;
@@ -151,6 +162,43 @@ submodule bbf-vdsl-threshold-management {
       }
 
       uses channel-threshold-profile;
+    }
+  }
+
+  augment '/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-'
+        + 'vdsl:line' {
+    description
+      "Augment the line to add threshold state data.";
+
+    notification vdsl-15min-threshold-crossing-alert {
+      description
+        "A threshold has been crossed during the current 15 minute
+         interval.";
+
+      leaf tca-identity {
+        type identityref {
+          base vdsl-15min-threshold-crossing-alert;
+        }
+        mandatory true;
+        description
+          "A unique identity associated with each threshold.";
+      }
+    }
+
+    notification vdsl-24hr-threshold-crossing-alert {
+      if-feature "performance-24hr";
+      description
+        "A threshold has been crossed during the current 24 hour
+         interval.";
+
+      leaf tca-identity {
+        type identityref {
+          base vdsl-24hr-threshold-crossing-alert;
+        }
+        mandatory true;
+        description
+          "A unique identity associated with each threshold.";
+      }
     }
   }
 }

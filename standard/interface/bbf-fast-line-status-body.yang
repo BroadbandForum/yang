@@ -13,6 +13,7 @@ submodule bbf-fast-line-status-body {
   }
 
   include bbf-fast-line-spectrum-profile-body;
+  include bbf-fast-base;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -23,16 +24,16 @@ submodule bbf-fast-line-status-body {
      should be directed to <mailto:help@broadband-forum.org>.
 
      Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
 
      Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
+
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>
 
-     WA Director: Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>";
+     WA Director: Joey Boyd, ADTRAN";
 
   description
     "This submodule contains a collection of status-related YANG
@@ -79,9 +80,19 @@ submodule bbf-fast-line-status-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c2; see
+     This version of this YANG module is part of TR-355a1; see
      the TR itself for full legal notices.";
 
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
   revision 2017-11-27 {
     description
       "Corrigendum 2 (fixes to the previous revision).
@@ -92,6 +103,7 @@ submodule bbf-fast-line-status-body {
                  <https://www.broadband-forum.org/technical/download/
                         TR-355_Corrigendum_2.pdf>";
   }
+
   revision 2017-03-13 {
     description
       "Corrigendum 1 (fixes to the initial revision).
@@ -898,7 +910,11 @@ submodule bbf-fast-line-status-body {
               "Band index";
           }
 
-          uses sub-carrier-range;
+          uses sub-carrier-range {
+            refine "start-index" {
+              mandatory true;
+            }
+          }
 
           leaf group-size {
             type uint8 {
@@ -1054,6 +1070,63 @@ submodule bbf-fast-line-status-body {
       reference
         "ITU-T G.997.2 clause 7.10.2.1 (PROFILE); ITU-T G.9701
          clause 12.3.1.";
+    }
+
+    leaf annex-x-enabled {
+      if-feature "annex-x";
+      type boolean;
+      description
+        "Indicates whether Annex X operation is enabled.";
+      reference
+        "ITU-T G.997.2 clause T.3.1 (ANNEX_X_ENABLED),
+         ITU-T G.9701 clause X.6.8.1.";
+    }
+
+    leaf annex-d-enabled {
+      if-feature "annex-d";
+      type boolean;
+      description
+        "Indicates whether Annex D operation is enabled.";
+      reference
+        "ITU-T G.997.2 clause T.3.3 (ANNEX_D_ENABLED),
+         ITU-T G.9701 clause D.5.8.1.";
+    }
+
+    leaf idta-enabled {
+      if-feature "(dta and annex-x)";
+      type boolean;
+      description
+        "Indicates whether iDTA is enabled.";
+      reference
+        "ITU-T G.9701 clause T.3.2 (DTA_ENABLED),
+         ITU-T G.9701 clause X.6.8.2.";
+    }
+
+    leaf cdta-procedure-actual-type {
+      if-feature "(dta and annex-d)";
+      type enumeration {
+        enum "disabled" {
+          value 0;
+          description
+            "cDTA is disabled (see clause D.5.8.2)";
+        }
+        enum "one-step" {
+          value 1;
+          description
+            "DRA uses one-step cDTA procedure (see clause D.5.8.2).";
+        }
+        enum "two-step" {
+          value 2;
+          description
+            "DRA uses two-step cDTA procedure (see clause D.5.8.2)";
+        }
+      }
+      description
+        "Indicates which cDTA procedure is used by the DRA according 
+         to Annex D.";
+      reference
+        "ITU-T G.997.2 clause T.3.4 (CDTA_PROC_ACT),
+         ITU-T G.9701 clause D.5.8.2.";
     }
 
     container ftu-o {

@@ -19,25 +19,11 @@ submodule bbf-vdsl-pointers {
 
   include bbf-vdsl-base-body;
   include bbf-vdsl-base;
-
-  // 5.1 xDSL Line
-  // 5.2 xDSL Channel
   include bbf-vdsl-line;
-
-  // 5.5 Service related profiles
   include bbf-vdsl-service-profiles;
-
-  // 5.6 Spectrum related profiles
   include bbf-vdsl-spectrum-profiles;
-
-  // 5.7 DSL Quality Management related profiles
   include bbf-vdsl-quality-profiles;
-
-  // 8.2 xTU Line Threshold Profile
-  // 8.3 xTU Channel Threshold Profile
-  // 8.4 xTU Channel Thresholds
   include bbf-vdsl-threshold-management;
-
   include bbf-vdsl-performance-management;
 
   organization
@@ -49,16 +35,16 @@ submodule bbf-vdsl-pointers {
      should be directed to <mailto:help@broadband-forum.org>.
 
      Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
 
      Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
+
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>
 
-     WA Director: Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>";
+     WA Director: Joey Boyd, ADTRAN";
 
   description
     "This submodule contains a collection of YANG definitions for
@@ -104,9 +90,19 @@ submodule bbf-vdsl-pointers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c2; see
+     This version of this YANG module is part of TR-355a1; see
      the TR itself for full legal notices.";
 
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
   revision 2017-11-27 {
     description
       "Corrigendum 2 (fixes to the previous revision).
@@ -156,15 +152,10 @@ submodule bbf-vdsl-pointers {
       "xDSL Line Threshold Template name.";
   }
 
-  // 5.4 xDSL Line Configuration Vector
-
   grouping line-config-vector-body {
     description
-      "Line Configuration Vector body.";
+      "Line Configuration Vector.";
 
-    // Per-Channel profiles:
-    // 5.5 Service related Profiles
-    // 5.7 DSL Quality Management related profiles (channel)
     container channel {
       description
         "Channel profiles. All profile identifiers must be 
@@ -174,54 +165,60 @@ submodule bbf-vdsl-pointers {
         type bbf-vdsl:downstream-data-rate-profile-ref;
         mandatory true;
         description
-          "Downstream Data Rate Profile identifier.";
+          "References a downstream data rate profile to be used to
+           configure the line.";
       }
       leaf upstream-data-rate-profile {
         type bbf-vdsl:upstream-data-rate-profile-ref;
         mandatory true;
         description
-          "Upstream Data Rate Profile identifier.";
+          "References an upstream data rate profile to be used to
+           configure the line.";
       }
       leaf impulse-noise-protection-delay-profile {
         type bbf-vdsl:impulse-noise-protection-delay-profile-ref;
         mandatory true;
         description
-          "INP-Delay Profile identifier.";
+          "References an impulse noise protection delay profile to be 
+           used to configure the line.";
       }
     }
 
-    // 5.6 Spectrum related Profiles
     leaf line-spectrum-profile {
       type bbf-vdsl:line-spectrum-profile-ref;
       mandatory true;
       description
-        "Line Spectrum Profile identifier.";
+        "References a line spectrum profile to be used to configure 
+         the line.";
     }
     leaf upstream-power-back-off-profile {
       type bbf-vdsl:upstream-power-back-off-profile-ref;
       mandatory true;
       description
-        "UPBO Profile identifier.";
+        "References an upstream power back-off profile to be used to 
+         configure the line.";
     }
     leaf downstream-power-back-off-profile {
       type bbf-vdsl:downstream-power-back-off-profile-ref;
       mandatory true;
       description
-        "DPBO Profile identifier.";
+        "References a downstream power back-off profile to be used to 
+         configure the line.";
     }
     leaf radio-frequency-interference-profile {
       type bbf-vdsl:radio-frequency-interference-profile-ref;
       mandatory true;
       description
-        "RFI Profile identifier.";
+        "References an radio frequency interference profile to be used
+         to configure the line.";
     }
 
-    // 5.7 DSL Quality Management related profiles (line)
     leaf noise-margin-profile {
       type bbf-vdsl:noise-margin-profile-ref;
       mandatory true;
       description
-        "Noise Margin Profile identifier.";
+        "References a noise margin profile to be used to configure the
+         line.";
     }
     leaf virtual-noise-profile {
       if-feature "virtual-noise";
@@ -231,7 +228,8 @@ submodule bbf-vdsl-pointers {
       }
       mandatory true;
       description
-        "Virtual Noise Profile identifier.";
+        "References a virtual noise profile to be used to configure 
+         the line.";
     }
     leaf sos-profile {
       if-feature "sos";
@@ -241,7 +239,7 @@ submodule bbf-vdsl-pointers {
       }
       mandatory true;
       description
-        "SOS Profile identifier.";
+        "References an SOS profile to be used to configure the line.";
     }
     leaf impulse-noise-monitoring-profile {
       if-feature "impulse-noise-monitoring";
@@ -251,7 +249,8 @@ submodule bbf-vdsl-pointers {
       }
       mandatory true;
       description
-        "INM Profile identifier.";
+        "References an impulse noise monitoring profile to be used to 
+         configure the line.";
     }
     leaf re-initialization-policy-profile {
       if-feature "re-initialization-policy";
@@ -261,7 +260,8 @@ submodule bbf-vdsl-pointers {
       }
       mandatory true;
       description
-        "Re-Initialization Policy Profile identifier.";
+        "References a re-initialization policy profile to be used to 
+         configure the line.";
     }
     leaf vectoring-profile {
       if-feature "vectoring";
@@ -271,7 +271,8 @@ submodule bbf-vdsl-pointers {
       }
       mandatory true;
       description
-        "Vectoring Profile identifier.";
+        "References a vectoring profile to be used to configure the 
+         line.";
     }
     leaf data-gathering-profile {
       if-feature "data-gathering";
@@ -281,18 +282,19 @@ submodule bbf-vdsl-pointers {
       }
       mandatory true;
       description
-        "Data Gathering Profile identifier.";
+        "References a data gathering profile to be used to configure 
+         the line.";
     }
   }
 
   augment '/bbf-vdsl:vdsl/bbf-vdsl:vectors' {
     description
-      "5.4 xDSL Line Configuration Vector.";
+      "xDSL Line Configuration Vector.";
 
     list line-config-vector {
       key "name";
       description
-        "5.4 xDSL Line Configuration Vector";
+        "xDSL Line Configuration Vector";
 
       leaf name {
         type bbf-yang:string-ascii64;
@@ -304,17 +306,14 @@ submodule bbf-vdsl-pointers {
     }
   }
 
-  // 8 Object model for xDSL Performance Threshold Management
-
   augment '/bbf-vdsl:vdsl/bbf-vdsl:thresholds' {
     description
-      "8 xDSL Performance Threshold Management.";
+      "xDSL Performance Threshold Management.";
 
-    // 8.1 xDSL Line Threshold Template
     list threshold-template {
       key "name";
       description
-        "8.1 xDSL Line Threshold Template";
+        "xDSL Line Threshold Template.";
 
       leaf name {
         type bbf-yang:string-ascii64;
@@ -324,13 +323,14 @@ submodule bbf-vdsl-pointers {
 
       grouping threshold-profile {
         description
-          "Defines 15-min and 24hr line and channel profiles.";
+          "Defines 15 minute and 24 hour line and channel profiles.";
 
         leaf xtu-15min-line-profile {
           type bbf-vdsl:line-threshold-profile-ref;
           mandatory true;
           description
-            "15-minute Line Threshold Profile identifier.";
+            "Reference to a line threshold profile for thresholds 
+             related to 15 minute performance counters.";
         }
 
         leaf xtu-24hr-line-profile {
@@ -338,14 +338,16 @@ submodule bbf-vdsl-pointers {
           type bbf-vdsl:line-threshold-profile-ref;
           mandatory true;
           description
-            "1-day Line Threshold Profile identifier.";
+            "Reference to a line threshold profile for thresholds 
+             related to 24 hour performance counters.";
         }
 
         leaf xtu-15min-channel-threshold-profile {
           type bbf-vdsl:channel-threshold-profile-ref;
           mandatory true;
           description
-            "15-minute Channel Threshold Profile identifier.";
+            "Reference to a channel threshold profile for thresholds 
+             related to 15 minute performance counters.";
         }
 
         leaf xtu-24hr-channel-threshold-profile {
@@ -353,7 +355,8 @@ submodule bbf-vdsl-pointers {
           type bbf-vdsl:channel-threshold-profile-ref;
           mandatory true;
           description
-            "1-day Channel Threshold Profile identifier.";
+            "Reference to a channel threshold profile for thresholds 
+             related to 24 hour performance counters.";
         }
       }
 
@@ -373,8 +376,8 @@ submodule bbf-vdsl-pointers {
   augment '/if:interfaces/if:interface/bbf-fastdsl:line/bbf-vdsl:'
         + 'line' {
     description
-      "5.1 Pointer to xDSL Line Configuration Vector,
-       8.1 Pointer to xDSL Line Threshold Template.";
+      "Pointer to xDSL Line Configuration Vector,
+       Pointer to xDSL Line Threshold Template.";
 
     choice profile-config {
       default "no-profiles-attached";

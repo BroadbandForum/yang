@@ -6,33 +6,29 @@ submodule bbf-selt-pmd-control-body {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
 
-     Editor:      William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>
+     Editor:      Joey Boyd, ADTRAN
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+
+     WA Director: Joey Boyd, ADTRAN";
 
   description
     "This submodule contains a collection of YANG definitions for
      managing the PMD control object.
 
-     Copyright (c) 2016, Broadband Forum
-     All rights reserved.
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -72,9 +68,19 @@ submodule bbf-selt-pmd-control-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355; see
+     This version of this YANG module is part of TR-355a1; see
      the TR itself for full legal notices.";
 
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
   revision 2016-07-18 {
     description
       "Initial revision.
@@ -86,17 +92,43 @@ submodule bbf-selt-pmd-control-body {
                         TR-355.pdf>";
   }
 
+  typedef pmd-function {
+    type enumeration {
+      enum "uer-measurement" {
+        value 1;
+        description
+          "Triggers the CO SELT PMD to start a Uncalibrated
+           Echo Response (UER) measurement.";
+        reference
+          "ITU-T G.996.2 clause A.2.3.1 (SELT-UME-C)";
+      }
+      enum "qln-measurement" {
+        value 2;
+        description
+          "Triggers the CO SELT PMD to start a Quiet Line
+           Noise (QLN) measurement.";
+        reference
+          "ITU-T G.996.2 clause A.2.3.3 (SELT-QME-C)";
+      }
+    }
+    description
+      "The SELT PMD function.";
+  }
+
   grouping selt-pmd-control {
     description
       "Defines the parameters contained in the PMD control object.";
 
-
     leaf uer-measurement-enable-c {
       type boolean;
       default "false";
+      status deprecated;
       description
         "If true, triggers the CO SELT PMD to start a Uncalibrated
-         Echo Response(UER) measurement.";
+         Echo Response(UER) measurement.
+
+         A configuration change back to 'false' is required before 
+         initiating another update.";
       reference
         "ITU-T G.996.2 clause A.2.3.1 (SELT-UME-C)";
     }
@@ -104,11 +136,71 @@ submodule bbf-selt-pmd-control-body {
     leaf qln-measurement-enable-c {
       type boolean;
       default "false";
+      status deprecated;
       description
         "If true, triggers the CO SELT PMD to start a Quiet Line
-         Noise(QLN) measurement.";
+         Noise(QLN) measurement.
+
+         A configuration change back to 'false' is required before 
+         initiating another update.";
       reference
         "ITU-T G.996.2 clause A.2.3.3 (SELT-QME-C)";
+    }
+  }
+
+
+  grouping pmd-control {
+    description
+      "PMD control configuration.";
+
+    leaf pmd-control {
+      type enumeration {
+        enum "disable" {
+          description
+            "The CO SELT PMD is not configured for a measurement.";
+        }
+        enum "enable" {
+          description
+            "The CO SELT PMD is configured for a measurement.";
+        }
+      }
+      default "disable";
+      description
+        "The CO SELT PMD is by default 'disable'. When 'disable', the 
+         line is in normal operation (e.g., in the L0 state if the 
+         line is configured with AdminStatus=up). When 'enable', the 
+         AN/DPU ME shall force the line to the L3 state.";
+    }
+
+
+    action request-pmd-function-c {
+      description
+        "A measurement is by default not triggered. A measurement is 
+         triggered when the action is sent with the appropriate 
+         function specified. One or more measurements may be triggered
+         while the CO SELT PMD is configured 'enable', possibly with 
+         different CO SELT PMD configuration parameters. If the 
+         triggered measurement cannot be executed, then the 
+         AN/DPU ME rejects this action and the CO SELT PMD status 
+         remains 'inactive'.";
+
+      input {
+        leaf pmd-function {
+          type union {
+            type enumeration {
+              enum "abort" {
+                value 0;
+                description
+                  "Triggers the CO SELT PMD to abort any currently
+                   ongoing measurement.";
+              }
+            }
+            type pmd-function;
+          }
+          description
+            "The action being requested.";
+        }
+      }
     }
   }
 }

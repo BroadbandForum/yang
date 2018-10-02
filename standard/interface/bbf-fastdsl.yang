@@ -11,6 +11,10 @@ module bbf-fastdsl {
     prefix ianaift;
   }
 
+  import bbf-availability {
+    prefix bbf-avail;
+  }
+
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
@@ -20,16 +24,16 @@ module bbf-fastdsl {
      should be directed to <mailto:help@broadband-forum.org>.
 
      Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
 
      Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
+
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>
 
-     WA Director: Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>";
+     WA Director: Joey Boyd, ADTRAN";
 
   description
     "This module contains a collection of YANG definitions for 
@@ -76,9 +80,19 @@ module bbf-fastdsl {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c2; see
+     This version of this YANG module is part of TR-355a1; see
      the TR itself for full legal notices.";
 
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
   revision 2017-11-27 {
     description
       "Corrigendum 2 (fixes to the previous revision).
@@ -127,12 +141,26 @@ module bbf-fastdsl {
       "ITU-T G.993.2 VDSL2 or derived technology.";
   }
 
+  identity configured-mode-fast-not-supported {
+    base bbf-avail:issue-tag;
+    description
+      "The configured mode, 'mode-fast' of the FastDSL line is not 
+       supported.";
+  }
+
+  identity configured-mode-vdsl-not-supported {
+    base bbf-avail:issue-tag;
+    description
+      "The configured mode, 'mode-vdsl' of the FastDSL line is not 
+       supported.";
+  }
+
   typedef fastdsl-mode-ref {
     type identityref {
       base fastdsl-mode;
     }
     description
-      "Reference to an FastDSL mode of operation.";
+      "Reference to a FastDSL mode of operation.";
   }
 
   augment '/if:interfaces/if:interface' {
@@ -153,14 +181,8 @@ module bbf-fastdsl {
 
       leaf-list supported-mode {
         type fastdsl-mode-ref;
-        must
-          "(count(../configured-mode) = 0) or
-           (../configured-mode = ../supported-mode)" {
-          description
-            "If configured modes of operation are specified, each
-             mode must be part of the supported modes.";
-        }
         config false;
+        status deprecated;
         description
           "Supported mode(s) of operation.";
       }

@@ -4,35 +4,33 @@ submodule bbf-fast-fast-retrain-policy-profile-body {
     prefix bbf-fast;
   }
 
+  include bbf-fast-base;
+
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
 
-     Editor:      William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>
+     Editor:      Joey Boyd, ADTRAN
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+
+     WA Director: Joey Boyd, ADTRAN";
 
   description
     "This submodule contains a collection of YANG definitions for
      managing fast retrain policy profiles.
 
-     Copyright (c) 2016, Broadband Forum
-     All rights reserved.
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -72,9 +70,19 @@ submodule bbf-fast-fast-retrain-policy-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355; see
+     This version of this YANG module is part of TR-355a1; see
      the TR itself for full legal notices.";
 
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
   revision 2016-07-18 {
     description
       "Initial revision.
@@ -191,6 +199,21 @@ submodule bbf-fast-fast-retrain-policy-profile-body {
         "ITU-T G.997.2 clause 7.1.8.9 (LOW_ETR_THRESHOLDds) and
          clause 7.1.8.10 (LOW_ETR_THRESHOLDus); ITU-T G.9701 clause
          12.1.4.3.4.";
+    }
+
+    leaf lor-rmcr-persistency {
+      if-feature "rmcr";
+      type uint8;
+      units "50 ms";
+      default "0";
+      description
+        "Defines the persistency period of a LOR defect before the RMC
+         is declared severely degraded. The value 0 is a special value
+         that indicates that the RMCR procedure is disabled. It can 
+         only be set to 0 in one direction if the value is also set to
+         0 in the opposite direction.";
+      reference
+        "ITU-T G.997.2 clause 7.1.12.1 (RMCR_LOR_TRIGGERds/us)";
     }
   }
 

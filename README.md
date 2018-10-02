@@ -1,5 +1,11 @@
 ## Broadband Forum YANG Modules
 
+### 2018-10-01: [TR-355a1](https://www.broadband-forum.org/technical/download/TR-355_Amendment-1.pdf) YANG Modules for FTTdp Management
+*Tag: [v1.1.0-TR-355a1](https://github.com/BroadbandForum/yang/tree/v1.1.0-TR-355a1)*
+
+* Add support for layer 2 multicast and enhanced QoS functions
+* Other updates and fixes applied
+
 ### 2018-07-13: [TR-374](https://www.broadband-forum.org/technical/download/TR-374.pdf) YANG modules for management of G.hn systems in FTTdp architectures
 *Tag: [v4.0.0-TR-374](https://github.com/BroadbandForum/yang/tree/v4.0.0-TR-374)*
 

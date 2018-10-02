@@ -30,16 +30,16 @@ submodule bbf-vdsl-performance-management {
      should be directed to <mailto:help@broadband-forum.org>.
 
      Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
 
      Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
+
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>
 
-     WA Director: Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>";
+     WA Director: Joey Boyd, ADTRAN";
 
   description
     "This submodule contains a collection of YANG definitions for
@@ -85,9 +85,19 @@ submodule bbf-vdsl-performance-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c2; see
+     This version of this YANG module is part of TR-355a1; see
      the TR itself for full legal notices.";
 
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
   revision 2017-11-27 {
     description
       "Corrigendum 2 (fixes to the previous revision).
@@ -125,14 +135,10 @@ submodule bbf-vdsl-performance-management {
        is supported";
   }
 
-  // 7 Object model for xDSL Performance Management
-
-  // 7.1 xTU Line Performance
-
   augment '/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-'
         + 'vdsl:line' {
     description
-      "7.1 xDSL Transmission Unit (xTU) Line Performance config.";
+      "xDSL Transmission Unit (xTU) Line Performance config.";
 
     container performance {
       description
@@ -255,12 +261,10 @@ submodule bbf-vdsl-performance-management {
     }
   }
 
-  // 7.2 xTU Channel Performance
-
   augment '/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-'
         + 'vdsl:line/bbf-vdsl:channel' {
     description
-      "7.2 xDSL Transmission Unit Channel Performance config.";
+      "xDSL Transmission Unit Channel Performance config.";
 
     container performance {
       description

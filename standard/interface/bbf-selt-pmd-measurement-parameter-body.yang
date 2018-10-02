@@ -13,16 +13,16 @@ submodule bbf-selt-pmd-measurement-parameter-body {
      should be directed to <mailto:help@broadband-forum.org>.
 
      Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
 
      Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
+
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>
 
-     WA Director: Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>";
+     WA Director: Joey Boyd, ADTRAN";
 
   description
     "This submodule contains a collection of YANG definitions for
@@ -68,9 +68,19 @@ submodule bbf-selt-pmd-measurement-parameter-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c2; see
+     This version of this YANG module is part of TR-355a1; see
      the TR itself for full legal notices.";
 
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
   revision 2017-11-27 {
     description
       "Corrigendum 2 (fixes to the previous revision).
@@ -124,25 +134,28 @@ submodule bbf-selt-pmd-measurement-parameter-body {
 
   typedef per-sub-carrier-uint8 {
     type binary {
-      length "8192";
+      length "0..8192";
     }
     description
       "A binary type where each octet represents data belonging to 
-       a sub-carrier. The first octet represents sub-carrier 0 and 
-       the last represents sub-carrier 8191.";
+       a sub-carrier group. The first octet represents sub-carrier 
+       group 0 and the last octet represents the sub-carrier 
+       group (length - 1).";
   }
 
   typedef per-sub-carrier-int32-tuple {
     type binary {
-      length "32768";
+      length "0..65536";
     }
     description
-      "A binary type where a tuple of 4 octet groups represent data 
+      "A binary type where each group of 8 octets represents a tuple. 
+       A tuple consists of two 4-octet groups and represents data 
        belonging to a sub-carrier. The first tuple represents 
-       sub-carrier group and the last tuple represents sub-carrier 
-       group 8191. In each 4 octet group in the tuple, the
-       most significant byte is loaded first. The order of the tuple
-       is determined by the node to which this type is associated.";
+       sub-carrier group 0 and the last tuple represents sub-carrier 
+       group (length/8 - 1). In each 4-octet group in the 
+       tuple, the most significant byte is loaded first. The order of 
+       the tuples is determined by the node to which this type is 
+       associated.";
   }
 
   grouping co-cpe-measurement-parameters {
@@ -158,19 +171,16 @@ submodule bbf-selt-pmd-measurement-parameter-body {
       }
 
       leaf uer-g {
-        if-feature "extended-bandwidth-selt-uer";
         type uint8 {
           range "1 | 2 | 12";
         }
         description
           "The SELT uncalibrated echo response group size (SELT-UER_G)
-           is a reported parameter identifying the UER frequency 
-           spacing, which is equal to SELT-UER_G x Df with Df = 
-           4.3125 kHz. SELT-UER_G has three valid values: 1, 2, and 
-           12. Section A.2.2.1 refers to SELT-UER_G as the UER 
-           granularity parameter, UER_G. The SELT uncalibrated echo 
-           response group size need only be reported if the option for
-           extended bandwidth SELT is applied.";
+              is a reported parameter identifying the UER frequency 
+              spacing, which is equal to SELT-UER_G x Df with Df = 
+              4.3125 kHz. SELT-UER_G has three valid values: 1, 2, and
+              12. Section A.2.2.1 refers to SELT-UER_G as the UER 
+              granularity parameter, UER_G.";
       }
 
       leaf uer {
@@ -190,37 +200,26 @@ submodule bbf-selt-pmd-measurement-parameter-body {
          Df = 4.3125 kHz, and (NSC-1) x UER_G x Df is the highest 
          frequency supported by the SELT-PMD functionality. 
 
-         If the option for extended bandwidth SELT is not applied, 
-         then:
-           The UER granularity parameter, UER_G, has two valid values:
-           1 and 2, indicating whether the measurements were performed
-           using a tonesubcarrier spacing of 4.3125 kHz or of 8.625 
-           kHz. If the uncalibrated echo response is being reported 
-           over a frequency range of 17.664 MHz or lower, UER_G shall 
-           be set to 1. If the uncalibrated echo response is being 
-           reported over a frequency range that is greater than 17.664
-           MHz, UER_G shall be set to 2.
-
-         If the option for extended bandwidth SELT is applied, then: 
-           The UER granularity parameter, UER_G, has three valid 
-           values: 1, 2, and 12, indicating whether the measurements 
-           were performed using a subcarrier spacing of 4.3125 kHz, 
-           8.625 kHz, or 51.75 kHz respectively.
+         The UER granularity parameter, UER_G, has three valid 
+         values: 1, 2, and 12, indicating whether the measurements 
+         were performed using a subcarrier spacing of 4.3125 kHz, 
+         8.625 kHz, or 51.75 kHz respectively.
 
          The scale factor shall be coded as a 32-bit unsigned integer.
          Both a(i) and b(i) shall be coded as 32 bit 2's complement 
          signed integers. The value of UER(i* UER_G*Df) shall be 
-         defined as: UER(i* UER_G*Df) = (scale/231)*(a(i)+j*b(i))/231.
+         defined as: 
+           UER(i* UER_G*Df) = (scale/2^31)*(a(i)+j*b(i))/2^31.
          In order to maximize precision, the scale factor shall be 
          chosen such that max(|a(i)|, |b(i)|) over all i is equal to 
-         231-1. 
+         2^31-1. 
 
          NOTE - This data format supports an UER(f) granularity of 
          2-31 and an UER(f) dynamic range of approximately +6 dB to 
          -186 dB, however it does not imply any future accuracy 
          requirements.
 
-         An UER(i*UER_G* Df) value indicated as a(i) = b(i) = -231 is 
+         An UER(i*UER_G* Df) value indicated as a(i) = b(i) = -2^31 is
          a special value. It indicates that no measurement could be 
          done for this subcarrier either because it is not supported 
          by the SELT-PMD function, or that the value is out of range 
@@ -259,7 +258,6 @@ submodule bbf-selt-pmd-measurement-parameter-body {
     container quiet-line-noise {
 
       leaf seltqln-g {
-        if-feature "extended-bandwidth-selt-qln";
         type uint8 {
           range "1 | 2 | 12";
         }
@@ -267,10 +265,7 @@ submodule bbf-selt-pmd-measurement-parameter-body {
           "The SELT quiet line noise group size (SELTQLN_G) is a 
            reported parameter identifying the SELTQLN frequency 
            spacing, which is equal to SELTQLN_G x Df with Df = 4.3125 
-           kHz. SELTQLN_G has three valid values: 1, 2, and 12.
-
-           The SELT quiet line noise group size need only be reported 
-           if the option for extended bandwidth SELT is applied.";
+           kHz. SELTQLN_G has three valid values: 1, 2, and 12.";
       }
 
       leaf qln {
@@ -287,22 +282,10 @@ submodule bbf-selt-pmd-measurement-parameter-body {
          (NSC-1) x SELTQLN_G x Df is the highest frequency supported 
          by the SELT-PMD functionality. 
 
-         If the option for extended bandwidth SELT is not applied, 
-         then:
-           SELTQLN_G has two valid values: 1 and 2, indicating whether
-           the measurements were performed using a tonesubcarrier 
-           spacing of 4.3125 kHz or of 8.625 kHz. If the SELT quiet 
-           line noise is being reported over a frequency range of 
-           17.664 MHz or lower, SELTQLN_G shall be set to 1. If the 
-           SELT quiet line noise is being reported over a frequency 
-           range that is greater than 17.664 MHz, SELTQLN_G shall be 
-           set to 2.
-
-         If the option for extended bandwidth SELT is applied, then:
-           SELTQLN_G has three valid values: 1, 2, and 12, indicating 
-           whether the measurements were performed using a subcarrier 
-           spacing of 4.3125 kHz,  8.625 kHz, or of 51.75 kHz 
-           respectively.
+         SELTQLN_G has three valid values: 1, 2, and 12, indicating 
+         whether the measurements were performed using a subcarrier 
+         spacing of 4.3125 kHz,  8.625 kHz, or of 51.75 kHz 
+         respectively.
 
          SELT quiet line noise SELTQLN(i x SELTQLN_G x Df) shall be 
          represented as an 8 bit unsigned integer n(i), where i is the

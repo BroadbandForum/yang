@@ -93,6 +93,11 @@
                     <code-violations/>
                     <uncorrected-dtus/>
                     <retransmitted-dtus/>
+                    <minimum-andeftr/>
+                    <maximum-andeftr/>
+                    <sum-andeftr/>
+                    <low-andeftr-seconds/>
+                    <andeftr-defined-seconds/>
                   </ftu-o>
                   <ftu-r>
                     <measured-time/>
@@ -101,6 +106,11 @@
                     <code-violations/>
                     <uncorrected-dtus/>
                     <retransmitted-dtus/>
+                    <minimum-andeftr/>
+                    <maximum-andeftr/>
+                    <sum-andeftr/>
+                    <low-andeftr-seconds/>
+                    <andeftr-defined-seconds/>
                   </ftu-r>
                 </current>
                 <number-of-intervals/>
@@ -116,6 +126,11 @@
                     <code-violations/>
                     <uncorrected-dtus/>
                     <retransmitted-dtus/>
+                    <minimum-andeftr/>
+                    <maximum-andeftr/>
+                    <sum-andeftr/>
+                    <low-andeftr-seconds/>
+                    <andeftr-defined-seconds/>
                   </ftu-o>
                   <ftu-r>
                     <measured-time/>
@@ -126,6 +141,11 @@
                     <code-violations/>
                     <uncorrected-dtus/>
                     <retransmitted-dtus/>
+                    <minimum-andeftr/>
+                    <maximum-andeftr/>
+                    <sum-andeftr/>
+                    <low-andeftr-seconds/>
+                    <andeftr-defined-seconds/>
                   </ftu-r>
                 </history>
               </intervals-15min>
@@ -138,6 +158,11 @@
                     <code-violations/>
                     <uncorrected-dtus/>
                     <retransmitted-dtus/>
+                    <minimum-andeftr/>
+                    <maximum-andeftr/>
+                    <sum-andeftr/>
+                    <low-andeftr-seconds/>
+                    <andeftr-defined-seconds/>
                   </ftu-o>
                   <ftu-r>
                     <measured-time/>
@@ -146,6 +171,11 @@
                     <code-violations/>
                     <uncorrected-dtus/>
                     <retransmitted-dtus/>
+                    <minimum-andeftr/>
+                    <maximum-andeftr/>
+                    <sum-andeftr/>
+                    <low-andeftr-seconds/>
+                    <andeftr-defined-seconds/>
                   </ftu-r>
                 </current>
                 <number-of-intervals/>
@@ -161,6 +191,11 @@
                     <code-violations/>
                     <uncorrected-dtus/>
                     <retransmitted-dtus/>
+                    <minimum-andeftr/>
+                    <maximum-andeftr/>
+                    <sum-andeftr/>
+                    <low-andeftr-seconds/>
+                    <andeftr-defined-seconds/>
                   </ftu-o>
                   <ftu-r>
                     <measured-time/>
@@ -171,6 +206,11 @@
                     <code-violations/>
                     <uncorrected-dtus/>
                     <retransmitted-dtus/>
+                    <minimum-andeftr/>
+                    <maximum-andeftr/>
+                    <sum-andeftr/>
+                    <low-andeftr-seconds/>
+                    <andeftr-defined-seconds/>
                   </ftu-r>
                 </history>
               </intervals-24hr>
@@ -416,6 +456,10 @@
             <profile/>
             <link-state/>
             <initialization-success-failure-cause/>
+            <annex-x-enabled/>
+            <annex-d-enabled/>
+            <idta-enabled/>
+            <cdta-procedure-actual-type/>
             <ftu-o>
               <update-test>
                 <time-stamp-at-g1-update/>
@@ -546,8 +590,11 @@
               <system-vendor-id/>
               <system-serial-number/>
               <profiles-supported/>
+              <annex-x-supported/>
+              <annex-d-supported/>
               <vce-id/>
               <vce-port-index/>
+              <idta-supported/>
             </ftu-o>
             <ftu-r>
               <g.994.1-vendor-id/>
@@ -556,9 +603,22 @@
               <system-vendor-id/>
               <system-serial-number/>
               <profiles-supported/>
+              <annex-x-supported/>
+              <annex-d-supported/>
             </ftu-r>
           </inventory>
         </line>
+        <availability xmlns="urn:bbf:yang:bbf-fast">
+          <availability-status/>
+          <issues>
+            <issue>
+              <tag/>
+              <code/>
+              <message/>
+              <root-cause/>
+            </issue>
+          </issues>
+        </availability>
       </line>
     </interface>
   </interfaces-state>
@@ -570,6 +630,11 @@
         <minimum-expected-throughput>0</minimum-expected-throughput>
         <maximum-gamma-data-rate>4294967295</maximum-gamma-data-rate>
         <minimum-gamma-data-rate>0</minimum-gamma-data-rate>
+        <dynamic-time-assignment>
+          <minimum-expected-throughput>0</minimum-expected-throughput>
+          <maximum-net-data-rate>4294967295</maximum-net-data-rate>
+        </dynamic-time-assignment>
+        <low-andeftr-threshold>0</low-andeftr-threshold>
       </downstream-data-rate-profile>
       <upstream-data-rate-profile>
         <name/>
@@ -577,6 +642,11 @@
         <minimum-expected-throughput>0</minimum-expected-throughput>
         <maximum-gamma-data-rate>4294967295</maximum-gamma-data-rate>
         <minimum-gamma-data-rate>0</minimum-gamma-data-rate>
+        <dynamic-time-assignment>
+          <minimum-expected-throughput>0</minimum-expected-throughput>
+          <maximum-net-data-rate>4294967295</maximum-net-data-rate>
+        </dynamic-time-assignment>
+        <low-andeftr-threshold>0</low-andeftr-threshold>
       </upstream-data-rate-profile>
       <low-power-data-rate-profile>
         <name/>
@@ -598,6 +668,15 @@
         <total-symbol-periods>36</total-symbol-periods>
         <downstream-symbol-periods>28</downstream-symbol-periods>
         <cyclic-extension>10</cyclic-extension>
+        <dynamic-time-assignment>
+          <dta-allowed>none</dta-allowed>
+          <preferred-mds>28</preferred-mds>
+          <maximum-step-size>25</maximum-step-size>
+          <minimum-time-between-updates>0</minimum-time-between-updates>
+          <minimum-mds>5</minimum-mds>
+          <maximum-mds>30</maximum-mds>
+          <cdta-procedure-control>one-or-two-step</cdta-procedure-control>
+        </dynamic-time-assignment>
       </time-division-duplexing-profile>
     </service>
     <spectrum>
@@ -717,6 +796,8 @@
         <upstream>
           <fext-to-cancel-enable>True</fext-to-cancel-enable>
         </upstream>
+        <annex-x-mode>forbidden</annex-x-mode>
+        <annex-d-mode>forbidden</annex-d-mode>
       </vectoring-profile>
       <fast-retrain-policy-profile>
         <name/>
@@ -726,6 +807,7 @@
           <lor-defect-persistency>2</lor-defect-persistency>
           <reinit-time-threshold>10</reinit-time-threshold>
           <low-etr-threshold>20</low-etr-threshold>
+          <lor-rmcr-persistency>0</lor-rmcr-persistency>
         </downstream>
         <upstream>
           <los-defect-persistency>2</los-defect-persistency>
@@ -733,6 +815,7 @@
           <lor-defect-persistency>2</lor-defect-persistency>
           <reinit-time-threshold>10</reinit-time-threshold>
           <low-etr-threshold>20</low-etr-threshold>
+          <lor-rmcr-persistency>0</lor-rmcr-persistency>
         </upstream>
       </fast-retrain-policy-profile>
       <retransmission-profile>

@@ -10,30 +10,30 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     Editor:      Joey Boyd, ADTRAN
+
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+
+     WA Director: Joey Boyd, ADTRAN";
 
   description
     "This submodule contains a collection of YANG definitions for 
      managing Broadband Forum TR-252i3 clause 9.1 xTU Sub-Carrier 
      Status.
 
-     Copyright (c) 2016, 2017 Broadband Forum
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -73,9 +73,19 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c1; see
+     This version of this YANG module is part of TR-355a1; see
      the TR itself for full legal notices.";
 
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
   revision 2017-03-13 {
     description
       "Corrigendum 1 (fixes to the initial revision).
@@ -509,7 +519,7 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            Xlinps values.";
         reference
           "ITU-T G.997.1 clause 7.5.1.39.1 Downstream XLIN scale
-           (XLINSCds) and clause 7.5.1.38.5 Upstream XLIN scale
+           (XLINSCds) and clause 7.5.1.39.5 Upstream XLIN scale
            (XLINSCus)";
       }
 
@@ -532,12 +542,19 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
 
       list xlinbands {
         key "band-index";
+
         leaf band-index {
           type uint16;
           description
             "xlin band index";
         }
-        uses sub-carrier-range;
+
+        uses sub-carrier-range {
+          refine "start-index" {
+            mandatory true;
+          }
+        }
+
         description
           "XLINBANDS contains pairs of (start_subcarrier_index,
            stop_subcarrier_index) for every band in which XLINps is

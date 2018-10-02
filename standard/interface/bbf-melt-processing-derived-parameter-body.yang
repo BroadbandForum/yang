@@ -4,35 +4,33 @@ submodule bbf-melt-processing-derived-parameter-body {
     prefix bbf-melt;
   }
 
+  include bbf-melt-base;
+
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
 
-     Editor:      William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>
+     Editor:      Joey Boyd, ADTRAN
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+
+     WA Director: Joey Boyd, ADTRAN";
 
   description
     "This submodule contains a collection of YANG definitions for
      MELT-P derived parameters.
 
-     Copyright (c) 2016, Broadband Forum
-     All rights reserved.
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -72,9 +70,19 @@ submodule bbf-melt-processing-derived-parameter-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355; see
+     This version of this YANG module is part of TR-355a1; see
      the TR itself for full legal notices.";
 
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
   revision 2016-07-18 {
     description
       "Initial revision.
@@ -261,31 +269,88 @@ submodule bbf-melt-processing-derived-parameter-body {
         }
         enum "16-hz-ac-voltage" {
           description
-            "16 2/3 Hz AC voltage";
+            "16 2/3 Hz AC voltage on both tip and ring wires.";
         }
         enum "25-hz-ac-voltage" {
           description
-            "25 Hz AC voltage";
+            "25 Hz AC voltage on both tip and ring wires.";
         }
         enum "50-hz-ac-voltage" {
           description
-            "50 Hz AC voltage";
+            "50 Hz AC voltage on both tip and ring wires.";
         }
         enum "60-hz-ac-voltage" {
           description
-            "60 Hz AC voltage";
+            "60 Hz AC voltage on both tip and ring wires.";
         }
         enum "pots-equipment" {
           description
-            "POTS equipment (-48 V DC)";
+            "POTS equipment (-48 V DC) on both tip and ring wires.";
         }
         enum "isdn-equipment" {
           description
-            "ISDN equipment (-96 V DC)";
+            "ISDN equipment (-96 V DC) on both tip and ring wires.";
         }
         enum "undefined-foreign-voltage-detected" {
           description
-            "Undefined foreign voltage detected";
+            "Undefined foreign voltage detected on both tip and 
+             ring wires.";
+        }
+        enum "16-hz-ac-voltage-tip" {
+          description
+            "16 2/3 Hz AC voltage on the tip wire.";
+        }
+        enum "16-hz-ac-voltage-ring" {
+          description
+            "16 2/3 Hz AC voltage on the ring wire.";
+        }
+        enum "25-hz-ac-voltage-tip" {
+          description
+            "25 Hz AC voltage on the the tip wire.";
+        }
+        enum "25-hz-ac-voltage-ring" {
+          description
+            "25 Hz AC voltage on the the ring wire.";
+        }
+        enum "50-hz-ac-voltage-tip" {
+          description
+            "50 Hz AC voltage on the tip wire.";
+        }
+        enum "50-hz-ac-voltage-ring" {
+          description
+            "50 Hz AC voltage on the ring wire.";
+        }
+        enum "60-hz-ac-voltage-tip" {
+          description
+            "60 Hz AC voltage on the tip wire.";
+        }
+        enum "60-hz-ac-voltage-ring" {
+          description
+            "60 Hz AC voltage on the ring wire.";
+        }
+        enum "pots-equipment-tip" {
+          description
+            "POTS equipment (-48 V DC) on the tip wire.";
+        }
+        enum "pots-equipment-ring" {
+          description
+            "POTS equipment (-48 V DC) on the ring wire.";
+        }
+        enum "isdn-equipment-tip" {
+          description
+            "ISDN equipment (-96 V DC) on the tip wire.";
+        }
+        enum "isdn-equipment-ring" {
+          description
+            "ISDN equipment (-96 V DC) on the ring wire.";
+        }
+        enum "undefined-foreign-voltage-detected-tip" {
+          description
+            "Undefined foreign voltage detected on the tip wire.";
+        }
+        enum "undefined-foreign-voltage-detected-ring" {
+          description
+            "Undefined foreign voltage detected on the ring wire.";
         }
       }
       description
@@ -337,19 +402,31 @@ submodule bbf-melt-processing-derived-parameter-body {
       type enumeration {
         enum "no-signature-detected" {
           description
-            "No signature detected";
+            "No signature detected.";
         }
         enum "unknown-signature" {
           description
-            "Unknown signature";
+            "Unknown signature.";
         }
         enum "signature-type-dr" {
           description
-            "Signature type DR detected";
+            "Signature type DR detected.";
         }
         enum "signature-type-zrc" {
           description
-            "Signature type ZRC detected";
+            "Signature type ZRC detected.";
+        }
+        enum "signature-type-dr-inverse" {
+          description
+            "Signature type DR inverse detected.";
+        }
+        enum "signature-type-dr-plus-zrc" {
+          description
+            "Signature types DR and XRC detected.";
+        }
+        enum "signature-type-dr-inverse-plus-zrc" {
+          description
+            "Signature types DR inverse and XRC detected.";
         }
       }
       description
@@ -364,6 +441,174 @@ submodule bbf-melt-processing-derived-parameter-body {
          - signature type ZRC detected";
       reference
         "ITU-T G.996.2 clause F.2.2.6.1 (MELT-FES-ID)";
+    }
+
+    leaf cpe-identification-capacitive {
+      type enumeration {
+        enum "no-cpe-detected" {
+          description
+            "No CPE has been detected.";
+        }
+        enum "cpe-detected" {
+          description
+            "A CPE has been detected.";
+        }
+      }
+      description
+        "CPE detected shall be reported if the measured capacitance 
+         value CTR-Term is >= MELT-SYSC-CPE. CTR-Term shall represent 
+         the termination capacitance only. Therefore, the line 
+         capacitance shall be subtracted from the measured CTR value. 
+         For this equation to hold, the MELT-SYSC-CPE value should be 
+         derived from the nominal CPE capacitance by accounting for 
+         all tolerances and be set to the minimum possible measurement
+         result.";
+      reference
+        "ITU-T G.996.2 clause F.2.2.7 (MELT-CPE-ID)";
+    }
+
+    leaf unreliability-indicator {
+      if-feature "melt-processing-derived-parameter-reliability";
+      type bits {
+        bit open-wire-failure-type {
+          description
+            "This sub-parameter is a five state indication of the type
+             of open wire failure defined as follows:
+
+             1) No open wire failure detected
+             2) Tip and ring wires open in equal distance
+             3) Tip wire open
+             4) Ring wire open
+             5) Undefined.
+
+             NOTE - An error-free loop will be classified as failure 
+             state 2) in case that the remote end of the loop was left
+             open during the measurement, or the connected CPE 
+             equipment could not be detected (too low parallel CPE 
+             system capacitance).";
+          reference
+            "ITU-T G.996.2 clause F.2.2.1.1 (MELT-O-WIRE-type)";
+        }
+        bit open-wire-failure-distance {
+          description
+            "This parameter represents a best-effort estimate of the 
+             distance of the detected open wire failure from the 
+             measurement point, i.e., from the central office or of 
+             the total loop length if no failure is detected. A priori
+             knowledge of the loop characteristics is required for 
+             reliable estimation of the distance (see clause F.2.1.2).
+             The range of valid values is from 0 to 10000 m with a 
+             granularity of 1 m.";
+          reference
+            "ITU-T G.996.2 clause F.2.2.1.2 (MELT-O-WIRE-DIST)";
+        }
+        bit short-circuit-failure-type {
+          description
+            "This parameter is a six-state indication of the type of 
+             short circuit failure defined as follows:
+
+             1) No short circuit detected
+             2) Tip and ring wires shorted to GND
+             3) Tip wire shorted to GND
+             4) Ring wire shorted to GND
+             5) Tip and ring wires shorted to each other
+             6) Undefined";
+          reference
+            "ITU-T G.996.2 clause F.2.2.2.1 (MELT-S-CCT-type)";
+        }
+        bit leakage-identification {
+          description
+            "This parameter indicates a leakage to GND failure, 
+             classified into the following states:
+
+             1) No leakage detected
+             2) Tip and ring wire leaking to GND
+             3) Tip wire leaking to GND
+             4) Ring wire leaking to GND.";
+          reference
+            "ITU-T G.996.2 clause F.2.2.3 (MELT-LEAK-ID)";
+        }
+        bit resistive-fault-identification {
+          description
+            "This parameter indicates a resistive fault to GND 
+             failure, classified into the following states:
+
+             1) No resistive fault detected
+             2) Resistive fault tip and ring to GND
+             3) Resistive fault tip to GND
+             4) Resistive fault ring to GND.";
+          reference
+            "ITU-T G.996.2 clause F.2.2.4 (MELT-RFAULT-ID)";
+        }
+        bit foreign-voltage-type-classification {
+          description
+            "The foreign voltage impairment in the loop under test is 
+             classified into the following states:
+
+             1) No foreign voltage detected
+             2) 16 2/3 Hz AC voltage
+             3) 25 Hz AC voltage
+             4) 50 Hz AC voltage
+             5) 60 Hz AC voltage
+             6) POTS equipment (-48 V DC)
+             7) ISDN equipment (-96 V DC)
+             8) Undefined foreign voltage detected.
+
+             This classification shall be done separately for both, 
+             the tip and the ring wire. ";
+          reference
+            "ITU-T G.996.2 clause F.2.2.5.1 (MELT-FV-TYPE)";
+        }
+        bit foreign-voltage-level-classification {
+          description
+            "This parameter provides a general classification of the 
+             foreign voltage into the following classes:
+
+             1) hazardous potential (e.g., power contact)
+             2) foreign electromotive force
+             3) other";
+          reference
+            "ITU-T G.996.2 clause F.2.2.5.2 (MELT-FV-LEVEL)";
+        }
+        bit far-end-signature-topology-type-identification {
+          description
+            "This parameter specifies the topology types of the 
+             detected far-end signature.
+
+             Valid response values are:
+
+             - no signature detected
+             - unknown signature
+             - signature type DR detected
+             - signature type ZRC detected";
+          reference
+            "ITU-T G.996.2 clause F.2.2.6.1 (MELT-FES-ID)";
+        }
+        bit cpe-identification-capacitive {
+          description
+            "CPE detected shall be reported if the measured 
+             capacitance value CTR-Term is >= MELT-SYSC-CPE. CTR-Term 
+             shall represent the termination capacitance only. 
+             Therefore, the line capacitance shall be subtracted from 
+             the measured CTR value. For this equation to hold, the 
+             MELT-SYSC-CPE value should be derived from the nominal 
+             CPE capacitance by accounting for all tolerances and be 
+             set to the minimum possible measurement result.";
+          reference
+            "ITU-T G.996.2 clause F.2.2.7 (MELT-CPE-ID)";
+        }
+      }
+      description
+        "The unreliability indicator provides the set of parameters
+         whose data can be considered to be unreliable.
+
+         Possible reasons that the data is unreliable:
+           - The measurement may not have been able to run, possibly
+             due to external conditions.
+           - The result is not reliable as the accuracy may be 
+             degraded due to external conditions.";
+      reference
+        "ITU-T G.996.2 clause F.2.2.8 (Reliability indicator)";
     }
   }
 }

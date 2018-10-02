@@ -8,29 +8,29 @@ submodule bbf-fast-channel-threshold-profile-body {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     Editor:      Joey Boyd, ADTRAN
+
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+
+     WA Director: Joey Boyd, ADTRAN";
 
   description
     "This submodule contains a collection of YANG definitions for
      managing channel threshold profiles.
 
-     Copyright (c) 2016, 2017 Broadband Forum
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +70,19 @@ submodule bbf-fast-channel-threshold-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355c1; see
+     This version of this YANG module is part of TR-355a1; see
      the TR itself for full legal notices.";
 
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
   revision 2017-03-13 {
     description
       "Corrigendum 1 (fixes to the initial revision).
@@ -104,10 +114,10 @@ submodule bbf-fast-channel-threshold-profile-body {
       units "1 second";
       default "0";
       description
-        "Threshold for the count of the cyclic redundancy check 
-         anomalies (crc). A special value (0) indicates the
-         threshold is disabled. The cyclic redundancy check anomaly
-         (crc) is defined in clause 11.3.1.1/G.9701.";
+        "Threshold for the count of the Cyclic Redundancy Check 
+         anomalies (CRC). A special value (0) indicates the
+         threshold is disabled. The Cyclic Redundancy Check anomaly
+         (CRC) is defined in clause 11.3.1.1/G.9701.";
       reference
         "ITU-T G.997.2 clause 7.8.4 (CURR/PREV_NE/FE_15/24_CV);
          ITU-T G.997.2 clause 8.2 (THRESHOLD_NE/FE_15/24_CV)";
@@ -119,8 +129,8 @@ submodule bbf-fast-channel-threshold-profile-body {
       default "0";
       description
         "Threshold for the count of the uncorrected DTU anomalies
-         (rtx-uc). A special value (0) indicates the threshold is
-         disabled. The uncorrected DTU anomaly (rtx-uc) is defined
+         (RTX-UC). A special value (0) indicates the threshold is
+         disabled. The uncorrected DTU anomaly (RTX-UC) is defined
          in clause 11.3.1.1/G.9701.";
       reference
         "ITU-T G.997.2 clause 7.8.6 (CURR/PREV_NE/FE_15/24_RTXUC);
@@ -133,8 +143,8 @@ submodule bbf-fast-channel-threshold-profile-body {
       default "0";
       description
         "Threshold for the count of the retransmitted DTU anomalies
-         (rtx-tx). A special value (0) indicates the threshold is
-         disabled. The retransmitted DTU anomaly (rtx-tx) is defined
+         (RTC-TX). A special value (0) indicates the threshold is
+         disabled. The retransmitted DTU anomaly (RTX-TX) is defined
          in clause 11.3.1.1/G.9701.";
       reference
         "ITU-T G.997.2 clause 7.8.7 (CURR/PREV_NE/FE_15/24_RTXTX);

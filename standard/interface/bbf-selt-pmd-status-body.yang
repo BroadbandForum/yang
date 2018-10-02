@@ -1,0 +1,177 @@
+submodule bbf-selt-pmd-status-body {
+  yang-version 1.1;
+  belongs-to bbf-selt {
+    prefix bbf-selt;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Ken Kerpez, ASSIA, Inc.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia
+
+     WA Director: Joey Boyd, ADTRAN";
+
+  description
+    "This submodule contains a collection of YANG definitions for
+     managing the PMD object.
+
+     Copyright (c) 2016-2018 Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-355a1; see
+     the TR itself for full legal notices.";
+
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
+  revision 2016-07-18 {
+    description
+      "Initial revision.
+       * Approval Date:    see revision date above.
+       * Publication Date: 2016-08-05.";
+    reference
+      "TR-355: YANG Modules for FTTdp Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-355.pdf>";
+  }
+
+  typedef pmd-result {
+    type enumeration {
+      enum "no-measurement-results-available" {
+        description
+          "No measurement results are available when no mesurement has
+           been performed yet or after measurement results have been 
+           deleted.";
+      }
+      enum "measurement-failed-results-invalid" {
+        description
+          "The measurement results are invalid after the most recent 
+           measurement failed.";
+      }
+      enum "measurement-succeeded-results-valid" {
+        description
+          "The measurement results are valid after the most recent 
+           measurement succeeded.";
+      }
+    }
+    description
+      "The overall results of the SELT PMD measurement.";
+  }
+
+
+  grouping pmd-status {
+    description
+      "Status parameters for the PMD object.";
+
+    leaf selt-status-c {
+      type enumeration {
+        enum "inactive" {
+          description
+            "The CO SELT PMD is inactive.";
+        }
+        enum "uer-ongoing" {
+          description
+            "The CO SELT PMD has an Uncalibrated Echo Response (UER) 
+             measurement ongoing.";
+        }
+        enum "qln-ongoing" {
+          description
+            "The CO SELT PMD has a Quiet Line Noise (QLN) measurement 
+             ongoing.";
+        }
+      }
+      description
+        "The status of the CO SELT PMD measurement.
+
+         Upon the CO SELT PMD request triggering a UER measurement, 
+         the CO SELT PMD status shall become 'uer-ongoing' if the 
+         measurement is executed.
+
+         Upon the CO SELT PMD request triggering a QLN measurement, 
+         the CO SELT PMD status shall become 'qln-ongoing' if the 
+         measurement is executed.
+
+         Upon abortion, failure or successful completion of the UER or
+         QLN measurement, the CO SELT PMD status shall become 
+         'inactive' and the AN/DPU ME shall send a notification to the
+         NMS.";
+      reference
+        "ITU-T G.996.2 clause A.3.3";
+    }
+
+    leaf uer-results-c {
+      type pmd-result;
+      description
+        "The status of the CO SELT PMD Uncalibrated Echo Response 
+         (UER) measurement results.";
+      reference
+        "ITU-T G.996.2 clause A.3.4";
+    }
+
+    leaf qln-results-c {
+      type pmd-result;
+      description
+        "The status of the CO SELT PMD Quiet Line Noise (QLN) 
+         measurement results.";
+      reference
+        "ITU-T G.996.2 clause A.3.5";
+    }
+  }
+}

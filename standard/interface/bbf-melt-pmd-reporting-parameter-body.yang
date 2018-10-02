@@ -5,36 +5,33 @@ submodule bbf-melt-pmd-reporting-parameter-body {
   }
 
   include bbf-melt-pmd-measurement-parameter-body;
+  include bbf-melt-base;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     FTTdp (Fiber to the Distribution Point) Work Area";
+     Common YANG Work Area";
 
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
-
      Editor:      Ken Kerpez, ASSIA, Inc.
-                  <mailto:kkerpez@assia-inc.com>
 
-     Editor:      William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>
+     Editor:      Joey Boyd, ADTRAN
 
-     WA Director: Christopher Croot, BT plc
-                  <mailto:chris.croot@bt.com>
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia
-                  <mailto:sven.ooghe@nokia.com>";
+
+     WA Director: Joey Boyd, ADTRAN";
 
   description
     "This submodule contains a collection of YANG definitions for
      MELT-PMD reporting parameters.
 
-     Copyright (c) 2016, Broadband Forum
-     All rights reserved.
+     Copyright (c) 2016-2018 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -74,9 +71,19 @@ submodule bbf-melt-pmd-reporting-parameter-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355; see
+     This version of this YANG module is part of TR-355a1; see
      the TR itself for full legal notices.";
 
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
   revision 2016-07-18 {
     description
       "Initial revision.
@@ -128,10 +135,57 @@ submodule bbf-melt-pmd-reporting-parameter-body {
          sinewave used by the measurement of the loop complex 
          admittance with a high voltage metallic test (see 
          clause E.1.1.7). The range of valid values is from 0 to 
-         100 V and it shall be represented in linear format with a 
+         150 V and it shall be represented in linear format with a 
          granularity of 0.1 V.";
       reference
         "ITU-T G.996.2 clause E.2.2.3 (MELT-HCA-V)";
+    }
+
+    leaf unreliability-indicator {
+      if-feature "melt-pmd-reporting-parameter-reliability";
+      type bits {
+        bit measurement-frequency {
+          description
+            "This parameter is the measurement frequency for a 
+             3-element capacitance measurement, if performed with a 
+             sinewave signal, or a for 3-element complex admittance 
+             measurement. The range of valid values is from 10 to 1000
+             Hz with a granularity of 1 Hz.";
+          reference
+            "ITU-T G.996.2 clause E.2.2.1 (MELT-MFREQ)";
+        }
+        bit foreign-voltage-input-impedance {
+          description
+            "This parameter reports the nominal input impedance of the
+             measuring instrument during foreign voltage tests. The 
+             range of valid values is from 0 to 10 Mohm with a 
+             granularity of 1 ohm.";
+          reference
+            "ITU-T G.996.2 clause E.2.2.2 (MELT-IMP-V)";
+        }
+        bit loop-complex-admittance-measurement-voltage {
+          description
+            "This parameter is the peak amplitude of the differential 
+             sinewave used by the measurement of the loop complex 
+             admittance with a high voltage metallic test (see 
+             clause E.1.1.7). The range of valid values is from 0 to 
+             150 V and it shall be represented in linear format with a
+             granularity of 0.1 V.";
+          reference
+            "ITU-T G.996.2 clause E.2.2.3 (MELT-HCA-V)";
+        }
+      }
+      description
+        "The unreliability indicator provides the set of parameters
+         whose data can be considered to be unreliable.
+
+         Possible reasons that the data is unreliable:
+           - The measurement may not have been able to run, possibly
+             due to external conditions.
+           - The result is not reliable as the accuracy may be 
+             degraded due to external conditions.";
+      reference
+        "ITU-T G.996.2 clause E.2.2.4 (Reliability indicator)";
     }
   }
 }
