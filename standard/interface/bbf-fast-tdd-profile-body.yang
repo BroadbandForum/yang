@@ -83,7 +83,6 @@ submodule bbf-fast-tdd-profile-body {
                  <https://www.broadband-forum.org/technical/download/
                         TR-355_Amendment-1.pdf>";
   }
-
   revision 2017-03-13 {
     description
       "Corrigendum 1 (fixes to the initial revision).
@@ -204,14 +203,15 @@ submodule bbf-fast-tdd-profile-body {
         type uint8 {
           range "5..31";
         }
-        must "((../dta-allowed='idta' and ../../total-symbol-periods =
-              23 and .>= 5 and .<= 17) or (../dta-allowed='idta' and 
-              ../../total-symbol-periods = 36 and .>= 5 and .<= 30) or
-              (../dta-allowed='cdta' and ../../total-symbol-periods = 
-              23 and .>= 6 and .<= 19) or (../dta-allowed='cdta' and 
-              ../../total-symbol-periods = 36 and .>= 10 and .<= 31) 
-              or ../dta-allowed='none') and (. >= ../minimum-mds) and 
-              (. <= ../maximum-mds)" {
+        must
+          "((../dta-allowed='idta' and ../../total-symbol-periods =
+           23 and .>= 5 and .<= 17) or (../dta-allowed='idta' and 
+           ../../total-symbol-periods = 36 and .>= 5 and .<= 30) or
+           (../dta-allowed='cdta' and ../../total-symbol-periods = 
+           23 and .>= 6 and .<= 19) or (../dta-allowed='cdta' and 
+           ../../total-symbol-periods = 36 and .>= 10 and .<= 31) 
+           or ../dta-allowed='none') and (. >= ../minimum-mds) and 
+           (. <= ../maximum-mds)" {
           description
             "Restricts the valid range for the preferred Mds depending
              on MF and DTA type allowed.
@@ -236,13 +236,14 @@ submodule bbf-fast-tdd-profile-body {
         type uint8 {
           range "1..25";
         }
-        must "(../dta-allowed='idta' and ../../total-symbol-periods = 
-              23 and .>= 1 and .<= 12) or (../dta-allowed='idta' and 
-              ../../total-symbol-periods = 36 and .>= 1 and .<= 25) or
-              (../dta-allowed='cdta' and ../../total-symbol-periods = 
-              23 and .>= 1 and .<= 13) or (../dta-allowed='cdta' and 
-              ../../total-symbol-periods = 36 and .>= 1 and .<= 21) or
-              ../dta-allowed='none'" {
+        must
+          "(../dta-allowed='idta' and ../../total-symbol-periods = 
+           23 and .>= 1 and .<= 12) or (../dta-allowed='idta' and 
+           ../../total-symbol-periods = 36 and .>= 1 and .<= 25) or
+           (../dta-allowed='cdta' and ../../total-symbol-periods = 
+           23 and .>= 1 and .<= 13) or (../dta-allowed='cdta' and 
+           ../../total-symbol-periods = 36 and .>= 1 and .<= 21) or
+           ../dta-allowed='none'" {
           description
             "Restricts the valid range for the maximum step size 
              depending on MF and DTA type allowed.";
@@ -275,14 +276,15 @@ submodule bbf-fast-tdd-profile-body {
         type uint8 {
           range "5..31";
         }
-        must "((../dta-allowed='idta' and ../../total-symbol-periods =
-              23 and .>= 5 and .<= 17) or (../dta-allowed='idta' and 
-              ../../total-symbol-periods = 36 and .>= 5 and .<= 30) or
-              (../dta-allowed='cdta' and ../../total-symbol-periods = 
-              23 and .>= 6 and .<= 19) or (../dta-allowed='cdta' and 
-              ../../total-symbol-periods = 36 and .>= 10 and .<= 31) 
-              or ../dta-allowed='none') and . <= 
-              ../../downstream-symbol-periods" {
+        must
+          "((../dta-allowed='idta' and ../../total-symbol-periods =
+           23 and .>= 5 and .<= 17) or (../dta-allowed='idta' and 
+           ../../total-symbol-periods = 36 and .>= 5 and .<= 30) or
+           (../dta-allowed='cdta' and ../../total-symbol-periods = 
+           23 and .>= 6 and .<= 19) or (../dta-allowed='cdta' and 
+           ../../total-symbol-periods = 36 and .>= 10 and .<= 31) 
+           or ../dta-allowed='none') and . <= 
+           ../../downstream-symbol-periods" {
           description
             "Restricts the valid range for the minimum Mds 
              depending on MF, DTA type allowed, and downstream symbol
@@ -303,14 +305,15 @@ submodule bbf-fast-tdd-profile-body {
         type uint8 {
           range "5..31";
         }
-        must "((../dta-allowed='idta' and ../../total-symbol-periods =
-              23 and .>= 5 and .<= 17) or (../dta-allowed='idta' and 
-              ../../total-symbol-periods = 36 and .>= 5 and .<= 30) or
-              (../dta-allowed='cdta' and ../../total-symbol-periods = 
-              23 and .>= 6 and .<= 19) or (../dta-allowed='cdta' and 
-              ../../total-symbol-periods = 36 and .>= 10 and .<= 31) 
-              or ../dta-allowed='none') and . <= 
-              ../../downstream-symbol-periods" {
+        must
+          "((../dta-allowed='idta' and ../../total-symbol-periods =
+           23 and .>= 5 and .<= 17) or (../dta-allowed='idta' and 
+           ../../total-symbol-periods = 36 and .>= 5 and .<= 30) or
+           (../dta-allowed='cdta' and ../../total-symbol-periods = 
+           23 and .>= 6 and .<= 19) or (../dta-allowed='cdta' and 
+           ../../total-symbol-periods = 36 and .>= 10 and .<= 31) 
+           or ../dta-allowed='none') and . <= 
+           ../../downstream-symbol-periods" {
           description
             "Restricts the valid range for the maximum Mds 
              depending on MF, DTA type allowed, and downstream symbol

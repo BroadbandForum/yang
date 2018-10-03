@@ -1,0 +1,208 @@
+module bbf-hardware-rpf-dpu-state {
+  yang-version 1.1;
+
+  namespace "urn:bbf:yang:bbf-hardware-rpf-dpu-state";
+  prefix bbf-hw-rpf-dpu-state;
+
+  import ietf-hardware-state {
+    prefix hw-state;
+  }
+
+  import bbf-hardware-types {
+    prefix bbf-hwt;
+  }
+
+  include bbf-hardware-rpf-dpu-state-status;
+  include bbf-hardware-rpf-dpu-state-diagnostics;
+  include bbf-hardware-rpf-dpu-state-inventory;
+  include bbf-hardware-rpf-dpu-state-performance;
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Ken Kerpez, ASSIA, Inc.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia
+
+     WA Director: Joey Boyd, ADTRAN";
+
+  description
+    "This module contains a collection of YANG definitions that are 
+     used to manage the state data for Reverse Power Feeding (RPF) 
+     requirements for a Distribution Point Unit (DPU) per ITU G.997.2,
+     Annex A. This module is to be used when the server does not 
+     support Network Management Datastore Architecture (NMDA).
+
+     Copyright (c) 2016-2018 Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-355a1; see
+     the TR itself for full legal notices.";
+
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
+
+  augment '/hw-state:hardware/hw-state:component' {
+    when "derived-from-or-self(hw-state:class,'bbf-hwt:fastdsl-tp')" {
+      description
+        "Only applicable when the hardware component class is 
+         'fastdsl-tp'.";
+    }
+    description
+      "Augment the port state data with data nodes specific
+       to managing RPF.";
+
+    container rpf {
+      status deprecated;
+      description
+        "State data nodes for managing Reverse Power Feeding
+         (RPF) per line.";
+
+      leaf line-id {
+        type uint32 {
+          range "1..4095";
+        }
+        mandatory true;
+        status deprecated;
+        description
+          "A unique numeric identifier associated with the port.";
+        reference
+          "TR-301i2 Figure 8-1";
+      }
+
+      container inventory {
+        status deprecated;
+        description
+          "Inventory data associated with RPF.";
+
+        container near-end-line {
+          status deprecated;
+          description
+            "Inventory data associated with the near-end.";
+
+          uses rpf-near-end-line-inventory {
+            status deprecated;
+          }
+        }
+
+        container far-end-line {
+          status deprecated;
+          description
+            "Inventory data associated with the far-end.";
+
+          uses rpf-far-end-line-inventory {
+            status deprecated;
+          }
+        }
+      }
+
+      container status {
+        status deprecated;
+        description
+          "Status data associated with RPF.";
+
+        container near-end-line {
+          status deprecated;
+          description
+            "Line state data associated with the near-end.";
+
+          uses rpf-near-end-line-status {
+            status deprecated;
+          }
+        }
+
+        container far-end-line {
+          status deprecated;
+          description
+            "Line state data associated with the far-end.";
+
+          uses rpf-far-end-line-status {
+            status deprecated;
+          }
+        }
+      }
+
+      container diagnostics {
+        status deprecated;
+        description
+          "Diagnostic data associated with RPF.";
+
+        container far-end-line {
+          status deprecated;
+          description
+            "Diagnostic data associated with the far-end.";
+
+          uses rpf-far-end-line-diagnostics {
+            status deprecated;
+          }
+        }
+      }
+
+      container performance {
+        status deprecated;
+        description
+          "Performance data associated with RPF.";
+
+        uses rpf-line-performance {
+          status deprecated;
+        }
+      }
+    }
+  }
+}

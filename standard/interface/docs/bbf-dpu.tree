@@ -91,12 +91,12 @@ module: ietf-interfaces
     |     |  x--rw bbf-melt:processing-profile?       -> /melt/profiles/processing-profile/name {melt-p}?
     |     |  x--rw bbf-melt:melt-pmd-control
     |     |  |  x--rw (bbf-melt:pmd-functions)?
-    |     |  |     +--:(bbf-melt:all-functions-disable)
-    |     |  |     |  +--rw bbf-melt:all-functions-disable?                        empty
-    |     |  |     +--:(bbf-melt:measurement-enable-c)
-    |     |  |     |  +--rw bbf-melt:measurement-enable-c?                         empty
-    |     |  |     +--:(bbf-melt:pair-identification-tone-generation-enable)
-    |     |  |        +--rw bbf-melt:pair-identification-tone-generation-enable?   empty
+    |     |  |     x--:(bbf-melt:all-functions-disable)
+    |     |  |     |  x--rw bbf-melt:all-functions-disable?                        empty
+    |     |  |     x--:(bbf-melt:measurement-enable-c)
+    |     |  |     |  x--rw bbf-melt:measurement-enable-c?                         empty
+    |     |  |     x--:(bbf-melt:pair-identification-tone-generation-enable)
+    |     |  |        x--rw bbf-melt:pair-identification-tone-generation-enable?   empty
     |     |  +--rw (bbf-melt:profile-config)?
     |     |     +--:(bbf-melt:no-profiles-attached)
     |     |     |  +--rw bbf-melt:no-profiles-attached?     empty
@@ -1865,3 +1865,174 @@ module: bbf-selt
                 |     +--rw t      uint16
                 |     +--rw psd    int16
                 +--rw capacity-estimate-target-noise-margin?   uint16
+module: bbf-hardware-rpf-dpu
+    +--rw rpf
+       +--rw near-end-system
+          +--rw dying-gasp-udp-port?   inet:port-number
+  augment /hw:hardware/hw:component:
+    +--rw rpf
+       +--rw near-end-line
+       |  +--rw power-extraction?                                enumeration
+       |  +--rw power-extraction-pse-on-battery?                 boolean
+       |  +--rw pse-shutdown-service?                            enumeration
+       |  +--rw forced-reconfiguration-state?                    enumeration
+       |  +--rw conditional-forced-reconfiguration-state?        enumeration
+       |  +--rw conditional-forced-reconfiguration-state-time?   uint8
+       |  +--rw thresholds
+       |     +--rw dpu-15min-extracted-energy-threshold?   uint32
+       |     +--rw dpu-24hr-extracted-energy-threshold?    uint32 {performance-24hr}?
+       +--rw far-end-line
+       |  +--rw thresholds
+       |     +--rw pse-15min-injected-energy-threshold?   uint32
+       |     +--rw pse-24hr-injected-energy-threshold?    uint32 {performance-24hr}?
+       +--ro line-id                               uint32
+       +--ro inventory
+       |  +--ro near-end-line
+       |  |  +--ro reconfiguration-capability?   enumeration
+       |  +--ro far-end-line
+       |     +--ro nt-integrated?              enumeration
+       |     +--ro battery-backup-available?   enumeration
+       |     +--ro prp-capability?             enumeration
+       +--ro status
+       |  +--ro near-end-line
+       |  |  +--ro actual-power-class?      enumeration
+       |  |  +--ro rpf-state?               enumeration
+       |  |  +--ro reconfiguration-state?   dpu-reconfiguration-state
+       |  |  +--ro prp-error-status?        enumeration
+       |  |  +--ro line-error-status?       enumeration
+       |  +--ro far-end-line
+       |     +--ro actual-power-class?   enumeration
+       |     +--ro rpf-state?            pse-rpf-state
+       +--ro diagnostics
+       |  +--ro far-end-line
+       |     +--ro latest-pse-start-up-failure-cause?   enumeration
+       |     +--ro latest-pse-shutdown-cause?           enumeration
+       +--ro performance
+       |  +--ro intervals-15min
+       |  |  +--ro current
+       |  |  |  +--ro near-end
+       |  |  |  |  +--ro measured-time?          uint32
+       |  |  |  |  +--ro dpu-extracted-energy?   bbf-yang:performance-counter32
+       |  |  |  +--ro far-end
+       |  |  |     +--ro measured-time?         uint32
+       |  |  |     +--ro pse-injected-energy?   bbf-yang:performance-counter32
+       |  |  +--ro number-of-intervals?   performance-15min-interval
+       |  |  +--ro non-valid-intervals?   performance-15min-interval
+       |  |  +--ro history* [interval-number]
+       |  |     +--ro interval-number    performance-15min-history-interval
+       |  |     +--ro near-end
+       |  |     |  +--ro measured-time?          uint32
+       |  |     |  +--ro invalid-data-flag?      boolean
+       |  |     |  +--ro time-stamp?             yang:date-and-time
+       |  |     |  +--ro dpu-extracted-energy?   bbf-yang:performance-counter32
+       |  |     +--ro far-end
+       |  |        +--ro measured-time?         uint32
+       |  |        +--ro invalid-data-flag?     boolean
+       |  |        +--ro time-stamp?            yang:date-and-time
+       |  |        +--ro pse-injected-energy?   bbf-yang:performance-counter32
+       |  +--ro intervals-24hr {performance-24hr}?
+       |     +--ro current
+       |     |  +--ro near-end
+       |     |  |  +--ro measured-time?          uint32
+       |     |  |  +--ro dpu-extracted-energy?   bbf-yang:performance-counter32
+       |     |  +--ro far-end
+       |     |     +--ro measured-time?         uint32
+       |     |     +--ro pse-injected-energy?   bbf-yang:performance-counter32
+       |     +--ro number-of-intervals?   performance-24hr-interval
+       |     +--ro non-valid-intervals?   performance-24hr-interval
+       |     +--ro history* [interval-number]
+       |        +--ro interval-number    performance-24hr-history-interval
+       |        +--ro near-end
+       |        |  +--ro measured-time?          uint32
+       |        |  +--ro invalid-data-flag?      boolean
+       |        |  +--ro time-stamp?             yang:date-and-time
+       |        |  +--ro dpu-extracted-energy?   bbf-yang:performance-counter32
+       |        +--ro far-end
+       |           +--ro measured-time?         uint32
+       |           +--ro invalid-data-flag?     boolean
+       |           +--ro time-stamp?            yang:date-and-time
+       |           +--ro pse-injected-energy?   bbf-yang:performance-counter32
+       +---n reconfiguration-state-change
+       |  +---- reconfiguration-state    dpu-reconfiguration-state
+       +---n pse-rpf-state-change
+       |  +---- rpf-state    pse-rpf-state
+       +---n rpf-15min-threshold-crossing-alert
+       |  +---- tca-identity    identityref
+       +---n rpf-24hr-threshold-crossing-alert {performance-24hr}?
+          +---- tca-identity    identityref
+
+  notifications:
+    +---n loss-of-power-dpu-shutdown
+       +--ro line         -> /hw:hardware/component/name
+       +--ro line-id      uint32
+       +--ro rpf-state    bbf-hw-rpf-dpu:pse-rpf-state
+module: bbf-hardware-rpf-dpu-state
+  augment /hw-state:hardware/hw-state:component:
+    x--ro rpf
+       x--ro line-id        uint32
+       x--ro inventory
+       |  x--ro near-end-line
+       |  |  x--ro reconfiguration-capability?   enumeration
+       |  x--ro far-end-line
+       |     x--ro nt-integrated?              enumeration
+       |     x--ro battery-backup-available?   enumeration
+       |     x--ro prp-capability?             enumeration
+       x--ro status
+       |  x--ro near-end-line
+       |  |  x--ro actual-power-class?      enumeration
+       |  |  x--ro rpf-state?               enumeration
+       |  |  x--ro reconfiguration-state?   dpu-reconfiguration-state
+       |  |  x--ro prp-error-status?        enumeration
+       |  |  x--ro line-error-status?       enumeration
+       |  x--ro far-end-line
+       |     x--ro actual-power-class?   enumeration
+       |     x--ro rpf-state?            pse-rpf-state
+       x--ro diagnostics
+       |  x--ro far-end-line
+       |     x--ro latest-pse-start-up-failure-cause?   enumeration
+       |     x--ro latest-pse-shutdown-cause?           enumeration
+       x--ro performance
+          x--ro intervals-15min
+          |  x--ro current
+          |  |  x--ro near-end
+          |  |  |  x--ro measured-time?          uint32
+          |  |  |  x--ro dpu-extracted-energy?   bbf-yang:performance-counter32
+          |  |  x--ro far-end
+          |  |     x--ro measured-time?         uint32
+          |  |     x--ro pse-injected-energy?   bbf-yang:performance-counter32
+          |  x--ro number-of-intervals?   performance-15min-interval
+          |  x--ro non-valid-intervals?   performance-15min-interval
+          |  x--ro history* [interval-number]
+          |     x--ro interval-number    performance-15min-history-interval
+          |     x--ro near-end
+          |     |  x--ro measured-time?          uint32
+          |     |  x--ro invalid-data-flag?      boolean
+          |     |  x--ro time-stamp?             yang:date-and-time
+          |     |  x--ro dpu-extracted-energy?   bbf-yang:performance-counter32
+          |     x--ro far-end
+          |        x--ro measured-time?         uint32
+          |        x--ro invalid-data-flag?     boolean
+          |        x--ro time-stamp?            yang:date-and-time
+          |        x--ro pse-injected-energy?   bbf-yang:performance-counter32
+          x--ro intervals-24hr {performance-24hr}?
+             x--ro current
+             |  x--ro near-end
+             |  |  x--ro measured-time?          uint32
+             |  |  x--ro dpu-extracted-energy?   bbf-yang:performance-counter32
+             |  x--ro far-end
+             |     x--ro measured-time?         uint32
+             |     x--ro pse-injected-energy?   bbf-yang:performance-counter32
+             x--ro number-of-intervals?   performance-24hr-interval
+             x--ro non-valid-intervals?   performance-24hr-interval
+             x--ro history* [interval-number]
+                x--ro interval-number    performance-24hr-history-interval
+                x--ro near-end
+                |  x--ro measured-time?          uint32
+                |  x--ro invalid-data-flag?      boolean
+                |  x--ro time-stamp?             yang:date-and-time
+                |  x--ro dpu-extracted-energy?   bbf-yang:performance-counter32
+                x--ro far-end
+                   x--ro measured-time?         uint32
+                   x--ro invalid-data-flag?     boolean
+                   x--ro time-stamp?            yang:date-and-time
+                   x--ro pse-injected-energy?   bbf-yang:performance-counter32

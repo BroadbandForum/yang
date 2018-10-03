@@ -1,0 +1,407 @@
+submodule bbf-hardware-rpf-dpu-status {
+  yang-version 1.1;
+  belongs-to bbf-hardware-rpf-dpu {
+    prefix bbf-hw-rpf-dpu;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Ken Kerpez, ASSIA, Inc.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia
+
+     WA Director: Joey Boyd, ADTRAN";
+
+  description
+    "This submodule contains a collection of YANG definitions for 
+     reporting the status of Reverse Power Feeding (RPF) for a 
+     Distribution Point Unit (DPU).
+
+     Copyright (c) 2016-2018 Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-355a1; see
+     the TR itself for full legal notices.";
+
+  revision 2018-10-01 {
+    description
+      "Amendment 1.
+       * Approval Date:    2018-10-01
+       * Publication Date: 2018-10-01.";
+    reference
+      "TR-355a1: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-1.pdf>";
+  }
+
+
+  typedef dpu-reconfiguration-state {
+    type enumeration {
+      enum "normal" {
+        description
+          "The line is in Normal mode.";
+      }
+      enum "bypass" {
+        description
+          "The line is in Bypass mode.";
+      }
+    }
+    description
+      "Reports the ReConfiguration State for the line. A state
+       change alarm shall be raised indicating a change of the
+       line's Reconfiguration State (see clause A.7.2.1.2).";
+    reference
+      "ITU-T G.997.2 clause A.7.4.1.3 (DPU-RCS)";
+  }
+
+  typedef pse-rpf-state {
+    type enumeration {
+      enum "pse-ukn" {
+        description
+          "Shutdown with unknown reason as initial state. 
+            - when for the line the PE transitions to 
+              'start-up' after the PE detects loss of voltage,
+              and has not received a PSE-DGL or PSE-OHP 
+              indication ( see clause A.6.2.2) from the PSE.";
+      }
+      enum "pse-dgl" {
+        description
+          "Shutdown with dying gasp (normal shutdown). 
+            - when for the line the PE transitions to 
+              'start-up' after the PE detects loss of voltage 
+              and has received a PSE-DGL indication (see 
+              clause A.6.2.2) from the PSE.";
+      }
+      enum "pse-ohp" {
+        description
+          "Shutdown with dying gasp with off-hook phone.
+            - when for the line the PE transitions to 
+              'start-up' after the PE detects loss of voltage 
+              and has received a PSE-OHP indication (see 
+              clause A.6.2.2) from the PSE.";
+      }
+      enum "pse-pwr" {
+        description
+          "Powered with unknown PSE powering method.
+            - when for the line the PE transitions to 
+              'normal-operations' and it is yet unknown 
+              whether the PSE is battery powered or mains 
+              powered.";
+      }
+      enum "pse-bat" {
+        description
+          "Battery powered.
+            - when for the line the PE transitions to 
+              'normal-operations' and the PE received an 
+              indication that the PSE is trying to start up 
+              the DPU while powered on battery (PRP PS field, 
+              see section 6.2.5.1 of [ETSI TS 101 548]);
+            - when for the line the PE is in 
+              'normal-operations' and the PE receives a 
+              PSE-BAT indication (see clause 6.2.2) from the 
+              PSE.";
+      }
+      enum "pse-acm" {
+        description
+          "Mains powered.
+            - when for the line the PE transitions to 
+              'normal-operations' and the PE received an 
+              indication that the PSE was trying to start up 
+              the DPU while powered on mains (PRP PS field, 
+              see section 6.2.5.1 of [ETSI TS 101 548]);
+            - when for the line the PE is in 
+              'normal-operations' and the PE receives a 
+              PSE-ACM or PSE-BBA indication (see clause 
+              A.6.2.2) from the PSE.";
+      }
+    }
+    description
+      "Reports the reverse power feeding state of the PSE.";
+    reference
+      "ITU-T G.997.2 clause A.7.4.2.2 (PSE-RPF)";
+  }
+
+  grouping rpf-near-end-line-status {
+    description
+      "RPF near-end line level status.";
+
+    leaf actual-power-class {
+      type enumeration {
+        enum "sr1" {
+          description
+            "RPF Class SR1 is defined to support (very) low 
+             power DPU designs, when they become available; the
+             applicability of Class SR1 for a considered 
+             deployment type (amount of ports per DPU, cable 
+             losses, DPU uplink types, DPU feature scope at and 
+             beyond the physical layer, amount of additional 
+             devices (POTSAdapters) to be fed from the same PSE,
+             etc.) depends on the availability of low-power 
+             solutions.";
+        }
+        enum "sr2" {
+          description
+            "RPF Class SR2 allows a higher maximum power to be 
+             transmitted than Class SR1. When compared to Class
+             SR1, a solution that complies with Class SR2 can 
+             extend the type of deployments that can be 
+             supported, while still avoiding any additional 
+             safety measures in the home environment (below 15 W
+             as per EN 60950-1 [2]).";
+        }
+        enum "sr3" {
+          description
+            "RPF Class SR3 allows a higher maximum power to be 
+             transmitted than Class SR2, aiming to cover trials 
+             or demanding deployment situations for which Class 
+             SR1 or SR2-compliant power solutions are not 
+             available. A PSE of Class SR3 can inject more than 
+             15 W and hence introduces additional safety 
+             measures compared to Class SR1 and Class SR2 
+             (see SAFETY NOTE (a) and SAFETY NOTE (b) in 
+             Table 10).";
+        }
+      }
+      description
+        "Reports the actual power class of the PE for the 
+         line.";
+      reference
+        "ITU-T G.997.2 clause A.7.4.1.1 (PE-PC)";
+    }
+
+    leaf rpf-state {
+      type enumeration {
+        enum "not-operational" {
+          description
+            "The PE is initializing and is not yet 
+             operational.";
+        }
+        enum "start-up" {
+          description
+            "The PE is starting up.";
+        }
+        enum "normal-operations" {
+          description
+            "The PE is in normal operations.";
+        }
+      }
+      description
+        "Reports the reverse power feeding state of the PE for 
+         the line.";
+      reference
+        "ITU-T G.997.2 clause A.7.4.1.2 (PE-RPF)";
+    }
+
+    leaf reconfiguration-state {
+      type dpu-reconfiguration-state;
+      description
+        "Reports the ReConfiguration State for the line. A state
+         change alarm shall be raised indicating a change of the
+         line's Reconfiguration State (see clause A.7.2.1.2).";
+      reference
+        "ITU-T G.997.2 clause A.7.4.1.3 (DPU-RCS)";
+    }
+
+    leaf prp-error-status {
+      type enumeration {
+        enum "none" {
+          description
+            "No error detected by DPU or PRP completed 
+             successfully.";
+        }
+        enum "rpf-class-mismatch" {
+          description
+            "DPU has decoded PRP disconnect trigger of a class 
+             that is not supported by the DPU for given line.";
+        }
+        enum "pots-reconnect-trigger" {
+          description
+            "POTS Reconnect trigger detected by DPU.";
+        }
+      }
+      description
+        "Reports that the DPU has deduced a PRP related ERROR 
+         while the is DPU powered on. An alarm shall be raised 
+         upon the PRP Error Status indicating an error condition
+         on the line.";
+      reference
+        "ITU-T G.997.2 clause A.7.4.1.4 (DPU-PRP-ERROR)";
+    }
+
+    leaf line-error-status {
+      type enumeration {
+        enum "no-error" {
+          description
+            "No error detected.";
+        }
+        enum "error" {
+          description
+            "Error detected.";
+        }
+      }
+      description
+        "Reports an error condition for the line whereby the DPU
+         is unable to draw continuous and sufficient power from 
+         the line. This status object is optional. If supported,
+         an alarm shall be raised upon the Line Error Status 
+         indicating an error condition on the line.";
+      reference
+        "ITU-T G.997.2 clause A.7.4.1.5 (DPU-LES)";
+    }
+  }
+
+  grouping rpf-far-end-line-status {
+    description
+      "RPF far-end line level status.";
+
+    leaf actual-power-class {
+      type enumeration {
+        enum "undetermined" {
+          description
+            "The power class of the PSE has yet to be 
+             determined.";
+        }
+        enum "sr1" {
+          description
+            "RPF Class SR1 is defined to support (very) low 
+             power DPU designs, when they become available; the
+             applicability of Class SR1 for a considered 
+             deployment type (amount of ports per DPU, cable 
+             losses, DPU uplink types, DPU feature scope at and 
+             beyond the physical layer, amount of additional 
+             devices (POTSAdapters) to be fed from the same PSE,
+             etc.) depends on the availability of low-power 
+             solutions.";
+        }
+        enum "sr2" {
+          description
+            "RPF Class SR2 allows a higher maximum power to be 
+             transmitted than Class SR1. When compared to Class
+             SR1, a solution that complies with Class SR2 can 
+             extend the type of deployments that can be 
+             supported, while still avoiding any additional 
+             safety measures in the home environment (below 15 W
+             as per EN 60950-1 [2]).";
+        }
+        enum "sr3" {
+          description
+            "RPF Class SR3 allows a higher maximum power to be 
+             transmitted than Class SR2, aiming to cover trials 
+             or demanding deployment situations for which Class 
+             SR1 or SR2-compliant power solutions are not 
+             available. A PSE of Class SR3 can inject more than 
+             15 W and hence introduces additional safety 
+             measures compared to Class SR1 and Class SR2 
+             (see SAFETY NOTE (a) and SAFETY NOTE (b) in 
+             Table 10).";
+        }
+      }
+      description
+        "Reports the actual power class of the PSE. Before the 
+         start-up protocol is successfully completed for the 
+         first time, the power class is undetermined.";
+      reference
+        "ITU-T G.997.2 clause A.7.4.2.1 (PSE-PC)";
+    }
+
+    leaf rpf-state {
+      type pse-rpf-state;
+      description
+        "Reports the reverse power feeding state of the PSE.";
+      reference
+        "ITU-T G.997.2 clause A.7.4.2.2 (PSE-RPF)";
+    }
+  }
+
+  grouping reconfiguration-state-change-notification {
+    description
+      "Defines a notification for reporting a DPU reconfiguration
+       state change.";
+
+    notification reconfiguration-state-change {
+      description
+        "This notification is sent upon a change in the DPU
+         reconfiguration state.";
+
+      leaf reconfiguration-state {
+        type dpu-reconfiguration-state;
+        mandatory true;
+        description
+          "Reports the ReConfiguration State for the line. A state
+           change alarm shall be raised indicating a change of the
+           line's Reconfiguration State (see clause A.7.2.1.2).";
+        reference
+          "ITU-T G.997.2 clause A.7.4.1.3 (DPU-RCS)";
+      }
+    }
+  }
+
+  grouping pse-rpf-state-change-notification {
+    description
+      "Defines a notification for reporting a PSE RPF state change.";
+
+    notification pse-rpf-state-change {
+      description
+        "This notification is sent upon a change in the PSE RPF 
+         state";
+
+      leaf rpf-state {
+        type pse-rpf-state;
+        mandatory true;
+        description
+          "Reports the reverse power feeding state of the PSE.";
+        reference
+          "ITU-T G.997.2 clause A.7.4.2.2 (PSE-RPF)";
+      }
+    }
+  }
+}
