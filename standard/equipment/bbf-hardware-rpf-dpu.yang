@@ -230,8 +230,9 @@ module bbf-hardware-rpf-dpu {
       type leafref {
         path '/hw:hardware/hw:component/hw:name';
       }
-      must "derived-from-or-self(/hw:hardware/hw:component
-            [hw:name=current()]/hw:class,'bbf-hwt:fastdsl-tp')" {
+      must
+        "derived-from-or-self(/hw:hardware/hw:component
+         [hw:name=current()]/hw:class,'bbf-hwt:fastdsl-tp')" {
         description
           "Only reference hardware components which are capable of
            RPF.";
