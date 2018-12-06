@@ -36,7 +36,7 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
      WA Director: Sven Ooghe, Nokia";
 
   description
-    "This submodule contains a collection of YANG definitions for 
+    "This submodule contains a collection of YANG definitions for
      managing split horizon profiles.
 
      Copyright (c) 2017-2018, Broadband Forum
@@ -82,6 +82,16 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
      This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2018-12-03 {
+    description
+      "Amendment 2.
+       * Approval Date:    2018-12-03.
+       * Publication Date: 2018-12-03.";
+    reference
+      "TR-383a2: Common YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-383_Amendment-2.pdf>";
+  }
   revision 2018-07-13 {
     description
       "Initial revision.
@@ -110,7 +120,7 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
 
   augment '/bbf-l2-fwd:forwarding' {
     description
-      "Augment the configuration nodes associated with layer 2 
+      "Augment the configuration nodes associated with layer 2
        forwarding with split horizon profile objects.";
 
     container split-horizon-profiles {
@@ -121,10 +131,10 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
       list split-horizon-profile {
         key "name";
         description
-          "A profile manages (not) allowed forwarding between various 
+          "A profile manages (not) allowed forwarding between various
            forwarder ports based on their underlying interface usage.
            The absence of data for a particular in-interface-usage has
-           a result that from that type of forwarder ports frames are 
+           a result that from that type of forwarder ports frames are
            allowed to be forwarded to any other forwarder port.";
 
         leaf name {
@@ -136,25 +146,25 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
         list split-horizon {
           key "in-interface-usage";
           description
-            "Frame forwarding is not allowed from interfaces/ports 
-             that have an interface usage as specified in 
-             in-interface-usage to interfaces/ports that have an 
-             interface usage for which the value is in the leaf-list 
+            "Frame forwarding is not allowed from interfaces/ports
+             that have an interface usage as specified in
+             in-interface-usage to interfaces/ports that have an
+             interface usage for which the value is in the leaf-list
              out-interface-usages.";
 
           leaf in-interface-usage {
             type bbf-if-usg:interface-usage;
             description
-              "The interface usage from which forwarding is specified 
+              "The interface usage from which forwarding is specified
                here.";
           }
 
           leaf-list out-interface-usage {
             type bbf-if-usg:interface-usage;
             description
-              "The interface usage to which frames coming from the 
-               'in-interface-usage' are not allowed to be forwarded. 
-               Frame forwarding to interface usages not configured is 
+              "The interface usage to which frames coming from the
+               'in-interface-usage' are not allowed to be forwarded.
+               Frame forwarding to interface usages not configured is
                allowed.";
           }
         }
@@ -172,10 +182,10 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
       if-feature "split-horizon-profiles";
       description
         "A split-horizon-profile allows to restrict forwarding between
-         its forwarder ports based on their interface usages. 
+         its forwarder ports based on their interface usages.
 
-         Without split-horizon-profile, packets can be forwarded 
-         within a forwarder from any of its forwarder ports to any 
+         Without split-horizon-profile, packets can be forwarded
+         within a forwarder from any of its forwarder ports to any
          other of its forwarder ports.";
 
       leaf split-horizon-profile {
@@ -185,7 +195,7 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
              + 'fwd:name';
         }
         description
-          "A reference to a split horizon profile associated with a 
+          "A reference to a split horizon profile associated with a
            forwarder.";
       }
     }

@@ -32,10 +32,10 @@ module bbf-if-type {
      WA Director: Sven Ooghe, Nokia";
 
   description
-    "This module contains a collection of YANG definitions for 
+    "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on reusable data
-     types as applicable to access network equipment. As such, this 
-     module is specific to access network equipment (e.g., 
+     types as applicable to access network equipment. As such, this
+     module is specific to access network equipment (e.g.,
      BBF-specified Access Nodes and FTTdp DPUs).
 
      Specifically, this module defines interface types that are needed
@@ -84,6 +84,16 @@ module bbf-if-type {
      This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2018-12-03 {
+    description
+      "Amendment 2.
+       * Approval Date:    2018-12-03.
+       * Publication Date: 2018-12-03.";
+    reference
+      "TR-383a2: Common YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-383_Amendment-2.pdf>";
+  }
   revision 2018-07-13 {
     description
       "Initial revision.
@@ -109,7 +119,7 @@ module bbf-if-type {
     base if:interface-type;
     description
       "This identity is used as a base for all interface types
-       defined by the BBF that are not in the 'ifType definitions' 
+       defined by the BBF that are not in the 'ifType definitions'
        registry maintained by IANA.";
   }
 
@@ -124,5 +134,19 @@ module bbf-if-type {
     base sub-interface;
     description
       "Base type for generic sub-interfaces. ";
+  }
+
+  identity ethernet-like {
+    base bbf-interface-type;
+    description
+      "An abstract identity defining a class of interfaces which
+       represents a logical interface transporting Ethernet frames,
+       i.e. frames with a destination and source MAC address, an
+       Ethernet type or length field, and a payload. This
+       'interface type' is intended only to be used to define
+       constraints against a class of interfaces each of which have
+       their 'type' derived from this identity (as well as potentially
+       others). At no time should this identity be used as the 'type'
+       for an interface.";
   }
 }

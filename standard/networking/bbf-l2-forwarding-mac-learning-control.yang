@@ -37,8 +37,8 @@ submodule bbf-l2-forwarding-mac-learning-control {
      WA Director: Sven Ooghe, Nokia";
 
   description
-    "This submodule contains a collection of YANG definitions for 
-     managing MAC address learning constraints, i.e. to constrain MAC 
+    "This submodule contains a collection of YANG definitions for
+     managing MAC address learning constraints, i.e. to constrain MAC
      learning rules compared with the standard IEEE MAC learning.
 
      Copyright (c) 2017-2018, Broadband Forum
@@ -84,6 +84,16 @@ submodule bbf-l2-forwarding-mac-learning-control {
      This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2018-12-03 {
+    description
+      "Amendment 2.
+       * Approval Date:    2018-12-03.
+       * Publication Date: 2018-12-03.";
+    reference
+      "TR-383a2: Common YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-383_Amendment-2.pdf>";
+  }
   revision 2018-07-13 {
     description
       "Initial revision.
@@ -112,12 +122,12 @@ submodule bbf-l2-forwarding-mac-learning-control {
 
   augment '/bbf-l2-fwd:forwarding' {
     description
-      "Augment the configuration nodes associated with layer 2 
+      "Augment the configuration nodes associated with layer 2
        forwarding with MAC address learning control profile objects.";
 
     container mac-learning-control-profiles {
       if-feature
-        "forwarding-databases and mac-learning and 
+        "forwarding-databases and mac-learning and
          mac-learning-control-profiles";
       description
         "Contains a set of MAC address learning control profiles.";
@@ -126,17 +136,17 @@ submodule bbf-l2-forwarding-mac-learning-control {
         key "name";
 
         description
-          "The configuration of a MAC address learning control 
+          "The configuration of a MAC address learning control
            profile.
 
-           A profile controls the MAC address learning behavior that 
-           deviates from the default MAC learning in an IEEE bridge, 
-           i.e. that behavior that deviates from 'learn on the last 
-           port or interface on which a frame with the corresponding 
-           source MAC address is received'. This implies that the 
+           A profile controls the MAC address learning behavior that
+           deviates from the default MAC learning in an IEEE bridge,
+           i.e. that behavior that deviates from 'learn on the last
+           port or interface on which a frame with the corresponding
+           source MAC address is received'. This implies that the
            default behavior is that the MAC address is always learned
            and that MAC movement is allowed from any port or interface
-           to any other port or interface, except if this would be in 
+           to any other port or interface, except if this would be in
            conflict with static MAC address configuration.";
 
         leaf name {
@@ -149,7 +159,7 @@ submodule bbf-l2-forwarding-mac-learning-control {
           key "receiving-interface-usage";
 
           description
-            "Defines what to do when a frame is received with a 
+            "Defines what to do when a frame is received with a
              particular source MAC address and this MAC address is not
              yet stored on that port or interface.";
 
@@ -158,22 +168,22 @@ submodule bbf-l2-forwarding-mac-learning-control {
 
             description
               "Defines MAC address learning rules for frames received
-               on a port for which the interface usage of the 
+               on a port for which the interface usage of the
                underlying interface is of this value.";
           }
           choice mac-learning-action {
             description
-              "Specifies how to learn a MAC address on a port or 
-               interface that has a usage specified by the leaf 
+              "Specifies how to learn a MAC address on a port or
+               interface that has a usage specified by the leaf
                receiving-interface-usage.";
 
             case learn-and-translate {
               description
-                "In case this is not in conflict with static MAC 
-                 address configuration, then the (source) MAC address 
-                 will be learned on the port or interface where the 
-                 frame is received, and the system will perform 
-                 (source) MAC address translation before forwarding 
+                "In case this is not in conflict with static MAC
+                 address configuration, then the (source) MAC address
+                 will be learned on the port or interface where the
+                 frame is received, and the system will perform
+                 (source) MAC address translation before forwarding
                  the frame.";
 
               reference
@@ -182,28 +192,28 @@ submodule bbf-l2-forwarding-mac-learning-control {
             }
             case learn-but-do-not-move {
               description
-                "In case the source MAC address is not known in the 
-                 forwarding database on any other port or interface, 
-                 and in case a possible learning is not in conflict 
+                "In case the source MAC address is not known in the
+                 forwarding database on any other port or interface,
+                 and in case a possible learning is not in conflict
                  with any static MAC address configuration
-                 then it is learned on the port or interface on which 
+                 then it is learned on the port or interface on which
                  the frame is received (in case other criteria such as
-                 specified by the leaf max-number-mac-addresses 
+                 specified by the leaf max-number-mac-addresses
                  allow).
 
-                 In case the MAC address was already known in the 
-                 forwarding database, where it was associated to a 
+                 In case the MAC address was already known in the
+                 forwarding database, where it was associated to a
                  port or interface, and a possible learning is not in
                  conflict with any static MAC address configuration
                  then MAC movement is restricted:
-                 the MAC address can not move and the frame will be 
-                 discarded in case the interface usage of the port or 
-                 interface where the frame is received is part of the 
-                 leaf-list mac-can-not-move-to of the list entry 
-                 identified by the interface usage of the port or 
-                 interface where the MAC address was already 
-                 associated to. The MAC address can move in case the 
-                 interface usage of the port or interface where the 
+                 the MAC address can not move and the frame will be
+                 discarded in case the interface usage of the port or
+                 interface where the frame is received is part of the
+                 leaf-list mac-can-not-move-to of the list entry
+                 identified by the interface usage of the port or
+                 interface where the MAC address was already
+                 associated to. The MAC address can move in case the
+                 interface usage of the port or interface where the
                  frame is received is not part of this list.";
 
               reference
@@ -254,7 +264,7 @@ submodule bbf-l2-forwarding-mac-learning-control {
         default "false";
         description
           "If true, an alarm shall be generated on an attempt of a not
-           allowed MAC movement. Allowed / not allowed MAC movements 
+           allowed MAC movement. Allowed / not allowed MAC movements
            are controlled via the referenced entry in the list
            mac-learning-control-profile.";
       }

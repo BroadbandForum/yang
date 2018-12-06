@@ -1,5 +1,10 @@
 ## Broadband Forum YANG Modules
 
+### 2018-12-03: [TR-383a2](https://www.broadband-forum.org/technical/download/TR-383_Amendment-2.pdf) Common YANG Modules for Access Networks
+*Tag: [v2.2.0-TR-383a2](https://github.com/BroadbandForum/yang/tree/v2.2.0-TR-383a2)*
+
+* Add `ethernet-like` abstract interface type
+
 ### 2018-10-01: [TR-355a1](https://www.broadband-forum.org/technical/download/TR-355_Amendment-1.pdf) YANG Modules for FTTdp Management
 *Tag: [v1.1.0-TR-355a1](https://github.com/BroadbandForum/yang/tree/v1.1.0-TR-355a1)*
 

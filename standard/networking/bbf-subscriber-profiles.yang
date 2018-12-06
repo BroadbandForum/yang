@@ -41,10 +41,10 @@ module bbf-subscriber-profiles {
      WA Director: Sven Ooghe, Nokia";
 
   description
-    "This module contains a collection of YANG definitions for 
+    "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the management of
-     subscribers as applicable to access network equipment. As such, 
-     this module is specific to access network equipment (e.g., 
+     subscribers as applicable to access network equipment. As such,
+     this module is specific to access network equipment (e.g.,
      BBF-specified Access Nodes and FTTdp DPUs).
 
      Specifically, this module defines subscriber profiles.
@@ -92,6 +92,16 @@ module bbf-subscriber-profiles {
      This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2018-12-03 {
+    description
+      "Amendment 2.
+       * Approval Date:    2018-12-03.
+       * Publication Date: 2018-12-03.";
+    reference
+      "TR-383a2: Common YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-383_Amendment-2.pdf>";
+  }
   revision 2018-07-13 {
     description
       "Initial revision.
@@ -132,12 +142,12 @@ module bbf-subscriber-profiles {
 
       description
         "List containing the parameters for a subscriber profile.
-         Various protocols need to insert strings in options / 
-         sub-tags. These strings are used to identify the subscriber. 
+         Various protocols need to insert strings in options /
+         sub-tags. These strings are used to identify the subscriber.
          This insertion can be enabled per protocol per VLAN
-         sub-interface. Identifying the subscriber is independent of 
+         sub-interface. Identifying the subscriber is independent of
          the protocol and most likely identical for all VLAN
-         sub-interfaces on top of the same physical line. Therefore 
+         sub-interfaces on top of the same physical line. Therefore
          this data is provided in a profile.";
 
       leaf name {
@@ -170,13 +180,13 @@ module bbf-subscriber-profiles {
         type bbf-yang:string-ascii63-or-empty;
         default "";
         description
-          "A subcriber-id string to be inserted in the subscriber
+          "A subscriber-id string to be inserted in the subscriber
            management protocol packets.
 
-           The subscriber-id carries a value that can be independent 
-           of the physical network configuration through which the 
-           subscriber is connected. This value complements, and might 
-           well be used in addition to the network-based 
+           The subscriber-id carries a value that can be independent
+           of the physical network configuration through which the
+           subscriber is connected. This value complements, and might
+           well be used in addition to the network-based
            information.";
         reference
           "RFC 4580 - Section 2";
@@ -189,12 +199,12 @@ module bbf-subscriber-profiles {
       "derived-from-or-self (if:type,
        'bbfift:vlan-sub-interface')" {
       description
-        "Applies only to VLAN sub-interfaces that are not 
+        "Applies only to VLAN sub-interfaces that are not
          network ports.";
     }
 
     description
-      "Additions for subscriber management on the VLAN 
+      "Additions for subscriber management on the VLAN
        sub-interface.";
 
     container subscriber-profile {
@@ -204,8 +214,8 @@ module bbf-subscriber-profiles {
       leaf profile {
         type subscriber-profile-ref;
         description
-          "Reference to a subcriber configuration profile. A profile 
-           is optional because it is possible that subscriber 
+          "Reference to a subscriber configuration profile. A profile
+           is optional because it is possible that subscriber
            identification is always generated according to a syntax.";
       }
     }
@@ -213,7 +223,7 @@ module bbf-subscriber-profiles {
 
   augment '/sys:system' {
     description
-      "Augment the system with generic subscriber management 
+      "Augment the system with generic subscriber management
        objects.";
 
     container subscriber-management {
@@ -226,9 +236,9 @@ module bbf-subscriber-profiles {
         default "access-node-not-configured";
 
         description
-          "An identifier representing the access node. This string 
+          "An identifier representing the access node. This string
            will be inserted in case the keyword Access_Node_ID is part
-           of the syntax according to which a subscriber 
+           of the syntax according to which a subscriber
            identification string shall be generated.";
         reference
           "TR-101i2 - R153";

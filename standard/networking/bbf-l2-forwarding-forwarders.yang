@@ -39,7 +39,7 @@ submodule bbf-l2-forwarding-forwarders {
      WA Director: Sven Ooghe, Nokia";
 
   description
-    "This submodule contains a collection of YANG definitions for 
+    "This submodule contains a collection of YANG definitions for
      managing forwarders.
 
      Copyright (c) 2017-2018, Broadband Forum
@@ -85,6 +85,16 @@ submodule bbf-l2-forwarding-forwarders {
      This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2018-12-03 {
+    description
+      "Amendment 2.
+       * Approval Date:    2018-12-03.
+       * Publication Date: 2018-12-03.";
+    reference
+      "TR-383a2: Common YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-383_Amendment-2.pdf>";
+  }
   revision 2018-07-13 {
     description
       "Initial revision.
@@ -150,7 +160,7 @@ submodule bbf-l2-forwarding-forwarders {
            + 'fwd:name';
       }
       description
-        "This leaf references a port within the forwarder identified 
+        "This leaf references a port within the forwarder identified
          by the leaf 'forwarder'.";
     }
   }
@@ -174,7 +184,7 @@ submodule bbf-l2-forwarding-forwarders {
            + 'fwd:name';
       }
       description
-        "This leaf references a port within the forwarder identified 
+        "This leaf references a port within the forwarder identified
          by the leaf 'forwarder'.";
     }
   }
@@ -198,7 +208,7 @@ submodule bbf-l2-forwarding-forwarders {
            + 'group/bbf-l2-fwd:name';
       }
       description
-        "This leaf references a port-group within the forwarder 
+        "This leaf references a port-group within the forwarder
          identified by the leaf 'forwarder'.";
     }
   }
@@ -222,14 +232,14 @@ submodule bbf-l2-forwarding-forwarders {
            + 'group/bbf-l2-fwd:name';
       }
       description
-        "This leaf references a port-group within the forwarder 
+        "This leaf references a port-group within the forwarder
          identified by the leaf 'forwarder'.";
     }
   }
 
   augment '/bbf-l2-fwd:forwarding' {
     description
-      "Augment the configuration nodes associated with layer 2 
+      "Augment the configuration nodes associated with layer 2
        forwarding with forwarder objects.";
 
     container forwarders {
@@ -279,7 +289,7 @@ submodule bbf-l2-forwarding-forwarders {
                  /bbf-l2-fwd:ports/bbf-l2-fwd:port
                  [bbf-l2-fwd:sub-interface = current()])< 2" {
                 description
-                  "No two forwarder ports can refer to the same 
+                  "No two forwarder ports can refer to the same
                    sub-interface.";
               }
               description
@@ -292,7 +302,7 @@ submodule bbf-l2-forwarding-forwarders {
           if-feature "forwarder-port-groups";
 
           description
-            "A group of ports associated with this forwarder that 
+            "A group of ports associated with this forwarder that
              have common forwarding characteristics.";
 
           list port-group {
@@ -322,7 +332,7 @@ submodule bbf-l2-forwarding-forwarders {
 
   augment '/bbf-l2-fwd:forwarding-state' {
     description
-      "Augment the state data nodes associated with layer 2 
+      "Augment the state data nodes associated with layer 2
        forwarding with forwarder objects.";
     container forwarders {
       description

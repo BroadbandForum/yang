@@ -9,7 +9,7 @@
       <timezone-utc-offset/>
     </clock>
     <ntp>
-      <enabled>True</enabled>
+      <enabled>true</enabled>
       <server>
         <name/>
         <udp>
@@ -17,12 +17,14 @@
           <port>123</port>
         </udp>
         <association-type>server</association-type>
-        <iburst>False</iburst>
-        <prefer>False</prefer>
+        <iburst>false</iburst>
+        <prefer>false</prefer>
       </server>
     </ntp>
     <dns-resolver>
-      <search/>
+      <search>
+        <!-- # entries: 0.. -->
+      </search>
       <server>
         <name/>
         <udp-and-tcp>
@@ -43,7 +45,7 @@
           <authentication-port>1812</authentication-port>
           <shared-secret/>
         </udp>
-        <authentication-type>&lt;pyang.statements.Statement object at 0x10c68ca20&gt;</authentication-type>
+        <authentication-type>radius-pap</authentication-type>
       </server>
       <options>
         <timeout>5</timeout>
@@ -51,7 +53,9 @@
       </options>
     </radius>
     <authentication>
-      <user-authentication-order/>
+      <user-authentication-order>
+        <!-- # entries: 0.. -->
+      </user-authentication-order>
       <user>
         <name/>
         <password/>
@@ -87,7 +91,9 @@
       <description/>
       <parent/>
       <parent-rel-pos/>
-      <contains-child/>
+      <contains-child>
+        <!-- # entries: 0.. -->
+      </contains-child>
       <hardware-rev/>
       <firmware-rev/>
       <software-rev/>
@@ -98,7 +104,9 @@
       <asset-id/>
       <is-fru/>
       <mfg-date/>
-      <uri/>
+      <uri>
+        <!-- # entries: 0.. -->
+      </uri>
       <uuid/>
       <state>
         <state-last-changed/>
@@ -130,7 +138,9 @@
       <serial-num/>
       <alias/>
       <asset-id/>
-      <uri/>
+      <uri>
+        <!-- # entries: 0.. -->
+      </uri>
       <admin-state/>
     </component>
   </hardware>
@@ -139,8 +149,165 @@
       <name/>
       <description/>
       <type/>
-      <enabled>True</enabled>
+      <enabled>true</enabled>
       <link-up-down-trap-enable/>
+      <performance xmlns="urn:bbf:yang:bbf-interfaces-performance-management">
+        <enable>false</enable>
+      </performance>
+      <interface-usage xmlns="urn:bbf:yang:bbf-interface-usage">
+        <interface-usage/>
+      </interface-usage>
+      <ptm xmlns="urn:bbf:yang:bbf-ptm">
+        <lower-layer-if/>
+      </ptm>
+      <subif-lower-layer xmlns="urn:bbf:yang:bbf-sub-interfaces">
+        <interface/>
+      </subif-lower-layer>
+      <inline-frame-processing xmlns="urn:bbf:yang:bbf-sub-interfaces">
+        <ingress-rule>
+          <rule>
+            <name/>
+            <priority/>
+            <flexible-match>
+              <match-criteria xmlns="urn:bbf:yang:bbf-sub-interface-tagging">
+                <any-frame/>
+                <any-multicast-mac-address/>
+                <unicast-address/>
+                <broadcast-address/>
+                <cfm-multicast-address/>
+                <ipv4-multicast-address/>
+                <ipv6-multicast-address/>
+                <mac-address-value/>
+                <mac-address-mask>FF:FF:FF:FF:FF:FF</mac-address-mask>
+                <any-multicast-ipv4-address/>
+                <all-hosts-multicast-address/>
+                <rip-multicast-address/>
+                <ntp-multicast-address/>
+                <match-all/>
+                <untagged/>
+                <tag>
+                  <index/>
+                  <dot1q-tag>
+                    <tag-type/>
+                    <vlan-id/>
+                    <pbit>any</pbit>
+                    <dei>any</dei>
+                  </dot1q-tag>
+                </tag>
+                <ethernet-frame-type>any</ethernet-frame-type>
+                <any-protocol/>
+                <protocol>
+                  <!-- # entries: 0.. -->
+                </protocol>
+              </match-criteria>
+            </flexible-match>
+            <ingress-rewrite>
+              <pop-tags xmlns="urn:bbf:yang:bbf-sub-interface-tagging">0</pop-tags>
+              <push-tag xmlns="urn:bbf:yang:bbf-sub-interface-tagging">
+                <index/>
+                <dot1q-tag>
+                  <tag-type/>
+                  <vlan-id/>
+                  <vlan-id-from-tag-index-or-discard/>
+                  <write-pbit-0/>
+                  <pbit-from-tag-index/>
+                  <write-pbit/>
+                  <pbit-marking-index xmlns="urn:bbf:yang:bbf-qos-policies-sub-interfaces"/>
+                  <write-dei-0/>
+                  <dei-from-tag-index/>
+                  <write-dei-1/>
+                  <dei-marking-index xmlns="urn:bbf:yang:bbf-qos-policies-sub-interfaces"/>
+                </dot1q-tag>
+              </push-tag>
+            </ingress-rewrite>
+          </rule>
+        </ingress-rule>
+        <egress-rewrite>
+          <pop-tags xmlns="urn:bbf:yang:bbf-sub-interface-tagging">0</pop-tags>
+          <push-tag xmlns="urn:bbf:yang:bbf-sub-interface-tagging">
+            <index/>
+            <dot1q-tag>
+              <tag-type/>
+              <vlan-id/>
+              <vlan-id-from-tag-index-or-discard/>
+              <write-pbit-0/>
+              <pbit-from-tag-index/>
+              <write-pbit/>
+              <pbit-marking-index xmlns="urn:bbf:yang:bbf-qos-policies-sub-interfaces"/>
+              <write-dei-0/>
+              <dei-from-tag-index/>
+              <write-dei-1/>
+              <dei-marking-index xmlns="urn:bbf:yang:bbf-qos-policies-sub-interfaces"/>
+            </dot1q-tag>
+          </push-tag>
+        </egress-rewrite>
+      </inline-frame-processing>
+      <mac-learning xmlns="urn:bbf:yang:bbf-l2-forwarding">
+        <max-number-mac-addresses>4294967295</max-number-mac-addresses>
+        <number-committed-mac-addresses>1</number-committed-mac-addresses>
+        <mac-learning-enable>true</mac-learning-enable>
+        <mac-learning-failure-action>forward</mac-learning-failure-action>
+      </mac-learning>
+      <subscriber-profile xmlns="urn:bbf:yang:bbf-subscriber-profiles">
+        <profile/>
+      </subscriber-profile>
+      <l2-dhcpv4-relay xmlns="urn:bbf:yang:bbf-l2-dhcpv4-relay">
+        <enable>false</enable>
+        <trusted-port>false</trusted-port>
+        <profile-ref/>
+      </l2-dhcpv4-relay>
+      <dhcpv6-ldra xmlns="urn:bbf:yang:bbf-ldra">
+        <enable>false</enable>
+        <trusted-port>false</trusted-port>
+        <profile-ref/>
+      </dhcpv6-ldra>
+      <pppoe xmlns="urn:bbf:yang:bbf-pppoe-intermediate-agent">
+        <enable>false</enable>
+        <profile-ref/>
+      </pppoe>
+      <ingress-qos-policy-profile xmlns="urn:bbf:yang:bbf-qos-policies"/>
+      <egress-qos-policy-profile xmlns="urn:bbf:yang:bbf-qos-policies"/>
+      <tm-root xmlns="urn:bbf:yang:bbf-qos-traffic-mngt">
+        <queue>
+          <local-queue-id/>
+          <bac-name/>
+          <priority/>
+          <weight/>
+          <shaper-name xmlns="urn:bbf:yang:bbf-qos-shaping"/>
+          <pre-emption/>
+        </queue>
+        <scheduler-node xmlns="urn:bbf:yang:bbf-qos-enhanced-scheduling">
+          <name/>
+          <description/>
+          <scheduling-level/>
+          <shaper-name/>
+          <child-scheduler-nodes>
+            <name/>
+            <priority/>
+            <weight/>
+          </child-scheduler-nodes>
+          <contains-queues>true</contains-queues>
+          <queue>
+            <local-queue-id/>
+            <bac-name/>
+            <priority/>
+            <weight/>
+            <shaper-name/>
+            <pre-emption/>
+          </queue>
+        </scheduler-node>
+        <child-scheduler-nodes xmlns="urn:bbf:yang:bbf-qos-enhanced-scheduling">
+          <name/>
+          <priority/>
+          <weight/>
+        </child-scheduler-nodes>
+        <tc-id-2-queue-id-mapping-profile-name/>
+        <shaper-name xmlns="urn:bbf:yang:bbf-qos-shaping"/>
+      </tm-root>
+      <egress-tm-objects xmlns="urn:bbf:yang:bbf-qos-enhanced-scheduling">
+        <root-if-name/>
+        <scheduler-node-name/>
+      </egress-tm-objects>
     </interface>
   </interfaces>
   <interfaces-state xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
@@ -152,8 +319,12 @@
       <last-change/>
       <if-index/>
       <phys-address/>
-      <higher-layer-if/>
-      <lower-layer-if/>
+      <higher-layer-if>
+        <!-- # entries: 0.. -->
+      </higher-layer-if>
+      <lower-layer-if>
+        <!-- # entries: 0.. -->
+      </lower-layer-if>
       <speed/>
       <statistics>
         <discontinuity-time/>
@@ -170,7 +341,142 @@
         <out-multicast-pkts/>
         <out-discards/>
         <out-errors/>
+        <dhcpv4 xmlns="urn:bbf:yang:bbf-l2-dhcpv4-relay">
+          <in-bad-packets-from-client/>
+          <in-bad-packets-from-server/>
+          <in-packets-from-client/>
+          <in-packets-from-server/>
+          <out-packets-to-server/>
+          <out-packets-to-client/>
+          <option-82-inserted-packets-to-server/>
+          <option-82-removed-packets-to-client/>
+          <option-82-not-inserted-to-server/>
+        </dhcpv4>
+        <dhcpv6-ldra xmlns="urn:bbf:yang:bbf-ldra">
+          <in-bad-packets-from-client/>
+          <in-bad-packets-from-server/>
+          <option-17-inserted-packets-to-server/>
+          <option-17-removed-packets-to-client/>
+          <option-18-inserted-packets-to-server/>
+          <option-18-removed-packets-to-client/>
+          <option-37-inserted-packets-to-server/>
+          <option-37-removed-packets-to-client/>
+          <outgoing-mtu-exceeded-packets-from-client/>
+        </dhcpv6-ldra>
+        <pppoe xmlns="urn:bbf:yang:bbf-pppoe-intermediate-agent">
+          <in-error-packets-from-client/>
+          <in-error-packets-from-server/>
+          <in-packets-from-client/>
+          <in-packets-from-server/>
+          <out-packets-to-server/>
+          <out-packets-to-client/>
+          <vendor-specific-tag-inserted-packets-to-server/>
+          <vendor-specific-tag-removed-packets-to-client/>
+          <outgoing-mtu-exceeded-packets-from-client/>
+        </pppoe>
       </statistics>
+      <performance xmlns="urn:bbf:yang:bbf-interfaces-performance-management">
+        <intervals-15min>
+          <current>
+            <in-octets/>
+            <in-unicast-pkts/>
+            <in-broadcast-pkts/>
+            <in-multicast-pkts/>
+            <in-discards/>
+            <in-errors/>
+            <in-unknown-protos/>
+            <out-octets/>
+            <out-unicast-pkts/>
+            <out-broadcast-pkts/>
+            <out-multicast-pkts/>
+            <out-discards/>
+            <out-errors/>
+            <ethernet xmlns="urn:bbf:yang:bbf-ethernet-performance-management">
+              <in-pkts-errors-fcs/>
+              <in-giant-pkts/>
+              <in-errors-mac-internal/>
+              <out-errors-mac-internal/>
+            </ethernet>
+          </current>
+          <number-of-intervals/>
+          <non-valid-intervals/>
+          <history>
+            <interval-number/>
+            <measured-time/>
+            <invalid-data-flag/>
+            <time-stamp/>
+            <in-octets/>
+            <in-unicast-pkts/>
+            <in-broadcast-pkts/>
+            <in-multicast-pkts/>
+            <in-discards/>
+            <in-errors/>
+            <in-unknown-protos/>
+            <out-octets/>
+            <out-unicast-pkts/>
+            <out-broadcast-pkts/>
+            <out-multicast-pkts/>
+            <out-discards/>
+            <out-errors/>
+            <ethernet xmlns="urn:bbf:yang:bbf-ethernet-performance-management">
+              <in-pkts-errors-fcs/>
+              <in-giant-pkts/>
+              <in-errors-mac-internal/>
+              <out-errors-mac-internal/>
+            </ethernet>
+          </history>
+        </intervals-15min>
+        <intervals-24hr>
+          <current>
+            <in-octets/>
+            <in-unicast-pkts/>
+            <in-broadcast-pkts/>
+            <in-multicast-pkts/>
+            <in-discards/>
+            <in-errors/>
+            <in-unknown-protos/>
+            <out-octets/>
+            <out-unicast-pkts/>
+            <out-broadcast-pkts/>
+            <out-multicast-pkts/>
+            <out-discards/>
+            <out-errors/>
+            <ethernet xmlns="urn:bbf:yang:bbf-ethernet-performance-management">
+              <in-pkts-errors-fcs/>
+              <in-giant-pkts/>
+              <in-errors-mac-internal/>
+              <out-errors-mac-internal/>
+            </ethernet>
+          </current>
+          <number-of-intervals/>
+          <non-valid-intervals/>
+          <history>
+            <interval-number/>
+            <measured-time/>
+            <invalid-data-flag/>
+            <time-stamp/>
+            <in-octets/>
+            <in-unicast-pkts/>
+            <in-broadcast-pkts/>
+            <in-multicast-pkts/>
+            <in-discards/>
+            <in-errors/>
+            <in-unknown-protos/>
+            <out-octets/>
+            <out-unicast-pkts/>
+            <out-broadcast-pkts/>
+            <out-multicast-pkts/>
+            <out-discards/>
+            <out-errors/>
+            <ethernet xmlns="urn:bbf:yang:bbf-ethernet-performance-management">
+              <in-pkts-errors-fcs/>
+              <in-giant-pkts/>
+              <in-errors-mac-internal/>
+              <out-errors-mac-internal/>
+            </ethernet>
+          </history>
+        </intervals-24hr>
+      </performance>
     </interface>
   </interfaces-state>
   <forwarding xmlns="urn:bbf:yang:bbf-l2-forwarding">
@@ -186,7 +492,9 @@
         <port-groups>
           <port-group>
             <name/>
-            <port/>
+            <port>
+              <!-- # entries: 0.. -->
+            </port>
           </port-group>
         </port-groups>
         <flooding-policies>
@@ -226,7 +534,7 @@
           <split-horizon-profile/>
         </split-horizon-profiles>
         <l2-dhcpv4-relay xmlns="urn:bbf:yang:bbf-l2-dhcpv4-relay-forwarding">
-          <downstream-broadcast-flooding>False</downstream-broadcast-flooding>
+          <downstream-broadcast-flooding>false</downstream-broadcast-flooding>
         </l2-dhcpv4-relay>
       </forwarder>
     </forwarders>
@@ -236,7 +544,9 @@
         <flooding-policy>
           <name/>
           <in-interface-usages>
-            <interface-usages/>
+            <interface-usages>
+              <!-- # entries: 0.. -->
+            </interface-usages>
           </in-interface-usages>
           <destination-address>
             <any-frame/>
@@ -255,7 +565,9 @@
           </destination-address>
           <discard/>
           <out-interface-usages>
-            <interface-usages/>
+            <interface-usages>
+              <!-- # entries: 0.. -->
+            </interface-usages>
           </out-interface-usages>
         </flooding-policy>
       </flooding-policies-profile>
@@ -265,7 +577,7 @@
         <name/>
         <max-number-mac-addresses>4294967295</max-number-mac-addresses>
         <aging-timer>300</aging-timer>
-        <shared-forwarding-database>False</shared-forwarding-database>
+        <shared-forwarding-database>false</shared-forwarding-database>
         <static-mac-address>
           <mac-address/>
           <discard-frame/>
@@ -278,7 +590,9 @@
             <group/>
           </forwarder-port-group-ref>
           <interface-references xmlns="urn:bbf:yang:bbf-l2-forwarding-shared-fdb">
-            <interface/>
+            <interface>
+              <!-- # entries: 0.. -->
+            </interface>
           </interface-references>
           <static-forwarder-port-ref>
             <forwarder/>
@@ -290,7 +604,7 @@
         </static-mac-address>
         <mac-learning-control>
           <mac-learning-control-profile/>
-          <generate-mac-learning-alarm>False</generate-mac-learning-alarm>
+          <generate-mac-learning-alarm>false</generate-mac-learning-alarm>
         </mac-learning-control>
       </forwarding-database>
     </forwarding-databases>
@@ -299,7 +613,9 @@
         <name/>
         <split-horizon>
           <in-interface-usage/>
-          <out-interface-usage/>
+          <out-interface-usage>
+            <!-- # entries: 0.. -->
+          </out-interface-usage>
         </split-horizon>
       </split-horizon-profile>
     </split-horizon-profiles>
@@ -308,7 +624,9 @@
         <name/>
         <mac-learning-rule>
           <receiving-interface-usage/>
-          <mac-can-not-move-to/>
+          <mac-can-not-move-to>
+            <!-- # entries: 0.. -->
+          </mac-can-not-move-to>
         </mac-learning-rule>
       </mac-learning-control-profile>
     </mac-learning-control-profiles>
@@ -361,12 +679,14 @@
       <name/>
       <max-packet-size>1500</max-packet-size>
       <option82-format>
-        <suboptions/>
+        <suboptions>
+          <!-- # entries: 1.. -->
+        </suboptions>
         <default-circuit-id-syntax/>
         <default-remote-id-syntax/>
-        <access-loop-suboptions>[]</access-loop-suboptions>
-        <start-numbering-from-zero>False</start-numbering-from-zero>
-        <use-leading-zeroes>False</use-leading-zeroes>
+        <access-loop-suboptions/>
+        <start-numbering-from-zero>false</start-numbering-from-zero>
+        <use-leading-zeroes>false</use-leading-zeroes>
       </option82-format>
     </l2-dhcpv4-relay-profile>
   </l2-dhcpv4-relay-profiles>
@@ -374,13 +694,15 @@
     <dhcpv6-ldra-profile>
       <name/>
       <options>
-        <option/>
+        <option>
+          <!-- # entries: 1.. -->
+        </option>
         <default-interface-id-syntax/>
         <default-remote-id-syntax/>
         <enterprise-number>3561</enterprise-number>
-        <access-loop-characteristics>[]</access-loop-characteristics>
-        <start-numbering-from-zero>False</start-numbering-from-zero>
-        <use-leading-zeroes>False</use-leading-zeroes>
+        <access-loop-characteristics/>
+        <start-numbering-from-zero>false</start-numbering-from-zero>
+        <use-leading-zeroes>false</use-leading-zeroes>
       </options>
     </dhcpv6-ldra-profile>
   </dhcpv6-ldra-profiles>
@@ -388,85 +710,39 @@
     <pppoe-profile>
       <name/>
       <pppoe-vendor-specific-tag>
-        <subtag/>
+        <subtag>
+          <!-- # entries: 1.. -->
+        </subtag>
         <default-circuit-id-syntax/>
         <default-remote-id-syntax/>
-        <access-loop-subtags>[]</access-loop-subtags>
-        <start-numbering-from-zero>False</start-numbering-from-zero>
-        <use-leading-zeroes>False</use-leading-zeroes>
+        <access-loop-subtags/>
+        <start-numbering-from-zero>false</start-numbering-from-zero>
+        <use-leading-zeroes>false</use-leading-zeroes>
       </pppoe-vendor-specific-tag>
     </pppoe-profile>
   </pppoe-profiles>
-  <classifiers xmlns="urn:bbf:yang:bbf-qos-classifiers">
-    <classifier-entry>
+  <policies xmlns="urn:bbf:yang:bbf-qos-policies">
+    <policy>
       <name/>
       <description/>
-      <filter-operation>&lt;pyang.statements.Statement object at 0x10dc57198&gt;</filter-operation>
-      <match-criteria>
-        <match-all/>
-        <untagged/>
-        <tag>
-          <index/>
-          <in-pbit-list/>
-          <in-dei/>
-        </tag>
-        <dscp-range>any</dscp-range>
-        <any-protocol/>
-        <protocol/>
-        <pbit-marking-list xmlns="urn:bbf:yang:bbf-qos-policing">
-          <index/>
-          <pbit-value/>
-        </pbit-marking-list>
-        <dei-marking-list xmlns="urn:bbf:yang:bbf-qos-policing">
-          <index/>
-          <dei-value/>
-        </dei-marking-list>
-        <flow-color xmlns="urn:bbf:yang:bbf-qos-policing"/>
-      </match-criteria>
-      <filter xmlns="urn:bbf:yang:bbf-qos-filters">
+      <classifiers>
         <name/>
-        <filter-name/>
-      </filter>
-      <classifier-action-entry-cfg>
-        <action-type/>
-        <pbit-marking-cfg>
-          <pbit-marking-list>
-            <index/>
-            <pbit-value/>
-          </pbit-marking-list>
-        </pbit-marking-cfg>
-        <dei-marking-cfg>
-          <dei-marking-list>
-            <index/>
-            <dei-value/>
-          </dei-marking-list>
-        </dei-marking-cfg>
-        <dscp-marking-cfg>
-          <dscp/>
-        </dscp-marking-cfg>
-        <scheduling-traffic-class/>
-        <policer-envelope-flow xmlns="urn:bbf:yang:bbf-qos-policer-envelope-profiles">
-          <envelope/>
-          <flow/>
-        </policer-envelope-flow>
-        <flow-color xmlns="urn:bbf:yang:bbf-qos-policing"/>
-        <bac-color xmlns="urn:bbf:yang:bbf-qos-policing"/>
-        <discard xmlns="urn:bbf:yang:bbf-qos-policing"/>
-        <policing xmlns="urn:bbf:yang:bbf-qos-policing">
-          <policing-profile/>
-        </policing>
-        <rate-limit-frames xmlns="urn:bbf:yang:bbf-qos-rate-control">
-          <rate/>
-          <burst-size/>
-        </rate-limit-frames>
-      </classifier-action-entry-cfg>
-    </classifier-entry>
-  </classifiers>
+      </classifiers>
+    </policy>
+  </policies>
+  <qos-policy-profiles xmlns="urn:bbf:yang:bbf-qos-policies">
+    <policy-profile>
+      <name/>
+      <policy-list>
+        <name/>
+      </policy-list>
+    </policy-profile>
+  </qos-policy-profiles>
   <filters xmlns="urn:bbf:yang:bbf-qos-filters">
     <filter>
       <name/>
       <description/>
-      <filter-match>True</filter-match>
+      <filter-match>true</filter-match>
       <source-mac-address>
         <any-multicast-mac-address/>
         <unicast-address/>
@@ -509,55 +785,6 @@
       </flows>
     </envelope-profile>
   </envelope-profiles>
-  <policies xmlns="urn:bbf:yang:bbf-qos-policies">
-    <policy>
-      <name/>
-      <description/>
-      <classifiers>
-        <name/>
-      </classifiers>
-    </policy>
-  </policies>
-  <qos-policy-profiles xmlns="urn:bbf:yang:bbf-qos-policies">
-    <policy-profile>
-      <name/>
-      <policy-list>
-        <name/>
-      </policy-list>
-    </policy-profile>
-  </qos-policy-profiles>
-  <policing-profiles xmlns="urn:bbf:yang:bbf-qos-policing">
-    <policing-profile>
-      <name/>
-      <scope/>
-      <single-rate-two-color-marker>
-        <cir/>
-        <cbs/>
-      </single-rate-two-color-marker>
-      <single-rate-three-color-marker>
-        <cir/>
-        <cbs/>
-        <ebs/>
-      </single-rate-three-color-marker>
-      <two-rate-three-color-marker>
-        <cir/>
-        <cbs/>
-        <pir/>
-        <pbs/>
-      </two-rate-three-color-marker>
-      <two-rate-three-color-marker-mef>
-        <cir/>
-        <cbs/>
-        <eir/>
-        <ebs/>
-        <couple-flag/>
-        <color-mode/>
-      </two-rate-three-color-marker-mef>
-      <hierarchical-policing>
-        <policing-profile/>
-      </hierarchical-policing>
-    </policing-profile>
-  </policing-profiles>
   <tm-profiles xmlns="urn:bbf:yang:bbf-qos-traffic-mngt">
     <tc-id-2-queue-id-mapping-profile>
       <name/>
@@ -618,9 +845,110 @@
       </single-token-bucket>
     </shaper-profile>
   </tm-profiles>
+  <policing-profiles xmlns="urn:bbf:yang:bbf-qos-policing">
+    <policing-profile>
+      <name/>
+      <scope/>
+      <single-rate-two-color-marker>
+        <cir/>
+        <cbs/>
+      </single-rate-two-color-marker>
+      <single-rate-three-color-marker>
+        <cir/>
+        <cbs/>
+        <ebs/>
+      </single-rate-three-color-marker>
+      <two-rate-three-color-marker>
+        <cir/>
+        <cbs/>
+        <pir/>
+        <pbs/>
+      </two-rate-three-color-marker>
+      <two-rate-three-color-marker-mef>
+        <cir/>
+        <cbs/>
+        <eir/>
+        <ebs/>
+        <couple-flag/>
+        <color-mode/>
+      </two-rate-three-color-marker-mef>
+      <hierarchical-policing>
+        <policing-profile/>
+      </hierarchical-policing>
+    </policing-profile>
+  </policing-profiles>
+  <classifiers xmlns="urn:bbf:yang:bbf-qos-classifiers">
+    <classifier-entry>
+      <name/>
+      <description/>
+      <filter-operation>bbf-qos-cls:match-any-filter</filter-operation>
+      <match-criteria>
+        <match-all/>
+        <untagged/>
+        <tag>
+          <index/>
+          <in-pbit-list/>
+          <in-dei/>
+        </tag>
+        <dscp-range>any</dscp-range>
+        <any-protocol/>
+        <protocol>
+          <!-- # entries: 0.. -->
+        </protocol>
+        <pbit-marking-list xmlns="urn:bbf:yang:bbf-qos-policing">
+          <index/>
+          <pbit-value/>
+        </pbit-marking-list>
+        <dei-marking-list xmlns="urn:bbf:yang:bbf-qos-policing">
+          <index/>
+          <dei-value/>
+        </dei-marking-list>
+        <flow-color xmlns="urn:bbf:yang:bbf-qos-policing">
+          <!-- # entries: 0.. -->
+        </flow-color>
+      </match-criteria>
+      <filter xmlns="urn:bbf:yang:bbf-qos-filters">
+        <name/>
+        <filter-name/>
+      </filter>
+      <classifier-action-entry-cfg>
+        <action-type/>
+        <pbit-marking-cfg>
+          <pbit-marking-list>
+            <index/>
+            <pbit-value/>
+          </pbit-marking-list>
+        </pbit-marking-cfg>
+        <dei-marking-cfg>
+          <dei-marking-list>
+            <index/>
+            <dei-value/>
+          </dei-marking-list>
+        </dei-marking-cfg>
+        <dscp-marking-cfg>
+          <dscp/>
+        </dscp-marking-cfg>
+        <scheduling-traffic-class/>
+        <rate-limit-frames xmlns="urn:bbf:yang:bbf-qos-rate-control">
+          <rate/>
+          <burst-size/>
+        </rate-limit-frames>
+        <policer-envelope-flow xmlns="urn:bbf:yang:bbf-qos-policer-envelope-profiles">
+          <envelope/>
+          <flow/>
+        </policer-envelope-flow>
+        <flow-color xmlns="urn:bbf:yang:bbf-qos-policing"/>
+        <bac-color xmlns="urn:bbf:yang:bbf-qos-policing"/>
+        <discard xmlns="urn:bbf:yang:bbf-qos-policing"/>
+        <policing xmlns="urn:bbf:yang:bbf-qos-policing">
+          <policing-profile/>
+        </policing>
+      </classifier-action-entry-cfg>
+    </classifier-entry>
+  </classifiers>
   <multicast xmlns="urn:bbf:yang:bbf-mgmd">
     <mgmd>
-      <global-administrative-enabled>True</global-administrative-enabled>
+      <global-administrative-enabled>true</global-administrative-enabled>
       <preview-parameters-profile>
         <name/>
         <preview-control-style/>
@@ -676,7 +1004,7 @@
       </multicast-proxy-profile>
       <multicast-vpn>
         <name/>
-        <vpn-administrative-enabled>True</vpn-administrative-enabled>
+        <vpn-administrative-enabled>true</vpn-administrative-enabled>
         <mode/>
         <multicast-proxy-profile-name/>
         <multicast-snoop-transparent-profile-name/>
@@ -684,18 +1012,20 @@
         <ip-version>ipv4</ip-version>
         <ipv4-address>0.0.0.0</ipv4-address>
         <ipv6-address>::</ipv6-address>
-        <unmatched-join-processing>&lt;pyang.statements.Statement object at 0x10df0d9e8&gt;</unmatched-join-processing>
+        <unmatched-join-processing>unmatched-join-discard</unmatched-join-processing>
         <network-interface-for-unmatched-reports/>
         <multicast-interface-to-host>
           <name/>
           <vlan-sub-interface/>
           <data-path-vlan-sub-interface/>
-          <interface-to-host-administrative-enabled>True</interface-to-host-administrative-enabled>
+          <interface-to-host-administrative-enabled>true</interface-to-host-administrative-enabled>
           <max-group-number>no-limit</max-group-number>
           <maximum-concurrent-devices-per-channel>2</maximum-concurrent-devices-per-channel>
           <multicast-rate-limit>0</multicast-rate-limit>
           <multicast-rate-limit-exceed-action>best-effort</multicast-rate-limit-exceed-action>
-          <multicast-package/>
+          <multicast-package>
+            <!-- # entries: 0.. -->
+          </multicast-package>
         </multicast-interface-to-host>
         <multicast-network-interface>
           <name/>
@@ -719,7 +1049,9 @@
             <group-ipv6-address-end/>
           </ipv6>
           <channel-rate>0</channel-rate>
-          <interface-to-host/>
+          <interface-to-host>
+            <!-- # entries: 0.. -->
+          </interface-to-host>
         </multicast-channel>
         <multicast-package>
           <name/>
@@ -781,7 +1113,9 @@
           <number-active-interfaces-to-hosts/>
           <multicast-interface-to-host>
             <name/>
-            <host-reporter-address/>
+            <host-reporter-address>
+              <!-- # entries: 0.. -->
+            </host-reporter-address>
           </multicast-interface-to-host>
           <uptime/>
         </active-channel>
