@@ -1,5 +1,12 @@
 ## Broadband Forum YANG Modules
 
+### 2019-02-25: [TR-385](https://www.broadband-forum.org/technical/download/TR-385.pdf) ITU-T PON YANG Modules
+*Tag: [v3.0.0-TR-385](https://github.com/BroadbandForum/yang/tree/v3.0.0-TR-385)*
+
+TR-385 defines YANG data models for ITU-T Passive Optical Networks (PON) devices as defined in ITU-T G.984.x, ITU-T G.987.x, ITU-T G.989.x, and ITU-T G.9807.x.
+
+(To avoid confusion, the YANG files from the 2017-05-05 WT-385_draft1 release have been removed.)
+
 ### 2018-12-03: [TR-383a2](https://www.broadband-forum.org/technical/download/TR-383_Amendment-2.pdf) Common YANG Modules for Access Networks
 *Tag: [v2.2.0-TR-383a2](https://github.com/BroadbandForum/yang/tree/v2.2.0-TR-383a2)*
 

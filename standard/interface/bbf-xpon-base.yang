@@ -1,0 +1,400 @@
+submodule bbf-xpon-base {
+  yang-version 1.1;
+  belongs-to bbf-xpon {
+    prefix bbf-xpon;
+  }
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import bbf-xpon-types {
+    prefix bbf-xpon-types;
+  }
+  import bbf-xpon-if-type {
+    prefix bbf-xponift;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Fiber Access Networks Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     Editor:      Samuel Chen, Broadcom
+
+     Editor:      Robert Peschi, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Lin Wei, Huawei";
+  description
+    "This submodule contains a collection of YANG definitions and
+     augmentations to ietf-interfaces for managing the xPON
+     infrastructure.
+
+     Copyright (c) 2018, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385; see
+     the TR itself for full legal notices.";
+
+  revision 2019-02-25 {
+    description
+      "Initial revision.
+       * Approval Date:    2019-02-25.
+       * Publication Date: 2019-02-25.";
+    reference
+      "TR-385: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385.pdf>";
+  }
+
+  feature ictp-support {
+    description
+      "Indicates that the OLT supports ICTP.";
+  }
+
+  feature configurable-ictp-proxy-tcp-port {
+    if-feature "ictp-support";
+    description
+      "Indicates support for the configuration of the TCP port
+       used by an ICTP proxy.";
+  }
+
+  container xpon {
+    description
+      "Configuration associated with managing xPON in a system.";
+    container ictp {
+      if-feature "ictp-support";
+      description
+        "Configuration data for the support of
+         Inter-Channel-Termination Protocol (ICTP).";
+      reference
+        "BBF TR-352";
+      leaf activated {
+        type boolean;
+        default "false";
+        description
+          "This is to enable or disable support of ICTP.
+           When true, the OLT attempts to establish TCP
+           connections with all relevant peer ICTP proxies
+           and is ready to exchange ICTP messages with other
+           channel terminations through those ICTP proxies.
+           When false, the OLT does not process nor generate
+           any ICTP messages and will not establish nor maintain
+           any TCP connection to any ICTP proxy.";
+      }
+      container all-ictp-proxies-all-channel-groups {
+        description
+          "This container contains all configuration data related to
+           TR-352 ICTP transport infrastructure for all ICTP proxies,
+           whether they are in charge of 'inside-olt' channel
+           terminations or 'outside-olt' channel terminations, for all
+           channel groups.";
+        list proxy {
+          key "name";
+          description
+            "The list of all ICTP proxies, whether they are in charge
+             of 'inside-olt' channel terminations or 'outside-olt'
+             channel terminations, for all channel groups configured
+             in the OLT.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "Name of the ICTP Proxy.";
+          }
+          leaf host {
+            type inet:host;
+            mandatory true;
+            description
+              "This is the IP address or the DNS domain name of the
+               ICTP proxy. TCP connections originating from this ICTP
+               proxy will use this IP address (or the one resolved
+               from the DNS domain name) as source IP address. Other
+               ICTP proxies will reach this Proxy using this IP
+               address (or the one resolved from the DNS domain name)
+               as destination address.";
+          }
+          leaf tcp-port {
+            if-feature "configurable-ictp-proxy-tcp-port";
+            type inet:port-number;
+            default "7202";
+            description
+              "The TCP port used by the ICTP proxy.";
+          }
+          container all-channel-terminations-proxied-by-this-proxy {
+            description
+              "In the context of a given ICTP proxy, this container
+               contains the list of all channel terminations 'inside'
+               and 'outside' the OLT, for all channel groups, for
+               which this ICTP proxy is playing proxy role.";
+            list channel-termination {
+              key "channel-termination-ref";
+              description
+                "The list of all channel terminations inside and
+                 outside the OLT, for all channel groups, for which
+                 this ICTP proxy is playing proxy role.";
+              leaf channel-termination-ref {
+                type if:interface-ref;
+                must "derived-from-or-self(/if:interfaces"
+                   + "/if:interface[if:name=current()]/if:type,"
+                   + "'bbf-xponift:channel-termination')" {
+                  error-message
+                    "Must reference a channel termination.";
+                }
+                description
+                  "Reference to a channel termination for which this
+                   ICTP proxy is responsible.";
+              }
+              leaf channel-termination-ictp-activated {
+                type boolean;
+                default "false";
+                description
+                  "When true, the ICTP proxy is willing to exchange
+                   ICTP messages on behalf of this
+                   channel termination. When false, the ICTP
+                   proxy ignores this channel termination.";
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  container xpon-state {
+    config false;
+    description
+      "State data associated with managing xPON in a system.";
+    container ictp {
+      if-feature "ictp-support";
+      description
+        "State data for the support of
+         Inter-Channel-Termination Protocol (ICTP).";
+      reference
+        "BBF TR-352";
+      container all-ictp-proxies-all-channel-groups {
+        description
+          "State data related to all ICTP proxies across all channel
+           groups.";
+        list proxy {
+          key "name";
+          description
+            "The list of all ICTP proxies for all channel-groups.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "Name of the ICTP Proxy.";
+          }
+          leaf proxy-ip-address {
+            type bbf-xpon-types:ip-address-or-unresolved;
+            description
+              "This is the IP address (v4 or v6) of this ICTP proxy
+               as derived from its configured host and as used in the
+               TCP connection when established. It is 'unresolved' if
+               for some reason the system is unable to deduce the IP
+               address from the host name of the ICTP proxy.";
+          }
+          container known-peered-proxies {
+            description
+              "In the context of an ICTP proxy, this container
+               contains state data about peering relations involving
+               this ICTP proxy. An OLT must know at least all peering
+               relations involving the ICTP proxies in charge of one
+               or several channel terminations 'inside' the OLT.
+               An OLT may or may not know peering relations between
+               ICTP proxies exclusively involving channel terminations
+               'outside' the OLT.";
+            list proxy {
+              key "name";
+              description
+                "In the context of an ICTP proxy, the list of all
+                 ICTP proxies which the OLT knows to be peered with
+                 this ICTP proxy.";
+              leaf name {
+                type bbf-yang:string-ascii64;
+                description
+                  "Name of this ICTP peer proxy.";
+              }
+              leaf ip-address {
+                type bbf-xpon-types:ip-address-or-unresolved;
+                description
+                  "This is the IP address (v4 or v6) of the peer
+                   ICTP proxy as derived from its configured
+                   host and as used in the TCP connection when
+                   established. It is 'unresolved' if for some
+                   reason the system is unable to deduce the IP
+                   address from the host name of the ICTP proxy.";
+              }
+              leaf tcp-connection-state {
+                type identityref {
+                  base bbf-xpon-types:tcp-connection-state-base;
+                }
+                description
+                  "This leaf reflects the state of the TCP connection
+                   with this peer ICTP Proxy. When 'established' the
+                   TCP connection is operational and able to transport
+                   ICTP messages. When 'not-established', the TCP
+                   connection is unable to exchange any ICTP message.
+                   When the TCP connection state is 'unknown' the OLT
+                   does not know whether the involved ICTP proxies can
+                   exchange ICTP messages or not; typically, this is
+                   because the OLT is not involved at all with either
+                   of the two related ICTP proxies.";
+              }
+              leaf source-tcp-port {
+                type inet:port-number;
+                description
+                  "This is the source port number of the TCP
+                   connection with the peer ICTP proxy, when
+                   established.";
+              }
+              leaf destination-tcp-port {
+                type inet:port-number;
+                description
+                  "This is the destination port number of the TCP
+                   connection with the peer ICTP proxy, when
+                   established.";
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  augment '/if:interfaces/if:interface' {
+    when "if:type = 'bbf-xponift:channel-group'";
+    description
+      "Augment interface configuration with xPON channel group
+       configuration.";
+    container channel-group {
+      description
+        "Channel group configuration data for all xPON variants
+         (NG-PON2, XGS-PON, XG-PON and G-PON).";
+    }
+  }
+
+  augment '/if:interfaces/if:interface' {
+    when "derived-from-or-self"
+       + "(if:type, 'bbf-xponift:channel-partition')";
+    description
+      "Augment interface configuration with xPON channel partition
+       configuration.";
+    container channel-partition {
+      description
+        "Channel partition configuration data for all xPON variants
+         (NG-PON2, XGS-PON, XG-PON and G-PON).";
+    }
+  }
+
+  augment '/if:interfaces/if:interface' {
+    when "derived-from-or-self"
+       + "(if:type, 'bbf-xponift:channel-pair')";
+    description
+      "Augment interface configuration with xPON channel pair
+       configuration.";
+    container channel-pair {
+      description
+        "Channel pair configuration data for all xPON variants
+         (NG-PON2, XGS-PON, XG-PON and G-PON).";
+    }
+  }
+
+  augment '/if:interfaces/if:interface' {
+    when "derived-from-or-self"
+       + "(if:type, 'bbf-xponift:channel-termination')";
+    description
+      "Augment interface configuration with xPON channel termination
+       configuration.";
+    container channel-termination {
+      description
+        "channel termination configuration data for all xPON variants
+         (NG-PON2, XGS-PON, XG-PON and G-PON).";
+    }
+  }
+
+  augment '/if:interfaces-state/if:interface' {
+    when "derived-from-or-self"
+       + "(if:type, 'bbf-xponift:channel-group')";
+    description
+      "Augment interface state data with xPON channel group
+       state data.";
+    container channel-group {
+      description
+        "Channel group state data for all xPON variants
+         (NG-PON2, XGS-PON, XG-PON and G-PON).";
+    }
+  }
+
+  augment '/if:interfaces-state/if:interface' {
+    when "derived-from-or-self"
+       + "(if:type, 'bbf-xponift:channel-pair')";
+    description
+      "Augment interface state data with xPON channel pair
+       state data.";
+    container channel-pair {
+      description
+        "Channel pair state data for all xPON variants
+         (NG-PON2, XGS-PON, XG-PON and G-PON).";
+    }
+  }
+
+  augment '/if:interfaces-state/if:interface' {
+    when "derived-from-or-self"
+       + "(if:type, 'bbf-xponift:channel-termination')";
+    description
+      "Augment interface state data with xPON channel termination
+       state data.";
+    container channel-termination {
+      description
+        "Channel termination state data for all xPON variants
+         (NG-PON2, XGS-PON, XG-PON and G-PON).";
+    }
+  }
+}

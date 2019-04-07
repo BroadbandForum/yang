@@ -1,0 +1,221 @@
+submodule bbf-xpongemtcont-gemport-body {
+  yang-version 1.1;
+  belongs-to bbf-xpongemtcont {
+    prefix bbf-xpongemtcont;
+  }
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  include bbf-xpongemtcont-base;
+  include bbf-xpongemtcont-tcont-body;
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Fiber Access Networks Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     Editor:      Samuel Chen, Broadcom
+
+     Editor:      Robert Peschi, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Lin Wei, Huawei";
+  description
+    "This submodule contains a collection of YANG definitions for
+     managing Gigabit-capable passive optical network Encapsulation
+     Method (GEM) ports.
+
+     Copyright (c) 2018, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385; see
+     the TR itself for full legal notices.";
+
+  revision 2019-02-25 {
+    description
+      "Initial revision.
+       * Approval Date:    2019-02-25.
+       * Publication Date: 2019-02-25.";
+    reference
+      "TR-385: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385.pdf>";
+  }
+
+  feature configurable-gemport-id {
+    description
+      "Indicates support for configuration of the GEM port ID.";
+  }
+
+  augment '/bbf-xpongemtcont:xpongemtcont' {
+    description
+      "Augment the xPON GEM port and T-CONT configuration with
+       GEM port specific configuration.";
+    container gemports {
+      description
+        "GEM port configuration data.";
+      uses gemports-config-data;
+    }
+  }
+
+  augment '/bbf-xpongemtcont:xpongemtcont-state' {
+    description
+      "Augment the xPON GEM port and T-CONT state data with
+       GEM port specific state data.";
+    container gemports {
+      config false;
+      description
+        "GEM port state data.";
+      uses gemports-state-data;
+    }
+  }
+
+  grouping gemports-config-data {
+    description
+      "The config data for all GEM ports.";
+    list gemport {
+      key "name";
+      description
+        "List of GEM ports.";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "Name of GEM port.";
+      }
+      leaf gemport-id {
+        if-feature "configurable-gemport-id";
+        type uint32;
+        description
+          "ID of GEM port. When configured this is the value which
+           must actually be used between the OLT device and ONU
+           device for this GEM port. For G-PON the value should
+           be in [0..4095] and not conflicting with the
+           management-gemport-id, for XG-PON it should be
+           in [1023..65534] and for XGS-PON and NG-PON2 it should
+           be in [1021..65534].";
+        reference
+          "ITU-T G.984.3 clause 5.5.5
+           ITU-T G.987.3 clause 6.4.4
+           ITU-T G.9807.1 clause C.6.1.5.8
+           ITU-T G.989.3 clause 6.1.5.8";
+      }
+      leaf interface {
+        type if:interface-ref;
+        description
+          "Points to an interface.";
+      }
+      leaf traffic-class {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "Traffic Class value.";
+      }
+      leaf downstream-aes-indicator {
+        type boolean;
+        default "false";
+        description
+          "Used to designate whether AES should be enabled/disabled
+           for this GEM port for the downstream direction.";
+        reference
+          "ITU-T G.9807.1 clause C.15.5.1
+           ITU-T G.989.3 clause 15.5.1";
+      }
+      leaf upstream-aes-indicator {
+        type boolean;
+        default "false";
+        description
+          "Used to designate whether AES should be enabled/disabled
+           for this GEM port for the upstream direction.";
+        reference
+          "ITU-T G.9807.1 clause C.15.5.1
+           ITU-T G.989.3 clause 15.5.1";
+      }
+      leaf tcont-ref {
+        type leafref {
+          path '/bbf-xpongemtcont:xpongemtcont/bbf-xpongemtcont:'
+             + 'tconts/bbf-xpongemtcont:tcont/bbf-xpongemtcont:'
+             + 'name';
+        }
+        description
+          "For the purpose of upstream scheduling in the ONU, a
+           GEM port needs to refer to the T-CONT into which it feeds
+           upstream traffic.";
+      }
+    }
+  }
+
+  grouping gemports-state-data {
+    description
+      "The state data for all GEM ports.";
+    list gemport {
+      key "name";
+      description
+        "List of GEM ports.";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "Name of GEM port.";
+      }
+      leaf actual-gemport-id {
+        type uint32;
+        mandatory true;
+        description
+          "TC layer ID of the GEM port. This is the value which is
+           actually used between the OLT device and ONU device
+           for this GEM port.";
+        reference
+          "ITU-T G.984.3 clause 5.5.5
+           ITU-T G.987.3 clause 6.4.4
+           ITU-T G.9807.1 clause C.6.1.5.8
+           ITU-T G.989.3 clause 6.1.5.8";
+      }
+    }
+  }
+}

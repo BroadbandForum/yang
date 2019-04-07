@@ -1,0 +1,182 @@
+submodule bbf-xpon-channel-partition-body {
+  yang-version 1.1;
+  belongs-to bbf-xpon {
+    prefix bbf-xpon;
+  }
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import bbf-xpon-if-type {
+    prefix bbf-xponift;
+  }
+  import bbf-xpon-types {
+    prefix bbf-xpon-types;
+  }
+  include bbf-xpon-base;
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Fiber Access Networks Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     Editor:      Samuel Chen, Broadcom
+
+     Editor:      Robert Peschi, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Lin Wei, Huawei";
+  description
+    "This submodule contains a collection of YANG definitions for
+     managing channel partitions.
+
+     Copyright (c) 2018, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385; see
+     the TR itself for full legal notices.";
+
+  revision 2019-02-25 {
+    description
+      "Initial revision.
+       * Approval Date:    2019-02-25.
+       * Publication Date: 2019-02-25.";
+    reference
+      "TR-385: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385.pdf>";
+  }
+
+  grouping channel-partition-config-data {
+    description
+      "All config data for a channel partition";
+    leaf channel-group-ref {
+      type if:interface-ref;
+      must "derived-from-or-self(/if:interfaces"
+         + "/if:interface[if:name=current()]/if:type,"
+         + "'bbf-xponift:channel-group')" {
+        error-message
+          "Must reference a channel group.";
+      }
+      mandatory true;
+      description
+        "Reference to a channel group.";
+    }
+    leaf channel-partition-index {
+      type uint8 {
+        range "0..15";
+      }
+      description
+        "This attribute identifies the partition inside the
+         channel group.";
+      reference
+        "ITU-T G.989.3 clause 6.1.5.9 and clause 11.3.3.14.";
+    }
+    leaf downstream-fec {
+      type boolean;
+      default "true";
+      description
+        "Enable/Disable downstream FEC.
+         Note that downstream FEC is always enabled for XG-PON and
+         XGS-PON and thus a value of 'false' is ignored.";
+      reference
+        "ITU-T G.984.3 clause 13.1.2.1
+         ITU-T G.987.3 clause 10.1
+         ITU-T G.9807.1 clause C.10.1.1.1.3
+         ITU-T G.989.3 clause 10.1.1.1.3";
+    }
+    leaf closest-onu-distance {
+      type uint16 {
+        range "0..40";
+      }
+      units "km";
+      default "0";
+      description
+        "Establishes the distance of the closest ONU.
+         Used to determine how to equalize delay
+         between the ONUs.";
+    }
+    leaf maximum-differential-xpon-distance {
+      type uint16 {
+        range "20 | 40";
+      }
+      units "km";
+      default "20";
+      description
+        "This attribute provides the ability to set the maximum
+         differential logical reach for a channel partition.";
+      reference
+        "ITU-T G.989.1 clause 8.2
+         ITU-T G.989.3 clause 13.1.";
+    }
+    leaf authentication-method {
+      type bbf-xpon-types:auth-method-type;
+      default "serial-number";
+      description
+        "ONU Authentication mode option for this
+         channel partition.";
+      reference
+        "ITU-T G.984.3, section VI.1.";
+    }
+    leaf multicast-aes-indicator {
+      type boolean;
+      default "false";
+      description
+        "Used to designate whether AES should be
+         enabled/disabled for multicast GEM ports.";
+      reference
+        "ITU-T G.984.3, section 12.2. and 9.2.3.8
+         ITU-T G.987.3, section 15.5.1 and 15.5.4
+         ITU-T G.9807.1, section C.15.5.1 and C.15.5.4
+         ITU-T G.989.3, section 15.5.1 and 5.5.4.";
+    }
+  }
+
+  augment '/if:interfaces/if:interface/bbf-xpon:channel-partition' {
+    description
+      "Configuration of an xPON channel partition.";
+    uses channel-partition-config-data;
+  }
+}

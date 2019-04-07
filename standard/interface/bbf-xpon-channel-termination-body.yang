@@ -1,0 +1,285 @@
+submodule bbf-xpon-channel-termination-body {
+  yang-version 1.1;
+  belongs-to bbf-xpon {
+    prefix bbf-xpon;
+  }
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import bbf-xpon-types {
+    prefix bbf-xpon-types;
+  }
+  import bbf-xpon-if-type {
+    prefix bbf-xponift;
+  }
+  include bbf-xpon-base;
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Fiber Access Networks Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     Editor:      Samuel Chen, Broadcom
+
+     Editor:      Robert Peschi, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Lin Wei, Huawei";
+  description
+    "This submodule contains a collection of YANG definitions for
+     managing channel terminations.
+
+     Copyright (c) 2018, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385; see
+     the TR itself for full legal notices.";
+
+  revision 2019-02-25 {
+    description
+      "Initial revision.
+       * Approval Date:    2019-02-25.
+       * Publication Date: 2019-02-25.";
+    reference
+      "TR-385: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385.pdf>";
+  }
+
+  grouping channel-termination-config-data {
+    description
+      "All configuration data for a channel termination.";
+    leaf channel-pair-ref {
+      type if:interface-ref;
+      must "derived-from-or-self(/if:interfaces"
+         + "/if:interface[if:name=current()]/if:type,"
+         + "'bbf-xponift:channel-pair') and "
+         + "/if:interfaces/if:interface[if:name=current()]/"
+         + "bbf-xpon:channel-pair/bbf-xpon:channel-pair-type = "
+         + "../bbf-xpon:channel-termination-type" {
+        error-message
+          "Must reference a channel pair with the same xPON type as 
+           the channel termination.";
+      }
+      description
+        "Reference to a channel pair.";
+    }
+    leaf channel-termination-type {
+      type identityref {
+        base bbf-xpon-types:channel-pair-type-base;
+      }
+      mandatory true;
+      description
+        "Represents the type of channel termination (e.g.
+         TWDM NG-PON2, PtP NG-PON2, XGS-PON, XG-PON, G-PON).";
+    }
+    leaf meant-for-type-b-primary-role {
+      type boolean;
+      description
+        "When true, the channel termination is meant to play type B
+         protection Primary role when it refers to a channel pair.
+         When false, the channel termination is meant to play
+         type B protection Secondary role when it refers to a
+         channel pair.";
+      reference
+        "ITU-T G.898.3 Amendment 1 (11/2016), section 18.1.";
+    }
+    leaf ngpon2-twdm-admin-label {
+      when "derived-from-or-self"
+         + "(../bbf-xpon:channel-termination-type,"
+         + "'bbf-xpon-types:ngpon2-twdm')";
+      type uint32 {
+        range "0..268435455" {
+          description
+            "0 to 2^28-1.";
+        }
+      }
+      description
+        "For TWDM NG-PON2, the admin-label is configurable and is
+         28 bits long. It is the configurable part of the PON-ID
+         which is available as state data.";
+      reference
+        "ITU-T G.989.3 section 6.1.5.3";
+    }
+    leaf ngpon2-ptp-admin-label {
+      when "derived-from-or-self"
+         + "(../bbf-xpon:channel-termination-type,"
+         + "'bbf-xpon-types:ngpon2-ptp')";
+      type uint32 {
+        range "0..4194303" {
+          description
+            "0 to 2^22-1.";
+        }
+      }
+      description
+        "For PtP NG-PON2, the admin-label is configurable and is
+         22 bits long. It is the configurable part of the PON-ID
+         which is available as state data.";
+      reference
+        "ITU-T G.989.3 section 6.1.5.3";
+    }
+    leaf xgs-pon-id {
+      when "derived-from-or-self"
+         + "(../bbf-xpon:channel-termination-type,"
+         + "'bbf-xpon-types:xgs')";
+      type uint32;
+      description
+        "For XGS-PON, the PON-ID is entirely configurable and is
+         32 bits long. The PON-ID is also available as state
+         data.";
+      reference
+        "ITU-T G.9807.1 section C.10.1.1.1.3";
+    }
+    leaf xgpon-pon-id {
+      when "derived-from-or-self"
+         + "(../bbf-xpon:channel-termination-type,"
+         + "'bbf-xpon-types:xgpon')";
+      type uint32;
+      description
+        "For XG-PON, the PON-ID is entirely configurable and is
+         32 bits long. The PON-ID is also available as state
+         data.";
+      reference
+        "ITU-T G.987.3 section E.2";
+    }
+    leaf gpon-pon-id {
+      when "derived-from-or-self"
+         + "(../bbf-xpon:channel-termination-type,"
+         + "'bbf-xpon-types:gpon')";
+      type bbf-xpon-types:string-hex14;
+      description
+        "For G-PON, the PON-ID is entirely configurable with
+         any binary value over 7 bytes. The PON-ID is also
+         available as state data.";
+      reference
+        "ITU-T G.984.3 section C.2.2";
+    }
+    leaf pon-tag {
+      when "not(derived-from-or-self"
+         + "(../bbf-xpon:channel-termination-type,"
+         + "'bbf-xpon-types:gpon'))";
+      type string {
+        pattern '[0-9a-fA-F]{16}';
+      }
+      description
+        "8 bytes. Each octet is represented by two hex values.
+         Used to specify channel-pair-TAG attribute in NG-PON2,
+         XGS-PON and XG-PON downstream PLOAM messages.
+         The PON-TAG is not relevant for G-PON.";
+    }
+    leaf ber-calc-period {
+      type uint32 {
+        range "1..864000";
+      }
+      units "0.1s";
+      default "10";
+      description
+        "Measurement period used to determine if an SDi alarm
+         has occurred for an ONU.";
+      reference
+        "ITU-T G.984.3 section 11.1.3";
+    }
+    leaf location {
+      type identityref {
+        base bbf-xpon-types:location-base;
+      }
+      description
+        "Indicates whether the CT is physically inside the OLT i.e.
+         can be related to a port in the OLT hardware model or
+         physically part of another OLT.";
+    }
+  }
+
+  grouping channel-termination-oper-data {
+    description
+      "All oper data for a channel termination";
+    leaf pon-id-display {
+      type bbf-xpon-types:pon-id-display-type;
+      description
+        "The PON-ID of the channel termination.
+         Per ITU-T G.989.3, ITU-T G.9807.1, ITU-T G.987.3 and
+         ITU-T G.984.3, depending of the xPON type some part
+         of this object is configured by the operator and the
+         other part is genuine operational data determined by
+         the system.";
+    }
+    leaf type-b-state {
+      type identityref {
+        base bbf-xpon-types:type-b-state-base;
+      }
+      description
+        "The type B protection state of the CT; it will typically
+         be active/standby. When the channel termination is not yet
+         referring to a channel pair, it is not part of any type B
+         protection scheme (and not usable either, btw); in that
+         case its type-b-state has the value 'not-part-of-type-b.";
+      reference
+        "ITU-T G.989.3 Amendment 1 clause 18.2";
+    }
+    leaf location {
+      type identityref {
+        base bbf-xpon-types:location-base;
+      }
+      description
+        "Indicates whether the CT is physically inside the OLT i.e.
+         can be related to a port in the OLT hardware model or
+         physically part of another OLT.";
+    }
+  }
+
+  augment '/if:interfaces/if:interface/bbf-xpon:channel-termination' {
+    description
+      "Configuration of an xPON channel termination.";
+    uses channel-termination-config-data;
+  }
+
+  augment '/if:interfaces-state/if:interface/bbf-xpon:channel-'
+        + 'termination' {
+    description
+      "State data of an xPON channel termination.";
+    uses channel-termination-oper-data;
+  }
+}

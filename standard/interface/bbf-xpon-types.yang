@@ -1,0 +1,421 @@
+module bbf-xpon-types {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-xpon-types";
+  prefix bbf-xpon-types;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Fiber Access Networks Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     Editor:      Samuel Chen, Broadcom
+
+     Editor:      Robert Peschi, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Lin Wei, Huawei";
+  description
+    "This module contains a collection of YANG definitions which
+     defines common types used in the xPON YANG models.
+
+     Copyright (c) 2018, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385; see
+     the TR itself for full legal notices.";
+
+  revision 2019-02-25 {
+    description
+      "Initial revision.
+       * Approval Date:    2019-02-25.
+       * Publication Date: 2019-02-25.";
+    reference
+      "TR-385: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385.pdf>";
+  }
+
+  identity type-b-state-base {
+    description
+      "This identity is used as the base for possible
+       channel-terminations states for type B protection.";
+  }
+
+  identity active {
+    base type-b-state-base;
+    description
+      "This identity is used to denote active state in type B
+       protection.";
+  }
+
+  identity standby {
+    base type-b-state-base;
+    description
+      "This identity is used to denote standby state in type B
+       protection.";
+  }
+
+  identity not-part-of-type-b {
+    base type-b-state-base;
+    description
+      "This identity is used to denote that the object is not part
+       of a type B protection scheme. This is for instance the
+       case when a channel-termination does not (yet) refer
+       to a channel-pair.";
+  }
+
+  identity location-base {
+    description
+      "This identity is used as the possible locations of an
+       object.";
+  }
+
+  identity inside-olt {
+    base location-base;
+    description
+      "This identity is used to denote a location physically inside
+       the OLT chassis.";
+  }
+
+  identity outside-olt {
+    base location-base;
+    description
+      "This identity is used to denote a location physically outside
+       the OLT chassis.";
+  }
+
+  identity channel-pair-type-base {
+    description
+      "This identity is used to qualify the possible types of a
+       channel-pair.";
+  }
+
+  identity ngpon2-twdm {
+    base channel-pair-type-base;
+    description
+      "This identity is used to denote a TWDM NG-PON2 channel-pair,
+       per ITU-T G.989.3.";
+  }
+
+  identity ngpon2-ptp {
+    base channel-pair-type-base;
+    description
+      "This identity is used to denote a PtP NG-PON2 channel-pair, per
+       ITU-T G.989.3.";
+  }
+
+  identity xgs {
+    base channel-pair-type-base;
+    description
+      "This identity is used to denote an XGS-PON channel-pair,
+       per ITU-T G.9807.1.";
+  }
+
+  identity xgpon {
+    base channel-pair-type-base;
+    description
+      "This identity is used to denote an XG-PON channel-pair,
+       per ITU-T G.987.3.";
+  }
+
+  identity gpon {
+    base channel-pair-type-base;
+    description
+      "This identity is used to denote an G-PON channel-pair,
+       per ITU-T G.984.3.";
+  }
+
+  identity channel-pair-line-rate-profile-base {
+    description
+      "This identity is used to define the possible combinations
+       of downstream and upstream line-rates for an NG-PON2
+       channel-pair.";
+  }
+
+  identity unplanned-cp-line-rate {
+    base channel-pair-line-rate-profile-base;
+    description
+      "This identity is used to denote an NG-PON2 channel-pair with
+       yet undefined downstream and upstream line rates.";
+  }
+
+  identity down-10-up-10 {
+    base channel-pair-line-rate-profile-base;
+    description
+      "This identity is used to denote an NG-PON2 channel-pair with
+       downstream 10Gbps and upstream 10Gbps line rates.";
+  }
+
+  identity down-10-up-2.5 {
+    base channel-pair-line-rate-profile-base;
+    description
+      "This identity is used to denote an NG-PON2 channel-pair with
+       downstream 10Gbps and upstream 2.5Gbps line rates.";
+  }
+
+  identity down-2.5-up-2.5 {
+    base channel-pair-line-rate-profile-base;
+    description
+      "This identity is used to denote an NG-PON2 channel-pair with
+       downstream 2.5Gbps and upstream 2.5Gbps line rates.";
+  }
+
+  identity tcp-connection-state-base {
+    description
+      "This identity is used to denote the possible states of
+       a TCP connection.";
+  }
+
+  identity established {
+    base tcp-connection-state-base;
+    description
+      "This identity is used to reflect that the TCP connection is
+       established.";
+  }
+
+  identity not-established {
+    base tcp-connection-state-base;
+    description
+      "This identity is used to reflect that the TCP connection is
+       not established.";
+  }
+
+  identity unknown {
+    base tcp-connection-state-base;
+    description
+      "This identity is used to reflect that the TCP connection state
+       is not known.";
+  }
+
+  identity action-request-status {
+    description
+      "This identity is used to denote the status following the
+       reception of a YANG action.";
+  }
+
+  identity request-being-processed {
+    base action-request-status;
+    description
+      "This identity is used to denote that the OLT has received
+       the action request and is handling it.";
+  }
+
+  identity request-rejected {
+    base action-request-status;
+    description
+      "This identity is used to denote that the OLT has rejected
+       the action request and will not perform anything further
+       about it.";
+  }
+
+  typedef string-hex14 {
+    type string {
+      pattern '[a-fA-F0-9]{14}';
+    }
+    description
+      "A string representing 7 hexadecimal octets expressed in
+       ASCII.";
+  }
+
+  typedef pon-id-display-type {
+    type union {
+      type uint32;
+      type string-hex14;
+    }
+    description
+      "A type meant for the different formats of the PON-ID for the
+       various channel-pair types. The 'unint' is meant for NG-PON2,
+       XGS-PON and XG-PON and the 'string7only' is meant for G-PON.";
+  }
+
+  typedef composite-channel-id-type {
+    type union {
+      type uint8 {
+        range "0..7";
+      }
+      type enumeration {
+        enum "xgs" {
+          description
+            "To be used in case of XGS-PON, rather than 0.";
+        }
+      }
+    }
+    description
+      "A composite type strictly meant for leaves reflecting the
+       already allocated downstream or upstream channel-id on a
+       channel-group.
+       Such leaves are used to prevent conflicts when allocating
+       a channel-pair to a channel-group. For NG-PON2, the applicable
+       values are in [0..7], for XGS-PON a dedicated value 'xgs'
+       is used rather than '0' to prevent ambiguity between this and
+       the valid value '0' for NG-PON2.";
+  }
+
+  typedef composite-downstream-wavelength-type {
+    type union {
+      type uint32 {
+        range "0 | 156000..161000";
+      }
+      type enumeration {
+        enum "xgs" {
+          description
+            "To be used in case of XGS-PON.";
+        }
+        enum "xgpon" {
+          description
+            "To be used in case of XG-PON.";
+        }
+        enum "gpon" {
+          description
+            "To be used in case of G-PON.";
+        }
+      }
+    }
+    description
+      "A composite type strictly meant for leaves reflecting the
+       already allocated downstream or upstream channel-id on a
+       channel-group.
+       Such leaves are used to prevent conflicts when allocating a
+       channel-pair to a channel-group. For NG-PON2, the applicable
+       values are in [0..8], for XGS-PON a dedicated value 'xgs'
+       is applicable rather than value '0': this is not to a priori
+       forbid in yang model the coexistence of XGS-PON with NG-PON2
+       using channel-id=0.";
+  }
+
+  typedef auth-method-type {
+    type enumeration {
+      enum "serial-number" {
+        description
+          "Authentication based on ONU serial number.";
+        reference
+          "ITU-T G.984.3 clause VI.1";
+      }
+      enum "loid" {
+        description
+          "Authentication based on the Logical ONU ID (LOID).";
+        reference
+          "ITU-T G.988 clause 9.1.1";
+      }
+      enum "registration-id" {
+        description
+          "Authentication based on ONU registration ID.";
+        reference
+          "ITU-T G.984.3 clause VI.2";
+      }
+      enum "omci" {
+        description
+          "Authentication by use of the enhanced security control
+           managed entity (ME) over OMCI.";
+        reference
+          "ITU-T G.987.3 Annex C";
+      }
+      enum "dot1x" {
+        description
+          "Authentication according to IEEE 802.1x.";
+        reference
+          "ITU-T G.987.3 Annex D";
+      }
+    }
+    description
+      "Method for authenticating an ONU.";
+  }
+
+  typedef raman-mitigation-type {
+    type enumeration {
+      enum "raman-none" {
+        description
+          "No Raman mitigation is performed.";
+      }
+      enum "raman-8b10b" {
+        description
+          "For Raman mitigation, the 8B10B sublayer is introduced
+           between the downstream NG-PON2 physical interface (PHY)
+           adaptation interface and the optical interface.";
+        reference
+          "ITU-T G.989.2 clause IX.1";
+      }
+      enum "raman-miller" {
+        description
+          "For Raman mitigation, Miller code is used.";
+        reference
+          "ITU-T G.989.2 clause IX.2";
+      }
+    }
+    description
+      "NG-PON2 Raman mitigation coding schemes when using RF video
+       overlay.";
+    reference
+      "ITU-T G.989.2 Appendix IX";
+  }
+
+  typedef ip-address-or-unresolved {
+    type union {
+      type inet:ip-address;
+      type enumeration {
+        enum "unresolved" {
+          description
+            "To be used when the URL cannot be resolved into an
+             IP address.";
+        }
+      }
+    }
+    description
+      "A type meant for a leaf which is either an IP address or
+       reflects that no IP address is available.";
+  }
+
+  typedef onu-id {
+    type uint32 {
+      range "0..1020";
+    }
+    description
+      "A type meant for ONU-IDs.";
+  }
+}

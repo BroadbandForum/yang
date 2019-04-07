@@ -1,0 +1,196 @@
+module bbf-xpon-if-type {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-xpon-if-type";
+  prefix bbf-xponift;
+
+  import bbf-if-type {
+    prefix bbfift;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Fiber Access Networks Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     Editor:      Samuel Chen, Broadcom
+
+     Editor:      Robert Peschi, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Lin Wei, Huawei";
+  description
+    "This module contains a collection of YANG definitions which
+     defines xPON interface types that are needed for BBF applications
+     but are not defined in iana-if-type.
+
+     Copyright (c) 2018, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385; see
+     the TR itself for full legal notices.";
+
+  revision 2019-02-25 {
+    description
+      "Initial revision.
+       * Approval Date:    2019-02-25.
+       * Publication Date: 2019-02-25.";
+    reference
+      "TR-385: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385.pdf>";
+  }
+
+  identity bbf-xpon-interface-type {
+    base bbfift:bbf-interface-type;
+    description
+      "This identity is used as a base for all xPON interface types
+       defined by the BBF that are not in the 'ifType definitions'
+       registry maintained by IANA.";
+  }
+
+  identity channel-group {
+    base bbf-xpon-interface-type;
+    description
+      "A set of channel-pairs carried over a common fiber.";
+  }
+
+  identity channel-partition {
+    base bbf-xpon-interface-type;
+    description
+      "Any of the operator-specified non-overlapping subsets of TWDM
+       or PtP WDM channels in an NG-PON2 system.";
+  }
+
+  identity channel-pair {
+    base bbf-xpon-interface-type;
+    description
+      "A set of one downstream wavelength channel and one upstream
+       wavelength channel that provides connectivity between an OLT
+       and one or more ONUs.";
+  }
+
+  identity channel-termination {
+    base bbf-xpon-interface-type;
+    description
+      "A logical function that resides at the OLT network element and
+       terminates a single PtP WDM channel in a PtP WDM system or a
+       single TWDM channel in a TWDM system.";
+  }
+
+  identity ani {
+    base bbf-xpon-interface-type;
+    description
+      "The Access Network Interface located on the ONU.";
+  }
+
+  identity v-ani {
+    base bbf-xpon-interface-type;
+    description
+      "A virtual representation of the 'ani' on the OLT.";
+  }
+
+  identity onu-v-enet {
+    base bbf-xpon-interface-type;
+    base bbfift:ethernet-like;
+    description
+      "Base type for onu-v-enet interfaces. The ONU-vENET
+       interfaces are virtual interfaces which carry ethernet
+       frames, which belong to the ONU and which are facing
+       the xPON side of the ONU i.e. facing the OLT.
+
+       ONU-vENET are virtual interfaces in the sense that they
+       do not directly refer to a physical port of an ONU.
+       Instead, ONU-vENET interfaces have the ANI interface of
+       the ONU as underlying interface. ONU-vENET are NOT
+       facing the user side of the ONU.
+
+       An ONU-vENET can be used as the xPON side Ehernet
+       aggregation interface of an ONU which performs Ethernet
+       traffic aggregation from several user-facing interfaces.";
+  }
+
+  identity olt-v-enet {
+    base bbf-xpon-interface-type;
+    base bbfift:ethernet-like;
+    description
+      "Base type for olt-v-enet interfaces. The OLT-vENET
+       interfaces are virtual interfaces which carry ethernet
+       frames, which belong to the OLT and which are facing
+       the xPON side of the OLT i.e. facing the ONU.
+
+       OLT-vENET are virtual interfaces in the sense that they
+       do not directly refer to a physical port of an OLT.
+       Instead, OLT-vENET interfaces have the v-ANI interface
+       corresponding to a specific ONU as underlying interface.
+       In the general case, an OLT-vENET 1-1 corresponds to a
+       counter-part ONU-vENET interface on the ONU.
+
+       In the specific case of a TR-156 deployment scheme,
+       there is typically no need for the ONU to instanciate
+       ONU-vENET interfaces for subscriber traffic: in that
+       case OLT-vENET interfaces can directly 1-1 correspond
+       to individual user facing interface of the ONU, being
+       physical (per TR-156) or virtual (per TR-167).";
+  }
+
+  identity onu-v-vrefpoint {
+    base bbf-xpon-interface-type;
+    base bbfift:ethernet-like;
+    description
+      "Base type for ONU-vUNI interfaces. The ONU-vUNI
+       interface is a virtual interface which carry ethernet
+       frames, which belong to the ONU and which is facing
+       the user.
+
+       It is intended for use as ONU 'Virtual V reference point'
+       defined in TR-167 (ref TR-167, Section 4 and 4.1).
+       ONU-vUNI are virtual interfaces in the sense that they
+       do not refer to a physical port of an ONU.
+
+       ONU-vUNI are virtual equivalents of the physical
+       interfaces at the ONU U reference point defined in
+       TR-156 (ref. TR-156, Section 4).";
+  }
+}

@@ -1,0 +1,235 @@
+submodule bbf-xponani-ani-body {
+  yang-version 1.1;
+  belongs-to bbf-xponani {
+    prefix bbf-xponani;
+  }
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import bbf-xpon-types {
+    prefix bbf-xpon-types;
+  }
+  include bbf-xponani-base;
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Fiber Access Networks Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     Editor:      Samuel Chen, Broadcom
+
+     Editor:      Robert Peschi, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Lin Wei, Huawei";
+  description
+    "This submodule contains data related to the actual ONU devices.
+     Each ONU device is 1-1 associated to its unique ANI interface.
+
+     Copyright (c) 2018, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385; see
+     the TR itself for full legal notices.";
+
+  revision 2019-02-25 {
+    description
+      "Initial revision.
+       * Approval Date:    2019-02-25.
+       * Publication Date: 2019-02-25.";
+    reference
+      "TR-385: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385.pdf>";
+  }
+
+  feature configurable-ani-onu-id {
+    description
+      "Indicates support for configuration of the ONU ID associated
+       with the ANI.";
+  }
+
+  feature configurable-ani-management-gem-port-id {
+    description
+      "Indicates support for configuration of the management
+       GEM port.";
+  }
+
+  grouping ani-config-data {
+    description
+      "Config data intended for the ONU physical device.
+       This data is brought to the ONU, when present, for instance
+       via the PLOAM channel or using OMCI on the Management GEM
+       port.";
+    leaf upstream-fec {
+      type boolean;
+      default "false";
+      description
+        "Used to Enable/Disable use of FEC in Upstream
+         direction for this specific ONU.";
+      reference
+        "ITU-T G.984.3 clause 13.3.1.1
+         ITU-T G.987.3 clause 10.2
+         ITU-T G.9807.1 clause C.10.1.3.2.4
+         ITU-T G.989.3 clause 10.1.3.2.4";
+    }
+    leaf management-gemport-aes-indicator {
+      type boolean;
+      default "false";
+      description
+        "Used to designate whether Advanced Encryption Standard
+         (AES) should be enabled/disabled for the management
+         GEM port of this ONU. This leaf applies for both the
+         upstream and downstream direction altogether.";
+      reference
+        "ITU-T G.9807.1 clause C.15.5.1 and ITU-T G.989.3
+         clause 15.5.1.";
+    }
+    leaf onu-id {
+      if-feature "configurable-ani-onu-id";
+      type bbf-xpon-types:onu-id;
+      description
+        "This is the TC layer ONU-ID identifier. When
+         configured this is the value which the OLT must assign
+         to the ONU during the ONU's activation using the
+         Assign_ONU-ID PLOAM message. For G-PON the value should
+         be in [0..253], for XG-PON it should be in [0..1022] and
+         for XGS-PON and NG-PON2 it should be in [0..1020].";
+      reference
+        "ITU-T G.984.3 clause 5.5.2
+         ITU-T G.987.3 clause 6.4.2
+         ITU-T G.9807.1 clause C.6.1.5.6
+         ITU-T G.989.3 clause 6.1.5.6";
+    }
+    leaf management-gemport-id {
+      if-feature "configurable-ani-management-gem-port-id";
+      type uint32;
+      description
+        "This leaf is only relevant to GPON ONUs; it is ignored
+         for non-GPON ONUs.
+         In contrast with other xPON technologies, in the case of
+         G-PON, there is no requirement that the ITU-T TC Id of
+         the management GEM port for the ONU is numerically equal
+         to the ONU-ID. This leaf provides the capability to
+         specify a specific value to the management GEM port ID.
+         If this leaf is not configured the management GEM port
+         ID must be numerically equal to the ONU-ID.";
+      reference
+        "Refer to 'OMCC Port-ID' in
+         ITU-T G.987.3, clause 6.1.5.8
+         ITU-T G.9807.1 clause C.6.1.5.8
+         ITU-T G.987.3 clause 6.4.4
+         ITU-T G.984.3 clause 5.5.5";
+    }
+  }
+
+  grouping ani-state-data {
+    description
+      "State data from the ONU physical device.
+       This data is fetched from the ONU physical device, when
+       present, for instance via the PLOAM channel or using OMCI
+       on the Management GEM port.";
+    leaf onu-id {
+      type bbf-xpon-types:onu-id;
+      description
+        "This is the TC layer ONU-ID identifier which the OLT
+         has assigned to the ONU during the ONU's activation using
+         the Assign_ONU-ID PLOAM message.";
+      reference
+        "ITU-T G.984.3 clause 5.5.2
+         ITU-T G.987.3 clause 6.4.2
+         ITU-T G.9807.1 clause C.6.1.5.6
+         ITU-T G.989.3 clause 6.1.5.6";
+    }
+    leaf channel-partition-id {
+      type uint8;
+      description
+        "An index of the operator-specified channel
+         subset in a NG-PON2 system.  During operation,
+         the ONUs can be re-tuned between the channels within
+         a channel partition, but not across the boundaries
+         of the channel partition.";
+    }
+    leaf management-tcont-alloc-id {
+      type uint32;
+      description
+        "The ITU-T TC Alloc-ID of the management T-CONT for the ONU.
+         It has the same numerical value as the ITU-T TC ONU-ID.";
+      reference
+        "Refer to 'Default Alloc-ID' in
+         ITU-T G.987.3, clause 6.1.5.7
+         ITU-T G.9807.1, clause C.6.1.5.7
+         ITU-T G.987.3, clause 6.4.3
+         ITU-T G.984.3, clause 5.5.3";
+    }
+    leaf management-gemport-id {
+      type uint32;
+      description
+        "The ITU-T TC Id of the management GEM port for the ONU.
+         For NG-PON2, XGS-PON and XG-PON, it has the same numerical
+         value as the ITU-T TC ONU-ID. For G-PON, its value is
+         not necessarily numerically equal to the ONU-ID.";
+      reference
+        "Reefer to 'OMCC Port-ID' in
+         ITU-T G.987.3, clause 6.1.5.8
+         ITU-T G.9807.1, clause C.6.1.5.8
+         ITU-T G.987.3, clause 6.4.4
+         ITU-T G.984.3, clause 5.5.5";
+    }
+  }
+
+  augment '/if:interfaces/if:interface/bbf-xponani:ani' {
+    description
+      "Configuration of an xPON ANI, i.e. an ONU device itself.";
+    uses ani-config-data;
+  }
+
+  augment '/if:interfaces-state/if:interface/bbf-xponani:ani' {
+    description
+      "State data of an xPON ANI, i.e. an ONU device itself.";
+    uses ani-state-data;
+  }
+}

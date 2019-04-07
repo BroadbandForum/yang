@@ -1,0 +1,236 @@
+submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
+  yang-version 1.1;
+  belongs-to bbf-xpongemtcont {
+    prefix bbf-xpongemtcont;
+  }
+
+  include bbf-xpongemtcont-base;
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Fiber Access Networks Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     Editor:      Samuel Chen, Broadcom
+
+     Editor:      Robert Peschi, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Lin Wei, Huawei";
+  description
+    "This submodule contains a collection of YANG definitions for
+     managing traffic descriptor profiles.
+
+     Copyright (c) 2018, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385; see
+     the TR itself for full legal notices.";
+
+  revision 2019-02-25 {
+    description
+      "Initial revision.
+       * Approval Date:    2019-02-25.
+       * Publication Date: 2019-02-25.";
+    reference
+      "TR-385: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385.pdf>";
+  }
+
+  augment '/bbf-xpongemtcont:xpongemtcont' {
+    description
+      "Augment the xPON GEM port and T-CONT configuration with
+       traffic descriptor profile specific configuration.";
+    container traffic-descriptor-profiles {
+      description
+        "Traffic descriptor profile configuration.";
+      uses traffic-descriptor-profile-data;
+    }
+  }
+
+  grouping traffic-descriptor-profile-data {
+    description
+      "All config data for traffic descriptor profile.";
+    reference
+      "ITU-T G.989.3";
+    list traffic-descriptor-profile {
+      key "name";
+      leaf name {
+        type string;
+        description
+          "Traffic descriptor profile name.";
+      }
+      leaf fixed-bandwidth {
+        type uint64;
+        units "bits/second";
+        default "0";
+        description
+          "Represents the reserved portion of the link capacity that
+           is allocated to the given traffic flow, regardless of its
+           traffic demand and the overall traffic load conditions.";
+        reference
+          "ITU-T G.984.3 clause 7.4.4.3";
+      }
+      leaf assured-bandwidth {
+        type uint64;
+        units "bits/second";
+        default "0";
+        description
+          "Represents a portion of the link capacity that is allocated
+           to the given traffic flow as long as the flow has
+           unsatisfied traffic demand, regardless of the overall
+           traffic conditions.";
+        reference
+          "ITU-T G.984.3 clause 7.4.4.3";
+      }
+      leaf maximum-bandwidth {
+        type uint64;
+        units "bits/second";
+        must
+          "(boolean(../fixed-bandwidth) and
+           boolean(../assured-bandwidth) and
+           (. >= ../fixed-bandwidth + ../assured-bandwidth))
+           or
+           (boolean(../fixed-bandwidth) and
+           not(boolean(../assured-bandwidth)) and
+           (. >= ../fixed-bandwidth))
+           or
+           (not(boolean(../fixed-bandwidth)) and
+           boolean(../assured-bandwidth) and
+           (. >= ../assured-bandwidth))
+           or
+           (not(boolean(../fixed-bandwidth)) and
+           not(boolean(../assured-bandwidth)))" {
+          error-message
+            "The maximum bandwidth must be greater than or equal to
+             the sum of the configured fixed and assured bandwidth.";
+          description
+            "The maximum bandwidth must be greater than or equal
+             to the sum of any configured fixed and assured
+             bandwidth.";
+        }
+        mandatory true;
+        description
+          "Represents the upper limit on the total bandwidth that can
+           be allocated to the traffic flow under any traffic
+           conditions.";
+        reference
+          "ITU-T G.984.3 clause 7.4.4.3";
+      }
+      leaf priority {
+        type uint8 {
+          range "1..8";
+        }
+        description
+          "Used for scheduling traffic on a T-CONT.";
+        reference
+          "ITU-T G.984.3 clause 7.4.5";
+      }
+      leaf weight {
+        type uint8;
+        description
+          "Used for scheduling traffic on a T-CONT.";
+        reference
+          "ITU-T G.984.3 clause 7.4.5";
+      }
+      leaf additional-bw-eligibility-indicator {
+        type enumeration {
+          enum "non-assured-sharing" {
+            description
+              "The T-CONT is eligible for non-assured bandwidth
+               in addition to the bandwidth described by this
+               traffic descriptor.";
+          }
+          enum "best-effort-sharing" {
+            description
+              "The T-CONT is eligible for best effort bandwidth
+               in addition to the bandwidth described by this
+               traffic descriptor.";
+          }
+          enum "none" {
+            description
+              "The T-CONT is not eligible for any additional
+               bandwidth beyond the bandwidth described by
+               this traffic descriptor.";
+          }
+        }
+        must
+          ". = 'non-assured-sharing' or
+           . = 'best-effort-sharing' or
+           (. = 'none' and
+           ((boolean(../fixed-bandwidth) and
+           boolean(../assured-bandwidth) and
+           (../maximum-bandwidth = ../fixed-bandwidth +
+           ../assured-bandwidth))
+           or
+           (boolean(../fixed-bandwidth) and
+           not(boolean(../assured-bandwidth)) and
+           (../maximum-bandwidth = ../fixed-bandwidth))
+           or
+           (not(boolean(../fixed-bandwidth)) and
+           boolean(../assured-bandwidth) and
+           (../maximum-bandwidth = ../assured-bandwidth))
+           or
+           (not(boolean(../fixed-bandwidth)) and
+           not(boolean(../assured-bandwidth)) and
+           ../maximum-bandwidth = 0)))";
+        description
+          "In case of rate-proportional assignment of
+           additional bandwidth, additional bandwidth
+           eligibility can be provisioned to either value
+           (non-assured-sharing, best-effort-sharing,
+           or none). The additional bandwidth is described as:
+
+           maximum-bandwidth - (fixed-bandwidth + assured-bandwidth)";
+        reference
+          "ITU-T G.984.3 clause 7.4.4.3
+           ITU-T G.989.3 clause 7.3.5";
+      }
+      description
+        "List of traffic descriptor profiles.";
+    }
+  }
+}

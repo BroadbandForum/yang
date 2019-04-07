@@ -1,0 +1,137 @@
+submodule bbf-xponani-v-enet-body {
+  yang-version 1.1;
+  belongs-to bbf-xponani {
+    prefix bbf-xponani;
+  }
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import bbf-xpon-if-type {
+    prefix bbf-xponift;
+  }
+  include bbf-xponani-base;
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Fiber Access Networks Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     Editor:      Samuel Chen, Broadcom
+
+     Editor:      Robert Peschi, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Lin Wei, Huawei";
+  description
+    "This submodule contains data related to virtual Ethernet
+     interfaces belonging to the physical ONU, such as the
+     'onu-v-enet' and the 'onu-v-vrefpoint' interfaces.
+
+     Copyright (c) 2018, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385; see
+     the TR itself for full legal notices.";
+
+  revision 2019-02-25 {
+    description
+      "Initial revision.
+       * Approval Date:    2019-02-25.
+       * Publication Date: 2019-02-25.";
+    reference
+      "TR-385: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385.pdf>";
+  }
+
+  grouping onu-v-enet-config-data {
+    description
+      "Config data intended for the onu-v-enet interface.
+       This data is brought to the ONU physical device, when
+       present, for instance using OMCI on the Management GEM port.";
+    leaf ani {
+      type if:interface-ref;
+      must "derived-from-or-self(/if:interfaces"
+         + "/if:interface[if:name = current()]/if:type,"
+         + "'bbf-xponift:ani')";
+      mandatory true;
+      description
+        "References the ANI which is the lower-layer interface
+         under the ONU-vENET.";
+    }
+  }
+
+  grouping onu-v-vrefpoint-config-data {
+    description
+      "Config data intended for the onu-v-vrefpoint interface,
+       (sometimes also called 'virtual UNI').
+       This data is brought to the ONU physical device, when
+       present, for instance using OMCI on the Management GEM port.";
+    leaf related-onu {
+      type if:interface-ref;
+      must "derived-from-or-self(/if:interfaces"
+         + "/if:interface[if:name = current()]/if:type,"
+         + "'bbf-xponift:ani')";
+      mandatory true;
+      description
+        "References the ONU to which the virtual UNI relates.";
+    }
+  }
+
+  augment '/if:interfaces/if:interface/bbf-xponani:onu-v-enet' {
+    description
+      "Configuration of an xPON ONU virtual ENET interface.";
+    uses onu-v-enet-config-data;
+  }
+
+  augment '/if:interfaces/if:interface/bbf-xponani:onu-v-vrefpoint' {
+    description
+      "Configuration of an xPON ONU virtual V reference point
+       interface per TR-167 (sometimes also called 'virtual UNI' for
+       short.";
+    uses onu-v-vrefpoint-config-data;
+  }
+}
