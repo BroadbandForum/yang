@@ -7,7 +7,6 @@ submodule bbf-fast-retransmission-profile-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,12 +22,11 @@ submodule bbf-fast-retransmission-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing noise margin profiles.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-fast-retransmission-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -98,7 +106,6 @@ submodule bbf-fast-retransmission-profile-body {
        upstream and downstream.";
     reference
       "ITU-T G.997.2 clause 7.2.2.";
-
     leaf maximum-delay {
       type uint32 {
         range "4..64" {
@@ -117,7 +124,6 @@ submodule bbf-fast-retransmission-profile-body {
         "ITU-T G.997.2 clause 7.2.2.1 (DELAYMAX); ITU-T G.9701
          clause 11.4.2.3.";
     }
-
     leaf minimum-inp-against-shine {
       type uint16 {
         range "0..520" {
@@ -129,16 +135,15 @@ submodule bbf-fast-retransmission-profile-body {
       units "1 symbol period";
       default "0";
       description
-        "Defines the minimum impulse noise protection against SHINE
-         (see clause 9.8/G.9701). The G.9701 control parameter
-         INP_min_shine is set to the same value as the minimum
-         impulse noise protection against SHINE (see clause
-         11.4.2.4/G.9701).";
+        "Defines the minimum impulse noise protection against Single
+         High Impulse Noise Event (SHINE) (see clause 9.8/G.9701). The
+         G.9701 control parameter INP_min_shine is set to the same
+         value as the minimum impulse noise protection against SHINE
+         (see clause 11.4.2.4/G.9701).";
       reference
         "ITU-T G.997.2 clause 7.2.2.2 (INPMIN_SHINE); ITU-T G.9701
          clause 11.4.2.4.";
     }
-
     leaf shine-ratio {
       type uint8 {
         range "0..100" {
@@ -152,12 +157,12 @@ submodule bbf-fast-retransmission-profile-body {
         "Defines the SHINEratio that is used in the definition of
          the expected throughput rate (ETR) (see clause 9.8/G.9701).
          The G.9701 control parameter SHINEratio is set to the same
-         value as the SHINE ratio (see clause 11.4.2.5/G.9701).";
+         value as the Single High Impulse Noise Event (SHINE) ratio
+         (see clause 11.4.2.5/G.9701).";
       reference
         "ITU-T G.997.2 clause 7.2.2.3 (SHINERATIO); ITU-T G.9701
          clause 11.4.2.5.";
     }
-
     leaf minimum-inp-against-rein {
       type uint8 {
         range "0..63" {
@@ -168,7 +173,8 @@ submodule bbf-fast-retransmission-profile-body {
       units "1 symbol period";
       default "0";
       description
-        "Defines the minimum impulse noise protection against REIN
+        "Defines the minimum impulse noise protection against
+         Repetitive Electrical Impulse Noise (REIN)
          (see clause 9.8/G.9701). The G.9701 control parameter
          INP_min_rein is set to the same value as the minimum impulse
          noise protection against REIN (see clause
@@ -177,25 +183,24 @@ submodule bbf-fast-retransmission-profile-body {
         "ITU-T G.997.2 clause 7.2.2.4 (INPMIN_REIN); ITU-T G.9701
          clause 11.4.2.6.";
     }
-
     leaf rein-inter-arrival-time {
       type enumeration {
-        enum "hz-100" {
+        enum hz-100 {
           value 0;
           description
             "100 Hz.";
         }
-        enum "hz-120" {
+        enum hz-120 {
           value 1;
           description
             "120 Hz.";
         }
-        enum "hz-300" {
+        enum hz-300 {
           value 2;
           description
             "300 Hz.";
         }
-        enum "hz-360" {
+        enum hz-360 {
           value 3;
           description
             "360 Hz.";
@@ -203,15 +208,14 @@ submodule bbf-fast-retransmission-profile-body {
       }
       default "hz-100";
       description
-        "Defines the REIN inter-arrival time (see clause
-         9.8/G.9701). The G.9701 control parameter iat_rein_flag is
-         set to the same value as the REIN inter-arrival time
-         (see clause 11.4.2.7/G.9701).";
+        "Defines the Repetitive Electrical Impulse Noise (REIN)
+         inter-arrival time (see clause 9.8/G.9701). The G.9701
+         control parameter iat_rein_flag is set to the same value as
+         the REIN inter-arrival time (see clause 11.4.2.7/G.9701).";
       reference
         "ITU-T G.997.2 clause 7.2.2.5 (IAT_REIN); ITU-T G.9701
          clause 11.4.2.7.";
     }
-
     leaf minimum-rfec-nfec-ratio {
       type uint8 {
         range "0..8" {
@@ -235,18 +239,14 @@ submodule bbf-fast-retransmission-profile-body {
   grouping retransmission-profile {
     description
       "Defines the contents of a Retransmission Profile.";
-
     container downstream {
       description
-        "Downstream retransmission parameters";
-
+        "Downstream retransmission parameters.";
       uses retransmission-parameters;
     }
-
     container upstream {
       description
-        "Upstream retransmission parameters";
-
+        "Upstream retransmission parameters.";
       uses retransmission-parameters;
     }
   }

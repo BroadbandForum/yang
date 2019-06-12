@@ -7,20 +7,20 @@ submodule bbf-fast-quality-profiles {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   include bbf-fast-base;
 
   /* Profile bodies */
+
   include bbf-fast-fast-rate-adaptation-profile-body;
   include bbf-fast-noise-margin-profile-body;
   include bbf-fast-fast-retrain-policy-profile-body;
   include bbf-fast-retransmission-profile-body;
   include bbf-fast-vectoring-profile-body;
+  include bbf-fast-impulse-noise-monitoring-profile-body;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -36,12 +36,11 @@ submodule bbf-fast-quality-profiles {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing FAST quality profiles.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +80,19 @@ submodule bbf-fast-quality-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -107,121 +116,118 @@ submodule bbf-fast-quality-profiles {
 
   typedef noise-margin-profile-ref {
     type leafref {
-      path '/bbf-fast:fast/bbf-fast:quality/bbf-fast:noise-margin-'
-         + 'profile/bbf-fast:name';
+      path "/bbf-fast:fast/bbf-fast:quality/bbf-fast:noise-margin-"
+         + "profile/bbf-fast:name";
     }
     description
-      "Used to reference a noise margin profile";
+      "Used to reference a noise margin profile.";
   }
 
   typedef fast-rate-adaptation-profile-ref {
     type leafref {
-      path '/bbf-fast:fast/bbf-fast:quality/bbf-fast:fast-rate-'
-         + 'adaptation-profile/bbf-fast:name';
+      path "/bbf-fast:fast/bbf-fast:quality/bbf-fast:fast-rate-"
+         + "adaptation-profile/bbf-fast:name";
     }
     description
-      "Used to reference a fast rate adaptation profile";
+      "Used to reference a fast rate adaptation profile.";
   }
 
   typedef vectoring-profile-ref {
     type leafref {
-      path '/bbf-fast:fast/bbf-fast:quality/bbf-fast:vectoring-'
-         + 'profile/bbf-fast:name';
+      path "/bbf-fast:fast/bbf-fast:quality/bbf-fast:vectoring-"
+         + "profile/bbf-fast:name";
     }
     description
-      "Used to reference a vectoring profile";
+      "Used to reference a vectoring profile.";
   }
 
   typedef fast-retrain-policy-profile-ref {
     type leafref {
-      path '/bbf-fast:fast/bbf-fast:quality/bbf-fast:fast-retrain-'
-         + 'policy-profile/bbf-fast:name';
+      path "/bbf-fast:fast/bbf-fast:quality/bbf-fast:fast-retrain-"
+         + "policy-profile/bbf-fast:name";
     }
     description
-      "Used to reference a fast retrain policy profile";
+      "Used to reference a fast retrain policy profile.";
   }
 
   typedef retransmission-profile-ref {
     type leafref {
-      path '/bbf-fast:fast/bbf-fast:quality/bbf-fast:'
-         + 'retransmission-profile/bbf-fast:name';
+      path "/bbf-fast:fast/bbf-fast:quality/bbf-fast:"
+         + "retransmission-profile/bbf-fast:name";
     }
     description
-      "Used to reference a retransmission profile";
+      "Used to reference a retransmission profile.";
   }
 
-  augment '/bbf-fast:fast/bbf-fast:quality' {
+  augment "/bbf-fast:fast/bbf-fast:quality" {
     description
       "Data nodes for quality-related configuration profiles.";
-
     list noise-margin-profile {
       key "name";
       description
         "A list of noise margin profiles.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "A name that uniquely identifies the profile.";
       }
-
       uses noise-margin-profile;
     }
-
     list fast-rate-adaptation-profile {
       key "name";
       description
         "A list of fast rate adaptation profiles.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "A name that uniquely identifies the profile.";
       }
-
       uses fast-rate-adaptation-profile;
     }
-
     list vectoring-profile {
       key "name";
       description
         "A list of vectoring profiles.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "A name that uniquely identifies the profile.";
       }
-
       uses vectoring-profile;
     }
-
     list fast-retrain-policy-profile {
       key "name";
       description
         "A list of fast retrain policy profiles.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "A name that uniquely identifies the profile.";
       }
-
       uses fast-retrain-policy-profile;
     }
-
     list retransmission-profile {
       key "name";
       description
         "A list of retransmission profiles.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "A name that uniquely identifies the profile.";
       }
-
       uses retransmission-profile;
+    }
+    list impulse-noise-monitoring-profile {
+      if-feature "impulse-noise-monitoring";
+      key "name";
+      description
+        "A list of impulse noise monitoring profiles.";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "A name that uniquely identifies the profile.";
+      }
+      uses impulse-noise-monitoring-profile;
     }
   }
 }

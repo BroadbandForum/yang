@@ -7,7 +7,6 @@ submodule bbf-vdsl-xtu-band-status-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,12 +22,11 @@ submodule bbf-vdsl-xtu-band-status-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
-    "This submodule contains a collection of YANG definitions for 
+    "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 6.1.1 xTU Band Status.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-vdsl-xtu-band-status-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -89,7 +97,7 @@ submodule bbf-vdsl-xtu-band-status-body {
     reference
       "TR-355c2: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_2.pdf>";
+                        TR-355_Corrigendum-2.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -105,8 +113,7 @@ submodule bbf-vdsl-xtu-band-status-body {
   grouping xtu-band-status {
     description
       "The xTU Band Status object represents current band status
-       / measurements at a particular xTU.";
-
+       and measurements at a particular xTU.";
     list line-attenuation {
       key "band";
       description
@@ -116,7 +123,7 @@ submodule bbf-vdsl-xtu-band-status-body {
           range "0..4";
         }
         description
-          "Identifies the frequency band. 
+          "Identifies the frequency band.
            For example, 0 denotes US0.";
       }
       leaf attenuation {
@@ -125,9 +132,9 @@ submodule bbf-vdsl-xtu-band-status-body {
             range "0..1270";
           }
           type enumeration {
-            enum "out-of-range" {
+            enum out-of-range {
               description
-                "Indicates that the line attenuation per band is 
+                "Indicates that the line attenuation per band is
                  out of range to be represented.";
             }
           }
@@ -144,7 +151,7 @@ submodule bbf-vdsl-xtu-band-status-body {
            dB steps. A special value (enum out-of-range) indicates
            the line attenuation per band is out of range to be
            represented.
-           For ADSL systems, a single parameter is defined for 
+           For ADSL systems, a single parameter is defined for
            band = 0, as only a single band is usable.";
         reference
           "ITU-T G.997.1 clause 7.5.1.9 Downstream line attenuation
@@ -152,7 +159,6 @@ submodule bbf-vdsl-xtu-band-status-body {
            attenuation per band (LATNus)";
       }
     }
-
     list signal-attenuation {
       key "band";
       description
@@ -162,7 +168,7 @@ submodule bbf-vdsl-xtu-band-status-body {
           range "0..4";
         }
         description
-          "Identifies the frequency band. 
+          "Identifies the frequency band.
            For example, 0 denotes US0.";
       }
       leaf attenuation {
@@ -171,7 +177,7 @@ submodule bbf-vdsl-xtu-band-status-body {
             range "0..1270";
           }
           type enumeration {
-            enum "out-of-range" {
+            enum out-of-range {
               description
                 "Indicates that the value is out of range
                  to be represented.";
@@ -190,7 +196,7 @@ submodule bbf-vdsl-xtu-band-status-body {
            from 0 to +127 dB, with 0.1 dB steps. A special value
            (enum out-of-range) indicates the signal attenuation per
            band is out of range to be represented.
-           For ADSL systems, a single parameter is defined for 
+           For ADSL systems, a single parameter is defined for
            band = 0, as only a single band is usable.";
         reference
           "ITU-T G.997.1 clause 7.5.1.11 Downstream signal
@@ -198,17 +204,16 @@ submodule bbf-vdsl-xtu-band-status-body {
            Upstream signal attenuation per band (SATNus)";
       }
     }
-
     list snr-margin {
       key "band";
       description
-        "SNR margin per band.";
+        "Signal-to-Noise Ratio (SNR) margin per band.";
       leaf band {
         type uint8 {
           range "0..4";
         }
         description
-          "Identifies the frequency band. 
+          "Identifies the frequency band.
            For example, 0 denotes US0.";
       }
       leaf margin {
@@ -217,7 +222,7 @@ submodule bbf-vdsl-xtu-band-status-body {
             range "-640..630";
           }
           type enumeration {
-            enum "out-of-range" {
+            enum out-of-range {
               description
                 "Indicates that the value is out of range to
                  be represented.";
@@ -233,9 +238,9 @@ submodule bbf-vdsl-xtu-band-status-body {
            the direction of transmission (SNRMpbds for xTU-R /
            SNRMpbus for xTU-C). The SNR margin per band ranges from
            -64 dB to +63 dB, with 0.1 dB steps. A special value
-           (enum out-of-range) indicates the parameter is out of 
-           range to be represented. 
-           For ADSL systems, a single parameter is defined for 
+           (enum out-of-range) indicates the parameter is out of
+           range to be represented.
+           For ADSL systems, a single parameter is defined for
            band = 0, as a single band is usable.";
         reference
           "ITU-T G.997.1 clause 7.5.1.14 Downstream signal-to-noise
@@ -244,18 +249,17 @@ submodule bbf-vdsl-xtu-band-status-body {
            (SNRMpbus)";
       }
     }
-
     list upbo-electrical-length-pbn {
       key "band";
       description
-        "Upstream power backoff (UPBO) electrical length
+        "Upstream Power Back-off (UPBO) electrical length
          per band.";
       leaf band {
         type uint8 {
           range "0..4";
         }
         description
-          "Identifies the frequency band. 
+          "Identifies the frequency band.
            For example, 0 denotes US0.";
       }
       leaf upbo-electrical-length {
@@ -264,7 +268,7 @@ submodule bbf-vdsl-xtu-band-status-body {
             range "0..1280";
           }
           type enumeration {
-            enum "out-of-range" {
+            enum out-of-range {
               description
                 "Indicates that the estimate is greater than
                  128 dB.";
@@ -273,15 +277,15 @@ submodule bbf-vdsl-xtu-band-status-body {
         }
         units "0.1 dB";
         description
-          "This parameter is a vector of UPBO electrical length
-           per-band estimates for each supported upstream band,
-           expressed in dB at 1 MHz (kl0) calculated by the VTU
-           (UPBOKLE-pb for the VTU-O, UPBOKLE-r-pb for the VTU-R),
-           based on separate measurements in the supported upstream
-           bands excluding US0. The value ranges from 0 to 128 dB
-           in steps of 0.1 dB, with special value 
-           (enum out-of-range) which indicates that the estimate is
-           greater than 128 dB. This parameter is needed for the
+          "This parameter is a vector of Upstream Power Back-off
+           (UPBO) electrical length per-band estimates for each
+           supported upstream band, expressed in dB at 1 MHz (kl0)
+           calculated by the VTU (UPBOKLE-pb for the VTU-O,
+           UPBOKLE-r-pb for the VTU-R), based on separate measurements
+           in the supported upstream bands excluding US0. The value
+           ranges from 0 to 128 dB in steps of 0.1 dB, with special
+           value (enum out-of-range) which indicates that the estimate
+           is greater than 128 dB. This parameter is needed for the
            alternative electrical length estimation method (ELE-M1).";
         reference
           "ITU-T G.997.1 clause 7.5.1.23.3 VTU-O estimated upstream
@@ -290,5 +294,7 @@ submodule bbf-vdsl-xtu-band-status-body {
            back-off electrical length per band (UPBOKLE-R-pb)";
       }
     }
-  } // end grouping xtu-band-status
-} // end submodule xtu-band-status-body
+  }
+
+  // end grouping xtu-band-status
+}

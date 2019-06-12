@@ -7,7 +7,6 @@ submodule bbf-fast-upstream-power-back-off-profile-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,12 +22,11 @@ submodule bbf-fast-upstream-power-back-off-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing upstream power back off profiles.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-fast-upstream-power-back-off-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -97,7 +105,6 @@ submodule bbf-fast-upstream-power-back-off-profile-body {
       "Power-back-off-specific configuration parameters.";
     reference
       "ITU-T G.997.2 clause 7.1.2.";
-
     leaf upbopsd-a {
       type uint16 {
         range "0..4095" {
@@ -109,14 +116,14 @@ submodule bbf-fast-upstream-power-back-off-profile-body {
       units "0.01 dBm/Hz";
       default "0";
       description
-        "Defines the parameter a for the UPBO reference PSD used to
+        "Defines the parameter a for the Upstream power back-off
+         (UPBO) reference Power Spectral Density (PSD) used to
          compute the upstream power back-off for the upstream
          frequency band.";
       reference
         "ITU-T G.997.2 clause 7.1.2.9 (UPBOPSDA); ITU-T G.9701
          clause 7.3.1.4.";
     }
-
     leaf upbopsd-b {
       type uint16 {
         range "0..4095" {
@@ -127,14 +134,14 @@ submodule bbf-fast-upstream-power-back-off-profile-body {
       units "0.01 dBm/Hz";
       default "0";
       description
-        "Defines the parameter b for the UPBO reference PSD used to
+        "Defines the parameter b for the Upstream power back-off
+         (UPBO) reference Power Spectral Density (PSD) used to
          compute the upstream power back-off for the upstream
          frequency band.";
       reference
         "ITU-T G.997.2 clause 7.1.2.10 (UPBOPSDB); ITU-T G.9701
          clause 7.3.1.4.";
     }
-
     leaf upbo-upstream-electrical-length {
       type uint16 {
         range "0..1280" {
@@ -151,34 +158,36 @@ submodule bbf-fast-upstream-power-back-off-profile-body {
         "ITU-T G.997.2 clause 7.1.2.11 (UPBOKL); ITU-T G.9701 clause
          7.3.1.4.2.1.";
     }
-
     leaf upbo-force-electrical-length {
       type boolean;
       default "false";
       description
         "Defines whether or not the FTU-R is forced to use the
          electrical length kl0 = UPBOKL to compute the UPBOMASK. If
-         not forced, the FTUs determine the electrical length kl0.";
+         not forced, the FAST Transceiver Units (FTU) determine the
+         electrical length kl0.";
       reference
         "ITU-T G.997.2 clause 7.1.2.12 (UPBOKLF); ITU-T G.9701
          clause 7.3.1.4.2.1.";
     }
-
     leaf upbo-reference-electrical-length {
       type uint16 {
         range "0 | 18..255" {
           description
             "Defines a range equal to 1.8..25.5 dB.
-             Special value 0: Use the Equal PSD UPBO method.";
+             Special value 0: Use the Equal Power Spectral Density
+             (PSD) Upstream power back-off (UPBO) method.";
         }
       }
       units "0.1 dB";
       default "0";
       description
-        "Defines the UPBO reference electrical length kl0_REF used
-         to compute the upstream power back-off for the Equalized
-         FEXT UPBO method. If kl0_REF = 0 (special value) then the
-         Equal PSD UPBO method is used.";
+        "Defines the Upstream power back-off (UPBO) reference
+         electrical length kl0_REF used to compute the upstream power
+         back-off for the Equalized Far-End Crosstalk (FEXT) Upstream
+         power back-off (UPBO) method. If kl0_REF = 0 (special value)
+         then the Equal Power Spectral Density (PSD) Upstream power
+         back-off (UPBO) method is used.";
       reference
         "ITU-T G.997.2 clause 7.1.2.13 (UPBOKLREF); ITU-T G.9701
          clause 7.3.1.4.2.2.";
@@ -189,7 +198,6 @@ submodule bbf-fast-upstream-power-back-off-profile-body {
     description
       "Defines the parameters contained in an upstream power back-off
        profile.";
-
     uses upstream-power-back-off-parameters;
   }
 }

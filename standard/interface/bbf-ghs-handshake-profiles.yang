@@ -7,16 +7,15 @@ submodule bbf-ghs-handshake-profiles {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   include bbf-ghs-base;
 
   /* Profile bodies */
+
   include bbf-ghs-handshake-profile-body;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -32,12 +31,11 @@ submodule bbf-ghs-handshake-profiles {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
-     managing G.hs handshake profiles.
+     managing G.handshake (G.hs) profiles.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -77,9 +75,19 @@ submodule bbf-ghs-handshake-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -103,29 +111,25 @@ submodule bbf-ghs-handshake-profiles {
 
   typedef handshake-profile-ref {
     type leafref {
-      path '/bbf-ghs:ghs/bbf-ghs:profiles/bbf-ghs:handshake-'
-         + 'profile/bbf-ghs:name';
+      path "/bbf-ghs:ghs/bbf-ghs:profiles/bbf-ghs:handshake-"
+         + "profile/bbf-ghs:name";
     }
     description
       "Used to reference a handshake profile.";
   }
 
-
-  augment '/bbf-ghs:ghs/bbf-ghs:profiles' {
+  augment "/bbf-ghs:ghs/bbf-ghs:profiles" {
     description
       "Data nodes to support handshake configuration profiles.";
-
     list handshake-profile {
       key "name";
       description
         "A list of handshake profiles.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "A name that uniquely identifies the profile.";
       }
-
       uses handshake-profile;
     }
   }

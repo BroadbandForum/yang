@@ -7,13 +7,11 @@ submodule bbf-fast-data-rate-profile-body {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   include bbf-fast-base;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -29,12 +27,11 @@ submodule bbf-fast-data-rate-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing data rate profiles.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -74,9 +71,19 @@ submodule bbf-fast-data-rate-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -103,7 +110,6 @@ submodule bbf-fast-data-rate-profile-body {
       "Data rate configuration parameters.";
     reference
       "ITU-T G.997.2 clause 7.2.1.";
-
     leaf maximum-net-data-rate {
       type bbf-yang:data-rate32;
       default "4294967295";
@@ -113,12 +119,11 @@ submodule bbf-fast-data-rate-profile-body {
       reference
         "ITU-T G.997.2 clause 7.2.1.1 (MAXNDR).";
     }
-
     leaf minimum-expected-throughput {
       type bbf-yang:data-rate32;
-      must ". < ../maximum-net-data-rate" {
+      must '. < ../maximum-net-data-rate' {
         description
-          "The minimum expected throughput must be less than the 
+          "The minimum expected throughput must be less than the
            maximum net data rate";
       }
       default "0";
@@ -128,77 +133,75 @@ submodule bbf-fast-data-rate-profile-body {
       reference
         "ITU-T G.997.2 clause 7.2.1.2 (MINETR).";
     }
-
     leaf maximum-gamma-data-rate {
       type bbf-yang:data-rate32;
-      must ". >= ../minimum-gamma-data-rate" {
+      must '. >= ../minimum-gamma-data-rate' {
         description
-          "The maximum gamma data rate must be greater than or equal 
+          "The maximum gamma data rate must be greater than or equal
            to the mimimum gamma data rate";
       }
       default "4294967295";
       description
-        "Defines the maximum value of the GDR (see clause
-         7.11.1.3/G.997.2). The GDR shall not exceed MAXGDR at the
-         start of showtime and during showtime. ";
+        "Defines the maximum value of the Gamma Data Rate (GDR)
+         (see clause 7.11.1.3/G.997.2). The GDR shall not exceed
+         maximum Gamma Data Rate (MAXGDR) at the start of showtime
+         and during showtime. ";
       reference
         "ITU-T G.997.2 clause 7.2.1.3 (MAXGDR).";
     }
-
     leaf minimum-gamma-data-rate {
       type bbf-yang:data-rate32;
-      must ". <= ../maximum-gamma-data-rate" {
+      must '. <= ../maximum-gamma-data-rate' {
         description
           "The minimum gamma data rate must be less than or equal to
            the maximum gamma data rate";
       }
       default "0";
       description
-        "Defines the minimum value of the GDR (see clause
-         7.11.1.3/G.997.2). The GDR may be lower than MINGDR. If the
-         GDR is lower than MINGDR at initialization or when GDR
-         becomes lower than MINGDR during showtime, a threshold
-         crossing alert occurs.";
+        "Defines the minimum value of the Gamma Data Rate (GDR)
+         (see clause 7.11.1.3/G.997.2). The GDR may be lower than
+         minimum Gamma Data Rate (MINGDR). If the GDR is lower than
+         MINGDR at initialization or when GDR becomes lower than
+         MINGDR during showtime, a threshold crossing alert occurs.";
       reference
         "ITU-T G.997.2 clause 7.2.1.4 (MINGDR).";
     }
-
     container dynamic-time-assignment {
       if-feature "dta";
       description
         "Configuruation of Dynamic Time Assignment (DTA).";
-
       leaf minimum-expected-throughput {
         type bbf-yang:data-rate32;
-        must ". < ../maximum-net-data-rate" {
+        must '. < ../maximum-net-data-rate' {
           description
-            "The minimum expected throughput for DTA must
-             be less than the maximum net data rate for DTA.";
+            "The minimum expected throughput for Dynamic Time
+             Assignment (DTA) must be less than the maximum net data
+             rate for DTA.";
         }
         default "0";
         description
           "Defines the value of the minimum expected
-           throughput for DTA operation to constrain
-           the dynamic range of Mds requested by the DRA.
+           throughput for Dynamic Time Assignment (DTA) operation to
+           constrain the dynamic range of Mds requested by the
+           Dynamic Resource Allocation (DRA).
 
-           If 'dta-allowed' in the TDD profile is equal to 'cdta',
-           then a value less than or equal to the minimum expected
-           throughput without DTA operation must be configured.";
+           If 'dta-allowed' in the Time Division Duplexing (TDD)
+           profile is equal to 'cdta', then a value less than or equal
+           to the minimum expected throughput without DTA operation
+           must be configured.";
         reference
           "ITU-T G.9701 clause T.2.7.";
       }
-
-
       leaf maximum-net-data-rate {
         type bbf-yang:data-rate32;
         default "4294967295";
         description
-          "Defines the value of the maximum NDR for DTA operation.";
+          "Defines the value of the maximum Net Datat Rate (NDR) for
+           Dynamic Time Assignment (DTA) operation.";
         reference
           "ITU-T G.9701 clause D.5.7.5, X.6.7.5 and T.2.8";
       }
     }
-
     leaf low-andeftr-threshold {
       if-feature "andeftr";
       type bbf-yang:data-rate32;
@@ -215,25 +218,23 @@ submodule bbf-fast-data-rate-profile-body {
     description
       "Parameters associated with configuration of data rates when
        operating in a low power mode.";
-
     leaf maximum-net-data-rate-in-l2.2 {
       type bbf-yang:data-rate32;
       default "4294967295";
       description
-        "Defines the value of the maximum net data rate allowed 
-         during the L2.2 link state for both the upstream and 
+        "Defines the value of the maximum net data rate allowed
+         during the L2.2 link state for both the upstream and
          downstream direction.";
       reference
         "ITU-T G.997.2 clause 7.2.3.2 (L2.2-MAXNDR); ITU-T G.9701
          clause 13.4.2.4.";
     }
-
     leaf minimum-expected-throughput-in-l2.2 {
       type bbf-yang:data-rate32;
       default "0";
       description
-        "Defines the value of the minimum expected throughput 
-         allowed during the L2.2 link state for both the upstream 
+        "Defines the value of the minimum expected throughput
+         allowed during the L2.2 link state for both the upstream
          and downstream direction.";
       reference
         "ITU-T G.997.2 clause 7.2.3.4 (L2.2-MINETR); ITU-T G.9701
@@ -246,67 +247,57 @@ submodule bbf-fast-data-rate-profile-body {
       "Parameters associated with configuration of data rates when
        operating in a low power mode for both the upstream and
        downstream directions.";
-
     leaf maximum-net-data-rate-in-l2.1 {
       type bbf-yang:data-rate32;
       default "4294967295";
       description
-        "Defines the value of the maximum net data rate allowed 
+        "Defines the value of the maximum net data rate allowed
          during the L2.1 link state.";
       reference
         "ITU-T G.997.2 clause 7.2.3.1 (L2.1-MAXNDR); ITU-T G.9701
          clause 13.4.1.4.";
     }
-
     leaf minimum-expected-throughput-in-l2.1 {
       type bbf-yang:data-rate32;
       default "0";
       description
-        "Defines the value of the minimum expected throughput 
+        "Defines the value of the minimum expected throughput
          allowed during the L2.1 link state.";
       reference
         "ITU-T G.997.2 clause 7.2.3.3 (L2.1-MINETR); ITU-T G.9701
          clause 13.4.1.4.";
     }
-
     leaf minimum-expected-throughput-after-exit-from-l2.1 {
       type bbf-yang:data-rate32;
       default "0";
       description
-        "Defines the value of the minimum expected throughput 
+        "Defines the value of the minimum expected throughput
          allowed after exit from L2.1 to the L0 link state.";
       reference
-        "ITU-T G.997.2 clause 7.2.3.5 (L2.1-MINETR-EXIT); ITU-T 
+        "ITU-T G.997.2 clause 7.2.3.5 (L2.1-MINETR-EXIT); ITU-T
          G.9701 clause 13.4.1.4.";
     }
   }
 
-
   grouping data-rate-profile {
     description
       "Defines the parameters contained in a data rate profile.";
-
     uses data-rate-parameters;
   }
 
   grouping low-power-data-rate-profile {
     description
-      "Defines the parameters contained in a low power data rate 
+      "Defines the parameters contained in a low power data rate
        profile.";
-
     uses low-power-data-rate-parameters;
-
     container downstream {
       description
-        "Downstream low power data rate parameters";
-
+        "Downstream low power data rate parameters.";
       uses low-power-data-rate-directional-parameters;
     }
-
     container upstream {
       description
-        "Upstream low power data rate parameters";
-
+        "Upstream low power data rate parameters.";
       uses low-power-data-rate-directional-parameters;
     }
   }

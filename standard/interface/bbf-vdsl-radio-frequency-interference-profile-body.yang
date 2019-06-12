@@ -5,13 +5,11 @@ submodule bbf-vdsl-radio-frequency-interference-profile-body {
   }
 
   include bbf-vdsl-base-body;
-
   include bbf-vdsl-line-spectrum-profile-body;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -27,13 +25,12 @@ submodule bbf-vdsl-radio-frequency-interference-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
-    "This submodule contains a collection of YANG definitions for 
+    "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 5.6 Spectrum related
-     profiles; RFI Profile.
+     profiles; Radio Frequency Interference (RFI) Profile.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -73,9 +70,19 @@ submodule bbf-vdsl-radio-frequency-interference-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -94,7 +101,7 @@ submodule bbf-vdsl-radio-frequency-interference-profile-body {
     reference
       "TR-355c1: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_1.pdf>";
+                        TR-355_Corrigendum-1.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -108,24 +115,24 @@ submodule bbf-vdsl-radio-frequency-interference-profile-body {
   }
 
   grouping radio-frequency-interference-profile {
-
     description
-      "RFI notches are necessary when radio services may be disturbed
-       during operation, or to protect DSL Lines from RFI.";
-
+      "Radio Frequency Interference (RFI) notches are necessary when
+       radio services may be disturbed during operation, or to protect
+       DSL Lines from RFI.";
     list rfibands {
       key "start-index";
       max-elements 16;
       uses sub-carrier-range;
       description
         "For [ITU-T G.992.5], this configuration parameter
-         defines the subset of downstream PSD mask breakpoints,
-         as specified in PSDMASK, that will be used to notch an
-         RFI band. This subset consists of couples of consecutive
-         subcarrier indices belonging to breakpoints: [ti; ti +
-         1], corresponding to the low level of the notch. The
-         specific interpolation around these points is defined in
-         the relevant Recommendations (e.g., [ITU-T G.992.5]).
+         defines the subset of downstream Power Spectral Density (PSD)
+         mask breakpoints, as specified in PSDMASK, that will be used
+         to notch an Radio Frequency Interference (RFI) band. This
+         subset consists of couples of consecutive subcarrier indices
+         belonging to breakpoints: [ti; ti + 1], corresponding to the
+         low level of the notch. The specific interpolation around
+         these points is defined in the relevant Recommendations
+         (e.g., [ITU-T G.992.5]).
          The CO-MIB will define the RFI notches using breakpoints
          in PSDMASKds as specified in the relevant
          Recommendations (e.g., [ITU-T G.992.5]).
@@ -140,5 +147,7 @@ submodule bbf-vdsl-radio-frequency-interference-profile-body {
       reference
         "ITU-T G.997.1 clause 7.3.1.2.10 RFI bands (RFIBANDS)";
     }
-  } // end grouping radio-frequency-interference-profile
-} // end submodule radio-frequency-interference-profile-body
+  }
+
+  // end grouping radio-frequency-interference-profile
+}

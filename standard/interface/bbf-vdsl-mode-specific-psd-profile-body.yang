@@ -4,12 +4,12 @@ submodule bbf-vdsl-mode-specific-psd-profile-body {
     prefix bbf-vdsl;
   }
 
+  include bbf-vdsl-base;
   include bbf-vdsl-base-body;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -25,13 +25,12 @@ submodule bbf-vdsl-mode-specific-psd-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
-    "This submodule contains a collection of YANG definitions for 
-     managing Broadband Forum TR-252i3 clause 5.6 Spectrum related 
+    "This submodule contains a collection of YANG definitions for
+     managing Broadband Forum TR-252i3 clause 5.6 Spectrum related
      profiles; Mode Specific PSD Profile.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -71,9 +70,19 @@ submodule bbf-vdsl-mode-specific-psd-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -92,7 +101,7 @@ submodule bbf-vdsl-mode-specific-psd-profile-body {
     reference
       "TR-355c1: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_1.pdf>";
+                        TR-355_Corrigendum-1.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -106,24 +115,22 @@ submodule bbf-vdsl-mode-specific-psd-profile-body {
   }
 
   grouping mode-specific-psd-profile {
-
     description
       "These configuration parameters depend on a transmission mode.
        Each transmission mode enabled in a Line Spectrum Profile is
-       covered by one and only one of the Mode Specific PSD Profiles
-       contained in that Line Spectrum Profile.";
-
+       covered by one and only one of the Mode Specific Power Spectral
+       Density (PSD) Profiles contained in that Line Spectrum
+       Profile.";
     leaf ts {
       type xts-descriptor;
       mandatory true;
       description
-        "This indicates the transmission system type this mode 
+        "This indicates the transmission system type this mode
          specific profile is used with.";
       reference
         "ITU-T G.997.1 clause 7.3.1.1.1 xTU transmission system
          enabling (XTSE)";
     }
-
     leaf maximum-nominal-psd-ds {
       type int16 {
         range "-600..-300";
@@ -132,16 +139,16 @@ submodule bbf-vdsl-mode-specific-psd-profile-body {
       default "-400";
       description
         "This parameter represents the maximum nominal transmit
-         PSD in the downstream direction during initialization
-         and showtime (in dBm/Hz). A single MAXNOMPSDds parameter
-         is defined per mode enabled in the XTSE line
-         configuration parameter. It ranges from -60 to -30
-         dBm/Hz, with 0.1 dB steps.";
+         Power Spectral Density (PSD) in the downstream direction
+         during initialization and showtime (in dBm/Hz). A single
+         MAXNOMPSDds parameter is defined per mode enabled in the
+         xDSL Transmission System Enabling (XTSE) line configuration
+         parameter. It ranges from -60 to -30 dBm/Hz, with 0.1 dB
+         steps.";
       reference
         "ITU-T G.997.1 clause 7.3.1.2.1 Downstream maximum
          nominal power spectral density (MAXNOMPSDds)";
     }
-
     leaf maximum-nominal-psd-us {
       type int16 {
         range "-600..-300";
@@ -152,14 +159,13 @@ submodule bbf-vdsl-mode-specific-psd-profile-body {
         "This parameter represents the maximum nominal transmit
          PSD in the upstream direction during initialization and
          showtime (in dBm/Hz). A single MAXNOMPSDus parameter is
-         defined per mode enabled in the XTSE line configuration
-         parameter. It ranges from -60 to -30 dBm/Hz, with 0.1 dB
-         steps.";
+         defined per mode enabled in the xDSL Transmission System
+         Enabling (XTSE) line configuration parameter. It ranges from
+         -60 to -30 dBm/Hz, with 0.1 dB steps.";
       reference
         "ITU-T G.997.1 clause 7.3.1.2.2 Upstream maximum nominal
          power spectral density (MAXNOMPSDus)";
     }
-
     leaf maximum-aggregate-transmit-power-ds {
       type uint8 {
         range "0..255";
@@ -175,7 +181,6 @@ submodule bbf-vdsl-mode-specific-psd-profile-body {
         "ITU-T G.997.1 clause 7.3.1.2.3 Downstream maximum
          nominal aggregate transmit power (MAXNOMATPds)";
     }
-
     leaf maximum-aggregate-transmit-power-us {
       type uint8 {
         range "0..255";
@@ -191,14 +196,13 @@ submodule bbf-vdsl-mode-specific-psd-profile-body {
         "ITU-T G.997.1 clause 7.3.1.2.4 Upstream maximum nominal
          aggregate transmit power (MAXNOMATPus)";
     }
-
     leaf maximum-aggregate-receive-power-us {
       type union {
         type int16 {
           range "-255..255";
         }
         type enumeration {
-          enum "unbounded" {
+          enum unbounded {
             description
               "Indicates that that no upstream maximum aggregate
                receive power limit is to be applied
@@ -215,7 +219,7 @@ submodule bbf-vdsl-mode-specific-psd-profile-body {
          request an upstream power cutback such that the upstream
          aggregate receive power over that set of subcarriers is
          at or below the configured maximum value. It ranges from
-         -25.5 to 25.5 dBm, with 0.1 dB steps. A special value of 
+         -25.5 to 25.5 dBm, with 0.1 dB steps. A special value of
          (enum unbounded) is used to indicate that no upstream
          maximum aggregate receive power limit is to be applied
          (i.e., the maximum value is unbounded).";
@@ -223,7 +227,6 @@ submodule bbf-vdsl-mode-specific-psd-profile-body {
         "ITU-T G.997.1 clause 7.3.1.2.5 Upstream maximum
          aggregate receive power (MAXRXPWRus)";
     }
-
     container psd-mask-ds {
       uses psdmask-descriptor {
         refine "psdmask" {
@@ -235,9 +238,10 @@ submodule bbf-vdsl-mode-specific-psd-profile-body {
          mask applicable at the U-C2 reference point as defined
          in the respective Recommendation. A modified PSD mask,
          as defined in clause 7.3.1.2.13, may apply at the U-C2
-         reference point. This MIB PSD mask may impose PSD
+         reference point. This Management Information Base (MIB)
+         Power Spectral Density (PSD) mask may impose PSD
          restrictions in addition to the Limit PSD mask defined
-         in the relevant Recommendations [ITU-T G.992.5] and 
+         in the relevant Recommendations [ITU-T G.992.5] and
          [ITU-T G.993.2].
          NOTE - In [ITU-T G.993.2], the PSDMASKds parameter is
          referred to as MIBMASKds.
@@ -252,33 +256,32 @@ submodule bbf-vdsl-mode-specific-psd-profile-body {
          coded as an unsigned integer representing the MIB PSD
          mask levels 0 dBm/Hz to -127.5 dBm/Hz, in steps of 0.5
          dBm/Hz, with valid range from 0 to -95 dBm/Hz. The
-         maximum number of breakpoints is 32 for [ITU-T G.992.5] and 
+         maximum number of breakpoints is 32 for [ITU-T G.992.5] and
          [ITU-T G.993.2].
          The default is an empty list indicating no PSD mask.";
       reference
         "ITU-T G.997.1 clause 7.3.1.2.9 Downstream PSD Mask
          (PSDMASKds)";
     }
-
     leaf upstream_psd_mask_selection {
       type uint8 {
         range "1..9";
       }
       default "9";
       description
-        "This configuration parameter defines which upstream PSD
-         mask is enabled. This parameter is used only for Annexes
-         J and M of [ITU-T G.992.3] and [ITU-T G.992.5]. As only
-         one selection parameter is defined in the MIB, the same
-         selection value applies to all relevant modes enabled in
-         the XTSE line configuration parameter. It ranges from 1
-         to 9 and selects the mask with the definitions of Table
-         7-5 of [ITU-T G.997.1].";
+        "This configuration parameter defines which upstream Power
+         Spectral Density (PSD) mask is enabled. This parameter is
+         used only for Annexes J and M of [ITU-T G.992.3] and [ITU-T
+         G.992.5]. As only one selection parameter is defined in the
+         MIB, the same selection value applies to all relevant modes
+         enabled in the xDSL Transmission System Enabling (XTSE) line
+         configuration parameter. It ranges from 1 to 9 and selects
+         the mask with the definitions of Table 7-5 of [ITU-T
+         G.997.1].";
       reference
         "ITU-T G.997.1 clause 7.3.1.2.11 Upstream PSD mask
          selection";
     }
-
     container psd-mask-us {
       uses psdmask-descriptor {
         refine "psdmask" {
@@ -286,13 +289,13 @@ submodule bbf-vdsl-mode-specific-psd-profile-body {
         }
       }
       description
-        "This configuration parameter defines the upstream PSD
-         mask applicable at the U-R2 reference point as defined
-         in the respective Recommendation. This MIB PSD mask may
-         impose PSD restrictions in addition to the Limit PSD
-         mask defined in the relevant Recommendations [ITU-T G.992.3 
-         Annex J and M], [ITU-T G.992.5 Annex J and M], and 
-         [ITU-T G.993.2].
+        "This configuration parameter defines the upstream Power
+         Spectral Density (PSD) mask applicable at the U-R2 reference
+         point as defined in the respective Recommendation. This
+         Management Information Base (MIB) PSD mask may impose PSD
+         restrictions in addition to the Limit PSD mask defined in the
+         relevant Recommendations [ITU-T G.992.3 Annex J and M],
+         [ITU-T G.992.5 Annex J and M], and [ITU-T G.993.2].
          NOTE - In [ITU-T G.993.2], the PSDMASKus parameter is
          referred to as MIBMASKus and does not include
          breakpoints to shape US0.
@@ -308,30 +311,29 @@ submodule bbf-vdsl-mode-specific-psd-profile-body {
          mask levels 0 dBm/Hz to -127.5 dBm/Hz, in steps of 0.5
          dBm/Hz, with valid range from 0 to -95 dBm/Hz. The
          maximum number of breakpoints is 4 for [ITU-T G.992.3 Annex J
-         and M] and [ITU-T G.992.5 Annex J and M], and 16 for [ITU-T 
+         and M] and [ITU-T G.992.5 Annex J and M], and 16 for [ITU-T
          G.993.2].
          The default is an empty list indicating no PSD mask.";
       reference
         "ITU-T G.997.1 clause 7.3.1.2.12 Upstream PSD mask
          (PSDMASKus)";
     }
-
     leaf limitmask {
       type limitmask-descriptor;
-      must
-        "(../ts!='xts57' and ../ts!='xts58' and ../ts!='xts59'
-          and .='') or .!=''" {
-        description
-          "If the transmission system is VDSL, then the limitmask must
-           be populated.";
+      must "(../ts!='xts57' and ../ts!='xts58' and ../ts!='xts59'
+             and ../ts!='xts60' and .='') or .!=''" {
+          description
+            "If the transmission system is VDSL, then the limitmask 
+             must be populated.";
       }
       default "";
       description
         "This configuration parameter contains the G.993.2 limit
-         PSD masks of the selected PSD mask class, enabled by the
-         near-end xTU on this line for each class of profiles.
+         Power Spectral Density (PSD) masks of the selected PSD mask
+         class, enabled by the near-end xTU on this line for each
+         class of profiles.
          One LIMITMASK parameter is defined per the G.993.2 Annex
-         enabled in the XTSE.
+         enabled in the xDSL Transmission System Enabling (XTSE).
          For each profile class, several limit PSD masks of the
          selected PSD mask class (CLASSMASK) may be enabled. The
          enabling parameter is coded in a bit-map representation
@@ -343,49 +345,89 @@ submodule bbf-vdsl-mode-specific-psd-profile-body {
         "ITU-T G.997.1 clause 7.3.1.2.16 VDSL2 limit PSD masks
          and band plans enabling (LIMITMASK)";
     }
-
     leaf us0disable {
       type limitmask-descriptor;
       default "";
       description
         "This configuration parameter indicates if the use of US0
-         is disabled for each limit PSD mask enabled in the
-         LIMITMASK parameter. One US0DISABLE parameter is defined
-         per the G.993.2 Annex enabled in the XTSE.
+         is disabled for each limit Power Spectral Density (PSD) mask
+         enabled in the LIMITMASK parameter. One US0DISABLE parameter
+         is defined per the G.993.2 Annex enabled in the xDSL
+         Transmission System Enabling (XTSE).
          For each limit PSD mask enabled in the LIMITMASK
          parameter, a bit will indicate if US0 is disabled. The
          disabling parameter is coded as a bit-map. The bit is
          set to 1 if US0 is disabled for the associated limit
          mask. The bit-map has the same structure as the
          LIMITMASK parameter.
-         The default is an empty bit list, corresponding to VDSL2 US0 
-         enabled for each limit PSD mask enabled in the LIMITMASK 
+         The default is an empty bit list, corresponding to VDSL2 US0
+         enabled for each limit PSD mask enabled in the LIMITMASK
          parameter.";
       reference
         "ITU-T G.997.1 clause 7.3.1.2.17 VDSL2 US0 disabling
          (US0DISABLE).";
     }
-
     leaf classmask {
       type classmask-descriptor;
-      must
-        "(../ts!='xts57' and ../ts!='xts58' and ../ts!='xts59')
-          or (../ts='xts57' and (.='class1'))
-          or (../ts='xts58' and ((.='class1') or (.='class2')
-          or (.='class3') or (.='class5') or (.='class6')
-          or (.='class8') or (.='class9')))
-          or (../ts='xts59' and ((.='class1') or (.='class2')))" {
-        description
-          "If the transmission system is VDSL, ensure the classmask
-           support aligns with Table 7-6 in ITU-T G.997.1.";
+      must "(../ts!='xts57' and ../ts!='xts58' and ../ts!='xts59')
+             or (../ts='xts57' and ((.='class1') or (.='class2')))
+             or (../ts='xts58' and ((.='class1') or (.='class2')
+             or (.='class3') or (.='class5') or (.='class6')
+             or (.='class8') or (.='class9')))
+             or (../ts='xts59' and ((.='class1') or (.='class2')))
+             or (../ts='xts60' and (.='class1'))" {
+          description
+            "If the transmission system is VDSL, he classmask must 
+             align with Table 7-6 in ITU-T G.997.1.";
       }
       default "none";
       description
-        "The parameter configures CLASSMASK. The default is 'none', 
+        "The parameter configures CLASSMASK. The default is 'none',
          corresponding to no VDSL2 classmask selected.";
       reference
         "ITU-T G.997.1 clause 7.3.1.2.15 VDSL2 PSD mask class
          selection (CLASSMASK).";
     }
-  } // end grouping mode-specific-psd-profile
-} // end submodule mode-specific-psd-profile-body
+    leaf vdsl2-lr-enable {
+      if-feature "vdsl2-lr";
+      type bits {
+        bit short {
+          description
+            "VDSL2 Long Reach (VDSL2-LR) short loop operation type is
+             allowed.";
+        }
+        bit medium {
+          description
+            "VDSL2 Long Reach (VDSL2-LR) medium loop operation type is
+             allowed.";
+        }
+        bit long {
+          description
+            "VDSL2 Long Reach (VDSL2-LR) long loop operation type is
+             allowed.";
+        }
+      }
+      must ".='' or (../ts='xts58' and
+            ((../classmask='class3') or (../classmask='class5') or
+            (../classmask='class6') or (../classmask='class8') or
+            (../classmask='class9')))" {
+          description
+            "VDSL2 Long Reach (VDSL2-LR) mode may be enabled only for
+             operation according to G.993.2 Annex B with specific
+             classmasks.";
+      }
+      default "";
+      description
+        "This configuration parameter contains the ITU-T G.993.2
+         VDSL2 Long Reach (VDSL2-LR) operation types to be allowed by
+         the near-end xTU on this line.
+         It is coded as a list of operation types.
+         The default is an empty bit list, corresponding to the
+         VDSL2-LR mode being disabled on this line.";
+      reference
+        "ITU-T G.997.1 clause 7.3.1.16.1 VDSL2-LR enable";
+    }
+  }
+
+  // end grouping mode-specific-psd-profile
+}

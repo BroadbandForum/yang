@@ -11,7 +11,6 @@ submodule bbf-fast-ftu-inventory-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -27,13 +26,12 @@ submodule bbf-fast-ftu-inventory-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
-    "This submodule contains a collection of FTU inventory related 
+    "This submodule contains a collection of FTU inventory related
      YANG data types and grouping definitions for the management of
      FAST lines.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -73,9 +71,19 @@ submodule bbf-fast-ftu-inventory-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -102,10 +110,10 @@ submodule bbf-fast-ftu-inventory-body {
       "Inventory parameters.";
     reference
       "ITU-T G.997.2 clause 7.13.";
-
     leaf g.994.1-vendor-id {
       type binary {
-        length "8"; // octets
+        length "8";
+        // octets
       }
       description
         "Reports the ITU-T G.994.1 vendor ID as inserted by the
@@ -115,10 +123,10 @@ submodule bbf-fast-ftu-inventory-body {
         "ITU-T G.997.2 clause 7.13.1.1 (FTUO_GHS_VENDOR) and
          7.13.1.2 (FTUR_GHS_VENDOR).";
     }
-
     leaf version-number {
       type binary {
-        length "0..16"; // octets
+        length "0..16";
+        // octets
       }
       description
         "Reports the version number as inserted by the FTU-O/FTU-R
@@ -129,7 +137,6 @@ submodule bbf-fast-ftu-inventory-body {
         "ITU-T G.997.2 clause 7.13.1.3 (FTUO_VERSION) and clause
          7.4.6 (FTUR_VERSION).";
     }
-
     leaf self-test-result {
       type binary;
       description
@@ -144,74 +151,83 @@ submodule bbf-fast-ftu-inventory-body {
         "ITU-T G.997.2 clause 7.13.1.5 (FTUO_SELFTEST)) and clause
          7.13.1.6 (FTUO_SELFTEST).";
     }
-
     leaf system-vendor-id {
       type binary {
-        length "8"; // octets
+        length "8";
+        // octets
       }
       description
-        "Reports the FTU system vendor ID as inserted by the
-         FTU-O/FTU-R in the embedded operations channel (see clause
-         11.2.2.10/G.9701) and as defined in clause 9.3.3.1/G.994.1.
-        ";
+        "Reports the FAST Transceiver Unit (FTU) system vendor ID as
+         inserted by the FTU-O/FTU-R in the embedded operations
+         channel (see clause 11.2.2.10/G.9701) and as defined in
+         clause 9.3.3.1/G.994.1.";
       reference
         "ITU-T G.997.2 clause 7.13.2.1 and clause 7.13.2.2.";
     }
-
     leaf system-serial-number {
       type binary {
-        length "0..32"; // octets
+        length "0..32";
+        // octets
       }
       description
-        "Reports the FTU serial number as inserted by the
-         FTU-O/FTU-R in the embedded operations channel (see clause
-         11.2.2.10/G.9701). It is vendor specific information. The
-         combination of system vendor ID and system serial number
-         creates a unique number for each FTU system.";
+        "Reports the FAST Transceiver Unit (FTU) serial number as
+         inserted by the FTU-O/FTU-R in the embedded operations
+         channel (see clause 11.2.2.10/G.9701). It is vendor specific
+         information. The combination of system vendor ID and system
+         serial number creates a unique number for each FTU system.";
       reference
         "ITU-T G.997.2 clause 7.13.2.3 and clause 7.13.2.4.";
     }
-
     leaf profiles-supported {
       type profiles;
       description
-        "Reports for each profile whether the FTU supports operation
-         according to that profile";
+        "Reports for each profile whether the FAST Transceiver Unit
+         (FTU) supports operation according to that profile.";
       reference
         "ITU-T G.997.2 clause 7.13.1.7; ITU-T G.9701 clause 6";
     }
-
     leaf annex-x-supported {
       if-feature "annex-x";
       type boolean;
       description
-        "Indicates whether Annex X is supported by the FTU.";
+        "Indicates whether Annex X is supported by the FAST
+         Transceiver Unit (FTU).";
       reference
-        "ITU-T G.997.2 clause T.4.1 and T.4.2 
+        "ITU-T G.997.2 clause T.4.1 and T.4.2
          (ANNEX_X_SUPPORT_FTU_O/R);
          ITU-T G.9701 clause X.7.1.1.1 and X.7.1.2.1.";
     }
-
     leaf annex-d-supported {
       if-feature "annex-d";
       type boolean;
       description
-        "Indicates whether Annex D is supported by the FTU.";
+        "Indicates whether Annex D is supported by the FAST
+         Transceiver Unit (FTU).";
       reference
         "ITU-T G.997.2 clause T.4.4 and T.4.5
-         (ANNEX_D_SUPPORT_FTU_O/R); 
+         (ANNEX_D_SUPPORT_FTU_O/R);
          ITU-T G.9701 clause D.6.1.1.1 and D.6.1.2.1.";
+    }
+    leaf srec-supported {
+      if-feature "srec";
+      type boolean;
+      description
+        "Indicates whether Showtime Reconfiguration (SREC) is
+         supported by the FAST Transceiver Unit (FTU).";
+      reference
+        "ITU-T G.997.2 clause 7.13.1.9 and 7.13.1.10
+         (ANNEX_R_SUPPORT_FTU_O/R);
+         ITU-T G.9701 Annex R.";
     }
   }
 
   grouping ftu-o-inventory-parameters {
     description
       "Inventory parameters applicable only to the FTU-O.";
-
     leaf vce-id {
       type union {
         type enumeration {
-          enum "not-in-vectored-group" {
+          enum not-in-vectored-group {
             description
               "The line is not in a vectored group.";
           }
@@ -221,21 +237,20 @@ submodule bbf-fast-ftu-inventory-body {
         }
       }
       description
-        "For the line in a vectored group, the VCE ID uniquely 
-         identifies the VCE that manages and controls the vectored 
-         group to which the line belongs. It consists of one octet 
-         and valid ranges are from 1 to 255. A special value 
-         (not-in-vectored-group) means the line is not in a vectored 
-         group.";
+        "For the line in a vectored group, the Vectoring Control
+         Entity (VCE) ID uniquely identifies the VCE that manages and
+         controls the vectored group to which the line belongs. It
+         consists of one octet and valid ranges are from 1 to 255. A
+         special value (not-in-vectored-group) means the line is not
+         in a vectored group.";
       reference
         "ITU-T G.997.2 clause 7.13.2.5; ITU-T G.9701 clause
          11.4.5.1.1";
     }
-
     leaf vce-port-index {
       type union {
         type enumeration {
-          enum "not-in-vectored-group" {
+          enum not-in-vectored-group {
             description
               "The line is not in a vectored group.";
           }
@@ -243,19 +258,18 @@ submodule bbf-fast-ftu-inventory-body {
         type vce-port-index;
       }
       description
-        "For the line in a vectored group, the VCE port index is the 
-         physical index that uniquely identifies the VCE port to 
-         which the line is connected. It is an integer from 1 to the 
-         maximum number of lines supported by the VCE. The 
-         combination of VCE ID and VCE port index creates a unique 
-         identifier for each vectored FTU-O/-R. A special value 
-         (not-in-vectored-group) means the line is not in a 
-         vectored group.";
+        "For the line in a vectored group, the Vectoring Control
+         Entity (VCE) port index is the physical index that uniquely
+         identifies the VCE port to which the line is connected. It
+         is an integer from 1 to the maximum number of lines supported
+         by the VCE. The combination of VCE ID and VCE port index
+         creates a unique identifier for each vectored FTU-O/-R. A
+         special value (not-in-vectored-group) means the line is not
+         in a vectored group.";
       reference
         "ITU-T G.997.2 clause 7.13.2.6; ITU-T G.9701 clause
          11.4.5.1.2";
     }
-
     leaf idta-supported {
       if-feature "(dta and annex-x)";
       type boolean;
@@ -270,14 +284,12 @@ submodule bbf-fast-ftu-inventory-body {
   grouping ftu-inventory {
     description
       "Objects defining the structure and content of FTU inventory";
-
     container ftu-o {
       description
         "Inventory parameters reported by the FTU-O.";
       uses ftu-inventory-parameters;
       uses ftu-o-inventory-parameters;
     }
-
     container ftu-r {
       description
         "Inventory parameters reported by the FTU-R.";

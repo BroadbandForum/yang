@@ -7,7 +7,6 @@ submodule bbf-fast-test-mode-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,12 +22,11 @@ submodule bbf-fast-test-mode-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing test modes.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-fast-test-mode-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -96,7 +104,6 @@ submodule bbf-fast-test-mode-body {
     description
       "A set of parameters used to enable various test modes
        specified by ITU-T G.997.2 and G.9701";
-
     leaf rtx-tc-test-mode {
       type boolean;
       default "false";
@@ -104,36 +111,34 @@ submodule bbf-fast-test-mode-body {
         "Defines whether the retransmission test-mode defined in
          clause 9.8.3.1.2/G.9701 is enabled or disabled. The
          RTX_TESTMODE setting may be changed during showtime. When
-         changed, it shall take effect within 2 seconds without 
+         changed, it shall take effect within 2 seconds without
          re-initialization";
       reference
         "ITU-T G.997.2 clause 7.2.2.7 (RTX_TESTMODE); ITU-T G.9701
          clause 9.8.3.1.2.";
     }
-
     leaf tps-tc-test-mode {
       type boolean;
       default "false";
       description
-        "Defines whether the TPS-TC test-mode defined in
-         clause 8.3.1/G.9701 is enabled or disabled.The
-         TPS_TESTMODE setting may be changed during showtime. When
-         changed, it shall take effect within 2 seconds without 
-         re-initialization";
+        "Defines whether the Transport Protocol Specific Transmission
+         Convergence (TPS-TC) test-mode defined in clause 8.3.1/G.9701
+         is enabled or disabled. The TPS_TESTMODE setting may be
+         changed during showtime. When changed, it shall take effect
+         within 2 seconds without re-initialization";
       reference
         "ITU-T G.997.2 clause 7.3.1 (TPS_TESTMODE); ITU-T G.9701
          clause 8.3.1.";
     }
-
     leaf dra-test-mode {
       type boolean;
       default "false";
       description
-        "Defines whether the DRA test-mode defined in clause
-         9.8.3.1.2/G.9701 is enabled or disabled. The DRA_TESTMODE
-         setting may be changed during showtime. When changed, it
-         shall take effect on the line within 2 seconds without
-         re-initialization.";
+        "Defines whether the Dynamic Resource Allocation (DRA)
+         test-mode defined in clause 9.8.3.1.2/G.9701 is enabled or
+         disabled. The DRA_TESTMODE setting may be changed during
+         showtime. When changed, it shall take effect on the line
+         within 2 seconds without re-initialization.";
       reference
         "ITU-T G.997.2 clause 7.3.2 (DRA_TESTMODE); ITU-T G.9701
          clause 9.8.3.1.2.";
@@ -142,8 +147,7 @@ submodule bbf-fast-test-mode-body {
 
   grouping line-test-modes {
     description
-      "Test modes associated with a line";
-
+      "Test modes associated with a line.";
     uses test-mode-enable-parameters;
   }
 }

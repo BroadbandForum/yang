@@ -7,7 +7,6 @@ submodule bbf-selt-base {
   import ietf-interfaces {
     prefix if;
   }
-
   import iana-if-type {
     prefix ianaift;
   }
@@ -15,7 +14,6 @@ submodule bbf-selt-base {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -31,13 +29,12 @@ submodule bbf-selt-base {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
-     managing top level SELT configuration and augmenations to
-     ietf-interfaces.
+     managing top level Single Ended Line Test (SELT) configuration
+     and augmenations to ietf-interfaces.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -77,9 +74,19 @@ submodule bbf-selt-base {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -103,52 +110,54 @@ submodule bbf-selt-base {
 
   feature selt-p {
     description
-      "Indicates support for SELT processing profiles (SELT-P).";
+      "Indicates support for Single Ended Line Test Processing
+       (SELT-P) profiles.";
     reference
       "ITU-T G.996.2 annex B";
   }
 
   container selt {
     description
-      "Single Ended Line Test(SELT) configuration";
-
+      "Single Ended Line Test (SELT) configuration.";
     container profiles {
       description
         "Configuration profiles.";
     }
   }
 
-  augment '/if:interfaces/if:interface' {
+  augment "/if:interfaces/if:interface" {
     when "if:type = 'ianaift:fastdsl'" {
       description
         "Only applicable when the interface type is 'fastdsl'";
     }
     description
-      "Data nodes for the configuration of SELT";
-
+      "Data nodes for the configuration of Single Ended Line Test
+       (SELT)";
     container selt {
       presence
-        "If present, indicates that the interface is able to operate
-         according to G.996.2";
+        "If present, indicates that the interface is capable of
+         performing Single Ended Line Test (SELT) functionality as
+         defined in ITU-T G.996.2.";
       description
-        "Configuration data for SELT.";
+        "Configuration data for Single Ended Line Test (SELT).";
     }
   }
 
-  augment '/if:interfaces-state/if:interface' {
+  augment "/if:interfaces-state/if:interface" {
     when "if:type = 'ianaift:fastdsl'" {
       description
         "Only applicable when the interface type is 'fastdsl'";
     }
     description
-      "Data nodes for the operational state data of SELT";
-
+      "Data nodes for the operational state data of Single Ended Line
+       Test (SELT)";
     container selt {
       presence
-        "If present, indicates that the interface is able to operate
-         according to G.996.2";
+        "If present, indicates that the interface is capable of
+         performing Single Ended Line Test (SELT) functionality as
+         defined in ITU-T G.996.2.";
       description
-        "Operational state data for SELT.";
+        "Operational state data for Single Ended Line Test (SELT).";
     }
   }
 }

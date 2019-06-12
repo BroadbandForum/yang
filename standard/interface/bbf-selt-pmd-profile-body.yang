@@ -7,7 +7,6 @@ submodule bbf-selt-pmd-profile-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,12 +22,11 @@ submodule bbf-selt-pmd-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
-     managing PMD profiles.
+     managing Physical Medium Dependent (PMD) profiles.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-selt-pmd-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -89,7 +97,7 @@ submodule bbf-selt-pmd-profile-body {
     reference
       "TR-355c2: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_2.pdf>";
+                        TR-355_Corrigendum-2.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -108,18 +116,20 @@ submodule bbf-selt-pmd-profile-body {
     }
     units "1 second";
     description
-      "This parameter is the maximum allowed time for SELT 
-       uncalibrated echo response measurement, between the time of 
-       the start command written by the SELT-PMD-ME, and the time the
-       result is available for read operation by SELT-PMD-ME.
+      "This parameter is the maximum allowed time for Singe Ended
+       Line Test (SELT) Uncalibrated Echo Response (UER) measurement,
+       between the time of the start command written by the
+       Single Ended Line Test Physical Medium Dependent Management
+       Entity (SELT-PMD-ME), and the time the result is available for
+       read operation by SELT-PMD-ME.
 
-       NOTE - The above duration includes internal pre- and 
+       NOTE - The above duration includes internal pre-processing and
               post-processing.
 
        It is configurable between 5 seconds and 240 seconds, in steps
-       of 1 second";
+       of 1 second.";
     reference
-      "ITU-T G.996.2 clause A.2.1.1 (SELT-UER-MMD-C, 
+      "ITU-T G.996.2 clause A.2.1.1 (SELT-UER-MMD-C,
        SELT-UER-MMD-R)";
   }
 
@@ -129,61 +139,65 @@ submodule bbf-selt-pmd-profile-body {
     }
     units "1 second";
     description
-      "This parameter is the maximum allowed time for SELT quiet line
-       noise measurement, between the time of the start command 
-       written by the SELT-PMD-ME, and the time the result is 
-       available for read operation by SELT-PMD-ME.
+      "This parameter is the maximum allowed time for Singe Ended
+       Line Test (SELT) Quiet Line Noise (QLN) measurement, between
+       the time of the start command written by the Single Ended Line
+       Test Physical Medium Dependent Management Entity (SELT-PMD-ME),
+       and the time the result is available for read operation by
+       SELT-PMD-ME.
 
-       NOTE - The above duration includes internal pre- and 
+       NOTE - The above duration includes internal pre-processing and
               post-processing.
 
-       It is configurable between 1 second and 240 seconds, in steps 
+       It is configurable between 1 second and 240 seconds, in steps
        of 1 second.";
     reference
-      "ITU-T G.996.2 clause A.2.1.2 (SELT-QLN-MMD-C, 
+      "ITU-T G.996.2 clause A.2.1.2 (SELT-QLN-MMD-C,
        SELT-QLN-MMD-R)";
   }
 
   grouping co-cpe-parameters {
     description
-      "Parameters to define the configuration common between the 
-       CO SELT PMD and CPE SELT PMD";
-
+      "Parameters to define the configuration common between the
+       Central Office (CO) CO Single Ended Line Test Physical Medium
+       Dependent (SELT-PMD) and Customer Premises Equipment (CPE)
+       SELT-PMD.";
     leaf uer-measurement-duration {
       type uer-measurement-duration;
       description
-        "The Uncalibrated Echo Response(UER) duration for the  
-         SELT PMD";
+        "The Uncalibrated Echo Response (UER) duration for the
+         Single Ended Line Test Physical Medium Dependent
+         (SELT-PMD).";
       reference
-        "ITU-T G.996.2 clause A.2.1.1 (SELT-UER-MMD-C, 
+        "ITU-T G.996.2 clause A.2.1.1 (SELT-UER-MMD-C,
          SELT-UER-MMD-R)";
     }
-
     leaf qln-measurement-duration {
       type qln-measurement-duration;
       description
-        "The Quiet Line Noise(QLN) duration for the SELT PMD";
+        "The Quiet Line Noise(QLN) duration for the Single Ended Line
+         Test Physical Medium Dependent (SELT-PMD).";
       reference
-        "ITU-T G.996.2 clause A.2.1.2 (SELT-QLN-MMD-C, 
+        "ITU-T G.996.2 clause A.2.1.2 (SELT-QLN-MMD-C,
          SELT-QLN-MMD-R)";
     }
   }
 
   grouping pmd-profile {
     description
-      "Defines the parameters contained in a PMD profile.";
-
+      "Defines the parameters contained in a Physical Medium Dependent
+       (PMD) profile.";
     container c {
       description
-        "Managed objects applicable to the CO SELT PMD";
-
+        "Managed objects applicable to the Central Office (CO) Single
+         Ended Line Test Physical Medium Dependent (SELT-PMD).";
       uses co-cpe-parameters;
     }
-
     container r {
       description
-        "Managed objects applicable to the CPE SELT PMD";
-
+        "Managed objects applicable to the Customer Premises
+         Equipment (CPE) Single Ended Line Test Physical Medium
+         Dependent (SELT-PMD).";
       uses co-cpe-parameters;
     }
   }

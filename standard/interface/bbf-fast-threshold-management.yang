@@ -7,19 +7,17 @@ submodule bbf-fast-threshold-management {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import bbf-fastdsl {
     prefix bbf-fastdsl;
   }
-
   import ietf-interfaces {
     prefix if;
   }
-
   include bbf-fast-base;
   include bbf-fast-perf-types;
 
   /* Profile bodies */
+
   include bbf-fast-line-threshold-profile-body;
   include bbf-fast-channel-threshold-profile-body;
   include bbf-fast-threshold-crossing-alert-body;
@@ -27,7 +25,6 @@ submodule bbf-fast-threshold-management {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -43,12 +40,11 @@ submodule bbf-fast-threshold-management {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing performance thresholds for FAST interfaces.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -88,9 +84,19 @@ submodule bbf-fast-threshold-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -114,68 +120,60 @@ submodule bbf-fast-threshold-management {
 
   typedef line-threshold-profile-ref {
     type leafref {
-      path '/bbf-fast:fast/bbf-fast:thresholds/bbf-fast:line-'
-         + 'threshold-profile/bbf-fast:name';
+      path "/bbf-fast:fast/bbf-fast:thresholds/bbf-fast:line-"
+         + "threshold-profile/bbf-fast:name";
     }
     description
-      "Used to reference a line threshold profile";
+      "Used to reference a line threshold profile.";
   }
 
   typedef channel-threshold-profile-ref {
     type leafref {
-      path '/bbf-fast:fast/bbf-fast:thresholds/bbf-fast:channel-'
-         + 'threshold-profile/bbf-fast:name';
+      path "/bbf-fast:fast/bbf-fast:thresholds/bbf-fast:channel-"
+         + "threshold-profile/bbf-fast:name";
     }
     description
-      "Used to reference a channel threshold profile";
+      "Used to reference a channel threshold profile.";
   }
 
-  augment '/bbf-fast:fast/bbf-fast:thresholds' {
+  augment "/bbf-fast:fast/bbf-fast:thresholds" {
     description
       "Data nodes to support performance threshold profiles and
        templates.";
-
     list line-threshold-profile {
       key "name";
       description
         "Profile defining thresholds for line specific
          performance parameters.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "Uniquely identifies the line threshold profile.";
       }
-
       uses line-thresholds;
     }
-
     list channel-threshold-profile {
       key "name";
       description
-        "Profile defining thresholds for bearer channel specific 
+        "Profile defining thresholds for bearer channel specific
          performance parameters.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "Uniquely identifies the channel threshold profile.";
       }
-
       uses channel-thresholds;
     }
   }
 
-  augment '/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-'
-        + 'fast:line' {
+  augment "/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-"
+        + "fast:line" {
     description
       "Augment the line to add threshold state data.";
-
     notification fast-15min-threshold-crossing-alert {
       description
         "A threshold has been crossed during the current 15 minute
          interval.";
-
       leaf tca-identity {
         type identityref {
           base fast-15min-threshold-crossing-alert;
@@ -185,13 +183,11 @@ submodule bbf-fast-threshold-management {
           "A unique identity associated with each threshold.";
       }
     }
-
     notification fast-24hr-threshold-crossing-alert {
       if-feature "performance-24hr";
       description
         "A threshold has been crossed during the current 24 hour
          interval.";
-
       leaf tca-identity {
         type identityref {
           base fast-24hr-threshold-crossing-alert;

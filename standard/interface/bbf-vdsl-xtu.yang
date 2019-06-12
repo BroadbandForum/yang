@@ -1,6 +1,5 @@
 submodule bbf-vdsl-xtu {
   yang-version 1.1;
-
   belongs-to bbf-vdsl {
     prefix bbf-vdsl;
   }
@@ -8,18 +7,15 @@ submodule bbf-vdsl-xtu {
   import ietf-interfaces {
     prefix if;
   }
-
   import bbf-fastdsl {
     prefix bbf-fastdsl;
   }
-
   include bbf-vdsl-line;
   include bbf-vdsl-inventory-body;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -35,12 +31,12 @@ submodule bbf-vdsl-xtu {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
-     managing xTU parameters for VDSL interfaces.
+     managing xDSL Transceiver Unit (xTU) parameters for VDSL
+     interfaces.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -80,9 +76,19 @@ submodule bbf-vdsl-xtu {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -104,24 +110,22 @@ submodule bbf-vdsl-xtu {
                         TR-355.pdf>";
   }
 
-  augment '/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-'
-        + 'vdsl:line' {
+  augment "/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-"
+        + "vdsl:line" {
     description
       "xDSL Termination Unit (xTU).";
-
     container inventory {
       description
         "xDSL Termination Unit (xTU) inventory.";
-
       container xtu-c {
         description
-          "xDSL Termination Unit (xTU-C) inventory.";
+          "xDSL Termination Unit - Central office (xTU-C) inventory.";
         uses inventory;
         uses vce;
       }
       container xtu-r {
         description
-          "xDSL Termination Unit (xTU-R) inventory.";
+          "xDSL Termination Unit - Remote side (xTU-R) inventory.";
         uses inventory;
       }
     }

@@ -7,7 +7,6 @@ submodule bbf-melt-base {
   import ietf-interfaces {
     prefix if;
   }
-
   import iana-if-type {
     prefix ianaift;
   }
@@ -15,7 +14,6 @@ submodule bbf-melt-base {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -31,13 +29,12 @@ submodule bbf-melt-base {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
-     managing top level MELT configuration and augmenations to
-     ietf-interfaces.
+     managing top level Metallic Line Test (MELT) configuration and
+     augmenations to ietf-interfaces.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -77,9 +74,19 @@ submodule bbf-melt-base {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -103,21 +110,22 @@ submodule bbf-melt-base {
 
   feature melt-p {
     description
-      "Indicates support for MELT processing profiles (MELT-P).";
+      "Indicates support for Metallic Line Test (MELT) processing
+       profiles (MELT-P).";
     reference
       "ITU-T G.996.2 annex F";
   }
 
   feature melt-pmd-reporting-parameter-reliability {
     description
-      "Indicates support for reporting the reliability of the PMD
-       reporting parameters.";
+      "Indicates support for reporting the reliability of the
+       Physical Medium Dependent (PMD) reporting parameters.";
   }
 
   feature melt-pmd-measurement-parameter-reliability {
     description
-      "Indicates support for reporting the reliability of the PMD
-       measurement parameters.";
+      "Indicates support for reporting the reliability of the
+       Physical Medium Dependent (PMD) measurement parameters.";
   }
 
   feature melt-processing-derived-parameter-reliability {
@@ -128,45 +136,45 @@ submodule bbf-melt-base {
 
   container melt {
     description
-      "Metallic Line Test(MELT) configuration.";
-
+      "Metallic Line Test (MELT) configuration.";
     container profiles {
       description
         "Configuration profiles.";
     }
   }
 
-  augment '/if:interfaces/if:interface' {
+  augment "/if:interfaces/if:interface" {
     when "if:type = 'ianaift:fastdsl'" {
       description
         "Only applicable when the interface type is 'fastdsl'.";
     }
     description
-      "Data nodes for the configuration of MELT.";
-
+      "Data nodes for the configuration of Metallic Line Test
+       (MELT).";
     container melt {
       presence
-        "If present, indicates that the interface is able to operate
-         according to G.996.2";
+        "If present, indicates that the interface is capable of
+         performing MELT functionality as defined in ITU-T G.996.2.";
       description
         "Configuration data for MELT.";
     }
   }
 
-  augment '/if:interfaces-state/if:interface' {
+  augment "/if:interfaces-state/if:interface" {
     when "if:type = 'ianaift:fastdsl'" {
       description
         "Only applicable when the interface type is 'fastdsl'.";
     }
     description
-      "Data nodes for the operational state data of MELT.";
-
+      "Data nodes for the operational state data of
+       Metallic Line Test (MELT).";
     container melt {
       presence
-        "If present, indicates that the interface is able to operate
-         according to G.996.2";
+        "If present, indicates that the interface is capable of
+         performing Metallic Line Test (MELT) functionality as defined
+         in ITU-T G.996.2.";
       description
-        "Operational state data for MELT.";
+        "Operational state data for Metallic Line Test (MELT).";
     }
   }
 }

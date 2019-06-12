@@ -7,7 +7,6 @@ submodule bbf-fast-update-test-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,12 +22,11 @@ submodule bbf-fast-update-test-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing test updates.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-fast-update-test-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -89,7 +97,7 @@ submodule bbf-fast-update-test-body {
     reference
       "TR-355c2: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_2.pdf>";
+                        TR-355_Corrigendum-2.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -138,15 +146,12 @@ submodule bbf-fast-update-test-body {
       "A set of bits representing each of the far end test groups.";
   }
 
-
   grouping line-update-test-parameters {
     description
-      "Objects used to update test parameters on a line";
-
+      "Objects used to update test parameters on a line.";
     container ftu-o {
       description
         "Relative to the Fast Transceiver Unit - central Office";
-
       leaf update-ne-test {
         type near-end-test-groups;
         default "";
@@ -159,22 +164,20 @@ submodule bbf-fast-update-test-body {
            A configuration change back to clear a bit is required
            before initiating another update.";
         reference
-          "ITU-T G.997.2 clause 7.1.9.1(UPDATE-NE-TEST); ITU-T 
+          "ITU-T G.997.2 clause 7.1.9.1(UPDATE-NE-TEST); ITU-T
            G.9701 clause 11.1.";
       }
-
       action update-near-end-test {
         description
           "Forces an update of the test parameters that can be
            updated during showtime.";
         reference
-          "ITU-T G.997.2 clause 7.1.9.1(UPDATE-NE-TEST); ITU-T 
+          "ITU-T G.997.2 clause 7.1.9.1(UPDATE-NE-TEST); ITU-T
            G.9701 clause 11.1.";
-
         input {
           leaf group {
             type near-end-test-groups;
-            must "boolean(.)" {
+            must 'boolean(.)' {
               description
                 "At least one bit must be specified.";
             }
@@ -184,11 +187,9 @@ submodule bbf-fast-update-test-body {
         }
       }
     }
-
     container ftu-r {
       description
-        "Relative to the Fast Transceiver Unit - Remote side";
-
+        "Relative to the Fast Transceiver Unit - Remote side.";
       leaf update-fe-test {
         type far-end-test-groups;
         default "";
@@ -201,22 +202,20 @@ submodule bbf-fast-update-test-body {
            A configuration change back to clear a bit is required
            before initiating another update.";
         reference
-          "ITU-T G.997.2 clause 7.1.9.2(UPDATE-FE-TEST); ITU-T 
+          "ITU-T G.997.2 clause 7.1.9.2(UPDATE-FE-TEST); ITU-T
            G.9701 clause 11.1.";
       }
-
       action update-far-end-test {
         description
           "Forces an update of the test parameters that can be
            updated during showtime.";
         reference
-          "ITU-T G.997.2 clause 7.1.9.2(UPDATE-FE-TEST); ITU-T 
+          "ITU-T G.997.2 clause 7.1.9.2(UPDATE-FE-TEST); ITU-T
            G.9701 clause 11.1.";
-
         input {
           leaf group {
             type far-end-test-groups;
-            must "boolean(.)" {
+            must 'boolean(.)' {
               description
                 "At least one bit must be specified.";
             }

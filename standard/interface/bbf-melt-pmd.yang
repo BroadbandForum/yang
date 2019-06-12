@@ -7,7 +7,6 @@ submodule bbf-melt-pmd {
   import ietf-interfaces {
     prefix if;
   }
-
   include bbf-melt-base;
   include bbf-melt-pmd-control-body;
   include bbf-melt-pmd-status-body;
@@ -16,7 +15,6 @@ submodule bbf-melt-pmd {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -32,12 +30,11 @@ submodule bbf-melt-pmd {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
-     managing the PMD object.
+     managing the Physical Medium Dependent (PMD) object.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -77,9 +74,19 @@ submodule bbf-melt-pmd {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -91,51 +98,47 @@ submodule bbf-melt-pmd {
                         TR-355_Amendment-1.pdf>";
   }
 
-
-  augment '/if:interfaces/if:interface/bbf-melt:melt/bbf-melt:'
-        + 'profile-config/bbf-melt:direct-attachment-mode/bbf-melt:'
-        + 'direct-attachment-mode' {
+  augment "/if:interfaces/if:interface/bbf-melt:melt/bbf-melt:"
+        + "profile-config/bbf-melt:direct-attachment-mode/bbf-melt:"
+        + "direct-attachment-mode" {
     description
-      "Data nodes for the configuration of MELT PMD control.";
-
+      "Data nodes for the configuration of Metallic Line Test Physical
+       Medium Dependent (MELT-PMD) control.";
     container pmd-control {
       description
-        "Data nodes to support the MELT-PMD control object.";
-
+        "Data nodes to support the Metallic Line Test Physical Medium
+         Dependent (MELT-PMD) control object.";
       uses pmd-control;
     }
   }
 
-
-  augment '/if:interfaces-state/if:interface/bbf-melt:melt' {
+  augment "/if:interfaces-state/if:interface/bbf-melt:melt" {
     description
-      "Data nodes for the configuration of MELT PMD status.";
-
+      "Data nodes for the configuration of Metallic Line Test Physical
+       Medium Dependent (MELT-PMD) status.";
     container pmd-status {
       description
-        "Status associated with the MELT-PMD control object.";
-
+        "Status associated with the Metallic Line Test Physical
+         Medium Dependent (MELT-PMD) control object.";
       uses pmd-status;
     }
-
     notification melt-pmd-completed {
       description
-        "Indicates that a MELT PMD function has failed, succeeded
-         or has been aborted.";
-
+        "Indicates that a Metallic Line Test Physical Medium Dependent
+         (MELT-PMD) function has failed, succeeded or has been
+         aborted.";
       leaf function {
         type pmd-function;
         mandatory true;
         description
           "The function that was performed or attempted to perform.";
       }
-
       leaf result {
         type pmd-result;
         mandatory true;
         description
-          "The result of the attempted execution of the PMD 
-           function.";
+          "The result of the attempted execution of the Metallic Line
+           Test Physical Medium Dependent (MELT-PMD) function.";
       }
     }
   }

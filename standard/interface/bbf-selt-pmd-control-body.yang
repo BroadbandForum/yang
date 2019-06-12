@@ -7,7 +7,6 @@ submodule bbf-selt-pmd-control-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,12 +22,11 @@ submodule bbf-selt-pmd-control-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
-     managing the PMD control object.
+     managing the Physical Medium Dependet (PMD) control object.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-selt-pmd-control-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -94,105 +102,113 @@ submodule bbf-selt-pmd-control-body {
 
   typedef pmd-function {
     type enumeration {
-      enum "uer-measurement" {
+      enum uer-measurement {
         value 1;
         description
-          "Triggers the CO SELT PMD to start a Uncalibrated
-           Echo Response (UER) measurement.";
+          "Triggers the Central Office (CO) Single Ended Line Test
+           Physical Medium Dependent (SELT-PMD) to start a
+           Uncalibrated Echo Response (UER) measurement.";
         reference
           "ITU-T G.996.2 clause A.2.3.1 (SELT-UME-C)";
       }
-      enum "qln-measurement" {
+      enum qln-measurement {
         value 2;
         description
-          "Triggers the CO SELT PMD to start a Quiet Line
+          "Triggers the Central Office (CO) Single Ended Line Test
+           Physical Medium Dependent (SELT-PMD) to start a Quiet Line
            Noise (QLN) measurement.";
         reference
           "ITU-T G.996.2 clause A.2.3.3 (SELT-QME-C)";
       }
     }
     description
-      "The SELT PMD function.";
+      "The Central Office (CO) Single Ended Line Test Physical Medium
+       Dependent (SELT-PMD) function.";
   }
 
   grouping selt-pmd-control {
     description
       "Defines the parameters contained in the PMD control object.";
-
     leaf uer-measurement-enable-c {
       type boolean;
       default "false";
       status deprecated;
       description
-        "If true, triggers the CO SELT PMD to start a Uncalibrated
-         Echo Response(UER) measurement.
+        "If true, triggers the Central Office (CO) Single Ended Line
+         Test Physical Medium Dependent (SELT-PMD) to start a
+         Uncalibrated Echo Response(UER) measurement.
 
-         A configuration change back to 'false' is required before 
+         A configuration change back to 'false' is required before
          initiating another update.";
       reference
         "ITU-T G.996.2 clause A.2.3.1 (SELT-UME-C)";
     }
-
     leaf qln-measurement-enable-c {
       type boolean;
       default "false";
       status deprecated;
       description
-        "If true, triggers the CO SELT PMD to start a Quiet Line
-         Noise(QLN) measurement.
+        "If true, triggers the Central Office (CO) Single Ended Line
+         Test Physical Medium Dependent (SELT-PMD) to start a Quiet
+         Line Noise(QLN) measurement.
 
-         A configuration change back to 'false' is required before 
+         A configuration change back to 'false' is required before
          initiating another update.";
       reference
         "ITU-T G.996.2 clause A.2.3.3 (SELT-QME-C)";
     }
   }
 
-
   grouping pmd-control {
     description
-      "PMD control configuration.";
-
+      "Physical Medium Dependent (PMD) control configuration.";
     leaf pmd-control {
       type enumeration {
-        enum "disable" {
+        enum disable {
           description
-            "The CO SELT PMD is not configured for a measurement.";
+            "The Central Office (CO) Single Ended Line Test Physical
+             Medium Dependent (SELT-PMD) is not configured for a
+             measurement.";
         }
-        enum "enable" {
+        enum enable {
           description
-            "The CO SELT PMD is configured for a measurement.";
+            "The Central Office (CO) Single Ended Line Test Physical
+             Medium Dependent (SELT-PMD) is configured for a
+             measurement.";
         }
       }
       default "disable";
       description
-        "The CO SELT PMD is by default 'disable'. When 'disable', the 
-         line is in normal operation (e.g., in the L0 state if the 
-         line is configured with AdminStatus=up). When 'enable', the 
-         AN/DPU ME shall force the line to the L3 state.";
+        "The Central Office (CO) Single Ended Line Test Physical
+         Medium Dependent (SELT-PMD) is by default 'disable'. When
+         'disable', the line is in normal operation (e.g., in the L0
+         state if the line is configured with AdminStatus=up). When
+         'enable', the Access Node (AN)/Distribution Point Unit (DPU)
+         Maintenance Entity (ME) shall force the line to the L3
+         state.";
     }
-
-
     action request-pmd-function-c {
       description
-        "A measurement is by default not triggered. A measurement is 
-         triggered when the action is sent with the appropriate 
+        "A measurement is by default not triggered. A measurement is
+         triggered when the action is sent with the appropriate
          function specified. One or more measurements may be triggered
-         while the CO SELT PMD is configured 'enable', possibly with 
-         different CO SELT PMD configuration parameters. If the 
-         triggered measurement cannot be executed, then the 
-         AN/DPU ME rejects this action and the CO SELT PMD status 
+         while the Central Office (CO) Single Ended Line Test Physical
+         Medium Dependent (SELT-PMD) is configured 'enable', possibly
+         with different CO SELT-PMD configuration parameters. If the
+         triggered measurement cannot be executed, then the
+         Access Node (AN)/Distribution Point Unit (DPU) Maintenance
+         Entity (ME) rejects this action and the CO SELT-PMD status
          remains 'inactive'.";
-
       input {
         leaf pmd-function {
           type union {
             type enumeration {
-              enum "abort" {
+              enum abort {
                 value 0;
                 description
-                  "Triggers the CO SELT PMD to abort any currently
-                   ongoing measurement.";
+                  "Triggers the Central Office (CO) Single Ended Line
+                   Test Physical Medium Dependent (SELT-PMD) to abort
+                   any currently ongoing measurement.";
               }
             }
             type pmd-function;

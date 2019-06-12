@@ -9,7 +9,6 @@ submodule bbf-fast-rfi-profile-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -25,12 +24,11 @@ submodule bbf-fast-rfi-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing RFI profiles.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +68,19 @@ submodule bbf-fast-rfi-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -91,7 +99,7 @@ submodule bbf-fast-rfi-profile-body {
     reference
       "TR-355c1: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_1.pdf>";
+                        TR-355_Corrigendum-1.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -107,8 +115,7 @@ submodule bbf-fast-rfi-profile-body {
   grouping rfibands {
     description
       "Parameters associated with Radio Frequency Interference
-       bands";
-
+       bands.";
     list rfiband {
       key "start-index";
       max-elements 32;
@@ -118,7 +125,6 @@ submodule bbf-fast-rfi-profile-body {
       reference
         "ITU-T G.997.2 clause 7.1.2.7 (RFIBANDS); ITU-T G.9701
          Clause 7.3.1.2.";
-
       uses sub-carrier-range;
     }
   }
@@ -128,73 +134,73 @@ submodule bbf-fast-rfi-profile-body {
       bit kHz-1800-2000 {
         position 0;
         description
-          "International amateur radio band 1800-2000 kHz";
+          "International amateur radio band 1800-2000 kHz.";
       }
       bit kHz-3500-4000 {
         position 1;
         description
-          "International amateur radio band 3500-4000 kHz";
+          "International amateur radio band 3500-4000 kHz.";
       }
       bit kHz-7000-7300 {
         position 2;
         description
-          "International amateur radio band 7000-7300 kHz";
+          "International amateur radio band 7000-7300 kHz.";
       }
       bit kHz-10100-10150 {
         position 3;
         description
-          "International amateur radio band 10100-10150 kHz";
+          "International amateur radio band 10100-10150 kHz.";
       }
       bit kHz-14000-14350 {
         position 4;
         description
-          "International amateur radio band 14000-14350 kHz";
+          "International amateur radio band 14000-14350 kHz.";
       }
       bit kHz-18068-18168 {
         position 5;
         description
-          "International amateur radio band 18068-18168 kHz";
+          "International amateur radio band 18068-18168 kHz.";
       }
       bit kHz-21000-21450 {
         position 6;
         description
-          "International amateur radio band 21000-21450 kHz";
+          "International amateur radio band 21000-21450 kHz.";
       }
       bit kHz-24890-24990 {
         position 7;
         description
-          "International amateur radio band 24890-24990 kHz";
+          "International amateur radio band 24890-24990 kHz.";
       }
       bit kHz-28000-29700 {
         position 8;
         description
-          "International amateur radio band 28000-29700 kHz";
+          "International amateur radio band 28000-29700 kHz.";
       }
       bit kHz-50000-54000 {
         position 9;
         description
-          "International amateur radio band 50000-54000 kHz";
+          "International amateur radio band 50000-54000 kHz.";
       }
       bit kHz-69900-70500 {
         position 10;
         description
-          "International amateur radio band 69900-70500 kHz";
+          "International amateur radio band 69900-70500 kHz.";
       }
       bit kHz-144000-148000 {
         position 11;
         description
-          "International amateur radio band 144000-148000 kHz";
+          "International amateur radio band 144000-148000 kHz.";
       }
       bit kHz-5351.5-5366.5 {
         position 12;
         description
-          "International amateur radio band 5351.5-5366.5 kHz";
+          "International amateur radio band 5351.5-5366.5 kHz.";
       }
     }
     description
       "Defines for each International Amateur Radio (IAR) band
-       whether transmit PSD reduction is enabled or disabled in that
-       band.";
+       whether transmit Power Spectral Density (PSD) reduction is
+       enabled or disabled in that band.";
     reference
       "ITU-T G.997.2 clause 7.1.2.8 (IARBANDS); ITU-T G.9701 clause
        7.3.1.2 and 12.3.2.1.1; ITU-T G.994.1 Table 11.70.8 and
@@ -203,17 +209,16 @@ submodule bbf-fast-rfi-profile-body {
 
   grouping rfi-profile {
     description
-      "Defines the parameters contained in an RFI profile.";
-
+      "Defines the parameters contained in an Radio Frequency
+       Interference (RFI) profile.";
     uses rfibands;
-
     leaf iarbands {
       type iarbands;
       default "";
       description
         "Defines for each International Amateur Radio (IAR) band
-         whether transmit PSD reduction is enabled or disabled in
-         that band.";
+         whether transmit Power Spectral Density (PSD) reduction is
+         enabled or disabled in that band.";
       reference
         "ITU-T G.997.2 clause 7.1.2.8 (IARBANDS); ITU-T G.9701
          clause 7.3.1.2 and 12.3.2.1.1; ITU-T G.994.1 Table 11.70.8

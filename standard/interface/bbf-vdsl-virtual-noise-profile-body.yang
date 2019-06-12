@@ -9,7 +9,6 @@ submodule bbf-vdsl-virtual-noise-profile-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -25,13 +24,12 @@ submodule bbf-vdsl-virtual-noise-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
-    "This submodule contains a collection of YANG definitions for 
-     managing Broadband Forum TR-252i3 5.7 DSL Quality Management 
+    "This submodule contains a collection of YANG definitions for
+     managing Broadband Forum TR-252i3 5.7 DSL Quality Management
      related profiles; Virtual Noise Profile.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -71,9 +69,19 @@ submodule bbf-vdsl-virtual-noise-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -92,7 +100,7 @@ submodule bbf-vdsl-virtual-noise-profile-body {
     reference
       "TR-355c2: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_2.pdf>";
+                        TR-355_Corrigendum-2.pdf>";
   }
   revision 2017-03-13 {
     description
@@ -102,7 +110,7 @@ submodule bbf-vdsl-virtual-noise-profile-body {
     reference
       "TR-355c1: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_1.pdf>";
+                        TR-355_Corrigendum-1.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -123,18 +131,17 @@ submodule bbf-vdsl-virtual-noise-profile-body {
       leaf sub-carrier {
         type sub-carrier-index;
         description
-          "Sub-carrier index";
+          "Sub-carrier index.";
       }
-
       leaf psd-level {
         type union {
           type uint8 {
             range "0..200";
           }
           type enumeration {
-            enum "zero-watts-per-hz" {
+            enum zero-watts-per-hz {
               description
-                "Indicates a noise level of 0 W/Hz 
+                "Indicates a noise level of 0 W/Hz
                  (minus infinity dBm/Hz).";
             }
           }
@@ -146,24 +153,23 @@ submodule bbf-vdsl-virtual-noise-profile-body {
            in steps of -0.5 dBm/Hz, with an offset of -40 dBm/Hz.
            The virtual noise level = -psd-level/2 -40 dBm/Hz.
            A special value of (enum zero-watts-per-hz) indicates
-           a noise level of 0 W/Hz (minus infinity dBm/Hz). 
+           a noise level of 0 W/Hz (minus infinity dBm/Hz).
            The default is an empty list, corresponding to no
            virtual noise defined.";
       }
       description
-        "The virtual noise PSD level.";
+        "The virtual noise Power Spectral Density (PSD) level.";
     }
   }
 
-
   grouping virtual-noise-profile {
-
     description
       "Configuration parameters for downstream Virtual Noise (VN).";
     container virtual-noise {
-      must "count(psdmask) != 1" {
+      must 'count(psdmask) != 1' {
         description
-          "There must be either 0 or 2 to 32 PSD masks defined.";
+          "There must be either 0 or 2 to 32 Power Spectral Density
+           (PSD) mask breakpoints defined.";
       }
       uses vn-descriptor {
         refine "psdmask" {
@@ -175,10 +181,10 @@ submodule bbf-vdsl-virtual-noise-profile-body {
          referred virtual noise (TXREFVN). The TXREFVN is
          specified through a set of breakpoints. Each breakpoint
          consists of a subcarrier index t, with a subcarrier
-         spacing of 4.3125 kHz, and a noise PSD level (expressed
-         in dBm/Hz) at that subcarrier. The set of breakpoints
-         can then be represented as [(t1, PSD1), (t2, PSD2), ,
-         (tN, PSDN)]. The subcarrier index is coded as an
+         spacing of 4.3125 kHz, and a noise Power Spectral Density
+         (PSD) level (expressed in dBm/Hz) at that subcarrier. The set
+         of breakpoints can then be represented as [(t1, PSD1),
+         (t2, PSD2), (tN, PSDN)]. The subcarrier index is coded as an
          unsigned integer. The noise level ranges from -40 dBm/Hz
          to -140 dBm/Hz in steps of 0.5 dBm/Hz. A special value
          of (enum zero-watts-per-hz) indicates a noise level of
@@ -189,35 +195,34 @@ submodule bbf-vdsl-virtual-noise-profile-body {
         "ITU-T G.997.1 clause 7.3.1.7.3 Downstream Virtual noise
          (VNds).";
     }
-
     container fext-txrefvnds {
       uses vn-descriptor;
       description
         "For ITU-T G.992.3 (ADSL2) Annex C and ITU-T G.992.5
          (ADSL2plus) Annex C, the transmitter referred virtual
          noise (see clause 7.3.1.7.3) specified for FEXTR
-         duration is defined as FEXT downstream transmitter
-         referred virtual noise (FEXT TXREFVNds). The default is
-         an empty list, corresponding to no virtual noise defined.";
+         duration is defined as Far-End Crosstalk (FEXT) downstream
+         transmitter referred virtual noise (FEXT TXREFVNds). The
+         default is an empty list, corresponding to no virtual noise
+         defined.";
       reference
         "ITU-T G.997.1 clause 7.3.1.7.3.1 FEXT downstream
          transmitter referred virtual noise (FEXT TXREFVNds)";
     }
-
     container next-txrefvnds {
       uses vn-descriptor;
       description
         "For ITU-T G.992.3 (ADSL2) Annex C and ITU-T G.992.5
          (ADSL2plus) Annex C, the transmitter referred virtual
          noise (see clause 7.3.1.7.3) specified for NEXTR
-         duration is defined as NEXT downstream transmitter
-         referred virtual noise (NEXT TXREFVNds). The default is
-         an empty list, corresponding to no virtual noise defined.";
+         duration is defined as Near-End Crosstalk (NEXT) downstream
+         transmitter referred virtual noise (NEXT TXREFVNds). The
+         default is an empty list, corresponding to no virtual noise
+         defined.";
       reference
         "ITU-T G.997.1 clause 7.3.1.7.3.2 NEXT downstream
          transmitter referred virtual noise (NEXT TXREFVNds)";
     }
-
     leaf txrefvnsfds {
       type int8 {
         range "-128..127";
@@ -235,17 +240,18 @@ submodule bbf-vdsl-virtual-noise-profile-body {
         "ITU-T G.997.1 clause 7.3.1.7.6 Downstream virtual noise
          scaling factor (TXREFVNSFds)";
     }
-  } // end grouping virtual-noise-profile (~downstream)
+  }
+
+  // end grouping virtual-noise-profile (~downstream)
 
   grouping virtual-noise-profile-upstream {
-
     description
       "Configuration parameters for upstream Virtual Noise (VN).";
-
     container virtual-noise {
-      must "count(psdmask) != 1" {
+      must 'count(psdmask) != 1' {
         description
-          "There must be either 0 or 2 to 16 PSD masks defined.";
+          "There must be either 0 or 2 to 16 Power Spectral Density
+           (PSD) mask breakpoints defined.";
       }
       uses vn-descriptor {
         refine "psdmask" {
@@ -253,14 +259,14 @@ submodule bbf-vdsl-virtual-noise-profile-body {
         }
       }
       description
-        "This configuration parameter VN defines the transmitter
-         referred virtual noise (TXREFVN). The TXREFVN is
+        "This configuration parameter Virtual Noise (VN) defines the
+         transmitter referred virtual noise (TXREFVN). The TXREFVN is
          specified through a set of breakpoints. Each breakpoint
          consists of a subcarrier index t, with a subcarrier
-         spacing of 4.3125 kHz, and a noise PSD level (expressed
-         in dBm/Hz) at that subcarrier. The set of breakpoints
-         can then be represented as [(t1, PSD1), (t2, PSD2), ,
-         (tN, PSDN)]. The subcarrier index is coded as an
+         spacing of 4.3125 kHz, and a noise Power Spectral Density
+         (PSD) level (expressed in dBm/Hz) at that subcarrier. The set
+         of breakpoints can then be represented as [(t1, PSD1),
+         (t2, PSD2), (tN, PSDN)]. The subcarrier index is coded as an
          unsigned integer. The noise level ranges from -40 dBm/Hz
          to -140 dBm/Hz in steps of 0.5 dBm/Hz. A special value
          of (enum zero-watts-per-hz) indicates a noise level of
@@ -271,7 +277,6 @@ submodule bbf-vdsl-virtual-noise-profile-body {
         "ITU-T G.997.1 clause 7.3.1.7.4 Upstream virtual noise
          (VNus).";
     }
-
     leaf rxrefvnsfus {
       type int8 {
         range "-128..127";
@@ -289,5 +294,7 @@ submodule bbf-vdsl-virtual-noise-profile-body {
         "ITU-T G.997.1 clause 7.3.1.7.5 Upstream virtual noise
          scaling factor (RXREFVNSFus)";
     }
-  } // end grouping virtual-noise-profile-upstream
-} // end submodule virtual-noise-profile-body
+  }
+
+  // end grouping virtual-noise-profile-upstream
+}

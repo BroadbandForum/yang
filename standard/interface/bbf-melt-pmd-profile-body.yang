@@ -7,7 +7,6 @@ submodule bbf-melt-pmd-profile-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,12 +22,11 @@ submodule bbf-melt-pmd-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
-     managing PMD profiles.
+     managing Physical Medium Dependent (PMD) profiles.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-melt-pmd-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -89,7 +97,7 @@ submodule bbf-melt-pmd-profile-body {
     reference
       "TR-355c2: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_2.pdf>";
+                        TR-355_Corrigendum-2.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -107,125 +115,118 @@ submodule bbf-melt-pmd-profile-body {
       "Base identity for defining the various measurements";
   }
 
-
   grouping pmd-profile {
     description
-      "Defines the parameters contained in a PMD profile.";
-
+      "Defines the parameters contained in a Physical Medium Dependent
+       (PMD) profile.";
     leaf peak-metallic-voltage-tr {
       type uint8 {
         range "0..150";
       }
       units "1 V";
       description
-        "This parameter defines the peak metallic voltage which must 
-         not be exceeded in any active measurement applying a 
-         metallic voltage between tip and ring in order not to 
-         conduct current in anon-linear termination located at the 
+        "This parameter defines the peak metallic voltage which must
+         not be exceeded in any active measurement applying a
+         metallic voltage between tip and ring in order not to
+         conduct current in anon-linear termination located at the
          far-end during the measurement. The range of valid values is
-         from 0 to 150 V with a granularity of 1 V. In the case of a 
-         test performed with a sinewave signal, it applies to the 
+         from 0 to 150 V with a granularity of 1 V. In the case of a
+         test performed with a sinewave signal, it applies to the
          peak of the sinewave, not to its rms value.";
       reference
         "ITU-T G.996.2 clause E.2.1.2 (MELT-PV)";
     }
-
     leaf pair-identification-tone-frequency {
       type uint16 {
         range "300..3400";
       }
       units "1 Hz";
       description
-        "This parameter sets up frequency of the pair identification 
-         tone as defined in clause E.1.2.1. The range of frequencies 
+        "This parameter sets up frequency of the pair identification
+         tone as defined in clause E.1.2.1. The range of frequencies
          is from 300 to 3400 Hz in granularity of 1 Hz.
-         The supported set of frequencies is at the vendor's 
+         The supported set of frequencies is at the vendor's
          discretion.";
       reference
         "ITU-T G.996.2 clause E.2.1.4 (MELT-PIT-F)";
     }
-
     leaf pair-identification-tone-timeout {
       type uint16 {
         range "1..65535";
       }
       units "1 second";
       description
-        "This parameter specifies the duration of the pair 
-         identification tone. After timeout the pair identification 
-         tone is deactivated automatically, if not deactivated 
+        "This parameter specifies the duration of the pair
+         identification tone. After timeout the pair identification
+         tone is deactivated automatically, if not deactivated
          manually before (abort).";
       reference
         "ITU-T G.996.2 clause E.2.1.5 (MELT-PIT-T)";
     }
-
     leaf maximum-far-end-signature-conductive-voltage {
       type uint16 {
         range "0..500";
       }
       units "0.1 V";
       description
-        "This parameter specifies the maximum conduction voltage 
-         level of an expected far-end signature. It defines the 
-         minimum metallic voltage required for all measurements with 
-         a high metallic voltage between tip and ring in order to 
-         conduct current in a far-end signature during the 
-         measurement. The range of valid values is from 0 to 50 V 
+        "This parameter specifies the maximum conduction voltage
+         level of an expected far-end signature. It defines the
+         minimum metallic voltage required for all measurements with
+         a high metallic voltage between tip and ring in order to
+         conduct current in a far-end signature during the
+         measurement. The range of valid values is from 0 to 50 V
          with a granularity of 0.1 V.";
       reference
         "ITU-T G.996.2 clause E.2.1.5 (MELT-MAXFE-SCV)";
     }
-
     leaf minimum-far-end-signature-conductive-voltage {
       type uint16 {
         range "0..500";
       }
       units "0.1 V";
       description
-        "This parameter specifies the minimum conduction voltage 
-         level of an expected far-end signature. It defines the 
+        "This parameter specifies the minimum conduction voltage
+         level of an expected far-end signature. It defines the
          maximum metallic voltage allowed for all measurements with a
-         controlled metallic voltage between tip and ring in order 
+         controlled metallic voltage between tip and ring in order
          not to conduct current in a far-end signature during the
-         measurement. The range of valid values is from 0 to 50 V 
-         with a granularity of 0.1 V. In the case of a measurement 
-         performed with a sinewave signal, it applies to the peak of 
+         measurement. The range of valid values is from 0 to 50 V
+         with a granularity of 0.1 V. In the case of a measurement
+         performed with a sinewave signal, it applies to the peak of
          the sinewave, not to its rms value.";
       reference
         "ITU-T G.996.2 clause E.2.1.6 (MELT-MINFE-SCV)";
     }
-
     leaf-list measurement-class {
       type identityref {
         base measurement-class;
       }
       ordered-by user;
       description
-        "This parameter defines the list of measurements to be 
-         executed. It shall support a single measurement or a set of 
-         MELT measurements in a consecutive manner. The measurements 
-         of interest are selected via a flag register, or 
+        "This parameter defines the list of measurements to be
+         executed. It shall support a single measurement or a set of
+         MELT measurements in a consecutive manner. The measurements
+         of interest are selected via a flag register, or
          equivalent. If no elements exist, no measurements will be
          executed.";
       reference
         "ITU-T G.996.2 clause E.2.1.1 (MELT-MCLASS)";
     }
-
     leaf signal-frequency-for-active-ac-tests {
       type uint16 {
         range "10..1000";
       }
       units "1 Hz";
       description
-        "This parameter controls the frequency used during the 
-         3-element capacitance test, if performed with a sinewave 
-         signal, and during the 3-element complex admittance test. 
-         This parameter shall be represented in linear format with 
-         values from 10 to 1000 Hz with a granularity of 1 Hz. 
+        "This parameter controls the frequency used during the
+         3-element capacitance test, if performed with a sinewave
+         signal, and during the 3-element complex admittance test.
+         This parameter shall be represented in linear format with
+         values from 10 to 1000 Hz with a granularity of 1 Hz.
 
-         The supported set of frequencies is at the vendor's 
-         discretion with an option to operate in automatic mode for 
-         which the testing routine will select the frequency on its 
+         The supported set of frequencies is at the vendor's
+         discretion with an option to operate in automatic mode for
+         which the testing routine will select the frequency on its
          own.";
       reference
         "ITU-T G.996.2 clause E.2.1.3 (MELT-AC-F)";

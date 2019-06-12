@@ -7,16 +7,15 @@ submodule bbf-fast-tdd-profiles {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   include bbf-fast-base;
 
   /* Profile bodies */
+
   include bbf-fast-tdd-profile-body;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -32,12 +31,11 @@ submodule bbf-fast-tdd-profiles {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing FAST time division duplexing(TDD) profiles.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -77,9 +75,19 @@ submodule bbf-fast-tdd-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -103,28 +111,25 @@ submodule bbf-fast-tdd-profiles {
 
   typedef time-division-duplexing-profile-ref {
     type leafref {
-      path '/bbf-fast:fast/bbf-fast:service/bbf-fast:time-division-'
-         + 'duplexing-profile/bbf-fast:name';
+      path "/bbf-fast:fast/bbf-fast:service/bbf-fast:time-division-"
+         + "duplexing-profile/bbf-fast:name";
     }
     description
       "Used to reference a Time Division Duplexing (TDD) profile.";
   }
 
-  augment '/bbf-fast:fast/bbf-fast:service' {
+  augment "/bbf-fast:fast/bbf-fast:service" {
     description
       "Data nodes for TDD configuration profiles.";
-
     list time-division-duplexing-profile {
       key "name";
       description
         "A list of Time Division Duplexing (TDD) profiles.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "A name that uniquely identifies the profile.";
       }
-
       uses tdd-profile;
     }
   }

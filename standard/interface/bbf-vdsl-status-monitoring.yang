@@ -1,6 +1,5 @@
 submodule bbf-vdsl-status-monitoring {
   yang-version 1.1;
-
   belongs-to bbf-vdsl {
     prefix bbf-vdsl;
   }
@@ -8,23 +7,19 @@ submodule bbf-vdsl-status-monitoring {
   import ietf-interfaces {
     prefix if;
   }
-
   import bbf-fastdsl {
     prefix bbf-fastdsl;
   }
-
   include bbf-vdsl-base-body;
   include bbf-vdsl-line-status-body;
   include bbf-vdsl-xtu-line-status-body;
   include bbf-vdsl-xtu-band-status-body;
   include bbf-vdsl-xtu-channel-status-body;
-
   include bbf-vdsl-line;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -40,12 +35,11 @@ submodule bbf-vdsl-status-monitoring {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing status monitoring for VDSL interfaces.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -85,9 +79,19 @@ submodule bbf-vdsl-status-monitoring {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -106,7 +110,7 @@ submodule bbf-vdsl-status-monitoring {
     reference
       "TR-355c2: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_2.pdf>";
+                        TR-355_Corrigendum-2.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -119,22 +123,20 @@ submodule bbf-vdsl-status-monitoring {
                         TR-355.pdf>";
   }
 
-  augment '/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-'
-        + 'vdsl:line' {
+  augment "/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-"
+        + "vdsl:line" {
     description
-      "xTU Line Status.";
-
+      "xDSL Transeciver Unit (xTU) Line Status.";
     container status {
       description
-        "The xTU Line Status object represents current line status
-         and measurements at a particular xTU.";
-
+        "The xDSL Transeciver Unit (xTU) Line Status object represents
+         current line status and measurements at a particular xTU.";
       uses line-status;
       uses xtu-line-status;
-
       container xtu-c {
         description
-          "xTU-C Line Status.";
+          "xDSL Transeciver Unit - Central office (xTU-C) Line
+           Status.";
         uses xtu-c-status;
         container band-status {
           description
@@ -145,7 +147,7 @@ submodule bbf-vdsl-status-monitoring {
       }
       container xtu-r {
         description
-          "xTU-R Line Status.";
+          "xDSL Transeciver Unit - Remote side (xTU-R) Line Status.";
         uses xtu-r-status;
         container band-status {
           description
@@ -157,19 +159,18 @@ submodule bbf-vdsl-status-monitoring {
     }
   }
 
-  augment '/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-'
-        + 'vdsl:line/bbf-vdsl:channel' {
+  augment "/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-"
+        + "vdsl:line/bbf-vdsl:channel" {
     description
-      "xTU Channel Status.";
-
+      "xDSL Transeciver Unit (xTU) channel status.";
     container status {
       description
-        "xTU channel status.";
-
+        "xDSL Transeciver Unit (xTU) channel status.";
       container xtu-c {
         description
-          "xTU-C channel status. This contains status parameters 
-           for transmission in the upstream direction.";
+          "xDSL Transeciver Unit - Central office (xTU-C) channel
+           status. This contains status parameters for transmission
+           in the upstream direction.";
         container upstream {
           description
             "These objects apply to the upstream direction of
@@ -178,11 +179,11 @@ submodule bbf-vdsl-status-monitoring {
           uses actual-ndr-inp-rein;
         }
       }
-
       container xtu-r {
         description
-          "xTU-R channel status. This contains status parameters
-           for transmission in the downstream direction.";
+          "xDSL Transeciver Unit - Remote side (xTU-R) channel status.
+           This contains status parameters for transmission in the
+           downstream direction.";
         container downstream {
           description
             "These objects apply to the downstream direction of

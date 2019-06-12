@@ -9,7 +9,6 @@ submodule bbf-fast-fast-retrain-policy-profile-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -25,12 +24,11 @@ submodule bbf-fast-fast-retrain-policy-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing fast retrain policy profiles.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +68,19 @@ submodule bbf-fast-fast-retrain-policy-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -100,7 +108,6 @@ submodule bbf-fast-fast-retrain-policy-profile-body {
        upstream and downstream.";
     reference
       "ITU-T G.997.2 clause 7.1.8.";
-
     leaf los-defect-persistency {
       type uint8 {
         range "1..20" {
@@ -111,35 +118,34 @@ submodule bbf-fast-fast-retrain-policy-profile-body {
       units "0.1 second";
       default "2";
       description
-        "Defines the los defect persistency for triggering a
-         reinitialization (see clause 12.1.4.2) at the FTU receiver,
-         as part of the fast retrain policy.";
+        "Defines the loss of signal (los) defect persistency for
+         triggering a reinitialization (see clause 12.1.4.2) at the
+         FAST Transceiver Unit (FTU) receiver, as part of the fast
+         retrain policy.";
       reference
         "ITU-T G.997.2 clause 7.1.8.1 (LOS_PERSISTENCYds) and clause
          7.1.8.2 (LOS_PERSISTENCYus); ITU-T G.9701 clause
          12.1.4.3.1.";
     }
-
     leaf lom-defect-persistency {
       type uint8 {
-        range "2..20" {
+        range "1..20" {
           description
-            "Defines a range equivalent to 2 to 20
-             seconds.";
+            "Defines a range equivalent to 1 to 20 seconds.";
         }
       }
       units "1 second";
       default "2";
       description
-        "Defines the lom defect persistency for triggering a
-         reinitialization (see clause 12.1.4.2) at the FTU receiver,
-         as part of the fast retrain policy.";
+        "Defines the loss of margin (lom) defect persistency for
+         triggering a reinitialization (see clause 12.1.4.2) at the
+         FAST Transceiver Unit (FTU) receiver, as part of the fast
+         retrain policy.";
       reference
         "ITU-T G.997.2 clause 7.1.8.3 (LOM_PERSISTENCYds) and clause
          7.1.8.4 (LOM_PERSISTENCYus); ITU-T G.9701 clause
          12.1.4.3.2.";
     }
-
     leaf lor-defect-persistency {
       type uint8 {
         range "1..20" {
@@ -150,36 +156,35 @@ submodule bbf-fast-fast-retrain-policy-profile-body {
       units "0.1 second";
       default "2";
       description
-        "Defines the lor defect persistency for triggering a
-         reinitialization (see clause 12.1.4.2) at the FTU receiver,
-         as part of the fast retrain policy.";
+        "Defines the loss of Robust Management Channel (RMC) (lor)
+         defect persistency for triggering a reinitialization
+         (see clause 12.1.4.2) at the FAST Transceiver Unit (FTU)
+         receiver, as part of the fast retrain policy.";
       reference
         "ITU-T G.997.2 clause 7.1.8.5 (LOR_PERSISTENCYds) and clause
          7.1.8.6 (LOR_PERSISTENCYus); ITU-T G.9701 clause
          12.1.4.3.3.";
     }
-
     leaf reinit-time-threshold {
       type uint8 {
         range "5..31" {
           description
-            "Defines a range equivalent to 5 to 31
-             seconds.";
+            "Defines a range equivalent to 5 to 31 seconds.";
         }
       }
       units "1 second";
       default "10";
       description
-        "Defines the threshold for the SES and eoc timeout
-         conditions for declaring a High_BER event (see clause
-         12.1.4.3.4) at the FTU receiver, as part of the
+        "Defines the threshold for the Severly Errored Seconds (SES)
+         and embedded operations channel (eoc) timeout conditions for
+         declaring a High_BER event (see clause 12.1.4.3.4) at the
+         FAST Transceiver Unit (FTU) receiver, as part of the
          fast retrain policy.";
       reference
         "ITU-T G.997.2 clause 7.1.8.7 (REINIT_TIME_THRESHOLDds) and
          clause 7.1.8.8 (REINIT_TIME_THRESHOLDus); ITU-T G.9701
          clause 12.1.4.3.4.";
     }
-
     leaf low-etr-threshold {
       type uint8 {
         range "0 | 1..30" {
@@ -190,9 +195,10 @@ submodule bbf-fast-fast-retrain-policy-profile-body {
       units "1 second";
       default "20";
       description
-        "Defines the threshold for the low ETR condition for
-         declaring a High_BER event (see clause 12.1.4.3.4) at the
-         FTU receiver, as part of the fast retrain policy.
+        "Defines the threshold for the low Expected Throughput Rate
+         (ETR) condition for declaring a High_BER event
+         (see clause 12.1.4.3.4) at the FAST Transceiver Unit (FTU)
+         receiver, as part of the fast retrain policy.
          The special value, 0, indicates that no High_BER event is
          declared based on ETR being below the ETR_min.";
       reference
@@ -200,16 +206,16 @@ submodule bbf-fast-fast-retrain-policy-profile-body {
          clause 7.1.8.10 (LOW_ETR_THRESHOLDus); ITU-T G.9701 clause
          12.1.4.3.4.";
     }
-
     leaf lor-rmcr-persistency {
       if-feature "rmcr";
       type uint8;
       units "50 ms";
       default "0";
       description
-        "Defines the persistency period of a LOR defect before the RMC
-         is declared severely degraded. The value 0 is a special value
-         that indicates that the RMCR procedure is disabled. It can 
+        "Defines the persistency period of a loss of Robust Management
+         Channel (RMC) (lor) defect before the RMC is declared
+         severely degraded. The value 0 is a special value
+         that indicates that the RMCR procedure is disabled. It can
          only be set to 0 in one direction if the value is also set to
          0 in the opposite direction.";
       reference
@@ -220,18 +226,14 @@ submodule bbf-fast-fast-retrain-policy-profile-body {
   grouping fast-retrain-policy-profile {
     description
       "Defines the contents of a Fast Retrain Policy Profile.";
-
     container downstream {
       description
-        "Downstream fast retrain policy parameters";
-
+        "Downstream fast retrain policy parameters.";
       uses fast-retrain-policy-parameters;
     }
-
     container upstream {
       description
-        "Downstream fast retrain policy parameters";
-
+        "Downstream fast retrain policy parameters.";
       uses fast-retrain-policy-parameters;
     }
   }

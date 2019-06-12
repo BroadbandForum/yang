@@ -4,33 +4,40 @@ module bbf-fast {
   prefix bbf-fast;
 
   /* Common */
+
   include bbf-fast-base;
   include bbf-fast-pointers;
   include bbf-fast-perf-types;
 
   /* Quality Profiles */
+
   include bbf-fast-quality-profiles;
   include bbf-fast-fast-rate-adaptation-profile-body;
   include bbf-fast-noise-margin-profile-body;
   include bbf-fast-fast-retrain-policy-profile-body;
   include bbf-fast-retransmission-profile-body;
   include bbf-fast-vectoring-profile-body;
+  include bbf-fast-impulse-noise-monitoring-profile-body;
 
   /* Service Profiles */
+
   include bbf-fast-service-profiles;
   include bbf-fast-data-rate-profile-body;
 
   /* Spectrum Profiles */
+
   include bbf-fast-spectrum-profiles;
   include bbf-fast-line-spectrum-profile-body;
   include bbf-fast-upstream-power-back-off-profile-body;
   include bbf-fast-rfi-profile-body;
 
   /* TDD Profiles */
+
   include bbf-fast-tdd-profiles;
   include bbf-fast-tdd-profile-body;
 
   /* Test Diagnostics */
+
   include bbf-fast-test-diagnostics;
   include bbf-fast-test-mode-body;
   include bbf-fast-update-test-body;
@@ -38,33 +45,36 @@ module bbf-fast {
   include bbf-fast-read-test-body;
 
   /* Threshold Management */
+
   include bbf-fast-threshold-management;
   include bbf-fast-line-threshold-profile-body;
   include bbf-fast-channel-threshold-profile-body;
   include bbf-fast-threshold-crossing-alert-body;
 
   /* Performance Management */
+
   include bbf-fast-performance-management;
   include bbf-fast-line-performance-body;
   include bbf-fast-channel-performance-body;
 
   /* Status Monitoring */
+
   include bbf-fast-status-monitoring;
   include bbf-fast-line-status-body;
   include bbf-fast-channel-status-body;
 
   /* Inventory */
+
   include bbf-fast-inventory;
   include bbf-fast-ftu-inventory-body;
 
   /* Availability */
-  include bbf-fast-availability;
 
+  include bbf-fast-availability;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -80,12 +90,11 @@ module bbf-fast {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
-    "This module contains a collection of YANG definitions for 
+    "This module contains a collection of YANG definitions for
      supporting Vector of Profiles for FAST lines.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -125,9 +134,19 @@ module bbf-fast {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -146,9 +165,8 @@ module bbf-fast {
     reference
       "TR-355c2: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_2.pdf>";
+                        TR-355_Corrigendum-2.pdf>";
   }
-
   revision 2017-03-13 {
     description
       "Corrigendum 1 (fixes to the initial revision).
@@ -157,7 +175,7 @@ module bbf-fast {
     reference
       "TR-355c1: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_1.pdf>";
+                        TR-355_Corrigendum-1.pdf>";
   }
   revision 2016-07-18 {
     description

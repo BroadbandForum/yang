@@ -1,26 +1,24 @@
 module bbf-hardware-rpf-dpu-state {
   yang-version 1.1;
-
   namespace "urn:bbf:yang:bbf-hardware-rpf-dpu-state";
   prefix bbf-hw-rpf-dpu-state;
 
   import ietf-hardware-state {
     prefix hw-state;
   }
-
+  import ietf-yang-types {
+    prefix yang;
+  }
   import bbf-hardware-types {
     prefix bbf-hwt;
   }
-
-  include bbf-hardware-rpf-dpu-state-status;
-  include bbf-hardware-rpf-dpu-state-diagnostics;
-  include bbf-hardware-rpf-dpu-state-inventory;
-  include bbf-hardware-rpf-dpu-state-performance;
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -36,15 +34,14 @@ module bbf-hardware-rpf-dpu-state {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
-    "This module contains a collection of YANG definitions that are 
-     used to manage the state data for Reverse Power Feeding (RPF) 
+    "This module contains a collection of YANG definitions that are
+     used to manage the state data for Reverse Power Feeding (RPF)
      requirements for a Distribution Point Unit (DPU) per ITU G.997.2,
-     Annex A. This module is to be used when the server does not 
+     Annex A. This module is to be used when the server does not
      support Network Management Datastore Architecture (NMDA).
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -84,9 +81,19 @@ module bbf-hardware-rpf-dpu-state {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -98,22 +105,844 @@ module bbf-hardware-rpf-dpu-state {
                         TR-355_Amendment-1.pdf>";
   }
 
-  augment '/hw-state:hardware/hw-state:component' {
+  feature performance-24hr {
+    description
+      "Indicates that collection of 24 hour performance intervals
+       is supported.";
+  }
+
+  typedef performance-15min-interval {
+    type uint8 {
+      range "0..96";
+    }
+    description
+      "Defines the range of 15 minute intervals.";
+  }
+
+  typedef performance-15min-history-interval {
+    type performance-15min-interval {
+      range "1..96";
+    }
+    description
+      "Defines the range of 15 minutes intervals and defines
+       the position of the interval relative to the current interval
+       where 1 is the most recent completed interval.";
+  }
+
+  typedef performance-24hr-interval {
+    type uint8 {
+      range "0..7";
+    }
+    description
+      "Defines the range of 24 hour intervals.";
+  }
+
+  typedef performance-24hr-history-interval {
+    type performance-24hr-interval {
+      range "1..7";
+    }
+    description
+      "Defines the range of 24 hour intervals and defines
+       the position of the interval relative to the current interval
+       where 1 is the most recent completed interval.";
+  }
+
+  typedef dpu-reconfiguration-state {
+    type enumeration {
+      enum normal {
+        description
+          "The line is in Normal mode.";
+      }
+      enum bypass {
+        description
+          "The line is in Bypass mode.";
+      }
+    }
+    description
+      "Reports the ReConfiguration State for the line. A state
+       change alarm shall be raised indicating a change of the
+       line's Reconfiguration State (see clause A.7.2.1.2).";
+    reference
+      "ITU-T G.997.2 clause A.7.4.1.3 (DPU-RCS)";
+  }
+
+  typedef pse-rpf-state {
+    type enumeration {
+      enum pse-ukn {
+        description
+          "Shutdown with unknown reason as initial state.
+            - when for the line the Power Extractor (PE) transitions
+              to 'start-up' after the PE detects loss of voltage,
+              and has not received a PSE-DGL or PSE-OHP
+              indication ( see clause A.6.2.2) from the Power Source
+              Equipment (PSE).";
+      }
+      enum pse-dgl {
+        description
+          "Shutdown with dying gasp (normal shutdown).
+            - when for the line the Power Extractor (PE) transitions
+              to 'start-up' after the PE detects loss of voltage
+              and has received a PSE-DGL indication (see
+              clause A.6.2.2) from the Power Source Equipment (PSE).";
+      }
+      enum pse-ohp {
+        description
+          "Shutdown with dying gasp with off-hook phone.
+            - when for the line the Power Extractor (PE) transitions
+              to 'start-up' after the PE detects loss of voltage
+              and has received a PSE-OHP indication (see
+              clause A.6.2.2) from the Power Source Equipment (PSE).";
+      }
+      enum pse-pwr {
+        description
+          "Powered with unknown Power Source Equipment (PSE) powering
+           method.
+            - when for the line the Power Extractor (PE) transitions
+              to 'normal-operations' and it is yet unknown whether the
+              PSE is battery powered or mains powered.";
+      }
+      enum pse-bat {
+        description
+          "Battery powered.
+            - when for the line the Power Extractor (PE) transitions
+              to 'normal-operations' and the PE received an indication
+              that the Power Source Equipment (PSE) is trying to start
+              up the DPU while powered on battery (PRP PS field,
+              see section 6.2.5.1 of [ETSI TS 101 548]);
+            - when for the line the PE is in 'normal-operations' and
+              the PE receives a PSE-BAT indication (see clause 6.2.2)
+              from the PSE.";
+      }
+      enum pse-acm {
+        description
+          "Mains powered.
+            - when for the line the Power Extractor (PE) transitions
+              to 'normal-operations' and the PE received an indication
+              that the Power Source Equipment (PSE) was trying to
+              start up the Distribution Point Unit (DPU) while powered
+              on mains (PRP PS field, see section 6.2.5.1 of [ETSI TS
+              101 548]);
+            - when for the line the PE is in 'normal-operations' and
+              the PE receives a PSE-ACM or PSE-BBA indication (see
+              clause A.6.2.2) from the PSE.";
+      }
+    }
+    description
+      "Reports the reverse power feeding state of the Power Source
+       Equipment (PSE).";
+    reference
+      "ITU-T G.997.2 clause A.7.4.2.2 (PSE-RPF)";
+  }
+
+  grouping rpf-far-end-line-diagnostics {
+    description
+      "Reverse Power Feeding (RPF) line level diagnostics.";
+    leaf latest-pse-start-up-failure-cause {
+      type enumeration {
+        enum no-failure {
+          description
+            "No failure detected.";
+        }
+        enum elc-0 {
+          description
+            "Open tip-to-ring.";
+        }
+        enum elc-1 {
+          description
+            "Short tip-to-ring.";
+        }
+        enum elc-2 {
+          description
+            "POTS Exchange (foreign) DC voltage.";
+        }
+        enum elc-3 {
+          description
+            "Off-hook phone.";
+        }
+        enum rpf-class-mismatch {
+          description
+            "Mismatch of the Power Source Equipment (PSE) Reverse
+             Power Feeding (RPF) Class with the Distribution Point
+             Unit (DPU) RPF Class.";
+        }
+        enum unknown {
+          description
+            "Unknown failure.";
+        }
+        enum other {
+          description
+            "Failure other than off-hook.";
+        }
+      }
+      status deprecated;
+      description
+        "Reports the latest PSE Start-Up Failure indication,
+         detected during 'Start-Up'.";
+      reference
+        "ITU-T G.997.2 clause A.7.5.2.1 (PSE-SUF)";
+    }
+    leaf latest-pse-shutdown-cause {
+      type enumeration {
+        enum no-shutdown {
+          description
+            "No Power Source Equipment (PSE) shutdown yet.";
+        }
+        enum elc-0 {
+          description
+            "Open tip-to-ring.";
+        }
+        enum elc-1 {
+          description
+            "Short tip-to-ring.";
+        }
+        enum elc-3 {
+          description
+            "Off-hook phone.";
+        }
+        enum overload-time-violation {
+          description
+            "Overload time violation as defined in Table 35 of
+             [ETSI TS 101 548].";
+        }
+        enum maintain-power-signature-violation {
+          description
+            "Maintain power signature violation as defined in
+             Table 37 of [ETSI TS 101 548].";
+        }
+        enum unknown {
+          description
+            "Unknown shutdown cause.";
+        }
+      }
+      status deprecated;
+      description
+        "Reports the latest Power Source Equipment (PSE) ShutDown
+         cause, detected during 'Normal Operation'.";
+      reference
+        "ITU-T G.997.2 clause A.7.5.2.2 (PSE-SDC)";
+    }
+  }
+
+  grouping rpf-near-end-line-inventory {
+    description
+      "Reverse Power Feeding (RPF) near-end line level inventory.";
+    leaf reconfiguration-capability {
+      type enumeration {
+        enum none {
+          description
+            "No reconfiguration capability.";
+        }
+        enum broadband-bypass {
+          description
+            "Broadband Bypass.";
+        }
+        enum pots-rcr {
+          description
+            "POTS Remote Copper Reconfiguration (RCR)
+             Protocol.";
+        }
+      }
+      status deprecated;
+      description
+        "Reports the ReConfiguration capability for the line.";
+      reference
+        "ITU-T G.997.2 clause A.7.6.1.1 (DPU-RC)";
+    }
+  }
+
+  grouping rpf-far-end-line-inventory {
+    description
+      "Reverse Power Feeding (RPF) far-end line level inventory.";
+    leaf nt-integrated {
+      type enumeration {
+        enum unknown {
+          description
+            "Network Termination (NT) integration of the Power Source
+             Equipment (PSE) is unknown.";
+        }
+        enum not-integrated {
+          description
+            "Power Source Equipment (PSE) is not integrated into the
+             Network Termination (NT).";
+        }
+        enum integrated {
+          description
+            "Power Source Equipment (PSE) is integrated into the
+             Network Termination (NT).";
+        }
+      }
+      status deprecated;
+      description
+        "Reports whether the Power Source Equipment (PSE) is
+         integrated in the Network Termination (NT), based on the
+         Reverse Power Feeding (RPF) OAM parameter NTE-CPF (see clause
+         A.6.2.7). Until the Distribution Point Unit (DPU) ME receives
+         an NTE-CPF Indication for the first time, it is unknown
+         whether or not the PSE is integrated in the NT.";
+      reference
+        "ITU-T G.997.2 clause A.7.6.2.1 (NTE-CPF)";
+    }
+    leaf battery-backup-available {
+      type enumeration {
+        enum unknown {
+          description
+            "Battery backup availability is unknown.";
+        }
+        enum not-available {
+          description
+            "Battery backup is not available.";
+        }
+        enum available {
+          description
+            "Battery backup is available.";
+        }
+      }
+      status deprecated;
+      description
+        "Reports whether battery backup is available at the Power
+         Source Equipment (PSE), based on the PSE trying to start up
+         the Power Extractor (PE) while powered on battery
+         (PRP PS field, see section 6.2.5.1 of [ETSI TS 101 548]) and
+         on the PSE-BAT, PSE-ACM, and PSE-BBA indications (see section
+         6.3 of [ETSI TS 101 548] and clause A.6.2.2). Until the Power
+         Extractor (PE) receives the PRP PS field for the first time
+         and until the PE or Distribution Point Unit (DPU) ME receive
+         a BAT, ACM, or BBA Indication for the first time (whichever
+         occurs first), it is unknown whether or not battery backup
+         is available in the PSE.";
+      reference
+        "ITU-T G.997.2 clause A.7.6.2.2 (PSE-BBA)";
+    }
+    leaf prp-capability {
+      type enumeration {
+        enum unknown {
+          description
+            "POTS Remote Copper Configuration Protocol (PRP)
+             capability is unknown.";
+        }
+        enum not-supported {
+          description
+            "POTS Remote Copper Configuration Protocol (PRP) not
+             supported.";
+        }
+        enum supported {
+          description
+            "POTS Remote Copper Configuration Protocol (PRP)
+             supported.";
+        }
+      }
+      status deprecated;
+      description
+        "Reports the Power Source Equipment (PSE) POTS Remote Copper
+         Configuration Protocol (PRP) capability. In case the PSE is
+         integrated in the NT (i.e., NT-CPF equals 2), the PSE-PRP
+         capability is communicated through Reverse Power Feeding
+         (RPF) OAM from PSE to Distribution Point Unit (DPU) (see
+         clause A.6.2.7). In case the PSE is not integrated in the NT
+         (i.e., NT-CPF equals 2), it is deduced by the DPU from
+         successful PRP start-up, whereby the DPU shall assume that
+         the PRP disconnect trigger is sent by the PSE that is
+         currently providing reverse power to the DPU. Until the Power
+         Extractor (PE) receives the PRP PS field (see clause A.6.2.7)
+         for the first time, or until first successful PRP start-up,
+         the PSE PRP capability is unknown.";
+      reference
+        "ITU-T G.997.2 clause A.7.6.2.3 (PSE-PRP)";
+    }
+  }
+
+  grouping performance-history-interval-parameters {
+    description
+      "Defines common parameters required when defining history
+       interval performance counters.";
+    leaf invalid-data-flag {
+      type boolean;
+      status deprecated;
+      description
+        "Reports the validity of the corresponding PM data.";
+    }
+    leaf time-stamp {
+      type yang:date-and-time;
+      status deprecated;
+      description
+        "Reports the start date/time for this interval.";
+    }
+  }
+
+  grouping performance-history-measured-time {
+    description
+      "Reports the measured time for a given interval";
+    leaf measured-time {
+      type uint32;
+      status deprecated;
+      description
+        "Reports the amount of time, measured in seconds,
+         that statistics for this interval have been counted.";
+    }
+  }
+
+  grouping performance-history-15min-interval-parameters {
+    description
+      "Defines common parameters required when defining 15 minute
+       interval history performance counters.";
+    uses performance-history-measured-time {
+      status deprecated;
+    }
+    uses performance-history-interval-parameters {
+      status deprecated;
+    }
+  }
+
+  grouping performance-history-24hr-interval-parameters {
+    description
+      "Defines common parameters required when defining 24 hour
+       interval history performance counters.";
+    uses performance-history-measured-time {
+      status deprecated;
+    }
+    uses performance-history-interval-parameters {
+      status deprecated;
+    }
+  }
+
+  grouping performance-15min-history-parameters {
+    description
+      "Defines common parameters required when defining 15 minute
+       history performance counters.";
+    leaf number-of-intervals {
+      type performance-15min-interval;
+      status deprecated;
+      description
+        "The total number of 15-minute PM intervals for which data
+         was collected. ";
+    }
+    leaf non-valid-intervals {
+      type performance-15min-interval;
+      status deprecated;
+      description
+        "The number of 15-minute PM intervals for which the data
+         is considered to be invalid or incomplete.";
+    }
+  }
+
+  grouping performance-24hr-history-parameters {
+    description
+      "Defines common parameters required when defining 24 hour
+       history performance counters.";
+    leaf number-of-intervals {
+      type performance-24hr-interval;
+      status deprecated;
+      description
+        "The total number of 24 hour PM intervals for which data
+         was collected. ";
+    }
+    leaf non-valid-intervals {
+      type performance-24hr-interval;
+      status deprecated;
+      description
+        "The number of 24 hour PM intervals for which the data
+         is considered to be invalid or incomplete.";
+    }
+  }
+
+  grouping near-end-performance-counters {
+    description
+      "Performance counters associated with the near-end.";
+    leaf dpu-extracted-energy {
+      type bbf-yang:performance-counter32;
+      units "mWh";
+      status deprecated;
+      description
+        "Reports a count of the Distribution Point Unit (DPU)
+         extracted energy per line at U-O interface or at Power Supply
+         Unit (PSU) input in current/previous interval, expressed in
+         units of mWh. This PM object is optional. The accuracy is
+         defined in [ETSI TS 101 548].";
+      reference
+        "ITU-T G.997.2 clause A.7.3.4 (CURR/PREV_NE_15/24_EE)";
+    }
+  }
+
+  grouping far-end-performance-counters {
+    description
+      "Performance counters associated with the far-end.";
+    leaf pse-injected-energy {
+      type bbf-yang:performance-counter32;
+      units "mWh";
+      status deprecated;
+      description
+        "Reports a count of the Distribution Point Unit (DPU)
+         extracted energy per line at U-O interface or at Power Supply
+         Unit (PSU) input in current/previous interval, expressed in
+         units of mWh. This PM object is optional. The accuracy is
+         defined in [ETSI TS 101 548].";
+      reference
+        "ITU-T G.997.2 clause A.7.3.5 (CURR/PREV_NE_15/24_IE)";
+    }
+  }
+
+  grouping rpf-line-performance {
+    description
+      "Reverse Power Feeding (RPF) line level performance.";
+    container intervals-15min {
+      status deprecated;
+      description
+        "15 minute interval performance history";
+      container current {
+        status deprecated;
+        description
+          "Contains the counts that are currently accumulating.";
+        container near-end {
+          status deprecated;
+          description
+            "Near-end performance counters.";
+          uses performance-history-measured-time {
+            status deprecated;
+          }
+          uses near-end-performance-counters {
+            status deprecated;
+          }
+        }
+        container far-end {
+          status deprecated;
+          description
+            "Far-end performance counters.";
+          uses performance-history-measured-time {
+            status deprecated;
+          }
+          uses far-end-performance-counters {
+            status deprecated;
+          }
+        }
+      }
+      uses performance-15min-history-parameters {
+        status deprecated;
+      }
+      list history {
+        key "interval-number";
+        max-elements 96;
+        status deprecated;
+        description
+          "A history of 15 minute intervals.";
+        leaf interval-number {
+          type performance-15min-history-interval;
+          status deprecated;
+          description
+            "The number of the interval relative to the current
+             interval.";
+        }
+        container near-end {
+          status deprecated;
+          description
+            "Near-end performance counters.";
+          uses performance-history-15min-interval-parameters {
+            status deprecated;
+          }
+          uses near-end-performance-counters {
+            status deprecated;
+          }
+        }
+        container far-end {
+          status deprecated;
+          description
+            "Far-end performance counters.";
+          uses performance-history-15min-interval-parameters {
+            status deprecated;
+          }
+          uses far-end-performance-counters {
+            status deprecated;
+          }
+        }
+      }
+    }
+    container intervals-24hr {
+      if-feature "performance-24hr";
+      status deprecated;
+      description
+        "24 hour interval performance history";
+      container current {
+        status deprecated;
+        description
+          "Contains the counts that are currently accumulating.";
+        container near-end {
+          status deprecated;
+          description
+            "Near-end performance counters.";
+          uses performance-history-measured-time {
+            status deprecated;
+          }
+          uses near-end-performance-counters {
+            status deprecated;
+          }
+        }
+        container far-end {
+          status deprecated;
+          description
+            "Far-end performance counters.";
+          uses performance-history-measured-time {
+            status deprecated;
+          }
+          uses far-end-performance-counters {
+            status deprecated;
+          }
+        }
+      }
+      uses performance-24hr-history-parameters {
+        status deprecated;
+      }
+      list history {
+        key "interval-number";
+        max-elements 7;
+        status deprecated;
+        description
+          "A history of 24 hour intervals.";
+        leaf interval-number {
+          type performance-24hr-history-interval;
+          status deprecated;
+          description
+            "The number of the interval relative to the current
+             interval.";
+        }
+        container near-end {
+          status deprecated;
+          description
+            "Near-end performance counters.";
+          uses performance-history-24hr-interval-parameters {
+            status deprecated;
+          }
+          uses near-end-performance-counters {
+            status deprecated;
+          }
+        }
+        container far-end {
+          status deprecated;
+          description
+            "Far-end performance counters.";
+          uses performance-history-24hr-interval-parameters {
+            status deprecated;
+          }
+          uses far-end-performance-counters {
+            status deprecated;
+          }
+        }
+      }
+    }
+  }
+
+  grouping rpf-near-end-line-status {
+    description
+      "Reverse Power Feeding (RPF) near-end line level status.";
+    leaf actual-power-class {
+      type enumeration {
+        enum sr1 {
+          description
+            "Reverse Power Feeding (RPF) Class SR1 is defined to
+             support (very) low power Distribution Point Unit (DPU)
+             designs, when they become available; the
+             applicability of Class SR1 for a considered
+             deployment type (amount of ports per DPU, cable
+             losses, DPU uplink types, DPU feature scope at and
+             beyond the physical layer, amount of additional
+             devices (POTSAdapters) to be fed from the same Power
+             Source Equipment (PSE), etc.) depends on the availability
+             of low-power solutions.";
+        }
+        enum sr2 {
+          description
+            "Reverse Power Feeding (RPF) Class SR2 allows a higher
+             maximum power to be transmitted than Class SR1. When
+             compared to Class SR1, a solution that complies with
+             Class SR2 can extend the type of deployments that can be
+             supported, while still avoiding any additional safety
+             measures in the home environment (below 15 W as per
+             EN 60950-1 [2]).";
+        }
+        enum sr3 {
+          description
+            "Reverse Power Feeding (RPF) Class SR3 allows a higher
+             maximum power to be transmitted than Class SR2, aiming to
+             cover trials or demanding deployment situations for which
+             Class SR1 or SR2-compliant power solutions are not
+             available. A Power Source Equipment (PSE) of Class SR3
+             can inject more than 15 W and hence introduces additional
+             safety measures compared to Class SR1 and Class SR2
+             (see SAFETY NOTE (a) and SAFETY NOTE (b) in
+             Table 10).";
+        }
+      }
+      status deprecated;
+      description
+        "Reports the actual power class of the Power Extractor (PE)
+         for the line.";
+      reference
+        "ITU-T G.997.2 clause A.7.4.1.1 (PE-PC)";
+    }
+    leaf rpf-state {
+      type enumeration {
+        enum not-operational {
+          description
+            "The Power Extractor (PE) is initializing and is not yet
+             operational.";
+        }
+        enum start-up {
+          description
+            "The Power Extractor (PE) is starting up.";
+        }
+        enum normal-operations {
+          description
+            "The Power Extractor (PE) is in normal operations.";
+        }
+      }
+      status deprecated;
+      description
+        "Reports the reverse power feeding state of the Power
+         Extractor (PE) for the line.";
+      reference
+        "ITU-T G.997.2 clause A.7.4.1.2 (PE-RPF)";
+    }
+    leaf reconfiguration-state {
+      type dpu-reconfiguration-state;
+      status deprecated;
+      description
+        "Reports the ReConfiguration State for the line. A state
+         change alarm shall be raised indicating a change of the
+         line's Reconfiguration State (see clause A.7.2.1.2).";
+      reference
+        "ITU-T G.997.2 clause A.7.4.1.3 (DPU-RCS)";
+    }
+    leaf prp-error-status {
+      type enumeration {
+        enum none {
+          description
+            "No error detected by Distribution Point Unit (DPU) or
+             POTS Remote Copper Configuration Protocol (PRP) completed
+             successfully.";
+        }
+        enum rpf-class-mismatch {
+          description
+            "Distribution Point Unit (DPU) has decoded POTS Remote
+             Copper Configuration Protocol (PRP) disconnect trigger of
+             a class that is not supported by the DPU for given
+             line.";
+        }
+        enum pots-reconnect-trigger {
+          description
+            "POTS Reconnect trigger detected by Distribution Point
+             Unit (DPU).";
+        }
+      }
+      status deprecated;
+      description
+        "Reports that the Distribution Point Unit (DPU) has deduced a
+         POTS Remote Copper Configuration Protocol (PRP) related ERROR
+         while the is DPU powered on. An alarm shall be raised
+         upon the PRP Error Status indicating an error condition
+         on the line.";
+      reference
+        "ITU-T G.997.2 clause A.7.4.1.4 (DPU-PRP-ERROR)";
+    }
+    leaf line-error-status {
+      type enumeration {
+        enum no-error {
+          description
+            "No error detected.";
+        }
+        enum error {
+          description
+            "Error detected.";
+        }
+      }
+      status deprecated;
+      description
+        "Reports an error condition for the line whereby the
+         Distribution Point Unit (DPU) is unable to draw continuous
+         and sufficient power from the line. This status object is
+         optional. If supported, an alarm shall be raised upon the
+         Line Error Status indicating an error condition on the
+         line.";
+      reference
+        "ITU-T G.997.2 clause A.7.4.1.5 (DPU-LES)";
+    }
+  }
+
+  grouping rpf-far-end-line-status {
+    description
+      "Reverse Power Feeding (RPF) far-end line level status.";
+    leaf actual-power-class {
+      type enumeration {
+        enum undetermined {
+          description
+            "The power class of the PSE has yet to be
+             determined.";
+        }
+        enum sr1 {
+          description
+            "Reverse Power Feeding (RPF) Class SR1 is defined to
+             support (very) low power Distribution Point Unit (DPU)
+             designs, when they become available; the applicability of
+             Class SR1 for a considered deployment type (amount of
+             ports per DPU, cable losses, DPU uplink types, DPU
+             feature scope at and beyond the physical layer, amount of
+             additional devices (POTSAdapters) to be fed from the same
+             PSE, etc.) depends on the availability of low-power
+             solutions.";
+        }
+        enum sr2 {
+          description
+            "Reverse Power Feeding (RPF) Class SR2 allows a higher
+             maximum power to be transmitted than Class SR1. When
+             compared to Class SR1, a solution that complies with
+             Class SR2 can extend the type of deployments that can be
+             supported, while still avoiding any additional
+             safety measures in the home environment (below 15 W
+             as per EN 60950-1 [2]).";
+        }
+        enum sr3 {
+          description
+            "Reverse Power Feeding (RPF) Class SR3 allows a higher
+             maximum power to be transmitted than Class SR2, aiming to
+             cover trials or demanding deployment situations for which
+             Class SR1 or SR2-compliant power solutions are not
+             available. A Power Source Equipment (PSE) of Class SR3
+             can inject more than 15 W and hence introduces additional
+             safety measures compared to Class SR1 and Class SR2
+             (see SAFETY NOTE (a) and SAFETY NOTE (b) in
+             Table 10).";
+        }
+      }
+      status deprecated;
+      description
+        "Reports the actual power class of the Power Source Equipment
+         (PSE). Before the start-up protocol is successfully completed
+         for the first time, the power class is undetermined.";
+      reference
+        "ITU-T G.997.2 clause A.7.4.2.1 (PSE-PC)";
+    }
+    leaf rpf-state {
+      type pse-rpf-state;
+      status deprecated;
+      description
+        "Reports the reverse power feeding state of the Power Source
+         Equipment (PSE).";
+      reference
+        "ITU-T G.997.2 clause A.7.4.2.2 (PSE-RPF)";
+    }
+  }
+
+  augment "/hw-state:hardware/hw-state:component" {
     when "derived-from-or-self(hw-state:class,'bbf-hwt:fastdsl-tp')" {
       description
-        "Only applicable when the hardware component class is 
+        "Only applicable when the hardware component class is
          'fastdsl-tp'.";
     }
     description
       "Augment the port state data with data nodes specific
-       to managing RPF.";
-
+       to managing Reverse Power Feeding (RPF).";
     container rpf {
       status deprecated;
       description
         "State data nodes for managing Reverse Power Feeding
          (RPF) per line.";
-
       leaf line-id {
         type uint32 {
           range "1..4095";
@@ -125,80 +954,68 @@ module bbf-hardware-rpf-dpu-state {
         reference
           "TR-301i2 Figure 8-1";
       }
-
       container inventory {
         status deprecated;
         description
-          "Inventory data associated with RPF.";
-
+          "Inventory data associated with Reverse Power Feeding
+           (RPF).";
         container near-end-line {
           status deprecated;
           description
             "Inventory data associated with the near-end.";
-
           uses rpf-near-end-line-inventory {
             status deprecated;
           }
         }
-
         container far-end-line {
           status deprecated;
           description
             "Inventory data associated with the far-end.";
-
           uses rpf-far-end-line-inventory {
             status deprecated;
           }
         }
       }
-
       container status {
         status deprecated;
         description
-          "Status data associated with RPF.";
-
+          "Status data associated with Reverse Power Feeding (RPF).";
         container near-end-line {
           status deprecated;
           description
             "Line state data associated with the near-end.";
-
           uses rpf-near-end-line-status {
             status deprecated;
           }
         }
-
         container far-end-line {
           status deprecated;
           description
             "Line state data associated with the far-end.";
-
           uses rpf-far-end-line-status {
             status deprecated;
           }
         }
       }
-
       container diagnostics {
         status deprecated;
         description
-          "Diagnostic data associated with RPF.";
-
+          "Diagnostic data associated with Reverse Power Feeding
+           (RPF).";
         container far-end-line {
           status deprecated;
           description
             "Diagnostic data associated with the far-end.";
-
           uses rpf-far-end-line-diagnostics {
             status deprecated;
           }
         }
       }
-
       container performance {
         status deprecated;
         description
-          "Performance data associated with RPF.";
-
+          "Performance data associated with Reverse Power Feeding
+           (RPF).";
         uses rpf-line-performance {
           status deprecated;
         }

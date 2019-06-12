@@ -7,7 +7,6 @@ submodule bbf-vdsl-upstream-power-back-off-profile-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,13 +22,12 @@ submodule bbf-vdsl-upstream-power-back-off-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
-    "This submodule contains a collection of YANG definitions for 
+    "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 5.6 Spectrum related
-     profiles; UPBO Profile.
+     profiles; Upstream Power Back-Off (UPBO) Profile.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -69,9 +67,19 @@ submodule bbf-vdsl-upstream-power-back-off-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -90,7 +98,7 @@ submodule bbf-vdsl-upstream-power-back-off-profile-body {
     reference
       "TR-355c2: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_2.pdf>";
+                        TR-355_Corrigendum-2.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -104,10 +112,8 @@ submodule bbf-vdsl-upstream-power-back-off-profile-body {
   }
 
   grouping upstream-power-back-off-profile {
-
     description
-      "This configures upstream power back-off (UPBO).";
-
+      "This configures Upstream Power Back-Off (UPBO).";
     leaf upbo-electrical-length {
       type uint16 {
         range "0..1280";
@@ -116,31 +122,32 @@ submodule bbf-vdsl-upstream-power-back-off-profile-body {
       default "0";
       description
         "This parameter defines the electrical length expressed
-         in dB at 1 MHz, kl0, configured by the CO MIB. The value
+         in dB at 1 MHz, kl0, configured by the Central Office
+         Management Information Base (CO-MIB). The value
          ranges from 0 to 128 dB in steps of 0.1 dB.";
       reference
         "ITU-T G.997.1 clause 7.3.1.2.14 a.2) Upstream electrical
          length (UPBOKL)";
     }
-
     leaf upbo-force-electrical-length {
       type boolean;
       default "false";
       description
         "This parameter is a flag that forces the VTU-R to use
-         the electrical length of the CO-MIB (UPBOKL) to compute
-         the UPBO. The value will be forced if the flag is set to
-         true. Otherwise, if false the VTUs will determine the
-         electrical length.";
+         the electrical length of the Central Office
+         Management Information Base (CO-MIB) (UPBOKL) to compute
+         the Upstream Power Back-Off (UPBO). The value will be forced
+         if the flag is set to true. Otherwise, if false the xTUs will
+         determine the electrical length.";
       reference
         "ITU-T G.997.1 clause 7.3.1.2.14 a.3) Force CO-MIB
          electrical length (UPBOKLF)";
     }
-
     list upbopsd-pb {
       key "band";
       description
-        "This parameter defines the UPBO reference PSD used to
+        "This parameter defines the Upstream Power Back-Off (UPBO)
+         reference Power Spectral Density (PSD) used to
          compute the upstream power back-off for each upstream
          band except US0. A UPBOPSD defined for each band will
          consist of two parameters [a, b]. Parameter a ranges
@@ -151,14 +158,13 @@ submodule bbf-vdsl-upstream-power-back-off-profile-body {
          parameter values a = 40 dBm/Hz, b = 0 dBm/Hz is a
          special configuration to disable UPBO in the respective
          upstream band.";
-
       leaf band {
         type uint8 {
           range "0..4";
         }
         description
           "Identifies the upstream band, e.g., a value of 1
-           denotes US1";
+           denotes US1.";
       }
       leaf upbopsd-a {
         type uint16 {
@@ -167,7 +173,7 @@ submodule bbf-vdsl-upstream-power-back-off-profile-body {
         units "0.01 dBm/Hz";
         default "4000";
         description
-          "UPBO parameter A";
+          "Upstream Power Back-Off (UPBO) parameter A.";
       }
       leaf upbopsd-b {
         type uint16 {
@@ -176,23 +182,22 @@ submodule bbf-vdsl-upstream-power-back-off-profile-body {
         units "0.01 dBm/Hz";
         default "0";
         description
-          "UPBO parameter B";
+          "Upstream Power Back-Off (UPBO) parameter B.";
       }
       reference
-        "ITU-T G.997.1 clause 7.3.1.2.14 a.1) Upstream power
-         back-off reference PSD per band (UPBOPSD-pb)";
+        "ITU-T G.997.1 clause 7.3.1.2.14 a.1) Upstream Power
+         Back-Off reference Power Spectral Density per band
+         (UPBOPSD-pb).";
     }
-
     list upbo-reference-electrical-length-pb {
       key "band";
-
       leaf band {
         type uint8 {
           range "0..4";
         }
         description
           "Identifies the upstream band, e.g., a value of 1
-           denotes US1";
+           denotes US1.";
       }
       leaf upbo-reference-electrical-length {
         type union {
@@ -200,23 +205,25 @@ submodule bbf-vdsl-upstream-power-back-off-profile-body {
             range "18..635";
           }
           type enumeration {
-            enum "equalized-fext-upbo-disabled" {
+            enum equalized-fext-upbo-disabled {
               description
-                "Indicates that equalized FEXT UPBO is disabled.";
+                "Indicates that equalized Far-End Crosstalk (FEXT)
+                 Upstream Power Back-Off (UPBO) is disabled.";
             }
           }
         }
         units "0.1 dB";
         default "equalized-fext-upbo-disabled";
         description
-          "The UPBO reference electrical length.";
+          "The Upstream Power Back-Off (UPBO) reference electrical
+           length.";
       }
       description
-        "This parameter defines the UPBO reference electrical
-         length used to compute the upstream power back-off for
-         each upstream band except US0, for the optional
-         Equalized FEXT UPBO method. The value ranges from 1.8 to
-         63.5 dB in steps of 0.1 dB. The use
+        "This parameter defines the Upstream Power Back-Off (UPBO)
+         reference electrical length used to compute the upstream
+         power back-off for each upstream band except US0, for the
+         optional Equalized Far-End Crosstalk (FEXT) UPBO method. The
+         value ranges from 1.8 to 63.5 dB in steps of 0.1 dB. The use
          of the special value (enum equalized-fext-upbo-disabled)
          is described in clause 7.2.1.3.2 of [ITU-T G.993.2] for
          kl0_REF=0.";
@@ -224,42 +231,40 @@ submodule bbf-vdsl-upstream-power-back-off-profile-body {
         "ITU-T G.997.1 clause 7.3.1.2.14 a.4) PBO reference
          electrical length per band (UPBOKLREF-pb)";
     }
-
     leaf aele-mode {
       type enumeration {
-        enum "0" {
+        enum 0 {
           description
-            "kl0[band] = ELE-M0 VTU-O kl0 estimate";
+            "kl0[band] = ELE-M0 VTU-O kl0 estimate.";
         }
-        enum "1" {
+        enum 1 {
           description
             "kl0[band] = ELEDS [dB], with band in the set
-             {upbo_bands}";
+             {upbo_bands}.";
         }
-        enum "2" {
+        enum 2 {
           description
             "kl0[band] = ELE[band] [dB], with band in the set
-             {upbo_bands}";
+             {upbo_bands}.";
         }
-        enum "3" {
+        enum 3 {
           description
             "kl0[band] = MIN(ELEUS, ELEDS) [dB], with band in the
-             set {upbo_bands}";
+             set {upbo_bands}.";
         }
       }
       default "0";
       description
-        "This parameter defines the UPBO electrical length
-         estimation mode to be used in the alternative electrical
-         length estimation method (ELE-M1) in clause 7.2.1.3.2.2
-         of [ITU-T G.993.2]. The value of this parameter is 0, 1,
-         2 or 3. The default is enum 0, kl0[band] = 
+        "This parameter defines the Upstream Power Back-Off (UPBO)
+         electrical length estimation mode to be used in the
+         alternative electrical length estimation method (ELE-M1) in
+         clause 7.2.1.3.2.2 of [ITU-T G.993.2]. The value of this
+         parameter is 0, 1, 2 or 3. The default is enum 0, kl0[band] =
          ELE-M0 VTU-O kl0 estimate";
       reference
         "ITU-T G.997.1 clause 7.3.1.2.14 a.5) Alternative
          Electrical Length Estimation Mode (AELE-MODE)";
     }
-
     leaf upbo-elmt {
       type uint8 {
         range "0..15";
@@ -267,11 +272,12 @@ submodule bbf-vdsl-upstream-power-back-off-profile-body {
       units "1 percent";
       default "0";
       description
-        "This parameter defines the UPBO electrical length
-         minimum threshold percentile in percent used in the
-         alternative electrical length estimation method (ELE-M1)
-         in clause 7.2.1.3.2.2 of [ITU-T G.993.2]. It is set by
-         network management via the CO-MIB. The parameter ranges
+        "This parameter defines the Upstream Power Back-Off (UPBO)
+         electrical length minimum threshold percentile in percent
+         used in the alternative electrical length estimation method
+         (ELE-M1) in clause 7.2.1.3.2.2 of [ITU-T G.993.2]. It is set
+         by network management via the Central Office
+         Management Information Base (CO-MIB). The parameter ranges
          from 0 to 15 percent in steps of 1 percent. This value
          is communicated to the VTU-R in accordance with [ITU-T
          G.994.1] at start-up.";
@@ -279,5 +285,7 @@ submodule bbf-vdsl-upstream-power-back-off-profile-body {
         "ITU-T G.997.1 clause 7.3.1.2.14 a.6) UPBO electrical
          length threshold percentile (UPBOELMT)";
     }
-  } // end grouping upstream-power-back-off-profile
-} // end submodule upstream-power-back-off-profile-body
+  }
+
+  // end grouping upstream-power-back-off-profile
+}

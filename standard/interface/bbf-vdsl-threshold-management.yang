@@ -1,6 +1,5 @@
 submodule bbf-vdsl-threshold-management {
   yang-version 1.1;
-
   belongs-to bbf-vdsl {
     prefix bbf-vdsl;
   }
@@ -8,27 +7,22 @@ submodule bbf-vdsl-threshold-management {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import bbf-fastdsl {
     prefix bbf-fastdsl;
   }
-
   import ietf-interfaces {
     prefix if;
   }
-
   include bbf-vdsl-base-body;
   include bbf-vdsl-xtu-line-threshold-profile-body;
   include bbf-vdsl-xtu-channel-threshold-profile-body;
   include bbf-vdsl-threshold-crossing-alert-body;
   include bbf-vdsl-performance-management;
-
   include bbf-vdsl-base;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -44,12 +38,11 @@ submodule bbf-vdsl-threshold-management {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing performance thresholds for VDSL interfaces.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -89,9 +82,19 @@ submodule bbf-vdsl-threshold-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -115,66 +118,58 @@ submodule bbf-vdsl-threshold-management {
 
   typedef line-threshold-profile-ref {
     type leafref {
-      path '/bbf-vdsl:vdsl/bbf-vdsl:thresholds/bbf-vdsl:line-'
-         + 'threshold-profile/bbf-vdsl:name';
+      path "/bbf-vdsl:vdsl/bbf-vdsl:thresholds/bbf-vdsl:line-"
+         + "threshold-profile/bbf-vdsl:name";
     }
     description
-      "xTU Line Threshold Profile name.";
+      "xDSL Transceiver Unit (xTU) Line Threshold Profile name.";
   }
 
   typedef channel-threshold-profile-ref {
     type leafref {
-      path '/bbf-vdsl:vdsl/bbf-vdsl:thresholds/bbf-vdsl:channel-'
-         + 'threshold-profile/bbf-vdsl:name';
+      path "/bbf-vdsl:vdsl/bbf-vdsl:thresholds/bbf-vdsl:channel-"
+         + "threshold-profile/bbf-vdsl:name";
     }
     description
-      "xTU Channel Threshold Profile name.";
+      "xDSL Transceiver Unit (xTU) Channel Threshold Profile name.";
   }
 
-
-  augment '/bbf-vdsl:vdsl/bbf-vdsl:thresholds' {
+  augment "/bbf-vdsl:vdsl/bbf-vdsl:thresholds" {
     description
       "xDSL Performance Threshold Management.";
-
     list line-threshold-profile {
       key "name";
       description
-        "xTU Line Threshold Profiles.";
-
+        "xDSL Transceiver Unit (xTU) Line Threshold Profiles.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
-          "xTU Line Threshold Profile name.";
+          "xDSL Transceiver Unit (xTU) Line Threshold Profile name.";
       }
-
       uses line-threshold-profile;
     }
-
     list channel-threshold-profile {
       key "name";
       description
-        "xTU Channel Threshold Profiles.";
-
+        "xDSL Transceiver Unit (xTU) Channel Threshold Profiles.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
-          "xTU Channel Threshold Profile name.";
+          "xDSL Transceiver Unit (xTU) Channel Threshold Profile
+           name.";
       }
-
       uses channel-threshold-profile;
     }
   }
 
-  augment '/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-'
-        + 'vdsl:line' {
+  augment "/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-"
+        + "vdsl:line" {
     description
       "Augment the line to add threshold state data.";
-
     notification vdsl-15min-threshold-crossing-alert {
       description
         "A threshold has been crossed during the current 15 minute
          interval.";
-
       leaf tca-identity {
         type identityref {
           base vdsl-15min-threshold-crossing-alert;
@@ -184,13 +179,11 @@ submodule bbf-vdsl-threshold-management {
           "A unique identity associated with each threshold.";
       }
     }
-
     notification vdsl-24hr-threshold-crossing-alert {
       if-feature "performance-24hr";
       description
         "A threshold has been crossed during the current 24 hour
          interval.";
-
       leaf tca-identity {
         type identityref {
           base vdsl-24hr-threshold-crossing-alert;

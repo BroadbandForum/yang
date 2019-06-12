@@ -7,13 +7,11 @@ submodule bbf-selt-processing-derived-parameter-body {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   include bbf-selt-pmd-measurement-parameter-body;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -29,12 +27,11 @@ submodule bbf-selt-processing-derived-parameter-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
-     SELT-P derived parameters.
+     Single Ended Line Test Processing (SELT-P) derived parameters.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -74,9 +71,19 @@ submodule bbf-selt-processing-derived-parameter-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -95,7 +102,7 @@ submodule bbf-selt-processing-derived-parameter-body {
     reference
       "TR-355c2: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_2.pdf>";
+                        TR-355_Corrigendum-2.pdf>";
   }
   revision 2017-03-13 {
     description
@@ -105,7 +112,7 @@ submodule bbf-selt-processing-derived-parameter-body {
     reference
       "TR-355c1: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_1.pdf>";
+                        TR-355_Corrigendum-1.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -120,8 +127,9 @@ submodule bbf-selt-processing-derived-parameter-body {
 
   feature extended-bandwidth-selt-tflog {
     description
-      "Indicates support for extended bandwidth SELT for reporting
-       the logarithmic power transfer function Tflog(f).";
+      "Indicates support for extended bandwidth Single Ended Line Test
+       (SELT) for reporting the logarithmic power transfer function
+       Tflog(f).";
   }
 
   typedef per-sub-carrier-uint16 {
@@ -129,21 +137,20 @@ submodule bbf-selt-processing-derived-parameter-body {
       length "0..16384";
     }
     description
-      "A binary type where each pair of octets represents data 
-       belonging to a sub-carrier group. The first pair represents 
-       sub-carrier group 0 and the last represents sub-carrier 
+      "A binary type where each pair of octets represents data
+       belonging to a sub-carrier group. The first pair represents
+       sub-carrier group 0 and the last represents sub-carrier
        group (length/2 - 1).";
   }
 
   grouping downstream-upstream-derived-parameters {
     description
-      "Derived parameters that are common between the downstream and 
+      "Derived parameters that are common between the downstream and
        upstream directions";
-
     leaf capacity-estimate {
       type bbf-yang:data-rate32;
       description
-        "This parameter represents a best-effort estimate of the 
+        "This parameter represents a best-effort estimate of the
          achievable net data rate (in kbit/s) on the loop under test,
          under the following assumptions:
 
@@ -151,16 +158,16 @@ submodule bbf-selt-processing-derived-parameter-body {
            INP=0 (no impulse noise protection))
          - use of Trellis coding
          - target margin equal to CAP-TARSNRM (see clause B.2.1.4)
-         - transmit signal PSD at the U-interface of the 
+         - transmit signal PSD at the U-interface of the
            xTU-transmitter equal to CAP-SIGNALPSD
            (see clause B.2.1.2)
-         - noise PSD at the U-interface of the xTU-receiver equal to 
+         - noise PSD at the U-interface of the xTU-receiver equal to
            CAP-NOISEPSD (see clause B.2.1.3)
-         - support of bit loading from 1 to 15 bits included, in 
+         - support of bit loading from 1 to 15 bits included, in
            steps of 1 bit increments.
 
          As the capacity is a best-effort estimate, accuracy for this
-         parameter is vendor proprietary. The parameter in the 
+         parameter is vendor proprietary. The parameter in the
          downstream direction is CAPACITYds, and the parameter in the
          upstream direction is CAPACITYus";
       reference
@@ -170,29 +177,29 @@ submodule bbf-selt-processing-derived-parameter-body {
 
   grouping processing-derived-parameters {
     description
-      "Defines the SELT-P derived parameters.";
-
+      "Defines the Single Ended Line Test Processing (SELT-P) derived
+       parameters.";
     leaf loop-termination-indicator {
       type enumeration {
-        enum "open" {
+        enum open {
           description
-            "Open";
+            "Open.";
         }
-        enum "short" {
+        enum short {
           description
-            "Short";
+            "Short.";
         }
-        enum "powered-by-cpe" {
+        enum powered-by-cpe {
           description
-            "Powered on CPE";
+            "Powered on Customer Premises Equipment (CPE).";
         }
-        enum "unknown" {
+        enum unknown {
           description
-            "Unknown (i.e., failure in identifying the termination)";
+            "Unknown (i.e., failure in identifying the termination).";
         }
       }
       description
-        "Loop termination indicator is a three state indication of 
+        "Loop termination indicator is a three state indication of
          the loop termination defined as follows.
 
          1) Open
@@ -202,40 +209,37 @@ submodule bbf-selt-processing-derived-parameter-body {
       reference
         "ITU-T G.996.2 clause B.2.2.1 (LOOP-TERM)";
     }
-
     leaf loop-length {
       type uint16 {
         range "0..16383";
       }
       units "1 meter";
       description
-        "This parameter is the physical length (in metres) of the 
-         loop between the U-C and the U-R interface. The loop length 
-         shall be measured with a granularity of 1 m, with valid 
-         range of 0 to 16383 m";
+        "This parameter is the physical length (in metres) of the
+         loop between the U-C and the U-R interface. The loop length
+         shall be measured with a granularity of 1 m, with valid
+         range of 0 to 16383 m.";
       reference
         "ITU-T G.996.2 clause B.2.2.2 (LOOP-LEN)";
     }
-
     container loop-topology {
       list loop {
         key "i";
         description
           "A list of loop segments including the length and whether
            there is a bridged tap.";
-
         leaf i {
           type uint8;
           description
-            "The segment number. The first loop segment in the list 
-             shall be the segment connected to the SELT-PMD block 
-             measuring the SELT-PMD measurement parameters (i.e., the 
-             SELT-PMD block shall be the starting point of the 
-             topology description). Subsequent loop segments in the 
-             list shall describe the loop in the direction toward the 
+            "The segment number. The first loop segment in the list
+             shall be the segment connected to the Single Ended Line
+             Test Physical Medium Dependent (SELT-PMD) block measuring
+             the SELT-PMD measurement parameters (i.e., the
+             SELT-PMD block shall be the starting point of the
+             topology description). Subsequent loop segments in the
+             list shall describe the loop in the direction toward the
              farend loop termination.";
         }
-
         leaf len {
           type uint16 {
             range "0..16383";
@@ -243,27 +247,26 @@ submodule bbf-selt-processing-derived-parameter-body {
           units "1 meter";
           description
             "This parameter specifies the physical length of the loop
-             segment, in metres. The loop segment length shall be 
-             measured with a granularity of 1 m, with a valid range 
-             of 0 to 16383 m";
+             segment, in metres. The loop segment length shall be
+             measured with a granularity of 1 m, with a valid range
+             of 0 to 16383 m.";
           reference
             "ITU-T G.996.2 clause B.1.1.3.1 (LOOP_SEGM_LENGTH)";
         }
-
         leaf bti {
           type enumeration {
-            enum "in-series" {
+            enum in-series {
               description
                 "In series";
             }
-            enum "bridged-tap" {
+            enum bridged-tap {
               description
                 "Bridged tap";
             }
           }
           description
-            "This parameter specifies whether the loop segment is a 
-             bridged tap or arranged in series (i.e., not branching, 
+            "This parameter specifies whether the loop segment is a
+             bridged tap or arranged in series (i.e., not branching,
              not a bridged tap).
 
              The valid values are:
@@ -275,123 +278,116 @@ submodule bbf-selt-processing-derived-parameter-body {
         }
       }
       description
-        "The loop topology consists of a description of the loop 
-         structure, with indication of the physical length of each 
-         loop segment. In this parameter, a loop segment is defined 
-         as delimited by either a loop termination, or the presence 
+        "The loop topology consists of a description of the loop
+         structure, with indication of the physical length of each
+         loop segment. In this parameter, a loop segment is defined
+         as delimited by either a loop termination, or the presence
          of a bridged tap.
 
-         NOTE 1 - Two cables with different gauges/cable-types 
+         NOTE 1 - Two cables with different gauges/cable-types
                   connected in series are considered as a single loop
                   segment.
 
-         The loop topology is reported as a list of loop segments, 
+         The loop topology is reported as a list of loop segments,
          using the following conventions:
 
-         1) The first loop segment in the list shall be the segment 
-            connected to the SELT-PMD block measuring the SELT-PMD 
+         1) The first loop segment in the list shall be the segment
+            connected to the Single Ended Line Test Physical Medium
+            Dependent (SELT-PMD) block measuring the SELT-PMD
             measurement parameters (i.e., the SELT-PMD block shall be
             the starting point of the topology description).
-         2) Subsequent loop segments in the list shall describe the 
+         2) Subsequent loop segments in the list shall describe the
             loop in the direction toward the farend loop termination.
-         3) Consecutive loop segments indicated as 'bridged tap' 
-            represent bridged taps, each branching off from the main 
+         3) Consecutive loop segments indicated as 'bridged tap'
+            represent bridged taps, each branching off from the main
             loop at the same point.
 
-         NOTE 2 - Identification of a bridged tap branching off on a 
+         NOTE 2 - Identification of a bridged tap branching off on a
                   bridged tap is not supported by this parameter.
-                  A single loop segment is specified with two 
-                  sub-parameters: loop segment length (see clause 
-                  B.1.1.3.1) and loop segment bridged tap indicator 
+                  A single loop segment is specified with two
+                  sub-parameters: loop segment length (see clause
+                  B.1.1.3.1) and loop segment bridged tap indicator
                   (see clause B.1.1.3.2).
 
-         If this parameter is supported, reporting of up to three 
-         segments is a mandatory capability. Reporting of additional 
+         If this parameter is supported, reporting of up to three
+         segments is a mandatory capability. Reporting of additional
          segments is optional. ";
       reference
         "ITU-T G.996.2 clause B.2.2.3 (LOOP-TOPOLOGY)";
     }
-
     container attenuation-characteristics {
       leaf tflog-g {
         type uint8 {
           range "1 | 2 | 12";
         }
         description
-          "The attenuation characteristics group size (TFlog_G) is a 
-           reported parameter identifying the attenuation 
-           characteristics, TFlog(f), at a frequency spacing equal to 
-           TFlog_G x Df with Df = 4.3125 kHz. TFlog_G has three valid 
+          "The attenuation characteristics group size (TFlog_G) is a
+           reported parameter identifying the attenuation
+           characteristics, TFlog(f), at a frequency spacing equal to
+           TFlog_G x Df with Df = 4.3125 kHz. TFlog_G has three valid
            values: 1, 2, and 12.";
       }
-
       leaf tflog {
         type per-sub-carrier-uint16;
         description
           "An array of values for Tflog(f).";
       }
-
       description
-        "The line attenuation TFlog(f) is the logarithmic power 
-         transfer function of the line as a function of frequency 
-         when both the near-end and far-end line terminations have 
+        "The line attenuation TFlog(f) is the logarithmic power
+         transfer function of the line as a function of frequency
+         when both the near-end and far-end line terminations have
          the following values:
 
          - Source impedance = purely resistive equal to 100 ohms
          - Termination impedance = purely resistive equal to 100 ohms
 
-         The definition for reporting the line attenuation TFlog(f) 
-         depends on whether or not the option for extended bandwidth 
-         SELT is applied.
+         The definition for reporting the line attenuation TFlog(f)
+         depends on whether or not the option for extended bandwidth
+         Single Ended Line Test (SELT) is applied.
 
-         The function TFlog(f) consists of an array of values 
-         TFlog(i * TFlog_G * Df), with Df = 4.3125 kHz. 
+         The function TFlog(f) consists of an array of values
+         TFlog(i * TFlog_G * Df), with Df = 4.3125 kHz.
 
          NOTE - In the case where the instantiation of the LT unit is
-                the same as the instantiation of the xTU transceiver 
+                the same as the instantiation of the xTU transceiver
                 unit, this value may be independent of the subcarrier
                 spacing used for the xDSL DMT modulation.
 
          The range of valid values for the index i is 0 to 8191.
 
-         The attenuation characteristics group size, TFlog_G, has 
-         three valid values: 1, 2, and 12, indicating whether the 
-         measurements were performed using a subcarrier spacing of 
-         4.3125 kHz, 8.625 kHz, or 51.75 kHz respectively. 
+         The attenuation characteristics group size, TFlog_G, has
+         three valid values: 1, 2, and 12, indicating whether the
+         measurements were performed using a subcarrier spacing of
+         4.3125 kHz, 8.625 kHz, or 51.75 kHz respectively.
 
-         The range of valid values for TFlog(i * Df) is from +6.0 dB 
+         The range of valid values for TFlog(i * Df) is from +6.0 dB
          down to -96.2 dB, with a granularity of 0.1 dB (represented
-         as values 0 to 1022). A special value, 1023, is used to 
-         indicate that no measurement could be done for this 
-         subcarrier because the attenuation is out of the range that 
-         can be represented";
+         as values 0 to 1022). A special value, 1023, is used to
+         indicate that no measurement could be done for this
+         subcarrier because the attenuation is out of the range that
+         can be represented.";
       reference
         "ITU-T G.996.2 clause B.2.2.6 (ATT-CHAR)";
     }
-
     leaf missing-micro-filter {
       type boolean;
       description
-        "This parameter is a binary indication of a missing or 
-         incorrectly installed splitter or micro-filter at the U-R 
-         reference point. A value of 1 for this flag represents a 
-         missing splitter. This parameter is only defined for the 
-         SELT-P-R functionality";
+        "This parameter is a binary indication of a missing or
+         incorrectly installed splitter or micro-filter at the U-R
+         reference point. A value of 1 for this flag represents a
+         missing splitter. This parameter is only defined for the
+         SELT-P-R functionality.";
       reference
         "ITU-T G.996.2 clause B.2.2.4 (MIS-FILTER)";
     }
-
     container downstream {
       description
-        "Managed objects applicable in the downstream direction";
-
+        "Managed objects applicable in the downstream direction.";
       uses downstream-upstream-derived-parameters;
     }
-
     container upstream {
       description
-        "Managed objects applicable in the upstream direction";
-
+        "Managed objects applicable in the upstream direction.";
       uses downstream-upstream-derived-parameters;
     }
   }

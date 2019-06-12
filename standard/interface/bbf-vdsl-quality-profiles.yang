@@ -1,6 +1,5 @@
 submodule bbf-vdsl-quality-profiles {
   yang-version 1.1;
-
   belongs-to bbf-vdsl {
     prefix bbf-vdsl;
   }
@@ -8,7 +7,6 @@ submodule bbf-vdsl-quality-profiles {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   include bbf-vdsl-base-body;
   include bbf-vdsl-noise-margin-profile-body;
   include bbf-vdsl-impulse-noise-protection-delay-profile-body;
@@ -18,13 +16,11 @@ submodule bbf-vdsl-quality-profiles {
   include bbf-vdsl-re-initialization-policy-profile-body;
   include bbf-vdsl-vectoring-profile-body;
   include bbf-vdsl-data-gathering-profile-body;
-
   include bbf-vdsl-base;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -40,12 +36,11 @@ submodule bbf-vdsl-quality-profiles {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing VDSL quality profiles.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -85,9 +80,19 @@ submodule bbf-vdsl-quality-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -106,7 +111,7 @@ submodule bbf-vdsl-quality-profiles {
     reference
       "TR-355c2: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_2.pdf>";
+                        TR-355_Corrigendum-2.pdf>";
   }
   revision 2017-03-13 {
     description
@@ -116,7 +121,7 @@ submodule bbf-vdsl-quality-profiles {
     reference
       "TR-355c1: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_1.pdf>";
+                        TR-355_Corrigendum-1.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -131,8 +136,8 @@ submodule bbf-vdsl-quality-profiles {
 
   typedef noise-margin-profile-ref {
     type leafref {
-      path '/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:noise-margin-'
-         + 'profile/bbf-vdsl:name';
+      path "/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:noise-margin-"
+         + "profile/bbf-vdsl:name";
     }
     description
       "Noise Margin Profile identifier.";
@@ -140,28 +145,25 @@ submodule bbf-vdsl-quality-profiles {
 
   typedef impulse-noise-protection-delay-profile-ref {
     type leafref {
-      path '/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:impulse-noise-'
-         + 'protection-delay-profile/bbf-vdsl:name';
+      path "/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:impulse-noise-"
+         + "protection-delay-profile/bbf-vdsl:name";
     }
     description
-      "INP-Delay Profile identifier.";
+      "Inpulse Noise Protection (INP) Delay Profile identifier.";
   }
 
-  augment '/bbf-vdsl:vdsl/bbf-vdsl:quality' {
+  augment "/bbf-vdsl:vdsl/bbf-vdsl:quality" {
     description
       "DSL Quality Management related profiles.";
-
     list noise-margin-profile {
       key "name";
       description
         "Noise Margin Profile.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "Noise Margin Profile identifier.";
       }
-
       container downstream {
         description
           "Downstream Noise Margin Profile.";
@@ -173,44 +175,38 @@ submodule bbf-vdsl-quality-profiles {
         uses noise-margin-profile-upstream;
       }
     }
-
     list impulse-noise-protection-delay-profile {
       key "name";
       description
-        "INP-Delay Profile.";
-
+        "Inpulse Noise Protection (INP) Delay Profile.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
-          "INP-Delay Profile identifier.";
+          "Inpulse Noise Protection (INP) Delay Profile identifier.";
       }
-
       container downstream {
         description
-          "Downstream INP-Delay Profile.";
+          "Downstream Inpulse Noise Protection (INP) Delay Profile.";
         uses impulse-noise-protection-delay-profile;
         uses impulse-noise-protection-delay-profile-downstream;
       }
       container upstream {
         description
-          "Upstream INP-Delay Profile.";
+          "Upstream Inpulse Noise Protection (INP) Delay Profile.";
         uses impulse-noise-protection-delay-profile;
         uses impulse-noise-protection-delay-profile-upstream;
       }
     }
-
     list virtual-noise-profile {
       if-feature "virtual-noise";
       key "name";
       description
         "Virtual Noise Profile.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "Virtual Noise Profile identifier.";
       }
-
       container downstream {
         description
           "Downstream Virtual Noise Profile.";
@@ -222,67 +218,68 @@ submodule bbf-vdsl-quality-profiles {
         uses virtual-noise-profile-upstream;
       }
     }
-
     list sos-profile {
       if-feature "sos";
       key "name";
       description
-        "SOS Profile.";
-
+        "Save Our Showtime (SOS) Profile.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
-          "SOS Profile identifier.";
+          "Save Our Showtime (SOS) Profile identifier.";
       }
-
       container downstream {
         uses sos-profile;
         description
-          "Downstream SOS Profile.";
+          "Downstream Save Our Showtime (SOS) Profile.";
       }
       container upstream {
         uses sos-profile;
         description
-          "Upstream SOS Profile.";
+          "Upstream Save Our Showtime (SOS) Profile.";
       }
     }
-
     list impulse-noise-monitoring-profile {
       if-feature "impulse-noise-monitoring";
       key "name";
       description
-        "INM Profile.";
-
+        "Impulse Noise Monitoring (INM) Profile.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
-          "INM Profile identifier.";
+          "Impulse Noise Monitoring (INM) Profile identifier.";
       }
-
+      leaf inm-enable {
+        type boolean;
+        default "false";
+        description
+          "If true, enables Impulse Noise Monitoring (INM)
+           in both directions. If false, disables Impulse
+           Noise Monitoring (INM) in both directions.";
+        reference
+          "ITU-T G.997.1 clause 7.3.1.9.6 (INM_ENABLE).";
+      }
       container downstream {
         description
-          "Downstream INM Profile.";
+          "Downstream Impulse Noise Monitoring (INM) Profile.";
         uses impulse-noise-monitoring-profile;
       }
       container upstream {
         description
-          "Upstream INM Profile.";
+          "Upstream Impulse Noise Monitoring (INM) Profile.";
         uses impulse-noise-monitoring-profile;
       }
     }
-
     list re-initialization-policy-profile {
       if-feature "re-initialization-policy";
       key "name";
       description
         "Re-Initialization Policy Profile.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "Re-Initialization Policy Profile identifier.";
       }
-
       container downstream {
         description
           "Downstream Re-Initialization Policy Profile.";
@@ -294,21 +291,17 @@ submodule bbf-vdsl-quality-profiles {
         uses re-initialization-policy-profile;
       }
     }
-
     list vectoring-profile {
       if-feature "vectoring";
       key "name";
       description
         "Vectoring Profile.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "Vectoring Profile identifier.";
       }
-
       uses vectoring-profile-non-directional;
-
       container downstream {
         description
           "Downstream Vectoring Profile.";
@@ -320,22 +313,19 @@ submodule bbf-vdsl-quality-profiles {
         uses vectoring-profile;
       }
     }
-
     list data-gathering-profile {
       if-feature "data-gathering";
       key "name";
       description
         "Data Gathering Profile.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "Data Gathering Profile identifier.";
       }
-
       container vtu {
         description
-          "VTU Data Gathering Profile.";
+          "VDSL2 Transceiver Unit (VTU) Data Gathering Profile.";
         uses data-gathering-profile;
       }
     }

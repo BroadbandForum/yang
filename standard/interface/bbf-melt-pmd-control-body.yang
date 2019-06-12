@@ -7,7 +7,6 @@ submodule bbf-melt-pmd-control-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,12 +22,11 @@ submodule bbf-melt-pmd-control-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
-     managing the PMD control object.
+     managing the Physical Medium Dependent (PMD) control object.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-melt-pmd-control-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -94,17 +102,19 @@ submodule bbf-melt-pmd-control-body {
 
   typedef pmd-function {
     type enumeration {
-      enum "measurement" {
+      enum measurement {
         value 1;
         description
-          "Triggers the MELT PMD to start the test or tests 
-           specified by the measurement class (MELT-MCLASS).";
+          "Triggers the Metallic Line Test Physical Medium Dependent
+           (MELT-PMD) to start the test or tests specified by the
+           measurement class (MELT-MCLASS).";
       }
-      enum "pair-identification-tone-generation" {
+      enum pair-identification-tone-generation {
         value 2;
         description
-          "Triggers the MELT PMD to start a Pair Identification 
-           Tone (PIT) generation.";
+          "Triggers the Metallic Line Test Physical Medium Dependent
+           (MELT-PMD) to start a Pair Identification Tone (PIT)
+           generation.";
       }
     }
     description
@@ -113,35 +123,34 @@ submodule bbf-melt-pmd-control-body {
 
   grouping melt-pmd-control {
     description
-      "Defines the parameters contained in the PMD control object.";
-
+      "Defines the parameters contained in the Physical Medium
+       Dependent (PMD) control object.";
     choice pmd-functions {
       default "all-functions-disable";
       status deprecated;
       description
-        "Options for enabling/disabling PMD functions.";
-
+        "Options for enabling/disabling Physical Medium Dependent
+         (PMD) functions.";
       case all-functions-disable {
         status deprecated;
         leaf all-functions-disable {
           type empty;
           status deprecated;
           description
-            "Disable all PMD control functions.";
+            "Disable all Physical Medium Dependent (PMD) control
+             functions.";
         }
       }
-
       case measurement-enable-c {
         status deprecated;
         leaf measurement-enable-c {
           type empty;
           status deprecated;
           description
-            "Enables the test or tests specified by the measurement 
+            "Enables the test or tests specified by the measurement
              class (MELT-MCLASS)";
         }
       }
-
       case pair-identification-tone-generation-enable {
         status deprecated;
         leaf pair-identification-tone-generation-enable {
@@ -156,58 +165,61 @@ submodule bbf-melt-pmd-control-body {
 
   grouping pmd-control {
     description
-      "PMD control functions.";
-
+      "Physical Medium Dependent (PMD) control functions.";
     leaf pmd-control {
       type enumeration {
-        enum "disable" {
+        enum disable {
           description
-            "The MELT PMD functionality is not configured for a 
-             measurement or Pair Identification Tone (PIT) 
+            "The Metallic Line Test Physical Medium Dependent
+             (MELT-PMD) functionality is not configured for a
+             measurement or Pair Identification Tone (PIT)
              generation.";
         }
-        enum "enable" {
+        enum enable {
           description
-            "The MELT PMD functionality is configured for a 
-             measurement or Pair Identification Tone (PIT) 
+            "The Metallic Line Test Physical Medium Dependent
+             (MELT-PMD) functionality is configured for a
+             measurement or Pair Identification Tone (PIT)
              generation.";
         }
       }
       default "disable";
       description
-        "This parameter configures the MELT PMD for a MELT
-         measurement or Pair Identification Tone (PIT) generation.";
+        "This parameter configures the Metallic Line Test Physical
+         Medium Dependent (MELT-PMD) for a MELT measurement or Pair
+         Identification Tone (PIT) generation.";
     }
-
     action request-pmd-function-c {
       description
         "Requests to disable or enable PMD functions.";
-
       input {
         leaf pmd-function {
           type union {
             type enumeration {
-              enum "abort" {
+              enum abort {
                 value 0;
                 description
-                  "Triggers the MELT PMD to abort any ongoing
-                   measurement or Pair Identification Tone (PIT) 
+                  "Triggers the Metallic Line Test Physical Medium
+                   Dependent (MELT-PMD) to abort any ongoing
+                   measurement or Pair Identification Tone (PIT)
                    generation.";
               }
             }
             type pmd-function;
           }
           description
-            "A measurement or Pair Identification Tone (PIT) 
-             generation is by default not triggered. A measurement or 
-             PIT generation is triggered when the action is sent with 
-             the appropriate function specified. One or more 
-             measurements or PIT generations may be triggered while 
-             the MELT PMD is configured 'enable', possibly with 
-             different MELT PMD configuration parameters. If the 
-             triggered measurement or PIT generation cannot be 
-             executed, then the AN/DPU ME rejects this action and the 
-             MELT PMD status remains 'inactive'.";
+            "A measurement or Pair Identification Tone (PIT)
+             generation is by default not triggered. A measurement or
+             PIT generation is triggered when the action is sent with
+             the appropriate function specified. One or more
+             measurements or PIT generations may be triggered while
+             the Metallic Line Test Physical Medium Dependent
+             (MELT-PMD) is configured 'enable', possibly with
+             different MELT PMD configuration parameters. If the
+             triggered measurement or PIT generation cannot be
+             executed, then the Access Node/Distribution Point Unit
+             (AN/DPU) Management Entitiy (ME) rejects this action and
+             the  MELT PMD status remains 'inactive'.";
         }
       }
     }

@@ -7,7 +7,6 @@ submodule bbf-fast-link-state-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,12 +22,11 @@ submodule bbf-fast-link-state-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing link state test configuration.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-fast-link-state-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -96,36 +104,35 @@ submodule bbf-fast-link-state-body {
     description
       "A set of parameters used to enable link state tests
        specified by ITU-T G.997.2 and G.9701";
-
     leaf link-state-forced {
       type enumeration {
-        enum "no-link-state" {
+        enum no-link-state {
           description
-            "No link state";
+            "No link state.";
         }
-        enum "l0-link-state" {
+        enum l0-link-state {
           description
-            "L0 link state";
+            "L0 link state.";
         }
-        enum "l2.1n-link-state" {
+        enum l2.1n-link-state {
           description
-            "L2.1N link state";
+            "L2.1N link state.";
         }
-        enum "l2.1b-link-state" {
+        enum l2.1b-link-state {
           description
-            "L2.1B link state";
+            "L2.1B link state.";
         }
-        enum "l2.2-link-state" {
+        enum l2.2-link-state {
           description
-            "L2.2 link state";
+            "L2.2 link state.";
         }
       }
       default "no-link-state";
       description
-        "Forces the link to transition and to remain in the selected 
+        "Forces the link to transition and to remain in the selected
          link state.";
       reference
-        "ITU-T G.997.2 clause 7.14.1.1(LS-FORCED); ITU-T G.9701 
+        "ITU-T G.997.2 clause 7.14.1.1(LS-FORCED); ITU-T G.9701
          clause 12.1.1.7.1";
     }
   }

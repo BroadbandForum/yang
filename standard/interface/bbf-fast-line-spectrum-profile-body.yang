@@ -4,10 +4,11 @@ submodule bbf-fast-line-spectrum-profile-body {
     prefix bbf-fast;
   }
 
+  include bbf-fast-base;
+
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,12 +24,11 @@ submodule bbf-fast-line-spectrum-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing line spectrum profiles.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +68,19 @@ submodule bbf-fast-line-spectrum-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -89,7 +99,7 @@ submodule bbf-fast-line-spectrum-profile-body {
     reference
       "TR-355c1: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_1.pdf>";
+                        TR-355_Corrigendum-1.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -102,28 +112,27 @@ submodule bbf-fast-line-spectrum-profile-body {
                         TR-355.pdf>";
   }
 
-
   typedef profiles {
     type bits {
       bit g.9701-profile-106a {
         description
-          "ITU-T G.9701 profile 106a";
+          "ITU-T G.9701 profile 106a.";
       }
       bit g.9701-profile-106b {
         description
-          "ITU-T G.9701 profile 106b";
+          "ITU-T G.9701 profile 106b.";
       }
       bit g.9701-profile-212a {
         description
-          "ITU-T G.9701 profile 212a";
+          "ITU-T G.9701 profile 212a.";
       }
       bit g.9701-profile-106c {
         description
-          "ITU-T G.9701 profile 106c";
+          "ITU-T G.9701 profile 106c.";
       }
       bit g.9701-profile-212c {
         description
-          "ITU-T G.9701 profile 212c";
+          "ITU-T G.9701 profile 212c.";
       }
     }
     description
@@ -138,7 +147,8 @@ submodule bbf-fast-line-spectrum-profile-body {
     }
     units "-0.5 dBm/Hz";
     description
-      "Defines a PSD level in the range 0 to -100 dBm/Hz.";
+      "Defines a Power Spectral Density (PSD) level in the range 0 to
+       -100 dBm/Hz.";
   }
 
   typedef sub-carrier-index {
@@ -154,17 +164,17 @@ submodule bbf-fast-line-spectrum-profile-body {
       range "39..4096";
     }
     description
-      "Identifies a sub-carrier used for PSD level configuration";
+      "Identifies a sub-carrier used for Power Spectral Density (PSD)
+       level configuration";
   }
 
   grouping sub-carrier-range {
     description
       "Defines a sub-carrier band, i.e., a set of contigious
        sub-carriers.";
-
     leaf start-index {
       type sub-carrier-index;
-      must ". <= ../stop-index" {
+      must '. <= ../stop-index' {
         description
           "The start index must be less than or equal to the stop
            index";
@@ -173,10 +183,9 @@ submodule bbf-fast-line-spectrum-profile-body {
         "The sub-carrier index identifying the start of a range of
          sub-carriers (inclusive).";
     }
-
     leaf stop-index {
       type sub-carrier-index;
-      must ". >= ../start-index" {
+      must '. >= ../start-index' {
         description
           "The stop index must be greater than or equal to the
            start index";
@@ -188,30 +197,27 @@ submodule bbf-fast-line-spectrum-profile-body {
     }
   }
 
-
   grouping power-and-spectrum-usage-parameters {
     description
       "Power and spectrum usage configuration parameters.";
     reference
       "ITU-T G.997.2 clause 7.1.2.";
-
     /* G.997.2 Clause 7.1.2 Power and Spectrum Usage */
     leaf maximum-aggregate-transmit-power {
       type int16 {
-        range "-310..310"; /* -31.0 to 31.0dBm */
+        range "-310..310";
+        /* -31.0 to 31.0dBm */
       }
       units "0.1dBm";
       default "40";
       description
         "Defines the maximum aggregate transmit power at the U-O2
-         reference
-           point during initialization and showtime
-           (in dBm).";
+         reference point during initialization and showtime
+         (in dBm).";
       reference
         "ITU-T G.997.2 clause 7.1.2.1 (MAXATPds) and clause 7.1.2.2
          (MAXATPus); ITU-T G.9701 Clause 7.3.2";
     }
-
     list carmask {
       key "start-index";
       max-elements 32;
@@ -224,7 +230,6 @@ submodule bbf-fast-line-spectrum-profile-body {
       reference
         "ITU-T G.997.2 clause 7.1.2.3 (CARMASKds) and clause 7.1.2.4
          (CARMASKus); ITU-T G.9701 Clause 7.3.1.3.";
-
       uses sub-carrier-range;
     }
   }
@@ -233,11 +238,10 @@ submodule bbf-fast-line-spectrum-profile-body {
     description
       "Defines the parameters contained in a line spectrum
        profile.";
-
     leaf profiles {
       type union {
         type enumeration {
-          enum "all" {
+          enum all {
             description
               "Used to indicate that all profiles are allowed.";
           }
@@ -252,34 +256,32 @@ submodule bbf-fast-line-spectrum-profile-body {
         "ITU-T G.997.2 clause 7.1.0.1 (PROFILES); ITU-T G.9701
          clause 6.";
     }
-
     leaf link-state-enabling {
       type enumeration {
-        enum "l0-l3-enabled" {
+        enum l0-l3-enabled {
           description
-            "L0 and L3 enabled (L2.1N, L2.1B, L2.2 disabled)";
+            "L0 and L3 enabled (L2.1N, L2.1B, L2.2 disabled).";
         }
-        enum "l0-l3-l2.1n-enabled" {
+        enum l0-l3-l2.1n-enabled {
           description
-            "L0, L3 and L2.1N enabled (L2.1B, L2.2 disabled)";
+            "L0, L3 and L2.1N enabled (L2.1B, L2.2 disabled).";
         }
-        enum "l0-l3-l2.1n-l2.1b-enabled" {
+        enum l0-l3-l2.1n-l2.1b-enabled {
           description
-            "L0, L3, L2.1N and L2.1B enabled (L2.2 disabled)";
+            "L0, L3, L2.1N and L2.1B enabled (L2.2 disabled).";
         }
-        enum "l0-l3-l2.1n-l2.1b-l2.2-enabled" {
+        enum l0-l3-l2.1n-l2.1b-l2.2-enabled {
           description
-            "L0, L3, L2.1N, L2.1B and L2.2 enabled";
+            "L0, L3, L2.1N, L2.1B and L2.2 enabled.";
         }
       }
       default "l0-l3-l2.1n-l2.1b-l2.2-enabled";
       description
-        "Selects the set of allowed low power mode states";
+        "Selects the set of allowed low power mode states.";
       reference
-        "ITU-T G.997.2 clause 7.14.1.2(LS-ENABLE); ITU-T G.9701 
+        "ITU-T G.997.2 clause 7.14.1.2(LS-ENABLE); ITU-T G.9701
          clause 12.1.1.7.2";
     }
-
     leaf maximum-psd-reduction-in-l2 {
       type uint8 {
         range "0..10 | 255" {
@@ -290,23 +292,20 @@ submodule bbf-fast-line-spectrum-profile-body {
       units "dB";
       default "0";
       description
-        "Defines the maximum PSD reduction allowed during the L2.1N,
-         L2.2B and L2.2 link states for both the upstream and 
-         downstream direction. The special value, 255, indicates 
-         there is no maximum bound for the PSD reduction (i.e., the 
-         maximum PSD reduction is infinite).";
+        "Defines the maximum Power Spectral Density (PSD) reduction
+         allowed during the L2.1N, L2.2B and L2.2 link states for both
+         the upstream and downstream direction. The special value,
+         255, indicates there is no maximum bound for the PSD
+         reduction (i.e., the maximum PSD reduction is infinite).";
       reference
         "ITU-T G.997.2 clause 7.1.10.3 (L2.1-MAXPSDR); ITU-T G.9701
          clause 13.4.1.4.";
     }
-
     container downstream {
       description
         "Downstream specific line spectrum configuration
          parameters.";
-
       uses power-and-spectrum-usage-parameters;
-
       list mibpsdmask {
         must
           "count(../mibpsdmask)=0 or
@@ -324,45 +323,64 @@ submodule bbf-fast-line-spectrum-profile-body {
            (../../profiles='all' and
            (not(../mibpsdmask[sub-carrier-index=2048]) or
            not(../mibpsdmask[sub-carrier-index=4096])))))" {
-          description
-            "If the MIBPSDMASK is configured, then the mask must 
-             include sub-carrier 39 as well as the highest sub-carrier
-             for the profile.";
+            description
+              "If the MIBPSDMASK is configured, then the mask must
+               include sub-carrier 39 as well as the highest 
+               sub-carrier for the profile.";
         }
         key "sub-carrier-index";
         max-elements 32;
         description
-          "This list defines the PSD mask applicable at the U-O2
-           reference point. Each entry in the list defines a 
-           breakpoint of the PSD mask. Requirements for a valid MIB 
-           PSD mask are defined in G.9701 clauses 7.3.1.1.2.1 and 
-           7.3.1.1.2.2.";
+          "This list defines the Power Spectral Density (PSD) mask
+           applicable at the U-O2 reference point. Each entry in the
+           list defines a breakpoint of the PSD mask. Requirements for
+           a valid Management Information Base (MIB) PSD mask are
+           defined in G.9701 clauses 7.3.1.1.2.1 and 7.3.1.1.2.2.";
         reference
           "ITU-T G.997.2 clause 7.1.2.5 (MIBPSDMASKds) and clause
-           7.1.2.6 (MIBPSDMASKus); ITU-T G.9701 clauses 7.3.1.1.2.1 
+           7.1.2.6 (MIBPSDMASKus); ITU-T G.9701 clauses 7.3.1.1.2.1
            and 7.3.1.1.2.2.";
-
         leaf sub-carrier-index {
           type psd-level-sub-carrier-index;
           description
             "Identifies the sub-carrier for which psd-level applies.";
         }
-
         leaf psd-level {
           type psd-level;
           mandatory true;
           description
-            "The PSD level of the referenced sub-carrier.";
+            "The Power Spectral Density (PSD) level of the referenced
+             sub-carrier.";
         }
       }
+      leaf classmask {
+        if-feature "classmask";
+        type enumeration {
+          enum classmask1 {
+            description
+              "The limit mask for each profile is as defined in G.9701
+               classmask1.";
+          }
+          enum classmask2 {
+            description
+              "The limit mask for each profile is as defined in G.9701
+               classmask2.";
+          }
+        }
+        default "classmask1";
+        description
+          "Defines, through a classmask selection, which limit mask
+           shall be used with each profile in the downstream
+           direction. The classmasks are defined in ITU-T G.9701.";
+        reference
+          "ITU-T G.997.2 clause 7.1.2.14 (CLASSMASKds);
+           ITU-T G.9701 clause 7.3.1.5.";
+      }
     }
-
     container upstream {
       description
         "Upstream specific line spectrum configuration parameters.";
-
       uses power-and-spectrum-usage-parameters;
-
       list mibpsdmask {
         must
           "count(../mibpsdmask)=0 or
@@ -380,36 +398,52 @@ submodule bbf-fast-line-spectrum-profile-body {
            (../../profiles='all' and
            (not(../mibpsdmask[sub-carrier-index=2048]) or
            not(../mibpsdmask[sub-carrier-index=4096])))))" {
-          description
-            "If the MIBPSDMASK is configured, then the mask must 
-             include sub-carrier 39 as well as the highest sub-carrier
-             for the profile.";
+            description
+              "If the MIBPSDMASK is configured, then the mask must
+               include sub-carrier 39 as well as the highest 
+               sub-carrier for the profile.";
         }
         key "sub-carrier-index";
         max-elements 32;
         description
-          "This list defines the PSD mask applicable at the U-O2
-           reference point. Each entry in the list defines a 
-           breakpoint of the PSD mask. Requirements for a valid MIB 
-           PSD mask are defined in G.9701 clauses 7.3.1.1.2.1 and 
-           7.3.1.1.2.2.";
+          "This list defines the Power Spectral Density (PSD) mask
+           applicable at the U-O2 reference point. Each entry in the
+           list defines a breakpoint of the PSD mask. Requirements for
+           a valid Management Information Base (MIB) PSD mask are
+           defined in G.9701 clauses 7.3.1.1.2.1 and 7.3.1.1.2.2.";
         reference
           "ITU-T G.997.2 clause 7.1.2.5 (MIBPSDMASKds) and clause
-           7.1.2.6 (MIBPSDMASKus); ITU-T G.9701 clauses 7.3.1.1.2.1 
+           7.1.2.6 (MIBPSDMASKus); ITU-T G.9701 clauses 7.3.1.1.2.1
            and 7.3.1.1.2.2.";
-
         leaf sub-carrier-index {
           type psd-level-sub-carrier-index;
           description
             "Identifies the sub-carrier for which psd-level applies.";
         }
-
         leaf psd-level {
           type psd-level;
           mandatory true;
           description
-            "The PSD level of the referenced sub-carrier.";
+            "The Power Spectral Density (PSD) level of the referenced
+             sub-carrier.";
         }
+      }
+      leaf classmask {
+        if-feature "classmask";
+        type enumeration {
+          enum classmask1 {
+            description
+              "Selects limit mask per classmask1.";
+          }
+        }
+        default "classmask1";
+        description
+          "Defines, through a classmask selection, which limit mask
+           shall be used with each profile in the upstream direction.
+           The classmasks are defined in ITU-T G.9701.";
+        reference
+          "ITU-T G.997.2 clause 7.1.2.15 (CLASSMASKus);
+           ITU-T G.9701 clause 7.3.1.5.";
       }
     }
   }

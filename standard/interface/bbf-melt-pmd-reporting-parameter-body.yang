@@ -10,7 +10,6 @@ submodule bbf-melt-pmd-reporting-parameter-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -26,12 +25,12 @@ submodule bbf-melt-pmd-reporting-parameter-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
-     MELT-PMD reporting parameters.
+     Metallic Line Test Physical Medium Dependent (MELT-PMD) reporting
+     parameters.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -71,9 +70,19 @@ submodule bbf-melt-pmd-reporting-parameter-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -97,58 +106,55 @@ submodule bbf-melt-pmd-reporting-parameter-body {
 
   grouping pmd-reporting-parameters {
     description
-      "Defines the MELT-PMD reporting parameters.";
-
+      "Defines the Metallic Line Test Physical Medium Dependent
+       (MELT-PMD) reporting parameters.";
     leaf measurement-frequency {
       type uint16 {
         range "10..1000";
       }
       units "1 Hz";
       description
-        "This parameter is the measurement frequency for a 3-element 
-         capacitance measurement, if performed with a sinewave 
-         signal, or a for 3-element complex admittance measurement. 
-         The range of valid values is from 10 to 1000 Hz with a 
+        "This parameter is the measurement frequency for a 3-element
+         capacitance measurement, if performed with a sinewave
+         signal, or a for 3-element complex admittance measurement.
+         The range of valid values is from 10 to 1000 Hz with a
          granularity of 1 Hz.";
       reference
         "ITU-T G.996.2 clause E.2.2.1 (MELT-MFREQ)";
     }
-
     leaf foreign-voltage-input-impedance {
       type uint32 {
         range "0..10000000";
       }
       units "1 ohm";
       description
-        "This parameter reports the nominal input impedance of the 
+        "This parameter reports the nominal input impedance of the
          measuring instrument during foreign voltage tests. The range
-         of valid values is from 0 to 10 Mohm with a granularity of 
+         of valid values is from 0 to 10 Mohm with a granularity of
          1 ohm.";
       reference
         "ITU-T G.996.2 clause E.2.2.2 (MELT-IMP-V)";
     }
-
     leaf loop-complex-admittance-measurement-voltage {
       type measurement-voltage;
       description
-        "This parameter is the peak amplitude of the differential 
-         sinewave used by the measurement of the loop complex 
-         admittance with a high voltage metallic test (see 
-         clause E.1.1.7). The range of valid values is from 0 to 
-         150 V and it shall be represented in linear format with a 
+        "This parameter is the peak amplitude of the differential
+         sinewave used by the measurement of the loop complex
+         admittance with a high voltage metallic test (see
+         clause E.1.1.7). The range of valid values is from 0 to
+         150 V and it shall be represented in linear format with a
          granularity of 0.1 V.";
       reference
         "ITU-T G.996.2 clause E.2.2.3 (MELT-HCA-V)";
     }
-
     leaf unreliability-indicator {
       if-feature "melt-pmd-reporting-parameter-reliability";
       type bits {
         bit measurement-frequency {
           description
-            "This parameter is the measurement frequency for a 
-             3-element capacitance measurement, if performed with a 
-             sinewave signal, or a for 3-element complex admittance 
+            "This parameter is the measurement frequency for a
+             3-element capacitance measurement, if performed with a
+             sinewave signal, or a for 3-element complex admittance
              measurement. The range of valid values is from 10 to 1000
              Hz with a granularity of 1 Hz.";
           reference
@@ -157,18 +163,18 @@ submodule bbf-melt-pmd-reporting-parameter-body {
         bit foreign-voltage-input-impedance {
           description
             "This parameter reports the nominal input impedance of the
-             measuring instrument during foreign voltage tests. The 
-             range of valid values is from 0 to 10 Mohm with a 
+             measuring instrument during foreign voltage tests. The
+             range of valid values is from 0 to 10 Mohm with a
              granularity of 1 ohm.";
           reference
             "ITU-T G.996.2 clause E.2.2.2 (MELT-IMP-V)";
         }
         bit loop-complex-admittance-measurement-voltage {
           description
-            "This parameter is the peak amplitude of the differential 
-             sinewave used by the measurement of the loop complex 
-             admittance with a high voltage metallic test (see 
-             clause E.1.1.7). The range of valid values is from 0 to 
+            "This parameter is the peak amplitude of the differential
+             sinewave used by the measurement of the loop complex
+             admittance with a high voltage metallic test (see
+             clause E.1.1.7). The range of valid values is from 0 to
              150 V and it shall be represented in linear format with a
              granularity of 0.1 V.";
           reference
@@ -182,7 +188,7 @@ submodule bbf-melt-pmd-reporting-parameter-body {
          Possible reasons that the data is unreliable:
            - The measurement may not have been able to run, possibly
              due to external conditions.
-           - The result is not reliable as the accuracy may be 
+           - The result is not reliable as the accuracy may be
              degraded due to external conditions.";
       reference
         "ITU-T G.996.2 clause E.2.2.4 (Reliability indicator)";

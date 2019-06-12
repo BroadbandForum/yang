@@ -5,11 +5,15 @@
       <name/>
       <description/>
       <type/>
-      <enabled>True</enabled>
+      <enabled>true</enabled>
       <link-up-down-trap-enable/>
       <line xmlns="urn:bbf:yang:bbf-fastdsl">
-        <supported-mode/>
-        <configured-mode/>
+        <supported-mode>
+          <!-- # entries: 0.. -->
+        </supported-mode>
+        <configured-mode>
+          <!-- # entries: 0.. -->
+        </configured-mode>
         <ghs xmlns="urn:bbf:yang:bbf-ghs">
           <handshake-profile/>
         </ghs>
@@ -27,19 +31,21 @@
           <retransmission-profile/>
           <fast-retrain-policy-profile/>
           <vectoring-profile/>
+          <impulse-noise-monitoring-profile/>
           <line-config-vector/>
           <threshold-template/>
+          <srec-allowed>false</srec-allowed>
           <test-mode>
-            <rtx-tc-test-mode>False</rtx-tc-test-mode>
-            <tps-tc-test-mode>False</tps-tc-test-mode>
-            <dra-test-mode>False</dra-test-mode>
+            <rtx-tc-test-mode>false</rtx-tc-test-mode>
+            <tps-tc-test-mode>false</tps-tc-test-mode>
+            <dra-test-mode>false</dra-test-mode>
           </test-mode>
           <update-test>
             <ftu-o>
-              <update-ne-test>[]</update-ne-test>
+              <update-ne-test/>
             </ftu-o>
             <ftu-r>
-              <update-fe-test>[]</update-fe-test>
+              <update-fe-test/>
             </ftu-r>
           </update-test>
           <read-test>
@@ -107,8 +113,8 @@
         <pmd-profile/>
         <processing-profile/>
         <pmd-control>
-          <uer-measurement-enable-c>False</uer-measurement-enable-c>
-          <qln-measurement-enable-c>False</qln-measurement-enable-c>
+          <uer-measurement-enable-c>false</uer-measurement-enable-c>
+          <qln-measurement-enable-c>false</qln-measurement-enable-c>
         </pmd-control>
         <no-profiles-attached/>
         <direct-attachment-mode>
@@ -130,8 +136,12 @@
       <last-change/>
       <if-index/>
       <phys-address/>
-      <higher-layer-if/>
-      <lower-layer-if/>
+      <higher-layer-if>
+        <!-- # entries: 0.. -->
+      </higher-layer-if>
+      <lower-layer-if>
+        <!-- # entries: 0.. -->
+      </lower-layer-if>
       <speed/>
       <statistics>
         <discontinuity-time/>
@@ -335,6 +345,16 @@
                   <successful-autonomous-sra/>
                   <successful-fra/>
                   <successful-rpa/>
+                  <inminpeq>
+                    <inminpeq-index/>
+                    <inminpeq/>
+                  </inminpeq>
+                  <inmame/>
+                  <inmiat>
+                    <inminiat-index/>
+                    <inmiat/>
+                  </inmiat>
+                  <inmblfc/>
                   <errored-seconds/>
                   <severely-errored-seconds/>
                   <loss-of-signal-seconds/>
@@ -348,6 +368,8 @@
                   <loss-of-power-interruptions/>
                   <host-reinit-interruptions/>
                   <spontaneous-interruptions/>
+                  <successful-srec/>
+                  <me-o-triggered-interruptions/>
                   <link-state-l2.1n-seconds/>
                   <link-state-l2.1b-seconds/>
                   <link-state-l2.2-seconds/>
@@ -362,6 +384,16 @@
                   <successful-autonomous-sra/>
                   <successful-fra/>
                   <successful-rpa/>
+                  <inminpeq>
+                    <inminpeq-index/>
+                    <inminpeq/>
+                  </inminpeq>
+                  <inmame/>
+                  <inmiat>
+                    <inminiat-index/>
+                    <inmiat/>
+                  </inmiat>
+                  <inmblfc/>
                   <errored-seconds/>
                   <severely-errored-seconds/>
                   <loss-of-signal-seconds/>
@@ -385,6 +417,16 @@
                   <successful-autonomous-sra/>
                   <successful-fra/>
                   <successful-rpa/>
+                  <inminpeq>
+                    <inminpeq-index/>
+                    <inminpeq/>
+                  </inminpeq>
+                  <inmame/>
+                  <inmiat>
+                    <inminiat-index/>
+                    <inmiat/>
+                  </inmiat>
+                  <inmblfc/>
                   <errored-seconds/>
                   <severely-errored-seconds/>
                   <loss-of-signal-seconds/>
@@ -398,6 +440,8 @@
                   <loss-of-power-interruptions/>
                   <host-reinit-interruptions/>
                   <spontaneous-interruptions/>
+                  <successful-srec/>
+                  <me-o-triggered-interruptions/>
                   <link-state-l2.1n-seconds/>
                   <link-state-l2.1b-seconds/>
                   <link-state-l2.2-seconds/>
@@ -414,6 +458,16 @@
                   <successful-autonomous-sra/>
                   <successful-fra/>
                   <successful-rpa/>
+                  <inminpeq>
+                    <inminpeq-index/>
+                    <inminpeq/>
+                  </inminpeq>
+                  <inmame/>
+                  <inmiat>
+                    <inminiat-index/>
+                    <inmiat/>
+                  </inmiat>
+                  <inmblfc/>
                   <errored-seconds/>
                   <severely-errored-seconds/>
                   <loss-of-signal-seconds/>
@@ -434,6 +488,16 @@
                   <successful-autonomous-sra/>
                   <successful-fra/>
                   <successful-rpa/>
+                  <inminpeq>
+                    <inminpeq-index/>
+                    <inminpeq/>
+                  </inminpeq>
+                  <inmame/>
+                  <inmiat>
+                    <inminiat-index/>
+                    <inmiat/>
+                  </inmiat>
+                  <inmblfc/>
                   <errored-seconds/>
                   <severely-errored-seconds/>
                   <loss-of-signal-seconds/>
@@ -447,6 +511,8 @@
                   <loss-of-power-interruptions/>
                   <host-reinit-interruptions/>
                   <spontaneous-interruptions/>
+                  <successful-srec/>
+                  <me-o-triggered-interruptions/>
                   <link-state-l2.1n-seconds/>
                   <link-state-l2.1b-seconds/>
                   <link-state-l2.2-seconds/>
@@ -461,6 +527,16 @@
                   <successful-autonomous-sra/>
                   <successful-fra/>
                   <successful-rpa/>
+                  <inminpeq>
+                    <inminpeq-index/>
+                    <inminpeq/>
+                  </inminpeq>
+                  <inmame/>
+                  <inmiat>
+                    <inminiat-index/>
+                    <inmiat/>
+                  </inmiat>
+                  <inmblfc/>
                   <errored-seconds/>
                   <severely-errored-seconds/>
                   <loss-of-signal-seconds/>
@@ -484,6 +560,16 @@
                   <successful-autonomous-sra/>
                   <successful-fra/>
                   <successful-rpa/>
+                  <inminpeq>
+                    <inminpeq-index/>
+                    <inminpeq/>
+                  </inminpeq>
+                  <inmame/>
+                  <inmiat>
+                    <inminiat-index/>
+                    <inmiat/>
+                  </inmiat>
+                  <inmblfc/>
                   <errored-seconds/>
                   <severely-errored-seconds/>
                   <loss-of-signal-seconds/>
@@ -497,6 +583,8 @@
                   <loss-of-power-interruptions/>
                   <host-reinit-interruptions/>
                   <spontaneous-interruptions/>
+                  <successful-srec/>
+                  <me-o-triggered-interruptions/>
                   <link-state-l2.1n-seconds/>
                   <link-state-l2.1b-seconds/>
                   <link-state-l2.2-seconds/>
@@ -513,6 +601,16 @@
                   <successful-autonomous-sra/>
                   <successful-fra/>
                   <successful-rpa/>
+                  <inminpeq>
+                    <inminpeq-index/>
+                    <inminpeq/>
+                  </inminpeq>
+                  <inmame/>
+                  <inmiat>
+                    <inminiat-index/>
+                    <inmiat/>
+                  </inmiat>
+                  <inmblfc/>
                   <errored-seconds/>
                   <severely-errored-seconds/>
                   <loss-of-signal-seconds/>
@@ -612,6 +710,7 @@
                 <time-stamp-last-successful-fra/>
                 <time-stamp-last-successful-rpa/>
                 <time-stamp-last-successful-tiga/>
+                <time-stamp-last-successful-srec/>
               </time-stamps>
             </downstream>
             <upstream>
@@ -662,6 +761,7 @@
               <profiles-supported/>
               <annex-x-supported/>
               <annex-d-supported/>
+              <srec-supported/>
               <vce-id/>
               <vce-port-index/>
               <idta-supported/>
@@ -675,6 +775,7 @@
               <profiles-supported/>
               <annex-x-supported/>
               <annex-d-supported/>
+              <srec-supported/>
             </ftu-r>
           </inventory>
         </line>
@@ -685,7 +786,9 @@
               <tag/>
               <code/>
               <message/>
-              <root-cause/>
+              <root-cause>
+                <!-- # entries: 0.. -->
+              </root-cause>
             </issue>
           </issues>
         </availability>
@@ -817,7 +920,11 @@
               <version-number/>
               <serial-number/>
               <self-test-result/>
-              <transmission-system-capabilities/>
+              <transmission-system-capabilities>
+                <!-- # entries: 0.. -->
+              </transmission-system-capabilities>
+              <vdsl2-lr-support/>
+              <strongfext-support/>
               <vce-id/>
               <vce-port-index/>
             </xtu-c>
@@ -827,13 +934,18 @@
               <version-number/>
               <serial-number/>
               <self-test-result/>
-              <transmission-system-capabilities/>
+              <transmission-system-capabilities>
+                <!-- # entries: 0.. -->
+              </transmission-system-capabilities>
+              <vdsl2-lr-support/>
+              <strongfext-support/>
             </xtu-r>
           </inventory>
           <status>
             <xdsl-transmission-system/>
             <line-power-management-state/>
             <initialization-success-failure-cause/>
+            <vdsl2-lr-actual-op-type/>
             <snr-margin/>
             <profile/>
             <limitmask/>
@@ -976,6 +1088,8 @@
                   <loss-of-signal/>
                   <loss-of-frame/>
                   <loss-of-power/>
+                  <maximum-error-free-throughput-ne/>
+                  <sra-success-ne/>
                 </xtu-c>
                 <xtu-r>
                   <measured-time/>
@@ -1001,6 +1115,8 @@
                   <loss-of-signal-fe/>
                   <loss-of-frame-fe/>
                   <loss-of-power-fe/>
+                  <maximum-error-free-throughput-lfe/>
+                  <sra-success-fe/>
                 </xtu-r>
               </current>
               <number-of-intervals/>
@@ -1039,6 +1155,8 @@
                   <loss-of-signal/>
                   <loss-of-frame/>
                   <loss-of-power/>
+                  <maximum-error-free-throughput-ne/>
+                  <sra-success-ne/>
                 </xtu-c>
                 <xtu-r>
                   <time-stamp/>
@@ -1065,6 +1183,8 @@
                   <loss-of-signal-fe/>
                   <loss-of-frame-fe/>
                   <loss-of-power-fe/>
+                  <maximum-error-free-throughput-lfe/>
+                  <sra-success-fe/>
                 </xtu-r>
               </history>
             </intervals-15min>
@@ -1101,6 +1221,8 @@
                   <loss-of-signal/>
                   <loss-of-frame/>
                   <loss-of-power/>
+                  <maximum-error-free-throughput-ne/>
+                  <sra-success-ne/>
                 </xtu-c>
                 <xtu-r>
                   <measured-time/>
@@ -1126,6 +1248,8 @@
                   <loss-of-signal-fe/>
                   <loss-of-frame-fe/>
                   <loss-of-power-fe/>
+                  <maximum-error-free-throughput-lfe/>
+                  <sra-success-fe/>
                 </xtu-r>
               </current>
               <number-of-intervals/>
@@ -1164,6 +1288,8 @@
                   <loss-of-signal/>
                   <loss-of-frame/>
                   <loss-of-power/>
+                  <maximum-error-free-throughput-ne/>
+                  <sra-success-ne/>
                 </xtu-c>
                 <xtu-r>
                   <time-stamp/>
@@ -1190,6 +1316,8 @@
                   <loss-of-signal-fe/>
                   <loss-of-frame-fe/>
                   <loss-of-power-fe/>
+                  <maximum-error-free-throughput-lfe/>
+                  <sra-success-fe/>
                 </xtu-r>
               </history>
             </intervals-24hr>
@@ -1298,7 +1426,9 @@
               <tag/>
               <code/>
               <message/>
-              <root-cause/>
+              <root-cause>
+                <!-- # entries: 0.. -->
+              </root-cause>
             </issue>
           </issues>
         </availability>
@@ -1521,6 +1651,7 @@
             <sub-carrier-index/>
             <psd-level/>
           </mibpsdmask>
+          <classmask>classmask1</classmask>
         </downstream>
         <upstream>
           <maximum-aggregate-transmit-power>40</maximum-aggregate-transmit-power>
@@ -1532,6 +1663,7 @@
             <sub-carrier-index/>
             <psd-level/>
           </mibpsdmask>
+          <classmask>classmask1</classmask>
         </upstream>
       </line-spectrum-profile>
       <radio-frequency-interference-profile>
@@ -1540,14 +1672,14 @@
           <start-index/>
           <stop-index/>
         </rfiband>
-        <iarbands>[]</iarbands>
+        <iarbands/>
       </radio-frequency-interference-profile>
       <upstream-power-back-off-profile>
         <name/>
         <upbopsd-a>0</upbopsd-a>
         <upbopsd-b>0</upbopsd-b>
         <upbo-upstream-electrical-length>0</upbo-upstream-electrical-length>
-        <upbo-force-electrical-length>False</upbo-force-electrical-length>
+        <upbo-force-electrical-length>false</upbo-force-electrical-length>
         <upbo-reference-electrical-length>0</upbo-reference-electrical-length>
       </upstream-power-back-off-profile>
     </spectrum>
@@ -1562,10 +1694,10 @@
             <maximum-noise-margin-in-l2.1>511</maximum-noise-margin-in-l2.1>
           </noise-margin>
           <seamless-rate-adaptation>
+            <downshift-noise-margin>50</downshift-noise-margin>
             <upshift-noise-margin>70</upshift-noise-margin>
             <upshift-noise-margin-in-l2.1>70</upshift-noise-margin-in-l2.1>
             <minimum-time-interval-upshift-sra>8</minimum-time-interval-upshift-sra>
-            <downshift-noise-margin>50</downshift-noise-margin>
             <downshift-noise-margin-in-l2.1>50</downshift-noise-margin-in-l2.1>
             <minimum-time-interval-downshift-sra>2</minimum-time-interval-downshift-sra>
           </seamless-rate-adaptation>
@@ -1584,10 +1716,10 @@
             <maximum-noise-margin-in-l2.1>511</maximum-noise-margin-in-l2.1>
           </noise-margin>
           <seamless-rate-adaptation>
+            <downshift-noise-margin>50</downshift-noise-margin>
             <upshift-noise-margin>70</upshift-noise-margin>
             <upshift-noise-margin-in-l2.1>70</upshift-noise-margin-in-l2.1>
             <minimum-time-interval-upshift-sra>8</minimum-time-interval-upshift-sra>
-            <downshift-noise-margin>50</downshift-noise-margin>
             <downshift-noise-margin-in-l2.1>50</downshift-noise-margin-in-l2.1>
             <minimum-time-interval-downshift-sra>2</minimum-time-interval-downshift-sra>
           </seamless-rate-adaptation>
@@ -1604,23 +1736,23 @@
           <time-window>8</time-window>
           <minimum-degraded-tones>50</minimum-degraded-tones>
           <uncorrectable-dtu>150</uncorrectable-dtu>
-          <vendor-discretionary-fra-triggering-criteria>False</vendor-discretionary-fra-triggering-criteria>
+          <vendor-discretionary-fra-triggering-criteria>false</vendor-discretionary-fra-triggering-criteria>
         </downstream>
         <upstream>
           <time-window>8</time-window>
           <minimum-degraded-tones>50</minimum-degraded-tones>
           <uncorrectable-dtu>150</uncorrectable-dtu>
-          <vendor-discretionary-fra-triggering-criteria>False</vendor-discretionary-fra-triggering-criteria>
+          <vendor-discretionary-fra-triggering-criteria>false</vendor-discretionary-fra-triggering-criteria>
         </upstream>
       </fast-rate-adaptation-profile>
       <vectoring-profile>
         <name/>
         <downstream>
-          <fext-to-cancel-enable>True</fext-to-cancel-enable>
+          <fext-to-cancel-enable>true</fext-to-cancel-enable>
           <xlog-group-size-req>1</xlog-group-size-req>
         </downstream>
         <upstream>
-          <fext-to-cancel-enable>True</fext-to-cancel-enable>
+          <fext-to-cancel-enable>true</fext-to-cancel-enable>
         </upstream>
         <annex-x-mode>forbidden</annex-x-mode>
         <annex-d-mode>forbidden</annex-d-mode>
@@ -1663,6 +1795,26 @@
           <minimum-rfec-nfec-ratio>0</minimum-rfec-nfec-ratio>
         </upstream>
       </retransmission-profile>
+      <impulse-noise-monitoring-profile>
+        <name/>
+        <inpeq-scaling-factor>12</inpeq-scaling-factor>
+        <iat-scaling-factor>12</iat-scaling-factor>
+        <inm-enable>false</inm-enable>
+        <downstream>
+          <inmiato>3</inmiato>
+          <inmiats>1</inmiats>
+          <inmcc>1</inmcc>
+          <inm-inpeq-format>linear</inm-inpeq-format>
+          <dtu-cluster-bridging>false</dtu-cluster-bridging>
+        </downstream>
+        <upstream>
+          <inmiato>3</inmiato>
+          <inmiats>1</inmiats>
+          <inmcc>1</inmcc>
+          <inm-inpeq-format>linear</inm-inpeq-format>
+          <dtu-cluster-bridging>false</dtu-cluster-bridging>
+        </upstream>
+      </impulse-noise-monitoring-profile>
     </quality>
     <thresholds>
       <line-threshold-profile>
@@ -1711,6 +1863,7 @@
         <retransmission-profile/>
         <fast-retrain-policy-profile/>
         <vectoring-profile/>
+        <impulse-noise-monitoring-profile/>
       </line-config-vector>
     </vectors>
   </fast>
@@ -1761,8 +1914,12 @@
         <l2-minimum-time>127</l2-minimum-time>
         <l2-maximum-aggregate-power-reduction-per>1</l2-maximum-aggregate-power-reduction-per>
         <l2-maximum-aggregate-power-reduction-total>10</l2-maximum-aggregate-power-reduction-total>
-        <carmaskds/>
-        <carmaskus/>
+        <carmaskds>
+          <!-- # entries: 0.. -->
+        </carmaskds>
+        <carmaskus>
+          <!-- # entries: 0.. -->
+        </carmaskus>
         <vdsl2-carmask>
           <start-index/>
           <stop-index/>
@@ -1771,7 +1928,7 @@
         <msgminus>16</msgminus>
         <profiles>all</profiles>
         <us0mask>all</us0mask>
-        <cyclic-extension-flag>False</cyclic-extension-flag>
+        <cyclic-extension-flag>false</cyclic-extension-flag>
         <rtx-mode-ds>1</rtx-mode-ds>
         <rtx-mode-us>1</rtx-mode-us>
       </line-spectrum-profile>
@@ -1796,14 +1953,15 @@
             <psd-level/>
           </psdmask>
         </psd-mask-us>
-        <limitmask>[]</limitmask>
-        <us0disable>[]</us0disable>
+        <limitmask/>
+        <us0disable/>
         <classmask>none</classmask>
+        <vdsl2-lr-enable/>
       </mode-specific-psd-profile>
       <upstream-power-back-off-profile>
         <name/>
         <upbo-electrical-length>0</upbo-electrical-length>
-        <upbo-force-electrical-length>False</upbo-force-electrical-length>
+        <upbo-force-electrical-length>false</upbo-force-electrical-length>
         <upbopsd-pb>
           <band/>
           <upbopsd-a>4000</upbopsd-a>
@@ -1871,7 +2029,7 @@
       <impulse-noise-protection-delay-profile>
         <name/>
         <downstream>
-          <force-framer-setting-inp>False</force-framer-setting-inp>
+          <force-framer-setting-inp>false</force-framer-setting-inp>
           <minimum-inp>0</minimum-inp>
           <minimum-inp-8>0</minimum-inp-8>
           <maximum-interleaving-delay>16</maximum-interleaving-delay>
@@ -1890,7 +2048,7 @@
           <attndr-mdosplit>vendor-discretionary</attndr-mdosplit>
         </downstream>
         <upstream>
-          <force-framer-setting-inp>False</force-framer-setting-inp>
+          <force-framer-setting-inp>false</force-framer-setting-inp>
           <minimum-inp>0</minimum-inp>
           <minimum-inp-8>0</minimum-inp-8>
           <maximum-interleaving-delay>16</maximum-interleaving-delay>
@@ -1963,13 +2121,14 @@
       </sos-profile>
       <impulse-noise-monitoring-profile>
         <name/>
+        <inm-enable>false</inm-enable>
         <downstream>
           <inmiato>3</inmiato>
           <inmiats>0</inmiats>
           <inmcc>0</inmcc>
           <inm-inpeq-mode>0</inm-inpeq-mode>
           <inm-inpeq-format>0</inm-inpeq-format>
-          <inm-enable>False</inm-enable>
+          <inm-enable>false</inm-enable>
         </downstream>
         <upstream>
           <inmiato>3</inmiato>
@@ -1977,7 +2136,7 @@
           <inmcc>0</inmcc>
           <inm-inpeq-mode>0</inm-inpeq-mode>
           <inm-inpeq-format>0</inm-inpeq-format>
-          <inm-enable>False</inm-enable>
+          <inm-enable>false</inm-enable>
         </upstream>
       </impulse-noise-monitoring-profile>
       <re-initialization-policy-profile>
@@ -1994,6 +2153,7 @@
       <vectoring-profile>
         <name/>
         <vector-mode-enable>all</vector-mode-enable>
+        <strongfext-mode>disabled</strongfext-mode>
         <downstream>
           <vector-band-control>
             <start-index/>
@@ -2026,7 +2186,7 @@
             <percentage>0</percentage>
           </logging-depth-event-percentage-r>
           <logging-depth-reporting-r>0</logging-depth-reporting-r>
-          <logging-report-newer-first>False</logging-report-newer-first>
+          <logging-report-newer-first>false</logging-report-newer-first>
         </vtu>
       </data-gathering-profile>
     </quality>
@@ -2099,7 +2259,9 @@
         <pair-identification-tone-timeout/>
         <maximum-far-end-signature-conductive-voltage/>
         <minimum-far-end-signature-conductive-voltage/>
-        <measurement-class/>
+        <measurement-class>
+          <!-- # entries: 0.. -->
+        </measurement-class>
         <signal-frequency-for-active-ac-tests/>
       </pmd-profile>
       <processing-profile>

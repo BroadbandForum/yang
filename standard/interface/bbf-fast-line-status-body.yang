@@ -7,18 +7,15 @@ submodule bbf-fast-line-status-body {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import ietf-yang-types {
     prefix yang;
   }
-
   include bbf-fast-line-spectrum-profile-body;
   include bbf-fast-base;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -34,13 +31,12 @@ submodule bbf-fast-line-status-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of status-related YANG
      data types and grouping definitions for the management of
      FAST lines.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -80,9 +76,19 @@ submodule bbf-fast-line-status-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -101,9 +107,8 @@ submodule bbf-fast-line-status-body {
     reference
       "TR-355c2: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_2.pdf>";
+                        TR-355_Corrigendum-2.pdf>";
   }
-
   revision 2017-03-13 {
     description
       "Corrigendum 1 (fixes to the initial revision).
@@ -112,7 +117,7 @@ submodule bbf-fast-line-status-body {
     reference
       "TR-355c1: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_1.pdf>";
+                        TR-355_Corrigendum-1.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -141,31 +146,32 @@ submodule bbf-fast-line-status-body {
        group.";
   }
 
-
   typedef snr-margin {
     type union {
       type bbf-yang:undetermined;
       type int16 {
-        range "-511..511"; /* -51.1dB to 51.1dB */
+        range "-511..511";
+        /* -51.1dB to 51.1dB */
       }
     }
     units "0.1 dB";
     description
       "Reports the signal-to-noise ratio margin. A first special value
-       (undetermined) indicates that the signal-to-noise ratio margin 
-       is undetermined. A second special value (-511) indicates that 
+       (undetermined) indicates that the signal-to-noise ratio margin
+       is undetermined. A second special value (-511) indicates that
        the signal-to-noise ratio margin is less than or equal to -51.1
-       dB. A third special value (+511) indicates that the 
-       signal-to-noise ratio margin is greater than or equal to 
+       dB. A third special value (+511) indicates that the
+       signal-to-noise ratio margin is greater than or equal to
        +51.1dB.";
   }
 
   typedef vce-port-index {
     type union {
       type enumeration {
-        enum "undefined" {
+        enum undefined {
           description
-            "The value of the VCE port index is undefined.";
+            "The value of the Vectoring Control Entity (VCE) port
+             index is undefined.";
         }
       }
       type uint16 {
@@ -173,10 +179,10 @@ submodule bbf-fast-line-status-body {
       }
     }
     description
-      "For the line in a vectored group, the VCE port index is the 
-       physical index that uniquely identifies the VCE port to which 
-       the line is connected. It is an integer from 1 to the maximum 
-       number of lines supported by the VCE.";
+      "For the line in a vectored group, the Vectoring Control Entity
+       (VCE) port index is the physical index that uniquely identifies
+       the VCE port to which the line is connected. It is an integer
+       from 1 to the maximum number of lines supported by the VCE.";
   }
 
   typedef per-sub-carrier-nibble {
@@ -184,8 +190,8 @@ submodule bbf-fast-line-status-body {
       length "0..2048";
     }
     description
-      "A binary type where each nibble represents data belonging to 
-       a sub-carrier. The first nibble represents sub-carrier 0 and 
+      "A binary type where each nibble represents data belonging to
+       a sub-carrier. The first nibble represents sub-carrier 0 and
        the last represents sub-carrier 4095.";
   }
 
@@ -194,32 +200,32 @@ submodule bbf-fast-line-status-body {
       length "0..4096";
     }
     description
-      "A binary type where each octet represents data belonging to 
-       a sub-carrier. The first octet represents sub-carrier 0 and 
+      "A binary type where each octet represents data belonging to
+       a sub-carrier. The first octet represents sub-carrier 0 and
        the last represents sub-carrier 4095.";
   }
 
   typedef per-sub-carrier-group-uint8 {
     type binary;
     description
-      "A binary type where each octet represents data belonging to 
-       a sub-carrier group. The first octet represents sub-carrier 
+      "A binary type where each octet represents data belonging to
+       a sub-carrier group. The first octet represents sub-carrier
        group 0.";
   }
 
   typedef per-sub-carrier-group-uint16 {
     type binary;
     description
-      "A binary type where each pair of octets represents data 
-       belonging to a sub-carrier. The first two octets represents 
-       sub-carrier 0. In each pair of octets, the most significant 
+      "A binary type where each pair of octets represents data
+       belonging to a sub-carrier. The first two octets represents
+       sub-carrier 0. In each pair of octets, the most significant
        byte is loaded first.";
   }
 
   typedef time-stamp-or-undefined {
     type union {
       type enumeration {
-        enum "undefined" {
+        enum undefined {
           description
             "The value of the time stamp is undefined or unknown.";
         }
@@ -238,63 +244,59 @@ submodule bbf-fast-line-status-body {
        downstream.";
     reference
       " ITU-T G.997.2 clause 7.10.";
-
     /* G.997.2 Clause 7.10.3 Signal to noise ratio margin */
     leaf snr-margin {
       type snr-margin;
       description
-        "Reports the signal-to-noise ratio margin (as defined in 
-         clauses 9.8.3.2 of [ITU T G.9701] and 11.4.1.1.10 of 
-         [ITU-T G.9701]) in the applicable direction during the L0 
-         link state. A first special value (undetermined) indicates 
-         that the signal-to-noise ratio margin is undetermined. A 
-         second special value (-511) indicates that the 
-         signal-to-noise ratio margin is less than or equal to -51.1 
-         dB. A third special value (+511) indicates that the 
-         signal-to-noise ratio margin is greater than or equal to 
+        "Reports the signal-to-noise ratio margin (as defined in
+         clauses 9.8.3.2 of [ITU T G.9701] and 11.4.1.1.10 of
+         [ITU-T G.9701]) in the applicable direction during the L0
+         link state. A first special value (undetermined) indicates
+         that the signal-to-noise ratio margin is undetermined. A
+         second special value (-511) indicates that the
+         signal-to-noise ratio margin is less than or equal to -51.1
+         dB. A third special value (+511) indicates that the
+         signal-to-noise ratio margin is greater than or equal to
          +51.1dB.";
       reference
         "ITU-T G.997.2 clause 7.10.3.1 (SNRMds) and clause 7.10.3.2
          (SNRMus); ITU-T G.9701 Clause 9.8.3.2 and 11.4.1.3.";
     }
-
     leaf snr-margin-in-l2.1 {
       type snr-margin;
       description
-        "Reports the signal-to-noise ratio margin (as defined in 
-         clauses 9.8.3.2 of [ITU T G.9701] and 11.4.1.1.10 of 
-         [ITU-T G.9701]) during the L2.1N and L2.1B link states. 
-         A first special value (undetermined) indicates that the 
-         signal-to-noise ratio margin is undetermined. A second 
-         special value (-511) indicates that the signal-to-noise 
-         ratio margin is less than or equal to -51.1 dB. A third 
-         special value (+511) indicates that the signal-to-noise 
+        "Reports the signal-to-noise ratio margin (as defined in
+         clauses 9.8.3.2 of [ITU T G.9701] and 11.4.1.1.10 of
+         [ITU-T G.9701]) during the L2.1N and L2.1B link states.
+         A first special value (undetermined) indicates that the
+         signal-to-noise ratio margin is undetermined. A second
+         special value (-511) indicates that the signal-to-noise
+         ratio margin is less than or equal to -51.1 dB. A third
+         special value (+511) indicates that the signal-to-noise
          ratio margin is greater than or equal to +51.1dB.";
       reference
-        "ITU-T G.997.2 clause 7.10.8.1 (L2.1-SNRMds) and clause 
-         7.10.8.2 (L2.1-SNRMus); ITU-T G.9701 Clause 9.8.3.2 and 
+        "ITU-T G.997.2 clause 7.10.8.1 (L2.1-SNRMds) and clause
+         7.10.8.2 (L2.1-SNRMus); ITU-T G.9701 Clause 9.8.3.2 and
          11.4.1.1.10.";
     }
-
     leaf snr-margin-in-l2.2 {
       type snr-margin;
       description
-        "Reports the signal-to-noise ratio margin (as defined in 
-         clauses 9.8.3.2 of [ITU T G.9701] and 11.4.1.1.10 of 
-         [ITU-T G.9701]) in the downstream direction during the L2.2 
-         link state. A first special value (undetermined) indicates 
-         that the signal-to-noise ratio margin is undetermined. A 
-         second special value (-511) indicates that the 
-         signal-to-noise ratio margin is less than or equal to -51.1 
-         dB. A third special value (+511) indicates that the 
-         signal-to-noise ratio margin is greater than or equal to 
+        "Reports the signal-to-noise ratio margin (as defined in
+         clauses 9.8.3.2 of [ITU T G.9701] and 11.4.1.1.10 of
+         [ITU-T G.9701]) in the downstream direction during the L2.2
+         link state. A first special value (undetermined) indicates
+         that the signal-to-noise ratio margin is undetermined. A
+         second special value (-511) indicates that the
+         signal-to-noise ratio margin is less than or equal to -51.1
+         dB. A third special value (+511) indicates that the
+         signal-to-noise ratio margin is greater than or equal to
          +51.1dB.";
       reference
-        "ITU-T G.997.2 clause 7.10.8.3 (L2.2-SNRMds) and clause 
-         7.10.8.4 (L2.2-SNRMus); ITU-T G.9701 Clause 9.8.3.2 and 
+        "ITU-T G.997.2 clause 7.10.8.3 (L2.2-SNRMds) and clause
+         7.10.8.4 (L2.2-SNRMus); ITU-T G.9701 Clause 9.8.3.2 and
          11.4.1.1.10.";
     }
-
     leaf upbo-electrical-length {
       type uint16 {
         range "0..1280" {
@@ -307,15 +309,14 @@ submodule bbf-fast-line-status-body {
         "Reports the electrical length that would have been sent, if
          the electrical length was not forced. If the electrical
          length is not forced, then this object reports the final
-         electrical length, as determined by the FTU (see clause
-         7.3.1.4.2.1/G.9701) and conveyed in the O-UPDATE or R-MSG1
-         initialization message accordingly (see clause
-         12.3.3.2.4/G.9701).";
+         electrical length, as determined by the FAST Transceiver Unit
+         (FTU) (see clause 7.3.1.4.2.1/G.9701) and conveyed in the
+         O-UPDATE or R-MSG1 initialization message accordingly
+         (see clause 12.3.3.2.4/G.9701).";
       reference
         "ITU-T G.997.2 clause 7.10.4.1 (UPBOKLE) and clause 7.10.4.2
          (UPBOKLE-R); ITU-T G.9701 Clause 9.8.3.2 and 11.4.1.3.";
     }
-
     /* G.997.2 Clause 7.10.5 Acutal aggregate transmit power */
     leaf actual-aggregate-transmit-power {
       type union {
@@ -326,46 +327,45 @@ submodule bbf-fast-line-status-body {
       }
       units "0.1 dB";
       description
-        "Reports the total amount of transmit power delivered by the 
-         FTU at the U reference point, at the instant of measurement. 
-         A first special value (undetermined) indicates that the 
-         transmit power is undetermined. A second special value (-311)
-         indicates that the transmit power is less than or equal to 
-         -31.1 dBm. A third special value (+311) indicates that the 
-         transmit power is greater than or equal to +31.1dBm.";
+        "Reports the total amount of transmit power delivered by the
+         FAST Transceiver Unit (FTU) at the U reference point, at the
+         instant of measurement. A first special value (undetermined)
+         indicates that the transmit power is undetermined. A second
+         special value (-311) indicates that the transmit power is
+         less than or equal to -31.1 dBm. A third special value (+311)
+         indicates that the transmit power is greater than or equal to
+         +31.1dBm.";
       reference
         "ITU-T G.997.2 clause 7.10.5.1 (ACTATPds) and clause
          7.10.5.2 (ACTATPus); ITU-T G.9701 Clause 9.8.3.2 and
          11.4.1.5.";
     }
-
     /* G.997.2 Clause 7.10.6 Actual transmit PSD per 
        sub-carrier */
     leaf actual-tx-psd-ps {
       type per-sub-carrier-uint8;
       description
-        "Reports the transmit PSD per sub-carrier delivered by the
-         FTU at the U reference point as calculated by the VCE
-         from the appropriate ACTPSDREF-ps. 
+        "Reports the transmit Power Spectral Density (PSD) per
+         sub-carrier delivered by the FAST Transceiver Unit (FTU) at
+         the U reference point as calculated by the Vector Control
+         Entity (VCE) from the appropriate ACTPSDREF-ps.
 
-         For each octet, the values 0 to 254 represent the PSD values 
+         For each octet, the values 0 to 254 represent the PSD values
          of 0 to -127 dBm/Hz in steps of -0.5 dBm/Hz.
 
-         A special value, 255,indicates that no transmit PSD value is 
-         available the sub-carrier, or its transmit power is zero, or 
+         A special value, 255,indicates that no transmit PSD value is
+         available the sub-carrier, or its transmit power is zero, or
          is out of the range to be represented.";
       reference
         "ITU-T G.997.2 clause 7.10.6.1 (ACTPSDpsds) and clause
          7.10.6.2 (ACTPSDpsus); ITU-T G.9701 Clause 11.4.1.2.5.";
     }
-
     /* G.997.2 Clause 7.10.8 Signal to noise ratio margin per 
        sub-carrier */
     container snr {
       description
-        "State data nodes related to sub-carrier Signal-to-Noise 
+        "State data nodes related to sub-carrier Signal-to-Noise
          Ratio values.";
-
       leaf snr-psd-measurement-time {
         type uint16;
         units "1 symbol";
@@ -376,20 +376,18 @@ submodule bbf-fast-line-status-body {
           "ITU-T G.997.2 clause 7.10.8.1 (SNRMTds) and clause
            7.10.8.4 (SNRMTus); ITU-T G.9701 Clause 11.4.1.2.2.";
       }
-
       leaf snr-sub-carrier-group-size {
         type sub-carrier-group-size;
         description
           "Reports the number of sub-carriers in any one sub-carrier
            group used to represent the SNR(f) values.
 
-           Note that in ITU-T G.9701-2014 the only valid value is 
+           Note that in ITU-T G.9701-2014 the only valid value is
            G = 1";
         reference
           "ITU-T G.997.2 clause 7.10.8.2 (SNRGds) and clause
            7.10.8.5 (SNRGus); ITU-T G.9701 Clause 11.4.1.2.2.";
       }
-
       leaf snrps {
         type per-sub-carrier-group-uint8 {
           length "0..4096";
@@ -397,28 +395,26 @@ submodule bbf-fast-line-status-body {
         description
           "Reports the downstream SNR(f) values.
 
-           For each octet, the values 0 to 254 represent the SNR
-           values of -32 to 95 dB in steps of 0.5 dB and an offset
-           of -64 where:
+           For each octet, the values 0 to 254 represent the Signal-
+           to-Noise (SNR) values of -32 to 95 dB in steps of 0.5 dB
+           and an offset of -64 where:
 
              SNR(f) = (snrps - 64) * 0.5
 
-           A special value, 255, indicates that no measurement could
-           be done for this sub-carrier group because it is out of
-           the MEDLEY set or its transmit power is zero.";
+           A special value, 255, indicates the cases defined
+           in clause 11.4.1.2.2 of [ITU-T G.9701].";
         reference
           "ITU-T G.997.2 clause 7.10.8.3 (SNRpsds) and clause
            7.10.8.6 (SNRpsus); ITU-T G.9701 Clause 11.4.1.2.2.";
       }
     }
-
     /* G.997.2 Clause 7.10.11 Bit allocation per sub-carrier 
        on data symbols */
     leaf bitsps {
       type per-sub-carrier-nibble;
       description
         "Reports the bit allocation values on data symbols in the
-         normal operation interval (NOI).         
+         normal operation interval (NOI).
 
          For each nibble, the values 0 to 14 represent the allocated
          bits.";
@@ -426,48 +422,44 @@ submodule bbf-fast-line-status-body {
         "ITU-T G.997.2 clause 7.10.11.1 (BITSpsds) and clause
          7.10.11.2 (BITSpsus); ITU-T G.9701 Clause 10.2.1.4.";
     }
-
     container robust-management-channel {
       description
         "Managment objects associated with the robust management
          channel(RMC)";
-
       /* G.997.2 Clause 7.10.12 Robust Management Channel(RMC) */
       leaf snr-margin {
         type snr-margin;
         description
-          "Reports the signal-to-noise ratio margin (as defined in 
-           clause 11.4.1.1.11 of [ITU T G.9701]) for the RMC in the 
-           applicable direction during the L0 link state. A first 
-           special value (undetermined) indicates that the 
-           signal-to-noise ratio margin is undetermined. A second 
-           special value (-511) indicates that the signal-to-noise 
-           ratio margin is less than or equal to -51.1 dB. A third 
-           special value (+511) indicates that the signal-to-noise 
+          "Reports the signal-to-noise ratio margin (as defined in
+           clause 11.4.1.1.11 of [ITU T G.9701]) for the RMC in the
+           applicable direction during the L0 link state. A first
+           special value (undetermined) indicates that the
+           signal-to-noise ratio margin is undetermined. A second
+           special value (-511) indicates that the signal-to-noise
+           ratio margin is less than or equal to -51.1 dB. A third
+           special value (+511) indicates that the signal-to-noise
            ratio margin is greater than or equal to +51.1dB.";
         reference
           "ITU-T G.997.2 clause 7.10.12.1 (SNRM-RMCds) and clause
            7.10.12.2 (SNRM-RMCus); ITU-T G.9701 Clause 11.4.1.4.";
       }
-
       leaf snr-margin-in-l2 {
         type snr-margin;
         description
-          "Reports the signal-to-noise ratio margin (as defined in 
-           clause 11.4.1.4 of [ITU T G.9701]) for the RMC during the 
-           L2.1N, L2.1B and L2.2 link state. A first special value 
-           (undetermined) indicates that the signal-to-noise ratio 
-           margin is undetermined. A second special value (-511) 
-           indicates that the signal-to-noise ratio margin is less 
-           than or equal to -51.1 dB. A third special value (+511) 
-           indicates that the signal-to-noise ratio margin is greater 
+          "Reports the signal-to-noise ratio margin (as defined in
+           clause 11.4.1.4 of [ITU T G.9701]) for the RMC during the
+           L2.1N, L2.1B and L2.2 link state. A first special value
+           (undetermined) indicates that the signal-to-noise ratio
+           margin is undetermined. A second special value (-511)
+           indicates that the signal-to-noise ratio margin is less
+           than or equal to -51.1 dB. A third special value (+511)
+           indicates that the signal-to-noise ratio margin is greater
            than or equal to +51.1dB.";
         reference
-          "ITU-T G.997.2 clause 7.10.18.5 (L2-SNRM-RMCds) and clause 
-           7.10.18.6 (L2-SNRM-RMCus); ITU-T G.9701 clause 
+          "ITU-T G.997.2 clause 7.10.18.5 (L2-SNRM-RMCds) and clause
+           7.10.18.6 (L2-SNRM-RMCus); ITU-T G.9701 clause
            11.4.1.1.11";
       }
-
       leaf bitsps {
         type binary {
           length "0..1024";
@@ -480,7 +472,7 @@ submodule bbf-fast-line-status-body {
            15:4 represent the subcarrier index and bits 3:0 represent
            the allocated bits using the values 0 and 2 to 6.
 
-           The 16-bit values are loaded into the binary array in 
+           The 16-bit values are loaded into the binary array in
            ascending order of the related sub-carrier-index (lowest
            sub-carrier-index first; highest sub-carrier-index last).";
         reference
@@ -488,7 +480,6 @@ submodule bbf-fast-line-status-body {
            (BITSRMCdescriptor:bit-allocation-value).";
       }
     }
-
     /* G.997.2 Clause 7.10.15 Signal Attenuation (SATN) */
     leaf signal-attenuation {
       type union {
@@ -499,85 +490,79 @@ submodule bbf-fast-line-status-body {
       }
       units "0.1 dB";
       description
-        "Reports the SATN. A special value (undetermined) indicates 
-         that the value is undetermined. A second special value (0) 
-         indicates that the SATN is less than or equal to 0 dB. A 
-         third special value (1001) indicates that the SATN is greater
-         than or equal to 100.1dB. The object is updated only in L0 
-         link state.";
+        "Reports the signal attention (SATN). A special value
+         (undetermined) indicates that the value is undetermined. A
+         second special value (0) indicates that the SATN is less than
+         or equal to 0 dB. A third special value (1001) indicates that
+         the SATN is greater than or equal to 100.1dB. The object is
+         updated only in L0 link state.";
       reference
-        "ITU-T G.997.2 clause 7.10.15.1 (SATNds) and 7.10.15.2 
+        "ITU-T G.997.2 clause 7.10.15.1 (SATNds) and 7.10.15.2
          (SATNus); ITU-T G.9701 clause 11.4.1.7.";
     }
-
     /* G.997.2 Clause 7.10.16 Quiet Line Noise (QLN) */
     container qln {
       description
-        "State data nodes related to sub-carrier Quiet Line 
+        "State data nodes related to sub-carrier Quiet Line
          Noise.";
-
       leaf qln-measurement-time {
         type uint16;
         units "1 symbol";
         description
-          "Reports the number of symbols used to measure the 
+          "Reports the number of symbols used to measure the
            downstream QLN(f) values.";
         reference
-          "ITU-T G.997.2 clause 7.10.16.1 (QLNMTds) and 7.10.16.4 
+          "ITU-T G.997.2 clause 7.10.16.1 (QLNMTds) and 7.10.16.4
            (QLNMTus); ITU-T G.9701 clause 11.4.1.2.3.";
       }
-
       leaf qln-sub-carrier-group-size {
         type sub-carrier-group-size;
         description
           "Reports the number of sub-carriers in any one sub-carrier
            group used to represent the QLN(f) values.";
         reference
-          "ITU-T G.997.2 clause 7.10.16.2 (QLNds) and 7.10.16.5 
+          "ITU-T G.997.2 clause 7.10.16.2 (QLNds) and 7.10.16.5
            (QLNus); ITU-T G.9701 clause 11.4.1.2.3.";
       }
-
       leaf qlnps {
         type per-sub-carrier-group-uint8 {
           length "0..512";
         }
         description
-          "Reports the downstream QLN(f) as one value per sub-carrier 
-           group. 
+          "Reports the downstream QLN(f) as one value per sub-carrier
+           group.
 
-           For each octet, the values, 1 to 250 represent the QLN
-           values of -35.5 to -160 dBm/Hz in steps of -0.5 dBm/Hz
-           using an offset of 70 where:
+           For each octet, the values, 1 to 250 represent the Quiet
+           Line Noise (QLN) values of -35.5 to -160 dBm/Hz in steps of
+           -0.5 dBm/Hz using an offset of 70 where:
 
              QLN(f) = (qlnps + 70) * -0.5
 
-           A first special value (255) indicates that the QLN(f) 
-           for this sub-carrier group is undetermined. 
+           A first special value (255) indicates that the QLN(f)
+           for this sub-carrier group is undetermined.
 
-           A second special value (254) indicates that no measurement 
-           could be done for this sub carrier group because it is out 
-           of the downstream MEDLEY set. 
+           A second special value (254) indicates that no measurement
+           could be done for this sub carrier group because it is out
+           of the downstream MEDLEY set.
 
-           A third special value (0) indicates that the QLN(f) for 
+           A third special value (0) indicates that the QLN(f) for
            this sub-carrier group is greater than or equal to
-           -35dBm/Hz. 
+           -35dBm/Hz.
 
-           A fourth special value (251) indicates that the 
-           QLN(f) for this sub-carrier group is less than or equal to 
-           -160.5 dBm/Hz. The object is updated only in L0 link 
+           A fourth special value (251) indicates that the
+           QLN(f) for this sub-carrier group is less than or equal to
+           -160.5 dBm/Hz. The object is updated only in L0 link
            state.";
         reference
           "ITU-T G.997.2 clause 7.10.16.3 (QLNpsds) and 7.10.6.6
            (QLNpsus); ITU-T G.9701 clause 11.4.1.2.3.";
       }
     }
-
     /* G.997.2 Clause 7.10.7 Channel characteristics function per
        sub-carrier (HLOG) */
     container hlog {
       description
         "State data nodes related to sub-carrier Hlog.";
-
       leaf hlog-measurement-time {
         type uint16;
         units "1 symbol";
@@ -588,7 +573,6 @@ submodule bbf-fast-line-status-body {
           "ITU-T G.997.2 clause 7.10.7.1 (HLOGMT); ITU-T
            G.9701 clause 11.4.1.2.1.";
       }
-
       leaf hlog-sub-carrier-group-size {
         type sub-carrier-group-size;
         description
@@ -598,33 +582,32 @@ submodule bbf-fast-line-status-body {
           "ITU-T G.997.2 clause 7.10.7.2 (HLOGG); ITU-T
            G.9701 clause 11.4.1.2.1.";
       }
-
       leaf hlogps {
         type per-sub-carrier-group-uint16 {
           length "0..1024";
         }
         description
           "Reports the downstream Hlog(f) as one value per sub-carrier
-           group. 
+           group.
 
-           For each pair of octets, the values, 1 to 1019 represent 
-           the Hlog values of 5.9 to -95.9 dB of -0.1 dB using an 
+           For each pair of octets, the values, 1 to 1019 represent
+           the Hlog values of 5.9 to -95.9 dB of -0.1 dB using an
            offset of -60 where:
 
              Hlog(f) = (hlogps - 60) * -0.1
 
            A first special value (1023) indicates that the Hlog(f) for
-           this sub-carrier group is undetermined. 
+           this sub-carrier group is undetermined.
 
            A second special value (1022) indicates that no measurement
-           could be done for this sub carrier group because it is out 
-           of the MEDLEY set. 
+           could be done for this sub carrier group because it is out
+           of the MEDLEY set.
 
-           A third special value (0) indicates that the Hlog(f) for 
+           A third special value (0) indicates that the Hlog(f) for
            this sub-carrier group is greater than or equal to +6.0 dB.
 
-           A fourth special value (1020) indicates that the Hlog(f) 
-           for this sub-carrier group is less than or equal to 
+           A fourth special value (1020) indicates that the Hlog(f)
+           for this sub-carrier group is less than or equal to
            -96.0 dB. The object is updated only in L0 link state.";
         reference
           "ITU-T G.997.2 clause 7.10.7.3 (HLOGps); ITU-T
@@ -635,9 +618,8 @@ submodule bbf-fast-line-status-body {
 
   grouping line-ftu-update-test {
     description
-      "Update test parameters associated with a Fast Transceiver 
+      "Update test parameters associated with a Fast Transceiver
        Unit";
-
     leaf time-stamp-at-g1-update {
       type time-stamp-or-undefined;
       description
@@ -647,7 +629,6 @@ submodule bbf-fast-line-status-body {
         "ITU-T G.997.2 clause 7.10.13.1 (STAMP-TEST-NE-G1) and clause
          7.10.13.2 (STAMP-TEST-FE-G1); ITU-T G.9701 clause 11.1.";
     }
-
     leaf time-stamp-at-g2-update {
       type time-stamp-or-undefined;
       description
@@ -657,28 +638,27 @@ submodule bbf-fast-line-status-body {
         "ITU-T G.997.2 clause 7.10.13.3 (STAMP-TEST-NE-G2) and clause
          7.10.13.4 (STAMP-TEST-FE-G2); ITU-T G.9701 clause 11.1.";
     }
-
     leaf link-state-at-g1-update {
       type enumeration {
-        enum "l0-link-state" {
+        enum l0-link-state {
           description
-            "L0 link state";
+            "L0 link state.";
         }
-        enum "l2.1n-link-state" {
+        enum l2.1n-link-state {
           description
-            "L2.1N link state";
+            "L2.1N link state.";
         }
-        enum "l2.1b-link-state" {
+        enum l2.1b-link-state {
           description
-            "L2.1B link state";
+            "L2.1B link state.";
         }
-        enum "l2.2-link-state" {
+        enum l2.2-link-state {
           description
-            "L2.2 link state";
+            "L2.2 link state.";
         }
       }
       description
-        "Report the link state during which test parameters group 1 
+        "Report the link state during which test parameters in group 1
          were updated.";
       reference
         "ITU-T G.997.2 clause 7.14.2.2 (LINK-STATE-TEST-NE-G1) and
@@ -691,44 +671,45 @@ submodule bbf-fast-line-status-body {
     description
       "Time stamps associated with the upstream or downstream
        direction";
-
     leaf time-stamp-last-successful-bitswap {
       type time-stamp-or-undefined;
       description
-        "Reports the date/time of the last successful FTU initiated
-         Bit Swap execution that has modified the bits allocation.";
+        "Reports the date/time of the last successful Fast Transceiver
+         Unit (FTU) initiated Bit Swap execution that has modified the
+         bits allocation.";
       reference
         "ITU-T G.997.2 clause 7.10.14.1 (STAMP-BSW-ds) and clause
          7.10.14.2 (STAMP-BSW-us); ITU-T G.9701 clause 11.2.2.5.";
     }
-
     leaf time-stamp-last-successful-autonomous-sra {
       type time-stamp-or-undefined;
       description
-        "Reports the date/time of the last successful FTU initiated
-         autonomous SRA execution (excluding SRAs in response to
-         TIGA) that has modified the bits allocation.";
+        "Reports the date/time of the last successful Fast Transceiver
+         Unit (FTU) initiated autonomous Seamless Rate Adaptation
+         (SRA) execution (excluding SRAs in response to Transmitter-
+         Initiated Gain Adjustment (TIGA)) that has modified the
+         bits allocation.";
       reference
         "ITU-T G.997.2 clause 7.10.14.3 (STAMP-SRA-ds) and clause
          7.10.14.4 (STAMP-SRA-us); ITU-T G.9701 clause 11.2.2.5.";
     }
-
     leaf time-stamp-last-successful-fra {
       type time-stamp-or-undefined;
       description
-        "Reports the date/time of the last successful FTU initiated
-         FRA execution that has modified the bits allocation.";
+        "Reports the date/time of the last successful Fast Transceiver
+         Unit (FTU) initiated Fast Rate Adaptation (FRA) execution
+         that has modified the bits allocation.";
       reference
         "ITU-T G.997.2 clause 7.10.14.5 (STAMP-FRA-ds) and clause
          7.10.14.6 (STAMP-FRA-us); ITU-T G.9701 clause 13.3.1.1.";
     }
-
     leaf time-stamp-last-successful-rpa {
       type time-stamp-or-undefined;
       description
-        "Reports the date/time of the last successful FTU initiated
-         RPA execution that has modified the bits allocation for the
-         RMC.";
+        "Reports the date/time of the last successful Fast Transceiver
+         Unit (FTU) initiated Robust Managmenet Channel (RMC)
+         Parameter Adjustmet (RPA) execution that has modified the
+         bits allocation for the RMC.";
       reference
         "ITU-T G.997.2 clause 7.10.14.7 (STAMP-RPA-ds) and clause
          7.10.14.8 (STAMP-RPA-us); ITU-T G.9701 clause 11.2.2.5.";
@@ -737,72 +718,68 @@ submodule bbf-fast-line-status-body {
 
   grouping line-ftu-failure-parameters {
     description
-      "FTU failure parameters applicable to both upstream and 
-       downstream. The LOS, LOR, and LOM failures are mutually 
-       exclusive and reflect the reason cause of the triggered 
-       re-initialization. If no LOS, LOR, or LOM failure is declared, 
-       then the re-initialization is triggered by a High_BER event 
-       (see clause 12.1.4/G.9701).";
-
+      "FAST Transceiver Unit (FTU) failure parameters applicable to
+       both upstream and downstream. The Loss of Signal (LOS), Loss of
+       RMC Channel (LOR), and Loss of Margin (LOM) failures are
+       mutually exclusive and reflect the reason cause of the
+       triggered re-initialization. If no LOS, LOR, or LOM failure is
+       declared, then the re-initialization is triggered by a
+       High_BER event (see clause 12.1.4/G.9701).";
     leaf loss-of-signal {
       type boolean;
       description
-        "A LOS failure is declared when a re-initialization is 
-         triggered by a persistent near-end los defect. A LOS failure 
-         is cleared immediately at the start of showtime in the 
-         receiving direction.";
+        "A Loss of Signal (LOS) failure is declared when a
+         re-initialization is triggered by a persistent near-end los
+         defect. A LOS failure is cleared immediately at the start of
+         showtime in the receiving direction.";
       reference
         "ITU-T G.997.2 clause 7.4.1.1 (LOS) and clause 7.4.2.1
          (LOS-FE).";
     }
-
     leaf loss-of-rmc {
       type boolean;
       description
-        "A LOR failure is declared when a re-initialization is 
-         triggered by a persistent near-end lor defect. A LOR failure 
-         is cleared immediately at the start of showtime in the 
-         receiving direction.";
+        "A Loss of RMC Channel (LOR) failure is declared when a
+         re-initialization is triggered by a persistent near-end
+         lor defect. A LOR failure is cleared immediately at the start
+         of showtime in the receiving direction.";
       reference
         "ITU-T G.997.2 clause 7.4.1.2 (LOR) and clause 7.4.2.2
          (LOR-FE).";
     }
-
     leaf loss-of-margin {
       type boolean;
       description
-        "A LOM failure is declared when a re-initialization is 
-         triggered by a persistent near-end lom defect. A LOM failure 
-         is cleared immediately at the start of showtime in the 
-         receiving direction.";
+        "A Loss of Margin (LOM) failure is declared when a
+         re-initialization is triggered by a persistent near-end lom
+         defect. A LOM failure is cleared immediately at the start of
+         showtime in the receiving direction.";
       reference
         "ITU-T G.997.2 clause 7.4.1.3 (LOM) and clause 7.4.2.3
          (LOM-FE).";
     }
-
     leaf loss-of-power {
       type boolean;
       description
-        "A LPR failure is declared after 2.5 +/- 0.5 seconds of 
-         contiguous near-end lpr primitive presence. An LPR failure is
-         cleared after 10 +/- 0.5 seconds of no near-end lpr primitive
-         presence.";
+        "A Loss of Power (LPR) failure is declared after 2.5 +/- 0.5
+         seconds of contiguous near-end lpr primitive presence. An LPR
+         failure is cleared after 10 +/- 0.5 seconds of no near-end
+         lpr primitive presence.";
       reference
-        "ITU-T G.997.2 clause 7.4.1.3 (LOM) and clause 7.4.2.3
-         (LOM-FE).";
+        "ITU-T G.997.2 clause 7.4.1.4 (LPR) and clause 7.4.2.3
+         (LPR-FE).";
     }
   }
 
-
   /* G.997.2 Clause 7.10.17 Active Line Noise (ALN) */
+
   grouping aln-parameters {
     description
       "Objects related to ALN(f) functionality.";
-
     container aln {
       description
-        "State data nodes related to sub-carrier ALN.";
-
+        "State data nodes related to sub-carrier Active Line Noise
+         (ALN).";
       leaf aln-measurement-time {
         type uint16;
         units "1 symbol";
@@ -813,7 +790,6 @@ submodule bbf-fast-line-status-body {
           "ITU-T G.997.2 clause 7.10.17.1 (ALNMT); ITU-T
            G.9701 clause 11.4.1.2.4.";
       }
-
       leaf aln-sub-carrier-group-size {
         type sub-carrier-group-size;
         description
@@ -823,35 +799,34 @@ submodule bbf-fast-line-status-body {
           "ITU-T G.997.2 clause 7.10.17.2 (ALNG); ITU-T
            G.9701 clause 11.4.1.2.4.";
       }
-
       leaf alnps {
         type per-sub-carrier-group-uint8 {
           length "0..512";
         }
         description
-          "Reports the downstream ALN(f) as one value per sub-carrier 
-           group. 
+          "Reports the downstream ALN(f) as one value per sub-carrier
+           group.
 
-           For each octet, the values, 1 to 250 represent the ALN
-           values of -35.5 to -160 dBm/Hz in steps of -0.5 dBm/Hz
-           using an offset of 70 where:
+           For each octet, the values, 1 to 250 represent the Active
+           Line Noise (ALN) values of -35.5 to -160 dBm/Hz in steps of
+           -0.5 dBm/Hz using an offset of 70 where:
 
              ALN(f) = (alnps + 70) * -0.5
 
-           A first special value (255) indicates that the ALN(f) 
-           for this sub-carrier group is undetermined. 
+           A first special value (255) indicates that the ALN(f)
+           for this sub-carrier group is undetermined.
 
-           A second special value (254) indicates that no measurement 
-           could be done for this sub carrier group because it is out 
-           of the downstream MEDLEY set. 
+           A second special value (254) indicates that no measurement
+           could be done for this sub carrier group because it is out
+           of the downstream MEDLEY set.
 
-           A third special value (0) indicates that the ALN(f) for 
+           A third special value (0) indicates that the ALN(f) for
            this sub-carrier group is greater than or equal to
-           -35dBm/Hz. 
+           -35dBm/Hz.
 
-           A fourth special value (251) indicates that the 
-           ALN(f) for this sub-carrier group is less than or equal to 
-           -160.5 dBm/Hz. The object is updated only in L0 link 
+           A fourth special value (251) indicates that the
+           ALN(f) for this sub-carrier group is less than or equal to
+           -160.5 dBm/Hz. The object is updated only in L0 link
            state.";
         reference
           "ITU-T G.997.2 clause 7.10.17.3 (ALNps); ITU-T
@@ -861,47 +836,44 @@ submodule bbf-fast-line-status-body {
   }
 
   /* G.997.2 Clause 7.10.16 FEXT Coupling Coefficients (XLOG) */
+
   grouping xlog-parameters {
     description
       "Objects related to XLOG functionality.";
-
     container xlog {
       description
         "State data nodes related to sub-carrier XLOG.";
-
       container xlogdisturber {
         description
           "Provides information regarding the XLOG disturber to which
            the XLOG values belong.";
-
         leaf vce-port-index {
           type union {
             type enumeration {
-              enum "invalid" {
+              enum invalid {
                 description
-                  "The XLOG disturber VCE port index is invalid.";
+                  "The XLOG disturber Vector Control Entity (VCE) port
+                   index is invalid.";
               }
             }
             type vce-port-index;
           }
           description
-            "The xlogps values are returned for the disturber line 
-             with this vce-port-index in the same vectored group. A 
-             special value (invalid) indicates an invalid 
+            "The xlogps values are returned for the disturber line
+             with this vce-port-index in the same vectored group. A
+             special value (invalid) indicates an invalid
              xlog-disturber-vce-port-index.";
           reference
-            "ITU-T G.997.2 clause 7.13.2.6; ITU-T G.9701 clause 
+            "ITU-T G.997.2 clause 7.13.2.6; ITU-T G.9701 clause
              11.4.5.1.2";
         }
       }
-
       container xlogbands {
         list xlog {
           key "band-index";
           max-elements 8;
           description
             "List of XLOG band edges";
-
           leaf band-index {
             type uint8 {
               range "1..8";
@@ -909,13 +881,11 @@ submodule bbf-fast-line-status-body {
             description
               "Band index";
           }
-
           uses sub-carrier-range {
             refine "start-index" {
               mandatory true;
             }
           }
-
           leaf group-size {
             type uint8 {
               range "1 | 2 | 4 | 8 | 16 | 32 | 64";
@@ -925,26 +895,25 @@ submodule bbf-fast-line-status-body {
           }
         }
         description
-          "Defines the set of sub-carriers for which XLOGpsds is 
-           reported. For each band in which XLOGpsds is reported, 
-           XLOGBANDSds contains a triplet of (start_subcarrier_index, 
-           stop_subcarrier_index, group size). The XLOGpsds is 
-           reported for all sub-carriers in the band (start and stop 
-           subcarrier inclusive) with index equal to 
-           start_subcarrier_index+m*group_size, with m integer. The 
+          "Defines the set of sub-carriers for which XLOGpsds is
+           reported. For each band in which XLOGpsds is reported,
+           XLOGBANDSds contains a triplet of (start_subcarrier_index,
+           stop_subcarrier_index, group size). The XLOGpsds is
+           reported for all sub-carriers in the band (start and stop
+           subcarrier inclusive) with index equal to
+           start_subcarrier_index+m*group_size, with m integer. The
            object is updated only in L0 link state.";
         reference
-          "ITU-T G.997.2 clause 7.10.16.1 (XLOGBANDSds); ITU-T G.9701 
+          "ITU-T G.997.2 clause 7.10.16.1 (XLOGBANDSds); ITU-T G.9701
            clause 11.4.1.2.8.";
       }
-
       leaf xlogps {
         type per-sub-carrier-group-uint8 {
           length "0..512";
         }
         description
           "Reports the downstream Xlog(f) as one value per sub-carrier
-           group. 
+           group.
 
            For each octet, the values, 1 to 250 represent the Xlog
            values of +39.5 to -85 dB in steps of -0.5 dB
@@ -952,18 +921,18 @@ submodule bbf-fast-line-status-body {
 
              Xlog(f) = (xlogps - 80) * -0.5
 
-           A first special value (255) indicates that the Xlog(f) for 
-           this sub-carrier group is undetermined. 
+           A first special value (255) indicates that the Xlog(f) for
+           this sub-carrier group is undetermined.
 
-           A second special value (254) indicates that no measurement 
-           could be done for this sub-carrier group. 
+           A second special value (254) indicates that no measurement
+           could be done for this sub-carrier group.
 
-           A third special value (0) indicates that the Xlog(f) for 
-           this sub-carrier group is greater than or equal to +40.0 
-           dB. 
+           A third special value (0) indicates that the Xlog(f) for
+           this sub-carrier group is greater than or equal to +40.0
+           dB.
 
            A fourth special value (251) indicates that the Xlog(f) for
-           this sub-carrier group is less than or equal to -85.5 dB. 
+           this sub-carrier group is less than or equal to -85.5 dB.
            The object is updated only in L0 link state.";
         reference
           "ITU-T G.997.2 clause 7.10.16.2 (XLOGpsds); ITU-T
@@ -972,12 +941,10 @@ submodule bbf-fast-line-status-body {
     }
   }
 
-
   grouping line-status {
     description
       "Defines the parameters that define the operational status of
        a FAST line.";
-
     leaf profile {
       type profiles;
       description
@@ -988,52 +955,51 @@ submodule bbf-fast-line-status-body {
         "ITU-T G.997.2 clause 7.10.1.1 (PROFILE); ITU-T G.9701
          clause 6.";
     }
-
     leaf link-state {
       type enumeration {
-        enum "l0-link-state" {
+        enum l0-link-state {
           description
-            "L0 link state";
+            "L0 link state.";
         }
-        enum "l2.1n-link-state" {
+        enum l2.1n-link-state {
           description
-            "L2.1N link state";
+            "L2.1N link state.";
         }
-        enum "l2.1b-link-state" {
+        enum l2.1b-link-state {
           description
-            "L2.1B link state";
+            "L2.1B link state.";
         }
-        enum "l2.2-link-state" {
+        enum l2.2-link-state {
           description
-            "L2.2 link state";
+            "L2.2 link state.";
         }
-        enum "l3-link-state" {
+        enum l3-link-state {
           description
-            "L3 link state";
+            "L3 link state.";
         }
       }
       description
         "Reports the actual link state.";
       reference
-        "ITU-T G.997.2 clause 7.10.18.1 (LINK_STATE); ITU-T G.9701
+        "ITU-T G.997.2 clause 7.14.2.1 (LINK_STATE); ITU-T G.9701
          clause 12.1.1.6.";
     }
-
     leaf initialization-success-failure-cause {
       type enumeration {
-        enum "successful" {
+        enum successful {
           value 0;
           description
             "Successful.";
         }
-        enum "config-error" {
+        enum config-error {
           value 1;
           description
             "Configuration error. This error occurs if the line
              cannot reach the L0 state due to a mismatch of
-             configuration and FTU capabilities.";
+             configuration and FAST Transceiver Unit (FTU)
+             capabilities.";
         }
-        enum "config-not-feasible" {
+        enum config-not-feasible {
           value 2;
           description
             "Configuration not feasible on the line. This error
@@ -1041,7 +1007,7 @@ submodule bbf-fast-line-status-body {
              mismatch of configuration and line and noise
              characteristics.";
         }
-        enum "communication-problem" {
+        enum communication-problem {
           value 3;
           description
             "Communication problem. This error occurs, for example,
@@ -1049,14 +1015,15 @@ submodule bbf-fast-line-status-body {
              no common mode can be selected in the ITU-T G.994.1
              handshaking procedure or due to a timeout.";
         }
-        enum "no-far-end-ftu-detected" {
+        enum no-far-end-ftu-detected {
           value 4;
           description
-            "No far-end FTU detected. This error occurs if the
-             far-end FTU is not powered or not connected or if the
-             line is too long to allow detection of a far-end FTU.";
+            "No far-end FAST Transceiver Unit (FTU) detected. This
+             error occurs if the far-end FTU is not powered or not
+             connected or if the line is too long to allow detection
+             of a far-end FTU.";
         }
-        enum "unknown" {
+        enum unknown {
           value 5;
           description
             "Any other or unknown initialization failure cause.";
@@ -1068,10 +1035,9 @@ submodule bbf-fast-line-status-body {
          procedure was not successful, this parameter provides
          the reason.";
       reference
-        "ITU-T G.997.2 clause 7.10.2.1 (PROFILE); ITU-T G.9701
+        "ITU-T G.997.2 clause 7.10.2.1 (INITFSCAUSE); ITU-T G.9701
          clause 12.3.1.";
     }
-
     leaf annex-x-enabled {
       if-feature "annex-x";
       type boolean;
@@ -1081,7 +1047,6 @@ submodule bbf-fast-line-status-body {
         "ITU-T G.997.2 clause T.3.1 (ANNEX_X_ENABLED),
          ITU-T G.9701 clause X.6.8.1.";
     }
-
     leaf annex-d-enabled {
       if-feature "annex-d";
       type boolean;
@@ -1091,7 +1056,6 @@ submodule bbf-fast-line-status-body {
         "ITU-T G.997.2 clause T.3.3 (ANNEX_D_ENABLED),
          ITU-T G.9701 clause D.5.8.1.";
     }
-
     leaf idta-enabled {
       if-feature "(dta and annex-x)";
       type boolean;
@@ -1101,50 +1065,50 @@ submodule bbf-fast-line-status-body {
         "ITU-T G.9701 clause T.3.2 (DTA_ENABLED),
          ITU-T G.9701 clause X.6.8.2.";
     }
-
     leaf cdta-procedure-actual-type {
       if-feature "(dta and annex-d)";
       type enumeration {
-        enum "disabled" {
+        enum disabled {
           value 0;
           description
-            "cDTA is disabled (see clause D.5.8.2)";
+            "Coordinated Dynamic Time Assignment (cDTA) is disabled
+             (see clause D.5.8.2)";
         }
-        enum "one-step" {
+        enum one-step {
           value 1;
           description
-            "DRA uses one-step cDTA procedure (see clause D.5.8.2).";
+            "Dynamic Resource Allocation (DRA) uses one-step
+             Coordinated Dynamic Time Assignment (cDTA)
+             procedure (see clause D.5.8.2).";
         }
-        enum "two-step" {
+        enum two-step {
           value 2;
           description
-            "DRA uses two-step cDTA procedure (see clause D.5.8.2)";
+            "Dynamic Resource Allocation (DRA) uses two-step
+             Coordinated Dynamic Time Assignment (cDTA) procedure
+             (see clause D.5.8.2)";
         }
       }
       description
-        "Indicates which cDTA procedure is used by the DRA according 
-         to Annex D.";
+        "Indicates which Coordinated Dynamic Time Assignment (cDTA)
+         procedure is used by the Dynamic Resource Allocation (DRA)
+         according to Annex D.";
       reference
         "ITU-T G.997.2 clause T.3.4 (CDTA_PROC_ACT),
          ITU-T G.9701 clause D.5.8.2.";
     }
-
     container ftu-o {
       description
         "Line status parameters associated with the Fast
-         Transceiver Unit - central Office (Near End)";
-
+         Transceiver Unit - central Office (Near End).";
       container update-test {
         description
-          "Test update parameters";
-
+          "Test update parameters.";
         uses line-ftu-update-test;
       }
-
       container failures {
         description
-          "Failure related status";
-
+          "Failure related status.";
         leaf line-initialization-failure {
           type boolean;
           description
@@ -1161,97 +1125,91 @@ submodule bbf-fast-line-status-body {
         uses line-ftu-failure-parameters;
       }
     }
-
     container ftu-r {
       description
         "Line status parameters associated with the Fast
-         Transceiver Unit - Remote side (Far End)";
-
+         Transceiver Unit - Remote side (Far End).";
       container update-test {
         description
-          "Test update parameters";
-
+          "Test update parameters.";
         uses line-ftu-update-test;
       }
-
       container failures {
         description
-          "Failure related status";
-
+          "Failure related status.";
         uses line-ftu-failure-parameters;
       }
     }
-
     container downstream {
       description
         "Line status parameters associated with the downstream
          direction";
-
       leaf initialization-last-transmitted-signal {
         type uint8 {
           range "0..21";
         }
         description
-          "Reports the downstream signal count of the last 
-           transmitted initialization signal in the last full or 
-           short initialization performed on the line.  The 
-           downstream signal count is defined in clause 
-           12.3.1/G.9701";
+          "Reports the downstream signal count of the last
+           transmitted initialization signal in the last full or
+           short initialization performed on the line.  The
+           downstream signal count is defined in clause
+           12.3.1/G.9701.";
         reference
-          "ITU-T G.997.2 clause 7.10.2.2 (INITLASTSIGNALds); ITU-T 
+          "ITU-T G.997.2 clause 7.10.2.2 (INITLASTSIGNALds); ITU-T
            G.9701 clause 12.3.1";
       }
-
       uses line-status-parameters;
-
       uses aln-parameters;
-
       uses xlog-parameters;
-
       container time-stamps {
         description
-          "Time stamps of certain status parameters";
-
+          "Time stamps of certain status parameters.";
         uses line-time-stamps;
-
         leaf time-stamp-last-successful-tiga {
           type time-stamp-or-undefined;
           description
             "Reports the date/time of the last successful FTU-O
-             initiated TIGA execution.";
+             initiated Transmitter-Initiated Gain Adjustment (TIGA)
+             execution.";
           reference
             "ITU-T G.997.2 clause 7.10.14.9 (STAMP-TIGA); ITU-T
              G.9701 clause 11.2.2.5.";
         }
+        leaf time-stamp-last-successful-srec {
+          if-feature "srec";
+          type time-stamp-or-undefined;
+          description
+            "Reports the date/time of the last successful FTU-O
+             initiated (local or remote) Showtime Reconfiguration
+             (SREC) execution.";
+          reference
+            "ITU-T G.997.2 clause 7.10.14.10 (STAMP-SREC);
+             ITU-T G.9701 Annex R.";
+        }
       }
     }
-
     container upstream {
       description
         "Line status parameters associated with the downstream
-         direction";
-
+         direction.";
       leaf initialization-last-received-signal {
         type uint8 {
           range "0..10";
         }
         description
-          "Reports the upstream signal count of the last 
-           transmitted initialization signal in the last full or 
-           short initialization performed on the line.  The 
-           upstream signal count is defined in clause 
-           12.3.1/G.9701";
+          "Reports the upstream signal count of the last
+           transmitted initialization signal in the last full or
+           short initialization performed on the line.  The
+           upstream signal count is defined in clause
+           12.3.1/G.9701.";
         reference
-          "ITU-T G.997.2 clause 7.10.2.3 (INITLASTSIGNALus); ITU-T 
+          "ITU-T G.997.2 clause 7.10.2.3 (INITLASTSIGNALus); ITU-T
            G.9701 clause 12.3.1";
       }
-
       uses line-status-parameters;
-
       container time-stamps {
         description
-          "Time stamps of certain status parameters";
-
+          "Time stamps of certain status parameters.";
         uses line-time-stamps;
       }
     }

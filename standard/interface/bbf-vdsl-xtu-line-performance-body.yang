@@ -7,17 +7,15 @@ submodule bbf-vdsl-xtu-line-performance-body {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import ietf-yang-types {
     prefix yang;
   }
-
+  include bbf-vdsl-base;
   include bbf-vdsl-base-body;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -33,13 +31,12 @@ submodule bbf-vdsl-xtu-line-performance-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
-    "This submodule contains a collection of YANG definitions for 
-     managing Broadband Forum TR-252i3 clause 7.1 xTU Line 
+    "This submodule contains a collection of YANG definitions for
+     managing Broadband Forum TR-252i3 clause 7.1 xTU Line
      Performance.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -79,9 +76,19 @@ submodule bbf-vdsl-xtu-line-performance-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -104,11 +111,9 @@ submodule bbf-vdsl-xtu-line-performance-body {
   }
 
   grouping xtu-c-line-performance {
-
     description
       "The xTU-C Line Performance object represents line performance
        related data for a given xTU - Central office.";
-
     leaf measured-time {
       type uint32;
       description
@@ -117,68 +122,64 @@ submodule bbf-vdsl-xtu-line-performance-body {
       reference
         "ITU-T G.997.2 clause 7.7.1 and 7.8.1.";
     }
-
     leaf invalid-data-flag {
       type boolean;
       description
-        "Reports the validity of the corresponding 
+        "Reports the validity of the corresponding
          performance monitoring data. true = invalid.";
       reference
         "ITU-T G.997.2 clause 7.7.2 and 7.8.2.";
     }
-
     leaf forward-error-correction-seconds-l {
       type bbf-yang:performance-counter32;
       description
         "This parameter is a count of 1-second intervals with one
-         or more FEC anomalies summed over all received bearer
-         channels.";
+         or more Forward Error Correction (FEC) anomalies summed over
+         all received bearer channels.";
       reference
         "ITU-T G.997.1 clause 7.2.1.1.1 Forward error correction
          second - Line (FECS-L)";
     }
-
     leaf errored-seconds-l {
       type bbf-yang:performance-counter32;
       description
         "This parameter is a count of 1-second intervals with one
-         or more CRC-8 anomalies summed over all received bearer
-         channels, or one or more LOS defects, or one or more SEF
-         defects, or one or more LPR defects.";
+         or more Cyclic Redundancy Check (CRC-8) anomalies summed over
+         all received bearer channels, or one or more Loss of Signal
+         (LOS) defects, or one or more Severely Errored Frame (SEF)
+         defects, or one or more Loss of Power (LPR) defects.";
       reference
         "ITU-T G.997.1 clause 7.2.1.1.2 Errored second - Line
          (ES-L)";
     }
-
     leaf severely-errored-seconds-l {
       type bbf-yang:performance-counter32;
       description
         "This parameter is a count of severely errored seconds
          (SES). An SES is declared if, during a 1-second
-         interval, there are 18 or more CRC-8 anomalies in one or
-         more of the received bearer channels, or one or more LOS
-         defects, or one or more SEF defects, or one or more LPR
-         defects. If [ITU-T G.998.4] is supported and
-         retransmission is enabled in the near-end received
+         interval, there are 18 or more Cyclic Redundancy Check
+         (CRC-8) anomalies in one or more of the received bearer
+         channels, or one or more Loss of Signal (LOS) defects, or one
+         or more Severely Errored Frame (SEF) defects, or one or more
+         Loss of Power (LPR) defects. If [ITU-T G.998.4] is supported
+         and retransmission is enabled in the near-end received
          direction, a SES is also declared if, during a 1-second
-         interval, there is one or more severe loss of error-free
-         throughput (seftr) defect in the near-end received
+         interval, there is one or more Severe Loss of Error-Free
+         Throughput (SEFTR) defect in the near-end received
          direction.";
       reference
         "ITU-T G.997.1 clause 7.2.1.1.3 Severely errored second -
          Line (SES-L)";
     }
-
     leaf loss-of-signal-seconds-l {
       type bbf-yang:performance-counter32;
       description
         "This parameter is a count of 1-second intervals
-         containing one or more LOS defects.";
+         containing one or more Loss of Signal (LOS) defects.";
       reference
         "ITU-T G.997.1 clause 7.2.1.1.4 LOS second - Line
          (LOSS-L)";
     }
-
     leaf unavailable-seconds-l {
       type bbf-yang:performance-counter32;
       description
@@ -197,12 +198,12 @@ submodule bbf-vdsl-xtu-line-performance-body {
           range "1..17";
         }
         description
-          "Identifies the INMAINPEQ histogram bin";
+          "Identifies the INMAINPEQ histogram bin.";
       }
       leaf inminpeq-l {
         type bbf-yang:performance-counter32-or-inactive;
         description
-          "count of the near-end INMAINPEQ anomalies";
+          "Count of the near-end INMAINPEQ anomalies.";
       }
       description
         "This parameter is a count of the near-end INMAINPEQi
@@ -217,7 +218,6 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "ITU-T G.997.1 clause 7.2.1.4.1 INM INPEQ histogram 1..17
          (INMINPEQ1..17-L)";
     }
-
     leaf inmme-l {
       type bbf-yang:performance-counter32-or-inactive;
       description
@@ -233,7 +233,6 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "ITU-T G.997.1 clause 7.2.1.4.2 INM total measurement
          (INMME-L)";
     }
-
     list inmiat-l {
       key "inminiat-index";
       leaf inminiat-index {
@@ -241,12 +240,12 @@ submodule bbf-vdsl-xtu-line-performance-body {
           range "0..7";
         }
         description
-          "Identifies the INMAIAT histogram bin";
+          "Identifies the INMAIAT histogram bin.";
       }
       leaf inmiat-l {
         type bbf-yang:performance-counter32-or-inactive;
         description
-          "Count of the near-end INMAIAT anomalies";
+          "Count of the near-end INMAIAT anomalies.";
       }
       description
         "This parameter is a count of the near-end INMAIATi
@@ -261,15 +260,14 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "ITU-T G.997.1 clause 7.2.1.4.3 INM IAT histogram 0..7
          (INMIAT0..7-L)";
     }
-
     leaf sos-success-ne {
       type bbf-yang:performance-counter32-or-inactive;
       description
         "This parameter is a count of the total number of
-         successful SOS procedures initiated by the near-end xTU
-         on the line during the accumulation period. Parameter
-         procedures will be as defined in ITU-T G.997.1 clause
-         7.2.7. Successful SOS is defined in clause 12.1.4 of
+         successful Save our Showtime (SOS) procedures initiated by
+         the near-end xTU on the line during the accumulation period.
+         Parameter procedures will be as defined in ITU-T G.997.1
+         clause 7.2.7. Successful SOS is defined in clause 12.1.4 of
          [ITU-T G.993.2].
 
          A special value (enum inactive) indicates that this
@@ -279,21 +277,19 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "ITU-T G.997.1 clause 7.2.1.6.1 Near-end successful SOS
          count (SOS-SUCCESS-NE)";
     }
-
     leaf leftr-defects-seconds-counter-ne {
       type bbf-yang:performance-counter32;
       description
-        "Near-end line leftr defects seconds counter. If
-         retransmission is used in a given transmit direction,
-         this parameter is a count of the seconds with a near-end
-         ''leftr'' defect present (see clause 11.4.1 of [ITU-T
-         G.998.4] for the definition of this counter).
+        "Near-end line Low Error-Free Throughput (LEFTR) defects
+         seconds counter. If retransmission is used in a given
+         transmit direction, this parameter is a count of the seconds
+         with a near-end ''leftr'' defect present (see clause 11.4.1
+         of [ITU-T G.998.4] for the definition of this counter).
          This near-end counter is only defined for upstream.";
       reference
         "ITU-T G.997.1 clause 7.2.1.1.6 leftr defects seconds
          counter";
     }
-
     leaf error-free-bits-counter-ne {
       type bbf-yang:performance-counter32;
       description
@@ -307,12 +303,11 @@ submodule bbf-vdsl-xtu-line-performance-body {
       reference
         "ITU-T G.997.1 clause 7.2.1.1.7 Error-free bits counter";
     }
-
     leaf minimum-error-free-throughput-ne {
       type bbf-yang:performance-counter32;
       units "bit/s";
       description
-        "Near-end minimum error-free throughput (MINEFTR). If
+        "Near-end Minimum Error-Free Throughput (MINEFTR). If
          retransmission is used in a given transmit direction,
          this parameter MINEFTR reports the minimum of the EFTR
          observed over the 15-min or 24-hour accumulation period
@@ -323,7 +318,6 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "ITU-T G.997.1 clause 7.2.1.1.8 Minimum error-free
          throughput (MINEFTR)";
     }
-
     leaf full-initializations {
       type bbf-yang:performance-counter32;
       description
@@ -335,7 +329,6 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "ITU-T G.997.1 clause 7.2.1.3.1 Full initialization
          count";
     }
-
     leaf failed-full-initializations {
       type bbf-yang:performance-counter32;
       description
@@ -349,7 +342,6 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "ITU-T G.997.1 clause 7.2.1.3.2 Failed full
          initialization count";
     }
-
     leaf short-initializations {
       type bbf-yang:performance-counter32-or-inactive;
       description
@@ -366,7 +358,6 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "ITU-T G.997.1 clause 7.2.1.3.3 Short initialization
          count";
     }
-
     leaf failed-short-initializations {
       type bbf-yang:performance-counter32-or-inactive;
       description
@@ -375,10 +366,10 @@ submodule bbf-vdsl-xtu-line-performance-body {
          during the accumulation period. A failed fast retrain or
          short initialization is when showtime is not reached at
          the end of the fast retrain or short initialization
-         procedure, e.g., when: A CRC error is detected, a
-         time-out occurs, or a fast retrain profile is unknown.
-         Parameter procedures are defined in ITU-T G997.1 clause
-         7.2.7.
+         procedure, e.g., when: A Cyclic Redundancy Check (CRC) error
+         is detected, a time-out occurs, or a fast retrain profile is
+         unknown. Parameter procedures are defined in ITU-T G997.1
+         clause 7.2.7.
 
          A special value (enum inactive) indicates that this
          counter is not active on the line as this is only applicable
@@ -387,7 +378,6 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "ITU-T G.997.1 clause 7.2.1.3.4 Failed short
          initialization count";
     }
-
     leaf loss-of-power-intrpt {
       type bbf-yang:performance-counter32-or-inactive;
       description
@@ -398,10 +388,9 @@ submodule bbf-vdsl-xtu-line-performance-body {
          counter is not active on the line.
          Threshold reports for this counter are not specified.";
       reference
-        "ITU-T G.997.1 clause 7.2.1.8.1 Loss-of-power
+        "ITU-T G.997.1 clause 7.2.1.8.1 Loss of Power
          interruption count (LPR_INTRPT)";
     }
-
     leaf host-reinit-interruptions {
       type bbf-yang:performance-counter32-or-inactive;
       description
@@ -415,7 +404,6 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "ITU-T G.997.1 clause 7.2.1.8.2 Host-Reinit interruption
          count (HRI_INTRPT)";
     }
-
     leaf spontaneous-intrpt {
       type bbf-yang:performance-counter32-or-inactive;
       description
@@ -430,43 +418,70 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "ITU-T G.997.1 clause 7.2.1.8.3 Spontaneous interruption
          count (SPONT_INTRPT)";
     }
-
     leaf loss-of-signal {
       type bbf-yang:performance-counter32;
       description
-        "Reports a count of the Loss-of-signal (LOS) failures.";
+        "Reports a count of the Loss of Signal (LOS) failures.";
       reference
         "Borrowed from ITU-T G.997.2 clause 7.7.4 (LOS).
-         Count of failures defined in ITU-T G.997.1 
+         Count of failures defined in ITU-T G.997.1
          clause 7.1.1.1.1.";
     }
-
     leaf loss-of-frame {
       type bbf-yang:performance-counter32;
       description
-        "Reports a count of the Loss-of-frame (LOF) failures.";
+        "Reports a count of the Loss of Frame (LOF) failures.";
       reference
-        "Count of failures defined in ITU-T G.997.1 
+        "Count of failures defined in ITU-T G.997.1
          clause 7.1.1.1.2.";
     }
-
     leaf loss-of-power {
       type bbf-yang:performance-counter32;
       description
-        "reports a count of the Loss-of-power (LPR) failures.";
+        "reports a count of the Loss of Power (LPR) failures.";
       reference
         "Borrowed from ITU-T G.997.2 clause 7.7.7 (LPR).
-         Count of failures defined in ITU-T G.997.1 
+         Count of failures defined in ITU-T G.997.1
          clause 7.1.1.1.3.";
     }
-  } // end grouping xtu-c-line-performance
+    leaf maximum-error-free-throughput-ne {
+      if-feature "maxeftr";
+      type bbf-yang:performance-counter32;
+      units "bit/s";
+      description
+        "Near-end Maximum Error-Free Throughput (MAXEFTR). If
+         retransmission is used in a given transmit direction,
+         this parameter MAXEFTR reports the maximum of the EFTR
+         observed over the 15-min or 24-hour accumulation period
+         (see clause 11.4.4 of [ITU-T G.998.4] for the definition
+         of this parameter). The value is reported in bit/s.
+         This near-end value is only defined for upstream.";
+      reference
+        "ITU-T G.997.1 clause 7.2.1.1.9 Maximum error-free
+         throughput (MAXEFTR)";
+    }
+    leaf sra-success-ne {
+      if-feature "successful-sra";
+      type bbf-yang:performance-counter32;
+      description
+        "This parameter is a count of the total number of
+         successful Seamless Rate Adaptation (SRA) procedures
+         initiated by the near-end xTU on the line during the
+         accumulation period. Parameter procedures will be as defined
+         in ITU-T G.997.1 clause 7.2.9. Successful SRA is defined in
+         clause 11.3.1.6 of [ITU-T G.993.2].";
+      reference
+        "ITU-T G.997.1 clause 7.2.9 Near-end successful SRA
+         count (SRA-SUCCESS-NE)";
+    }
+  }
+
+  // end grouping xtu-c-line-performance
 
   grouping xtu-r-line-performance {
-
     description
       "The xTU-R Line Performance object represents line performance
        related data for a given xTU - Remote side.";
-
     leaf measured-time {
       type uint32;
       description
@@ -475,68 +490,66 @@ submodule bbf-vdsl-xtu-line-performance-body {
       reference
         "ITU-T G.997.2 clause 7.7.1 and 7.8.1.";
     }
-
     leaf invalid-data-flag {
       type boolean;
       description
-        "Reports the validity of the corresponding 
+        "Reports the validity of the corresponding
          performance monitoring data. true = invalid.";
       reference
         "ITU-T G.997.2 clause 7.7.2 and 7.8.2.";
     }
-
     leaf forward-error-correction-seconds-lfe {
       type bbf-yang:performance-counter32;
       description
         "This parameter is a count of 1-second intervals with one
-         or more FFEC anomalies summed over all transmitted
-         bearer channels.";
+         or more Far-End Forward Error Correction  (FFEC) anomalies
+         summed over all transmitted bearer channels.";
       reference
         "ITU-T G.997.1 clause 7.2.1.2.1 Forward error correction
          second - Line far-end (FECS-LFE)";
     }
-
     leaf errored-seconds-lfe {
       type bbf-yang:performance-counter32;
       description
         "This parameter is a count of one-second intervals with
-         one or more FEBE anomalies summed over all transmitted
-         bearer channels, or one or more LOS-FE defects, or one
-         or more RDI defects, or one or more LPR-FE defects.";
+         one or more Far-End Block Error (FEBE) anomalies summed over
+         all transmitted bearer channels, or one or more Far-End Loss
+         of Signal (LOS-FE) defects, or one or more Remote Defect
+         Indication (RDI) defects, or one or more Far-End Loss of
+         Power (LPR-FE) defects.";
       reference
         "ITU-T G.997.1 clause 7.2.1.2.2 Errored second - Line
          far-end (ES-LFE)";
     }
-
     leaf severely-errored-seconds-lfe {
       type bbf-yang:performance-counter32;
       description
         "This parameter is a count of severely errored seconds
          (SES). An SES is declared if, during a 1-second
-         interval, there are 18 or more FEBE anomalies in one or
-         more of the transmitted bearer channels, or one or more
-         far-end LOS defects, or one or more RDI defects, or one
-         or more LPR-FE defects. If [ITU-T G.998.4] is supported
-         and retransmission is enabled in the far-end received
-         direction, a SES-LFE is also declared if, during a
-         1-second interval, there is one or more severe loss of
-         error-free throughput (seftr) defect in the far-end
+         interval, there are 18 or more Far-End Block Error (FEBE)
+         anomalies in one or more of the transmitted bearer channels,
+         or one or more Far-End Loss of Signal (LOS-FE) defects, or
+         one or more Remote Defect Indication (RDI) defects, or one or
+         more Far-End Loss of Power (LPR-FE) defects. If
+         [ITU-T G.998.4] is supported and retransmission is enabled in
+         the far-end received direction, a SES-LFE is also declared
+         if, during a 1-second interval, there is one or more severe
+         loss of error-free throughput (seftr) defect in the far-end
          received direction.";
       reference
         "ITU-T G.997.1 clause 7.2.1.2.3 Severely errored second -
          Line far-end (SES-LFE)";
     }
-
     leaf loss-of-signal-seconds-lfe {
       type bbf-yang:performance-counter32;
       description
         "This parameter is a count of 1-second intervals
-         containing one or more far-end LOS defects.";
+         containing one or more far-end Loss of Signal (LOS)
+         defects.";
       reference
         "ITU-T G.997.1 clause 7.2.1.2.4 LOS second - Line far-end
          (LOSS-LFE)";
     }
-
     leaf unavailable-seconds-lfe {
       type bbf-yang:performance-counter32;
       description
@@ -548,7 +561,6 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "ITU-T G.997.1 clause 7.2.1.2.5 Unavailable seconds -
          Line far-end (UAS-LFE)";
     }
-
     list inminpeq-lfe {
       key "inminpeq-index";
       leaf inminpeq-index {
@@ -576,7 +588,6 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "ITU-T G.997.1 clause 7.2.1.5.1 INM INPEQ histogram 1..17
          (INMINPEQ1..17-LFE)";
     }
-
     leaf inmme-lfe {
       type bbf-yang:performance-counter32-or-inactive;
       description
@@ -592,7 +603,6 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "ITU-T G.997.1 clause 7.2.1.5.2 INM total measurement
          (INMME-LFE)";
     }
-
     list inmiat-lfe {
       key "inminiat-index";
       leaf inminiat-index {
@@ -620,15 +630,14 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "ITU-T G.997.1 clause 7.2.1.5.3 INM IAT histogram 0..7
          (INMIAT0..7-LFE)";
     }
-
     leaf sos-success-fe {
       type bbf-yang:performance-counter32-or-inactive;
       description
         "This parameter is a count of the total number of
-         successful SOS procedures initiated by the far-end xTU
-         on the line during the accumulation period. Parameter
-         procedures will be as defined in ITU-T G.997.1 clause
-         7.2.7. Successful SOS is defined in clause 12.1.4 of
+         successful Save our Showtime (SOS) procedures initiated by
+         the far-end xTU on the line during the accumulation period.
+         Parameter procedures will be as defined in ITU-T G.997.1
+         clause 7.2.7. Successful SOS is defined in clause 12.1.4 of
          [ITU-T G.993.2].
 
          A special value (enum inactive) indicates that this
@@ -638,21 +647,19 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "ITU-T G.997.1 clause 7.2.1.7.1 Far-end successful SOS
          count (SOS-SUCCESS-FE)";
     }
-
     leaf leftr-defects-seconds-counter-lfe {
       type bbf-yang:performance-counter32;
       description
-        "Far-end line leftr defects seconds counter. If
-         retransmission is used in a given transmit direction,
-         this parameter is a count of the seconds with a far-end
-         leftr defect present (see clause 11.4.1 of [ITU-T
-         G.998.4] for the definition of this counter).
+        "Far-end line Low Error-Free Throughput (LEFTR) defects
+         seconds counter. If retransmission is used in a given
+         transmit direction, this parameter is a count of the seconds
+         with a far-end leftr defect present (see clause 11.4.1 of
+         [ITU-T G.998.4] for the definition of this counter).
          The far-end counter is only defined for downstream.";
       reference
         "ITU-T G.997.1 clause 7.2.1.2.6 leftr defects seconds
          counter";
     }
-
     leaf error-free-bits-counter-lfe {
       type bbf-yang:performance-counter32;
       description
@@ -666,7 +673,6 @@ submodule bbf-vdsl-xtu-line-performance-body {
       reference
         "ITU-T G.997.1 clause 7.2.1.2.7 Error-free bits counter";
     }
-
     leaf minimum-error-free-throughput-lfe {
       type bbf-yang:performance-counter32;
       units "bit/s";
@@ -682,42 +688,70 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "ITU-T G.997.1 clause 7.2.1.2.8 Minimum error-free
          throughput (MINEFTR)";
     }
-
     leaf loss-of-signal-fe {
       type bbf-yang:performance-counter32;
       description
-        "Reports a count of the far-end Loss-of-signal (LOS)
+        "Reports a count of the far-end Loss of Signal (LOS)
          failures.";
       reference
         "Borrowed from ITU-T G.997.2 clause 7.7.4 (LOS).
-         Count of failures defined in ITU-T G.997.1 
+         Count of failures defined in ITU-T G.997.1
          clause 7.1.1.2.1.";
     }
-
     leaf loss-of-frame-fe {
       type bbf-yang:performance-counter32;
       description
-        "Reports a count of the Loss-of-frame (LOF) failures.";
+        "Reports a count of the Loss of Frame (LOF) failures.";
       reference
-        "Count of failures defined in ITU-T G.997.1 
+        "Count of failures defined in ITU-T G.997.1
          clause 7.1.1.2.2.";
     }
-
     leaf loss-of-power-fe {
       type bbf-yang:performance-counter32;
       description
-        "reports a count of the Loss-of-power (LPR) failures.";
+        "reports a count of the Loss of Power (LPR) failures.";
       reference
         "Borrowed from ITU-T G.997.2 clause 7.7.7 (LPR).
-         Count of failures defined in ITU-T G.997.1 
+         Count of failures defined in ITU-T G.997.1
          clause 7.1.1.2.3.";
     }
-  } // end grouping xtu-r-line-performance  
+    leaf maximum-error-free-throughput-lfe {
+      if-feature "maxeftr";
+      type bbf-yang:performance-counter32;
+      units "bit/s";
+      description
+        "Far-end maximum error-free throughput (MAXEFTR). If
+         retransmission is used in a given transmit direction,
+         this parameter MAXEFTR reports the maximum of the EFTR
+         observed over the 15-min or 24-hour accumulation period
+         (see clause 11.4.4 of [ITU-T G.998.4] for the definition
+         of this parameter). The value is reported in bit/s.
+         This far-end value is only defined for downstream.";
+      reference
+        "ITU-T G.997.1 clause 7.2.1.2.9 Maximum error-free
+         throughput (MAXEFTR)";
+    }
+    leaf sra-success-fe {
+      if-feature "successful-sra";
+      type bbf-yang:performance-counter32;
+      description
+        "This parameter is a count of the total number of
+         successful Seamless Rate Adaptation (SRA) procedures
+         initiated by the far-end xTU on the line during the
+         accumulation period. Parameter procedures will be as defined
+         in ITU-T G.997.1 clause 7.2.9. Successful SRA is defined in
+         clause 11.3.1.7 of [ITU-T G.993.2].";
+      reference
+        "ITU-T G.997.1 clause 7.2.9 Far-end successful SRA
+         count (SRA-SUCCESS-FE)";
+    }
+  }
+
+  // end grouping xtu-r-line-performance  
 
   grouping line-time-stamp {
     description
       "Time stamp for line performance parameters.";
-
     leaf time-stamp {
       type yang:date-and-time;
       description
@@ -727,4 +761,4 @@ submodule bbf-vdsl-xtu-line-performance-body {
         "ITU-T G.997.2 clause 7.7.3 and 7.7.3.";
     }
   }
-} // end submodule xtu-line-performance-body
+}

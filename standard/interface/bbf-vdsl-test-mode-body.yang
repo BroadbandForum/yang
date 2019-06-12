@@ -9,7 +9,6 @@ submodule bbf-vdsl-test-mode-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -25,12 +24,11 @@ submodule bbf-vdsl-test-mode-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
-    "This submodule contains a collection of YANG definitions for 
+    "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 5.1 xDSL Line.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +68,19 @@ submodule bbf-vdsl-test-mode-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -91,7 +99,7 @@ submodule bbf-vdsl-test-mode-body {
     reference
       "TR-355c2: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_2.pdf>";
+                        TR-355_Corrigendum-2.pdf>";
   }
   revision 2017-03-13 {
     description
@@ -101,7 +109,7 @@ submodule bbf-vdsl-test-mode-body {
     reference
       "TR-355c1: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_1.pdf>";
+                        TR-355_Corrigendum-1.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -115,18 +123,15 @@ submodule bbf-vdsl-test-mode-body {
   }
 
   grouping test-mode {
-
     description
-      "The object contains parameters that invoke test modes and 
+      "The object contains parameters that invoke test modes and
        update test parameters.";
-
     container test-mode {
       description
         "update test parameters";
-
       leaf power-management-state-forced {
         type enumeration {
-          enum "0" {
+          enum 0 {
             description
               "Force the line to transition from the L3 idle state
                to the L0 full-on state (i.e., both xTUs are in
@@ -142,7 +147,7 @@ submodule bbf-vdsl-test-mode-body {
                to the L0 state until it is forced into another state
                through this configuration parameter.";
           }
-          enum "2" {
+          enum 2 {
             description
               "Force the line to transition from L0 full on to L2
                low power state. This transition requires the entry
@@ -154,16 +159,16 @@ submodule bbf-vdsl-test-mode-body {
                applicable, this value is ignored until its use is
                defined.";
           }
-          enum "3" {
+          enum 3 {
             description
-              "Force the line to transition from the L0 full-on or 
+              "Force the line to transition from the L0 full-on or
                L2 low power state to the L3 idle state. This
                transition requires the (orderly) shutdown procedure.
                After reaching the L3 state, the line will remain in
                the L3 idle state until it is forced into another
                state through this configuration parameter.";
           }
-          enum "4" {
+          enum 4 {
             description
               "No power management state forced.";
           }
@@ -177,22 +182,21 @@ submodule bbf-vdsl-test-mode-body {
           "ITU-T G.997.1 7.3.1.1.3 Power management state forced
            (PMSF)";
       }
-
       leaf loop-diagnostics-mode-forced {
         type enumeration {
-          enum "0" {
+          enum 0 {
             description
               "Inhibits the near-end xTU from performing loop
-               diagnostic mode procedures on the line. Loop 
+               diagnostic mode procedures on the line. Loop
                diagnostic mode procedures may still be initiated
                by the far-end xTU.";
           }
-          enum "1" {
+          enum 1 {
             description
               "Forces the near-end xTU to perform the loop
                diagnostic procedures.";
           }
-          enum "2" {
+          enum 2 {
             description
               "No loop diagnostic mode forced.";
           }
@@ -201,13 +205,13 @@ submodule bbf-vdsl-test-mode-body {
         description
           "This configuration parameter defines whether the line
            should be forced into the loop diagnostic mode by the
-           near-end xTU on this line. The default is no loop 
+           near-end xTU on this line. The default is no loop
            diagnostic mode forced, corresponding to enum 2.
 
            Upon completion of the loop diagnostics mode procedures,
            the xTUs return to the IDLE state. The loop diagnostic mode
            data are available at least until the loop diagnostics mode
-           is no longer forced (i.e., until a value different from 
+           is no longer forced (i.e., until a value different from
            enum 1 is configured). When the loop diagnostics mode is no
            longer forced, the xTUs resume normal operation.
 
@@ -218,7 +222,6 @@ submodule bbf-vdsl-test-mode-body {
           "ITU-T G.997.1 clause 7.3.1.1.8 Loop diagnostic mode
            forced (LDSF)";
       }
-
       leaf auto-mode-cold-start-forced {
         type uint8 {
           range "0..1";
@@ -226,11 +229,11 @@ submodule bbf-vdsl-test-mode-body {
         description
           "This parameter is defined in order to improve testing of
            the performance of xTUs supporting automode when it is
-           enabled in the MIB. The valid values are 0 and 1. A
-           change in value of this parameter indicates a change in
-           loop conditions applied to the devices under test. The
-           xTUs will reset any historical information used for
-           automode, for shortening G.994.1 handshake, or for
+           enabled in the Management Information Base (MIB). The valid
+           values are 0 and 1. A change in value of this parameter i
+           ndicates a change in loop conditions applied to the devices
+           under test. The xTUs will reset any historical information
+           used for automode, for shortening G.994.1 handshake, or for
            shortening the initialization procedure.
            The default is no automode cold start forced.";
         reference
@@ -238,16 +241,18 @@ submodule bbf-vdsl-test-mode-body {
            forced";
       }
     }
-  } // end grouping test-mode
+  }
+
+  // end grouping test-mode
 
   grouping update-test {
     description
       "This is defined so that test parameters can be forced to
        be updated.";
-
     container xtu-c {
       description
-        "The update-test-ne is performed on the xtu-c.";
+        "The update-test-ne is performed on the xDSL Transceiver
+         Unit - Central office.";
       leaf update-test-ne {
         type uint8 {
           range "0..1";
@@ -260,25 +265,24 @@ submodule bbf-vdsl-test-mode-body {
            showtime. The parameter is configurable over the
            Q-interface and the valid values are 0 and 1. When this
            parameter is set (its value is changed from 0 to 1), the
-           near-end test parameters will be updated in the AN MIB
-           within 10 seconds. The update request flag for the
-           near-end test parameters is defined in the AN MIB and is
-           independent of any autonomous update process in the
-           system. The parameter will be reset (its value changed
-           back to 0) by the AN after a period shorter than 3
-           minutes to allow reception of another update request.
-           The 3-minute period starts since the last time the flag
-           was set (externally or by an autonomous process in the
+           near-end test parameters will be updated in the Access Node
+           (AN) Management Information Base (MIB) within 10 seconds.
+           The update request flag for the near-end test parameters is
+           defined in the AN MIB and is independent of any autonomous
+           update process in the system. The parameter will be reset
+           (its value changed back to 0) by the AN after a period
+           shorter than 3 minutes to allow reception of another update
+           request. The 3-minute period starts since the last time the
+           flag was set (externally or by an autonomous process in the
            system). This applies only to the elements maintained in
            the AN.
 
-           A configuration change back to 0 is required before 
+           A configuration change back to 0 is required before
            initiating another update.";
         reference
           "ITU-T G.997.1 clause 7.5.1.36.1 Update request flag for
            near-end test parameters (UPDATE-TEST-NE)";
       }
-
       action update-near-end-test {
         description
           "Forces an update of the test parameters that can be
@@ -287,25 +291,25 @@ submodule bbf-vdsl-test-mode-body {
           "ITU-T G.997.1 clause 7.5.1.36.1 Update request flag for
            near-end test parameters (UPDATE-TEST-NE)";
       }
-
       leaf xlin-disturber-vce-port-index-ds {
         type vce-port-index;
         default "undefined";
         description
-          "The requested XLIN downstream disturber VCE port index.";
+          "The requested XLIN downstream disturber Vectoring Control
+           Entity (VCE) port index.";
       }
-
       leaf xlin-disturber-vce-port-index-us {
         type vce-port-index;
         default "undefined";
         description
-          "The requested XLIN upstream disturber VCE port index.";
+          "The requested XLIN upstream disturber Vectoring Control
+           Entity (VCE) port index.";
       }
     }
-
     container xtu-r {
       description
-        "The update-test-fe is performed on the xtu-r.";
+        "The update-test-fe is performed on the xDSL Transceiver
+         Unit - Remote site.";
       leaf update-test-fe {
         type uint8 {
           range "0..1";
@@ -318,25 +322,24 @@ submodule bbf-vdsl-test-mode-body {
            showtime. The parameter is configurable over the
            Q-interface and the valid values are 0 and 1. When this
            parameter is set (its value is changed from 0 to 1), the
-           far-end test parameters will be updated in the AN MIB
-           within 30 seconds. The update request flag for the
-           far-end test parameters is defined in the AN MIB and is
-           independent of any autonomous update process in the
-           system. The parameter will be reset (its value changed
-           back to 0) by the AN after a period shorter than 3
-           minutes to allow reception of another update request.
-           The 3-minute period starts since the last time the flag
-           was set (externally or by an autonomous process in the
+           far-end test parameters will be updated in the Access Node
+           (AN) Management Information Base (MIB) within 30 seconds.
+           The update request flag for the far-end test parameters is
+           defined in the AN MIB and is independent of any autonomous
+           update process in the system. The parameter will be reset
+           (its value changed back to 0) by the AN after a period
+           shorter than 3 minutes to allow reception of another update
+           request. The 3-minute period starts since the last time the
+           flag was set (externally or by an autonomous process in the
            system). This applies only to the elements maintained in
            the AN.
 
-           A configuration change back to 0 is required before 
+           A configuration change back to 0 is required before
            initiating another update.";
         reference
           "ITU-T G.997.1 clause 7.5.1.36.2 Update request flag for
            far-end test parameters (UPDATE-TEST-FE)";
       }
-
       action update-far-end-test {
         description
           "Forces an update of the test parameters that can be
@@ -346,5 +349,7 @@ submodule bbf-vdsl-test-mode-body {
            far-end test parameters (UPDATE-TEST-FE)";
       }
     }
-  } // end grouping update-test
-} // end submodule bbf-vdsl-test-mode-body
+  }
+
+  // end grouping update-test
+}

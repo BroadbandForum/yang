@@ -7,17 +7,16 @@ submodule bbf-selt-result-parameters {
   import ietf-interfaces {
     prefix if;
   }
-
   include bbf-selt-base;
 
   /* Result parameter bodies */
+
   include bbf-selt-pmd-measurement-parameter-body;
   include bbf-selt-processing-derived-parameter-body;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -33,12 +32,11 @@ submodule bbf-selt-result-parameters {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
-     managing SELT result parameters.
+     managing Single Ended Line Test (SELT) result parameters.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -78,9 +76,19 @@ submodule bbf-selt-result-parameters {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -102,24 +110,21 @@ submodule bbf-selt-result-parameters {
                         TR-355.pdf>";
   }
 
-
-  augment '/if:interfaces-state/if:interface/bbf-selt:selt' {
+  augment "/if:interfaces-state/if:interface/bbf-selt:selt" {
     description
-      "Data nodes to support the reporting of SELT result 
+      "Data nodes to support the reporting of SELT result
        parameters.";
-
     container pmd-measurement-parameters {
       description
-        "SELT-PMD measurement parameters";
-
+        "Single Ended Line Test Physical Medium Dependent (SELT-PMD)
+         measurement parameters.";
       uses pmd-measurement-parameters;
     }
-
     container processing-derived-parameters {
       if-feature "selt-p";
       description
-        "SELT-P derived parameters";
-
+        "Single Ended Line Test Processing (SELT-P) derived
+         parameters.";
       uses processing-derived-parameters;
     }
   }

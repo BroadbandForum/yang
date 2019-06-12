@@ -10,7 +10,6 @@ submodule bbf-melt-pmd-measurement-parameter-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -26,12 +25,12 @@ submodule bbf-melt-pmd-measurement-parameter-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
-     MELT-PMD measurement parameters.
+     Metallic Line Test Physical Medium Dependent (MELT-PMD)
+     measurement parameters.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -71,9 +70,19 @@ submodule bbf-melt-pmd-measurement-parameter-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -92,7 +101,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
     reference
       "TR-355c2: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_2.pdf>";
+                        TR-355_Corrigendum-2.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -108,7 +117,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
   identity melt-cdcr {
     base measurement-class;
     description
-      "The 4-element DC resistance with controlled metallic 
+      "The 4-element DC resistance with controlled metallic
        voltage";
     reference
       "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-xx)";
@@ -178,9 +187,10 @@ submodule bbf-melt-pmd-measurement-parameter-body {
     }
     units "1 ohm";
     description
-      "The 4-element DC resistances RTR, RRT, RTG and RRG, shall be
-       represented in linear format. The range of valid values is 
-       from 0 to 10 Mohms with a granularity of 1 ohm.";
+      "The 4-element DC resistances, RTR (Tip-to-Ring), RRT
+       (Ring-to-Tip), RTG (Tip-to-Ground), and RRG (Ring-to-Ground),
+       shall be represented in linear format. The range of valid
+       values is from 0 to 10 Mohms with a granularity of 1 ohm.";
     reference
       "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-TR, MELT-CDCR-RT,
        MELT-CDCR-TG, MELT-CDCR-RG)";
@@ -192,11 +202,12 @@ submodule bbf-melt-pmd-measurement-parameter-body {
     }
     units "0.1 nF";
     description
-      "The 3-element capacitances CTR, CTG and CRG, shall be 
-       represented in linear format. The range of valid values is 
-       from -2 to 5 uF with a granularity of 0.1 nF.";
+      "The 3-element capacitances, CTR (Tip-to-Ring), CTG
+       (Tip-to-Ground), and CRG (Ring-to-Ground), shall be represented
+       in linear format. The range of valid values is from -2 to 5 uF
+       with a granularity of 0.1 nF.";
     reference
-      "ITU-T G.996.2 clause E.2.3.4 (MELT-CC-TR, MELT-CC-TG, 
+      "ITU-T G.996.2 clause E.2.3.4 (MELT-CC-TR, MELT-CC-TG,
        MELT-CC-RG)";
   }
 
@@ -206,14 +217,15 @@ submodule bbf-melt-pmd-measurement-parameter-body {
     }
     units "100 mV";
     description
-      "The range of valid values for the foreign DC voltages 
-       VTR-DC, VTG-DC and VRG-DC is from -350 to 350V. The foreign 
-       DC voltage shall be represented in linear format with a 
-       granularity of 100 mV. 
+      "The range of valid values for the foreign DC voltages,
+       VTR-DC (Tip-to-Ring), VTG-DC (Tip-to-Ground), and VRG-DC
+       (Ring-to-Ground) is from -350 to 350V. The foreign DC voltage
+       shall be represented in linear format with a granularity of
+       100 mV.
 
-       The reported DC voltage polarity is defined with respect to 
-       ground for the VTG-DC and VRG-DC measurements and returns a 
-       positive result for the VTR-DC measurement if the tip wire 
+       The reported DC voltage polarity is defined with respect to
+       ground for the VTG-DC and VRG-DC measurements and returns a
+       positive result for the VTR-DC measurement if the tip wire
        is more positive than the ring wire. ";
     reference
       "ITU-T G.996.2 clause E.2.3.5 (MELT-FVDC-TR, MELT-FVDC-TG,
@@ -226,10 +238,11 @@ submodule bbf-melt-pmd-measurement-parameter-body {
     }
     units "100 mVrms";
     description
-      "The range of valid values for the foreign AC voltages 
-       VTR-AC, VTG-AC and VRG-AC is from 0 to 250Vrms. The foreign 
-       AC voltage shall be represented in linear format with a 
-       granularity of 100 mV.";
+      "The range of valid values for the foreign AC voltages
+       VTR-AC (Tip-to-Ring), VTG-AC (Tip-to-Ground), and VRG-AC
+       (Ring-To-Ground) is from 0 to 250Vrms. The foreign AC voltage
+       shall be represented in linear format with a granularity of
+       100 mV.";
     reference
       "ITU-T G.996.2 clause E.2.3.5 (MELT-FVAC-TR, MELT-FVAC-TG,
        MELT-FVAC-RG)";
@@ -241,9 +254,10 @@ submodule bbf-melt-pmd-measurement-parameter-body {
     }
     units "0.1 Hz";
     description
-      "The range of valid values for the foreign AC voltage 
-       frequencies FTR-AC, FTG-AC and FRG-AC is from 10 to 90 Hz with
-       a granularity of 0.1 Hz.";
+      "The range of valid values for the foreign AC voltage FTR-AC
+       (Tip-to-Ring), FTG-AC (Tip-to-Ground), and FRG-AC
+       (Ring-To-Ground) is from 10 to 90 Hz with a granularity
+       of 0.1 Hz.";
     reference
       "ITU-T G.996.2 clause E.2.3.5 (MELT-FVACF-TR, MELT-FVACF-TG,
        MELT-FVACF-RG)";
@@ -255,13 +269,14 @@ submodule bbf-melt-pmd-measurement-parameter-body {
     }
     units "1 ohm";
     description
-      "The loop resistances RTR-HV and RRT-HV shall be represented in
-       linear format. The range of valid values is from 0 to 10 Mohms
-       with a granularity of 1 ohm. The RTR-HV and RRT-HV values of 
-       the loop resistance with high metallic voltage test are the 
-       total resistances measured. The RTR and RRT values obtained 
-       from the 3-element resistance with controlled metallic voltage
-       test are not subtracted from the results.";
+      "The loop resistances RTF-HV (Tip-to-Ring) and RRT-HV
+       (Ring-to-Tip) shall be represented in linear format. The range
+       of valid values is from 0 to 10 Mohms with a granularity of 1
+       ohm. The RTR-HV and RRT-HV values of the loop resistance with
+       high metallic voltage test are the total resistances measured.
+       The RTR and RRT values obtained from the 3-element resistance
+       with controlled metallic voltage test are not subtracted from
+       the results.";
     reference
       "ITU-T G.996.2 clause E.2.3.7 (MELT-HDCR-TR, MELT-HDCR-RT)";
   }
@@ -272,12 +287,13 @@ submodule bbf-melt-pmd-measurement-parameter-body {
     }
     units "0.1 V";
     description
-      "The test voltages for the measurement of the 4-element DC 
-       resistance VDCTR, VDCRT, VDCTG and VDCRG, shall be represented
-       in linear format. The range of valid values is from -150 V to 
-       +150 V with a granularity of 0.1 V.";
+      "The test voltages for the measurement of the 4-element DC
+       resistance, VDCTR (Tip-to-Ring), VDCRT (Ring-to-Tip), VDCTG
+       (Tip-to-Ground), and VDCRG (Ring-to-Ground), shall be
+       represented in linear format. The range of valid values is from
+       -150 V to +150 V with a granularity of 0.1 V.";
     reference
-      "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-TR, MELT-CDCV-RT, 
+      "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-TR, MELT-CDCV-RT,
        MELT-CDCV-TG, MELT-CDCV-RG)";
   }
 
@@ -287,12 +303,13 @@ submodule bbf-melt-pmd-measurement-parameter-body {
     }
     units "1 uA";
     description
-      "The test currents for the measurement of the 4-element DC 
-       resistance IDCTR, IDCRT, IDCTG and IDCRG, shall be represented
-       in linear format. The range of valid values is from -1 A to 
-       +1 A with a granularity of 1 uA.";
+      "The test currents for the measurement of the 4-element DC
+       resistance, IDCTR (Tip-to-Ring), IDCRT (Ring-to-Tip),
+       IDCTG (Tip-to-Ground), and IDCRG (Ring-to-Ground), shall be
+       represented in linear format. The range of valid values is from
+       -1 A to +1 A with a granularity of 1 uA.";
     reference
-      "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-TR, MELT-CDCI-RT, 
+      "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-TR, MELT-CDCI-RT,
        MELT-CDCI-TG, MELT-CDCI-RG)";
   }
 
@@ -302,10 +319,11 @@ submodule bbf-melt-pmd-measurement-parameter-body {
     }
     units "0.1 V";
     description
-      "The test voltages for the measurement of the loop resistance 
-       with a high metallic voltage VDCHTR and VDCHRT shall be 
-       represented in linear format. The range of valid values is 
-       from -150 V to +150 V with a granularity of 0.1 V.";
+      "The test voltages for the measurement of the loop resistance
+       with a high metallic voltage, VDCHTR (Tip-to-Ring) and
+       VDCHRT (Ring-to-Tip) shall be represented in linear format.
+       The range of valid values is from -150 V to +150 V with a
+       granularity of 0.1 V.";
     reference
       "ITU-T G.996.2 clause E.2.3.8 (MELT-HDCV-TR, MELT-HDCV-RT)";
   }
@@ -316,31 +334,32 @@ submodule bbf-melt-pmd-measurement-parameter-body {
     }
     units "0.1 V";
     description
-      "The range of valid values for the AC voltages VACTR-CC, 
-       VACTG-CC, and VACRG-CC for the 3-element capacitance test with
-       a controlled metallic voltage is from 0 V rms to 150 V rms. 
-       The values shall be represented in linear format with a 
-       granularity of 0.1 V. 
-
-       The range of valid values for the AC voltage VACTR-HC for the 
-       loop capacitance test with a high metallic voltage is from 0 
-       Vrms to 150 Vrms. The values shall be represented in linear 
-       format with a granularity of 0.1 V.
-
-       The range of valid values for the AC voltages VACTR-CA, 
-       VACTG-CA, and VACRG-CA for the 3-element complex admittance 
-       test with a controlled metallic voltage is from 0 Vrms to 150 
-       Vrms. The values shall be represented in linear format with a 
+      "The range of valid values for the AC voltages VACTR-CC
+       (Tip-to-Ring), VACTG-CC (Tip-to-Ground), and VACRG-CC
+       (Ring-to-Ground) for the 3-element capacitance test with
+       a controlled metallic voltage is from 0 V rms to 150 V rms.
+       The values shall be represented in linear format with a
        granularity of 0.1 V.
 
-       The range of valid values for the AC voltage VACTR-HA for the 
-       loop complex admittance test with a high metallic voltage is 
-       from 0 V rms to 150 V rms. The values shall be represented in 
+       The range of valid values for the AC voltage VACTR-HC for the
+       loop capacitance test with a high metallic voltage is from 0
+       Vrms to 150 Vrms. The values shall be represented in linear
+       format with a granularity of 0.1 V.
+
+       The range of valid values for the AC voltages VACTR-CA,
+       VACTG-CA, and VACRG-CA for the 3-element complex admittance
+       test with a controlled metallic voltage is from 0 Vrms to 150
+       Vrms. The values shall be represented in linear format with a
+       granularity of 0.1 V.
+
+       The range of valid values for the AC voltage VACTR-HA for the
+       loop complex admittance test with a high metallic voltage is
+       from 0 V rms to 150 V rms. The values shall be represented in
        linear format with a granularity of 0.1 V.";
     reference
-      "ITU-T G.996.2 clauses E.2.3.11 (MELT-ACV-CC-TR, 
-       MELT-ACV-CC-TG, MELT-ACV-CC-RG); E.2.3.12 (MELT-ACV-HC-TR); 
-       E.2.3.13 (MELT-ACV-CA-TR, MELT-ACV-CA-TG, MELT-ACV-CA-RG);  
+      "ITU-T G.996.2 clauses E.2.3.11 (MELT-ACV-CC-TR,
+       MELT-ACV-CC-TG, MELT-ACV-CC-RG); E.2.3.12 (MELT-ACV-HC-TR);
+       E.2.3.13 (MELT-ACV-CA-TR, MELT-ACV-CA-TG, MELT-ACV-CA-RG);
        E.2.3.14 (MELT-ACV-HA-TR); and E.2.2.3 (MELT-HCA-V)";
   }
 
@@ -350,16 +369,17 @@ submodule bbf-melt-pmd-measurement-parameter-body {
     }
     units "0.1 uSiemens";
     description
-      "The range of valid values for the 3-element complex 
-       conductances and susceptances GTR, BTR, GTG, BTG, GRG and BRG 
-       is from 0.1 uSiemens to 0.1 Siemens. The values shall be 
-       represented in linear format with a granularity of 0.1 
+      "The range of valid values for the 3-element complex
+       conductances and susceptances, GTR and BTR (Tip-to-Ring);
+       GTG and BTG (Tip-to-Ground); and GRG and BRG (Ring-to-Ground)
+       is from 0.1 uSiemens to 0.1 Siemens. The values shall be
+       represented in linear format with a granularity of 0.1
        uSiemens.
 
-       NOTE - The linear format is chosen for simplicity reason and 
+       NOTE - The linear format is chosen for simplicity reason and
        does not imply any future accuracy requirements.";
     reference
-      "ITU-T G.996.2 clause E.2.3.9 (MELT-CAG-TR, MELT-CAB-TR, 
+      "ITU-T G.996.2 clause E.2.3.9 (MELT-CAG-TR, MELT-CAB-TR,
        MELT-CAG-TG, MELT-CAB-TG, MELT-CAG-RG, MELT-CAB-RG)";
   }
 
@@ -369,590 +389,544 @@ submodule bbf-melt-pmd-measurement-parameter-body {
     }
     units "0.1 uSiemens";
     description
-      "The range of valid values for the 3-element complex 
-       conductance and susceptance GTR,HV, and BTR,HV is from 0.1 
-       uSiemens to 0.1 Siemens. The values shall be represented in 
-       linear format with a granularity of 0.1 uSiemens. The GTR,HV 
-       and BTR,HV values of the loop complex admittance with high 
-       metallic voltage test are the total conductance and 
-       susceptance measured. The GTR and BTR values obtained from the
-       3-element complex admittance with controlled metallic voltage 
-       test are not subtracted from the results.
+      "The range of valid values for the 3-element complex
+       conductance and susceptance GTR,HV and BTR,HV (Tip-to-Ring) is
+       from 0.1 uSiemens to 0.1 Siemens. The values shall be
+       represented in linear format with a granularity of 0.1
+       uSiemens. The GTR,HV and BTR,HV values of the loop complex
+       admittance with high metallic voltage test are the total
+       conductance and susceptance measured. The GTR and BTR values
+       obtained from the 3-element complex admittance with controlled
+       metallic voltage test are not subtracted from the results.
 
-       NOTE - The linear format is chosen for simplicity reason and 
+       NOTE - The linear format is chosen for simplicity reason and
        does not imply any future accuracy requirements.";
     reference
       "ITU-T G.996.2 clause E.2.3.10 (MELT-HAG-TR, MELT-HAB-TR)";
   }
 
-
   grouping pmd-measurement-parameters {
     description
-      "Defines the MELT-PMD measurement parameters.";
-
+      "Defines the Metallic Line Test Physical Medium Dependent
+       (MELT-PMD) measurement parameters.";
     leaf four-element-dc-resistance-tr {
       type four-element-dc-resistance;
       description
-        "The 4-element DC resistance with controlled metallic 
-         voltage, RTR (tip-to-ring)";
+        "The 4-element DC resistance with controlled metallic
+         voltage, RTR (Tip-to-Ring)";
       reference
         "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-TR)";
     }
-
     leaf four-element-dc-resistance-rt {
       type four-element-dc-resistance;
       description
-        "The 4-element DC resistance with controlled metallic 
-         voltage, RRT (ring-to-tip)";
+        "The 4-element DC resistance with controlled metallic
+         voltage, RRT (Ring-to-Tip)";
       reference
         "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-RT)";
     }
-
     leaf four-element-dc-resistance-tg {
       type four-element-dc-resistance;
       description
-        "The 4-element DC resistance with controlled metallic 
-         voltage, RTG (tip-to-ground)";
+        "The 4-element DC resistance with controlled metallic
+         voltage, RTG (Tip-to-Ground)";
       reference
         "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-TG)";
     }
-
     leaf four-element-dc-resistance-rg {
       type four-element-dc-resistance;
       description
-        "The 4-element DC resistance with controlled metallic 
-         voltage, RRG (ring-to-ground)";
+        "The 4-element DC resistance with controlled metallic
+         voltage, RRG (Ring-to-Ground)";
       reference
         "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-RG)";
     }
-
     leaf three-element-capacitance-tr {
       type three-element-capacitance;
       description
-        "The 3-element capacitance with controlled metallic voltage, 
-         CTR (tip-to-ring)";
+        "The 3-element capacitance with controlled metallic voltage,
+         CTR (Tip-to-Ring)";
       reference
         "ITU-T G.996.2 clause E.2.3.4 (MELT-CC-TR)";
     }
-
     leaf three-element-capacitance-tg {
       type three-element-capacitance;
       description
-        "The 3-element capacitance with controlled metallic voltage, 
-         CTG (tip-to-ground)";
+        "The 3-element capacitance with controlled metallic voltage,
+         CTG (Tip-to-Ground)";
       reference
         "ITU-T G.996.2 clause E.2.3.4 (MELT-CC-TG)";
     }
-
     leaf three-element-capacitance-rg {
       type three-element-capacitance;
       description
-        "The 3-element capacitance with controlled metallic voltage, 
-         CRG (ring-to-ground)";
+        "The 3-element capacitance with controlled metallic voltage,
+         CRG (Ring-to-Ground)";
       reference
         "ITU-T G.996.2 clause E.2.3.4 (MELT-CC-RG)";
     }
-
     leaf foreign-dc-voltage-tr {
       type foreign-dc-voltage;
       description
-        "The foreign DC voltage, VTR-DC (tip-to-ring)";
+        "The foreign DC voltage, VTR-DC (Tip-to-Ring)";
       reference
         "ITU-T G.996.2 clause E.2.3.5 (MELT-FVDC-TR)";
     }
-
     leaf foreign-dc-voltage-tg {
       type foreign-dc-voltage;
       description
-        "The foreign DC voltage, VTG-DC (tip-to-ground)";
+        "The foreign DC voltage, VTG-DC (Tip-to-Ground)";
       reference
         "ITU-T G.996.2 clause E.2.3.5 (MELT-FVDC-TG)";
     }
-
     leaf foreign-dc-voltage-rg {
       type foreign-dc-voltage;
       description
-        "The foreign DC voltage, VRG-DC (ring-to-ground)";
+        "The foreign DC voltage, VRG-DC (Ring-to-Ground)";
       reference
         "ITU-T G.996.2 clause E.2.3.5 (MELT-FVDC-RG)";
     }
-
     leaf foreign-ac-voltage-tr {
       type foreign-ac-voltage;
       description
-        "The foreign AC voltage, VTR-AC (tip-to-ring)";
+        "The foreign AC voltage, VTR-AC (Tip-to-Ring)";
       reference
         "ITU-T G.996.2 clause E.2.3.5 (MELT-FVAC-TR)";
     }
-
     leaf foreign-ac-voltage-tg {
       type foreign-ac-voltage;
       description
-        "The foreign AC voltage, VTG-AC (tip-to-ground)";
+        "The foreign AC voltage, VTG-AC (Tip-to-Ground)";
       reference
         "ITU-T G.996.2 clause E.2.3.5 (MELT-FVAC-TG)";
     }
-
     leaf foreign-ac-voltage-rg {
       type foreign-ac-voltage;
       description
-        "The foreign AC voltage, VRG-AC (ring-to-ground)";
+        "The foreign AC voltage, VRG-AC (Ring-to-Ground)";
       reference
         "ITU-T G.996.2 clause E.2.3.5 (MELT-FVAC-RG)";
     }
-
     leaf foreign-ac-voltage-frequency-tr {
       type foreign-ac-voltage-frequency;
       description
-        "The foreign AC voltage frequency for VTR-AC (tip-to-ring)";
+        "The foreign AC voltage frequency for VTR-AC (Tip-to-Ring)";
       reference
         "ITU-T G.996.2 clause E.2.3.5 (MELT-FVACF-TR)";
     }
-
     leaf foreign-ac-voltage-frequency-tg {
       type foreign-ac-voltage-frequency;
       description
-        "The foreign AC voltage frequency for VTG-AC 
-         (tip-to-ground)";
+        "The foreign AC voltage frequency for VTG-AC
+         (Tip-to-Ground)";
       reference
         "ITU-T G.996.2 clause E.2.3.5 (MELT-FVACF-TG)";
     }
-
     leaf foreign-ac-voltage-frequency-rg {
       type foreign-ac-voltage-frequency;
       description
-        "The foreign AC voltage frequency for VRG-AC 
-         (ring-to-ground)";
+        "The foreign AC voltage frequency for VRG-AC
+         (Ring-to-Ground)";
       reference
         "ITU-T G.996.2 clause E.2.3.5 (MELT-FVACF-RG)";
     }
-
     leaf loop-capacitance-hv-tr {
       type int32 {
         range "-20000..50000";
       }
       units "0.1 nF";
       description
-        "The loop capacitance CTR-HV shall be represented in linear 
-         format. The range of valid values is from -2 to 5 uF with a 
-         granularity of 0.1 nF. The CTR-HV value of the loop 
-         capacitance with high metallic voltage test is the total 
-         capacitance measured. The CTR value obtained from the 
-         3-element capacitance with controlled metallic voltage test 
-         is not subtracted from the results.";
+        "The loop capacitance CTR-HV (Tip-to-Ring) shall be
+         represented in linear format. The range of valid values is
+         from -2 to 5 uF with a granularity of 0.1 nF. The CTR-HV
+         value of the loop capacitance with high metallic voltage test
+         is the total capacitance measured. The CTR value obtained
+         from the 3-element capacitance with controlled metallic
+         voltage test is not subtracted from the results.";
       reference
         "ITU-T G.996.2 clause E.2.3.6 (MELT-HV-TR)";
     }
-
     leaf loop-resistance-hv-tr {
       type loop-resistance;
       description
         "The loop resistance with high metallic voltage, RTR-HV
-         (tip-to-ring)";
+         (Tip-to-Ring)";
       reference
         "ITU-T G.996.2 clause E.2.3.7 (MELT-HDCR-TR)";
     }
-
     leaf loop-resistance-hv-rt {
       type loop-resistance;
       description
         "The loop resistance with high metallic voltage, RRT-HV
-         (ring-to-tip)";
+         (Ring-to-Tip)";
       reference
         "ITU-T G.996.2 clause E.2.3.7 (MELT-HDCR-RT)";
     }
-
     leaf four-element-dc-resistance-test-voltage-tr {
       type dc-test-voltage;
       description
         "The DC test voltage for the measuremnt of 4-element DC
          resistance with a controlled metallic voltage VDC-TR
-         (tip-to-ring)";
+         (Tip-to-Ring)";
       reference
         "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-TR)";
     }
-
     leaf four-element-dc-resistance-test-voltage-rt {
       type dc-test-voltage;
       description
         "The DC test voltage for the measuremnt of 4-element DC
          resistance with a controlled metallic voltage VDC-RT
-         (ring-to-tip)";
+         (Ring-to-Tip)";
       reference
         "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-RT)";
     }
-
     leaf four-element-dc-resistance-test-voltage-tg {
       type dc-test-voltage;
       description
         "The DC test voltage for the measuremnt of 4-element DC
          resistance with a controlled metallic voltage VDC-TG
-         (tip-to-ground)";
+         (Tip-to-Ground)";
       reference
         "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-TG)";
     }
-
     leaf four-element-dc-resistance-test-voltage-rg {
       type dc-test-voltage;
       description
         "The DC test voltage for the measuremnt of 4-element DC
          resistance with a controlled metallic voltage VDC-RG
-         (ring-to-ground)";
+         (Ring-to-Ground)";
       reference
         "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-RG)";
     }
-
     leaf four-element-dc-resistance-test-current-tr {
       type test-current;
       description
         "The test current for the measuremnt of 4-element DC
          resistance with a controlled metallic voltage IDC-TR
-         (tip-to-ring)";
+         (Tip-to-Ring)";
       reference
         "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-TR)";
     }
-
     leaf four-element-dc-resistance-test-current-rt {
       type test-current;
       description
         "The test current for the measuremnt of 4-element DC
          resistance with a controlled metallic voltage IDC-RT
-         (ring-to-tip)";
+         (Ring-to-Tip)";
       reference
         "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-RT)";
     }
-
     leaf four-element-dc-resistance-test-current-tg {
       type test-current;
       description
         "The test current for the measuremnt of 4-element DC
          resistance with a controlled metallic voltage IDC-TG
-         (tip-to-ground)";
+         (Tip-to-Ground)";
       reference
         "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-TG)";
     }
-
     leaf four-element-dc-resistance-test-current-rg {
       type test-current;
       description
         "The test current for the measuremnt of 4-element DC
          resistance with a controlled metallic voltage IDC-RG
-         (ring-to-ground)";
+         (Ring-to-Ground)";
       reference
         "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-RG)";
     }
-
     leaf loop-resistance-test-voltage-tr {
       type loop-resistance-test-voltage;
       description
         "The test voltage for the measurement of the loop resistance
-         with a high metallic voltage VDCH-TR (tip-to-ring)";
+         with a high metallic voltage VDCH-TR (Tip-to-Ring)";
       reference
         "ITU-T G.996.2 clause E.2.3.8 (MELT-HDCV-TR)";
     }
-
     leaf loop-resistance-test-voltage-rt {
       type loop-resistance-test-voltage;
       description
         "The test voltage for the measurement of the loop resistance
-         with a high metallic voltage VDCH-RT (ring-to-tip)";
+         with a high metallic voltage VDCH-RT (Ring-to-Tip)";
       reference
         "ITU-T G.996.2 clause E.2.3.8 (MELT-HDCV-RT)";
     }
-
     leaf three-element-complex-admittance-real-tr {
       type complex-admittance;
       description
         "The real part of the 3-element complex admittance
-         with controlled metallic voltage (tip-to-ring)";
+         with controlled metallic voltage (Tip-to-Ring)";
       reference
         "ITU-T G.996.2 clause E.2.3.9 (MELT-CAG-TR)";
     }
-
     leaf three-element-complex-admittance-imaginary-tr {
       type complex-admittance;
       description
         "The imaginary part of the 3-element complex admittance
-         with controlled metallic voltage (tip-to-ring)";
+         with controlled metallic voltage (Tip-to-Ring)";
       reference
         "ITU-T G.996.2 clause E.2.3.9 (MELT-CAB-TR)";
     }
-
     leaf three-element-complex-admittance-real-tg {
       type complex-admittance;
       description
         "The real part of the 3-element complex admittance
-         with controlled metallic voltage (tip-to-ground)";
+         with controlled metallic voltage (Tip-to-Ground)";
       reference
         "ITU-T G.996.2 clause E.2.3.9 (MELT-CAG-TG)";
     }
-
     leaf three-element-complex-admittance-imaginary-tg {
       type complex-admittance;
       description
         "The imaginary part of the 3-element complex admittance
-         with controlled metallic voltage (tip-to-ground)";
+         with controlled metallic voltage (Tip-to-Ground)";
       reference
         "ITU-T G.996.2 clause E.2.3.9 (MELT-CAB-TG)";
     }
-
     leaf three-element-complex-admittance-real-rg {
       type complex-admittance;
       description
         "The real part of the 3-element complex admittance
-         with controlled metallic voltage (ring-to-ground)";
+         with controlled metallic voltage (Ring-to-Ground)";
       reference
         "ITU-T G.996.2 clause E.2.3.9 (MELT-CAG-RG)";
     }
-
     leaf three-element-complex-admittance-imaginary-rg {
       type complex-admittance;
       description
         "The imaginary part of the 3-element complex admittance
-         with controlled metallic voltage (ring-to-ground)";
+         with controlled metallic voltage (Ring-to-Ground)";
       reference
         "ITU-T G.996.2 clause E.2.3.9 (MELT-CAB-RG)";
     }
-
     leaf loop-complex-admittance-real-hv-tr {
       type loop-complex-admittance;
       description
-        "The real part of the loop complex admittance with high 
-         metallic voltage (tip-to-ring)";
+        "The real part of the loop complex admittance with high
+         metallic voltage (Tip-to-Ring)";
       reference
         "ITU-T G.996.2 clause E.2.3.10 (MELT-HAG-TR)";
     }
-
     leaf loop-complex-admittance-imaginary-hv-tr {
       type loop-complex-admittance;
       description
-        "The imaginary part of the loop complex admittance with high 
-         metallic voltage (tip-to-ring)";
+        "The imaginary part of the loop complex admittance with high
+         metallic voltage (Tip-to-Ring)";
       reference
         "ITU-T G.996.2 clause E.2.3.10 (MELT-HAB-TR)";
     }
-
     leaf three-element-capacitance-measurement-voltage-tr {
       type measurement-voltage;
       description
-        "The range of valid values for the AC voltage VACTR-CC 
+        "The range of valid values for the AC voltage VACTR-CC
          for the 3-element capacitance test with a controlled metallic
-         voltage is from 0 V rms to 150 V rms. The values shall be 
+         voltage is from 0 V rms to 150 V rms. The values shall be
          represented in linear format with a granularity of 0.1 V.";
       reference
         "ITU-T G.996.2 clause E.2.3.11 (MELT-ACV-CC-TR)";
     }
-
     leaf three-element-capacitance-measurement-voltage-tg {
       type measurement-voltage;
       description
-        "The range of valid values for the AC voltage VACTG-CC 
+        "The range of valid values for the AC voltage VACTG-CC
          for the 3-element capacitance test with a controlled metallic
-         voltage is from 0 V rms to 150 V rms. The values shall be 
+         voltage is from 0 V rms to 150 V rms. The values shall be
          represented in linear format with a granularity of 0.1 V.";
       reference
         "ITU-T G.996.2 clause E.2.3.11 (MELT-ACV-CC-TG)";
     }
-
     leaf three-element-capacitance-measurement-voltage-rg {
       type measurement-voltage;
       description
-        "The range of valid values for the AC voltage VACRG-CC 
+        "The range of valid values for the AC voltage VACRG-CC
          for the 3-element capacitance test with a controlled metallic
-         voltage is from 0 V rms to 150 V rms. The values shall be 
+         voltage is from 0 V rms to 150 V rms. The values shall be
          represented in linear format with a granularity of 0.1 V.";
       reference
         "ITU-T G.996.2 clause E.2.3.11 (MELT-ACV-CC-RG)";
     }
-
     leaf loop-capacitance-measurement-voltage-tr {
       type measurement-voltage;
       description
         "The range of valid values for the AC voltage VACTR-HC for the
-         loop capacitance test with a high metallic voltage is from 0 
+         loop capacitance test with a high metallic voltage is from 0
          V rms to 150 V rms. The values shall be represented in linear
          format with a granularity of 0.1 V.";
       reference
         "ITU-T G.996.2 clause E.2.3.12 (MELT-ACV-HC-TR)";
     }
-
     leaf three-element-complex-admittance-measurement-voltage-tr {
       type measurement-voltage;
       description
         "The range of valid values for the AC voltage VACTR-CA for the
-         3-element complex admittance test with a controlled metallic 
-         voltage is from 0 V rms to 150 V rms. The values shall be 
+         3-element complex admittance test with a controlled metallic
+         voltage is from 0 V rms to 150 V rms. The values shall be
          represented in linear format with a granularity of 0.1 V.";
       reference
         "ITU-T G.996.2 clause E.2.3.13 (MELT-ACV-CA-TR)";
     }
-
     leaf three-element-complex-admittance-measurement-voltage-tg {
       type measurement-voltage;
       description
         "The range of valid values for the AC voltage VACTG-CA for the
-         3-element complex admittance test with a controlled metallic 
-         voltage is from 0 V rms to 150 V rms. The values shall be 
+         3-element complex admittance test with a controlled metallic
+         voltage is from 0 V rms to 150 V rms. The values shall be
          represented in linear format with a granularity of 0.1 V.";
       reference
         "ITU-T G.996.2 clause E.2.3.13 (MELT-ACV-CA-TG)";
     }
-
     leaf three-element-complex-admittance-measurement-voltage-rg {
       type measurement-voltage;
       description
         "The range of valid values for the AC voltage VACRG-CA for the
-         3-element complex admittance test with a controlled metallic 
-         voltage is from 0 V rms to 150 V rms. The values shall be 
+         3-element complex admittance test with a controlled metallic
+         voltage is from 0 V rms to 150 V rms. The values shall be
          represented in linear format with a granularity of 0.1 V.";
       reference
         "ITU-T G.996.2 clause E.2.3.13 (MELT-ACV-CA-RG)";
     }
-
     leaf loop-complex-admittance-measurement-voltage-tr {
       type measurement-voltage;
       description
         "The range of valid values for the AC voltage VACTR-HA for the
-         loop complex admittance test with a high metallic voltage is 
+         loop complex admittance test with a high metallic voltage is
          from 0 V rms to 150 V rms. The values shall be represented in
          linear format with a granularity of 0.1 V.";
       reference
         "ITU-T G.996.2 clause E.2.3.14 (MELT-ACV-HA-TR)";
     }
-
-
     leaf unreliability-indicator {
       if-feature "melt-pmd-measurement-parameter-reliability";
       type bits {
         bit four-element-dc-resistance-tr {
           description
-            "The 4-element DC resistance with controlled metallic 
-             voltage, RTR (tip-to-ring).";
+            "The 4-element DC resistance with controlled metallic
+             voltage, RTR (Tip-to-Ring).";
           reference
             "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-TR)";
         }
         bit four-element-dc-resistance-rt {
           description
-            "The 4-element DC resistance with controlled metallic 
-             voltage, RRT (ring-to-tip).";
+            "The 4-element DC resistance with controlled metallic
+             voltage, RRT (Ring-to-Tip).";
           reference
             "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-RT)";
         }
         bit four-element-dc-resistance-tg {
           description
-            "The 4-element DC resistance with controlled metallic 
-             voltage, RTG (tip-to-ground.)";
+            "The 4-element DC resistance with controlled metallic
+             voltage, RTG (Tip-to-Ground.)";
           reference
             "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-TG)";
         }
         bit four-element-dc-resistance-rg {
           description
-            "The 4-element DC resistance with controlled metallic 
-             voltage, RRG (ring-to-ground).";
+            "The 4-element DC resistance with controlled metallic
+             voltage, RRG (Ring-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-RG)";
         }
         bit three-element-capacitance-tr {
           description
-            "The 3-element capacitance with controlled metallic 
-             voltage, CTR (tip-to-ring).";
+            "The 3-element capacitance with controlled metallic
+             voltage, CTR (Tip-to-Ring).";
           reference
             "ITU-T G.996.2 clause E.2.3.4 (MELT-CC-TR)";
         }
         bit three-element-capacitance-tg {
           description
-            "The 3-element capacitance with controlled metallic 
-             voltage, CTG (tip-to-ground).";
+            "The 3-element capacitance with controlled metallic
+             voltage, CTG (Tip-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.4 (MELT-CC-TG)";
         }
         bit three-element-capacitance-rg {
           description
-            "The 3-element capacitance with controlled metallic 
-             voltage, CRG (ring-to-ground).";
+            "The 3-element capacitance with controlled metallic
+             voltage, CRG (Ring-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.4 (MELT-CC-RG)";
         }
         bit foreign-dc-voltage-tr {
           description
-            "The foreign DC voltage, VTR-DC (tip-to-ring).";
+            "The foreign DC voltage, VTR-DC (Tip-to-Ring).";
           reference
             "ITU-T G.996.2 clause E.2.3.5 (MELT-FVDC-TR)";
         }
         bit foreign-dc-voltage-tg {
           description
-            "The foreign DC voltage, VTG-DC (tip-to-ground).";
+            "The foreign DC voltage, VTG-DC (Tip-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.5 (MELT-FVDC-TG)";
         }
         bit foreign-dc-voltage-rg {
           description
-            "The foreign DC voltage, VRG-DC (ring-to-ground).";
+            "The foreign DC voltage, VRG-DC (Ring-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.5 (MELT-FVDC-RG)";
         }
         bit foreign-ac-voltage-tr {
           description
-            "The foreign AC voltage, VTR-AC (tip-to-ring).";
+            "The foreign AC voltage, VTR-AC (Tip-to-Ring).";
           reference
             "ITU-T G.996.2 clause E.2.3.5 (MELT-FVAC-TR)";
         }
         bit foreign-ac-voltage-tg {
           description
-            "The foreign AC voltage, VTG-AC (tip-to-ground).";
+            "The foreign AC voltage, VTG-AC (Tip-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.5 (MELT-FVAC-TG)";
         }
         bit foreign-ac-voltage-rg {
           description
-            "The foreign AC voltage, VRG-AC (ring-to-ground).";
+            "The foreign AC voltage, VRG-AC (Ring-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.5 (MELT-FVAC-RG)";
         }
         bit foreign-ac-voltage-frequency-tr {
           description
-            "The foreign AC voltage frequency for VTR-AC 
-             (tip-to-ring).";
+            "The foreign AC voltage frequency for VTR-AC
+             (Tip-to-Ring).";
           reference
             "ITU-T G.996.2 clause E.2.3.5 (MELT-FVACF-TR)";
         }
         bit foreign-ac-voltage-frequency-tg {
           description
-            "The foreign AC voltage frequency for VTG-AC 
-             (tip-to-ground).";
+            "The foreign AC voltage frequency for VTG-AC
+             (Tip-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.5 (MELT-FVACF-TG)";
         }
         bit foreign-ac-voltage-frequency-rg {
           description
-            "The foreign AC voltage frequency for VRG-AC 
-             (ring-to-ground).";
+            "The foreign AC voltage frequency for VRG-AC
+             (Ring-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.5 (MELT-FVACF-RG)";
         }
         bit loop-capacitance-hv-tr {
           description
-            "The loop capacitance CTR-HV shall be represented in 
-             linear format. The range of valid values is from 0 to 5 
-             uF with a granularity of 0.1 nF. The CTR-HV value of the 
-             loop capacitance with high metallic voltage test is the 
-             total capacitance measured. The CTR value obtained from 
-             the 3-element capacitance with controlled metallic 
-             voltage test is not subtracted from the results.";
+            "The loop capacitance CTR-HV (Tip-to-Ring) shall be
+             represented in linear format. The range of valid values
+             is from 0 to 5 uF with a granularity of 0.1 nF. The
+             CTR-HV value of the loop capacitance with high metallic
+             voltage test is the total capacitance measured. The CTR
+             value obtained from the 3-element capacitance with
+             controlled metallic voltage test is not subtracted from
+             the results.";
           reference
             "ITU-T G.996.2 clause E.2.3.6 (MELT-HV-TR)";
         }
         bit loop-resistance-hv-tr {
           description
             "The loop resistance with high metallic voltage, RTR-HV
-             (tip-to-ring).";
+             (Tip-to-Ring).";
           reference
             "ITU-T G.996.2 clause E.2.3.7 (MELT-HDCR-TR.";
         }
         bit loop-resistance-hv-rt {
           description
             "The loop resistance with high metallic voltage, RRT-HV
-             (ring-to-tip).";
+             (Ring-to-Tip).";
           reference
             "ITU-T G.996.2 clause E.2.3.7 (MELT-HDCR-RT)";
         }
@@ -960,7 +934,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
           description
             "The DC test voltage for the measuremnt of 4-element DC
              resistance with a controlled metallic voltage VDC-TR
-             (tip-to-ring).";
+             (Tip-to-Ring).";
           reference
             "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-TR)";
         }
@@ -968,7 +942,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
           description
             "The DC test voltage for the measuremnt of 4-element DC
              resistance with a controlled metallic voltage VDC-RT
-             (ring-to-tip).";
+             (Ring-to-Tip).";
           reference
             "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-RT)";
         }
@@ -976,7 +950,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
           description
             "The DC test voltage for the measuremnt of 4-element DC
              resistance with a controlled metallic voltage VDC-TG
-             (tip-to-ground).";
+             (Tip-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-TG)";
         }
@@ -984,7 +958,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
           description
             "The DC test voltage for the measuremnt of 4-element DC
              resistance with a controlled metallic voltage VDC-RG
-             (ring-to-ground).";
+             (Ring-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-RG)";
         }
@@ -992,7 +966,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
           description
             "The test current for the measuremnt of 4-element DC
              resistance with a controlled metallic voltage IDC-TR
-             (tip-to-ring).";
+             (Tip-to-Ring).";
           reference
             "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-TR)";
         }
@@ -1000,7 +974,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
           description
             "The test current for the measuremnt of 4-element DC
              resistance with a controlled metallic voltage IDC-RT
-             (ring-to-tip).";
+             (Ring-to-Tip).";
           reference
             "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-RT)";
         }
@@ -1008,7 +982,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
           description
             "The test current for the measuremnt of 4-element DC
              resistance with a controlled metallic voltage IDC-TG
-             (tip-to-ground).";
+             (Tip-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-TG)";
         }
@@ -1016,140 +990,140 @@ submodule bbf-melt-pmd-measurement-parameter-body {
           description
             "The test current for the measuremnt of 4-element DC
              resistance with a controlled metallic voltage IDC-RG
-             (ring-to-ground).";
+             (Ring-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-RG)";
         }
         bit loop-resistance-test-voltage-tr {
           description
-            "The test voltage for the measurement of the loop 
-             resistance with a high metallic voltage VDCH-TR 
-             (tip-to-ring).";
+            "The test voltage for the measurement of the loop
+             resistance with a high metallic voltage VDCH-TR
+             (Tip-to-Ring).";
           reference
             "ITU-T G.996.2 clause E.2.3.8 (MELT-HDCV-TR)";
         }
         bit loop-resistance-test-voltage-rt {
           description
-            "The test voltage for the measurement of the loop 
-             resistance with a high metallic voltage VDCH-RT 
-             (ring-to-tip).";
+            "The test voltage for the measurement of the loop
+             resistance with a high metallic voltage VDCH-RT
+             (Ring-to-Tip).";
           reference
             "ITU-T G.996.2 clause E.2.3.8 (MELT-HDCV-RT)";
         }
         bit three-element-complex-admittance-real-tr {
           description
             "The real part of the 3-element complex admittance
-             with controlled metallic voltage (tip-to-ring).";
+             with controlled metallic voltage (Tip-to-Ring).";
           reference
             "ITU-T G.996.2 clause E.2.3.9 (MELT-CAG-TR)";
         }
         bit three-element-complex-admittance-imaginary-tr {
           description
             "The imaginary part of the 3-element complex admittance
-             with controlled metallic voltage (tip-to-ring).";
+             with controlled metallic voltage (Tip-to-Ring).";
           reference
             "ITU-T G.996.2 clause E.2.3.9 (MELT-CAB-TR)";
         }
         bit three-element-complex-admittance-real-tg {
           description
             "The real part of the 3-element complex admittance
-             with controlled metallic voltage (tip-to-ground).";
+             with controlled metallic voltage (Tip-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.9 (MELT-CAG-TG)";
         }
         bit three-element-complex-admittance-imaginary-tg {
           description
             "The imaginary part of the 3-element complex admittance
-             with controlled metallic voltage (tip-to-ground).";
+             with controlled metallic voltage (Tip-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.9 (MELT-CAB-TG)";
         }
         bit three-element-complex-admittance-real-rg {
           description
             "The real part of the 3-element complex admittance
-             with controlled metallic voltage (ring-to-ground).";
+             with controlled metallic voltage (Ring-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.9 (MELT-CAG-RG)";
         }
         bit three-element-complex-admittance-imaginary-rg {
           description
             "The imaginary part of the 3-element complex admittance
-             with controlled metallic voltage (ring-to-ground).";
+             with controlled metallic voltage (Ring-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.9 (MELT-CAB-RG)";
         }
         bit loop-complex-admittance-real-hv-tr {
           description
-            "The real part of the loop complex admittance with high 
-             metallic voltage (tip-to-ring).";
+            "The real part of the loop complex admittance with high
+             metallic voltage (Tip-to-Ring).";
           reference
             "ITU-T G.996.2 clause E.2.3.10 (MELT-HAG-TR)";
         }
         bit loop-complex-admittance-imaginary-hv-tr {
           description
-            "The imaginary part of the loop complex admittance with 
-             high metallic voltage (tip-to-ring).";
+            "The imaginary part of the loop complex admittance with
+             high metallic voltage (Tip-to-Ring).";
           reference
             "ITU-T G.996.2 clause E.2.3.10 (MELT-HAB-TR)";
         }
         bit three-element-capacitance-measurement-voltage-tr {
           description
-            "The AC voltage, VACTR-CC, for the 3-element capacitance 
-             test with a controlled metallic voltage (tip-to-ring).";
+            "The AC voltage, VACTR-CC, for the 3-element capacitance
+             test with a controlled metallic voltage (Tip-to-Ring).";
           reference
             "ITU-T G.996.2 clause E.2.3.11 (MELT-ACV-CC-TR)";
         }
         bit three-element-capacitance-measurement-voltage-tg {
           description
-            "The AC voltage, VACTG-CC, for the 3-element capacitance 
-             test with a controlled metallic voltage 
-             (tip-to-ground).";
+            "The AC voltage, VACTG-CC, for the 3-element capacitance
+             test with a controlled metallic voltage
+             (Tip-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.11 (MELT-ACV-CC-TG)";
         }
         bit three-element-capacitance-measurement-voltage-rg {
           description
-            "The AC voltage, VACRG-CC, for the 3-element capacitance 
-             test with a controlled metallic voltage 
-             (ring-to-ground).";
+            "The AC voltage, VACRG-CC, for the 3-element capacitance
+             test with a controlled metallic voltage
+             (Ring-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.11 (MELT-ACV-CC-RG)";
         }
         bit loop-capacitance-measurement-voltage-tr {
           description
-            "The AC voltage, VACTR-HC, for the loop capacitance test 
-             with a high metallic voltage (tip-to-ring).";
+            "The AC voltage, VACTR-HC, for the loop capacitance test
+             with a high metallic voltage (Tip-to-Ring).";
           reference
             "ITU-T G.996.2 clause E.2.3.12 (MELT-ACV-HC-TR)";
         }
         bit three-element-complex-admittance-measurement-voltage-tr {
           description
-            "The AC voltage, VACTR-CA, for the 3-element complex 
-             admittance test with a controlled metallic voltage 
-             (tip-to-ring).";
+            "The AC voltage, VACTR-CA, for the 3-element complex
+             admittance test with a controlled metallic voltage
+             (Tip-to-Ring).";
           reference
             "ITU-T G.996.2 clause E.2.3.13 (MELT-ACV-CA-TR)";
         }
         bit three-element-complex-admittance-measurement-voltage-tg {
           description
-            "The AC voltage, VACTG-CA, for the 3-element complex 
-             admittance test with a controlled metallic voltage 
-             (tip-to-ground).";
+            "The AC voltage, VACTG-CA, for the 3-element complex
+             admittance test with a controlled metallic voltage
+             (Tip-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.13 (MELT-ACV-CA-TG)";
         }
         bit three-element-complex-admittance-measurement-voltage-rg {
           description
-            "The AC voltage, VACRG-CA, for the 3-element complex 
-             admittance test with a controlled metallic voltage 
-             (ring-to-ground).";
+            "The AC voltage, VACRG-CA, for the 3-element complex
+             admittance test with a controlled metallic voltage
+             (Ring-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.13 (MELT-ACV-CA-RG)";
         }
         bit loop-complex-admittance-measurement-voltage-tr {
           description
             "The AC voltage, VACTR-HA, for the loop complex admittance
-             test with a high metallic voltage (tip-to-ring).";
+             test with a high metallic voltage (Tip-to-Ring).";
           reference
             "ITU-T G.996.2 clause E.2.3.14 (MELT-ACV-HA-TR)";
         }
@@ -1161,7 +1135,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
          Possible reasons that the data is unreliable:
            - The measurement may not have been able to run, possibly
              due to external conditions.
-           - The result is not reliable as the accuracy may be 
+           - The result is not reliable as the accuracy may be
              degraded due to external conditions.";
       reference
         "ITU-T G.996.2 clause E.2.2.15 (Reliability indicator)";

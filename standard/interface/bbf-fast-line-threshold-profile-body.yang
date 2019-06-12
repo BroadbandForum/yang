@@ -9,7 +9,6 @@ submodule bbf-fast-line-threshold-profile-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -25,12 +24,11 @@ submodule bbf-fast-line-threshold-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing line threshold profiles.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +68,19 @@ submodule bbf-fast-line-threshold-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -97,67 +105,63 @@ submodule bbf-fast-line-threshold-profile-body {
   grouping line-thresholds {
     description
       "Performance parameters that have corresponding thresholds
-       used to issue reports";
-
+       used to issue reports.";
     leaf errored-seconds-threshold {
       type uint32;
       units "1 second";
       default "0";
       description
-        "Threshold for the count of errored seconds (ES). A special 
+        "Threshold for the count of errored seconds (ES). A special
          value (0) indicates the threshold is disabled. An errored
          second (ES) is defined in clause 11.4.4.2/G.9701.";
       reference
         "ITU-T G.997.2 clause 7.7.8 (CURR/PREV_NE/FE_15/24_ES);
          ITU-T G.997.2 clause 8.2 (THRESHOLD_NE/FE_15/24_ES)";
     }
-
     leaf severely-errored-seconds-threshold {
       type uint32;
       units "1 second";
       default "0";
       description
         "Threshold for the count of severely errored seconds (SES).
-         A special value (0) indicates the threshold is disabled. 
+         A special value (0) indicates the threshold is disabled.
          A severely errored second (SES) is defined in clause
          11.4.4.3/G.9701.";
       reference
         "ITU-T G.997.2 clause 7.7.9 (CURR/PREV_NE/FE_15/24_SES);
          ITU-T G.997.2 clause 8.2 (THRESHOLD_NE/FE_15/24_SES)";
     }
-
     leaf loss-of-signal-seconds-threshold {
       type uint32;
       units "1 second";
       description
-        "Threshold for the count of LOS seconds (LOSS). A special 
-         value (0) indicates the threshold is disabled. A LOS second 
-         (LOSS) is defined in clause 11.4.4.4/G.9701. Support for this
-         threshold is optional.";
+        "Threshold for the count of Loss of Signal (LOS) seconds
+         (LOSS). A special value (0) indicates the threshold is
+         disabled. A LOS second (LOSS) is defined in clause
+         11.4.4.4/G.9701. Support for this threshold is optional.";
       reference
         "ITU-T G.997.2 clause 7.7.10 (CURR/PREV_NE/FE_15/24_LOSS);
          ITU-T G.997.2 clause 8.2 (THRESHOLD_NE/FE_15/24_LOSS)";
     }
-
     leaf loss-of-rmc-seconds-threshold {
       type uint32;
       units "1 second";
       description
-        "Threshold for the count of LOR seconds (LORS). A special 
-         value (0) indicates the threshold is disabled. A LOR second
-         (LORS) is defined in clause 11.4.4.5/G.9701. Support for this
-         threshold is optional.";
+        "Threshold for the count of Loss of Robust Management Channel
+         (RMC) (LOR) seconds (LORS). A special value (0) indicates the
+         threshold is disabled. A LOR second (LORS) is defined in
+         clause 11.4.4.5/G.9701. Support for this threshold is
+         optional.";
       reference
         "ITU-T G.997.2 clause 7.7.11 (CURR/PREV_NE/FE_15/24_LORS);
          ITU-T G.997.2 clause 8.2 (THRESHOLD_NE/FE_15/24_LORS)";
     }
-
     leaf unavailable-seconds-threshold {
       type uint32;
       units "1 second";
       default "0";
       description
-        "Threshold for the count of unavailable seconds (UAS). A 
+        "Threshold for the count of unavailable seconds (UAS). A
          special value (0) indicates the threshold is disabled. An
          unavailable second (UAS) is defined in clause
          11.4.4.6/G.9701.";
@@ -165,70 +169,65 @@ submodule bbf-fast-line-threshold-profile-body {
         "ITU-T G.997.2 clause 7.7.12 (CURR/PREV_NE/FE_15/24_UAS);
          ITU-T G.997.2 clause 8.2 (THRESHOLD_NE/FE_15/24_UAS)";
     }
-
     leaf full-initializations-threshold {
       type uint32;
       description
         "Threshold for a count of the full initialization primitives
-         (full_init). A special value (0) indicates the threshold is 
+         (full_init). A special value (0) indicates the threshold is
          disabled. The full initialization primitive (full_init)
-         is defined in clause 11.3.1.5/G.9701. Support for this 
+         is defined in clause 11.3.1.5/G.9701. Support for this
          threshold is optional.";
       reference
         "ITU-T G.997.2 clause 7.7.13 (CURR/PREV_15/24_FULL_INITS);
          ITU-T G.997.2 clause 8.2 (THRESHOLD_15/24_FULL_INITS)";
     }
-
     leaf failed-initializations-threshold {
       type uint32;
       description
         "Threshold for a count of the failed full initialization
-         primitives (failedfull_init). A special value (0) indicates 
+         primitives (failedfull_init). A special value (0) indicates
          the threshold is disabled. The failed full initialization
          primitive (failedfull_init) is defined in clause
          11.3.1.5/G.9701. Support for this threshold is optional.";
       reference
         "ITU-T G.997.2 clause 7.7.14
          (CURR/PREV_15/24_FAILEDFULL_INITS);
-         ITU-T G.997.2 clause 8.2 
+         ITU-T G.997.2 clause 8.2
          (THRESHOLD_15/24_FAILEDFULL_INITS)";
     }
-
     leaf fast-initializations-threshold {
       type uint32;
       description
         "Threshold for a count of the fast initialization primitives
-         (fast_init). A special value (0) indicates the threshold is 
+         (fast_init). A special value (0) indicates the threshold is
          disabled. The fast initialization primitive (fast_init)
-         is defined in clause 11.3.1.5/G.9701. Support for this 
+         is defined in clause 11.3.1.5/G.9701. Support for this
          threshold is optional.";
       reference
         "ITU-T G.997.2 clause 7.7.15 (CURR/PREV_15/24_FAST_INITS);
          ITU-T G.997.2 clause 8.2 (THRESHOLD_15/24_FAST_INITS)";
     }
-
     leaf failed-fast-initializations-threshold {
       type uint32;
       description
         "Threshold for a count of the failed fast initialization
-         primitives (failedfast_init). A special value (0) indicates 
+         primitives (failedfast_init). A special value (0) indicates
          the threshold is disabled. The failed fast initialization
          primitive (failedfast_init) is defined in clause
          11.3.1.5/G.9701. Support for this threshold is optional.";
       reference
         "ITU-T G.997.2 clause 7.7.16
          (CURR/PREV_15/24_FAILEDFAST_INITS);
-         ITU-T G.997.2 clause 8.2 
+         ITU-T G.997.2 clause 8.2
          (THRESHOLD_15/24_FAILEDFAST_INITS)";
     }
-
     leaf spontaneous-interruptions-threshold {
       type uint32;
       description
-        "Threshold for a count of the spontaneous interruption 
-         anomalies (spont_intrpt). A special value (0) indicates the 
+        "Threshold for a count of the spontaneous interruption
+         anomalies (spont_intrpt). A special value (0) indicates the
          threshold is disabled. The spontaneous interruption anomaly
-         (spont_intrpt) is defined in clause 11.3.1.1/G.9701. Support 
+         (spont_intrpt) is defined in clause 11.3.1.1/G.9701. Support
          for this threshold is optional.";
       reference
         "ITU-T G.997.2 clause 7.7.19 (CURR/PREV_24_SPONT_INTRPT);

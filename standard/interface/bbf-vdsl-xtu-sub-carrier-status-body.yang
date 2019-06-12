@@ -5,13 +5,11 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
   }
 
   include bbf-vdsl-base-body;
-
   include bbf-vdsl-line-spectrum-profile-body;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -27,13 +25,12 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
-    "This submodule contains a collection of YANG definitions for 
-     managing Broadband Forum TR-252i3 clause 9.1 xTU Sub-Carrier 
+    "This submodule contains a collection of YANG definitions for
+     managing Broadband Forum TR-252i3 clause 9.1 xTU Sub-Carrier
      Status.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -73,9 +70,19 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -94,7 +101,7 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
     reference
       "TR-355c1: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_1.pdf>";
+                        TR-355_Corrigendum-1.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -112,8 +119,8 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
       length "0..512";
     }
     description
-      "A binary type where each octet represents data belonging to 
-       a sub-carrier group. The first octet represents sub-carrier 
+      "A binary type where each octet represents data belonging to
+       a sub-carrier group. The first octet represents sub-carrier
        group 0 and the last represents sub-carrier group 511.";
   }
 
@@ -122,10 +129,10 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
       length "0..1024";
     }
     description
-      "A binary type where each pair of octets represents data 
-       belonging to a sub-carrier group. The first two octets 
-       represents sub-carrier group 0 and the last two represents 
-       sub-carrier group 511. In each pair of octets, the most 
+      "A binary type where each pair of octets represents data
+       belonging to a sub-carrier group. The first two octets
+       represents sub-carrier group 0 and the last two represents
+       sub-carrier group 511. In each pair of octets, the most
        significant byte is loaded first.";
   }
 
@@ -134,9 +141,9 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
       length "0..2048";
     }
     description
-      "A binary type where a tuple of octet pairs represent data 
-       belonging to a sub-carrier group. The first tuple 
-       represents sub-carrier group 0 and the last tuple represents 
+      "A binary type where a tuple of octet pairs represent data
+       belonging to a sub-carrier group. The first tuple
+       represents sub-carrier group 0 and the last tuple represents
        sub-carrier group 511. In each pair of octets in the tuple, the
        most significant byte is loaded first. The order of the tuple
        is determined by the node to which this type is associated.";
@@ -147,9 +154,9 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
       length "0..192";
     }
     description
-      "A binary type where a tuple of octet pairs represent data 
-       belonging to a sub-carrier group. The first tuple 
-       represents sub-carrier group 0 and the last tuple represents 
+      "A binary type where a tuple of octet pairs represent data
+       belonging to a sub-carrier group. The first tuple
+       represents sub-carrier group 0 and the last tuple represents
        sub-carrier group 511. In each pair of octets in the tuple, the
        most significant byte is loaded first. The order of the tuple
        is determined by the node to which this type is associated.";
@@ -160,8 +167,8 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
       length "4096";
     }
     description
-      "A binary type where each nibble represents data belonging to 
-       a sub-carrier. The first nibble represents sub-carrier 0 and 
+      "A binary type where each nibble represents data belonging to
+       a sub-carrier. The first nibble represents sub-carrier 0 and
        the last represents sub-carrier 8191.";
   }
 
@@ -170,8 +177,8 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
       length "16384";
     }
     description
-      "A binary type where each pair of octets represents data 
-       belonging to a sub-carrier. The first two octets represents 
+      "A binary type where each pair of octets represents data
+       belonging to a sub-carrier. The first two octets represents
        sub-carrier 0 and the last two represents sub-carrier 16383.
        In each pair of octets, the most significant byte is loaded
        first.";
@@ -182,8 +189,8 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
       range "1 | 2 | 4 | 8 | 16";
     }
     description
-      "This parameter is the number of subcarriers per group. 
-       The valid values are 1, 2, 4, 8 and 16. For ADSL, this 
+      "This parameter is the number of subcarriers per group.
+       The valid values are 1, 2, 4, 8 and 16. For ADSL, this
        parameter is equal to 1 and, for VDSL2, it is equal to the size
        of a subcarrier group used to compute these parameters.";
     reference
@@ -191,16 +198,13 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
   }
 
   grouping xtu-sub-carrier-status {
-
     description
       "The xTU Sub-Carrier Status object represents current detailed
        status / measurements relating to a particular sub-carrier or
        a sub-carrier group in an xDSL Line at a particular xTU.";
-
     container hlin {
       description
         "State data nodes related to sub-carrier Hlin.";
-
       leaf hlin-scale {
         type uint16 {
           range "1..65535";
@@ -215,7 +219,6 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            representation scale (HLINSCds) and clause 7.5.1.26.7
            Upstream H(f) linear representation scale (HLINSCus)";
       }
-
       leaf hlin-sub-carrier-group-size {
         type sub-carrier-group-size;
         description
@@ -226,7 +229,6 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            subcarrier group size (HLINGds) and clause 7.5.1.26.8
            Upstream H(f) linear subcarrier group size (HLINGus)";
       }
-
       leaf hlinps {
         type per-sub-carrier-group-int16-tuple;
         description
@@ -236,20 +238,20 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            subcarrier group index i. The Hlin(f) is represented as
            ((HLINSC/2^15) * ((a(i) + j * b(i))/2^15)), where a(i)
            and b(i) are signed integers in the (-2^15 + 1) to
-           (+2^15 - 1) range. 
+           (+2^15 - 1) range.
 
            For each 16-bit tuple, the first 16-bit value, a(i), can
            have values in the range -32,767 to 32,767. The second
            16-bit value, b(i), can have values in the range -32,767
-           to 32,767. In each tuple the value for a(i) is loaded 
+           to 32,767. In each tuple the value for a(i) is loaded
            first.
 
-           A special value (-32,768) indicates that no measurement 
-           could be done for this subcarrier group because it is out 
-           of the passband or that the attenuation is out of range to 
+           A special value (-32,768) indicates that no measurement
+           could be done for this subcarrier group because it is out
+           of the passband or that the attenuation is out of range to
            be represented.
 
-           This parameter is only available after a loop diagnostic 
+           This parameter is only available after a loop diagnostic
            procedure.";
         reference
           "ITU-T G.997.1 clause 7.5.1.26.3 Downstream H(f) linear
@@ -257,11 +259,9 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            linear representation (HLINpsus)";
       }
     }
-
     container hlog {
       description
         "State data nodes related to sub-carrier Hlog.";
-
       leaf hlog-measurement-time {
         type uint16 {
           range "1..65535";
@@ -277,7 +277,6 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            7.5.1.26.10 Upstream H(f) logarithmic measurement time
            (HLOGMTus)";
       }
-
       leaf hlog-sub-carrier-group-size {
         type sub-carrier-group-size;
         description
@@ -289,7 +288,6 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            7.5.1.26.11 Upstream H(f) logarithmic subcarrier group
            size (HLOGGus)";
       }
-
       leaf hlogps {
         type per-sub-carrier-group-uint16;
         description
@@ -311,12 +309,10 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            (HLOGpsus)";
       }
     }
-
     container qln {
       description
-        "State data nodes related to sub-carrier Quiet Line 
-         Noise.";
-
+        "State data nodes related to sub-carrier Quiet Line
+         Noise (QLN).";
       leaf qln-measurement-time {
         type uint16 {
           range "1..65535";
@@ -332,7 +328,6 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            7.5.1.27.4 Upstream quiet line noise PSD measurement
            time (QLNMTus)";
       }
-
       leaf qln-sub-carrier-group-size {
         type sub-carrier-group-size;
         description
@@ -343,7 +338,6 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            subcarrier group size (QLNGds) and clause 7.5.1.27.5
            Upstream QLN(f) subcarrier group size (QLNGus)";
       }
-
       leaf qlnps {
         type per-sub-carrier-group-uint8;
         description
@@ -353,7 +347,7 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            i. The QLN(f) is represented as (-23 - n(i)/2), where
            n(i) is an unsigned integer in the range from 0 to 254.
 
-           A special value (255) indicates that no measurement could 
+           A special value (255) indicates that no measurement could
            be done for this subcarrier group because it is out of the
            passband or that the noise PSD is out of range to be
            represented.";
@@ -363,12 +357,10 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            (QLNpsus)";
       }
     }
-
     container snr {
       description
-        "State data nodes related to sub-carrier Signal-to-Noise 
-         Ratio values.";
-
+        "State data nodes related to sub-carrier Signal-to-Noise
+         Ratio (SNR) values.";
       leaf snr-measurement-time {
         type uint16 {
           range "1..65535";
@@ -383,7 +375,6 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            measurement time (SNRMTds) and clause 7.5.1.28.4
            Upstream SNR measurement time (SNRMTus)";
       }
-
       leaf snr-sub-carrier-group-size {
         type sub-carrier-group-size;
         description
@@ -394,7 +385,6 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            subcarrier group size (SNRGds) and clause 7.5.1.28.5
            Upstream SNR(f) subcarrier group size (SNRGus)";
       }
-
       leaf snrps {
         type per-sub-carrier-group-uint8;
         description
@@ -414,44 +404,43 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            (SNRpsus)";
       }
     }
-
     leaf bitsps {
       type per-sub-carrier-nibble;
       description
-        "This parameter defines the downstream bits allocation table 
-         per subcarrier. It is an array of integer values in the 0 to 
-         15 range for each subcarrier. The reported bits of 
-         subcarriers out of the MEDLEY set will be set to 0. This 
-         parameter will be reported with the most recent values when 
+        "This parameter defines the downstream bits allocation table
+         per subcarrier. It is an array of integer values in the 0 to
+         15 range for each subcarrier. The reported bits of
+         subcarriers out of the MEDLEY set will be set to 0. This
+         parameter will be reported with the most recent values when
          read over the Q-interface.";
       reference
-        "ITU-T G.997.1 clause 7.5.1.29.1 Downstream bits allocation 
-         (BITSpsds) and clause 7.5.1.29.2 Upstream bits allocation 
+        "ITU-T G.997.1 clause 7.5.1.29.1 Downstream bits allocation
+         (BITSpsds) and clause 7.5.1.29.2 Upstream bits allocation
          (BITSpsus)";
     }
-
     leaf gainsps {
       type per-sub-carrier-uint16;
       description
         "This parameter defines the gains allocation table per
-         subcarrier. It is an array of integer values in the 0 to 
+         subcarrier. It is an array of integer values in the 0 to
          4095 range for each subcarrier. The gain value is represented
          as a multiple of 1/512 on linear scale. The reported gains of
-         subcarriers out of the MEDLEY set will be set to 0. This 
-         arameter will be reported with the most recent values when 
+         subcarriers out of the MEDLEY set will be set to 0. This
+         arameter will be reported with the most recent values when
          read over the Q interface.";
       reference
-        "ITU-T G.997.1 clause 7.5.1.29.3 Downstream gains allocation 
-         (GAINSpsds) and clause 7.5.1.29.4 Upstream gains allocation 
+        "ITU-T G.997.1 clause 7.5.1.29.3 Downstream gains allocation
+         (GAINSpsds) and clause 7.5.1.29.4 Upstream gains allocation
          (GAINSpsus)";
     }
-  } // end grouping xtu-sub-carrier-status
+  }
+
+  // end grouping xtu-sub-carrier-status
 
   grouping transmit-psd {
     description
       "The transmit-psd object represents the current transmit
        power spectral density (PSD).";
-
     leaf tssps {
       type per-sub-carrier-group-uint16-tuple;
       description
@@ -460,9 +449,9 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
          during G.994.1. Each breakpoint consists of a subcarrier
          index and the associated shaping parameter. The shaping
          parameter is an integer value in the 0 to 126 range. It
-         is represented as a multiple of -0.5 dB. 
+         is represented as a multiple of -0.5 dB.
 
-         A special value (255) indicates that the subcarrier is not 
+         A special value (255) indicates that the subcarrier is not
          transmitted.
 
          This is encoded as an array of 16-bit tuples where the first
@@ -471,11 +460,10 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
 
          TSS only applies to G.992.3 and G.992.5.";
       reference
-        "ITU-T G.997.1 clause 7.5.1.29.5 Downstream transmit spectrum 
-         shaping (TSSpsds) and clause 7.5.1.29.6 Upstream transmit 
+        "ITU-T G.997.1 clause 7.5.1.29.5 Downstream transmit spectrum
+         shaping (TSSpsds) and clause 7.5.1.29.6 Upstream transmit
          spectrum shaping (TSSpsus)";
     }
-
     leaf mrefpsd {
       type per-sub-carrier-group-uint16-tuple;
       description
@@ -483,33 +471,33 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
          which for downstream are exchanged in the MREFPSDds
          fields of the O-PRM message of ITU-T G.993.2, and which
          for upstream are exchanged in the MREFPSDus fields of
-         the R-PRM message of ITU-T G.993.2. 
+         the R-PRM message of ITU-T G.993.2.
 
          This is encoded as an array of 16-bit tuples where the first
          16-bit value represents the sub-carrier index and the second
-         represents the PSD.
+         represents the Power Spectral Density (PSD).
 
-         The format of the PSD is as specified in [ITU-T G.993.2], 
-         using 12 bits to indicate MREFPSD level in steps of 0.1 dB 
+         The format of the PSD is as specified in [ITU-T G.993.2],
+         using 12 bits to indicate MREFPSD level in steps of 0.1 dB
          with an offset of -140 dBm/Hz.
 
-         MREFPSD only applies to G.993.2.";
+         MEDLEY Reference PSD (MREFPSD) only applies to G.993.2.";
       reference
         "ITU-T G.997.1 clause 7.5.1.29.7 Downstream MEDLEY
          reference PSD (MREFPSDds) and clause 7.5.1.29.8 Upstream
          MEDLEY reference PSD (MREFPSDus)";
     }
-  } // end grouping transmit-psd
+  }
+
+  // end grouping transmit-psd
 
   grouping xlin {
     description
-      "The xlin object represents the crosstalk coupling, 
+      "The Xlin object represents the crosstalk coupling,
        XLIN(f).";
-
     container xlin {
       description
         "State data nodes related to sub-carrier Xlin.";
-
       leaf xlin-scale {
         type uint16 {
           range "0..65535";
@@ -522,7 +510,6 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            (XLINSCds) and clause 7.5.1.39.5 Upstream XLIN scale
            (XLINSCus)";
       }
-
       leaf xlin-sub-carrier-group-size {
         type sub-carrier-group-size;
         description
@@ -533,28 +520,24 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            subcarrier group size (XLINGds) and clause 7.5.1.39.6
            Upstream XLIN subcarrier group size (XLINGus)";
       }
-
       leaf xlin-disturber {
         type vce-port-index;
         description
-          "The XLIN disturber VCE port index.";
+          "The Xlin disturber Vectoring Control Entity (VCE) port
+           index.";
       }
-
       list xlinbands {
         key "band-index";
-
         leaf band-index {
           type uint16;
           description
-            "xlin band index";
+            "Xlin band index";
         }
-
         uses sub-carrier-range {
           refine "start-index" {
             mandatory true;
           }
         }
-
         description
           "XLINBANDS contains pairs of (start_subcarrier_index,
            stop_subcarrier_index) for every band in which XLINps is
@@ -564,30 +547,29 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            bandedges (XLINBANDSds) and clause 7.5.1.38.7 Upstream
            XLIN bandedges (XLINBANDSus)";
       }
-
       leaf xlinps {
         type per-sub-carrier-group-int16-tuple;
         description
-          "For each given VCE port index k, this parameter is a
-           one-dimensional array of complex values in linear scale
-           for FEXT coupling coefficients Xlin(f) originating from
-           the loop connected to the VCE port k into the loop for
-           which Xlin(f) is being reported. Each array entry
-           represents the Xlinds(f = n*deltaf) value for a
-           particular subcarrier index n. The Xlin(f = n*deltaf)
-           value is represented as ((XLINSC/2^15) * ((a(n) +
-           j*b(n))/2^15)), where a(n) and b(n) are signed integers
-           in the (-2^15 + 1) to (+2^15 - 1) range. The format of
-           XLINps is defined in ITU-T G.993.5.
+          "For each given Vectoring Control Entity (VCE) port index k,
+           this parameter is a one-dimensional array of complex values
+           in linear scale for Far-End Crosstalk (FEXT) coupling
+           coefficients Xlin(f) originating from the loop connected to
+           the VCE port k into the loop for which Xlin(f) is being
+           reported. Each array entry represents the
+           Xlinds(f = n*deltaf) value for a  particular subcarrier
+           index n. The Xlin(f = n*deltaf) value is represented as
+           ((XLINSC/2^15) * ((a(n) + j*b(n))/2^15)), where a(n) and
+           b(n) are signed integers in the (-2^15 + 1) to (+2^15 - 1)
+           range. The format of XLINps is defined in ITU-T G.993.5.
 
            For each 16-bit tuple, the first 16-bit value, a(n), can
            have values in the range -32,767 to 32,767. The second
            16-bit value, b(n), can have values in the range -32,767
-           to 32,767. In each tuple the value for a(n) is loaded 
+           to 32,767. In each tuple the value for a(n) is loaded
            first.
 
-           A special value (-32,768) indicates that no measurement 
-           could be done from line k into this line for subcarrier n; 
+           A special value (-32,768) indicates that no measurement
+           could be done from line k into this line for subcarrier n;
 
            Another special value indicates that there is no phase
            information and the magnitude of Xlin(f = n*deltaf) is
@@ -600,5 +582,7 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
            (XLINpsus)";
       }
     }
-  } // end grouping xlin
-} // end submodule xtu-sub-carrier-status-body
+  }
+
+  // end grouping xlin
+}

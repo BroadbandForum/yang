@@ -7,7 +7,6 @@ submodule bbf-melt-processing-profile-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,12 +22,11 @@ submodule bbf-melt-processing-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing processing profiles.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-melt-processing-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -95,11 +103,10 @@ submodule bbf-melt-processing-profile-body {
   grouping processing-profile {
     description
       "Defines the parameters contained in a processing profile.";
-
     container loop-resistance-classification-threshold {
       description
-        "This parameter defines the limits for classification of the 
-         resistances to GND of the loop under test.
+        "This parameter defines the limits for classification of the
+         resistances to ground (GND) of the loop under test.
 
          The following limit values need to be defined:
           - maximum resistance for a short-circuit to GND;
@@ -109,162 +116,152 @@ submodule bbf-melt-processing-profile-body {
          A resistance to ground measured as being:
           - Below the maximum resistance for a short circuit shall be
             interpreted as a short circuit to GND.
-          - Above the maximum resistance for a short circuit and 
-            below the minimum resistance for a leakage shall be 
+          - Above the maximum resistance for a short circuit and
+            below the minimum resistance for a leakage shall be
             interpreted as a resistance fault to GND.
-          - Above the minimum resistance for a leakage and below the 
-            maximum resistance for a leakage shall be interpreted as 
+          - Above the minimum resistance for a leakage and below the
+            maximum resistance for a leakage shall be interpreted as
             a leakage to GND.
-          - Above the maximum resistance for a leakage shall be 
+          - Above the maximum resistance for a leakage shall be
             interpreted as a high impedance to GND. ";
       reference
         "ITU-T G.996.2 clause F.2.1.1 (MELT-LRC-TH)";
-
       leaf maximum-resistance-short-circuit-to-ground {
         type uint32;
         units "0.1 kOhm";
         description
           "The maximum resistance threshold for a short circuit to
-           ground";
+           ground.";
       }
-
       leaf minimum-resistance-leakage-to-ground {
         type uint32;
         units "0.1 kOhm";
         description
-          "The minimum resistance threshold for a leakage to ground";
+          "The minimum resistance threshold for a leakage to ground.";
       }
-
       leaf maximum-resistance-leakage-to-ground {
         type uint32;
         units "0.1 kOhm";
         description
-          "The maximum resistance threshold for a leakage to ground";
+          "The maximum resistance threshold for a leakage to ground.";
       }
     }
-
     container loop-parameters-per-unit-length {
       description
         "The a priori knowledge of some characteristic parameters per
-         Unit length of the loop under test is necessary to derive 
-         length or distance information from the MELT-PMD 
-         measurements. This parameter combines the set of required 
-         loop parameters:
+         Unit length of the loop under test is necessary to derive
+         length or distance information from the Metallic Line Test
+         Physical Medium Dependent (MELT-PMD) measurements. This
+         parameter combines the set of required loop parameters:
 
-         1) Cable characteristic capacitance per unit length between 
-            tip and ring. The range of valid values is from 0 to 100 
+         1) Cable characteristic capacitance per unit length between
+            tip and ring. The range of valid values is from 0 to 100
             nF/km with a granularity of 0.1 nF/km.
-         2) Cable characteristic capacitance per unit length between 
-            tip and GND and ring and GND. The range of valid values 
+         2) Cable characteristic capacitance per unit length between
+            tip and GND and ring and GND. The range of valid values
             is from 0 to 100 nF/km with a granularity of 0.1 nF/km.
-         3) Cable loop DC resistance per unit length (sum of both 
-            wires). The range of valid values is from 50 to 400 
+         3) Cable loop DC resistance per unit length (sum of both
+            wires). The range of valid values is from 50 to 400
             ohm/km with a granularity of 1 ohm/km.";
       reference
         "ITU-T G.996.2 clause F.2.1.2 (MELT-LOOP-PARAMS)";
-
       leaf capacitance-per-unit-length-tr {
         type uint16 {
           range "0..1000";
         }
         units "0.1 nF/km";
         description
-          "Cable characteristic capacitance per unit length between 
-           tip and ring. The range of valid values is from 0 to 100 
+          "Cable characteristic capacitance per unit length between
+           tip and ring. The range of valid values is from 0 to 100
            nF/km with a granularity of 0.1 nF/km.";
       }
-
       leaf capacitance-per-unit-length-tg-rg {
         type uint16 {
           range "0..1000";
         }
         units "0.1 nF/km";
         description
-          "Cable characteristic capacitance per unit length between 
-           tip and GND and ring and GND. The range of valid values is
-           from 0 to 100 nF/km with a granularity of 0.1 nF/km.";
+          "Cable characteristic capacitance per unit length between
+           tip and ground (GND) and ring and GND. The range of valid
+           values is from 0 to 100 nF/km with a granularity of 0.1
+           nF/km.";
       }
-
       leaf dc-resistance-per-unit-length {
         type uint16 {
           range "50..400";
         }
         units "1 ohm/km";
         description
-          "Cable loop DC resistance per unit length (sum of both 
-           wires). The range of valid values is from 50 to 400 
+          "Cable loop DC resistance per unit length (sum of both
+           wires). The range of valid values is from 50 to 400
            ohm/km with a granularity of 1 ohm/km.";
       }
     }
-
     leaf hazardous-dc-voltage-level {
       type uint8 {
         range "0..200";
       }
       units "1 V";
       description
-        "This parameter defines the level above which DC voltage 
-         shall be identified as hazardous. The hazardous voltage 
-         level shall be configurable between 0 and 200 V with a 
+        "This parameter defines the level above which DC voltage
+         shall be identified as hazardous. The hazardous voltage
+         level shall be configurable between 0 and 200 V with a
          granularity of 1 V.";
       reference
         "ITU-T G.996.2 clause F.2.1.3 (MELT-HDCV-L)";
     }
-
     leaf hazardous-ac-voltage-level {
       type uint8 {
         range "0..200";
       }
       units "1 Vrms";
       description
-        "This parameter defines the level above which AC voltage 
-         shall be identified as hazardous. The hazardous voltage 
-         level shall be configurable between 0 and 200 Vrms with a 
+        "This parameter defines the level above which AC voltage
+         shall be identified as hazardous. The hazardous voltage
+         level shall be configurable between 0 and 200 Vrms with a
          granularity of 1 Vrms.";
       reference
         "ITU-T G.996.2 clause F.2.1.4 (MELT-HACV-L)";
     }
-
     leaf foreign-emf-dc-voltage-level {
       type uint8 {
         range "0..50";
       }
       units "1 V";
       description
-        "This parameter defines the level above which a DC voltage 
-         shall be identified as a foreign EMF. The foreign EMF 
-         voltage level shall be configurable between 0 and 50 V with 
-         a granularity of 1 V.";
+        "This parameter defines the level above which a DC voltage
+         shall be identified as a foreign Electromagnetic Field (EMF).
+         The foreign EMF voltage level shall be configurable between
+         0 and 50 V with a granularity of 1 V.";
       reference
         "ITU-T G.996.2 clause F.2.1.5 (MELT-FDCV-L)";
     }
-
     leaf foreign-emf-ac-voltage-level {
       type uint8 {
         range "0..50";
       }
       units "1 Vrms";
       description
-        "This parameter defines the level above which an AC voltage 
-         shall be identified as a foreign EMF. The foreign EMF 
-         voltage level shall be configurable between 0 and 50 Vrms 
-         with a granularity of 1 Vrms";
+        "This parameter defines the level above which an AC voltage
+         shall be identified as a foreign Electromagnetic Field (EMF).
+         The foreign EMF voltage level shall be configurable between
+         0 and 50 Vrms with a granularity of 1 Vrms";
       reference
         "ITU-T G.996.2 clause F.2.1.6 (MELT-FACV-L)";
     }
-
     leaf system-capacitance-cpe-side {
       type uint16 {
         range "0..20000";
       }
       units "0.1 nF";
       description
-        "This parameter is the expected value of the system 
-         capacitance at the CPE side as it appears in parallel 
-         between tip and ring in a corresponding MELT measurement. 
-         A priori knowledge of this capacitance improves accuracy of 
-         the results and offers additional degrees for 
-         interpretation. The range of valid values is from 0 to 2 uF 
+        "This parameter is the expected value of the system
+         capacitance at the Customer Premises Equipment (CPE) side as
+         it appears in parallel between tip and ring in a
+         corresponding Metallic Line Test (MELT) measurement.
+         A priori knowledge of this capacitance improves accuracy of
+         the results and offers additional degrees for
+         interpretation. The range of valid values is from 0 to 2 uF
          with a granularity of 0.1 nF";
       reference
         "ITU-T G.996.2 clause F.2.1.7 (MELT-SYSC-CPE)";

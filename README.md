@@ -1,5 +1,10 @@
 ## Broadband Forum YANG Modules
 
+### 2019-06-11: [TR-355a2](https://www.broadband-forum.org/technical/download/TR-355_Amendment-2.pdf) YANG Modules for FTTdp Management
+*Tag: [v1.2.0-TR-355a2](https://github.com/BroadbandForum/yang/tree/v1.2.0-TR-355a2)*
+
+* Add support for additions and changes from amendments to ITU-T G.997.1 and ITU-T G.997.2
+
 ### 2019-02-25: [TR-385](https://www.broadband-forum.org/technical/download/TR-385.pdf) ITU-T PON YANG Modules
 *Tag: [v3.0.0-TR-385](https://github.com/BroadbandForum/yang/tree/v3.0.0-TR-385)*
 

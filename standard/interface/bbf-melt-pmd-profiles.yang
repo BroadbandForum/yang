@@ -7,16 +7,15 @@ submodule bbf-melt-pmd-profiles {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   include bbf-melt-base;
 
   /* Profile bodies */
+
   include bbf-melt-pmd-profile-body;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -32,12 +31,12 @@ submodule bbf-melt-pmd-profiles {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
-     managing MELT-PMD profiles.
+     managing Metallic Line Test Physical Medium Dependent (MELT-PMD)
+     profiles.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -77,9 +76,19 @@ submodule bbf-melt-pmd-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -103,29 +112,26 @@ submodule bbf-melt-pmd-profiles {
 
   typedef pmd-profile-ref {
     type leafref {
-      path '/bbf-melt:melt/bbf-melt:profiles/bbf-melt:pmd-profile/'
-         + 'bbf-melt:name';
+      path "/bbf-melt:melt/bbf-melt:profiles/bbf-melt:pmd-profile/"
+         + "bbf-melt:name";
     }
     description
-      "Used to reference a PMD profile";
+      "Used to reference a Physical Medium Dependent (PMD) profile";
   }
 
-
-  augment '/bbf-melt:melt/bbf-melt:profiles' {
+  augment "/bbf-melt:melt/bbf-melt:profiles" {
     description
-      "Data nodes for PMD configuration profiles.";
-
+      "Data nodes for Physical Medium Dependent (PMD) configuration
+       profiles.";
     list pmd-profile {
       key "name";
       description
-        "A list of PMD profiles.";
-
+        "A list of Physical Medium Dependent (PMD) profiles.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "A name that uniquely identifies the profile.";
       }
-
       uses pmd-profile;
     }
   }

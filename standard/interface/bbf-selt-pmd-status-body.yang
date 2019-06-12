@@ -7,7 +7,6 @@ submodule bbf-selt-pmd-status-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,12 +22,11 @@ submodule bbf-selt-pmd-status-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
-     managing the PMD object.
+     managing the Physical Medium Dependent (PMD) object.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-selt-pmd-status-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -94,20 +102,20 @@ submodule bbf-selt-pmd-status-body {
 
   typedef pmd-result {
     type enumeration {
-      enum "no-measurement-results-available" {
+      enum no-measurement-results-available {
         description
           "No measurement results are available when no mesurement has
-           been performed yet or after measurement results have been 
+           been performed yet or after measurement results have been
            deleted.";
       }
-      enum "measurement-failed-results-invalid" {
+      enum measurement-failed-results-invalid {
         description
-          "The measurement results are invalid after the most recent 
+          "The measurement results are invalid after the most recent
            measurement failed.";
       }
-      enum "measurement-succeeded-results-valid" {
+      enum measurement-succeeded-results-valid {
         description
-          "The measurement results are valid after the most recent 
+          "The measurement results are valid after the most recent
            measurement succeeded.";
       }
     }
@@ -115,60 +123,64 @@ submodule bbf-selt-pmd-status-body {
       "The overall results of the SELT PMD measurement.";
   }
 
-
   grouping pmd-status {
     description
-      "Status parameters for the PMD object.";
-
+      "Status parameters for the Physical Medium Dependent (PMD)
+       object.";
     leaf selt-status-c {
       type enumeration {
-        enum "inactive" {
+        enum inactive {
           description
-            "The CO SELT PMD is inactive.";
+            "The Central Office (CO) Single Ended Line Test Physical
+             Medium Dependent (SELT-PMD) is inactive.";
         }
-        enum "uer-ongoing" {
+        enum uer-ongoing {
           description
-            "The CO SELT PMD has an Uncalibrated Echo Response (UER) 
+            "The Central Office (CO) Single Ended Line Test Physical
+             Medium Dependent (SELT-PMD) has an Uncalibrated Echo
+             Response (UER) measurement ongoing.";
+        }
+        enum qln-ongoing {
+          description
+            "The Central Office (CO) Single Ended Line Test Physical
+             Medium Dependent (SELT-PMD) has a Quiet Line Noise (QLN)
              measurement ongoing.";
-        }
-        enum "qln-ongoing" {
-          description
-            "The CO SELT PMD has a Quiet Line Noise (QLN) measurement 
-             ongoing.";
         }
       }
       description
-        "The status of the CO SELT PMD measurement.
+        "The status of the Central Office (CO) Single Ended Line Test
+         Physical Medium Dependent (SELT-PMD) measurement.
 
-         Upon the CO SELT PMD request triggering a UER measurement, 
-         the CO SELT PMD status shall become 'uer-ongoing' if the 
-         measurement is executed.
+         Upon the CO SELT PMD request triggering a Uncalibrated Echo
+         Response (UER) measurement, the CO SELT PMD status shall
+         become 'uer-ongoing' if the measurement is executed.
 
-         Upon the CO SELT PMD request triggering a QLN measurement, 
-         the CO SELT PMD status shall become 'qln-ongoing' if the 
-         measurement is executed.
+         Upon the CO SELT PMD request triggering a Quiet Line Noise
+         (QLN) measurement, the CO SELT PMD status shall become
+         'qln-ongoing' if the measurement is executed.
 
          Upon abortion, failure or successful completion of the UER or
-         QLN measurement, the CO SELT PMD status shall become 
-         'inactive' and the AN/DPU ME shall send a notification to the
+         QLN measurement, the CO SELT PMD status shall become
+         'inactive' and the Access Node (AN)/Distribution Point Unit
+         (DPU) Management Entity (ME) shall send a notification to the
          NMS.";
       reference
         "ITU-T G.996.2 clause A.3.3";
     }
-
     leaf uer-results-c {
       type pmd-result;
       description
-        "The status of the CO SELT PMD Uncalibrated Echo Response 
-         (UER) measurement results.";
+        "The status of the Central Office (CO) Single Ended Line Test
+         Physical Medium Dependent (SELT-PMD) Uncalibrated Echo
+         Response (UER) measurement results.";
       reference
         "ITU-T G.996.2 clause A.3.4";
     }
-
     leaf qln-results-c {
       type pmd-result;
       description
-        "The status of the CO SELT PMD Quiet Line Noise (QLN) 
+        "The status of the Central Office (CO) Single Ended Line Test
+         Physical Medium Dependent (SELT-PMD) Quiet Line Noise (QLN)
          measurement results.";
       reference
         "ITU-T G.996.2 clause A.3.5";

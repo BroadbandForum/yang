@@ -7,10 +7,10 @@ submodule bbf-melt-result-parameters {
   import ietf-interfaces {
     prefix if;
   }
-
   include bbf-melt-base;
 
   /* Result parameter bodies */
+
   include bbf-melt-pmd-measurement-parameter-body;
   include bbf-melt-pmd-reporting-parameter-body;
   include bbf-melt-processing-derived-parameter-body;
@@ -18,7 +18,6 @@ submodule bbf-melt-result-parameters {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -34,12 +33,11 @@ submodule bbf-melt-result-parameters {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
-     managing MELT result parameters.
+     managing Metallic Line Test (MELT) result parameters.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -79,9 +77,19 @@ submodule bbf-melt-result-parameters {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -103,31 +111,26 @@ submodule bbf-melt-result-parameters {
                         TR-355.pdf>";
   }
 
-
-  augment '/if:interfaces-state/if:interface/bbf-melt:melt' {
+  augment "/if:interfaces-state/if:interface/bbf-melt:melt" {
     description
-      "Data nodes to support the reporting of MELT result 
-       parameters.";
-
+      "Data nodes to support the reporting of Metallic Line Test
+       (MELT) result parameters.";
     container pmd-reporting-parameters {
       description
-        "MELT-PMD reporting parameters";
-
+        "Metallic Line Test Physical Medium Dependent (MELT-PMD)
+         reporting parameters.";
       uses pmd-reporting-parameters;
     }
-
     container pmd-measurement-parameters {
       description
-        "MELT-PMD measurement parameters";
-
+        "Metallic Line Test Physical Medium Dependent (MELT-PMD)
+         measurement parameters.";
       uses pmd-measurement-parameters;
     }
-
     container processing-derived-parameters {
       if-feature "melt-p";
       description
-        "MELT-P derived parameters";
-
+        "Metallic Line Test Processing (MELT-P) derived parameters.";
       uses processing-derived-parameters;
     }
   }

@@ -1,6 +1,5 @@
 submodule bbf-vdsl-test-diagnostics {
   yang-version 1.1;
-
   belongs-to bbf-vdsl {
     prefix bbf-vdsl;
   }
@@ -8,21 +7,17 @@ submodule bbf-vdsl-test-diagnostics {
   import ietf-interfaces {
     prefix if;
   }
-
   import bbf-fastdsl {
     prefix bbf-fastdsl;
   }
-
   include bbf-vdsl-base-body;
   include bbf-vdsl-xtu-sub-carrier-status-body;
   include bbf-vdsl-xtu-data-gathering-report-body;
-
   include bbf-vdsl-line;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -38,12 +33,11 @@ submodule bbf-vdsl-test-diagnostics {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG data types and
      grouping definitions for the management of VDSL test modes.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -83,9 +77,19 @@ submodule bbf-vdsl-test-diagnostics {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -104,7 +108,7 @@ submodule bbf-vdsl-test-diagnostics {
     reference
       "TR-355c2: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_2.pdf>";
+                        TR-355_Corrigendum-2.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -117,25 +121,24 @@ submodule bbf-vdsl-test-diagnostics {
                         TR-355.pdf>";
   }
 
-
   typedef loop-diagnostics-result {
     type enumeration {
-      enum "no-loop-diagnostics-results-available" {
+      enum no-loop-diagnostics-results-available {
         description
-          "No measurement results are available when no Loop 
-           Diagnostics mode procedures has been performed yet or 
-           after Loop Diagnostics mode results have been 
+          "No measurement results are available when no Loop
+           Diagnostics mode procedures has been performed yet or
+           after Loop Diagnostics mode results have been
            deleted.";
       }
-      enum "loop-diagnostics-failed-results-invalid" {
+      enum loop-diagnostics-failed-results-invalid {
         description
-          "Loop Diagnostics mode results are invalid after the 
+          "Loop Diagnostics mode results are invalid after the
            most recent Loop Diagnostics mode procedures failed.";
       }
-      enum "loop-diagnostics-succeeded-results-valid" {
+      enum loop-diagnostics-succeeded-results-valid {
         description
-          "Loop Diagnostics mode results are valid after the 
-           most recent Loop Diagnostics mode procedures 
+          "Loop Diagnostics mode results are valid after the
+           most recent Loop Diagnostics mode procedures
            succeeded.";
       }
     }
@@ -145,22 +148,20 @@ submodule bbf-vdsl-test-diagnostics {
       "ITU-T G.997.1 Clause 7.5.1.45 (LDR)";
   }
 
-  augment '/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-'
-        + 'vdsl:line' {
+  augment "/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-"
+        + "vdsl:line" {
     description
       "xDSL Testing / Diagnostics.";
-
     container diagnostics {
       description
         "xDSL Testing / Diagnostics.";
-
       leaf loop-diagnostics-mode-status {
         type enumeration {
-          enum "inactive" {
+          enum inactive {
             description
               "Loop Diagnostics mode procedures are inhibited.";
           }
-          enum "loop-diagnostics-ongoing" {
+          enum loop-diagnostics-ongoing {
             description
               "Loop Diagnostics mode procedures are ongoing.";
           }
@@ -168,17 +169,19 @@ submodule bbf-vdsl-test-diagnostics {
         description
           "Reports the status of the Loop Diagnostics mode procedures
 
-           Upon the near-end xTU being forced to perform the Loop 
-           Diagnostic mode procedures, LDS shall become 
+           Upon the near-end xDSL Transceiver Unit (xTU) being forced
+           to perform the Loop Diagnostic mode procedures, the Loop
+           Diagnostic mode Status (LDS) shall become
            'loop-diagnostics-ongoing'.
 
-           Upon failure or successful completion of the Loop 
-           Diagnostics mode procedures, LDS shall become 'inactive' 
-           and the AN/DPU ME shall send a notification to the NMS.";
+           Upon failure or successful completion of the Loop
+           Diagnostics mode procedures, the Loop Diagnostic mode
+           Status (LDS) shall become 'inactive' and the Access Node
+           (AN)/Distribution Point Unit (DPU) Maintenance Entity (ME)
+           shall send a notification to the NMS.";
         reference
           "ITU-T G.997.1 Clause 7.5.1.44 (LDS)";
       }
-
       leaf loop-diagnostics-mode-results {
         type loop-diagnostics-result;
         description
@@ -186,11 +189,9 @@ submodule bbf-vdsl-test-diagnostics {
         reference
           "ITU-T G.997.1 Clause 7.5.1.45 (LDR)";
       }
-
       notification loop-diagnostics-completed {
         description
           "Notifies that the loop diagnostics have completed.";
-
         leaf result {
           type loop-diagnostics-result;
           mandatory true;
@@ -200,20 +201,21 @@ submodule bbf-vdsl-test-diagnostics {
             "ITU-T G.997.1 Clause 7.5.1.45 (LDR)";
         }
       }
-
       container xtu-c {
         description
-          "Diagnostics objects for the xDSL transmission unit -
+          "Diagnostics objects for the xDSL Transmission Unit -
            Central office.";
         container downstream {
           description
-            "Downstream xTU Sub-Carrier status.";
+            "Downstream xDSL Transceiver Unit (xTU) Sub-Carrier
+             status.";
           uses transmit-psd;
           uses xlin;
         }
         container upstream {
           description
-            "Upstream xTU Sub-Carrier status.";
+            "Upstream xDSL Transceiver Unit (xTU) Sub-Carrier
+             status.";
           uses xtu-sub-carrier-status;
           uses xlin;
         }
@@ -223,22 +225,22 @@ submodule bbf-vdsl-test-diagnostics {
           uses xtu-data-gathering-report;
         }
       }
-
       container xtu-r {
         description
-          "Diagnostics objects for the xDSL transmission unit -
+          "Diagnostics objects for the xDSL Transmission Unit -
            Remote side.";
         container downstream {
           description
-            "Downstream xTU Sub-Carrier status.";
+            "Downstream xDSL Transceiver Unit (xTU) Sub-Carrier
+             status.";
           uses xtu-sub-carrier-status;
         }
         container upstream {
           description
-            "Upstream xTU Sub-Carrier status.";
+            "Upstream xDSL Transceiver Unit (xTU) Sub-Carrier
+             status.";
           uses transmit-psd;
         }
-
         container data-gathering-report {
           description
             "Reports data gathered by the receiver.";

@@ -1,6 +1,5 @@
 submodule bbf-vdsl-base {
   yang-version 1.1;
-
   belongs-to bbf-vdsl {
     prefix bbf-vdsl;
   }
@@ -8,17 +7,14 @@ submodule bbf-vdsl-base {
   import ietf-interfaces {
     prefix if;
   }
-
   import bbf-fastdsl {
     prefix bbf-fastdsl;
   }
-
   include bbf-vdsl-base-body;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -34,13 +30,12 @@ submodule bbf-vdsl-base {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing top level VDSL configuration and augmenations to
      ietf-interfaces.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -80,9 +75,19 @@ submodule bbf-vdsl-base {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -106,72 +111,86 @@ submodule bbf-vdsl-base {
 
   feature data-rate-profile-leftr {
     description
-      "Indicates support for the configuration of LEFTR as part of the
-       data rate profile.";
+      "Indicates support for the configuration of Low Error-Free
+       Throughput Rate (LEFTR) as part of the data rate profile.";
+  }
+
+  feature maxeftr {
+    description
+      "Indicates support for Maximum Error Free Throughput Rate
+       (MAXEFTR).";
+  }
+
+  feature successful-sra {
+    description
+      "Indicates support for reporting successful Seamless Rate
+       Adaptation (SRA).";
+  }
+
+  feature vdsl2-lr {
+    description
+      "Indicates support for VDSL2 Long Reach (VDSL2-LR).";
+  }
+
+  feature strongfext {
+    description
+      "Indicates support for Strong Far-End Crosstalk (STRONGFEXT).";
   }
 
   container vdsl {
     description
       "VDSL configuration";
-
     container service {
       description
-        "Service profile configuration";
+        "Service profile configuration.";
     }
-
     container spectrum {
       description
         "Spectrum profile configuration.";
     }
-
     container quality {
       description
         "Quality profile configuration.";
     }
-
     container thresholds {
       description
-        "Threshold configuration";
+        "Threshold configuration.";
     }
-
     container vectors {
       description
-        "Vectors of profiles";
+        "Vectors of profiles.";
     }
   }
 
-  augment '/if:interfaces/if:interface/bbf-fastdsl:line' {
+  augment "/if:interfaces/if:interface/bbf-fastdsl:line" {
     when "bbf-fastdsl:configured-mode = 'bbf-fastdsl:mode-vdsl'" {
       description
         "Applicable when VDSL mode is configured";
     }
     description
       "Data nodes for the administrative state of DSL lines.";
-
     container line {
       presence
-        "If present, indicates the interface is configured to operate 
+        "If present, indicates the interface is configured to operate
          in VDSL mode.";
       description
         "xDSL line-specific parameters.";
     }
   }
 
-  augment '/if:interfaces-state/if:interface/bbf-fastdsl:line' {
+  augment "/if:interfaces-state/if:interface/bbf-fastdsl:line" {
     when "bbf-fastdsl:operational-mode = 'bbf-fastdsl:mode-vdsl'" {
       description
         "Applicable when VDSL is the current mode of operation";
     }
     description
       "Data nodes for the operational state of DSL lines.";
-
     container line {
       presence
-        "If present, indicates the interface is operaterting in VDSL 
+        "If present, indicates the interface is operaterting in VDSL
          mode.";
       description
         "xDSL line-specific parameters.";
-
       container channel {
         description
           "xDSL channel-specific parameters.";

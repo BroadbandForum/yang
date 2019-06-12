@@ -7,19 +7,17 @@ submodule bbf-fast-spectrum-profiles {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   include bbf-fast-base;
 
   /* Profile bodies */
+
   include bbf-fast-line-spectrum-profile-body;
   include bbf-fast-upstream-power-back-off-profile-body;
   include bbf-fast-rfi-profile-body;
 
-
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -35,12 +33,11 @@ submodule bbf-fast-spectrum-profiles {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing FAST spectrum profiles.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -80,9 +77,19 @@ submodule bbf-fast-spectrum-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -106,77 +113,68 @@ submodule bbf-fast-spectrum-profiles {
 
   typedef line-spectrum-profile-ref {
     type leafref {
-      path '/bbf-fast:fast/bbf-fast:spectrum/bbf-fast:line-'
-         + 'spectrum-profile/bbf-fast:name';
+      path "/bbf-fast:fast/bbf-fast:spectrum/bbf-fast:line-"
+         + "spectrum-profile/bbf-fast:name";
     }
     description
-      "Used to reference a line spectrum profile";
+      "Used to reference a line spectrum profile.";
   }
 
   typedef radio-frequency-interference-profile-ref {
     type leafref {
-      path '/bbf-fast:fast/bbf-fast:spectrum/bbf-fast:radio-'
-         + 'frequency-interference-profile/bbf-fast:name';
+      path "/bbf-fast:fast/bbf-fast:spectrum/bbf-fast:radio-"
+         + "frequency-interference-profile/bbf-fast:name";
     }
     description
-      "Used to reference an Radio Frequency Interference(RFI) 
-       profile";
+      "Used to reference an Radio Frequency Interference(RFI)
+       profile.";
   }
 
   typedef upstream-power-back-off-profile-ref {
     type leafref {
-      path '/bbf-fast:fast/bbf-fast:spectrum/bbf-fast:upstream-'
-         + 'power-back-off-profile/bbf-fast:name';
+      path "/bbf-fast:fast/bbf-fast:spectrum/bbf-fast:upstream-"
+         + "power-back-off-profile/bbf-fast:name";
     }
     description
-      "Used to reference an upstream power back-off profile";
+      "Used to reference an upstream power back-off profile.";
   }
 
-  augment '/bbf-fast:fast/bbf-fast:spectrum' {
+  augment "/bbf-fast:fast/bbf-fast:spectrum" {
     description
       "Data nodes for spectrum-related configuration
        profiles.";
-
     list line-spectrum-profile {
       key "name";
       description
         "A list of line spectrum profiles.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "A name that uniquely identifies the
            profile.";
       }
-
       uses line-spectrum-profile;
     }
-
     list radio-frequency-interference-profile {
       key "name";
       description
-        "A list of Radio Frequency Interference(RFI) profiles.";
-
+        "A list of Radio Frequency Interference (RFI) profiles.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "A name that uniquely identifies the profile.";
       }
-
       uses rfi-profile;
     }
-
     list upstream-power-back-off-profile {
       key "name";
       description
         "A list of upstream power back-off profiles.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "A name that uniquely identifies the profile.";
       }
-
       uses upstream-power-back-off-parameters;
     }
   }

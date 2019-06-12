@@ -1,0 +1,219 @@
+submodule bbf-fast-impulse-noise-monitoring-profile-body {
+  yang-version 1.1;
+  belongs-to bbf-fast {
+    prefix bbf-fast;
+  }
+
+  include bbf-fast-base;
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Ken Kerpez, ASSIA, Inc.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     PS Leader:   Ken Kerpez, ASSIA, Inc.
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia
+
+     WA Director: Joey Boyd, ADTRAN";
+  description
+    "This submodule contains a collection of YANG definitions for
+     managing Impulse Noise Monitoring (INM) profiles.
+
+     Copyright (c) 2016-2019 Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-355a2; see
+     the TR itself for full legal notices.";
+
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
+
+  grouping impulse-noise-monitoring-parameters {
+    description
+      "Impulse Noise Monitoring (INM) is not required for modem
+       operation but is a capability for the measurement of Impulse
+       Noise. The INM Profile includes the option to control an
+       INM function on the receiver of the FAST Transceiver Unit
+       (FTU).";
+    leaf inmiato {
+      type uint16 {
+        range "3..511";
+      }
+      units "one IAT time unit";
+      default "3";
+      description
+        "Defines the Inter Arrival Time (IAT) offset per direction
+         that the FTU receiver shall use to determine in which bin of
+         the inter arrival time histogram the IAT is reported.";
+      reference
+        "ITU-T G.997.2 clause 7.1.11.1 (INMIATO).
+         ITU-T G.9701 clause 11.4.4.7.2.1.";
+    }
+    leaf inmiats {
+      type uint8 {
+        range "0..7";
+      }
+      units "one IAT time unit";
+      default "1";
+      description
+        "Defines the Inter Arrival Time (IAT) step per direction that
+         the FAST Transceiver Unit (FTU) receiver shall use to
+         determine in which bin of the inter arrival time histogram
+         the IAT is reported.";
+      reference
+        "ITU-T G.997.2 clause 7.1.11.2 (INMIATS).
+         ITU-T G.9701 clause 11.4.4.7.2.2.";
+    }
+    leaf inmcc {
+      type uint8 {
+        range "0..255";
+      }
+      units "One DMT symbol";
+      default "1";
+      description
+        "Defines the cluster continuation value per direction that
+         the FAST Transceiver Unit (FTU) receiver shall use in the
+         cluster indication process.";
+      reference
+        "ITU-T G.997.2 clause 7.1.11.3 (INMCC).
+         ITU-T G.9701 clause 11.4.4.7.2.3.";
+    }
+    leaf inm-inpeq-format {
+      type enumeration {
+        enum linear {
+          description
+            "Linear scale.";
+        }
+        enum logarithmic {
+          description
+            "Logarithmic scale.";
+        }
+      }
+      default "linear";
+      description
+        "Defines the way the scale is configured for the INM_INPEQ
+         histogram.";
+      reference
+        "ITU-T G.997.2 clause 7.1.11.4 (INM_INPEQ_FORMAT).
+         ITU-T G.9701 clause 11.4.4.7.2.4.";
+    }
+    leaf dtu-cluster-bridging {
+      type boolean;
+      default "false";
+      description
+        "Defines per direction whether the FAST Transceiver Unit (FTU)
+         receiver shall use bridging in the determination of the Data
+         Transfer Unit (DTU) cluster size. If 'true', bridging is
+         enabled. If 'false', bridging is disabled.";
+      reference
+        "ITU-T G.997.2 clause 7.1.11.5 (BRGN).
+         ITU-T G.9701 clause 11.4.4.7.2.5.";
+    }
+  }
+
+  grouping impulse-noise-monitoring-profile {
+    description
+      "Defines the contents of an Impulse Noise Monitoring (INM)
+       Profile.";
+    leaf inpeq-scaling-factor {
+      type uint8 {
+        range "4 | 8 | 12";
+      }
+      default "12";
+      description
+        "Defines the time unit scaling factor for the line that the
+         FAST Transceiver Unit (FTU) receivers shall use for reporting
+         INPEQ.";
+      reference
+        "ITU-T G.997.2 clause 7.1.11.6;
+         ITU-T G.9701 clause 11.4.4.7.2.6";
+    }
+    leaf iat-scaling-factor {
+      type uint8 {
+        range "4 | 8 | 12";
+      }
+      default "12";
+      description
+        "Defines the time unit scaling factor for the line that the
+         FAST Transceiver Unit (FTU) receivers shall use for reporting
+         Inter Arrival Time (IAT).";
+      reference
+        "ITU-T G.997.2 clause 7.1.11.7;
+         ITU-T G.9701 clause 11.4.4.7.2.7";
+    }
+    leaf inm-enable {
+      type boolean;
+      default "false";
+      description
+        "If true, enables Impulse Noise Monitoring (INM) in both
+         directions. If false, disables Impulse Noise Monitoring (INM)
+         in both directions.";
+      reference
+        "ITU-T G.997.2 clause 7.1.11.8";
+    }
+    container downstream {
+      description
+        "Downstream impulse noise monitoring configuration.";
+      uses impulse-noise-monitoring-parameters;
+    }
+    container upstream {
+      description
+        "Upstream impulse noise monitoring configuration.";
+      uses impulse-noise-monitoring-parameters;
+    }
+  }
+}

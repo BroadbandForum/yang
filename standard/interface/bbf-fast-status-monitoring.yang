@@ -7,22 +7,19 @@ submodule bbf-fast-status-monitoring {
   import ietf-interfaces {
     prefix if;
   }
-
   import bbf-fastdsl {
     prefix bbf-fastdsl;
   }
-
   include bbf-fast-base;
 
   /* Status bodies */
+
   include bbf-fast-line-status-body;
   include bbf-fast-channel-status-body;
-
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -38,12 +35,11 @@ submodule bbf-fast-status-monitoring {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing status monitoring for FAST interfaces.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -83,9 +79,19 @@ submodule bbf-fast-status-monitoring {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -107,31 +113,27 @@ submodule bbf-fast-status-monitoring {
                         TR-355.pdf>";
   }
 
-  augment '/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-'
-        + 'fast:line' {
+  augment "/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-"
+        + "fast:line" {
     description
       "Data nodes for the operational status of FAST lines.";
-
     container status {
       config false;
       description
-        "Status parameters";
-
+        "Status parameters.";
       uses line-status;
     }
   }
 
-  augment '/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-'
-        + 'fast:line/bbf-fast:channel' {
+  augment "/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-"
+        + "fast:line/bbf-fast:channel" {
     description
       "Data nodes for the operational status of FAST bearer
        channels.";
-
     container status {
       config false;
       description
-        "Channel status parameters";
-
+        "Channel status parameters.";
       uses channel-status;
     }
   }

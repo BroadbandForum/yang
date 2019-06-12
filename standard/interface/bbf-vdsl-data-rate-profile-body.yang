@@ -7,13 +7,11 @@ submodule bbf-vdsl-data-rate-profile-body {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   include bbf-vdsl-base;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -29,13 +27,12 @@ submodule bbf-vdsl-data-rate-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
-    "This submodule contains a collection of YANG definitions for 
-     managing Broadband Forum TR-252i3 clause 5.5 Service related 
+    "This submodule contains a collection of YANG definitions for
+     managing Broadband Forum TR-252i3 clause 5.5 Service related
      profiles; DS Data Rate Profile and US Data Rate Profile.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -75,9 +72,19 @@ submodule bbf-vdsl-data-rate-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -96,7 +103,7 @@ submodule bbf-vdsl-data-rate-profile-body {
     reference
       "TR-355c2: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_2.pdf>";
+                        TR-355_Corrigendum-2.pdf>";
   }
   revision 2017-03-13 {
     description
@@ -106,7 +113,7 @@ submodule bbf-vdsl-data-rate-profile-body {
     reference
       "TR-355c1: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_1.pdf>";
+                        TR-355_Corrigendum-1.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -120,15 +127,13 @@ submodule bbf-vdsl-data-rate-profile-body {
   }
 
   grouping data-rate-profile {
-
     description
       "Data rate profile for upstream and downstream.";
-
     leaf minimum-net-data-rate {
       type bbf-yang:data-rate32;
-      must ". <= ../maximum-net-data-rate" {
+      must '. <= ../maximum-net-data-rate' {
         description
-          "The minimum net data rate must be less than or equal the 
+          "The minimum net data rate must be less than or equal the
            maximum net data rate.";
       }
       default "0";
@@ -141,7 +146,6 @@ submodule bbf-vdsl-data-rate-profile-body {
       reference
         "ITU-T G.997.1 clause 7.3.2.1.1 Minimum data rate";
     }
-
     leaf maximum-net-data-rate {
       type bbf-yang:data-rate32;
       default "4294967295";
@@ -154,7 +158,6 @@ submodule bbf-vdsl-data-rate-profile-body {
       reference
         "ITU-T G.997.1 clause 7.3.2.1.3 Maximum data rate";
     }
-
     leaf minimum-data-rate-in-low-power-state {
       type bbf-yang:data-rate32;
       default "0";
@@ -173,18 +176,17 @@ submodule bbf-vdsl-data-rate-profile-body {
         "ITU-T G.997.1 clause 7.3.2.1.5 Minimum data rate in low
          power state";
     }
-
     leaf maximum-bit-error-ratio {
       type enumeration {
-        enum "1e-3" {
+        enum 1e-3 {
           description
             "Bit error ratio 10^-3.";
         }
-        enum "1e-5" {
+        enum 1e-5 {
           description
             "Bit error ratio 10^-5.";
         }
-        enum "1e-7" {
+        enum 1e-7 {
           description
             "Bit error ratio 10^-7.";
         }
@@ -199,7 +201,6 @@ submodule bbf-vdsl-data-rate-profile-body {
       reference
         "ITU-T G.997.1 clause 7.3.2.6 Maximum bit error ratio";
     }
-
     leaf data-rate-threshold-upshift {
       type bbf-yang:data-rate32;
       default "0";
@@ -217,7 +218,6 @@ submodule bbf-vdsl-data-rate-profile-body {
         "ITU-T G.997.1 clause 7.3.2.8.1 Data rate threshold
          upshift";
     }
-
     leaf data-rate-threshold-downshift {
       type bbf-yang:data-rate32;
       default "0";
@@ -235,24 +235,22 @@ submodule bbf-vdsl-data-rate-profile-body {
         "ITU-T G.997.1 clause 7.3.2.8.2 Data rate threshold
          downshift";
     }
-
     leaf minimum-sos-data-rate {
       type bbf-yang:data-rate32;
       default "0";
       description
         "This parameter specifies the minimum net data rate for
-         the bearer channel required for a valid SOS request in
-         the direction of the bearer channel. The value will be
-         coded as an unsigned integer representing the data rate
-         is coded in steps of 1000 bits/s. ";
+         the bearer channel required for a valid Save Our Showtime
+         (SOS) request in the direction of the bearer channel. The
+         value will be coded as an unsigned integer representing the
+         data rate is coded in steps of 1000 bits/s. ";
       reference
         "ITU-T G.997.1 clause 7.3.2.1.6 Minimum SOS Data rate
          (MIN-SOS-DR)";
     }
-
     leaf minimum-expected-throughput-rtx {
       type bbf-yang:data-rate32;
-      must ". <= ../maximum-expected-throughput-rtx" {
+      must '. <= ../maximum-expected-throughput-rtx' {
         description
           "The minimum expected throughput must be less than or equal
            to the maximum expected throughput for retransmission.";
@@ -268,10 +266,9 @@ submodule bbf-vdsl-data-rate-profile-body {
         "ITU-T G.997.1 clause 7.3.2.1.8 Minimum expected
          throughput for retransmission (MINETR_RTX)";
     }
-
     leaf maximum-expected-throughput-rtx {
       type bbf-yang:data-rate32;
-      must ". <= ../maximum-net-data-rate-rtx" {
+      must '. <= ../maximum-net-data-rate-rtx' {
         description
           "The maximum expected throughput must be less than or equal
            to the maximum net data rate for retransmission.";
@@ -287,7 +284,6 @@ submodule bbf-vdsl-data-rate-profile-body {
         "ITU-T G.997.1 clause 7.3.2.1.9 Maximum expected
          throughput for retransmission (MAXETR_RTX)";
     }
-
     leaf maximum-net-data-rate-rtx {
       type bbf-yang:data-rate32;
       default "4294967295";
@@ -301,7 +297,6 @@ submodule bbf-vdsl-data-rate-profile-body {
         "ITU-T G.997.1 clause 7.3.2.1.10 Maximum net data rate
          for retransmission (MAXNDR_RTX)";
     }
-
     leaf target-net-data-rate {
       type bbf-yang:data-rate32;
       default "4294967295";
@@ -315,7 +310,6 @@ submodule bbf-vdsl-data-rate-profile-body {
         "ITU-T G.997.1 clause 7.3.2.19.1 Target net data rate
          (TARGET_NDR) ";
     }
-
     leaf target-expected-throughput {
       type bbf-yang:data-rate32;
       default "4294967295";
@@ -329,7 +323,6 @@ submodule bbf-vdsl-data-rate-profile-body {
         "ITU-T G.997.1 clause 7.3.2.19.2 Target expected
          throughput for retransmission (TARGET_ETR)";
     }
-
     leaf leftr-defect-threshold {
       if-feature "data-rate-profile-leftr";
       type union {
@@ -337,10 +330,11 @@ submodule bbf-vdsl-data-rate-profile-body {
           range "0..99";
         }
         type enumeration {
-          enum "etr-default-threshold" {
+          enum etr-default-threshold {
             description
-              "Indicates that the ETR shall be used as the default
-               threshold for declaring a leftr defect.";
+              "Indicates that the Expected Throughput Rate (ETR) shall
+               be used as the default threshold for declaring a Low
+               Error-Free Throughput Rate (leftr) defect.";
           }
         }
       }
@@ -348,17 +342,20 @@ submodule bbf-vdsl-data-rate-profile-body {
       default "etr-default-threshold";
       description
         "If retransmission is used in a given transmit direction,
-         LEFTR_THRESH specifies the threshold for declaring a 
+         LEFTR_THRESH specifies the threshold for declaring a
          leftr defect (see clause 11.1.12 of ITU-T G.998.4)
-         for the definition of this threshold). 
+         for the definition of this threshold).
          The value is coded as a fraction of the NDR with valid
          range from 0.00 to 0.99 in increments of 0.01.
-         The value 0.00 implies no leftr-defects are declared. 
+         The value 0.00 implies no leftr-defects are declared.
          A special value of (enum etr-default-threshold) means the
-         ETR shall be used as the default threshold for declaring a
-         leftr defect.";
+         Expected Throughput Rate (ETR) shall be used as the default
+         threshold for declaring a Low Error-Free Throughput Rate
+         (leftr) defect.";
       reference
         "ITU-T G.997.1 clause 7.3.1.12.";
     }
-  } // end grouping data-rate-profile
-} // end submodule data-rate-profile-body
+  }
+
+  // end grouping data-rate-profile
+}

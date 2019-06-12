@@ -7,7 +7,6 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,14 +22,13 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of identities associated
      with the management of VDSL threshold crossing alerts.
      YANG data types and grouping definitions for the management
      of VDSL bearer channels.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +68,19 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -100,29 +108,29 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
     description
       "Base identity for VDSL threshold crossing alerts (TCA).
 
-       This identity is abstract and is not be used for a 
+       This identity is abstract and is not be used for a
        threshold crossing alert.";
   }
 
   identity vdsl-15min-threshold-crossing-alert {
     base vdsl-threshold-crossing-alert;
     description
-      "A threshold crossing alert associated with performance  
+      "A threshold crossing alert associated with performance
        counters collected over the current 15 minute interval
        for xTU-C/xTU-R channels and lines.
 
-       This identity is abstract and is not be used for a 
+       This identity is abstract and is not be used for a
        threshold crossing alert.";
   }
 
   identity vdsl-24hr-threshold-crossing-alert {
     base vdsl-threshold-crossing-alert;
     description
-      "A threshold crossing alert associated with performance  
+      "A threshold crossing alert associated with performance
        counters collected over the current 24 hour interval
        for xTU-C/xTU-R channels and lines.
 
-       This identity is abstract and is not be used for a 
+       This identity is abstract and is not be used for a
        threshold crossing alert.";
   }
 
@@ -131,25 +139,26 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
   identity xtu-c-15min-channel-code-violations-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of channel code violations during the 
-       current 15 minute interval has exceeded the configured xTU-C 
+      "The number of channel code violations during the
+       current 15 minute interval has exceeded the configured xTU-C
        threshold. This TCA is optional.";
   }
 
   identity xtu-c-15min-channel-forward-error-corrections-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of forward-error-corrections during the current 15 
-       minute interval has exceeded the configured xTU-C threshold. 
-       This TCA is optional.";
+      "The number of forward-error-corrections during the current 15
+       minute interval has exceeded the configured xTU-C threshold.
+       This threshold crossing alert is optional.";
   }
 
   identity xtu-c-15min-channel-uncorrected-dtus-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of received uncorrected DTUs during the current 
-       15 minute interval has exceeded the configured xTU-C threshold.
-       This TCA is optional.";
+      "The number of received uncorrected Data Transfer Units (DTU)
+       during the current 15 minute interval has exceeded the
+       configured xTU-C threshold. This threshold crossing alert is
+       optional.";
   }
 
   /********** xTU-C 15-MIN LINE NOTIFICATIONS **********/
@@ -157,9 +166,9 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
   identity xtu-c-15min-line-forward-error-correction-seconds-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of line forward error correction seconds during the 
-       current 15 minute interval has exceeded the configured xTU-C 
-       threshold. This TCA is optional.";
+      "The number of line forward error correction seconds during the
+       current 15 minute interval has exceeded the configured xTU-C
+       threshold. This threshold crossing alert is optional.";
   }
 
   identity xtu-c-15min-line-errored-seconds-tca {
@@ -172,73 +181,73 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
   identity xtu-c-15min-line-severely-errored-seconds-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of line severly errored seconds during the current 
-       15 minute interval has exceeded the configured xTU-C 
+      "The number of line severly errored seconds during the current
+       15 minute interval has exceeded the configured xTU-C
        threshold.";
   }
 
   identity xtu-c-15min-line-loss-of-signal-seconds-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of line loss of signal seconds during the current 
+      "The number of line loss of signal seconds during the current
        15 minute interval has exceeded the configured xTU-C threshold.
-       This TCA is optional.";
+       This threshold crossing alert is optional.";
   }
 
   identity xtu-c-15min-line-unavailable-seconds-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of line unavailable seconds during the 
-       current 15 minute interval has exceeded the configured xTU-C 
+      "The number of line unavailable seconds during the
+       current 15 minute interval has exceeded the configured xTU-C
        threshold.";
   }
 
   identity xtu-c-15min-line-leftr-seconds-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of line LEFTR defect seconds during the 
-       current 15 minute interval has exceeded the configured xTU-C 
-       threshold.";
+      "The number of line Low Error-Free Throughput Rate (LEFTR)
+       defect seconds during the current 15 minute interval has
+       exceeded the configured xTU-C threshold.";
   }
 
   identity xtu-c-15min-line-full-initializations-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of line full initializations during the current 
-       15 minute interval has exceeded the configured xTU-C 
+      "The number of line full initializations during the current
+       15 minute interval has exceeded the configured xTU-C
        threshold.";
   }
 
   identity xtu-c-15min-line-failed-full-initializations-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of line failed full initializations during the 
-       current 15 minute interval has exceeded the configured xTU-C 
+      "The number of line failed full initializations during the
+       current 15 minute interval has exceeded the configured xTU-C
        threshold.";
   }
 
   identity xtu-c-15min-line-fast-initializations-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of line fast initializations during the current 15 
-       minute interval has exceeded the configured xTU-C threshold. 
-       This TCA is optional.";
+      "The number of line fast initializations during the current 15
+       minute interval has exceeded the configured xTU-C threshold.
+       This threshold crossing alert is optional.";
   }
 
   identity xtu-c-15min-line-failed-fast-initializations-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of line failed fast initializations during the 
-       current 15 minute interval has exceeded the configured xTU-C 
-       threshold. This TCA is optional.";
+      "The number of line failed fast initializations during the
+       current 15 minute interval has exceeded the configured xTU-C
+       threshold. This threshold crossing alert is optional.";
   }
 
   identity xtu-c-15min-line-spontaneous-interruptions-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of line spontaneous interuptions during the current 
+      "The number of line spontaneous interuptions during the current
        15 minute interval has exceeded the configured xTU-C threshold.
-       This TCA is optional.";
+       This threshold crossing alert is optional.";
   }
 
   /********** xTU-R 15-MIN CHANNEL NOTIFICATIONS **********/
@@ -246,36 +255,36 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
   identity xtu-r-15min-channel-code-violations-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of channel code violations during the 
-       current 15 minute interval has exceeded the configured xTU-R 
+      "The number of channel code violations during the
+       current 15 minute interval has exceeded the configured xTU-R
        threshold. This TCA is optional.";
   }
 
   identity xtu-r-15min-channel-forward-error-corrections-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of forward-error-corrections during the current 15 
-       minute interval has exceeded the configured xTU-R threshold. 
+      "The number of forward-error-corrections during the current 15
+       minute interval has exceeded the configured xTU-R threshold.
        This TCA is optional.";
   }
 
   identity xtu-r-15min-channel-uncorrected-dtus-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of received uncorrected DTUs during the current 
-       15 minute interval has exceeded the configured xTU-R threshold.
-       This TCA is optional.";
+      "The number of received uncorrected Data Transfer Units (DTU)
+       during the current 15 minute interval has exceeded the
+       configured xTU-R threshold. This threshold crossing alert is
+       optional.";
   }
-
 
   /********************* xTU-R 15-MIN LINE NOTIFICATIONS *********/
 
   identity xtu-r-15min-line-forward-error-correction-seconds-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of line forward error correction seconds during the 
-       current 15 minute interval has exceeded the configured xTU-R 
-       threshold. This TCA is optional.";
+      "The number of line forward error correction seconds during the
+       current 15 minute interval has exceeded the configured xTU-R
+       threshold. This threshold crossing alert is optional.";
   }
 
   identity xtu-r-15min-line-errored-seconds-tca {
@@ -288,71 +297,69 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
   identity xtu-r-15min-line-severely-errored-seconds-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of line severly errored seconds during the current 
-       15 minute interval has exceeded the configured xTU-R 
+      "The number of line severly errored seconds during the current
+       15 minute interval has exceeded the configured xTU-R
        threshold.";
   }
 
   identity xtu-r-15min-line-loss-of-signal-seconds-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of line loss of signal seconds during the current 
+      "The number of line loss of signal seconds during the current
        15 minute interval has exceeded the configured xTU-R threshold.
-       This TCA is optional.";
+       This threshold crossing alert is optional.";
   }
 
   identity xtu-r-15min-line-unavailable-seconds-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of line unavailable seconds during the 
-       current 15 minute interval has exceeded the configured xTU-R 
+      "The number of line unavailable seconds during the
+       current 15 minute interval has exceeded the configured xTU-R
        threshold.";
   }
 
   identity xtu-r-15min-line-leftr-seconds-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of line LEFTR defect seconds during the 
-       current 15 minute interval has exceeded the configured xTU-R 
-       threshold.";
+      "The number of line Low Error-Free Throughput Rate (LEFTR)
+       defect seconds during the current 15 minute interval has
+       exceeded the configured xTU-R threshold.";
   }
-
 
   /********** xTU-C 24-HR CHANNEL NOTIFICATIONS **********/
 
   identity xtu-c-24hr-channel-code-violations-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of channel code violations during the 
-       current 24 hour interval has exceeded the configured xTU-C 
-       threshold. This TCA is optional.";
+      "The number of channel code violations during the
+       current 24 hour interval has exceeded the configured xTU-C
+       threshold. This threshold crossing alert is optional.";
   }
 
   identity xtu-c-24hr-channel-forward-error-corrections-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of forward-error-corrections during the current 24 
-       hour interval has exceeded the configured xTU-C threshold. 
-       This TCA is optional.";
+      "The number of forward-error-corrections during the current 24
+       hour interval has exceeded the configured xTU-C threshold.
+       This threshold crossing alert is optional.";
   }
 
   identity xtu-c-24hr-channel-uncorrected-dtus-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of received uncorrected DTUs during the current 
+      "The number of received uncorrected DTUs during the current
        24 hour interval has exceeded the configured xTU-C threshold.
-       This TCA is optional.";
+       This threshold crossing alert is optional.";
   }
-
 
   /********** xTU-C 24-HR LINE NOTIFICATIONS **********/
 
   identity xtu-c-24hr-line-forward-error-correction-seconds-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of line forward error correction seconds during the 
-       current 24 hour interval has exceeded the configured xTU-C 
-       threshold. This TCA is optional.";
+      "The number of line forward error correction seconds during the
+       current 24 hour interval has exceeded the configured xTU-C
+       threshold. This threshold crossing alert is optional.";
   }
 
   identity xtu-c-24hr-line-errored-seconds-tca {
@@ -365,73 +372,73 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
   identity xtu-c-24hr-line-severely-errored-seconds-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of line severly errored seconds during the current 
-       24 hour interval has exceeded the configured xTU-C 
+      "The number of line severly errored seconds during the current
+       24 hour interval has exceeded the configured xTU-C
        threshold.";
   }
 
   identity xtu-c-24hr-line-loss-of-signal-seconds-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of line loss of signal seconds during the current 
+      "The number of line loss of signal seconds during the current
        24 hour interval has exceeded the configured xTU-C threshold.
-       This TCA is optional.";
+       This threshold crossing alert is optional.";
   }
 
   identity xtu-c-24hr-line-unavailable-seconds-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of line unavailable seconds during the 
-       current 24 hour interval has exceeded the configured xTU-C 
+      "The number of line unavailable seconds during the
+       current 24 hour interval has exceeded the configured xTU-C
        threshold.";
   }
 
   identity xtu-c-24hr-line-leftr-seconds-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of line LEFTR defect seconds during the 
-       current 24 hour interval has exceeded the configured xTU-C 
-       threshold.";
+      "The number of line Low Error-Free Throughput Rate (LEFTR)
+       defect seconds during the current 24 hour interval has exceeded
+       the configured xTU-C threshold.";
   }
 
   identity xtu-c-24hr-line-full-initializations-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of line full initializations during the current 
-       24 hour interval has exceeded the configured xTU-C 
+      "The number of line full initializations during the current
+       24 hour interval has exceeded the configured xTU-C
        threshold.";
   }
 
   identity xtu-c-24hr-line-failed-full-initializations-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of line failed full initializations during the 
-       current 24 hour interval has exceeded the configured xTU-C 
+      "The number of line failed full initializations during the
+       current 24 hour interval has exceeded the configured xTU-C
        threshold.";
   }
 
   identity xtu-c-24hr-line-fast-initializations-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of line fast initializations during the current 24 
-       hour interval has exceeded the configured xTU-C threshold. 
-       This TCA is optional.";
+      "The number of line fast initializations during the current 24
+       hour interval has exceeded the configured xTU-C threshold.
+       This threshold crossing alert is optional.";
   }
 
   identity xtu-c-24hr-line-failed-fast-initializations-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of line failed fast initializations during the 
-       current 24 hour interval has exceeded the configured xTU-C 
-       threshold. This TCA is optional.";
+      "The number of line failed fast initializations during the
+       current 24 hour interval has exceeded the configured xTU-C
+       threshold. This threshold crossing alert is optional.";
   }
 
   identity xtu-c-24hr-line-spontaneous-interruptions-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of line spontaneous interuptions during the current 
+      "The number of line spontaneous interuptions during the current
        24 hour interval has exceeded the configured xTU-C threshold.
-       This TCA is optional.";
+       This threshold crossing alert is optional.";
   }
 
   /********** xTU-R 24-HR CHANNEL NOTIFICATIONS **********/
@@ -439,25 +446,25 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
   identity xtu-r-24hr-channel-code-violations-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of channel code violations during the 
-       current 24 hour interval has exceeded the configured xTU-R 
-       threshold. This TCA is optional.";
+      "The number of channel code violations during the
+       current 24 hour interval has exceeded the configured xTU-R
+       threshold. This threshold crossing alert is optional.";
   }
 
   identity xtu-r-24hr-channel-forward-error-corrections-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of forward-error-corrections during the current 24 
-       hour interval has exceeded the configured xTU-R threshold. 
-       This TCA is optional.";
+      "The number of forward-error-corrections during the current 24
+       hour interval has exceeded the configured xTU-R threshold.
+       This threshold crossing alert is optional.";
   }
 
   identity xtu-r-24hr-channel-uncorrected-dtus-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of received uncorrected DTUs during the current 
-       24 hour interval has exceeded the configured xTU-R threshold.
-       This TCA is optional.";
+      "The number of received uncorrected Data Transfer Units (DTU)
+       during the current 24 hour interval has exceeded the configured
+       xTU-R threshold. This threshold crossing alert is optional.";
   }
 
   /********** xTU-R 24-HR LINE NOTIFICATIONS **********/
@@ -465,9 +472,9 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
   identity xtu-r-24hr-line-forward-error-correction-seconds-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of line forward error correction seconds during the 
-       current 24 hour interval has exceeded the configured xTU-R 
-       threshold. This TCA is optional.";
+      "The number of line forward error correction seconds during the
+       current 24 hour interval has exceeded the configured xTU-R
+       threshold. This threshold crossing alert is optional.";
   }
 
   identity xtu-r-24hr-line-errored-seconds-tca {
@@ -480,32 +487,32 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
   identity xtu-r-24hr-line-severely-errored-seconds-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of line severly errored seconds during the current 
-       24 hour interval has exceeded the configured xTU-R 
+      "The number of line severly errored seconds during the current
+       24 hour interval has exceeded the configured xTU-R
        threshold.";
   }
 
   identity xtu-r-24hr-line-loss-of-signal-seconds-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of line loss of signal seconds during the current 
+      "The number of line loss of signal seconds during the current
        24 hour interval has exceeded the configured xTU-R threshold.
-       This TCA is optional.";
+       This threshold crossing alert is optional.";
   }
 
   identity xtu-r-24hr-line-unavailable-seconds-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of line unavailable seconds during the 
-       current 24 hour interval has exceeded the configured xTU-R 
+      "The number of line unavailable seconds during the
+       current 24 hour interval has exceeded the configured xTU-R
        threshold.";
   }
 
   identity xtu-r-24hr-line-leftr-seconds-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
-      "The number of line LEFTR defect seconds during the 
-       current 24 hour interval has exceeded the configured xTU-R 
-       threshold.";
+      "The number of line Low Error-Free Throughput Rate (LEFTR)
+       defect seconds during the current 24 hour interval has exceeded
+       the configured xTU-R threshold.";
   }
 }

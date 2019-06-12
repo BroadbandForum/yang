@@ -7,7 +7,6 @@ submodule bbf-vdsl-noise-margin-profile-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,13 +22,12 @@ submodule bbf-vdsl-noise-margin-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
-    "This submodule contains a collection of YANG definitions for 
-     managing Broadband Forum TR-252i3 clause 5.7 DSL Quality 
+    "This submodule contains a collection of YANG definitions for
+     managing Broadband Forum TR-252i3 clause 5.7 DSL Quality
      Management related profiles; SNR Margin Profile.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -69,9 +67,19 @@ submodule bbf-vdsl-noise-margin-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -90,7 +98,7 @@ submodule bbf-vdsl-noise-margin-profile-body {
     reference
       "TR-355c2: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_2.pdf>";
+                        TR-355_Corrigendum-2.pdf>";
   }
   revision 2017-03-13 {
     description
@@ -100,7 +108,7 @@ submodule bbf-vdsl-noise-margin-profile-body {
     reference
       "TR-355c1: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_1.pdf>";
+                        TR-355_Corrigendum-1.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -114,18 +122,16 @@ submodule bbf-vdsl-noise-margin-profile-body {
   }
 
   grouping noise-margin-profile {
-
     description
       "Noise margins are important for line robustness and can be
        configured independently from other spectrum related
        parameters to reduce the amount of combinations.";
-
     leaf minimum-noise-margin {
       type uint16 {
         range "0..310";
       }
       units "0.1 dB";
-      must ". <= ../target-noise-margin" {
+      must '. <= ../target-noise-margin' {
         description
           "The minimum noise margin must be less than or equal to
            the target noise margin.";
@@ -145,25 +151,23 @@ submodule bbf-vdsl-noise-margin-profile-body {
          margin (MINSNRMds) and clause 7.3.1.3.6 Upstream minimum
          noise margin (MINSNRMus)";
     }
-
     leaf target-noise-margin {
       type uint16 {
         range "0..310";
       }
       units "0.1 dB";
-      must
-        "../maximum-noise-margin = 'unbounded' or 
-         . <= ../maximum-noise-margin" {
-        description
-          "If the maximum noise margin is not unbounded, the target 
-           noise margin must be less than or equal to the maximum 
-           noise margin.";
+      must "../maximum-noise-margin = 'unbounded' or
+            . <= ../maximum-noise-margin" {
+          description
+            "If the maximum noise margin is not unbounded, the target
+             noise margin must be less than or equal to the maximum
+             noise margin.";
       }
       default "60";
       description
         "This is the noise margin that the receiver will achieve,
-         relative to the BER requirement for each of the bearer
-         channels, or better, to successfully complete
+         relative to the Bit Error Rate (BER) requirement for each of
+         the bearer channels, or better, to successfully complete
          initialization. The target noise margin ranges from 0 to
          31 dB, with 0.1 dB steps.";
       reference
@@ -171,14 +175,13 @@ submodule bbf-vdsl-noise-margin-profile-body {
          margin (TARSNRMds) and clause 7.3.1.3.2 Upstream target
          noise margin (TARSNRMus)";
     }
-
     leaf maximum-noise-margin {
       type union {
         type uint16 {
           range "0..310";
         }
         type enumeration {
-          enum "unbounded" {
+          enum unbounded {
             description
               "Indicates that no delay variation bound is imposed.";
           }
@@ -204,22 +207,21 @@ submodule bbf-vdsl-noise-margin-profile-body {
          margin (MAXSNRMds) and clause 7.3.1.3.4 Upstream maximum
          noise margin (MAXSNRMus";
     }
-
     leaf ra-mode {
       type enumeration {
-        enum "1" {
+        enum 1 {
           description
             "Mode 1 = MANUAL.";
         }
-        enum "2" {
+        enum 2 {
           description
             "Mode 2 = AT_INIT.";
         }
-        enum "3" {
+        enum 3 {
           description
             "Mode 3 = DYNAMIC.";
         }
-        enum "4" {
+        enum 4 {
           description
             "Mode 4 = DYNAMIC with SOS.";
         }
@@ -230,29 +232,27 @@ submodule bbf-vdsl-noise-margin-profile-body {
          rate-adaptive xTU in the transmit direction. The
          parameter is used only if the rate-adaptive
          functionality is supported.
-         The default is enum 4, corresponding to Mode 4 
+         The default is enum 4, corresponding to Mode 4
          = DYNAMIC with SOS.";
       reference
         "ITU-T G.997.1 ITU-T G.997.1 clause 7.3.1.4.1 Downstream
          rate adaptation mode (RA-MODEds) and clause 7.3.1.4.2
          Upstream rate adaptation mode (RA-MODEus)";
     }
-
     leaf upshift-noise-margin {
       type uint16 {
         range "0..310";
       }
       units "0.1 dB";
-      must
-        "(../ra-mode != '3' and ../ra-mode != '4') or
-         (. >= ../target-noise-margin and
-         (../maximum-noise-margin = 'unbounded' or
-         . <= ../maximum-noise-margin))" {
-        description
-          "If the RA-MODE is equal to 3 or 4, the upshift target
-           noise margin must be greater than or equal to the 
-           target noise margin and less than or equal to the 
-           maximum noise margin.";
+      must "(../ra-mode != '3' and ../ra-mode != '4') or
+            (. >= ../target-noise-margin and
+            (../maximum-noise-margin = 'unbounded' or
+            . <= ../maximum-noise-margin))" {
+          description
+            "If the RA-MODE is equal to 3 or 4, the upshift target
+             noise margin must be greater than or equal to the
+             target noise margin and less than or equal to the
+             maximum noise margin.";
       }
       default "70";
       description
@@ -267,7 +267,6 @@ submodule bbf-vdsl-noise-margin-profile-body {
          margin (RA-USNRMds) and clause 7.3.1.4.4 Upstream
          upshift noise margin (RA-USNRMus)";
     }
-
     leaf minimum-time-interval-upshift-sra {
       type uint16 {
         range "0..16383";
@@ -286,21 +285,19 @@ submodule bbf-vdsl-noise-margin-profile-body {
          clause 7.3.1.4.6 Upstream minimum time interval for
          upshift rate adaptation (RA-UTIMEus)";
     }
-
     leaf downshift-noise-margin {
       type uint16 {
         range "0..310";
       }
       units "0.1 dB";
-      must
-        "(../ra-mode != '3' and ../ra-mode != '4') or
-         (. >= ../minimum-noise-margin and
-         . <= ../target-noise-margin)" {
-        description
-          "If the RA-MODE is equal to 3 or 4, the downshift target
-           noise margin must be greater than or equal to the minimum 
-           noise margin and less than or equal to the target noise 
-           margin.";
+      must "(../ra-mode != '3' and ../ra-mode != '4') or
+            (. >= ../minimum-noise-margin and
+            . <= ../target-noise-margin)" {
+          description
+            "If the RA-MODE is equal to 3 or 4, the downshift target
+             noise margin must be greater than or equal to the minimum
+             noise margin and less than or equal to the target noise
+             margin.";
       }
       default "50";
       description
@@ -315,7 +312,6 @@ submodule bbf-vdsl-noise-margin-profile-body {
          noise margin (RA-DSNRMds) and clause 7.3.1.4.8 Upstream
          downshift noise margin (RA-DSNRMus)";
     }
-
     leaf minimum-time-interval-downshift-sra {
       type uint16 {
         range "0..16383";
@@ -338,32 +334,31 @@ submodule bbf-vdsl-noise-margin-profile-body {
 
   grouping noise-margin-profile-upstream {
     description
-      "Noise margin configuration nodes for the upstream noise 
+      "Noise margin configuration nodes for the upstream noise
        margin profile.";
-
     uses noise-margin-profile;
-
     leaf snr-mode {
       type enumeration {
-        enum "1" {
+        enum 1 {
           description
-            "If SNRMODE equals 1, the virtual noise is disabled.";
+            "If Signal-to-Noise Ratio mode (SNRMODE) equals 1, the
+             virtual noise is disabled.";
         }
-        enum "2" {
+        enum 2 {
           description
-            "If SNRMODE equals 2, the transmitter-referred virtual 
-             noise is enabled.";
+            "If Signal-to-Noise Ratio mode (SNRMODE) equals 2, the
+             transmitter-referred virtual noise is enabled.";
         }
-        enum "3" {
+        enum 3 {
           description
-            "If SNRMODE equals 3, the receiver-referred virtual noise 
-             is enabled.";
+            "If Signal-to-Noise Ratio mode (SNRMODE) equals 3, the
+             receiver-referred virtual noise is enabled.";
         }
-        enum "4" {
+        enum 4 {
           description
-            "If SNRMODE equals 4, the receiver-referred virtual
-             noise together with the virtual noise
-             scaling factor is enabled.";
+            "If Signal-to-Noise Ratio mode (SNRMODE) equals 4, the
+             receiver-referred virtual noise together with the virtual
+             noise scaling factor is enabled.";
         }
       }
       default "1";
@@ -377,26 +372,26 @@ submodule bbf-vdsl-noise-margin-profile-body {
 
   grouping noise-margin-profile-downstream {
     description
-      "Noise margin configuration nodes for the downstream noise 
+      "Noise margin configuration nodes for the downstream noise
        margin profile.";
-
     uses noise-margin-profile;
-
     leaf snr-mode {
       type enumeration {
-        enum "1" {
+        enum 1 {
           description
-            "If SNRMODE equals 1, the virtual noise is disabled.";
+            "If Signal-to-Noise Ratio mode (SNRMODE) equals 1, the
+             virtual noise is disabled.";
         }
-        enum "2" {
+        enum 2 {
           description
-            "If SNRMODE equals 2,the virtual noise is enabled.";
+            "If Signal-to-Noise Ratio mode (SNRMODE) equals 2, the
+             virtual noise is enabled.";
         }
-        enum "4" {
+        enum 4 {
           description
-            "If SNRMODE equals 4, the virtual noise
-             together with the virtual noise scaling factor
-             is enabled.";
+            "If Signal-to-Noise Ratio mode (SNRMODE) equals 4, the
+             virtual noise together with the virtual noise scaling
+             factor is enabled.";
         }
       }
       default "1";

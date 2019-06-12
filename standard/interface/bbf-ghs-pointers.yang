@@ -7,20 +7,18 @@ submodule bbf-ghs-pointers {
   import ietf-interfaces {
     prefix if;
   }
-
   import bbf-fastdsl {
     prefix bbf-fastdsl;
   }
-
   include bbf-ghs-base;
 
   /* Profile Definitions */
+
   include bbf-ghs-handshake-profiles;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -36,12 +34,11 @@ submodule bbf-ghs-pointers {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
-     managing profiles for G.hs on supported interfaces.
+     managing profiles for G.handshake (G.hs) on supported interfaces.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +78,19 @@ submodule bbf-ghs-pointers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -105,16 +112,14 @@ submodule bbf-ghs-pointers {
                         TR-355.pdf>";
   }
 
-
-  augment '/if:interfaces/if:interface/bbf-fastdsl:line/bbf-ghs:ghs' {
+  augment "/if:interfaces/if:interface/bbf-fastdsl:line/bbf-ghs:ghs" {
     description
       "Data nodes to support the assignment of a G.handshake (G.hs)
        profile.";
-
     leaf handshake-profile {
       type handshake-profile-ref;
       description
-        "Reference to a G.hs profile.";
+        "Reference to a G.handshake (G.hs) profile.";
     }
   }
 }

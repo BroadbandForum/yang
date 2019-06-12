@@ -7,7 +7,6 @@ submodule bbf-ghs-handshake-profile-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,12 +22,11 @@ submodule bbf-ghs-handshake-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing handshake profiles.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-ghs-handshake-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -89,7 +97,7 @@ submodule bbf-ghs-handshake-profile-body {
     reference
       "TR-355c2: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_2.pdf>";
+                        TR-355_Corrigendum-2.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -105,51 +113,64 @@ submodule bbf-ghs-handshake-profile-body {
   grouping handshake-profile {
     description
       "Defines the parameters contained in a handshake profile.";
-
     container downstream {
       description
-        "Parameters associated with the downstream direction";
-
+        "Parameters associated with the downstream direction.";
       container sub-carrier-maximum-psd-level {
         list maxpsd {
           key "sub-carrier-index";
           leaf sub-carrier-index {
             type uint16 {
-              range "12|14|40|56|64|72|88|96|257|293|337|383|511";
+              range "12|14|40|56|64|72|88|96|257|293|337|383|511|"
+                  + "4368|4440|4488";
             }
             description
               "Sub carrier index. For each valid sub-carrier index
-               not included in this list, the maximum PSD level
-               permitted by G.994.1 is allowed.";
+               not included in this list, the maximum Power Spectral
+               Density (PSD) level permitted by G.994.1 is allowed.";
           }
-
           leaf psd-level {
             type uint8 {
               range "0..117 | 118" {
                 description
-                  "Values from -40 to -98.5 dBm/Hz.  Uses an offset
-                   of -80 in 0.5 dBm/Hz steps";
+                  "Values from -40 to -98.5 dBm/Hz. 'psd-level' is
+                   calculated from the following:
+
+                     psd-level = (maximum PSD level / -0.5) - 80
+
+                     Examples:
+                       (-40 dBm/Hz / -0.5) - 80 = 0
+                       (-98.5 dBm/Hz / -0.5) - 80 = 117";
               }
             }
-            units "-0.5dbm/Hz";
+            units "-0.5 dBm/Hz";
+            must '(../sub-carrier-index != 4368 and
+ ../sub-carrier-index != 4440 and
+ ../sub-carrier-index != 4488) or (. >= 50)' {
+              description
+                "If the sub-carrier-index is 4368, 4440 or 4488, the
+                 Power Spectral Density (PSD) level must be less than
+                 or equal to -65 dBm/Hz corresponding to a 'psd-level'
+                 range of 50 to 117.";
+            }
             default "0";
             description
-              "Maximum PSD level";
+              "Maximum Power Spectral Density (PSD) level";
           }
           description
-            "List of maximum PSD levels per carrier with frequency
-             index, N";
+            "List of maximum Power Spectral Density (PSD) levels per
+             carrier with frequency index, N.";
         }
         description
-          "Defines the maximum transmit PSD level for each individual 
-           G.hs carrier frequency index N in the downstream direction.
-           The PSD level (in dBm/Hz) is calculated as the tone power 
-           averaged over a 4.3125 kHz bandwidth.
+          "Defines the maximum transmit Power Spectral Density (PSD)
+           level for each individual G.handshake (G.hs) carrier
+           frequency index N in the downstream direction. The PSD
+           level (in dBm/Hz) is calculated as the tone power averaged
+           over a 4.3125 kHz bandwidth.
 
-           The range supported is from -98.5 to -40 dBm/Hz, with 0.5 
-           dB steps. If the value is set to -99 (118), then the 
+           The range supported is from -98.5 to -40 dBm/Hz, with 0.5
+           dB steps. If the value is set to -99 (118), then the
            carrier shall not be transmitted.";
-
         reference
           "ITU-T G.994.1 clause 13";
       }

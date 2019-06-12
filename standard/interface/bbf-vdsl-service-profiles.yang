@@ -1,6 +1,5 @@
 submodule bbf-vdsl-service-profiles {
   yang-version 1.1;
-
   belongs-to bbf-vdsl {
     prefix bbf-vdsl;
   }
@@ -8,16 +7,13 @@ submodule bbf-vdsl-service-profiles {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   include bbf-vdsl-base-body;
   include bbf-vdsl-data-rate-profile-body;
-
   include bbf-vdsl-base;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -33,12 +29,11 @@ submodule bbf-vdsl-service-profiles {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing VDSL service profiles.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -78,9 +73,19 @@ submodule bbf-vdsl-service-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -104,8 +109,8 @@ submodule bbf-vdsl-service-profiles {
 
   typedef downstream-data-rate-profile-ref {
     type leafref {
-      path '/bbf-vdsl:vdsl/bbf-vdsl:service/bbf-vdsl:downstream-'
-         + 'data-rate-profile/bbf-vdsl:name';
+      path "/bbf-vdsl:vdsl/bbf-vdsl:service/bbf-vdsl:downstream-"
+         + "data-rate-profile/bbf-vdsl:name";
     }
     description
       "Downstream Data Rate Profile identifier.";
@@ -113,43 +118,36 @@ submodule bbf-vdsl-service-profiles {
 
   typedef upstream-data-rate-profile-ref {
     type leafref {
-      path '/bbf-vdsl:vdsl/bbf-vdsl:service/bbf-vdsl:upstream-data-'
-         + 'rate-profile/bbf-vdsl:name';
+      path "/bbf-vdsl:vdsl/bbf-vdsl:service/bbf-vdsl:upstream-data-"
+         + "rate-profile/bbf-vdsl:name";
     }
     description
       "Upstream Data Rate Profile identifier.";
   }
 
-
-  augment '/bbf-vdsl:vdsl/bbf-vdsl:service' {
+  augment "/bbf-vdsl:vdsl/bbf-vdsl:service" {
     description
       "Service related profiles.";
-
     list downstream-data-rate-profile {
       key "name";
       description
         "Downstream Data Rate Profile.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "Downstream Data Rate Profile identifier.";
       }
-
       uses data-rate-profile;
     }
-
     list upstream-data-rate-profile {
       key "name";
       description
         "Upstream Data Rate Profile.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "Upstream Data Rate Profile identifier.";
       }
-
       uses data-rate-profile;
     }
   }

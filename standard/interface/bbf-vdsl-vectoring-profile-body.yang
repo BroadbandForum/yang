@@ -4,14 +4,13 @@ submodule bbf-vdsl-vectoring-profile-body {
     prefix bbf-vdsl;
   }
 
+  include bbf-vdsl-base;
   include bbf-vdsl-base-body;
-
   include bbf-vdsl-line-spectrum-profile-body;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -27,13 +26,12 @@ submodule bbf-vdsl-vectoring-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
-    "This submodule contains a collection of YANG definitions for 
-     managing Broadband Forum TR-252i3 clause 5.7 DSL Quality 
+    "This submodule contains a collection of YANG definitions for
+     managing Broadband Forum TR-252i3 clause 5.7 DSL Quality
      Management related profiles; Vectoring Profile.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -73,9 +71,19 @@ submodule bbf-vdsl-vectoring-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -94,7 +102,7 @@ submodule bbf-vdsl-vectoring-profile-body {
     reference
       "TR-355c1: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_1.pdf>";
+                        TR-355_Corrigendum-1.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -107,15 +115,12 @@ submodule bbf-vdsl-vectoring-profile-body {
                         TR-355.pdf>";
   }
 
-
   grouping vectoring-profile {
-
     description
       "The Vectoring mechanism is defined by ITU-T Recommendation
        G.993.5. The Vectoring Profile contains part of the Vectoring
        related configuration parameters while the rest of the
        parameters are located in the data rate profile.";
-
     list vector-band-control {
       key "start-index";
       max-elements 8;
@@ -125,10 +130,10 @@ submodule bbf-vdsl-vectoring-profile-body {
          sub-carrier indices (a(i), b(i)). Each pair specifies a
          frequency band starting from sub-carrier index a(i) and
          ending at sub-carrier index b(i) (including both start
-         and end points) in which FEXT cancellation for
-         the line is not required. Up to 8 frequency bands may be
-         configured. The same value of this parameter will be set
-         for all lines of the same vector group.
+         and end points) in which Far-End Crosstalk (FEXT)
+         cancellation for the line is not required. Up to 8 frequency
+         bands may be configured. The same value of this parameter
+         will be set for all lines of the same vector group.
          The default is an empty list, corresponding to no
          vectoring frequency-band control.";
       reference
@@ -137,16 +142,16 @@ submodule bbf-vdsl-vectoring-profile-body {
          7.3.1.13.2 Vectoring frequency-band control downstream
          (VECTOR_BAND_CONTROLds)";
     }
-
     leaf fext-cancel-priority {
       type enumeration {
-        enum "LOW" {
+        enum LOW {
           description
-            "Low priority for FEXT cancellation";
+            "Low priority for Far-End Crosstalk (FEXT) cancellation.";
         }
-        enum "HIGH" {
+        enum HIGH {
           description
-            "High priority for FEXT cancellation";
+            "High priority for Far-End Crosstalk (FEXT)
+             cancellation.";
         }
       }
       default "HIGH";
@@ -161,58 +166,57 @@ submodule bbf-vdsl-vectoring-profile-body {
          7.3.1.13.4 FEXT cancellation line priorities downstream
          (FEXT_CANCEL_PRIORITYds)";
     }
-
     leaf fext-cancel-enable {
       type enumeration {
-        enum "1" {
+        enum 1 {
           description
-            "FEXT cancellation enabled";
+            "Far-End Crosstalk (FEXT) cancellation enabled.";
         }
-        enum "0" {
+        enum 0 {
           description
-            "FEXT cancellation disabled";
+            "Far-End Crosstalk (FEXT) cancellation disabled.";
         }
       }
       default "1";
       description
-        "A value of 1 enables and a value of 0 disables FEXT
-         cancellation in the direction of transmission from all
-         the other vectored lines into the line in the vectored
-         group. The default is enum 1, corresponding to FEXT
-         cancellation enabled.";
+        "A value of 1 enables and a value of 0 disables Far-End
+         Crosstalk (FEXT) cancellation in the direction of
+         transmission from all the other vectored lines into the line
+         in the vectored group. The default is enum 1, corresponding
+         to FEXT cancellation enabled.";
       reference
         "ITU-T G.997.1 clause 7.3.1.13.5 FEXT cancellation
          enabling/disabling upstream (FEXT_CANCEL_ENABLEus) and
          clause 7.3.1.13.6 FEXT cancellation enabling/disabling
          downstream (FEXT_CANCEL_ENABLEds)";
     }
-
     leaf xlin-group-size-req {
       type uint8 {
         range "1 | 2 | 4 | 8 | 16 | 32 | 64";
       }
       default "1";
       description
-        "This parameter is the requested value of XLING in the
-         direction of transmission. The valid values are 1, 2, 4,
-         8, 16, 32, and 64.";
+        "This parameter is the requested value of XLIN Group size
+         (XLING) in the direction of transmission. The valid values
+         are 1, 2, 4, 8, 16, 32, and 64.";
       reference
         "ITU-T G.997.1 clause 7.3.1.13.7 Downstream requested
          XLIN subcarrier group size (XLINGREQds) and clause
          7.3.1.13.8 Upstream requested XLIN subcarrier group size
          (XLINGREQus)";
     }
-  } // end grouping vectoring-profile
+  }
+
+  // end grouping vectoring-profile
 
   grouping vectoring-profile-non-directional {
     description
       "Configuration data that is not associated with the upstream
        or downstream directions.";
-
     leaf vector-mode-enable {
       type union {
         type enumeration {
-          enum "all" {
+          enum all {
             description
               "All vector modes enabled.";
           }
@@ -258,5 +262,34 @@ submodule bbf-vdsl-vectoring-profile-body {
         "ITU-T G.997.1 clause 7.3.1.13.9 Vectoring mode enable
          (VECTORMODE_ENABLE)";
     }
+    leaf strongfext-mode {
+      if-feature "strongfext";
+      type enumeration {
+        enum disabled {
+          description
+            "Operation according to G.993.5 Annex A is disable.";
+        }
+        enum preferred {
+          description
+            "Operation according to G.993.5 Annex A is preferred.";
+        }
+        enum forced {
+          description
+            "Operation according to G.993.5 Annex A is forced.";
+        }
+        enum forced-above-17mhz {
+          description
+            "Operation according to G.993.5 Annex A is forced above
+             17MHz.";
+        }
+      }
+      default "disabled";
+      description
+        "This configuration parameter specifies if operation
+         according to G.993.5 Annex A is disabled, preferred, forced,
+         or forced above 17MHz.";
+      reference
+        "ITU-T G.997.1 clause 7.3.1.17.1 STRONGFEXT mode";
+    }
   }
-} // end submodule vectoring-profile-body
+}

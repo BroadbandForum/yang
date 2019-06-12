@@ -9,7 +9,6 @@ submodule bbf-vdsl-data-gathering-profile-body {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -25,13 +24,12 @@ submodule bbf-vdsl-data-gathering-profile-body {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
-    "This submodule contains a collection of YANG definitions for 
+    "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 5.7 DSL Quality
      Management related profiles; Data Gathering Profile.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -71,9 +69,19 @@ submodule bbf-vdsl-data-gathering-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -96,11 +104,9 @@ submodule bbf-vdsl-data-gathering-profile-body {
   }
 
   grouping data-gathering-profile {
-
     description
       "These parameters are used to configure data gathering
        functionality.";
-
     list logging-depth-event-percentage-o {
       key "event-number";
       leaf event-number {
@@ -130,20 +136,19 @@ submodule bbf-vdsl-data-gathering-profile-body {
          percentage per event VTU-O
          (LOGGING_DEPTH_EVENT_PERCENTAGE_Oi)";
     }
-
     leaf logging-depth-reporting-o {
       type uint32;
       units "6-byte data gathering records";
       default "0";
       description
         "This parameter is the logging depth that is requested for
-         reporting the VTU-O event trace buffer in the CO-MIB, in
-         number of 6-byte data gathering records.";
+         reporting the VTU-O event trace buffer in the Central Office
+         Management Information Base (CO-MIB), in number of 6-byte
+         data gathering records.";
       reference
         "ITU-T G.997.1 clause 7.3.6.3 Logging depth for VTU-O
          reporting (LOGGING_DEPTH_REPORTING_O)";
     }
-
     list logging-depth-event-percentage-r {
       key "event-number";
       leaf event-number {
@@ -173,20 +178,19 @@ submodule bbf-vdsl-data-gathering-profile-body {
          Logging depth event percentage per event VTU-R
          (LOGGING_DEPTH_EVENT_PERCENTAGE_Ri)";
     }
-
     leaf logging-depth-reporting-r {
       type uint32;
       units "6-byte data gathering records";
       default "0";
       description
         "This parameter is the logging depth that is requested for
-         reporting the VTU-R event trace buffer in the CO-MIB, in
-         number of 6-byte data gathering records.";
+         reporting the VTU-R event trace buffer in the Central Office
+         Management Information Base (CO-MIB), in number of 6-byte
+         data gathering records.";
       reference
-        "ITU-T G.997.1 clause 7.3.6.4 Logging depth for VTU-R 
+        "ITU-T G.997.1 clause 7.3.6.4 Logging depth for VTU-R
          reporting";
     }
-
     leaf logging-report-newer-first {
       type boolean;
       default "false";
@@ -200,5 +204,7 @@ submodule bbf-vdsl-data-gathering-profile-body {
         "ITU-T G.997.1 clause 7.3.6.5 Logging data report newer
          events first VTU-R (LOGGING_REPORT_NEWER_FIRST)";
     }
-  } // end grouping data-gathering-profile
-} // end submodule data-gathering-profile-body
+  }
+
+  // end grouping data-gathering-profile
+}

@@ -1,6 +1,5 @@
 submodule bbf-vdsl-pointers {
   yang-version 1.1;
-
   belongs-to bbf-vdsl {
     prefix bbf-vdsl;
   }
@@ -8,15 +7,12 @@ submodule bbf-vdsl-pointers {
   import ietf-interfaces {
     prefix if;
   }
-
   import bbf-fastdsl {
     prefix bbf-fastdsl;
   }
-
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   include bbf-vdsl-base-body;
   include bbf-vdsl-base;
   include bbf-vdsl-line;
@@ -29,7 +25,6 @@ submodule bbf-vdsl-pointers {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -45,12 +40,11 @@ submodule bbf-vdsl-pointers {
      WA Director: Sven Ooghe, Nokia
 
      WA Director: Joey Boyd, ADTRAN";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing Vector of Profiles (VoP) on VDSL interfaces.
 
-     Copyright (c) 2016-2018 Broadband Forum
+     Copyright (c) 2016-2019 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -90,9 +84,19 @@ submodule bbf-vdsl-pointers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a1; see
+     This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-06-11 {
+    description
+      "Amendment 2.
+       * Approval Date:    2019-06-11
+       * Publication Date: 2019-06-11.";
+    reference
+      "TR-355a2: YANG Modules for FTTdp Management
+                 <https://www.broadband-forum.org/technical/download/
+                        TR-355_Amendment-2.pdf>";
+  }
   revision 2018-10-01 {
     description
       "Amendment 1.
@@ -111,7 +115,7 @@ submodule bbf-vdsl-pointers {
     reference
       "TR-355c2: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_2.pdf>";
+                        TR-355_Corrigendum-2.pdf>";
   }
   revision 2017-03-13 {
     description
@@ -121,7 +125,7 @@ submodule bbf-vdsl-pointers {
     reference
       "TR-355c1: YANG Modules for FTTdp Management
                  <https://www.broadband-forum.org/technical/download/
-                        TR-355_Corrigendum_1.pdf>";
+                        TR-355_Corrigendum-1.pdf>";
   }
   revision 2016-07-18 {
     description
@@ -134,10 +138,10 @@ submodule bbf-vdsl-pointers {
                         TR-355.pdf>";
   }
 
-
   typedef line-config-vector-ref {
     type leafref {
-      path '/bbf-vdsl:vdsl/vectors/line-config-vector/name';
+      path "/bbf-vdsl:vdsl/bbf-vdsl:vectors"
+         + "/bbf-vdsl:line-config-vector/bbf-vdsl:name";
     }
     description
       "xDSL Line Configuration Vector identifier.";
@@ -145,8 +149,8 @@ submodule bbf-vdsl-pointers {
 
   typedef threshold-template-ref {
     type leafref {
-      path '/bbf-vdsl:vdsl/bbf-vdsl:thresholds/bbf-vdsl:threshold-'
-         + 'template/bbf-vdsl:name';
+      path "/bbf-vdsl:vdsl/bbf-vdsl:thresholds/bbf-vdsl:threshold-"
+         + "template/bbf-vdsl:name";
     }
     description
       "xDSL Line Threshold Template name.";
@@ -155,12 +159,10 @@ submodule bbf-vdsl-pointers {
   grouping line-config-vector-body {
     description
       "Line Configuration Vector.";
-
     container channel {
       description
-        "Channel profiles. All profile identifiers must be 
+        "Channel profiles. All profile identifiers must be
          configured.";
-
       leaf downstream-data-rate-profile {
         type bbf-vdsl:downstream-data-rate-profile-ref;
         mandatory true;
@@ -179,30 +181,29 @@ submodule bbf-vdsl-pointers {
         type bbf-vdsl:impulse-noise-protection-delay-profile-ref;
         mandatory true;
         description
-          "References an impulse noise protection delay profile to be 
+          "References an impulse noise protection delay profile to be
            used to configure the line.";
       }
     }
-
     leaf line-spectrum-profile {
       type bbf-vdsl:line-spectrum-profile-ref;
       mandatory true;
       description
-        "References a line spectrum profile to be used to configure 
+        "References a line spectrum profile to be used to configure
          the line.";
     }
     leaf upstream-power-back-off-profile {
       type bbf-vdsl:upstream-power-back-off-profile-ref;
       mandatory true;
       description
-        "References an upstream power back-off profile to be used to 
+        "References an upstream power back-off profile to be used to
          configure the line.";
     }
     leaf downstream-power-back-off-profile {
       type bbf-vdsl:downstream-power-back-off-profile-ref;
       mandatory true;
       description
-        "References a downstream power back-off profile to be used to 
+        "References a downstream power back-off profile to be used to
          configure the line.";
     }
     leaf radio-frequency-interference-profile {
@@ -212,7 +213,6 @@ submodule bbf-vdsl-pointers {
         "References an radio frequency interference profile to be used
          to configure the line.";
     }
-
     leaf noise-margin-profile {
       type bbf-vdsl:noise-margin-profile-ref;
       mandatory true;
@@ -223,139 +223,130 @@ submodule bbf-vdsl-pointers {
     leaf virtual-noise-profile {
       if-feature "virtual-noise";
       type leafref {
-        path '/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:virtual-'
-           + 'noise-profile/bbf-vdsl:name';
+        path "/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:virtual-"
+           + "noise-profile/bbf-vdsl:name";
       }
       mandatory true;
       description
-        "References a virtual noise profile to be used to configure 
+        "References a virtual noise profile to be used to configure
          the line.";
     }
     leaf sos-profile {
       if-feature "sos";
       type leafref {
-        path '/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:sos-profile/'
-           + 'bbf-vdsl:name';
+        path "/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:sos-profile/"
+           + "bbf-vdsl:name";
       }
       mandatory true;
       description
-        "References an SOS profile to be used to configure the line.";
+        "References a Save Our Showtime (SOS) profile to be used to
+         configure the line.";
     }
     leaf impulse-noise-monitoring-profile {
       if-feature "impulse-noise-monitoring";
       type leafref {
-        path '/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:impulse-'
-           + 'noise-monitoring-profile/bbf-vdsl:name';
+        path "/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:impulse-"
+           + "noise-monitoring-profile/bbf-vdsl:name";
       }
       mandatory true;
       description
-        "References an impulse noise monitoring profile to be used to 
+        "References an impulse noise monitoring profile to be used to
          configure the line.";
     }
     leaf re-initialization-policy-profile {
       if-feature "re-initialization-policy";
       type leafref {
-        path '/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:re-'
-           + 'initialization-policy-profile/bbf-vdsl:name';
+        path "/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:re-"
+           + "initialization-policy-profile/bbf-vdsl:name";
       }
       mandatory true;
       description
-        "References a re-initialization policy profile to be used to 
+        "References a re-initialization policy profile to be used to
          configure the line.";
     }
     leaf vectoring-profile {
       if-feature "vectoring";
       type leafref {
-        path '/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:vectoring-'
-           + 'profile/bbf-vdsl:name';
+        path "/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:vectoring-"
+           + "profile/bbf-vdsl:name";
       }
       mandatory true;
       description
-        "References a vectoring profile to be used to configure the 
+        "References a vectoring profile to be used to configure the
          line.";
     }
     leaf data-gathering-profile {
       if-feature "data-gathering";
       type leafref {
-        path '/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:data-'
-           + 'gathering-profile/bbf-vdsl:name';
+        path "/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:data-"
+           + "gathering-profile/bbf-vdsl:name";
       }
       mandatory true;
       description
-        "References a data gathering profile to be used to configure 
+        "References a data gathering profile to be used to configure
          the line.";
     }
   }
 
-  augment '/bbf-vdsl:vdsl/bbf-vdsl:vectors' {
+  augment "/bbf-vdsl:vdsl/bbf-vdsl:vectors" {
     description
       "xDSL Line Configuration Vector.";
-
     list line-config-vector {
       key "name";
       description
-        "xDSL Line Configuration Vector";
-
+        "xDSL Line Configuration Vector.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "xDSL Line Configuration Vector Identifier.";
       }
-
       uses line-config-vector-body;
     }
   }
 
-  augment '/bbf-vdsl:vdsl/bbf-vdsl:thresholds' {
+  augment "/bbf-vdsl:vdsl/bbf-vdsl:thresholds" {
     description
       "xDSL Performance Threshold Management.";
-
     list threshold-template {
       key "name";
       description
         "xDSL Line Threshold Template.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "Template name.";
       }
-
       grouping threshold-profile {
         description
           "Defines 15 minute and 24 hour line and channel profiles.";
-
         leaf xtu-15min-line-profile {
           type bbf-vdsl:line-threshold-profile-ref;
           mandatory true;
           description
-            "Reference to a line threshold profile for thresholds 
+            "Reference to a line threshold profile for thresholds
              related to 15 minute performance counters.";
         }
-
         leaf xtu-24hr-line-profile {
           if-feature "performance-24hr";
           type bbf-vdsl:line-threshold-profile-ref;
           mandatory true;
           description
-            "Reference to a line threshold profile for thresholds 
+            "Reference to a line threshold profile for thresholds
              related to 24 hour performance counters.";
         }
-
         leaf xtu-15min-channel-threshold-profile {
           type bbf-vdsl:channel-threshold-profile-ref;
           mandatory true;
           description
-            "Reference to a channel threshold profile for thresholds 
+            "Reference to a channel threshold profile for thresholds
              related to 15 minute performance counters.";
         }
-
         leaf xtu-24hr-channel-threshold-profile {
           if-feature "performance-24hr";
           type bbf-vdsl:channel-threshold-profile-ref;
           mandatory true;
           description
-            "Reference to a channel threshold profile for thresholds 
+            "Reference to a channel threshold profile for thresholds
              related to 24 hour performance counters.";
         }
       }
@@ -367,23 +358,21 @@ submodule bbf-vdsl-pointers {
       }
       container xtu-r {
         description
-          "xTU-Central Office threshold profile pointer.";
+          "xTU-Remote Side threshold profile pointer.";
         uses threshold-profile;
       }
     }
   }
 
-  augment '/if:interfaces/if:interface/bbf-fastdsl:line/bbf-vdsl:'
-        + 'line' {
+  augment "/if:interfaces/if:interface/bbf-fastdsl:line/bbf-vdsl:"
+        + "line" {
     description
-      "Pointer to xDSL Line Configuration Vector,
-       Pointer to xDSL Line Threshold Template.";
-
+      "Augment FastDSL line configuration with VDSL line
+       configuration.";
     choice profile-config {
       default "no-profiles-attached";
       description
         "No profiles, Direct or Indirect attachment mode.";
-
       case no-profiles-attached {
         leaf no-profiles-attached {
           type empty;
@@ -392,11 +381,9 @@ submodule bbf-vdsl-pointers {
              to this line.";
         }
       }
-
       case direct-attachment-mode {
         uses line-config-vector-body;
       }
-
       case indirect-attachment-mode {
         leaf line-config-vector {
           type bbf-vdsl:line-config-vector-ref;
@@ -407,12 +394,11 @@ submodule bbf-vdsl-pointers {
         }
       }
     }
-
     leaf threshold-template {
       type bbf-vdsl:threshold-template-ref;
       description
         "xDSL Line Threshold Template identifier. If no threshold
-         template is assigned, threshold crossing alert (TCA) 
+         template is assigned, threshold crossing alert (TCA)
          reporting for all thresholds is disabled.";
     }
   }
