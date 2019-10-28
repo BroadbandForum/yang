@@ -7,7 +7,6 @@ submodule bbf-mgmd-configuration-multicast-snoop {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,16 +22,15 @@ submodule bbf-mgmd-configuration-multicast-snoop {
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
-    "This module contains a collection of YANG definitions for 
-     supporting the Multicast Group Membership Discovery (MGMD) 
+    "This module contains a collection of YANG definitions for
+     supporting the Multicast Group Membership Discovery (MGMD)
      Protocols. In particular, it describes configuration objects used
-     for managing the Internet Group Management Protocol (IGMP) and 
-     the Multicast Listener Discovery (MLD) protocol in case the 
+     for managing the Internet Group Management Protocol (IGMP) and
+     the Multicast Listener Discovery (MLD) protocol in case the
      system acts as a snooper.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2019, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -75,6 +73,16 @@ submodule bbf-mgmd-configuration-multicast-snoop {
      This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2019-10-21 {
+    description
+      "Amendment 2 Corrigendum 1.
+       * Approval Date:    2019-10-21.
+       * Publication Date: 2019-10-21.";
+    reference
+      "TR-383a2c1: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-2.pdf>";
+  }
   revision 2018-07-13 {
     description
       "Initial revision.
@@ -93,51 +101,49 @@ submodule bbf-mgmd-configuration-multicast-snoop {
 
   grouping multicast-snoop {
     description
-      "Grouping of objects used for configuring the Internet Group 
+      "Grouping of objects used for configuring the Internet Group
        Management Protocol (IGMP) and the Multicast Listener Discovery
-       (MLD) protocol on a layer 2 system that connects multicast 
-       hosts and multicast routers and for which the system acts as a 
+       (MLD) protocol on a layer 2 system that connects multicast
+       hosts and multicast routers and for which the system acts as a
        MGMD snooper.";
-
     leaf immediate-leave {
       type enumeration {
-        enum "enabled" {
+        enum enabled {
           description
-            "Immediate leave enabled means the system performs host 
-             tracking. Then the reception of a leave results in 
-             immediately removing this host from the subscription 
+            "Immediate leave enabled means the system performs host
+             tracking. Then the reception of a leave results in
+             immediately removing this host from the subscription
              list.";
         }
-        enum "disabled" {
+        enum disabled {
           description
-            "Immediate leave disabled means the system sends MGMD 
-             Group-Specific Query messages on the interface to find 
-             out if other hosts connected to the same interface would 
+            "Immediate leave disabled means the system sends MGMD
+             Group-Specific Query messages on the interface to find
+             out if other hosts connected to the same interface would
              still be interested in receiving the multicast channel.";
         }
       }
       default "disabled";
       description
-        "Immediate leave controls the function by which an interface 
-         that receives a leave for a certain group might immediately 
+        "Immediate leave controls the function by which an interface
+         that receives a leave for a certain group might immediately
          delete the corresponding group record.
 
          Configuring immediate leave reduces the amount of time it
-         takes for the switch to stop sending multicast traffic to an 
-         interface when the last host on that interface leaves the 
+         takes for the switch to stop sending multicast traffic to an
+         interface when the last host on that interface leaves the
          group.
 
          When immediate leave is disabled, the switch no longer tracks
-         hosts. Instead, whenever it receives a leave from a host on 
+         hosts. Instead, whenever it receives a leave from a host on
          an interface, it waits for a period as specified by the group
-         membership interval. If it does not receive any MGMD 
+         membership interval. If it does not receive any MGMD
          Membership Report on the interface in that time interval, it
          stops forwarding multicast traffic to the interface.";
       reference
         "ITU-T G.988 Section 9.3.27 Immediate Leave;
          RFC 3810 Section A.2";
     }
-
     leaf group-membership-interval {
       type uint32 {
         range "1..31744";
@@ -145,21 +151,20 @@ submodule bbf-mgmd-configuration-multicast-snoop {
       units "seconds";
       default "260";
       description
-        "The group membership interval is the amount of time that has 
-         to pass before a multicast router decides there are no more 
+        "The group membership interval is the amount of time that has
+         to pass before a multicast router decides there are no more
          members of a group or a particular source on an interface.
 
-         This leaf, as a parameter of a snooper, has to be consistent 
+         This leaf, as a parameter of a snooper, has to be consistent
          with the parameters configured in the multicast router that
          is connected to the snooper. It has to be equal to or larger
-         than ((the Robustness Variable) times (the Query Interval)) 
-         plus (one Query Response Interval) as calculated from 
+         than ((the Robustness Variable) times (the Query Interval))
+         plus (one Query Response Interval) as calculated from
          parameters configured in the multicast router.";
       reference
         "RFC 4541, Section 2.1.1, item 6;
          RFC 3376, section 8.4";
     }
-
     leaf last-member-query-interval {
       if-feature "mgmd-snoop-last-leave";
       type uint32 {
@@ -169,23 +174,21 @@ submodule bbf-mgmd-configuration-multicast-snoop {
       default "10";
       description
         "The last member query interval is the maximum response time
-         inserted into MGMD Group-Specific Query messages sent in 
-         response to leaves, and is also the amount of time between 
-         MGMD Group-Specific Query messages.  
+         inserted into MGMD Group-Specific Query messages sent in
+         response to leaves, and is also the amount of time between
+         MGMD Group-Specific Query messages.
 
          This feature is optional for a snooper and can be used in a
-         slow network. When this feature is enabled, it permits a 
+         slow network. When this feature is enabled, it permits a
          snooper to send a MGMD Group-Specific Query message after the
-         group membership has timed out to verify that clients have 
+         group membership has timed out to verify that clients have
          stopped watching a channel. If no response is received to the
          MGMD Group-Specific Query message, it removes the group state
          and discontinuous multicast transmission for that channel";
-
       reference
         "RFC3376 Section 8.8;
          RFC5519 mgmdRouterInterfaceLastMemberQueryInterval";
     }
-
     leaf last-member-query-count {
       if-feature "mgmd-snoop-last-leave";
       type uint32 {
@@ -193,18 +196,17 @@ submodule bbf-mgmd-configuration-multicast-snoop {
       }
       default "2";
       description
-        "The number of unanswered MGMD Group-Specific Query messages 
+        "The number of unanswered MGMD Group-Specific Query messages
          sent out before it is assumed that there are no local members
          interested in the IP multicast stream.
 
          This feature is optional for a snooper and can be used in a
-         slow network. When this feature is enabled, it permits a 
+         slow network. When this feature is enabled, it permits a
          snooper to send a MGMD Group-Specific Query message after the
-         group membership has timed out to verify that clients have 
+         group membership has timed out to verify that clients have
          stopped watching a channel. If no response is received to the
          MGMD Group-Specific Query message, it removes the group state
          and discontinuous multicast transmission for that channel";
-
       reference
         "RFC3376 Section 8.9";
     }

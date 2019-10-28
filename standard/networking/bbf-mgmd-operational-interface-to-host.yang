@@ -11,7 +11,6 @@ submodule bbf-mgmd-operational-interface-to-host {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -27,16 +26,15 @@ submodule bbf-mgmd-operational-interface-to-host {
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
-    "This module contains a collection of YANG definitions for 
-     supporting the Multicast Group Membership Discovery (MGMD) 
-     Protocols. In particular, it describes state objects used for 
-     managing the Internet Group Management Protocol (IGMP) and the 
-     Multicast Listener Discovery (MLD) protocol on interfaces that 
+    "This module contains a collection of YANG definitions for
+     supporting the Multicast Group Membership Discovery (MGMD)
+     Protocols. In particular, it describes state objects used for
+     managing the Internet Group Management Protocol (IGMP) and the
+     Multicast Listener Discovery (MLD) protocol on interfaces that
      connect a system to multicast hosts.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2019, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -79,6 +77,16 @@ submodule bbf-mgmd-operational-interface-to-host {
      This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2019-10-21 {
+    description
+      "Amendment 2 Corrigendum 1.
+       * Approval Date:    2019-10-21.
+       * Publication Date: 2019-10-21.";
+    reference
+      "TR-383a2c1: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-2.pdf>";
+  }
   revision 2018-07-13 {
     description
       "Initial revision.
@@ -92,97 +100,92 @@ submodule bbf-mgmd-operational-interface-to-host {
 
   grouping mgmd-interface-to-hosts-receive-state {
     description
-      "Grouping of objects used for monitoring the Internet Group 
+      "Grouping of objects used for monitoring the Internet Group
        Management Protocol (IGMP) and the Multicast Listener Discovery
-       (MLD) protocol on interfaces that connect a system to a 
+       (MLD) protocol on interfaces that connect a system to a
        multicast host.";
-
     leaf in-successful-join-requests {
       type yang:counter32;
       description
-        "Counts the total number of successful join requests received 
-         from hosts connected to the interface. This includes new 
+        "Counts the total number of successful join requests received
+         from hosts connected to the interface. This includes new
          joins (which make a new connection) and re-joins (which
          already have a connection).
 
-         For MGMD version 2 it counts the number of Membership Report 
+         For MGMD version 2 it counts the number of Membership Report
          messages that resulted in a successful join.
 
          MGMD version 3 defines a Membership Report message to contain
-         multiple group records. Within a group record there is a 
-         parameter 'multicast address' and a list of 'source 
-         addresses'. A tree is managed per (multicast address, source 
-         address) pair. Hence a join is a request that requests 
-         associating the interface to a tree. In case one Membership 
-         Report message results in requests for associating the 
-         interface to N trees, then this corresponds to N joins. For 
+         multiple group records. Within a group record there is a
+         parameter 'multicast address' and a list of 'source
+         addresses'. A tree is managed per (multicast address, source
+         address) pair. Hence a join is a request that requests
+         associating the interface to a tree. In case one Membership
+         Report message results in requests for associating the
+         interface to N trees, then this corresponds to N joins. For
          MGMD version 3 the counter result in-successful-join-requests
-         counts the number of joins that in successfully associating 
+         counts the number of joins that in successfully associating
          the interface to a tree.";
       reference
         "TR-101 - R-217, per DSL port, per multicast VLAN, item 1";
     }
-
     leaf in-unsuccessful-join-requests {
       type yang:counter32;
       description
-        "Counts the total number of unsuccessful new join requests 
+        "Counts the total number of unsuccessful new join requests
          from hosts connected to the interface. The failures could be
-         due to the following reasons: permission failure, bitrate 
+         due to the following reasons: permission failure, bitrate
          failure, lack of resource or invalid group address.
 
-         For MGMD version 2 it counts the number of Membership Report 
+         For MGMD version 2 it counts the number of Membership Report
          messages that failed to result in a successful join.
 
          MGMD version 3 defines a Membership Report message to contain
-         multiple group records. Within a group record there is a 
-         parameter 'multicast address' and a list of 'source 
-         addresses'. A tree is managed per (multicast address, source 
-         address) pair. Hence a join is a request that requests 
-         associating the interface to a tree. In case one Membership 
-         Report message results in requests for associating the 
-         interface to N trees, then this corresponds to N joins. For 
-         MGMD version 3 the counter in-unsuccessful-join-requests 
-         counts the number of joins that did not result in 
+         multiple group records. Within a group record there is a
+         parameter 'multicast address' and a list of 'source
+         addresses'. A tree is managed per (multicast address, source
+         address) pair. Hence a join is a request that requests
+         associating the interface to a tree. In case one Membership
+         Report message results in requests for associating the
+         interface to N trees, then this corresponds to N joins. For
+         MGMD version 3 the counter in-unsuccessful-join-requests
+         counts the number of joins that did not result in
          successfully associating the interface to a tree.";
       reference
         "TR-101 - R-217, per DSL port, per multicast VLAN, item 2";
     }
-
     leaf in-leaves {
       type yang:counter32;
       description
-        "For MGMD version 2 it counts the number of Leave Group 
-         messages received on this interface, i.e. messages that are 
+        "For MGMD version 2 it counts the number of Leave Group
+         messages received on this interface, i.e. messages that are
          requesting to leave a multicast group address.
 
          MGMD version 3 defines a Membership Report message to contain
-         multiple group records. Within a group record there is a 
-         parameter 'multicast address' and a list of 'source 
-         addresses'. A tree is managed per (multicast address, source 
-         address) pair. Hence a leave is a request that requests to 
-         remove the association from an interface to a tree. In case 
-         one Membership Report message results in requests for 
-         removing N associations from the interface from trees, then 
+         multiple group records. Within a group record there is a
+         parameter 'multicast address' and a list of 'source
+         addresses'. A tree is managed per (multicast address, source
+         address) pair. Hence a leave is a request that requests to
+         remove the association from an interface to a tree. In case
+         one Membership Report message results in requests for
+         removing N associations from the interface from trees, then
          this corresponds to N leaves.";
     }
-
     leaf in-valid-messages {
       type yang:counter32;
       description
         "For MGMD version 2 it counts the number of Membership Report
-         messages plus the number of MGMD Leave Group messages 
+         messages plus the number of MGMD Leave Group messages
          received on this interface and that had valid formatting.
 
-         For MGMD version 3 it also counts the number of Membership 
+         For MGMD version 3 it also counts the number of Membership
          Report messages received on this interface and that had valid
          formatting.";
     }
-
     leaf in-invalid-messages {
       type yang:counter32;
       description
-        "Counts the number of invalid MGMD messages received on this 
+        "Counts the number of invalid MGMD messages received on this
          interface.";
       reference
         "TR-101 - R-217, per DSL port, per multicast VLAN, item 6";
@@ -191,42 +194,40 @@ submodule bbf-mgmd-operational-interface-to-host {
 
   grouping mgmd-interface-to-hosts-transmit-state {
     description
-      "Grouping of objects used for monitoring the Internet Group 
+      "Grouping of objects used for monitoring the Internet Group
        Management Protocol (IGMP) and the Multicast Listener Discovery
        (MLD) protocol on interfaces that connect a system to multicast
        hosts.";
-
     leaf out-specific-queries {
       type yang:counter32;
       description
-        "For MGMD version 2 it counts the number of sent MGMD 
+        "For MGMD version 2 it counts the number of sent MGMD
          Group-Specific Query messages.
 
-         MGMD version 3 defines a Query message to contain a single 
-         group address' and a list of 'source addresses'. A tree is 
-         managed per group address, source address) pair. For MGMD 
-         version 3 a MGMD Group-Specific Query message is a Query 
-         message for which the group address is not the zero address. 
-         The counter out-specific-queries is incremented once for a 
-         sent ASM Group-Specific Query message (i.e. no source 
-         address), and is incremented with N for SSM Group-Specific 
-         Query messages that are sent to the router, where N is the 
+         MGMD version 3 defines a Query message to contain a single
+         group address' and a list of 'source addresses'. A tree is
+         managed per group address, source address) pair. For MGMD
+         version 3 a MGMD Group-Specific Query message is a Query
+         message for which the group address is not the zero address.
+         The counter out-specific-queries is incremented once for a
+         sent ASM Group-Specific Query message (i.e. no source
+         address), and is incremented with N for SSM Group-Specific
+         Query messages that are sent to the router, where N is the
          number of source addresses in the Query message.";
       reference
         "TR-101 - R-217, per DSL port, per multicast VLAN, item 5";
     }
-
     leaf out-general-queries {
       type yang:counter32;
       description
-        "For MGMD version 2 it counts the number of sent MGMD General 
+        "For MGMD version 2 it counts the number of sent MGMD General
          Query messages.
 
-         MGMD version 3 defines a Query message to contain a single 
-         group address' and a list of 'source addresses'. For MGMD 
+         MGMD version 3 defines a Query message to contain a single
+         group address' and a list of 'source addresses'. For MGMD
          version 3 a MGMD General Query message is a Query message for
-         which the group address is the zero address and there are no 
-         sources addresses. The counter out-generic-queries is 
+         which the group address is the zero address and there are no
+         sources addresses. The counter out-generic-queries is
          incremented once per sent MGMD General Query message.";
       reference
         "TR-101 - R-217, per DSL port, per multicast VLAN, item 4";

@@ -7,7 +7,6 @@ submodule bbf-mgmd-configuration-interface-to-router {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -23,16 +22,15 @@ submodule bbf-mgmd-configuration-interface-to-router {
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
-    "This module contains a collection of YANG definitions for 
-     supporting the Multicast Group Membership Discovery (MGMD) 
+    "This module contains a collection of YANG definitions for
+     supporting the Multicast Group Membership Discovery (MGMD)
      Protocols. In particular, it describes configuration objects used
-     for managing the Internet Group Management Protocol (IGMP) and 
-     the Multicast Listener Discovery (MLD) protocol on interfaces 
+     for managing the Internet Group Management Protocol (IGMP) and
+     the Multicast Listener Discovery (MLD) protocol on interfaces
      that connect to multicast routers.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2019, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -75,6 +73,16 @@ submodule bbf-mgmd-configuration-interface-to-router {
      This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2019-10-21 {
+    description
+      "Amendment 2 Corrigendum 1.
+       * Approval Date:    2019-10-21.
+       * Publication Date: 2019-10-21.";
+    reference
+      "TR-383a2c1: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-2.pdf>";
+  }
   revision 2018-07-13 {
     description
       "Initial revision.
@@ -88,10 +96,9 @@ submodule bbf-mgmd-configuration-interface-to-router {
 
   grouping interface-to-router {
     description
-      "Grouping of objects used for configuring the Internet Group 
+      "Grouping of objects used for configuring the Internet Group
        Management Protocol (IGMP) and the Multicast Listener Discovery
        (MLD) protocol on interfaces that connect multicast routers.";
-
     leaf unsolicited-report-interval {
       type uint32 {
         range "1..255";
@@ -105,7 +112,6 @@ submodule bbf-mgmd-configuration-interface-to-router {
         "RFC 3376 Section 8.11;
          RFC 3810 Section 9.11";
     }
-
     leaf robustness {
       type uint32 {
         range "1..255";
@@ -117,7 +123,7 @@ submodule bbf-mgmd-configuration-interface-to-router {
          robustness variable may be increased. IGMP and MLD are robust
          to (robustness variable - 1) packet losses.";
       reference
-        "RFC 3376 Section 8.1; 
+        "RFC 3376 Section 8.1;
          RFC 5519 mgmdHostInterfaceVersion3Robustness";
     }
   }

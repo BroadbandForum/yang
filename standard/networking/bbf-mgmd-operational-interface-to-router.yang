@@ -11,7 +11,6 @@ submodule bbf-mgmd-operational-interface-to-router {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -27,16 +26,15 @@ submodule bbf-mgmd-operational-interface-to-router {
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
-    "This module contains a collection of YANG definitions for 
-     supporting the Multicast Group Membership Discovery (MGMD) 
-     Protocols. In particular, it describes state objects used for 
-     managing the Internet Group Management Protocol (IGMP) and the 
-     Multicast Listener Discovery (MLD) protocol on interfaces that 
+    "This module contains a collection of YANG definitions for
+     supporting the Multicast Group Membership Discovery (MGMD)
+     Protocols. In particular, it describes state objects used for
+     managing the Internet Group Management Protocol (IGMP) and the
+     Multicast Listener Discovery (MLD) protocol on interfaces that
      connect a system to multicast routers.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2019, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -79,6 +77,16 @@ submodule bbf-mgmd-operational-interface-to-router {
      This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2019-10-21 {
+    description
+      "Amendment 2 Corrigendum 1.
+       * Approval Date:    2019-10-21.
+       * Publication Date: 2019-10-21.";
+    reference
+      "TR-383a2c1: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-2.pdf>";
+  }
   revision 2018-07-13 {
     description
       "Initial revision.
@@ -92,134 +100,125 @@ submodule bbf-mgmd-operational-interface-to-router {
 
   grouping mgmd-host-interface-state {
     description
-      "Grouping of objects used for monitoring the Internet Group 
+      "Grouping of objects used for monitoring the Internet Group
        Management Protocol (IGMP) and the Multicast Listener Discovery
        (MLD) protocol on interfaces that connect a system to multicast
        routers.";
-
     leaf out-joins {
       type yang:counter32;
       description
-        "For MGMD version 2 it counts the number of Membership Report 
-         messages sent on this interface, i.e. messages that are 
+        "For MGMD version 2 it counts the number of Membership Report
+         messages sent on this interface, i.e. messages that are
          requesting to join a multicast group address.
 
          MGMD version 3 defines a Membership Report message to contain
-         multiple group records. Within a group record there is a 
-         parameter 'multicast address' and a list of 'source 
-         addresses'. A tree is managed per (multicast address, source 
-         address) pair. Hence a join is a request that requests 
-         associating the interface to a tree. In case one Membership 
-         Report message results in requests for associating the 
-         interface to N trees, then this corresponds to N joins. For 
-         MGMD version 3 the counter counts the number of joins that 
+         multiple group records. Within a group record there is a
+         parameter 'multicast address' and a list of 'source
+         addresses'. A tree is managed per (multicast address, source
+         address) pair. Hence a join is a request that requests
+         associating the interface to a tree. In case one Membership
+         Report message results in requests for associating the
+         interface to N trees, then this corresponds to N joins. For
+         MGMD version 3 the counter counts the number of joins that
          are sent to the router.";
       reference
         "TR-101 - R-217, multicast VLAN, item 2";
     }
-
     leaf out-leaves {
       type yang:counter32;
       description
-        "For MGMD version 2 it counts the number of Leave Group 
-         messages sent on this interface, i.e. messages that are 
+        "For MGMD version 2 it counts the number of Leave Group
+         messages sent on this interface, i.e. messages that are
          requesting to leave a multicast group address.
 
          MGMD version 3 defines a Membership Report message to contain
-         multiple group records. Within a group record there is a 
-         parameter 'multicast address' and a list of 'source 
-         addresses'. A tree is managed per (multicast address, source 
-         address) pair. Hence a leave is a request that requests to 
-         remove the association from an interface to a tree. In case 
-         one Membership Report message results in requests for 
-         removing N associations from trees for the interface, then 
+         multiple group records. Within a group record there is a
+         parameter 'multicast address' and a list of 'source
+         addresses'. A tree is managed per (multicast address, source
+         address) pair. Hence a leave is a request that requests to
+         remove the association from an interface to a tree. In case
+         one Membership Report message results in requests for
+         removing N associations from trees for the interface, then
          this corresponds to N leaves.";
       reference
         "TR-101 - R-217, multicast VLAN, item 6";
     }
-
     leaf in-general-queries {
       type yang:counter32;
       description
-        "For MGMD version 2 it counts the number of received General 
+        "For MGMD version 2 it counts the number of received General
          Query messages.
 
-         MGMD version 3 defines a Query message to contain a single 
-         'group address' and a list of 'source addresses'. For MGMD 
-         version 3 a General Query message is a Query message for 
+         MGMD version 3 defines a Query message to contain a single
+         'group address' and a list of 'source addresses'. For MGMD
+         version 3 a General Query message is a Query message for
          which the group address is  the zero address and there are no
-         sources addresses. The counter in-general-queries is 
+         sources addresses. The counter in-general-queries is
          incremented once per received General Query message.";
       reference
         "TR-101 - R-217, per multicast VLAN, item 9";
     }
-
     leaf in-specific-queries {
       type yang:counter32;
       description
-        "For MGMD version 2 it counts the number of received 
+        "For MGMD version 2 it counts the number of received
          Group-Specific Query messages.
 
-         MGMD version 3 defines a Query message to contain a single 
-         'group address' and a list of 'source addresses'. A tree is 
-         managed per group address, source address) pair. For MGMD 
-         version 3 a Group-Specific Query message is a Query message 
-         for which the group address is not the zero address.  The 
-         counter in-specific-queries is incremented once for a 
-         received ASM Group-Specific Query message (i.e. no source 
-         address), and is incremented with N for SSM Group-Specific 
-         Query messages received to the router, where N is the number 
+         MGMD version 3 defines a Query message to contain a single
+         'group address' and a list of 'source addresses'. A tree is
+         managed per group address, source address) pair. For MGMD
+         version 3 a Group-Specific Query message is a Query message
+         for which the group address is not the zero address.  The
+         counter in-specific-queries is incremented once for a
+         received ASM Group-Specific Query message (i.e. no source
+         address), and is incremented with N for SSM Group-Specific
+         Query messages received to the router, where N is the number
          of source addresses in the Query message.";
       reference
         "TR-101 - R-217, multicast VLAN, item 11";
     }
-
     leaf in-valid-messages {
       type yang:counter32;
       description
-        "For MGMD version 2 it counts the number of Query messages 
+        "For MGMD version 2 it counts the number of Query messages
          received on this interface and that had valid formatting.
 
-         For MGMD version 3 it also counts the number of Query 
+         For MGMD version 3 it also counts the number of Query
          messages received on this interface and that had valid
          formatting.";
     }
-
     leaf in-invalid-message {
       type yang:counter32;
       description
-        "Counts the number of invalid messages received on the 
+        "Counts the number of invalid messages received on the
          interface.";
       reference
         "TR-101 - R-217, multicast VLAN, item 12";
     }
-
     leaf in-interface-wrong-version-queries {
       type yang:counter32;
       description
         "The number of MGMD General Query messages received whose IGMP
-         or MLD version does not match the version configured in the 
+         or MLD version does not match the version configured in the
          VPN its protocol version.
 
-         Both IGMP and MLD require that all routers on a LAN be 
-         configured to run the same version.  Thus, if any MGMD 
-         General Query messages are received with the wrong version, 
+         Both IGMP and MLD require that all routers on a LAN be
+         configured to run the same version.  Thus, if any MGMD
+         General Query messages are received with the wrong version,
          this indicates a configuration error.";
-
       reference
         "RFC 5519 Section 5; mgmdRouterInterfaceWrongVersionQueries";
     }
-
     leaf host-interface-version2-querier-time {
       type yang:timeticks;
       units "0.01 seconds";
       description
-        "The time remaining until the host assumes that there are no 
-         MGMDv2 routers present on the interface. While this is 
-         non-zero, the host will reply to all MGMD Membership Query 
-         messages with version 2 Membership Reports. This variable 
-         applies to MGMDv3 hosts that are forced to run in v2 for 
-         compatibility with v2 hosts or routers present on the 
+        "The time remaining until the host assumes that there are no
+         MGMDv2 routers present on the interface. While this is
+         non-zero, the host will reply to all MGMD Membership Query
+         messages with version 2 Membership Reports. This variable
+         applies to MGMDv3 hosts that are forced to run in v2 for
+         compatibility with v2 hosts or routers present on the
          interface.";
       reference
         "RFC 3376 Section 7.2.1;

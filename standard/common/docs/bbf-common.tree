@@ -143,10 +143,10 @@ module: ietf-interfaces
   |     +--rw type                                       identityref
   |     +--rw enabled?                                   boolean
   |     +--rw link-up-down-trap-enable?                  enumeration {if-mib}?
-  |     +--rw bbf-if-pm:performance
-  |     |  +--rw bbf-if-pm:enable?   boolean
   |     +--rw bbf-if-usg:interface-usage
   |     |  +--rw bbf-if-usg:interface-usage?   interface-usage
+  |     +--rw bbf-if-pm:performance
+  |     |  +--rw bbf-if-pm:enable?   boolean
   |     +--rw bbf-ptm:ptm
   |     |  +--rw bbf-ptm:lower-layer-if    if:interface-ref
   |     +--rw bbf-subif:subif-lower-layer
@@ -280,8 +280,6 @@ module: ietf-interfaces
   |     +--rw bbf-pppoe-ia:pppoe!
   |     |  +--rw bbf-pppoe-ia:enable?        boolean
   |     |  +--rw bbf-pppoe-ia:profile-ref    -> /pppoe-profiles/pppoe-profile/name
-  |     +--rw bbf-qos-pol:ingress-qos-policy-profile?    qos-policy-profile-ref
-  |     +--rw bbf-qos-pol:egress-qos-policy-profile?     qos-policy-profile-ref
   |     +--rw bbf-qos-tm:tm-root
   |     |  +--rw (bbf-qos-tm:children-type)?
   |     |  |  +--:(bbf-qos-tm:queues)
@@ -328,10 +326,12 @@ module: ietf-interfaces
   |     |  +--rw bbf-qos-tm:tc-id-2-queue-id-mapping-profile-name?   -> /tm-profiles/tc-id-2-queue-id-mapping-profile/name {tc-id-2-queue-id-mapping-config}?
   |     |  +--rw bbf-qos-shap:shaper-name?                           -> /bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/name
   |     +--rw bbf-qos-sched:egress-tm-objects
-  |        +--rw (bbf-qos-sched:select-tm-objects-method)?
-  |           +--:(bbf-qos-sched:scheduler)
-  |              +--rw bbf-qos-sched:root-if-name?          -> /if:interfaces/interface/name
-  |              +--rw bbf-qos-sched:scheduler-node-name?   -> /if:interfaces/interface[if:name = current()/../root-if-name]/bbf-qos-tm:tm-root/bbf-qos-sched:scheduler-node/name
+  |     |  +--rw (bbf-qos-sched:select-tm-objects-method)?
+  |     |     +--:(bbf-qos-sched:scheduler)
+  |     |        +--rw bbf-qos-sched:root-if-name?          -> /if:interfaces/interface/name
+  |     |        +--rw bbf-qos-sched:scheduler-node-name?   -> /if:interfaces/interface[if:name = current()/../root-if-name]/bbf-qos-tm:tm-root/bbf-qos-sched:scheduler-node/name
+  |     +--rw bbf-qos-pol:ingress-qos-policy-profile?    qos-policy-profile-ref
+  |     +--rw bbf-qos-pol:egress-qos-policy-profile?     qos-policy-profile-ref
   +--ro interfaces-state
      +--ro interface* [name]
         +--ro name                            string
@@ -400,7 +400,7 @@ module: ietf-interfaces
         |  |  |  +--ro bbf-if-pm:in-errors?            bbf-yang:performance-counter32
         |  |  |  +--ro bbf-if-pm:in-unknown-protos?    bbf-yang:performance-counter32
         |  |  |  +--ro bbf-if-pm:out-octets?           bbf-yang:performance-counter64
-        |  |  |  +--ro bbf-if-pm:out-unicast-pkts?     yang:counter64
+        |  |  |  +--ro bbf-if-pm:out-unicast-pkts?     bbf-yang:performance-counter64
         |  |  |  +--ro bbf-if-pm:out-broadcast-pkts?   bbf-yang:performance-counter64
         |  |  |  +--ro bbf-if-pm:out-multicast-pkts?   bbf-yang:performance-counter64
         |  |  |  +--ro bbf-if-pm:out-discards?         bbf-yang:performance-counter32
@@ -425,7 +425,7 @@ module: ietf-interfaces
         |  |     +--ro bbf-if-pm:in-errors?            bbf-yang:performance-counter32
         |  |     +--ro bbf-if-pm:in-unknown-protos?    bbf-yang:performance-counter32
         |  |     +--ro bbf-if-pm:out-octets?           bbf-yang:performance-counter64
-        |  |     +--ro bbf-if-pm:out-unicast-pkts?     yang:counter64
+        |  |     +--ro bbf-if-pm:out-unicast-pkts?     bbf-yang:performance-counter64
         |  |     +--ro bbf-if-pm:out-broadcast-pkts?   bbf-yang:performance-counter64
         |  |     +--ro bbf-if-pm:out-multicast-pkts?   bbf-yang:performance-counter64
         |  |     +--ro bbf-if-pm:out-discards?         bbf-yang:performance-counter32
@@ -445,7 +445,7 @@ module: ietf-interfaces
         |     |  +--ro bbf-if-pm:in-errors?            bbf-yang:performance-counter32
         |     |  +--ro bbf-if-pm:in-unknown-protos?    bbf-yang:performance-counter32
         |     |  +--ro bbf-if-pm:out-octets?           bbf-yang:performance-counter64
-        |     |  +--ro bbf-if-pm:out-unicast-pkts?     yang:counter64
+        |     |  +--ro bbf-if-pm:out-unicast-pkts?     bbf-yang:performance-counter64
         |     |  +--ro bbf-if-pm:out-broadcast-pkts?   bbf-yang:performance-counter64
         |     |  +--ro bbf-if-pm:out-multicast-pkts?   bbf-yang:performance-counter64
         |     |  +--ro bbf-if-pm:out-discards?         bbf-yang:performance-counter32
@@ -470,7 +470,7 @@ module: ietf-interfaces
         |        +--ro bbf-if-pm:in-errors?            bbf-yang:performance-counter32
         |        +--ro bbf-if-pm:in-unknown-protos?    bbf-yang:performance-counter32
         |        +--ro bbf-if-pm:out-octets?           bbf-yang:performance-counter64
-        |        +--ro bbf-if-pm:out-unicast-pkts?     yang:counter64
+        |        +--ro bbf-if-pm:out-unicast-pkts?     bbf-yang:performance-counter64
         |        +--ro bbf-if-pm:out-broadcast-pkts?   bbf-yang:performance-counter64
         |        +--ro bbf-if-pm:out-multicast-pkts?   bbf-yang:performance-counter64
         |        +--ro bbf-if-pm:out-discards?         bbf-yang:performance-counter32
@@ -481,6 +481,25 @@ module: ietf-interfaces
         |           +--ro bbf-eth-pm:in-errors-mac-internal?    bbf-yang:performance-counter64
         |           +--ro bbf-eth-pm:out-errors-mac-internal?   bbf-yang:performance-counter64
         +---x bbf-if-ctrs:reset-statistics
+
+module: bbf-l2-forwarding-shared-fdb
+  augment /bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarding-databases/bbf-l2-fwd:forwarding-database/bbf-l2-fwd:static-mac-address/bbf-l2-fwd:learning-constraint/bbf-l2-fwd:allowed-to-learn-on/bbf-l2-fwd:allow-to-learn-on:
+    +--:(ethernet-interfaces) {bbf-l2-fwd:shared-forwarding-databases,bbf-l2-fwd:forwarding-databases and
+bbf-l2-fwd:mac-learning}?
+       +--rw interface-references
+          +--rw interface*   if:interface-ref
+  augment /bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarding-databases/bbf-l2-fwd:forwarding-database/bbf-l2-fwd:static-mac-address/bbf-l2-fwd:learning-constraint/bbf-l2-fwd:install-in-fdb-on/bbf-l2-fwd:install-on:
+    +--:(static-ethernet-interface) {bbf-l2-fwd:shared-forwarding-databases,bbf-l2-fwd:forwarding-databases}?
+       +--rw static-interface-reference
+          +--rw interface?   if:interface-ref
+  augment /bbf-l2-fwd:forwarding-state/bbf-l2-fwd:forwarding-databases/bbf-l2-fwd:forwarding-database/bbf-l2-fwd:mac-addresses/bbf-l2-fwd:mac-address/bbf-l2-fwd:learned-on:
+    +--:(interface) {bbf-l2-fwd:shared-forwarding-databases,bbf-l2-fwd:forwarding-databases and
+bbf-l2-fwd:mac-learning}?
+       +--ro interface?         if:interface-state-ref
+       +--ro forwarder-ports* [index]
+          +--ro index        uint32
+          +--ro forwarder?   forwarder-state-ref
+          +--ro port?        -> /bbf-l2-fwd:forwarding-state/forwarders/forwarder[bbf-l2-fwd:name = current()/../forwarder]/ports/port/name
 module: bbf-l2-forwarding
   +--rw forwarding
   |  +--rw forwarders
@@ -681,25 +700,6 @@ bbf-l2-fwd:mac-learning}?
                           +--ro bbf-l2-sfdb:index        uint32
                           +--ro bbf-l2-sfdb:forwarder?   forwarder-state-ref
                           +--ro bbf-l2-sfdb:port?        -> /bbf-l2-fwd:forwarding-state/forwarders/forwarder[bbf-l2-fwd:name = current()/../forwarder]/ports/port/name
-
-module: bbf-l2-forwarding-shared-fdb
-  augment /bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarding-databases/bbf-l2-fwd:forwarding-database/bbf-l2-fwd:static-mac-address/bbf-l2-fwd:learning-constraint/bbf-l2-fwd:allowed-to-learn-on/bbf-l2-fwd:allow-to-learn-on:
-    +--:(ethernet-interfaces) {bbf-l2-fwd:shared-forwarding-databases,bbf-l2-fwd:forwarding-databases and
-bbf-l2-fwd:mac-learning}?
-       +--rw interface-references
-          +--rw interface*   if:interface-ref
-  augment /bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarding-databases/bbf-l2-fwd:forwarding-database/bbf-l2-fwd:static-mac-address/bbf-l2-fwd:learning-constraint/bbf-l2-fwd:install-in-fdb-on/bbf-l2-fwd:install-on:
-    +--:(static-ethernet-interface) {bbf-l2-fwd:shared-forwarding-databases,bbf-l2-fwd:forwarding-databases}?
-       +--rw static-interface-reference
-          +--rw interface?   if:interface-ref
-  augment /bbf-l2-fwd:forwarding-state/bbf-l2-fwd:forwarding-databases/bbf-l2-fwd:forwarding-database/bbf-l2-fwd:mac-addresses/bbf-l2-fwd:mac-address/bbf-l2-fwd:learned-on:
-    +--:(interface) {bbf-l2-fwd:shared-forwarding-databases,bbf-l2-fwd:forwarding-databases and
-bbf-l2-fwd:mac-learning}?
-       +--ro interface?         if:interface-state-ref
-       +--ro forwarder-ports* [index]
-          +--ro index        uint32
-          +--ro forwarder?   forwarder-state-ref
-          +--ro port?        -> /bbf-l2-fwd:forwarding-state/forwarders/forwarder[bbf-l2-fwd:name = current()/../forwarder]/ports/port/name
 module: bbf-subscriber-profiles
   +--rw subscriber-profiles
      +--rw subscriber-profile* [name]
@@ -747,18 +747,77 @@ module: bbf-pppoe-intermediate-agent
            +--rw access-loop-subtags?         bbf-subtype:broadband-line-characteristics
            +--rw start-numbering-from-zero?   boolean
            +--rw use-leading-zeroes?          boolean
-module: bbf-qos-policies
-  +--rw policies
-  |  +--rw policy* [name]
-  |     +--rw name           bbf-yang:string-ascii64
-  |     +--rw description?   bbf-yang:string-ascii64-or-empty
-  |     +--rw classifiers* [name]
-  |        +--rw name    -> /bbf-qos-cls:classifiers/classifier-entry/name
-  +--rw qos-policy-profiles
-     +--rw policy-profile* [name]
-        +--rw name           bbf-yang:string-ascii64
-        +--rw policy-list* [name]
-           +--rw name    -> /policies/policy/name
+module: bbf-qos-classifiers
+  +--rw classifiers
+     +--rw classifier-entry* [name]
+        +--rw name                           bbf-yang:string-ascii64
+        +--rw description?                   bbf-yang:string-ascii64-or-empty
+        +--rw filter-operation?              identityref
+        +--rw (filter-method)?
+        |  +--:(inline)
+        |  |  +--rw match-criteria
+        |  |     +--rw (vlan-tag-match-type)?
+        |  |     |  +--:(match-all)
+        |  |     |  |  +--rw match-all?                 empty
+        |  |     |  +--:(untagged)
+        |  |     |  |  +--rw untagged?                  empty
+        |  |     |  +--:(vlan-tagged)
+        |  |     |     +--rw tag* [index]
+        |  |     |        +--rw index           tag-index
+        |  |     |        +--rw in-pbit-list?   bbf-dot1qt:pbit-list
+        |  |     |        +--rw in-dei?         uint8
+        |  |     +--rw dscp-range?                      union
+        |  |     +--rw (protocols)?
+        |  |     |  +--:(any-protocol)
+        |  |     |  |  +--rw any-protocol?              empty
+        |  |     |  +--:(protocol)
+        |  |     |     +--rw protocol*                  enumeration
+        |  |     +--rw bbf-qos-plc:pbit-marking-list* [index]
+        |  |     |  +--rw bbf-qos-plc:index         qos-pbit-marking-index
+        |  |     |  +--rw bbf-qos-plc:pbit-value?   bbf-dot1qt:pbit
+        |  |     +--rw bbf-qos-plc:dei-marking-list* [index]
+        |  |     |  +--rw bbf-qos-plc:index        qos-dei-marking-index
+        |  |     |  +--rw bbf-qos-plc:dei-value?   bbf-dot1qt:dei
+        |  |     +--rw bbf-qos-plc:flow-color*          qos-color
+        |  +--:(bbf-qos-filt:by-reference)
+        |     +--rw bbf-qos-filt:filter* [name]
+        |        +--rw bbf-qos-filt:name           bbf-yang:string-ascii64
+        |        +--rw bbf-qos-filt:filter-name?   -> /filters/filter/name
+        +--rw classifier-action-entry-cfg* [action-type]
+           +--rw action-type                                   identityref
+           +--rw (action-cfg-params)?
+              +--:(pbit-marking)
+              |  +--rw pbit-marking-cfg
+              |     +--rw pbit-marking-list* [index]
+              |        +--rw index         qos-pbit-marking-index
+              |        +--rw pbit-value?   bbf-dot1qt:pbit
+              +--:(dei-marking)
+              |  +--rw dei-marking-cfg
+              |     +--rw dei-marking-list* [index]
+              |        +--rw index        qos-dei-marking-index
+              |        +--rw dei-value?   bbf-dot1qt:dei
+              +--:(dscp-marking)
+              |  +--rw dscp-marking-cfg
+              |     +--rw dscp?   inet:dscp
+              +--:(scheduling-traffic-class)
+              |  +--rw scheduling-traffic-class?               bbf-qos-t:traffic-class-id
+              +--:(bbf-qos-plc-ep:envelope-policing)
+              |  +--rw bbf-qos-plc-ep:policer-envelope-flow
+              |     +--rw bbf-qos-plc-ep:envelope?   -> /envelope-profiles/envelope-profile/name
+              |     +--rw bbf-qos-plc-ep:flow?       -> /envelope-profiles/envelope-profile[bbf-qos-plc-ep:name=current()/../envelope]/flows/flow/rank
+              +--:(bbf-qos-plc:flow-color)
+              |  +--rw bbf-qos-plc:flow-color?                 qos-color
+              +--:(bbf-qos-plc:bac-color)
+              |  +--rw bbf-qos-plc:bac-color?                  qos-color
+              +--:(bbf-qos-plc:discard)
+              |  +--rw bbf-qos-plc:discard?                    empty
+              +--:(bbf-qos-plc:policing)
+              |  +--rw bbf-qos-plc:policing
+              |     +--rw bbf-qos-plc:policing-profile?   -> /policing-profiles/policing-profile/name
+              +--:(bbf-qos-rc:rate-limit-frames)
+                 +--rw bbf-qos-rc:rate-limit-frames
+                    +--rw bbf-qos-rc:rate?         uint32
+                    +--rw bbf-qos-rc:burst-size?   uint32
 module: bbf-qos-filters
   +--rw filters
      +--rw filter* [name]
@@ -819,6 +878,49 @@ module: bbf-qos-policer-envelope-profiles
               +--rw ebs?             bbf-qos-plc-tp:burst-size
               +--rw coupling-flag?   bbf-qos-plc-tp:coupling-flag
               +--rw color-mode?      bbf-qos-plc-tp:color-mode
+module: bbf-qos-policies
+  +--rw policies
+  |  +--rw policy* [name]
+  |     +--rw name           bbf-yang:string-ascii64
+  |     +--rw description?   bbf-yang:string-ascii64-or-empty
+  |     +--rw classifiers* [name]
+  |        +--rw name    -> /bbf-qos-cls:classifiers/classifier-entry/name
+  +--rw qos-policy-profiles
+     +--rw policy-profile* [name]
+        +--rw name           bbf-yang:string-ascii64
+        +--rw policy-list* [name]
+           +--rw name    -> /policies/policy/name
+module: bbf-qos-policing
+  +--rw policing-profiles
+     +--rw policing-profile* [name]
+        +--rw name                                     bbf-yang:string-ascii64
+        +--rw scope?                                   bbf-qos-cls:action-scope
+        +--rw (policing-type)
+        |  +--:(single-rate-two-color-marker-type) {single-rate-two-color-marker}?
+        |  |  +--rw single-rate-two-color-marker
+        |  |     +--rw cir?   bbf-qos-plc-tp:information-rate
+        |  |     +--rw cbs?   bbf-qos-plc-tp:burst-size
+        |  +--:(single-rate-three-color-marker-type) {single-rate-three-color-marker}?
+        |  |  +--rw single-rate-three-color-marker
+        |  |     +--rw cir?   bbf-qos-plc-tp:information-rate
+        |  |     +--rw cbs?   bbf-qos-plc-tp:burst-size
+        |  |     +--rw ebs?   bbf-qos-plc-tp:burst-size
+        |  +--:(two-rate-three-color-marker-type) {two-rate-three-color-marker}?
+        |  |  +--rw two-rate-three-color-marker
+        |  |     +--rw cir?   bbf-qos-plc-tp:information-rate
+        |  |     +--rw cbs?   bbf-qos-plc-tp:burst-size
+        |  |     +--rw pir?   bbf-qos-plc-tp:information-rate
+        |  |     +--rw pbs?   bbf-qos-plc-tp:burst-size
+        |  +--:(two-rate-three-color-marker-mef-type) {two-rate-three-color-marker-mef}?
+        |     +--rw two-rate-three-color-marker-mef
+        |        +--rw cir?           bbf-qos-plc-tp:information-rate
+        |        +--rw cbs?           bbf-qos-plc-tp:burst-size
+        |        +--rw eir?           bbf-qos-plc-tp:information-rate
+        |        +--rw ebs?           bbf-qos-plc-tp:burst-size
+        |        +--rw couple-flag?   bbf-qos-plc-tp:coupling-flag
+        |        +--rw color-mode?    bbf-qos-plc-tp:color-mode
+        +--rw hierarchical-policing
+           +--rw policing-profile?   -> /policing-profiles/policing-profile/name
 module: bbf-qos-traffic-mngt
   +--rw tm-profiles
      +--rw tc-id-2-queue-id-mapping-profile* [name] {tc-id-2-queue-id-mapping-config}?
@@ -869,108 +971,6 @@ module: bbf-qos-traffic-mngt
               +--rw bbf-qos-shap:single-token-bucket
                  +--rw bbf-qos-shap:pir?   uint32
                  +--rw bbf-qos-shap:pbs?   uint32
-module: bbf-qos-policing
-  +--rw policing-profiles
-     +--rw policing-profile* [name]
-        +--rw name                                     bbf-yang:string-ascii64
-        +--rw scope?                                   bbf-qos-cls:action-scope
-        +--rw (policing-type)
-        |  +--:(single-rate-two-color-marker-type) {single-rate-two-color-marker}?
-        |  |  +--rw single-rate-two-color-marker
-        |  |     +--rw cir?   bbf-qos-plc-tp:information-rate
-        |  |     +--rw cbs?   bbf-qos-plc-tp:burst-size
-        |  +--:(single-rate-three-color-marker-type) {single-rate-three-color-marker}?
-        |  |  +--rw single-rate-three-color-marker
-        |  |     +--rw cir?   bbf-qos-plc-tp:information-rate
-        |  |     +--rw cbs?   bbf-qos-plc-tp:burst-size
-        |  |     +--rw ebs?   bbf-qos-plc-tp:burst-size
-        |  +--:(two-rate-three-color-marker-type) {two-rate-three-color-marker}?
-        |  |  +--rw two-rate-three-color-marker
-        |  |     +--rw cir?   bbf-qos-plc-tp:information-rate
-        |  |     +--rw cbs?   bbf-qos-plc-tp:burst-size
-        |  |     +--rw pir?   bbf-qos-plc-tp:information-rate
-        |  |     +--rw pbs?   bbf-qos-plc-tp:burst-size
-        |  +--:(two-rate-three-color-marker-mef-type) {two-rate-three-color-marker-mef}?
-        |     +--rw two-rate-three-color-marker-mef
-        |        +--rw cir?           bbf-qos-plc-tp:information-rate
-        |        +--rw cbs?           bbf-qos-plc-tp:burst-size
-        |        +--rw eir?           bbf-qos-plc-tp:information-rate
-        |        +--rw ebs?           bbf-qos-plc-tp:burst-size
-        |        +--rw couple-flag?   bbf-qos-plc-tp:coupling-flag
-        |        +--rw color-mode?    bbf-qos-plc-tp:color-mode
-        +--rw hierarchical-policing
-           +--rw policing-profile?   -> /policing-profiles/policing-profile/name
-module: bbf-qos-classifiers
-  +--rw classifiers
-     +--rw classifier-entry* [name]
-        +--rw name                           bbf-yang:string-ascii64
-        +--rw description?                   bbf-yang:string-ascii64-or-empty
-        +--rw filter-operation?              identityref
-        +--rw (filter-method)?
-        |  +--:(inline)
-        |  |  +--rw match-criteria
-        |  |     +--rw (vlan-tag-match-type)?
-        |  |     |  +--:(match-all)
-        |  |     |  |  +--rw match-all?                 empty
-        |  |     |  +--:(untagged)
-        |  |     |  |  +--rw untagged?                  empty
-        |  |     |  +--:(vlan-tagged)
-        |  |     |     +--rw tag* [index]
-        |  |     |        +--rw index           tag-index
-        |  |     |        +--rw in-pbit-list?   bbf-dot1qt:pbit-list
-        |  |     |        +--rw in-dei?         uint8
-        |  |     +--rw dscp-range?                      union
-        |  |     +--rw (protocols)?
-        |  |     |  +--:(any-protocol)
-        |  |     |  |  +--rw any-protocol?              empty
-        |  |     |  +--:(protocol)
-        |  |     |     +--rw protocol*                  enumeration
-        |  |     +--rw bbf-qos-plc:pbit-marking-list* [index]
-        |  |     |  +--rw bbf-qos-plc:index         qos-pbit-marking-index
-        |  |     |  +--rw bbf-qos-plc:pbit-value?   bbf-dot1qt:pbit
-        |  |     +--rw bbf-qos-plc:dei-marking-list* [index]
-        |  |     |  +--rw bbf-qos-plc:index        qos-dei-marking-index
-        |  |     |  +--rw bbf-qos-plc:dei-value?   bbf-dot1qt:dei
-        |  |     +--rw bbf-qos-plc:flow-color*          qos-color
-        |  +--:(bbf-qos-filt:by-reference)
-        |     +--rw bbf-qos-filt:filter* [name]
-        |        +--rw bbf-qos-filt:name           bbf-yang:string-ascii64
-        |        +--rw bbf-qos-filt:filter-name?   -> /filters/filter/name
-        +--rw classifier-action-entry-cfg* [action-type]
-           +--rw action-type                                   identityref
-           +--rw (action-cfg-params)?
-              +--:(pbit-marking)
-              |  +--rw pbit-marking-cfg
-              |     +--rw pbit-marking-list* [index]
-              |        +--rw index         qos-pbit-marking-index
-              |        +--rw pbit-value?   bbf-dot1qt:pbit
-              +--:(dei-marking)
-              |  +--rw dei-marking-cfg
-              |     +--rw dei-marking-list* [index]
-              |        +--rw index        qos-dei-marking-index
-              |        +--rw dei-value?   bbf-dot1qt:dei
-              +--:(dscp-marking)
-              |  +--rw dscp-marking-cfg
-              |     +--rw dscp?   inet:dscp
-              +--:(scheduling-traffic-class)
-              |  +--rw scheduling-traffic-class?               bbf-qos-t:traffic-class-id
-              +--:(bbf-qos-rc:rate-limit-frames)
-              |  +--rw bbf-qos-rc:rate-limit-frames
-              |     +--rw bbf-qos-rc:rate?         uint32
-              |     +--rw bbf-qos-rc:burst-size?   uint32
-              +--:(bbf-qos-plc-ep:envelope-policing)
-              |  +--rw bbf-qos-plc-ep:policer-envelope-flow
-              |     +--rw bbf-qos-plc-ep:envelope?   -> /envelope-profiles/envelope-profile/name
-              |     +--rw bbf-qos-plc-ep:flow?       -> /envelope-profiles/envelope-profile[bbf-qos-plc-ep:name=current()/../envelope]/flows/flow/rank
-              +--:(bbf-qos-plc:flow-color)
-              |  +--rw bbf-qos-plc:flow-color?                 qos-color
-              +--:(bbf-qos-plc:bac-color)
-              |  +--rw bbf-qos-plc:bac-color?                  qos-color
-              +--:(bbf-qos-plc:discard)
-              |  +--rw bbf-qos-plc:discard?                    empty
-              +--:(bbf-qos-plc:policing)
-                 +--rw bbf-qos-plc:policing
-                    +--rw bbf-qos-plc:policing-profile?   -> /policing-profiles/policing-profile/name
 module: bbf-mgmd
   +--rw multicast
   |  +--rw mgmd

@@ -74,6 +74,16 @@ submodule bbf-fast-ftu-inventory-body {
      This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-10-21 {
+    description
+      "Amendment 2 Corrigendum 1.
+       * Approval Date:    2019-10-21
+       * Publication Date: 2019-10-21.";
+    reference
+      "TR-355a2c1: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-2.pdf>";
+  }
   revision 2019-06-11 {
     description
       "Amendment 2.
@@ -135,7 +145,7 @@ submodule bbf-fast-ftu-inventory-body {
          specific information.";
       reference
         "ITU-T G.997.2 clause 7.13.1.3 (FTUO_VERSION) and clause
-         7.4.6 (FTUR_VERSION).";
+         7.13.1.4 (FTUR_VERSION).";
     }
     leaf self-test-result {
       type binary;
@@ -148,8 +158,8 @@ submodule bbf-fast-ftu-inventory-body {
          and can be interpreted in combination with the FTU-O/FTU-R
          ITU-T G.994.1 vendor ID and system vendor ID.";
       reference
-        "ITU-T G.997.2 clause 7.13.1.5 (FTUO_SELFTEST)) and clause
-         7.13.1.6 (FTUO_SELFTEST).";
+        "ITU-T G.997.2 clause 7.13.1.5 (FTUO_SELFTEST) and clause
+         7.13.1.6 (FTUR_SELFTEST).";
     }
     leaf system-vendor-id {
       type binary {
@@ -162,7 +172,8 @@ submodule bbf-fast-ftu-inventory-body {
          channel (see clause 11.2.2.10/G.9701) and as defined in
          clause 9.3.3.1/G.994.1.";
       reference
-        "ITU-T G.997.2 clause 7.13.2.1 and clause 7.13.2.2.";
+        "ITU-T G.997.2 clause 7.13.2.1 (DPU_SYSTEM_VENDOR) and
+         clause 7.13.2.2 (NT_SYSTEM_VENDOR).";
     }
     leaf system-serial-number {
       type binary {
@@ -176,7 +187,8 @@ submodule bbf-fast-ftu-inventory-body {
          information. The combination of system vendor ID and system
          serial number creates a unique number for each FTU system.";
       reference
-        "ITU-T G.997.2 clause 7.13.2.3 and clause 7.13.2.4.";
+        "ITU-T G.997.2 clause 7.13.2.3 (DPU_SYSTEM_SERIALNR) and
+         clause 7.13.2.4 (NT_SYSTEM_SERIALNR).";
     }
     leaf profiles-supported {
       type profiles;
@@ -184,7 +196,8 @@ submodule bbf-fast-ftu-inventory-body {
         "Reports for each profile whether the FAST Transceiver Unit
          (FTU) supports operation according to that profile.";
       reference
-        "ITU-T G.997.2 clause 7.13.1.7; ITU-T G.9701 clause 6";
+        "ITU-T G.997.2 clause 7.13.1.7 (FTUO_PROFILES) and clause
+         7.13.1.8 (FTUR_PROFILES); ITU-T G.9701 clause 6";
     }
     leaf annex-x-supported {
       if-feature "annex-x";
@@ -244,8 +257,8 @@ submodule bbf-fast-ftu-inventory-body {
          special value (not-in-vectored-group) means the line is not
          in a vectored group.";
       reference
-        "ITU-T G.997.2 clause 7.13.2.5; ITU-T G.9701 clause
-         11.4.5.1.1";
+        "ITU-T G.997.2 clause 7.13.2.5 (VCE_ID);
+         ITU-T G.9701 clause 11.4.5.1.1";
     }
     leaf vce-port-index {
       type union {
@@ -267,8 +280,8 @@ submodule bbf-fast-ftu-inventory-body {
          special value (not-in-vectored-group) means the line is not
          in a vectored group.";
       reference
-        "ITU-T G.997.2 clause 7.13.2.6; ITU-T G.9701 clause
-         11.4.5.1.2";
+        "ITU-T G.997.2 clause 7.13.2.6 (VCE_PORT_INDEX);
+         ITU-T G.9701 clause 11.4.5.1.2";
     }
     leaf idta-supported {
       if-feature "(dta and annex-x)";

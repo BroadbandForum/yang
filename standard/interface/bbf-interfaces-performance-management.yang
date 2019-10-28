@@ -1,17 +1,14 @@
 module bbf-interfaces-performance-management {
   yang-version 1.1;
   namespace "urn:bbf:yang:bbf-interfaces-performance-management";
-
   prefix bbf-if-pm;
 
   import ietf-interfaces {
     prefix if;
   }
-
   import ietf-yang-types {
     prefix yang;
   }
-
   import bbf-yang-types {
     prefix bbf-yang;
   }
@@ -19,7 +16,6 @@ module bbf-interfaces-performance-management {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
@@ -35,19 +31,18 @@ module bbf-interfaces-performance-management {
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
-    "This module contains a collection of YANG definitions for 
-     supporting the Broadband Forum requirements on interface 
-     management as applicable to access network equipment. As such, 
-     this module is specific to access network equipment (e.g., 
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on interface
+     management as applicable to access network equipment. As such,
+     this module is specific to access network equipment (e.g.,
      BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module reports performance management of 
-     statistics defined by the IETF interfaces data model, 
+     Specifically, this module reports performance management of
+     statistics defined by the IETF interfaces data model,
      ietf-interfaces (RFC7223).
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2019, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -90,6 +85,16 @@ module bbf-interfaces-performance-management {
      This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2019-10-21 {
+    description
+      "Amendment 2 Corrigendum 1.
+       * Approval Date:    2019-10-21.
+       * Publication Date: 2019-10-21.";
+    reference
+      "TR-383a2c1: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-2.pdf>";
+  }
   revision 2018-07-13 {
     description
       "Initial revision.
@@ -157,13 +162,11 @@ module bbf-interfaces-performance-management {
     description
       "Defines common parameters required when defining history
        interval performance counters.";
-
     leaf invalid-data-flag {
       type boolean;
       description
         "Reports the validity of the corresponding PM data.";
     }
-
     leaf time-stamp {
       type yang:date-and-time;
       description
@@ -174,7 +177,6 @@ module bbf-interfaces-performance-management {
   grouping performance-history-measured-time {
     description
       "Reports the measured time for a given interval";
-
     leaf measured-time {
       type uint32;
       description
@@ -187,7 +189,6 @@ module bbf-interfaces-performance-management {
     description
       "Defines common parameters required when defining 15 minute
        interval history performance counters.";
-
     uses performance-history-measured-time;
     uses performance-history-interval-parameters;
   }
@@ -196,7 +197,6 @@ module bbf-interfaces-performance-management {
     description
       "Defines common parameters required when defining 24 hour
        interval history performance counters.";
-
     uses performance-history-measured-time;
     uses performance-history-interval-parameters;
   }
@@ -205,14 +205,12 @@ module bbf-interfaces-performance-management {
     description
       "Defines common parameters required when defining 15 minute
        history performance counters.";
-
     leaf number-of-intervals {
       type performance-15min-interval;
       description
-        "The total number of 15-minute PM intervals for which data 
+        "The total number of 15-minute PM intervals for which data
          was collected.";
     }
-
     leaf non-valid-intervals {
       type performance-15min-interval;
       description
@@ -225,14 +223,12 @@ module bbf-interfaces-performance-management {
     description
       "Defines common parameters required when defining 24 hour
        history performance counters.";
-
     leaf number-of-intervals {
       type performance-24hr-interval;
       description
-        "The total number of 24-hour PM intervals for which data 
+        "The total number of 24-hour PM intervals for which data
          was collected. ";
     }
-
     leaf non-valid-intervals {
       type performance-24hr-interval;
       description
@@ -245,7 +241,6 @@ module bbf-interfaces-performance-management {
     description
       "Counters associated with current and historical 15 minute and
        24 hour performance counters.";
-
     leaf in-octets {
       type bbf-yang:performance-counter64;
       description
@@ -254,7 +249,6 @@ module bbf-interfaces-performance-management {
       reference
         "RFC 2863: The Interfaces Group MIB - ifHCInOctets";
     }
-
     leaf in-unicast-pkts {
       type bbf-yang:performance-counter64;
       description
@@ -264,7 +258,6 @@ module bbf-interfaces-performance-management {
       reference
         "RFC 2863: The Interfaces Group MIB - ifHCInUcastPkts";
     }
-
     leaf in-broadcast-pkts {
       type bbf-yang:performance-counter64;
       description
@@ -274,7 +267,6 @@ module bbf-interfaces-performance-management {
       reference
         "RFC 2863: The Interfaces Group MIB - ifHCInBroadcastPkts";
     }
-
     leaf in-multicast-pkts {
       type bbf-yang:performance-counter64;
       description
@@ -285,7 +277,6 @@ module bbf-interfaces-performance-management {
       reference
         "RFC 2863: The Interfaces Group MIB - ifHCInMulticastPkts";
     }
-
     leaf in-discards {
       type bbf-yang:performance-counter32;
       description
@@ -297,7 +288,6 @@ module bbf-interfaces-performance-management {
       reference
         "RFC 2863: The Interfaces Group MIB - ifInDiscards";
     }
-
     leaf in-errors {
       type bbf-yang:performance-counter32;
       description
@@ -311,7 +301,6 @@ module bbf-interfaces-performance-management {
       reference
         "RFC 2863: The Interfaces Group MIB - ifInErrors";
     }
-
     leaf in-unknown-protos {
       type bbf-yang:performance-counter32;
       description
@@ -327,7 +316,6 @@ module bbf-interfaces-performance-management {
       reference
         "RFC 2863: The Interfaces Group MIB - ifInUnknownProtos";
     }
-
     leaf out-octets {
       type bbf-yang:performance-counter64;
       description
@@ -336,9 +324,8 @@ module bbf-interfaces-performance-management {
       reference
         "RFC 2863: The Interfaces Group MIB - ifHCOutOctets";
     }
-
     leaf out-unicast-pkts {
-      type yang:counter64;
+      type bbf-yang:performance-counter64;
       description
         "The total number of packets that higher-level protocols
          requested be transmitted, and that were not addressed
@@ -347,7 +334,6 @@ module bbf-interfaces-performance-management {
       reference
         "RFC 2863: The Interfaces Group MIB - ifHCOutUcastPkts";
     }
-
     leaf out-broadcast-pkts {
       type bbf-yang:performance-counter64;
       description
@@ -359,8 +345,6 @@ module bbf-interfaces-performance-management {
         "RFC 2863: The Interfaces Group MIB -
                    ifHCOutBroadcastPkts";
     }
-
-
     leaf out-multicast-pkts {
       type bbf-yang:performance-counter64;
       description
@@ -374,7 +358,6 @@ module bbf-interfaces-performance-management {
         "RFC 2863: The Interfaces Group MIB -
                    ifHCOutMulticastPkts";
     }
-
     leaf out-discards {
       type bbf-yang:performance-counter32;
       description
@@ -386,7 +369,6 @@ module bbf-interfaces-performance-management {
       reference
         "RFC 2863: The Interfaces Group MIB - ifOutDiscards";
     }
-
     leaf out-errors {
       type bbf-yang:performance-counter32;
       description
@@ -400,23 +382,21 @@ module bbf-interfaces-performance-management {
     }
   }
 
-  augment '/if:interfaces/if:interface' {
+  augment "/if:interfaces/if:interface" {
     description
       "Data nodes for the performance configuration parameters.";
-
     container performance {
       description
         "Performance parameters.";
-
       leaf enable {
         type boolean;
         default "false";
         description
           "If true, enables counting of performance statistics.
            Then performance statistics will be available in
-           /interfaces/interface/performance. 
-           i.e. 15 minutes statistics and 24 hours statistics, 
-           and for both there are current statistics and history 
+           /interfaces/interface/performance.
+           i.e. 15 minutes statistics and 24 hours statistics,
+           and for both there are current statistics and history
            data.
 
            If false, then there are no performance statistics.";
@@ -424,73 +404,57 @@ module bbf-interfaces-performance-management {
     }
   }
 
-  augment '/if:interfaces-state/if:interface' {
+  augment "/if:interfaces-state/if:interface" {
     description
       "Data nodes for the performance status parameters.";
-
     container performance {
       description
         "Performance parameters.";
-
       container intervals-15min {
         description
           "15 minute interval performance history.";
-
         container current {
           description
             "Contains the counts that are currently accumulating.";
-
           uses interface-performance-counters;
         }
-
         uses performance-15min-history-parameters;
-
         list history {
           key "interval-number";
           max-elements 96;
           description
             "A history of 15 minute intervals.";
-
           leaf interval-number {
             type performance-15min-history-interval;
             description
               "The number of the interval relative to the current
                interval.";
           }
-
           uses performance-history-15min-interval-parameters;
           uses interface-performance-counters;
         }
       }
-
-
       container intervals-24hr {
         if-feature "performance-24hr";
         description
           "24 hour interval performance history.";
-
         container current {
           description
             "Contains the counts that are currently accumulating.";
-
           uses interface-performance-counters;
         }
-
         uses performance-24hr-history-parameters;
-
         list history {
           key "interval-number";
           max-elements 7;
           description
             "A history of 24 hour intervals.";
-
           leaf interval-number {
             type performance-24hr-history-interval;
             description
               "The number of the interval relative to the current
                interval.";
           }
-
           uses performance-history-24hr-interval-parameters;
           uses interface-performance-counters;
         }

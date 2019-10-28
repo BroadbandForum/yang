@@ -71,6 +71,16 @@ submodule bbf-fast-line-threshold-profile-body {
      This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2019-10-21 {
+    description
+      "Amendment 2 Corrigendum 1.
+       * Approval Date:    2019-10-21
+       * Publication Date: 2019-10-21.";
+    reference
+      "TR-355a2c1: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-2.pdf>";
+  }
   revision 2019-06-11 {
     description
       "Amendment 2.
@@ -134,6 +144,7 @@ submodule bbf-fast-line-threshold-profile-body {
     leaf loss-of-signal-seconds-threshold {
       type uint32;
       units "1 second";
+      default "0";
       description
         "Threshold for the count of Loss of Signal (LOS) seconds
          (LOSS). A special value (0) indicates the threshold is
@@ -146,6 +157,7 @@ submodule bbf-fast-line-threshold-profile-body {
     leaf loss-of-rmc-seconds-threshold {
       type uint32;
       units "1 second";
+      default "0";
       description
         "Threshold for the count of Loss of Robust Management Channel
          (RMC) (LOR) seconds (LORS). A special value (0) indicates the
@@ -171,6 +183,7 @@ submodule bbf-fast-line-threshold-profile-body {
     }
     leaf full-initializations-threshold {
       type uint32;
+      default "0";
       description
         "Threshold for a count of the full initialization primitives
          (full_init). A special value (0) indicates the threshold is
@@ -183,6 +196,7 @@ submodule bbf-fast-line-threshold-profile-body {
     }
     leaf failed-initializations-threshold {
       type uint32;
+      default "0";
       description
         "Threshold for a count of the failed full initialization
          primitives (failedfull_init). A special value (0) indicates
@@ -197,6 +211,7 @@ submodule bbf-fast-line-threshold-profile-body {
     }
     leaf fast-initializations-threshold {
       type uint32;
+      default "0";
       description
         "Threshold for a count of the fast initialization primitives
          (fast_init). A special value (0) indicates the threshold is
@@ -209,6 +224,7 @@ submodule bbf-fast-line-threshold-profile-body {
     }
     leaf failed-fast-initializations-threshold {
       type uint32;
+      default "0";
       description
         "Threshold for a count of the failed fast initialization
          primitives (failedfast_init). A special value (0) indicates
@@ -223,6 +239,7 @@ submodule bbf-fast-line-threshold-profile-body {
     }
     leaf spontaneous-interruptions-threshold {
       type uint32;
+      default "0";
       description
         "Threshold for a count of the spontaneous interruption
          anomalies (spont_intrpt). A special value (0) indicates the

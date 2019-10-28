@@ -1,5 +1,19 @@
 ## Broadband Forum YANG Modules
 
+### 2019-10-21: [TR-355a2c1](https://www.broadband-forum.org/technical/download/TR-355_Amendment-2.pdf) YANG Modules for FTTdp Management (PDF not updated)
+*Tag: [v1.2.1-TR-355a2c1](https://github.com/BroadbandForum/yang/tree/v1.2.1-TR-355a2c1)*
+
+* Correct length of *version-number* and *serial-number* in VDSL inventory
+* Add missing default values for FAST thresholds
+* Correct references in both bbf-fast and bbf-vdsl
+
+### 2019-10-21: [TR-383a2c1](https://www.broadband-forum.org/technical/download/TR-383_Amendment-2.pdf) Common YANG Modules for Access Networks (PDF not updated)
+*Tag: [v2.2.1-TR-383a2c1](https://github.com/BroadbandForum/yang/tree/v2.2.1-TR-383a2c1)*
+
+* Correct data type used for *out-unicast-pkts* in bbf-interfaces-performance-management
+* Add description of the behavior of the value 0 for *multicast-rate-limit* in bbf-mgmd
+* Correct descriptions for *performance-counter* types
+
 ### 2019-06-11: [TR-355a2](https://www.broadband-forum.org/technical/download/TR-355_Amendment-2.pdf) YANG Modules for FTTdp Management
 *Tag: [v1.2.0-TR-355a2](https://github.com/BroadbandForum/yang/tree/v1.2.0-TR-355a2)*
 
