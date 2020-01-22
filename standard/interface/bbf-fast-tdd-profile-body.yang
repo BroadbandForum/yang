@@ -28,7 +28,7 @@ submodule bbf-fast-tdd-profile-body {
     "This submodule contains a collection of YANG definitions for
      managing TDD profiles.
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Copyright (c) 2016-2020 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -71,6 +71,16 @@ submodule bbf-fast-tdd-profile-body {
      This version of this YANG module is part of TR-355a2; see
      the TR itself for full legal notices.";
 
+  revision 2020-01-17 {
+    description
+      "Amendment 2 Corrigendum 2.
+       * Approval Date:    2020-01-17
+       * Publication Date: 2020-01-17.";
+    reference
+      "TR-355a2c2: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-2.pdf>";
+  }
   revision 2019-10-21 {
     description
       "Amendment 2 Corrigendum 1.
@@ -218,14 +228,14 @@ submodule bbf-fast-tdd-profile-body {
           range "5..31";
         }
         must
-          "((../dta-allowed='idta' and ../../total-symbol-periods =
+          "(((../dta-allowed='idta' and ../../total-symbol-periods =
            23 and .>= 5 and .<= 17) or (../dta-allowed='idta' and
            ../../total-symbol-periods = 36 and .>= 5 and .<= 30) or
            (../dta-allowed='cdta' and ../../total-symbol-periods =
            23 and .>= 6 and .<= 19) or (../dta-allowed='cdta' and
-           ../../total-symbol-periods = 36 and .>= 10 and .<= 31)
-           or ../dta-allowed='none') and (. >= ../minimum-mds) and
-           (. <= ../maximum-mds)" {
+           ../../total-symbol-periods = 36 and .>= 10 and .<= 31))
+           and (. >= ../minimum-mds) and (. <= ../maximum-mds))
+           or ../dta-allowed='none'" {
             description
               "The preferred Mds for Dynamic Time Assignment (DTA)
                must be equal to or higher than the minimum Mds for DTA
@@ -291,14 +301,14 @@ submodule bbf-fast-tdd-profile-body {
           range "5..31";
         }
         must
-          "((../dta-allowed='idta' and ../../total-symbol-periods =
+          "(((../dta-allowed='idta' and ../../total-symbol-periods =
            23 and .>= 5 and .<= 17) or (../dta-allowed='idta' and
            ../../total-symbol-periods = 36 and .>= 5 and .<= 30) or
            (../dta-allowed='cdta' and ../../total-symbol-periods =
            23 and .>= 6 and .<= 19) or (../dta-allowed='cdta' and
-           ../../total-symbol-periods = 36 and .>= 10 and .<= 31)
-           or ../dta-allowed='none') and . <=
-           ../../downstream-symbol-periods" {
+           ../../total-symbol-periods = 36 and .>= 10 and .<= 31))
+           and . <= ../../downstream-symbol-periods) or
+           ../dta-allowed='none'" {
             description
               "The minimum Mds must be restricted to the valid
                range depending on total symbol periods (MF), Dynamic
@@ -321,14 +331,14 @@ submodule bbf-fast-tdd-profile-body {
           range "5..31";
         }
         must
-          "((../dta-allowed='idta' and ../../total-symbol-periods =
+          "(((../dta-allowed='idta' and ../../total-symbol-periods =
            23 and .>= 5 and .<= 17) or (../dta-allowed='idta' and
            ../../total-symbol-periods = 36 and .>= 5 and .<= 30) or
            (../dta-allowed='cdta' and ../../total-symbol-periods =
            23 and .>= 6 and .<= 19) or (../dta-allowed='cdta' and
-           ../../total-symbol-periods = 36 and .>= 10 and .<= 31)
-           or ../dta-allowed='none') and . >=
-           ../../downstream-symbol-periods" {
+           ../../total-symbol-periods = 36 and .>= 10 and .<= 31))
+           and . >= ../../downstream-symbol-periods) or
+           ../dta-allowed='none'" {
             description
               "The maximum Mds must be restricted to the valid
                range depending on total symbol periods (MF), Dynamic

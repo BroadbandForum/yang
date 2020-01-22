@@ -143,10 +143,62 @@ module: ietf-interfaces
   |     +--rw type                                       identityref
   |     +--rw enabled?                                   boolean
   |     +--rw link-up-down-trap-enable?                  enumeration {if-mib}?
+  |     +--rw bbf-qos-tm:tm-root
+  |     |  +--rw (bbf-qos-tm:children-type)?
+  |     |  |  +--:(bbf-qos-tm:queues)
+  |     |  |  |  +--rw bbf-qos-tm:queue* [local-queue-id]
+  |     |  |  |     +--rw bbf-qos-tm:local-queue-id         queue-id
+  |     |  |  |     +--rw bbf-qos-tm:bac-name?              -> /tm-profiles/bac-entry/name
+  |     |  |  |     +--rw (bbf-qos-tm:queue-scheduling-cfg-type)?
+  |     |  |  |     |  +--:(bbf-qos-tm:inline)
+  |     |  |  |     |     +--rw bbf-qos-tm:priority?        scheduling-priority
+  |     |  |  |     |     +--rw bbf-qos-tm:weight?          scheduling-weight
+  |     |  |  |     |     +--rw bbf-qos-shap:shaper-name?   -> /bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/name
+  |     |  |  |     +--rw bbf-qos-tm:pre-emption?           boolean {pre-emption}?
+  |     |  |  +--:(bbf-qos-sched:scheduler-node)
+  |     |  |     +--rw bbf-qos-sched:scheduler-node* [name]
+  |     |  |     |  +--rw bbf-qos-sched:name                           bbf-yang:string-ascii64
+  |     |  |     |  +--rw bbf-qos-sched:description?                   bbf-yang:string-ascii64
+  |     |  |     |  +--rw bbf-qos-sched:scheduling-level               uint8
+  |     |  |     |  +--rw bbf-qos-sched:shaper-name?                   -> /bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/name
+  |     |  |     |  +--rw (bbf-qos-sched:children-type)?
+  |     |  |     |     +--:(bbf-qos-sched:scheduler-node)
+  |     |  |     |     |  +--rw bbf-qos-sched:child-scheduler-nodes* [name]
+  |     |  |     |     |     +--rw bbf-qos-sched:name              -> ../../name
+  |     |  |     |     |     +--rw (bbf-qos-sched:scheduling-type)?
+  |     |  |     |     |        +--:(bbf-qos-sched:inline)
+  |     |  |     |     |           +--rw bbf-qos-sched:priority?   scheduling-priority
+  |     |  |     |     |           +--rw bbf-qos-sched:weight?     scheduling-weight
+  |     |  |     |     +--:(bbf-qos-sched:queue)
+  |     |  |     |        +--rw bbf-qos-sched:contains-queues?         boolean
+  |     |  |     |        +--rw bbf-qos-sched:queue* [local-queue-id]
+  |     |  |     |           +--rw bbf-qos-sched:local-queue-id       queue-id
+  |     |  |     |           +--rw bbf-qos-sched:bac-name?            -> /bbf-qos-tm:tm-profiles/bac-entry/name
+  |     |  |     |           +--rw (bbf-qos-sched:queue-scheduling-cfg-type)?
+  |     |  |     |           |  +--:(bbf-qos-sched:inline)
+  |     |  |     |           |     +--rw bbf-qos-sched:priority?      scheduling-priority
+  |     |  |     |           |     +--rw bbf-qos-sched:weight?        scheduling-weight
+  |     |  |     |           |     +--rw bbf-qos-sched:shaper-name?   -> /bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/name
+  |     |  |     |           +--rw bbf-qos-sched:pre-emption?         boolean {pre-emption}?
+  |     |  |     +--rw bbf-qos-sched:child-scheduler-nodes* [name]
+  |     |  |        +--rw bbf-qos-sched:name              -> ../../scheduler-node/name
+  |     |  |        +--rw (bbf-qos-sched:scheduling-type)?
+  |     |  |           +--:(bbf-qos-sched:inline)
+  |     |  |              +--rw bbf-qos-sched:priority?   scheduling-priority
+  |     |  |              +--rw bbf-qos-sched:weight?     scheduling-weight
+  |     |  +--rw bbf-qos-tm:tc-id-2-queue-id-mapping-profile-name?   -> /tm-profiles/tc-id-2-queue-id-mapping-profile/name {tc-id-2-queue-id-mapping-config}?
+  |     |  +--rw bbf-qos-shap:shaper-name?                           -> /bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/name
+  |     +--rw bbf-qos-sched:egress-tm-objects
+  |     |  +--rw (bbf-qos-sched:select-tm-objects-method)?
+  |     |     +--:(bbf-qos-sched:scheduler)
+  |     |        +--rw bbf-qos-sched:root-if-name?          -> /if:interfaces/interface/name
+  |     |        +--rw bbf-qos-sched:scheduler-node-name?   -> /if:interfaces/interface[if:name = current()/../root-if-name]/bbf-qos-tm:tm-root/bbf-qos-sched:scheduler-node/name
   |     +--rw bbf-if-usg:interface-usage
   |     |  +--rw bbf-if-usg:interface-usage?   interface-usage
-  |     +--rw bbf-if-pm:performance
-  |     |  +--rw bbf-if-pm:enable?   boolean
+  |     +--rw bbf-ldra:dhcpv6-ldra!
+  |     |  +--rw bbf-ldra:enable?         boolean
+  |     |  +--rw bbf-ldra:trusted-port?   boolean
+  |     |  +--rw bbf-ldra:profile-ref     -> /dhcpv6-ldra-profiles/dhcpv6-ldra-profile/name
   |     +--rw bbf-ptm:ptm
   |     |  +--rw bbf-ptm:lower-layer-if    if:interface-ref
   |     +--rw bbf-subif:subif-lower-layer
@@ -267,69 +319,17 @@ module: ietf-interfaces
   |     |  +--rw bbf-l2-fwd:number-committed-mac-addresses?   uint32
   |     |  +--rw bbf-l2-fwd:mac-learning-enable?              boolean
   |     |  +--rw bbf-l2-fwd:mac-learning-failure-action?      enumeration
-  |     +--rw bbf-subprof:subscriber-profile
-  |     |  +--rw bbf-subprof:profile?   subscriber-profile-ref
+  |     +--rw bbf-pppoe-ia:pppoe!
+  |     |  +--rw bbf-pppoe-ia:enable?        boolean
+  |     |  +--rw bbf-pppoe-ia:profile-ref    -> /pppoe-profiles/pppoe-profile/name
   |     +--rw bbf-l2-d4r:l2-dhcpv4-relay!
   |     |  +--rw bbf-l2-d4r:enable?         boolean
   |     |  +--rw bbf-l2-d4r:trusted-port?   boolean
   |     |  +--rw bbf-l2-d4r:profile-ref     -> /l2-dhcpv4-relay-profiles/l2-dhcpv4-relay-profile/name
-  |     +--rw bbf-ldra:dhcpv6-ldra!
-  |     |  +--rw bbf-ldra:enable?         boolean
-  |     |  +--rw bbf-ldra:trusted-port?   boolean
-  |     |  +--rw bbf-ldra:profile-ref     -> /dhcpv6-ldra-profiles/dhcpv6-ldra-profile/name
-  |     +--rw bbf-pppoe-ia:pppoe!
-  |     |  +--rw bbf-pppoe-ia:enable?        boolean
-  |     |  +--rw bbf-pppoe-ia:profile-ref    -> /pppoe-profiles/pppoe-profile/name
-  |     +--rw bbf-qos-tm:tm-root
-  |     |  +--rw (bbf-qos-tm:children-type)?
-  |     |  |  +--:(bbf-qos-tm:queues)
-  |     |  |  |  +--rw bbf-qos-tm:queue* [local-queue-id]
-  |     |  |  |     +--rw bbf-qos-tm:local-queue-id         queue-id
-  |     |  |  |     +--rw bbf-qos-tm:bac-name?              -> /tm-profiles/bac-entry/name
-  |     |  |  |     +--rw (bbf-qos-tm:queue-scheduling-cfg-type)?
-  |     |  |  |     |  +--:(bbf-qos-tm:inline)
-  |     |  |  |     |     +--rw bbf-qos-tm:priority?        scheduling-priority
-  |     |  |  |     |     +--rw bbf-qos-tm:weight?          scheduling-weight
-  |     |  |  |     |     +--rw bbf-qos-shap:shaper-name?   -> /bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/name
-  |     |  |  |     +--rw bbf-qos-tm:pre-emption?           boolean {pre-emption}?
-  |     |  |  +--:(bbf-qos-sched:scheduler-node)
-  |     |  |     +--rw bbf-qos-sched:scheduler-node* [name]
-  |     |  |     |  +--rw bbf-qos-sched:name                           bbf-yang:string-ascii64
-  |     |  |     |  +--rw bbf-qos-sched:description?                   bbf-yang:string-ascii64
-  |     |  |     |  +--rw bbf-qos-sched:scheduling-level               uint8
-  |     |  |     |  +--rw bbf-qos-sched:shaper-name?                   -> /bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/name
-  |     |  |     |  +--rw (bbf-qos-sched:children-type)?
-  |     |  |     |     +--:(bbf-qos-sched:scheduler-node)
-  |     |  |     |     |  +--rw bbf-qos-sched:child-scheduler-nodes* [name]
-  |     |  |     |     |     +--rw bbf-qos-sched:name              -> ../../name
-  |     |  |     |     |     +--rw (bbf-qos-sched:scheduling-type)?
-  |     |  |     |     |        +--:(bbf-qos-sched:inline)
-  |     |  |     |     |           +--rw bbf-qos-sched:priority?   scheduling-priority
-  |     |  |     |     |           +--rw bbf-qos-sched:weight?     scheduling-weight
-  |     |  |     |     +--:(bbf-qos-sched:queue)
-  |     |  |     |        +--rw bbf-qos-sched:contains-queues?         boolean
-  |     |  |     |        +--rw bbf-qos-sched:queue* [local-queue-id]
-  |     |  |     |           +--rw bbf-qos-sched:local-queue-id       queue-id
-  |     |  |     |           +--rw bbf-qos-sched:bac-name?            -> /bbf-qos-tm:tm-profiles/bac-entry/name
-  |     |  |     |           +--rw (bbf-qos-sched:queue-scheduling-cfg-type)?
-  |     |  |     |           |  +--:(bbf-qos-sched:inline)
-  |     |  |     |           |     +--rw bbf-qos-sched:priority?      scheduling-priority
-  |     |  |     |           |     +--rw bbf-qos-sched:weight?        scheduling-weight
-  |     |  |     |           |     +--rw bbf-qos-sched:shaper-name?   -> /bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/name
-  |     |  |     |           +--rw bbf-qos-sched:pre-emption?         boolean {pre-emption}?
-  |     |  |     +--rw bbf-qos-sched:child-scheduler-nodes* [name]
-  |     |  |        +--rw bbf-qos-sched:name              -> ../../scheduler-node/name
-  |     |  |        +--rw (bbf-qos-sched:scheduling-type)?
-  |     |  |           +--:(bbf-qos-sched:inline)
-  |     |  |              +--rw bbf-qos-sched:priority?   scheduling-priority
-  |     |  |              +--rw bbf-qos-sched:weight?     scheduling-weight
-  |     |  +--rw bbf-qos-tm:tc-id-2-queue-id-mapping-profile-name?   -> /tm-profiles/tc-id-2-queue-id-mapping-profile/name {tc-id-2-queue-id-mapping-config}?
-  |     |  +--rw bbf-qos-shap:shaper-name?                           -> /bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/name
-  |     +--rw bbf-qos-sched:egress-tm-objects
-  |     |  +--rw (bbf-qos-sched:select-tm-objects-method)?
-  |     |     +--:(bbf-qos-sched:scheduler)
-  |     |        +--rw bbf-qos-sched:root-if-name?          -> /if:interfaces/interface/name
-  |     |        +--rw bbf-qos-sched:scheduler-node-name?   -> /if:interfaces/interface[if:name = current()/../root-if-name]/bbf-qos-tm:tm-root/bbf-qos-sched:scheduler-node/name
+  |     +--rw bbf-if-pm:performance
+  |     |  +--rw bbf-if-pm:enable?   boolean
+  |     +--rw bbf-subprof:subscriber-profile
+  |     |  +--rw bbf-subprof:profile?   subscriber-profile-ref
   |     +--rw bbf-qos-pol:ingress-qos-policy-profile?    qos-policy-profile-ref
   |     +--rw bbf-qos-pol:egress-qos-policy-profile?     qos-policy-profile-ref
   +--ro interfaces-state
@@ -359,16 +359,6 @@ module: ietf-interfaces
         |  +--ro out-multicast-pkts?     yang:counter64
         |  +--ro out-discards?           yang:counter32
         |  +--ro out-errors?             yang:counter32
-        |  +--ro bbf-l2-d4r:dhcpv4!
-        |  |  +--ro bbf-l2-d4r:in-bad-packets-from-client?             yang:counter32
-        |  |  +--ro bbf-l2-d4r:in-bad-packets-from-server?             yang:counter32
-        |  |  +--ro bbf-l2-d4r:in-packets-from-client?                 yang:counter32
-        |  |  +--ro bbf-l2-d4r:in-packets-from-server?                 yang:counter32
-        |  |  +--ro bbf-l2-d4r:out-packets-to-server?                  yang:counter32
-        |  |  +--ro bbf-l2-d4r:out-packets-to-client?                  yang:counter32
-        |  |  +--ro bbf-l2-d4r:option-82-inserted-packets-to-server?   yang:counter32
-        |  |  +--ro bbf-l2-d4r:option-82-removed-packets-to-client?    yang:counter32
-        |  |  +--ro bbf-l2-d4r:option-82-not-inserted-to-server?       yang:counter32
         |  +--ro bbf-ldra:dhcpv6-ldra!
         |  |  +--ro bbf-ldra:in-bad-packets-from-client?                  yang:counter32
         |  |  +--ro bbf-ldra:in-bad-packets-from-server?                  yang:counter32
@@ -380,107 +370,117 @@ module: ietf-interfaces
         |  |  +--ro bbf-ldra:option-37-removed-packets-to-client?         yang:counter32
         |  |  +--ro bbf-ldra:outgoing-mtu-exceeded-packets-from-client?   yang:counter32
         |  +--ro bbf-pppoe-ia:pppoe!
-        |     +--ro bbf-pppoe-ia:in-error-packets-from-client?                     yang:counter32
-        |     +--ro bbf-pppoe-ia:in-error-packets-from-server?                     yang:counter32
-        |     +--ro bbf-pppoe-ia:in-packets-from-client?                           yang:counter32
-        |     +--ro bbf-pppoe-ia:in-packets-from-server?                           yang:counter32
-        |     +--ro bbf-pppoe-ia:out-packets-to-server?                            yang:counter32
-        |     +--ro bbf-pppoe-ia:out-packets-to-client?                            yang:counter32
-        |     +--ro bbf-pppoe-ia:vendor-specific-tag-inserted-packets-to-server?   yang:counter32
-        |     +--ro bbf-pppoe-ia:vendor-specific-tag-removed-packets-to-client?    yang:counter32
-        |     +--ro bbf-pppoe-ia:outgoing-mtu-exceeded-packets-from-client?        yang:counter32
-        +--ro bbf-if-pm:performance
-        |  +--ro bbf-if-pm:intervals-15min
-        |  |  +--ro bbf-if-pm:current
-        |  |  |  +--ro bbf-if-pm:in-octets?            bbf-yang:performance-counter64
-        |  |  |  +--ro bbf-if-pm:in-unicast-pkts?      bbf-yang:performance-counter64
-        |  |  |  +--ro bbf-if-pm:in-broadcast-pkts?    bbf-yang:performance-counter64
-        |  |  |  +--ro bbf-if-pm:in-multicast-pkts?    bbf-yang:performance-counter64
-        |  |  |  +--ro bbf-if-pm:in-discards?          bbf-yang:performance-counter32
-        |  |  |  +--ro bbf-if-pm:in-errors?            bbf-yang:performance-counter32
-        |  |  |  +--ro bbf-if-pm:in-unknown-protos?    bbf-yang:performance-counter32
-        |  |  |  +--ro bbf-if-pm:out-octets?           bbf-yang:performance-counter64
-        |  |  |  +--ro bbf-if-pm:out-unicast-pkts?     bbf-yang:performance-counter64
-        |  |  |  +--ro bbf-if-pm:out-broadcast-pkts?   bbf-yang:performance-counter64
-        |  |  |  +--ro bbf-if-pm:out-multicast-pkts?   bbf-yang:performance-counter64
-        |  |  |  +--ro bbf-if-pm:out-discards?         bbf-yang:performance-counter32
-        |  |  |  +--ro bbf-if-pm:out-errors?           bbf-yang:performance-counter32
-        |  |  |  +--ro bbf-eth-pm:ethernet
-        |  |  |     +--ro bbf-eth-pm:in-pkts-errors-fcs?        bbf-yang:performance-counter64
-        |  |  |     +--ro bbf-eth-pm:in-giant-pkts?             bbf-yang:performance-counter64
-        |  |  |     +--ro bbf-eth-pm:in-errors-mac-internal?    bbf-yang:performance-counter64
-        |  |  |     +--ro bbf-eth-pm:out-errors-mac-internal?   bbf-yang:performance-counter64
-        |  |  +--ro bbf-if-pm:number-of-intervals?   performance-15min-interval
-        |  |  +--ro bbf-if-pm:non-valid-intervals?   performance-15min-interval
-        |  |  +--ro bbf-if-pm:history* [interval-number]
-        |  |     +--ro bbf-if-pm:interval-number       performance-15min-history-interval
-        |  |     +--ro bbf-if-pm:measured-time?        uint32
-        |  |     +--ro bbf-if-pm:invalid-data-flag?    boolean
-        |  |     +--ro bbf-if-pm:time-stamp?           yang:date-and-time
-        |  |     +--ro bbf-if-pm:in-octets?            bbf-yang:performance-counter64
-        |  |     +--ro bbf-if-pm:in-unicast-pkts?      bbf-yang:performance-counter64
-        |  |     +--ro bbf-if-pm:in-broadcast-pkts?    bbf-yang:performance-counter64
-        |  |     +--ro bbf-if-pm:in-multicast-pkts?    bbf-yang:performance-counter64
-        |  |     +--ro bbf-if-pm:in-discards?          bbf-yang:performance-counter32
-        |  |     +--ro bbf-if-pm:in-errors?            bbf-yang:performance-counter32
-        |  |     +--ro bbf-if-pm:in-unknown-protos?    bbf-yang:performance-counter32
-        |  |     +--ro bbf-if-pm:out-octets?           bbf-yang:performance-counter64
-        |  |     +--ro bbf-if-pm:out-unicast-pkts?     bbf-yang:performance-counter64
-        |  |     +--ro bbf-if-pm:out-broadcast-pkts?   bbf-yang:performance-counter64
-        |  |     +--ro bbf-if-pm:out-multicast-pkts?   bbf-yang:performance-counter64
-        |  |     +--ro bbf-if-pm:out-discards?         bbf-yang:performance-counter32
-        |  |     +--ro bbf-if-pm:out-errors?           bbf-yang:performance-counter32
-        |  |     +--ro bbf-eth-pm:ethernet
-        |  |        +--ro bbf-eth-pm:in-pkts-errors-fcs?        bbf-yang:performance-counter64
-        |  |        +--ro bbf-eth-pm:in-giant-pkts?             bbf-yang:performance-counter64
-        |  |        +--ro bbf-eth-pm:in-errors-mac-internal?    bbf-yang:performance-counter64
-        |  |        +--ro bbf-eth-pm:out-errors-mac-internal?   bbf-yang:performance-counter64
-        |  +--ro bbf-if-pm:intervals-24hr {performance-24hr}?
-        |     +--ro bbf-if-pm:current
-        |     |  +--ro bbf-if-pm:in-octets?            bbf-yang:performance-counter64
-        |     |  +--ro bbf-if-pm:in-unicast-pkts?      bbf-yang:performance-counter64
-        |     |  +--ro bbf-if-pm:in-broadcast-pkts?    bbf-yang:performance-counter64
-        |     |  +--ro bbf-if-pm:in-multicast-pkts?    bbf-yang:performance-counter64
-        |     |  +--ro bbf-if-pm:in-discards?          bbf-yang:performance-counter32
-        |     |  +--ro bbf-if-pm:in-errors?            bbf-yang:performance-counter32
-        |     |  +--ro bbf-if-pm:in-unknown-protos?    bbf-yang:performance-counter32
-        |     |  +--ro bbf-if-pm:out-octets?           bbf-yang:performance-counter64
-        |     |  +--ro bbf-if-pm:out-unicast-pkts?     bbf-yang:performance-counter64
-        |     |  +--ro bbf-if-pm:out-broadcast-pkts?   bbf-yang:performance-counter64
-        |     |  +--ro bbf-if-pm:out-multicast-pkts?   bbf-yang:performance-counter64
-        |     |  +--ro bbf-if-pm:out-discards?         bbf-yang:performance-counter32
-        |     |  +--ro bbf-if-pm:out-errors?           bbf-yang:performance-counter32
-        |     |  +--ro bbf-eth-pm:ethernet {bbf-if-pm:performance-24hr}?
-        |     |     +--ro bbf-eth-pm:in-pkts-errors-fcs?        bbf-yang:performance-counter64
-        |     |     +--ro bbf-eth-pm:in-giant-pkts?             bbf-yang:performance-counter64
-        |     |     +--ro bbf-eth-pm:in-errors-mac-internal?    bbf-yang:performance-counter64
-        |     |     +--ro bbf-eth-pm:out-errors-mac-internal?   bbf-yang:performance-counter64
-        |     +--ro bbf-if-pm:number-of-intervals?   performance-24hr-interval
-        |     +--ro bbf-if-pm:non-valid-intervals?   performance-24hr-interval
-        |     +--ro bbf-if-pm:history* [interval-number]
-        |        +--ro bbf-if-pm:interval-number       performance-24hr-history-interval
-        |        +--ro bbf-if-pm:measured-time?        uint32
-        |        +--ro bbf-if-pm:invalid-data-flag?    boolean
-        |        +--ro bbf-if-pm:time-stamp?           yang:date-and-time
-        |        +--ro bbf-if-pm:in-octets?            bbf-yang:performance-counter64
-        |        +--ro bbf-if-pm:in-unicast-pkts?      bbf-yang:performance-counter64
-        |        +--ro bbf-if-pm:in-broadcast-pkts?    bbf-yang:performance-counter64
-        |        +--ro bbf-if-pm:in-multicast-pkts?    bbf-yang:performance-counter64
-        |        +--ro bbf-if-pm:in-discards?          bbf-yang:performance-counter32
-        |        +--ro bbf-if-pm:in-errors?            bbf-yang:performance-counter32
-        |        +--ro bbf-if-pm:in-unknown-protos?    bbf-yang:performance-counter32
-        |        +--ro bbf-if-pm:out-octets?           bbf-yang:performance-counter64
-        |        +--ro bbf-if-pm:out-unicast-pkts?     bbf-yang:performance-counter64
-        |        +--ro bbf-if-pm:out-broadcast-pkts?   bbf-yang:performance-counter64
-        |        +--ro bbf-if-pm:out-multicast-pkts?   bbf-yang:performance-counter64
-        |        +--ro bbf-if-pm:out-discards?         bbf-yang:performance-counter32
-        |        +--ro bbf-if-pm:out-errors?           bbf-yang:performance-counter32
-        |        +--ro bbf-eth-pm:ethernet {bbf-if-pm:performance-24hr}?
-        |           +--ro bbf-eth-pm:in-pkts-errors-fcs?        bbf-yang:performance-counter64
-        |           +--ro bbf-eth-pm:in-giant-pkts?             bbf-yang:performance-counter64
-        |           +--ro bbf-eth-pm:in-errors-mac-internal?    bbf-yang:performance-counter64
-        |           +--ro bbf-eth-pm:out-errors-mac-internal?   bbf-yang:performance-counter64
+        |  |  +--ro bbf-pppoe-ia:in-error-packets-from-client?                     yang:counter32
+        |  |  +--ro bbf-pppoe-ia:in-error-packets-from-server?                     yang:counter32
+        |  |  +--ro bbf-pppoe-ia:in-packets-from-client?                           yang:counter32
+        |  |  +--ro bbf-pppoe-ia:in-packets-from-server?                           yang:counter32
+        |  |  +--ro bbf-pppoe-ia:out-packets-to-server?                            yang:counter32
+        |  |  +--ro bbf-pppoe-ia:out-packets-to-client?                            yang:counter32
+        |  |  +--ro bbf-pppoe-ia:vendor-specific-tag-inserted-packets-to-server?   yang:counter32
+        |  |  +--ro bbf-pppoe-ia:vendor-specific-tag-removed-packets-to-client?    yang:counter32
+        |  |  +--ro bbf-pppoe-ia:outgoing-mtu-exceeded-packets-from-client?        yang:counter32
+        |  +--ro bbf-l2-d4r:dhcpv4!
+        |     +--ro bbf-l2-d4r:in-bad-packets-from-client?             yang:counter32
+        |     +--ro bbf-l2-d4r:in-bad-packets-from-server?             yang:counter32
+        |     +--ro bbf-l2-d4r:in-packets-from-client?                 yang:counter32
+        |     +--ro bbf-l2-d4r:in-packets-from-server?                 yang:counter32
+        |     +--ro bbf-l2-d4r:out-packets-to-server?                  yang:counter32
+        |     +--ro bbf-l2-d4r:out-packets-to-client?                  yang:counter32
+        |     +--ro bbf-l2-d4r:option-82-inserted-packets-to-server?   yang:counter32
+        |     +--ro bbf-l2-d4r:option-82-removed-packets-to-client?    yang:counter32
+        |     +--ro bbf-l2-d4r:option-82-not-inserted-to-server?       yang:counter32
         +---x bbf-if-ctrs:reset-statistics
+        +--ro bbf-if-pm:performance
+           +--ro bbf-if-pm:intervals-15min
+           |  +--ro bbf-if-pm:current
+           |  |  +--ro bbf-if-pm:in-octets?            bbf-yang:performance-counter64
+           |  |  +--ro bbf-if-pm:in-unicast-pkts?      bbf-yang:performance-counter64
+           |  |  +--ro bbf-if-pm:in-broadcast-pkts?    bbf-yang:performance-counter64
+           |  |  +--ro bbf-if-pm:in-multicast-pkts?    bbf-yang:performance-counter64
+           |  |  +--ro bbf-if-pm:in-discards?          bbf-yang:performance-counter32
+           |  |  +--ro bbf-if-pm:in-errors?            bbf-yang:performance-counter32
+           |  |  +--ro bbf-if-pm:in-unknown-protos?    bbf-yang:performance-counter32
+           |  |  +--ro bbf-if-pm:out-octets?           bbf-yang:performance-counter64
+           |  |  +--ro bbf-if-pm:out-unicast-pkts?     bbf-yang:performance-counter64
+           |  |  +--ro bbf-if-pm:out-broadcast-pkts?   bbf-yang:performance-counter64
+           |  |  +--ro bbf-if-pm:out-multicast-pkts?   bbf-yang:performance-counter64
+           |  |  +--ro bbf-if-pm:out-discards?         bbf-yang:performance-counter32
+           |  |  +--ro bbf-if-pm:out-errors?           bbf-yang:performance-counter32
+           |  |  +--ro bbf-eth-pm:ethernet
+           |  |     +--ro bbf-eth-pm:in-pkts-errors-fcs?        bbf-yang:performance-counter64
+           |  |     +--ro bbf-eth-pm:in-giant-pkts?             bbf-yang:performance-counter64
+           |  |     +--ro bbf-eth-pm:in-errors-mac-internal?    bbf-yang:performance-counter64
+           |  |     +--ro bbf-eth-pm:out-errors-mac-internal?   bbf-yang:performance-counter64
+           |  +--ro bbf-if-pm:number-of-intervals?   performance-15min-interval
+           |  +--ro bbf-if-pm:non-valid-intervals?   performance-15min-interval
+           |  +--ro bbf-if-pm:history* [interval-number]
+           |     +--ro bbf-if-pm:interval-number       performance-15min-history-interval
+           |     +--ro bbf-if-pm:measured-time?        uint32
+           |     +--ro bbf-if-pm:invalid-data-flag?    boolean
+           |     +--ro bbf-if-pm:time-stamp?           yang:date-and-time
+           |     +--ro bbf-if-pm:in-octets?            bbf-yang:performance-counter64
+           |     +--ro bbf-if-pm:in-unicast-pkts?      bbf-yang:performance-counter64
+           |     +--ro bbf-if-pm:in-broadcast-pkts?    bbf-yang:performance-counter64
+           |     +--ro bbf-if-pm:in-multicast-pkts?    bbf-yang:performance-counter64
+           |     +--ro bbf-if-pm:in-discards?          bbf-yang:performance-counter32
+           |     +--ro bbf-if-pm:in-errors?            bbf-yang:performance-counter32
+           |     +--ro bbf-if-pm:in-unknown-protos?    bbf-yang:performance-counter32
+           |     +--ro bbf-if-pm:out-octets?           bbf-yang:performance-counter64
+           |     +--ro bbf-if-pm:out-unicast-pkts?     bbf-yang:performance-counter64
+           |     +--ro bbf-if-pm:out-broadcast-pkts?   bbf-yang:performance-counter64
+           |     +--ro bbf-if-pm:out-multicast-pkts?   bbf-yang:performance-counter64
+           |     +--ro bbf-if-pm:out-discards?         bbf-yang:performance-counter32
+           |     +--ro bbf-if-pm:out-errors?           bbf-yang:performance-counter32
+           |     +--ro bbf-eth-pm:ethernet
+           |        +--ro bbf-eth-pm:in-pkts-errors-fcs?        bbf-yang:performance-counter64
+           |        +--ro bbf-eth-pm:in-giant-pkts?             bbf-yang:performance-counter64
+           |        +--ro bbf-eth-pm:in-errors-mac-internal?    bbf-yang:performance-counter64
+           |        +--ro bbf-eth-pm:out-errors-mac-internal?   bbf-yang:performance-counter64
+           +--ro bbf-if-pm:intervals-24hr {performance-24hr}?
+              +--ro bbf-if-pm:current
+              |  +--ro bbf-if-pm:in-octets?            bbf-yang:performance-counter64
+              |  +--ro bbf-if-pm:in-unicast-pkts?      bbf-yang:performance-counter64
+              |  +--ro bbf-if-pm:in-broadcast-pkts?    bbf-yang:performance-counter64
+              |  +--ro bbf-if-pm:in-multicast-pkts?    bbf-yang:performance-counter64
+              |  +--ro bbf-if-pm:in-discards?          bbf-yang:performance-counter32
+              |  +--ro bbf-if-pm:in-errors?            bbf-yang:performance-counter32
+              |  +--ro bbf-if-pm:in-unknown-protos?    bbf-yang:performance-counter32
+              |  +--ro bbf-if-pm:out-octets?           bbf-yang:performance-counter64
+              |  +--ro bbf-if-pm:out-unicast-pkts?     bbf-yang:performance-counter64
+              |  +--ro bbf-if-pm:out-broadcast-pkts?   bbf-yang:performance-counter64
+              |  +--ro bbf-if-pm:out-multicast-pkts?   bbf-yang:performance-counter64
+              |  +--ro bbf-if-pm:out-discards?         bbf-yang:performance-counter32
+              |  +--ro bbf-if-pm:out-errors?           bbf-yang:performance-counter32
+              |  +--ro bbf-eth-pm:ethernet {bbf-if-pm:performance-24hr}?
+              |     +--ro bbf-eth-pm:in-pkts-errors-fcs?        bbf-yang:performance-counter64
+              |     +--ro bbf-eth-pm:in-giant-pkts?             bbf-yang:performance-counter64
+              |     +--ro bbf-eth-pm:in-errors-mac-internal?    bbf-yang:performance-counter64
+              |     +--ro bbf-eth-pm:out-errors-mac-internal?   bbf-yang:performance-counter64
+              +--ro bbf-if-pm:number-of-intervals?   performance-24hr-interval
+              +--ro bbf-if-pm:non-valid-intervals?   performance-24hr-interval
+              +--ro bbf-if-pm:history* [interval-number]
+                 +--ro bbf-if-pm:interval-number       performance-24hr-history-interval
+                 +--ro bbf-if-pm:measured-time?        uint32
+                 +--ro bbf-if-pm:invalid-data-flag?    boolean
+                 +--ro bbf-if-pm:time-stamp?           yang:date-and-time
+                 +--ro bbf-if-pm:in-octets?            bbf-yang:performance-counter64
+                 +--ro bbf-if-pm:in-unicast-pkts?      bbf-yang:performance-counter64
+                 +--ro bbf-if-pm:in-broadcast-pkts?    bbf-yang:performance-counter64
+                 +--ro bbf-if-pm:in-multicast-pkts?    bbf-yang:performance-counter64
+                 +--ro bbf-if-pm:in-discards?          bbf-yang:performance-counter32
+                 +--ro bbf-if-pm:in-errors?            bbf-yang:performance-counter32
+                 +--ro bbf-if-pm:in-unknown-protos?    bbf-yang:performance-counter32
+                 +--ro bbf-if-pm:out-octets?           bbf-yang:performance-counter64
+                 +--ro bbf-if-pm:out-unicast-pkts?     bbf-yang:performance-counter64
+                 +--ro bbf-if-pm:out-broadcast-pkts?   bbf-yang:performance-counter64
+                 +--ro bbf-if-pm:out-multicast-pkts?   bbf-yang:performance-counter64
+                 +--ro bbf-if-pm:out-discards?         bbf-yang:performance-counter32
+                 +--ro bbf-if-pm:out-errors?           bbf-yang:performance-counter32
+                 +--ro bbf-eth-pm:ethernet {bbf-if-pm:performance-24hr}?
+                    +--ro bbf-eth-pm:in-pkts-errors-fcs?        bbf-yang:performance-counter64
+                    +--ro bbf-eth-pm:in-giant-pkts?             bbf-yang:performance-counter64
+                    +--ro bbf-eth-pm:in-errors-mac-internal?    bbf-yang:performance-counter64
+                    +--ro bbf-eth-pm:out-errors-mac-internal?   bbf-yang:performance-counter64
 
 module: bbf-l2-forwarding-shared-fdb
   augment /bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarding-databases/bbf-l2-fwd:forwarding-database/bbf-l2-fwd:static-mac-address/bbf-l2-fwd:learning-constraint/bbf-l2-fwd:allowed-to-learn-on/bbf-l2-fwd:allow-to-learn-on:
@@ -747,6 +747,159 @@ module: bbf-pppoe-intermediate-agent
            +--rw access-loop-subtags?         bbf-subtype:broadband-line-characteristics
            +--rw start-numbering-from-zero?   boolean
            +--rw use-leading-zeroes?          boolean
+module: bbf-qos-policies
+  +--rw policies
+  |  +--rw policy* [name]
+  |     +--rw name           bbf-yang:string-ascii64
+  |     +--rw description?   bbf-yang:string-ascii64-or-empty
+  |     +--rw classifiers* [name]
+  |        +--rw name    -> /bbf-qos-cls:classifiers/classifier-entry/name
+  +--rw qos-policy-profiles
+     +--rw policy-profile* [name]
+        +--rw name           bbf-yang:string-ascii64
+        +--rw policy-list* [name]
+           +--rw name    -> /policies/policy/name
+module: bbf-qos-filters
+  +--rw filters
+     +--rw filter* [name]
+        +--rw name                             bbf-yang:string-ascii64
+        +--rw description?                     bbf-yang:string-ascii64-or-empty
+        +--rw filter-match?                    boolean
+        +--rw (filter-field)?
+           +--:(source-mac-address)
+           |  +--rw source-mac-address
+           |     +--rw (mac-address)?
+           |        +--:(any-multicast-mac-address)
+           |        |  +--rw any-multicast-mac-address?   empty
+           |        +--:(unicast-address)
+           |        |  +--rw unicast-address?             empty
+           |        +--:(broadcast-address)
+           |        |  +--rw broadcast-address?           empty
+           |        +--:(cfm-multicast-address)
+           |        |  +--rw cfm-multicast-address?       empty
+           |        +--:(ipv4-multicast-address)
+           |        |  +--rw ipv4-multicast-address?      empty
+           |        +--:(ipv6-multicast-address)
+           |        |  +--rw ipv6-multicast-address?      empty
+           |        +--:(mac-address-filter)
+           |           +--rw mac-address-value?           yang:mac-address
+           |           +--rw mac-address-mask?            yang:mac-address
+           +--:(destination-mac-address)
+              +--rw destination-mac-address
+                 +--rw (mac-address)?
+                    +--:(any-multicast-mac-address)
+                    |  +--rw any-multicast-mac-address?   empty
+                    +--:(unicast-address)
+                    |  +--rw unicast-address?             empty
+                    +--:(broadcast-address)
+                    |  +--rw broadcast-address?           empty
+                    +--:(cfm-multicast-address)
+                    |  +--rw cfm-multicast-address?       empty
+                    +--:(ipv4-multicast-address)
+                    |  +--rw ipv4-multicast-address?      empty
+                    +--:(ipv6-multicast-address)
+                    |  +--rw ipv6-multicast-address?      empty
+                    +--:(mac-address-filter)
+                       +--rw mac-address-value?           yang:mac-address
+                       +--rw mac-address-mask?            yang:mac-address
+module: bbf-qos-policer-envelope-profiles
+  +--rw envelope-profiles
+     +--rw envelope-profile* [name]
+        +--rw name             bbf-yang:string-ascii64
+        +--rw scope?           identityref
+        +--rw coupling-flag?   bbf-qos-plc-tp:coupling-flag
+        +--rw flows
+           +--rw flow* [rank]
+              +--rw rank             flow-rank
+              +--rw cir?             bbf-qos-plc-tp:information-rate
+              +--rw cir-max?         bbf-qos-plc-tp:information-rate
+              +--rw cbs?             bbf-qos-plc-tp:burst-size
+              +--rw eir?             bbf-qos-plc-tp:information-rate
+              +--rw eir-max?         bbf-qos-plc-tp:information-rate
+              +--rw ebs?             bbf-qos-plc-tp:burst-size
+              +--rw coupling-flag?   bbf-qos-plc-tp:coupling-flag
+              +--rw color-mode?      bbf-qos-plc-tp:color-mode
+module: bbf-qos-traffic-mngt
+  +--rw tm-profiles
+     +--rw tc-id-2-queue-id-mapping-profile* [name] {tc-id-2-queue-id-mapping-config}?
+     |  +--rw name             bbf-yang:string-ascii64
+     |  +--rw mapping-entry* [traffic-class-id]
+     |     +--rw traffic-class-id    bbf-qos-t:traffic-class-id
+     |     +--rw local-queue-id      queue-id
+     +--rw bac-entry* [name]
+     |  +--rw name               bbf-yang:string-ascii64
+     |  +--rw max-queue-size?    uint32
+     |  +--rw (bac-type)
+     |     +--:(taildrop)
+     |     |  +--rw taildrop
+     |     |     +--rw max-threshold?   bbf-yang:percent
+     |     +--:(red)
+     |     |  +--rw red
+     |     |     +--rw min-threshold?     bbf-yang:percent
+     |     |     +--rw max-threshold?     bbf-yang:percent
+     |     |     +--rw max-probability?   bbf-yang:percent
+     |     +--:(wtaildrop)
+     |     |  +--rw wtaildrop
+     |     |     +--rw color
+     |     |        +--rw green
+     |     |        |  +--rw max-threshold?   bbf-yang:percent
+     |     |        +--rw yellow
+     |     |        |  +--rw max-threshold?   bbf-yang:percent
+     |     |        +--rw red
+     |     |           +--rw max-threshold?   bbf-yang:percent
+     |     +--:(wred)
+     |        +--rw wred
+     |           +--rw color
+     |              +--rw green
+     |              |  +--rw min-threshold?     bbf-yang:percent
+     |              |  +--rw max-threshold?     bbf-yang:percent
+     |              |  +--rw max-probability?   bbf-yang:percent
+     |              +--rw yellow
+     |              |  +--rw min-threshold?     bbf-yang:percent
+     |              |  +--rw max-threshold?     bbf-yang:percent
+     |              |  +--rw max-probability?   bbf-yang:percent
+     |              +--rw red
+     |                 +--rw min-threshold?     bbf-yang:percent
+     |                 +--rw max-threshold?     bbf-yang:percent
+     |                 +--rw max-probability?   bbf-yang:percent
+     +--rw bbf-qos-shap:shaper-profile* [name]
+        +--rw bbf-qos-shap:name                         bbf-yang:string-ascii64
+        +--rw (bbf-qos-shap:shaper-type)
+           +--:(bbf-qos-shap:single-token-bucket)
+              +--rw bbf-qos-shap:single-token-bucket
+                 +--rw bbf-qos-shap:pir?   uint32
+                 +--rw bbf-qos-shap:pbs?   uint32
+module: bbf-qos-policing
+  +--rw policing-profiles
+     +--rw policing-profile* [name]
+        +--rw name                                     bbf-yang:string-ascii64
+        +--rw scope?                                   bbf-qos-cls:action-scope
+        +--rw (policing-type)
+        |  +--:(single-rate-two-color-marker-type) {single-rate-two-color-marker}?
+        |  |  +--rw single-rate-two-color-marker
+        |  |     +--rw cir?   bbf-qos-plc-tp:information-rate
+        |  |     +--rw cbs?   bbf-qos-plc-tp:burst-size
+        |  +--:(single-rate-three-color-marker-type) {single-rate-three-color-marker}?
+        |  |  +--rw single-rate-three-color-marker
+        |  |     +--rw cir?   bbf-qos-plc-tp:information-rate
+        |  |     +--rw cbs?   bbf-qos-plc-tp:burst-size
+        |  |     +--rw ebs?   bbf-qos-plc-tp:burst-size
+        |  +--:(two-rate-three-color-marker-type) {two-rate-three-color-marker}?
+        |  |  +--rw two-rate-three-color-marker
+        |  |     +--rw cir?   bbf-qos-plc-tp:information-rate
+        |  |     +--rw cbs?   bbf-qos-plc-tp:burst-size
+        |  |     +--rw pir?   bbf-qos-plc-tp:information-rate
+        |  |     +--rw pbs?   bbf-qos-plc-tp:burst-size
+        |  +--:(two-rate-three-color-marker-mef-type) {two-rate-three-color-marker-mef}?
+        |     +--rw two-rate-three-color-marker-mef
+        |        +--rw cir?           bbf-qos-plc-tp:information-rate
+        |        +--rw cbs?           bbf-qos-plc-tp:burst-size
+        |        +--rw eir?           bbf-qos-plc-tp:information-rate
+        |        +--rw ebs?           bbf-qos-plc-tp:burst-size
+        |        +--rw couple-flag?   bbf-qos-plc-tp:coupling-flag
+        |        +--rw color-mode?    bbf-qos-plc-tp:color-mode
+        +--rw hierarchical-policing
+           +--rw policing-profile?   -> /policing-profiles/policing-profile/name
 module: bbf-qos-classifiers
   +--rw classifiers
      +--rw classifier-entry* [name]
@@ -818,159 +971,6 @@ module: bbf-qos-classifiers
                  +--rw bbf-qos-rc:rate-limit-frames
                     +--rw bbf-qos-rc:rate?         uint32
                     +--rw bbf-qos-rc:burst-size?   uint32
-module: bbf-qos-filters
-  +--rw filters
-     +--rw filter* [name]
-        +--rw name                             bbf-yang:string-ascii64
-        +--rw description?                     bbf-yang:string-ascii64-or-empty
-        +--rw filter-match?                    boolean
-        +--rw (filter-field)?
-           +--:(source-mac-address)
-           |  +--rw source-mac-address
-           |     +--rw (mac-address)?
-           |        +--:(any-multicast-mac-address)
-           |        |  +--rw any-multicast-mac-address?   empty
-           |        +--:(unicast-address)
-           |        |  +--rw unicast-address?             empty
-           |        +--:(broadcast-address)
-           |        |  +--rw broadcast-address?           empty
-           |        +--:(cfm-multicast-address)
-           |        |  +--rw cfm-multicast-address?       empty
-           |        +--:(ipv4-multicast-address)
-           |        |  +--rw ipv4-multicast-address?      empty
-           |        +--:(ipv6-multicast-address)
-           |        |  +--rw ipv6-multicast-address?      empty
-           |        +--:(mac-address-filter)
-           |           +--rw mac-address-value?           yang:mac-address
-           |           +--rw mac-address-mask?            yang:mac-address
-           +--:(destination-mac-address)
-              +--rw destination-mac-address
-                 +--rw (mac-address)?
-                    +--:(any-multicast-mac-address)
-                    |  +--rw any-multicast-mac-address?   empty
-                    +--:(unicast-address)
-                    |  +--rw unicast-address?             empty
-                    +--:(broadcast-address)
-                    |  +--rw broadcast-address?           empty
-                    +--:(cfm-multicast-address)
-                    |  +--rw cfm-multicast-address?       empty
-                    +--:(ipv4-multicast-address)
-                    |  +--rw ipv4-multicast-address?      empty
-                    +--:(ipv6-multicast-address)
-                    |  +--rw ipv6-multicast-address?      empty
-                    +--:(mac-address-filter)
-                       +--rw mac-address-value?           yang:mac-address
-                       +--rw mac-address-mask?            yang:mac-address
-module: bbf-qos-policer-envelope-profiles
-  +--rw envelope-profiles
-     +--rw envelope-profile* [name]
-        +--rw name             bbf-yang:string-ascii64
-        +--rw scope?           identityref
-        +--rw coupling-flag?   bbf-qos-plc-tp:coupling-flag
-        +--rw flows
-           +--rw flow* [rank]
-              +--rw rank             flow-rank
-              +--rw cir?             bbf-qos-plc-tp:information-rate
-              +--rw cir-max?         bbf-qos-plc-tp:information-rate
-              +--rw cbs?             bbf-qos-plc-tp:burst-size
-              +--rw eir?             bbf-qos-plc-tp:information-rate
-              +--rw eir-max?         bbf-qos-plc-tp:information-rate
-              +--rw ebs?             bbf-qos-plc-tp:burst-size
-              +--rw coupling-flag?   bbf-qos-plc-tp:coupling-flag
-              +--rw color-mode?      bbf-qos-plc-tp:color-mode
-module: bbf-qos-policies
-  +--rw policies
-  |  +--rw policy* [name]
-  |     +--rw name           bbf-yang:string-ascii64
-  |     +--rw description?   bbf-yang:string-ascii64-or-empty
-  |     +--rw classifiers* [name]
-  |        +--rw name    -> /bbf-qos-cls:classifiers/classifier-entry/name
-  +--rw qos-policy-profiles
-     +--rw policy-profile* [name]
-        +--rw name           bbf-yang:string-ascii64
-        +--rw policy-list* [name]
-           +--rw name    -> /policies/policy/name
-module: bbf-qos-policing
-  +--rw policing-profiles
-     +--rw policing-profile* [name]
-        +--rw name                                     bbf-yang:string-ascii64
-        +--rw scope?                                   bbf-qos-cls:action-scope
-        +--rw (policing-type)
-        |  +--:(single-rate-two-color-marker-type) {single-rate-two-color-marker}?
-        |  |  +--rw single-rate-two-color-marker
-        |  |     +--rw cir?   bbf-qos-plc-tp:information-rate
-        |  |     +--rw cbs?   bbf-qos-plc-tp:burst-size
-        |  +--:(single-rate-three-color-marker-type) {single-rate-three-color-marker}?
-        |  |  +--rw single-rate-three-color-marker
-        |  |     +--rw cir?   bbf-qos-plc-tp:information-rate
-        |  |     +--rw cbs?   bbf-qos-plc-tp:burst-size
-        |  |     +--rw ebs?   bbf-qos-plc-tp:burst-size
-        |  +--:(two-rate-three-color-marker-type) {two-rate-three-color-marker}?
-        |  |  +--rw two-rate-three-color-marker
-        |  |     +--rw cir?   bbf-qos-plc-tp:information-rate
-        |  |     +--rw cbs?   bbf-qos-plc-tp:burst-size
-        |  |     +--rw pir?   bbf-qos-plc-tp:information-rate
-        |  |     +--rw pbs?   bbf-qos-plc-tp:burst-size
-        |  +--:(two-rate-three-color-marker-mef-type) {two-rate-three-color-marker-mef}?
-        |     +--rw two-rate-three-color-marker-mef
-        |        +--rw cir?           bbf-qos-plc-tp:information-rate
-        |        +--rw cbs?           bbf-qos-plc-tp:burst-size
-        |        +--rw eir?           bbf-qos-plc-tp:information-rate
-        |        +--rw ebs?           bbf-qos-plc-tp:burst-size
-        |        +--rw couple-flag?   bbf-qos-plc-tp:coupling-flag
-        |        +--rw color-mode?    bbf-qos-plc-tp:color-mode
-        +--rw hierarchical-policing
-           +--rw policing-profile?   -> /policing-profiles/policing-profile/name
-module: bbf-qos-traffic-mngt
-  +--rw tm-profiles
-     +--rw tc-id-2-queue-id-mapping-profile* [name] {tc-id-2-queue-id-mapping-config}?
-     |  +--rw name             bbf-yang:string-ascii64
-     |  +--rw mapping-entry* [traffic-class-id]
-     |     +--rw traffic-class-id    bbf-qos-t:traffic-class-id
-     |     +--rw local-queue-id      queue-id
-     +--rw bac-entry* [name]
-     |  +--rw name               bbf-yang:string-ascii64
-     |  +--rw max-queue-size?    uint32
-     |  +--rw (bac-type)
-     |     +--:(taildrop)
-     |     |  +--rw taildrop
-     |     |     +--rw max-threshold?   bbf-yang:percent
-     |     +--:(red)
-     |     |  +--rw red
-     |     |     +--rw min-threshold?     bbf-yang:percent
-     |     |     +--rw max-threshold?     bbf-yang:percent
-     |     |     +--rw max-probability?   bbf-yang:percent
-     |     +--:(wtaildrop)
-     |     |  +--rw wtaildrop
-     |     |     +--rw color
-     |     |        +--rw green
-     |     |        |  +--rw max-threshold?   bbf-yang:percent
-     |     |        +--rw yellow
-     |     |        |  +--rw max-threshold?   bbf-yang:percent
-     |     |        +--rw red
-     |     |           +--rw max-threshold?   bbf-yang:percent
-     |     +--:(wred)
-     |        +--rw wred
-     |           +--rw color
-     |              +--rw green
-     |              |  +--rw min-threshold?     bbf-yang:percent
-     |              |  +--rw max-threshold?     bbf-yang:percent
-     |              |  +--rw max-probability?   bbf-yang:percent
-     |              +--rw yellow
-     |              |  +--rw min-threshold?     bbf-yang:percent
-     |              |  +--rw max-threshold?     bbf-yang:percent
-     |              |  +--rw max-probability?   bbf-yang:percent
-     |              +--rw red
-     |                 +--rw min-threshold?     bbf-yang:percent
-     |                 +--rw max-threshold?     bbf-yang:percent
-     |                 +--rw max-probability?   bbf-yang:percent
-     +--rw bbf-qos-shap:shaper-profile* [name]
-        +--rw bbf-qos-shap:name                         bbf-yang:string-ascii64
-        +--rw (bbf-qos-shap:shaper-type)
-           +--:(bbf-qos-shap:single-token-bucket)
-              +--rw bbf-qos-shap:single-token-bucket
-                 +--rw bbf-qos-shap:pir?   uint32
-                 +--rw bbf-qos-shap:pbs?   uint32
 module: bbf-mgmd
   +--rw multicast
   |  +--rw mgmd

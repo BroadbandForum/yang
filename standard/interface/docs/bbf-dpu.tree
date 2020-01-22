@@ -9,8 +9,41 @@ module: ietf-interfaces
   |     +--rw bbf-fastdsl:line!
   |     |  x--ro bbf-fastdsl:supported-mode*    fastdsl-mode-ref
   |     |  +--rw bbf-fastdsl:configured-mode*   fastdsl-mode-ref
-  |     |  +--rw bbf-ghs:ghs!
-  |     |  |  +--rw bbf-ghs:handshake-profile?   handshake-profile-ref
+  |     |  +--rw bbf-vdsl:line!
+  |     |  |  +--rw bbf-vdsl:test-mode
+  |     |  |  |  +--rw bbf-vdsl:power-management-state-forced?   enumeration
+  |     |  |  |  +--rw bbf-vdsl:loop-diagnostics-mode-forced?    enumeration
+  |     |  |  |  +--rw bbf-vdsl:auto-mode-cold-start-forced?     uint8
+  |     |  |  +--rw bbf-vdsl:xtu-c
+  |     |  |  |  x--rw bbf-vdsl:update-test-ne?                     uint8
+  |     |  |  |  +---x bbf-vdsl:update-near-end-test
+  |     |  |  |  +--rw bbf-vdsl:xlin-disturber-vce-port-index-ds?   vce-port-index
+  |     |  |  |  +--rw bbf-vdsl:xlin-disturber-vce-port-index-us?   vce-port-index
+  |     |  |  +--rw bbf-vdsl:xtu-r
+  |     |  |  |  x--rw bbf-vdsl:update-test-fe?        uint8
+  |     |  |  |  +---x bbf-vdsl:update-far-end-test
+  |     |  |  +--rw (bbf-vdsl:profile-config)?
+  |     |  |  |  +--:(bbf-vdsl:no-profiles-attached)
+  |     |  |  |  |  +--rw bbf-vdsl:no-profiles-attached?                   empty
+  |     |  |  |  +--:(bbf-vdsl:direct-attachment-mode)
+  |     |  |  |  |  +--rw bbf-vdsl:channel
+  |     |  |  |  |  |  +--rw bbf-vdsl:downstream-data-rate-profile              bbf-vdsl:downstream-data-rate-profile-ref
+  |     |  |  |  |  |  +--rw bbf-vdsl:upstream-data-rate-profile                bbf-vdsl:upstream-data-rate-profile-ref
+  |     |  |  |  |  |  +--rw bbf-vdsl:impulse-noise-protection-delay-profile    bbf-vdsl:impulse-noise-protection-delay-profile-ref
+  |     |  |  |  |  +--rw bbf-vdsl:line-spectrum-profile                   bbf-vdsl:line-spectrum-profile-ref
+  |     |  |  |  |  +--rw bbf-vdsl:upstream-power-back-off-profile         bbf-vdsl:upstream-power-back-off-profile-ref
+  |     |  |  |  |  +--rw bbf-vdsl:downstream-power-back-off-profile       bbf-vdsl:downstream-power-back-off-profile-ref
+  |     |  |  |  |  +--rw bbf-vdsl:radio-frequency-interference-profile    bbf-vdsl:radio-frequency-interference-profile-ref
+  |     |  |  |  |  +--rw bbf-vdsl:noise-margin-profile                    bbf-vdsl:noise-margin-profile-ref
+  |     |  |  |  |  +--rw bbf-vdsl:virtual-noise-profile                   -> /vdsl/quality/virtual-noise-profile/name {virtual-noise}?
+  |     |  |  |  |  +--rw bbf-vdsl:sos-profile                             -> /vdsl/quality/sos-profile/name {sos}?
+  |     |  |  |  |  +--rw bbf-vdsl:impulse-noise-monitoring-profile        -> /vdsl/quality/impulse-noise-monitoring-profile/name {impulse-noise-monitoring}?
+  |     |  |  |  |  +--rw bbf-vdsl:re-initialization-policy-profile        -> /vdsl/quality/re-initialization-policy-profile/name {re-initialization-policy}?
+  |     |  |  |  |  +--rw bbf-vdsl:vectoring-profile                       -> /vdsl/quality/vectoring-profile/name {vectoring}?
+  |     |  |  |  |  +--rw bbf-vdsl:data-gathering-profile                  -> /vdsl/quality/data-gathering-profile/name {data-gathering}?
+  |     |  |  |  +--:(bbf-vdsl:indirect-attachment-mode)
+  |     |  |  |     +--rw bbf-vdsl:line-config-vector?                     bbf-vdsl:line-config-vector-ref
+  |     |  |  +--rw bbf-vdsl:threshold-template?                           bbf-vdsl:threshold-template-ref
   |     |  +--rw bbf-fast:line!
   |     |  |  +--rw (bbf-fast:profile-config)?
   |     |  |  |  +--:(bbf-fast:no-profiles-attached)
@@ -53,82 +86,49 @@ module: ietf-interfaces
   |     |  |  |     +--rw bbf-fast:xlog-disturber-vce-port-index?   vce-port-index
   |     |  |  +--rw bbf-fast:link-state
   |     |  |     +--rw bbf-fast:link-state-forced?   enumeration
-  |     |  +--rw bbf-vdsl:line!
-  |     |     +--rw bbf-vdsl:test-mode
-  |     |     |  +--rw bbf-vdsl:power-management-state-forced?   enumeration
-  |     |     |  +--rw bbf-vdsl:loop-diagnostics-mode-forced?    enumeration
-  |     |     |  +--rw bbf-vdsl:auto-mode-cold-start-forced?     uint8
-  |     |     +--rw bbf-vdsl:xtu-c
-  |     |     |  x--rw bbf-vdsl:update-test-ne?                     uint8
-  |     |     |  +---x bbf-vdsl:update-near-end-test
-  |     |     |  +--rw bbf-vdsl:xlin-disturber-vce-port-index-ds?   vce-port-index
-  |     |     |  +--rw bbf-vdsl:xlin-disturber-vce-port-index-us?   vce-port-index
-  |     |     +--rw bbf-vdsl:xtu-r
-  |     |     |  x--rw bbf-vdsl:update-test-fe?        uint8
-  |     |     |  +---x bbf-vdsl:update-far-end-test
-  |     |     +--rw (bbf-vdsl:profile-config)?
-  |     |     |  +--:(bbf-vdsl:no-profiles-attached)
-  |     |     |  |  +--rw bbf-vdsl:no-profiles-attached?                   empty
-  |     |     |  +--:(bbf-vdsl:direct-attachment-mode)
-  |     |     |  |  +--rw bbf-vdsl:channel
-  |     |     |  |  |  +--rw bbf-vdsl:downstream-data-rate-profile              bbf-vdsl:downstream-data-rate-profile-ref
-  |     |     |  |  |  +--rw bbf-vdsl:upstream-data-rate-profile                bbf-vdsl:upstream-data-rate-profile-ref
-  |     |     |  |  |  +--rw bbf-vdsl:impulse-noise-protection-delay-profile    bbf-vdsl:impulse-noise-protection-delay-profile-ref
-  |     |     |  |  +--rw bbf-vdsl:line-spectrum-profile                   bbf-vdsl:line-spectrum-profile-ref
-  |     |     |  |  +--rw bbf-vdsl:upstream-power-back-off-profile         bbf-vdsl:upstream-power-back-off-profile-ref
-  |     |     |  |  +--rw bbf-vdsl:downstream-power-back-off-profile       bbf-vdsl:downstream-power-back-off-profile-ref
-  |     |     |  |  +--rw bbf-vdsl:radio-frequency-interference-profile    bbf-vdsl:radio-frequency-interference-profile-ref
-  |     |     |  |  +--rw bbf-vdsl:noise-margin-profile                    bbf-vdsl:noise-margin-profile-ref
-  |     |     |  |  +--rw bbf-vdsl:virtual-noise-profile                   -> /vdsl/quality/virtual-noise-profile/name {virtual-noise}?
-  |     |     |  |  +--rw bbf-vdsl:sos-profile                             -> /vdsl/quality/sos-profile/name {sos}?
-  |     |     |  |  +--rw bbf-vdsl:impulse-noise-monitoring-profile        -> /vdsl/quality/impulse-noise-monitoring-profile/name {impulse-noise-monitoring}?
-  |     |     |  |  +--rw bbf-vdsl:re-initialization-policy-profile        -> /vdsl/quality/re-initialization-policy-profile/name {re-initialization-policy}?
-  |     |     |  |  +--rw bbf-vdsl:vectoring-profile                       -> /vdsl/quality/vectoring-profile/name {vectoring}?
-  |     |     |  |  +--rw bbf-vdsl:data-gathering-profile                  -> /vdsl/quality/data-gathering-profile/name {data-gathering}?
-  |     |     |  +--:(bbf-vdsl:indirect-attachment-mode)
-  |     |     |     +--rw bbf-vdsl:line-config-vector?                     bbf-vdsl:line-config-vector-ref
-  |     |     +--rw bbf-vdsl:threshold-template?                           bbf-vdsl:threshold-template-ref
-  |     +--rw bbf-melt:melt!
-  |     |  x--rw bbf-melt:pmd-profile?                    pmd-profile-ref
-  |     |  x--rw bbf-melt:processing-profile?             -> /melt/profiles/processing-profile/name {melt-p}?
-  |     |  x--rw bbf-melt:melt-pmd-control
-  |     |  |  x--rw (bbf-melt:pmd-functions)?
-  |     |  |     x--:(bbf-melt:all-functions-disable)
-  |     |  |     |  x--rw bbf-melt:all-functions-disable?                        empty
-  |     |  |     x--:(bbf-melt:measurement-enable-c)
-  |     |  |     |  x--rw bbf-melt:measurement-enable-c?                         empty
-  |     |  |     x--:(bbf-melt:pair-identification-tone-generation-enable)
-  |     |  |        x--rw bbf-melt:pair-identification-tone-generation-enable?   empty
-  |     |  +--rw (bbf-melt:profile-config)?
-  |     |     +--:(bbf-melt:no-profiles-attached)
-  |     |     |  +--rw bbf-melt:no-profiles-attached?     empty
-  |     |     +--:(bbf-melt:direct-attachment-mode)
-  |     |        +--rw bbf-melt:direct-attachment-mode
-  |     |           +--rw bbf-melt:pmd-profile           pmd-profile-ref
-  |     |           +--rw bbf-melt:processing-profile    -> /melt/profiles/processing-profile/name {melt-p}?
-  |     |           +--rw bbf-melt:pmd-control
-  |     |              +--rw bbf-melt:pmd-control?              enumeration
-  |     |              +---x bbf-melt:request-pmd-function-c
-  |     |                 +---w bbf-melt:input
-  |     |                    +---w bbf-melt:pmd-function?   union
+  |     |  +--rw bbf-ghs:ghs!
+  |     |     +--rw bbf-ghs:handshake-profile?   handshake-profile-ref
   |     +--rw bbf-selt:selt!
-  |        x--rw bbf-selt:pmd-profile?                    pmd-profile-ref
-  |        x--rw bbf-selt:processing-profile?             -> /selt/profiles/processing-profile/name {selt-p}?
-  |        x--rw bbf-selt:pmd-control
-  |        |  x--rw bbf-selt:uer-measurement-enable-c?   boolean
-  |        |  x--rw bbf-selt:qln-measurement-enable-c?   boolean
-  |        +--rw (bbf-selt:profile-config)?
-  |           +--:(bbf-selt:no-profiles-attached)
-  |           |  +--rw bbf-selt:no-profiles-attached?     empty
-  |           +--:(bbf-selt:direct-attachment-mode)
-  |              +--rw bbf-selt:direct-attachment-mode
-  |                 +--rw bbf-selt:pmd-profile           pmd-profile-ref
-  |                 +--rw bbf-selt:processing-profile    -> /selt/profiles/processing-profile/name {selt-p}?
-  |                 +--rw bbf-selt:pmd-control
-  |                    +--rw bbf-selt:pmd-control?              enumeration
-  |                    +---x bbf-selt:request-pmd-function-c
-  |                       +---w bbf-selt:input
-  |                          +---w bbf-selt:pmd-function?   union
+  |     |  x--rw bbf-selt:pmd-profile?                    pmd-profile-ref
+  |     |  x--rw bbf-selt:processing-profile?             -> /selt/profiles/processing-profile/name {selt-p}?
+  |     |  x--rw bbf-selt:pmd-control
+  |     |  |  x--rw bbf-selt:uer-measurement-enable-c?   boolean
+  |     |  |  x--rw bbf-selt:qln-measurement-enable-c?   boolean
+  |     |  +--rw (bbf-selt:profile-config)?
+  |     |     +--:(bbf-selt:no-profiles-attached)
+  |     |     |  +--rw bbf-selt:no-profiles-attached?     empty
+  |     |     +--:(bbf-selt:direct-attachment-mode)
+  |     |        +--rw bbf-selt:direct-attachment-mode
+  |     |           +--rw bbf-selt:pmd-profile           pmd-profile-ref
+  |     |           +--rw bbf-selt:processing-profile    -> /selt/profiles/processing-profile/name {selt-p}?
+  |     |           +--rw bbf-selt:pmd-control
+  |     |              +--rw bbf-selt:pmd-control?              enumeration
+  |     |              +---x bbf-selt:request-pmd-function-c
+  |     |                 +---w bbf-selt:input
+  |     |                    +---w bbf-selt:pmd-function?   union
+  |     +--rw bbf-melt:melt!
+  |        x--rw bbf-melt:pmd-profile?                    pmd-profile-ref
+  |        x--rw bbf-melt:processing-profile?             -> /melt/profiles/processing-profile/name {melt-p}?
+  |        x--rw bbf-melt:melt-pmd-control
+  |        |  x--rw (bbf-melt:pmd-functions)?
+  |        |     x--:(bbf-melt:all-functions-disable)
+  |        |     |  x--rw bbf-melt:all-functions-disable?                        empty
+  |        |     x--:(bbf-melt:measurement-enable-c)
+  |        |     |  x--rw bbf-melt:measurement-enable-c?                         empty
+  |        |     x--:(bbf-melt:pair-identification-tone-generation-enable)
+  |        |        x--rw bbf-melt:pair-identification-tone-generation-enable?   empty
+  |        +--rw (bbf-melt:profile-config)?
+  |           +--:(bbf-melt:no-profiles-attached)
+  |           |  +--rw bbf-melt:no-profiles-attached?     empty
+  |           +--:(bbf-melt:direct-attachment-mode)
+  |              +--rw bbf-melt:direct-attachment-mode
+  |                 +--rw bbf-melt:pmd-profile           pmd-profile-ref
+  |                 +--rw bbf-melt:processing-profile    -> /melt/profiles/processing-profile/name {melt-p}?
+  |                 +--rw bbf-melt:pmd-control
+  |                    +--rw bbf-melt:pmd-control?              enumeration
+  |                    +---x bbf-melt:request-pmd-function-c
+  |                       +---w bbf-melt:input
+  |                          +---w bbf-melt:pmd-function?   union
   +--ro interfaces-state
      +--ro interface* [name]
         +--ro name                string
@@ -158,6 +158,547 @@ module: ietf-interfaces
         |  +--ro out-errors?           yang:counter32
         +--ro bbf-fastdsl:line!
         |  +--ro bbf-fastdsl:operational-mode?   union
+        |  +--ro bbf-vdsl:line!
+        |  |  +--ro bbf-vdsl:channel
+        |  |  |  +--ro bbf-vdsl:status
+        |  |  |  |  +--ro bbf-vdsl:xtu-c
+        |  |  |  |  |  +--ro bbf-vdsl:upstream
+        |  |  |  |  |     +--ro bbf-vdsl:actual-data-rate?                   bbf-yang:data-rate32-or-undetermined
+        |  |  |  |  |     +--ro bbf-vdsl:previous-data-rate?                 bbf-yang:data-rate32-or-undetermined
+        |  |  |  |  |     +--ro bbf-vdsl:actual-delay?                       uint16
+        |  |  |  |  |     +--ro bbf-vdsl:actual-inp?                         uint16
+        |  |  |  |  |     +--ro bbf-vdsl:inpreport?                          enumeration
+        |  |  |  |  |     +--ro bbf-vdsl:nfec?                               uint8
+        |  |  |  |  |     +--ro bbf-vdsl:rfec?                               uint8
+        |  |  |  |  |     +--ro bbf-vdsl:actual-number-of-bits-per-symbol?   uint32
+        |  |  |  |  |     +--ro bbf-vdsl:actual-interleaving-depth?          uint16
+        |  |  |  |  |     +--ro bbf-vdsl:actual-interleaving-block-length?   uint8
+        |  |  |  |  |     +--ro bbf-vdsl:actual-latency-path?                uint8
+        |  |  |  |  |     +--ro bbf-vdsl:fec-codewords-per-dtu?              uint8
+        |  |  |  |  |     +--ro bbf-vdsl:actual-ndr?                         bbf-yang:data-rate32-or-undetermined
+        |  |  |  |  |     +--ro bbf-vdsl:actual-inp-against-rein?            uint8
+        |  |  |  |  +--ro bbf-vdsl:xtu-r
+        |  |  |  |     +--ro bbf-vdsl:downstream
+        |  |  |  |        +--ro bbf-vdsl:actual-data-rate?                   bbf-yang:data-rate32-or-undetermined
+        |  |  |  |        +--ro bbf-vdsl:previous-data-rate?                 bbf-yang:data-rate32-or-undetermined
+        |  |  |  |        +--ro bbf-vdsl:actual-delay?                       uint16
+        |  |  |  |        +--ro bbf-vdsl:actual-inp?                         uint16
+        |  |  |  |        +--ro bbf-vdsl:inpreport?                          enumeration
+        |  |  |  |        +--ro bbf-vdsl:nfec?                               uint8
+        |  |  |  |        +--ro bbf-vdsl:rfec?                               uint8
+        |  |  |  |        +--ro bbf-vdsl:actual-number-of-bits-per-symbol?   uint32
+        |  |  |  |        +--ro bbf-vdsl:actual-interleaving-depth?          uint16
+        |  |  |  |        +--ro bbf-vdsl:actual-interleaving-block-length?   uint8
+        |  |  |  |        +--ro bbf-vdsl:actual-latency-path?                uint8
+        |  |  |  |        +--ro bbf-vdsl:fec-codewords-per-dtu?              uint8
+        |  |  |  |        +--ro bbf-vdsl:actual-ndr?                         bbf-yang:data-rate32-or-undetermined
+        |  |  |  |        +--ro bbf-vdsl:actual-inp-against-rein?            uint8
+        |  |  |  +--ro bbf-vdsl:performance
+        |  |  |     +--ro bbf-vdsl:intervals-15min
+        |  |  |     |  +--ro bbf-vdsl:current
+        |  |  |     |  |  +--ro bbf-vdsl:xtu-c
+        |  |  |     |  |  |  +--ro bbf-vdsl:measured-time?                 uint32
+        |  |  |     |  |  |  +--ro bbf-vdsl:invalid-data-flag?             boolean
+        |  |  |     |  |  |  +--ro bbf-vdsl:code-violations-c?             bbf-yang:performance-counter32
+        |  |  |     |  |  |  +--ro bbf-vdsl:forward-error-corrections-c?   bbf-yang:performance-counter32
+        |  |  |     |  |  |  +--ro bbf-vdsl:uncorrected-dtu-c?             bbf-yang:performance-counter32
+        |  |  |     |  |  +--ro bbf-vdsl:xtu-r
+        |  |  |     |  |     +--ro bbf-vdsl:measured-time?                   uint32
+        |  |  |     |  |     +--ro bbf-vdsl:invalid-data-flag?               boolean
+        |  |  |     |  |     +--ro bbf-vdsl:code-violations-cfe?             bbf-yang:performance-counter32
+        |  |  |     |  |     +--ro bbf-vdsl:forward-error-corrections-cfe?   bbf-yang:performance-counter32
+        |  |  |     |  |     +--ro bbf-vdsl:uncorrected-dtu-cfe?             bbf-yang:performance-counter32
+        |  |  |     |  +--ro bbf-vdsl:number-of-intervals?   performance-15min-interval
+        |  |  |     |  +--ro bbf-vdsl:non-valid-intervals?   performance-15min-interval
+        |  |  |     |  +--ro bbf-vdsl:history* [interval-number]
+        |  |  |     |     +--ro bbf-vdsl:interval-number    performance-15min-history-interval
+        |  |  |     |     +--ro bbf-vdsl:xtu-c
+        |  |  |     |     |  +--ro bbf-vdsl:time-stamp?                    yang:date-and-time
+        |  |  |     |     |  +--ro bbf-vdsl:measured-time?                 uint32
+        |  |  |     |     |  +--ro bbf-vdsl:invalid-data-flag?             boolean
+        |  |  |     |     |  +--ro bbf-vdsl:code-violations-c?             bbf-yang:performance-counter32
+        |  |  |     |     |  +--ro bbf-vdsl:forward-error-corrections-c?   bbf-yang:performance-counter32
+        |  |  |     |     |  +--ro bbf-vdsl:uncorrected-dtu-c?             bbf-yang:performance-counter32
+        |  |  |     |     +--ro bbf-vdsl:xtu-r
+        |  |  |     |        +--ro bbf-vdsl:time-stamp?                      yang:date-and-time
+        |  |  |     |        +--ro bbf-vdsl:measured-time?                   uint32
+        |  |  |     |        +--ro bbf-vdsl:invalid-data-flag?               boolean
+        |  |  |     |        +--ro bbf-vdsl:code-violations-cfe?             bbf-yang:performance-counter32
+        |  |  |     |        +--ro bbf-vdsl:forward-error-corrections-cfe?   bbf-yang:performance-counter32
+        |  |  |     |        +--ro bbf-vdsl:uncorrected-dtu-cfe?             bbf-yang:performance-counter32
+        |  |  |     +--ro bbf-vdsl:intervals-24hr {performance-24hr}?
+        |  |  |        +--ro bbf-vdsl:current
+        |  |  |        |  +--ro bbf-vdsl:xtu-c
+        |  |  |        |  |  +--ro bbf-vdsl:measured-time?                 uint32
+        |  |  |        |  |  +--ro bbf-vdsl:invalid-data-flag?             boolean
+        |  |  |        |  |  +--ro bbf-vdsl:code-violations-c?             bbf-yang:performance-counter32
+        |  |  |        |  |  +--ro bbf-vdsl:forward-error-corrections-c?   bbf-yang:performance-counter32
+        |  |  |        |  |  +--ro bbf-vdsl:uncorrected-dtu-c?             bbf-yang:performance-counter32
+        |  |  |        |  +--ro bbf-vdsl:xtu-r
+        |  |  |        |     +--ro bbf-vdsl:measured-time?                   uint32
+        |  |  |        |     +--ro bbf-vdsl:invalid-data-flag?               boolean
+        |  |  |        |     +--ro bbf-vdsl:code-violations-cfe?             bbf-yang:performance-counter32
+        |  |  |        |     +--ro bbf-vdsl:forward-error-corrections-cfe?   bbf-yang:performance-counter32
+        |  |  |        |     +--ro bbf-vdsl:uncorrected-dtu-cfe?             bbf-yang:performance-counter32
+        |  |  |        +--ro bbf-vdsl:number-of-intervals?   performance-24hr-interval
+        |  |  |        +--ro bbf-vdsl:non-valid-intervals?   performance-24hr-interval
+        |  |  |        +--ro bbf-vdsl:history* [interval-number]
+        |  |  |           +--ro bbf-vdsl:interval-number    performance-24hr-history-interval
+        |  |  |           +--ro bbf-vdsl:xtu-c
+        |  |  |           |  +--ro bbf-vdsl:time-stamp?                    yang:date-and-time
+        |  |  |           |  +--ro bbf-vdsl:measured-time?                 uint32
+        |  |  |           |  +--ro bbf-vdsl:invalid-data-flag?             boolean
+        |  |  |           |  +--ro bbf-vdsl:code-violations-c?             bbf-yang:performance-counter32
+        |  |  |           |  +--ro bbf-vdsl:forward-error-corrections-c?   bbf-yang:performance-counter32
+        |  |  |           |  +--ro bbf-vdsl:uncorrected-dtu-c?             bbf-yang:performance-counter32
+        |  |  |           +--ro bbf-vdsl:xtu-r
+        |  |  |              +--ro bbf-vdsl:time-stamp?                      yang:date-and-time
+        |  |  |              +--ro bbf-vdsl:measured-time?                   uint32
+        |  |  |              +--ro bbf-vdsl:invalid-data-flag?               boolean
+        |  |  |              +--ro bbf-vdsl:code-violations-cfe?             bbf-yang:performance-counter32
+        |  |  |              +--ro bbf-vdsl:forward-error-corrections-cfe?   bbf-yang:performance-counter32
+        |  |  |              +--ro bbf-vdsl:uncorrected-dtu-cfe?             bbf-yang:performance-counter32
+        |  |  +--ro bbf-vdsl:inventory
+        |  |  |  +--ro bbf-vdsl:xtu-c
+        |  |  |  |  +--ro bbf-vdsl:g.994.1-vendor-id?                  binary
+        |  |  |  |  +--ro bbf-vdsl:system-vendor-id?                   binary
+        |  |  |  |  +--ro bbf-vdsl:version-number?                     binary
+        |  |  |  |  +--ro bbf-vdsl:serial-number?                      binary
+        |  |  |  |  +--ro bbf-vdsl:self-test-result?                   uint32
+        |  |  |  |  +--ro bbf-vdsl:transmission-system-capabilities*   xts-descriptor
+        |  |  |  |  +--ro bbf-vdsl:vdsl2-lr-support?                   boolean {vdsl2-lr}?
+        |  |  |  |  +--ro bbf-vdsl:strongfext-support?                 boolean {strongfext}?
+        |  |  |  |  +--ro bbf-vdsl:vce-id?                             union
+        |  |  |  |  +--ro bbf-vdsl:vce-port-index?                     uint16
+        |  |  |  +--ro bbf-vdsl:xtu-r
+        |  |  |     +--ro bbf-vdsl:g.994.1-vendor-id?                  binary
+        |  |  |     +--ro bbf-vdsl:system-vendor-id?                   binary
+        |  |  |     +--ro bbf-vdsl:version-number?                     binary
+        |  |  |     +--ro bbf-vdsl:serial-number?                      binary
+        |  |  |     +--ro bbf-vdsl:self-test-result?                   uint32
+        |  |  |     +--ro bbf-vdsl:transmission-system-capabilities*   xts-descriptor
+        |  |  |     +--ro bbf-vdsl:vdsl2-lr-support?                   boolean {vdsl2-lr}?
+        |  |  |     +--ro bbf-vdsl:strongfext-support?                 boolean {strongfext}?
+        |  |  +--ro bbf-vdsl:status
+        |  |  |  +--ro bbf-vdsl:xdsl-transmission-system?               xts-descriptor
+        |  |  |  +--ro bbf-vdsl:line-power-management-state?            enumeration
+        |  |  |  +--ro bbf-vdsl:initialization-success-failure-cause?   enumeration
+        |  |  |  +--ro bbf-vdsl:vdsl2-lr-actual-op-type?                enumeration {vdsl2-lr}?
+        |  |  |  o--ro bbf-vdsl:snr-margin?                             union
+        |  |  |  +--ro bbf-vdsl:profile?                                profiles
+        |  |  |  +--ro bbf-vdsl:limitmask?                              limitmask-descriptor
+        |  |  |  +--ro bbf-vdsl:us0mask?                                us0mask-descriptor
+        |  |  |  +--ro bbf-vdsl:actual-cyclic-extension?                uint8
+        |  |  |  +--ro bbf-vdsl:actual-aele-mode?                       enumeration
+        |  |  |  +--ro bbf-vdsl:actual-vector-mode?                     enumeration
+        |  |  |  +--ro bbf-vdsl:attndr-actual-method?                   uint8
+        |  |  |  +--ro bbf-vdsl:xtu-c
+        |  |  |  |  +--ro bbf-vdsl:stamp-test-ne?   time-stamp-or-undefined
+        |  |  |  |  +--ro bbf-vdsl:failures
+        |  |  |  |  |  +--ro bbf-vdsl:los?              boolean
+        |  |  |  |  |  +--ro bbf-vdsl:lof?              boolean
+        |  |  |  |  |  +--ro bbf-vdsl:lpr?              boolean
+        |  |  |  |  |  +--ro bbf-vdsl:linit?            boolean
+        |  |  |  |  |  +--ro bbf-vdsl:loss-of-margin?   boolean
+        |  |  |  |  +--ro bbf-vdsl:downstream
+        |  |  |  |  |  +--ro bbf-vdsl:last-transmitted-state?            uint8
+        |  |  |  |  |  +--ro bbf-vdsl:actual-psd?                        union
+        |  |  |  |  |  +--ro bbf-vdsl:actual-aggregate-transmit-power?   union
+        |  |  |  |  |  +--ro bbf-vdsl:aggachndr?                         bbf-yang:data-rate32-or-undetermined
+        |  |  |  |  +--ro bbf-vdsl:upstream
+        |  |  |  |  |  +--ro bbf-vdsl:actual-snr-mode?            enumeration
+        |  |  |  |  |  +--ro bbf-vdsl:attainable-net-data-rate?   bbf-yang:data-rate32-or-undetermined
+        |  |  |  |  |  +--ro bbf-vdsl:trellis?                    boolean
+        |  |  |  |  |  +--ro bbf-vdsl:actual-ra-mode?             enumeration
+        |  |  |  |  |  +--ro bbf-vdsl:rxthrh?                     uint8
+        |  |  |  |  |  +--ro bbf-vdsl:actual-inp-roc?             uint8
+        |  |  |  |  |  +--ro bbf-vdsl:snr-margin-roc?             union
+        |  |  |  |  |  +--ro bbf-vdsl:stamp-olr?                  time-stamp-or-undefined
+        |  |  |  |  |  +--ro bbf-vdsl:actual-ripolicy?            enumeration
+        |  |  |  |  |  +--ro bbf-vdsl:rtx-used?                   enumeration
+        |  |  |  |  |  +--ro bbf-vdsl:attndr-actual-inp?          uint16
+        |  |  |  |  |  +--ro bbf-vdsl:attndr-actual-inp-rein?     uint8
+        |  |  |  |  |  +--ro bbf-vdsl:attndr-actual-delay?        uint8
+        |  |  |  |  |  +--ro bbf-vdsl:snr-margin?                 union
+        |  |  |  |  +--ro bbf-vdsl:band-status
+        |  |  |  |     +--ro bbf-vdsl:line-attenuation* [band]
+        |  |  |  |     |  +--ro bbf-vdsl:band           uint8
+        |  |  |  |     |  +--ro bbf-vdsl:attenuation?   union
+        |  |  |  |     +--ro bbf-vdsl:signal-attenuation* [band]
+        |  |  |  |     |  +--ro bbf-vdsl:band           uint8
+        |  |  |  |     |  +--ro bbf-vdsl:attenuation?   union
+        |  |  |  |     +--ro bbf-vdsl:snr-margin* [band]
+        |  |  |  |     |  +--ro bbf-vdsl:band      uint8
+        |  |  |  |     |  +--ro bbf-vdsl:margin?   union
+        |  |  |  |     +--ro bbf-vdsl:upbo-electrical-length-pbn* [band]
+        |  |  |  |        +--ro bbf-vdsl:band                      uint8
+        |  |  |  |        +--ro bbf-vdsl:upbo-electrical-length?   union
+        |  |  |  +--ro bbf-vdsl:xtu-r
+        |  |  |     +--ro bbf-vdsl:stamp-test-fe?   time-stamp-or-undefined
+        |  |  |     +--ro bbf-vdsl:failures
+        |  |  |     |  +--ro bbf-vdsl:los-fe?              boolean
+        |  |  |     |  +--ro bbf-vdsl:lof-fe?              boolean
+        |  |  |     |  +--ro bbf-vdsl:lpr-fe?              boolean
+        |  |  |     |  +--ro bbf-vdsl:loss-of-margin-fe?   boolean
+        |  |  |     +--ro bbf-vdsl:downstream
+        |  |  |     |  +--ro bbf-vdsl:actual-snr-mode?            enumeration
+        |  |  |     |  +--ro bbf-vdsl:attainable-net-data-rate?   bbf-yang:data-rate32-or-undetermined
+        |  |  |     |  +--ro bbf-vdsl:trellis?                    boolean
+        |  |  |     |  +--ro bbf-vdsl:actual-ra-mode?             enumeration
+        |  |  |     |  +--ro bbf-vdsl:rxthrh?                     uint8
+        |  |  |     |  +--ro bbf-vdsl:actual-inp-roc?             uint8
+        |  |  |     |  +--ro bbf-vdsl:snr-margin-roc?             union
+        |  |  |     |  +--ro bbf-vdsl:stamp-olr?                  time-stamp-or-undefined
+        |  |  |     |  +--ro bbf-vdsl:actual-ripolicy?            enumeration
+        |  |  |     |  +--ro bbf-vdsl:rtx-used?                   enumeration
+        |  |  |     |  +--ro bbf-vdsl:attndr-actual-inp?          uint16
+        |  |  |     |  +--ro bbf-vdsl:attndr-actual-inp-rein?     uint8
+        |  |  |     |  +--ro bbf-vdsl:attndr-actual-delay?        uint8
+        |  |  |     |  +--ro bbf-vdsl:snr-margin?                 union
+        |  |  |     +--ro bbf-vdsl:upstream
+        |  |  |     |  +--ro bbf-vdsl:last-transmitted-state?            uint8
+        |  |  |     |  +--ro bbf-vdsl:actual-psd?                        union
+        |  |  |     |  +--ro bbf-vdsl:actual-aggregate-transmit-power?   union
+        |  |  |     |  +--ro bbf-vdsl:aggachndr?                         bbf-yang:data-rate32-or-undetermined
+        |  |  |     +--ro bbf-vdsl:band-status
+        |  |  |        +--ro bbf-vdsl:line-attenuation* [band]
+        |  |  |        |  +--ro bbf-vdsl:band           uint8
+        |  |  |        |  +--ro bbf-vdsl:attenuation?   union
+        |  |  |        +--ro bbf-vdsl:signal-attenuation* [band]
+        |  |  |        |  +--ro bbf-vdsl:band           uint8
+        |  |  |        |  +--ro bbf-vdsl:attenuation?   union
+        |  |  |        +--ro bbf-vdsl:snr-margin* [band]
+        |  |  |        |  +--ro bbf-vdsl:band      uint8
+        |  |  |        |  +--ro bbf-vdsl:margin?   union
+        |  |  |        +--ro bbf-vdsl:upbo-electrical-length-pbn* [band]
+        |  |  |           +--ro bbf-vdsl:band                      uint8
+        |  |  |           +--ro bbf-vdsl:upbo-electrical-length?   union
+        |  |  +--ro bbf-vdsl:performance
+        |  |  |  +--ro bbf-vdsl:intervals-15min
+        |  |  |  |  +--ro bbf-vdsl:current
+        |  |  |  |  |  +--ro bbf-vdsl:xtu-c
+        |  |  |  |  |  |  +--ro bbf-vdsl:measured-time?                        uint32
+        |  |  |  |  |  |  +--ro bbf-vdsl:invalid-data-flag?                    boolean
+        |  |  |  |  |  |  +--ro bbf-vdsl:forward-error-correction-seconds-l?   bbf-yang:performance-counter32
+        |  |  |  |  |  |  +--ro bbf-vdsl:errored-seconds-l?                    bbf-yang:performance-counter32
+        |  |  |  |  |  |  +--ro bbf-vdsl:severely-errored-seconds-l?           bbf-yang:performance-counter32
+        |  |  |  |  |  |  +--ro bbf-vdsl:loss-of-signal-seconds-l?             bbf-yang:performance-counter32
+        |  |  |  |  |  |  +--ro bbf-vdsl:unavailable-seconds-l?                bbf-yang:performance-counter32
+        |  |  |  |  |  |  +--ro bbf-vdsl:inminpeq-l* [inminpeq-index]
+        |  |  |  |  |  |  |  +--ro bbf-vdsl:inminpeq-index    uint8
+        |  |  |  |  |  |  |  +--ro bbf-vdsl:inminpeq-l?       bbf-yang:performance-counter32-or-inactive
+        |  |  |  |  |  |  +--ro bbf-vdsl:inmme-l?                              bbf-yang:performance-counter32-or-inactive
+        |  |  |  |  |  |  +--ro bbf-vdsl:inmiat-l* [inminiat-index]
+        |  |  |  |  |  |  |  +--ro bbf-vdsl:inminiat-index    uint8
+        |  |  |  |  |  |  |  +--ro bbf-vdsl:inmiat-l?         bbf-yang:performance-counter32-or-inactive
+        |  |  |  |  |  |  +--ro bbf-vdsl:sos-success-ne?                       bbf-yang:performance-counter32-or-inactive
+        |  |  |  |  |  |  +--ro bbf-vdsl:leftr-defects-seconds-counter-ne?     bbf-yang:performance-counter32
+        |  |  |  |  |  |  +--ro bbf-vdsl:error-free-bits-counter-ne?           bbf-yang:performance-counter32
+        |  |  |  |  |  |  +--ro bbf-vdsl:minimum-error-free-throughput-ne?     bbf-yang:performance-counter32
+        |  |  |  |  |  |  +--ro bbf-vdsl:full-initializations?                 bbf-yang:performance-counter32
+        |  |  |  |  |  |  +--ro bbf-vdsl:failed-full-initializations?          bbf-yang:performance-counter32
+        |  |  |  |  |  |  +--ro bbf-vdsl:short-initializations?                bbf-yang:performance-counter32-or-inactive
+        |  |  |  |  |  |  +--ro bbf-vdsl:failed-short-initializations?         bbf-yang:performance-counter32-or-inactive
+        |  |  |  |  |  |  +--ro bbf-vdsl:loss-of-power-intrpt?                 bbf-yang:performance-counter32-or-inactive
+        |  |  |  |  |  |  +--ro bbf-vdsl:host-reinit-interruptions?            bbf-yang:performance-counter32-or-inactive
+        |  |  |  |  |  |  +--ro bbf-vdsl:spontaneous-intrpt?                   bbf-yang:performance-counter32-or-inactive
+        |  |  |  |  |  |  +--ro bbf-vdsl:loss-of-signal?                       bbf-yang:performance-counter32
+        |  |  |  |  |  |  +--ro bbf-vdsl:loss-of-frame?                        bbf-yang:performance-counter32
+        |  |  |  |  |  |  +--ro bbf-vdsl:loss-of-power?                        bbf-yang:performance-counter32
+        |  |  |  |  |  |  +--ro bbf-vdsl:maximum-error-free-throughput-ne?     bbf-yang:performance-counter32 {maxeftr}?
+        |  |  |  |  |  |  +--ro bbf-vdsl:sra-success-ne?                       bbf-yang:performance-counter32 {successful-sra}?
+        |  |  |  |  |  +--ro bbf-vdsl:xtu-r
+        |  |  |  |  |     +--ro bbf-vdsl:measured-time?                          uint32
+        |  |  |  |  |     +--ro bbf-vdsl:invalid-data-flag?                      boolean
+        |  |  |  |  |     +--ro bbf-vdsl:forward-error-correction-seconds-lfe?   bbf-yang:performance-counter32
+        |  |  |  |  |     +--ro bbf-vdsl:errored-seconds-lfe?                    bbf-yang:performance-counter32
+        |  |  |  |  |     +--ro bbf-vdsl:severely-errored-seconds-lfe?           bbf-yang:performance-counter32
+        |  |  |  |  |     +--ro bbf-vdsl:loss-of-signal-seconds-lfe?             bbf-yang:performance-counter32
+        |  |  |  |  |     +--ro bbf-vdsl:unavailable-seconds-lfe?                bbf-yang:performance-counter32
+        |  |  |  |  |     +--ro bbf-vdsl:inminpeq-lfe* [inminpeq-index]
+        |  |  |  |  |     |  +--ro bbf-vdsl:inminpeq-index    uint8
+        |  |  |  |  |     |  +--ro bbf-vdsl:inminpeq-lfe?     bbf-yang:performance-counter32-or-inactive
+        |  |  |  |  |     +--ro bbf-vdsl:inmme-lfe?                              bbf-yang:performance-counter32-or-inactive
+        |  |  |  |  |     +--ro bbf-vdsl:inmiat-lfe* [inminiat-index]
+        |  |  |  |  |     |  +--ro bbf-vdsl:inminiat-index    uint8
+        |  |  |  |  |     |  +--ro bbf-vdsl:inmiat-lfe?       bbf-yang:performance-counter32-or-inactive
+        |  |  |  |  |     +--ro bbf-vdsl:sos-success-fe?                         bbf-yang:performance-counter32-or-inactive
+        |  |  |  |  |     +--ro bbf-vdsl:leftr-defects-seconds-counter-lfe?      bbf-yang:performance-counter32
+        |  |  |  |  |     +--ro bbf-vdsl:error-free-bits-counter-lfe?            bbf-yang:performance-counter32
+        |  |  |  |  |     +--ro bbf-vdsl:minimum-error-free-throughput-lfe?      bbf-yang:performance-counter32
+        |  |  |  |  |     +--ro bbf-vdsl:loss-of-signal-fe?                      bbf-yang:performance-counter32
+        |  |  |  |  |     +--ro bbf-vdsl:loss-of-frame-fe?                       bbf-yang:performance-counter32
+        |  |  |  |  |     +--ro bbf-vdsl:loss-of-power-fe?                       bbf-yang:performance-counter32
+        |  |  |  |  |     +--ro bbf-vdsl:maximum-error-free-throughput-lfe?      bbf-yang:performance-counter32 {maxeftr}?
+        |  |  |  |  |     +--ro bbf-vdsl:sra-success-fe?                         bbf-yang:performance-counter32 {successful-sra}?
+        |  |  |  |  +--ro bbf-vdsl:number-of-intervals?   performance-15min-interval
+        |  |  |  |  +--ro bbf-vdsl:non-valid-intervals?   performance-15min-interval
+        |  |  |  |  +--ro bbf-vdsl:history* [interval-number]
+        |  |  |  |     +--ro bbf-vdsl:interval-number    performance-15min-history-interval
+        |  |  |  |     +--ro bbf-vdsl:xtu-c
+        |  |  |  |     |  +--ro bbf-vdsl:time-stamp?                           yang:date-and-time
+        |  |  |  |     |  +--ro bbf-vdsl:measured-time?                        uint32
+        |  |  |  |     |  +--ro bbf-vdsl:invalid-data-flag?                    boolean
+        |  |  |  |     |  +--ro bbf-vdsl:forward-error-correction-seconds-l?   bbf-yang:performance-counter32
+        |  |  |  |     |  +--ro bbf-vdsl:errored-seconds-l?                    bbf-yang:performance-counter32
+        |  |  |  |     |  +--ro bbf-vdsl:severely-errored-seconds-l?           bbf-yang:performance-counter32
+        |  |  |  |     |  +--ro bbf-vdsl:loss-of-signal-seconds-l?             bbf-yang:performance-counter32
+        |  |  |  |     |  +--ro bbf-vdsl:unavailable-seconds-l?                bbf-yang:performance-counter32
+        |  |  |  |     |  +--ro bbf-vdsl:inminpeq-l* [inminpeq-index]
+        |  |  |  |     |  |  +--ro bbf-vdsl:inminpeq-index    uint8
+        |  |  |  |     |  |  +--ro bbf-vdsl:inminpeq-l?       bbf-yang:performance-counter32-or-inactive
+        |  |  |  |     |  +--ro bbf-vdsl:inmme-l?                              bbf-yang:performance-counter32-or-inactive
+        |  |  |  |     |  +--ro bbf-vdsl:inmiat-l* [inminiat-index]
+        |  |  |  |     |  |  +--ro bbf-vdsl:inminiat-index    uint8
+        |  |  |  |     |  |  +--ro bbf-vdsl:inmiat-l?         bbf-yang:performance-counter32-or-inactive
+        |  |  |  |     |  +--ro bbf-vdsl:sos-success-ne?                       bbf-yang:performance-counter32-or-inactive
+        |  |  |  |     |  +--ro bbf-vdsl:leftr-defects-seconds-counter-ne?     bbf-yang:performance-counter32
+        |  |  |  |     |  +--ro bbf-vdsl:error-free-bits-counter-ne?           bbf-yang:performance-counter32
+        |  |  |  |     |  +--ro bbf-vdsl:minimum-error-free-throughput-ne?     bbf-yang:performance-counter32
+        |  |  |  |     |  +--ro bbf-vdsl:full-initializations?                 bbf-yang:performance-counter32
+        |  |  |  |     |  +--ro bbf-vdsl:failed-full-initializations?          bbf-yang:performance-counter32
+        |  |  |  |     |  +--ro bbf-vdsl:short-initializations?                bbf-yang:performance-counter32-or-inactive
+        |  |  |  |     |  +--ro bbf-vdsl:failed-short-initializations?         bbf-yang:performance-counter32-or-inactive
+        |  |  |  |     |  +--ro bbf-vdsl:loss-of-power-intrpt?                 bbf-yang:performance-counter32-or-inactive
+        |  |  |  |     |  +--ro bbf-vdsl:host-reinit-interruptions?            bbf-yang:performance-counter32-or-inactive
+        |  |  |  |     |  +--ro bbf-vdsl:spontaneous-intrpt?                   bbf-yang:performance-counter32-or-inactive
+        |  |  |  |     |  +--ro bbf-vdsl:loss-of-signal?                       bbf-yang:performance-counter32
+        |  |  |  |     |  +--ro bbf-vdsl:loss-of-frame?                        bbf-yang:performance-counter32
+        |  |  |  |     |  +--ro bbf-vdsl:loss-of-power?                        bbf-yang:performance-counter32
+        |  |  |  |     |  +--ro bbf-vdsl:maximum-error-free-throughput-ne?     bbf-yang:performance-counter32 {maxeftr}?
+        |  |  |  |     |  +--ro bbf-vdsl:sra-success-ne?                       bbf-yang:performance-counter32 {successful-sra}?
+        |  |  |  |     +--ro bbf-vdsl:xtu-r
+        |  |  |  |        +--ro bbf-vdsl:time-stamp?                             yang:date-and-time
+        |  |  |  |        +--ro bbf-vdsl:measured-time?                          uint32
+        |  |  |  |        +--ro bbf-vdsl:invalid-data-flag?                      boolean
+        |  |  |  |        +--ro bbf-vdsl:forward-error-correction-seconds-lfe?   bbf-yang:performance-counter32
+        |  |  |  |        +--ro bbf-vdsl:errored-seconds-lfe?                    bbf-yang:performance-counter32
+        |  |  |  |        +--ro bbf-vdsl:severely-errored-seconds-lfe?           bbf-yang:performance-counter32
+        |  |  |  |        +--ro bbf-vdsl:loss-of-signal-seconds-lfe?             bbf-yang:performance-counter32
+        |  |  |  |        +--ro bbf-vdsl:unavailable-seconds-lfe?                bbf-yang:performance-counter32
+        |  |  |  |        +--ro bbf-vdsl:inminpeq-lfe* [inminpeq-index]
+        |  |  |  |        |  +--ro bbf-vdsl:inminpeq-index    uint8
+        |  |  |  |        |  +--ro bbf-vdsl:inminpeq-lfe?     bbf-yang:performance-counter32-or-inactive
+        |  |  |  |        +--ro bbf-vdsl:inmme-lfe?                              bbf-yang:performance-counter32-or-inactive
+        |  |  |  |        +--ro bbf-vdsl:inmiat-lfe* [inminiat-index]
+        |  |  |  |        |  +--ro bbf-vdsl:inminiat-index    uint8
+        |  |  |  |        |  +--ro bbf-vdsl:inmiat-lfe?       bbf-yang:performance-counter32-or-inactive
+        |  |  |  |        +--ro bbf-vdsl:sos-success-fe?                         bbf-yang:performance-counter32-or-inactive
+        |  |  |  |        +--ro bbf-vdsl:leftr-defects-seconds-counter-lfe?      bbf-yang:performance-counter32
+        |  |  |  |        +--ro bbf-vdsl:error-free-bits-counter-lfe?            bbf-yang:performance-counter32
+        |  |  |  |        +--ro bbf-vdsl:minimum-error-free-throughput-lfe?      bbf-yang:performance-counter32
+        |  |  |  |        +--ro bbf-vdsl:loss-of-signal-fe?                      bbf-yang:performance-counter32
+        |  |  |  |        +--ro bbf-vdsl:loss-of-frame-fe?                       bbf-yang:performance-counter32
+        |  |  |  |        +--ro bbf-vdsl:loss-of-power-fe?                       bbf-yang:performance-counter32
+        |  |  |  |        +--ro bbf-vdsl:maximum-error-free-throughput-lfe?      bbf-yang:performance-counter32 {maxeftr}?
+        |  |  |  |        +--ro bbf-vdsl:sra-success-fe?                         bbf-yang:performance-counter32 {successful-sra}?
+        |  |  |  +--ro bbf-vdsl:intervals-24hr {performance-24hr}?
+        |  |  |     +--ro bbf-vdsl:current
+        |  |  |     |  +--ro bbf-vdsl:xtu-c
+        |  |  |     |  |  +--ro bbf-vdsl:measured-time?                        uint32
+        |  |  |     |  |  +--ro bbf-vdsl:invalid-data-flag?                    boolean
+        |  |  |     |  |  +--ro bbf-vdsl:forward-error-correction-seconds-l?   bbf-yang:performance-counter32
+        |  |  |     |  |  +--ro bbf-vdsl:errored-seconds-l?                    bbf-yang:performance-counter32
+        |  |  |     |  |  +--ro bbf-vdsl:severely-errored-seconds-l?           bbf-yang:performance-counter32
+        |  |  |     |  |  +--ro bbf-vdsl:loss-of-signal-seconds-l?             bbf-yang:performance-counter32
+        |  |  |     |  |  +--ro bbf-vdsl:unavailable-seconds-l?                bbf-yang:performance-counter32
+        |  |  |     |  |  +--ro bbf-vdsl:inminpeq-l* [inminpeq-index]
+        |  |  |     |  |  |  +--ro bbf-vdsl:inminpeq-index    uint8
+        |  |  |     |  |  |  +--ro bbf-vdsl:inminpeq-l?       bbf-yang:performance-counter32-or-inactive
+        |  |  |     |  |  +--ro bbf-vdsl:inmme-l?                              bbf-yang:performance-counter32-or-inactive
+        |  |  |     |  |  +--ro bbf-vdsl:inmiat-l* [inminiat-index]
+        |  |  |     |  |  |  +--ro bbf-vdsl:inminiat-index    uint8
+        |  |  |     |  |  |  +--ro bbf-vdsl:inmiat-l?         bbf-yang:performance-counter32-or-inactive
+        |  |  |     |  |  +--ro bbf-vdsl:sos-success-ne?                       bbf-yang:performance-counter32-or-inactive
+        |  |  |     |  |  +--ro bbf-vdsl:leftr-defects-seconds-counter-ne?     bbf-yang:performance-counter32
+        |  |  |     |  |  +--ro bbf-vdsl:error-free-bits-counter-ne?           bbf-yang:performance-counter32
+        |  |  |     |  |  +--ro bbf-vdsl:minimum-error-free-throughput-ne?     bbf-yang:performance-counter32
+        |  |  |     |  |  +--ro bbf-vdsl:full-initializations?                 bbf-yang:performance-counter32
+        |  |  |     |  |  +--ro bbf-vdsl:failed-full-initializations?          bbf-yang:performance-counter32
+        |  |  |     |  |  +--ro bbf-vdsl:short-initializations?                bbf-yang:performance-counter32-or-inactive
+        |  |  |     |  |  +--ro bbf-vdsl:failed-short-initializations?         bbf-yang:performance-counter32-or-inactive
+        |  |  |     |  |  +--ro bbf-vdsl:loss-of-power-intrpt?                 bbf-yang:performance-counter32-or-inactive
+        |  |  |     |  |  +--ro bbf-vdsl:host-reinit-interruptions?            bbf-yang:performance-counter32-or-inactive
+        |  |  |     |  |  +--ro bbf-vdsl:spontaneous-intrpt?                   bbf-yang:performance-counter32-or-inactive
+        |  |  |     |  |  +--ro bbf-vdsl:loss-of-signal?                       bbf-yang:performance-counter32
+        |  |  |     |  |  +--ro bbf-vdsl:loss-of-frame?                        bbf-yang:performance-counter32
+        |  |  |     |  |  +--ro bbf-vdsl:loss-of-power?                        bbf-yang:performance-counter32
+        |  |  |     |  |  +--ro bbf-vdsl:maximum-error-free-throughput-ne?     bbf-yang:performance-counter32 {maxeftr}?
+        |  |  |     |  |  +--ro bbf-vdsl:sra-success-ne?                       bbf-yang:performance-counter32 {successful-sra}?
+        |  |  |     |  +--ro bbf-vdsl:xtu-r
+        |  |  |     |     +--ro bbf-vdsl:measured-time?                          uint32
+        |  |  |     |     +--ro bbf-vdsl:invalid-data-flag?                      boolean
+        |  |  |     |     +--ro bbf-vdsl:forward-error-correction-seconds-lfe?   bbf-yang:performance-counter32
+        |  |  |     |     +--ro bbf-vdsl:errored-seconds-lfe?                    bbf-yang:performance-counter32
+        |  |  |     |     +--ro bbf-vdsl:severely-errored-seconds-lfe?           bbf-yang:performance-counter32
+        |  |  |     |     +--ro bbf-vdsl:loss-of-signal-seconds-lfe?             bbf-yang:performance-counter32
+        |  |  |     |     +--ro bbf-vdsl:unavailable-seconds-lfe?                bbf-yang:performance-counter32
+        |  |  |     |     +--ro bbf-vdsl:inminpeq-lfe* [inminpeq-index]
+        |  |  |     |     |  +--ro bbf-vdsl:inminpeq-index    uint8
+        |  |  |     |     |  +--ro bbf-vdsl:inminpeq-lfe?     bbf-yang:performance-counter32-or-inactive
+        |  |  |     |     +--ro bbf-vdsl:inmme-lfe?                              bbf-yang:performance-counter32-or-inactive
+        |  |  |     |     +--ro bbf-vdsl:inmiat-lfe* [inminiat-index]
+        |  |  |     |     |  +--ro bbf-vdsl:inminiat-index    uint8
+        |  |  |     |     |  +--ro bbf-vdsl:inmiat-lfe?       bbf-yang:performance-counter32-or-inactive
+        |  |  |     |     +--ro bbf-vdsl:sos-success-fe?                         bbf-yang:performance-counter32-or-inactive
+        |  |  |     |     +--ro bbf-vdsl:leftr-defects-seconds-counter-lfe?      bbf-yang:performance-counter32
+        |  |  |     |     +--ro bbf-vdsl:error-free-bits-counter-lfe?            bbf-yang:performance-counter32
+        |  |  |     |     +--ro bbf-vdsl:minimum-error-free-throughput-lfe?      bbf-yang:performance-counter32
+        |  |  |     |     +--ro bbf-vdsl:loss-of-signal-fe?                      bbf-yang:performance-counter32
+        |  |  |     |     +--ro bbf-vdsl:loss-of-frame-fe?                       bbf-yang:performance-counter32
+        |  |  |     |     +--ro bbf-vdsl:loss-of-power-fe?                       bbf-yang:performance-counter32
+        |  |  |     |     +--ro bbf-vdsl:maximum-error-free-throughput-lfe?      bbf-yang:performance-counter32 {maxeftr}?
+        |  |  |     |     +--ro bbf-vdsl:sra-success-fe?                         bbf-yang:performance-counter32 {successful-sra}?
+        |  |  |     +--ro bbf-vdsl:number-of-intervals?   performance-24hr-interval
+        |  |  |     +--ro bbf-vdsl:non-valid-intervals?   performance-24hr-interval
+        |  |  |     +--ro bbf-vdsl:history* [interval-number]
+        |  |  |        +--ro bbf-vdsl:interval-number    performance-24hr-history-interval
+        |  |  |        +--ro bbf-vdsl:xtu-c
+        |  |  |        |  +--ro bbf-vdsl:time-stamp?                           yang:date-and-time
+        |  |  |        |  +--ro bbf-vdsl:measured-time?                        uint32
+        |  |  |        |  +--ro bbf-vdsl:invalid-data-flag?                    boolean
+        |  |  |        |  +--ro bbf-vdsl:forward-error-correction-seconds-l?   bbf-yang:performance-counter32
+        |  |  |        |  +--ro bbf-vdsl:errored-seconds-l?                    bbf-yang:performance-counter32
+        |  |  |        |  +--ro bbf-vdsl:severely-errored-seconds-l?           bbf-yang:performance-counter32
+        |  |  |        |  +--ro bbf-vdsl:loss-of-signal-seconds-l?             bbf-yang:performance-counter32
+        |  |  |        |  +--ro bbf-vdsl:unavailable-seconds-l?                bbf-yang:performance-counter32
+        |  |  |        |  +--ro bbf-vdsl:inminpeq-l* [inminpeq-index]
+        |  |  |        |  |  +--ro bbf-vdsl:inminpeq-index    uint8
+        |  |  |        |  |  +--ro bbf-vdsl:inminpeq-l?       bbf-yang:performance-counter32-or-inactive
+        |  |  |        |  +--ro bbf-vdsl:inmme-l?                              bbf-yang:performance-counter32-or-inactive
+        |  |  |        |  +--ro bbf-vdsl:inmiat-l* [inminiat-index]
+        |  |  |        |  |  +--ro bbf-vdsl:inminiat-index    uint8
+        |  |  |        |  |  +--ro bbf-vdsl:inmiat-l?         bbf-yang:performance-counter32-or-inactive
+        |  |  |        |  +--ro bbf-vdsl:sos-success-ne?                       bbf-yang:performance-counter32-or-inactive
+        |  |  |        |  +--ro bbf-vdsl:leftr-defects-seconds-counter-ne?     bbf-yang:performance-counter32
+        |  |  |        |  +--ro bbf-vdsl:error-free-bits-counter-ne?           bbf-yang:performance-counter32
+        |  |  |        |  +--ro bbf-vdsl:minimum-error-free-throughput-ne?     bbf-yang:performance-counter32
+        |  |  |        |  +--ro bbf-vdsl:full-initializations?                 bbf-yang:performance-counter32
+        |  |  |        |  +--ro bbf-vdsl:failed-full-initializations?          bbf-yang:performance-counter32
+        |  |  |        |  +--ro bbf-vdsl:short-initializations?                bbf-yang:performance-counter32-or-inactive
+        |  |  |        |  +--ro bbf-vdsl:failed-short-initializations?         bbf-yang:performance-counter32-or-inactive
+        |  |  |        |  +--ro bbf-vdsl:loss-of-power-intrpt?                 bbf-yang:performance-counter32-or-inactive
+        |  |  |        |  +--ro bbf-vdsl:host-reinit-interruptions?            bbf-yang:performance-counter32-or-inactive
+        |  |  |        |  +--ro bbf-vdsl:spontaneous-intrpt?                   bbf-yang:performance-counter32-or-inactive
+        |  |  |        |  +--ro bbf-vdsl:loss-of-signal?                       bbf-yang:performance-counter32
+        |  |  |        |  +--ro bbf-vdsl:loss-of-frame?                        bbf-yang:performance-counter32
+        |  |  |        |  +--ro bbf-vdsl:loss-of-power?                        bbf-yang:performance-counter32
+        |  |  |        |  +--ro bbf-vdsl:maximum-error-free-throughput-ne?     bbf-yang:performance-counter32 {maxeftr}?
+        |  |  |        |  +--ro bbf-vdsl:sra-success-ne?                       bbf-yang:performance-counter32 {successful-sra}?
+        |  |  |        +--ro bbf-vdsl:xtu-r
+        |  |  |           +--ro bbf-vdsl:time-stamp?                             yang:date-and-time
+        |  |  |           +--ro bbf-vdsl:measured-time?                          uint32
+        |  |  |           +--ro bbf-vdsl:invalid-data-flag?                      boolean
+        |  |  |           +--ro bbf-vdsl:forward-error-correction-seconds-lfe?   bbf-yang:performance-counter32
+        |  |  |           +--ro bbf-vdsl:errored-seconds-lfe?                    bbf-yang:performance-counter32
+        |  |  |           +--ro bbf-vdsl:severely-errored-seconds-lfe?           bbf-yang:performance-counter32
+        |  |  |           +--ro bbf-vdsl:loss-of-signal-seconds-lfe?             bbf-yang:performance-counter32
+        |  |  |           +--ro bbf-vdsl:unavailable-seconds-lfe?                bbf-yang:performance-counter32
+        |  |  |           +--ro bbf-vdsl:inminpeq-lfe* [inminpeq-index]
+        |  |  |           |  +--ro bbf-vdsl:inminpeq-index    uint8
+        |  |  |           |  +--ro bbf-vdsl:inminpeq-lfe?     bbf-yang:performance-counter32-or-inactive
+        |  |  |           +--ro bbf-vdsl:inmme-lfe?                              bbf-yang:performance-counter32-or-inactive
+        |  |  |           +--ro bbf-vdsl:inmiat-lfe* [inminiat-index]
+        |  |  |           |  +--ro bbf-vdsl:inminiat-index    uint8
+        |  |  |           |  +--ro bbf-vdsl:inmiat-lfe?       bbf-yang:performance-counter32-or-inactive
+        |  |  |           +--ro bbf-vdsl:sos-success-fe?                         bbf-yang:performance-counter32-or-inactive
+        |  |  |           +--ro bbf-vdsl:leftr-defects-seconds-counter-lfe?      bbf-yang:performance-counter32
+        |  |  |           +--ro bbf-vdsl:error-free-bits-counter-lfe?            bbf-yang:performance-counter32
+        |  |  |           +--ro bbf-vdsl:minimum-error-free-throughput-lfe?      bbf-yang:performance-counter32
+        |  |  |           +--ro bbf-vdsl:loss-of-signal-fe?                      bbf-yang:performance-counter32
+        |  |  |           +--ro bbf-vdsl:loss-of-frame-fe?                       bbf-yang:performance-counter32
+        |  |  |           +--ro bbf-vdsl:loss-of-power-fe?                       bbf-yang:performance-counter32
+        |  |  |           +--ro bbf-vdsl:maximum-error-free-throughput-lfe?      bbf-yang:performance-counter32 {maxeftr}?
+        |  |  |           +--ro bbf-vdsl:sra-success-fe?                         bbf-yang:performance-counter32 {successful-sra}?
+        |  |  +---n bbf-vdsl:vdsl-15min-threshold-crossing-alert
+        |  |  |  +--ro bbf-vdsl:tca-identity    identityref
+        |  |  +---n bbf-vdsl:vdsl-24hr-threshold-crossing-alert {performance-24hr}?
+        |  |  |  +--ro bbf-vdsl:tca-identity    identityref
+        |  |  +--ro bbf-vdsl:diagnostics
+        |  |     +--ro bbf-vdsl:loop-diagnostics-mode-status?    enumeration
+        |  |     +--ro bbf-vdsl:loop-diagnostics-mode-results?   loop-diagnostics-result
+        |  |     +---n bbf-vdsl:loop-diagnostics-completed
+        |  |     |  +-- bbf-vdsl:result    loop-diagnostics-result
+        |  |     +--ro bbf-vdsl:xtu-c
+        |  |     |  +--ro bbf-vdsl:downstream
+        |  |     |  |  +--ro bbf-vdsl:tssps?     per-sub-carrier-group-uint16-tuple
+        |  |     |  |  +--ro bbf-vdsl:mrefpsd?   per-sub-carrier-group-uint16-tuple
+        |  |     |  |  +--ro bbf-vdsl:xlin
+        |  |     |  |     +--ro bbf-vdsl:xlin-scale?                    uint16
+        |  |     |  |     +--ro bbf-vdsl:xlin-sub-carrier-group-size?   sub-carrier-group-size
+        |  |     |  |     +--ro bbf-vdsl:xlin-disturber?                vce-port-index
+        |  |     |  |     +--ro bbf-vdsl:xlinbands* [band-index]
+        |  |     |  |     |  +--ro bbf-vdsl:band-index     uint16
+        |  |     |  |     |  +--ro bbf-vdsl:start-index    sub-carrier-index
+        |  |     |  |     |  +--ro bbf-vdsl:stop-index     sub-carrier-index
+        |  |     |  |     +--ro bbf-vdsl:xlinps?                        per-sub-carrier-group-int16-tuple
+        |  |     |  +--ro bbf-vdsl:upstream
+        |  |     |  |  +--ro bbf-vdsl:hlin
+        |  |     |  |  |  +--ro bbf-vdsl:hlin-scale?                    uint16
+        |  |     |  |  |  +--ro bbf-vdsl:hlin-sub-carrier-group-size?   sub-carrier-group-size
+        |  |     |  |  |  +--ro bbf-vdsl:hlinps?                        per-sub-carrier-group-int16-tuple
+        |  |     |  |  +--ro bbf-vdsl:hlog
+        |  |     |  |  |  +--ro bbf-vdsl:hlog-measurement-time?         uint16
+        |  |     |  |  |  +--ro bbf-vdsl:hlog-sub-carrier-group-size?   sub-carrier-group-size
+        |  |     |  |  |  +--ro bbf-vdsl:hlogps?                        per-sub-carrier-group-uint16
+        |  |     |  |  +--ro bbf-vdsl:qln
+        |  |     |  |  |  +--ro bbf-vdsl:qln-measurement-time?         uint16
+        |  |     |  |  |  +--ro bbf-vdsl:qln-sub-carrier-group-size?   sub-carrier-group-size
+        |  |     |  |  |  +--ro bbf-vdsl:qlnps?                        per-sub-carrier-group-uint8
+        |  |     |  |  +--ro bbf-vdsl:snr
+        |  |     |  |  |  +--ro bbf-vdsl:snr-measurement-time?         uint16
+        |  |     |  |  |  +--ro bbf-vdsl:snr-sub-carrier-group-size?   sub-carrier-group-size
+        |  |     |  |  |  +--ro bbf-vdsl:snrps?                        per-sub-carrier-group-uint8
+        |  |     |  |  +--ro bbf-vdsl:bitsps?    per-sub-carrier-nibble
+        |  |     |  |  +--ro bbf-vdsl:gainsps?   per-sub-carrier-uint16
+        |  |     |  |  +--ro bbf-vdsl:xlin
+        |  |     |  |     +--ro bbf-vdsl:xlin-scale?                    uint16
+        |  |     |  |     +--ro bbf-vdsl:xlin-sub-carrier-group-size?   sub-carrier-group-size
+        |  |     |  |     +--ro bbf-vdsl:xlin-disturber?                vce-port-index
+        |  |     |  |     +--ro bbf-vdsl:xlinbands* [band-index]
+        |  |     |  |     |  +--ro bbf-vdsl:band-index     uint16
+        |  |     |  |     |  +--ro bbf-vdsl:start-index    sub-carrier-index
+        |  |     |  |     |  +--ro bbf-vdsl:stop-index     sub-carrier-index
+        |  |     |  |     +--ro bbf-vdsl:xlinps?                        per-sub-carrier-group-int16-tuple
+        |  |     |  +--ro bbf-vdsl:data-gathering-report
+        |  |     |     +--ro bbf-vdsl:logging-depth?                    uint32
+        |  |     |     +--ro bbf-vdsl:actual-logging-depth-reporting?   uint32
+        |  |     |     +--ro bbf-vdsl:event-trace-buffer?               binary
+        |  |     +--ro bbf-vdsl:xtu-r
+        |  |        +--ro bbf-vdsl:downstream
+        |  |        |  +--ro bbf-vdsl:hlin
+        |  |        |  |  +--ro bbf-vdsl:hlin-scale?                    uint16
+        |  |        |  |  +--ro bbf-vdsl:hlin-sub-carrier-group-size?   sub-carrier-group-size
+        |  |        |  |  +--ro bbf-vdsl:hlinps?                        per-sub-carrier-group-int16-tuple
+        |  |        |  +--ro bbf-vdsl:hlog
+        |  |        |  |  +--ro bbf-vdsl:hlog-measurement-time?         uint16
+        |  |        |  |  +--ro bbf-vdsl:hlog-sub-carrier-group-size?   sub-carrier-group-size
+        |  |        |  |  +--ro bbf-vdsl:hlogps?                        per-sub-carrier-group-uint16
+        |  |        |  +--ro bbf-vdsl:qln
+        |  |        |  |  +--ro bbf-vdsl:qln-measurement-time?         uint16
+        |  |        |  |  +--ro bbf-vdsl:qln-sub-carrier-group-size?   sub-carrier-group-size
+        |  |        |  |  +--ro bbf-vdsl:qlnps?                        per-sub-carrier-group-uint8
+        |  |        |  +--ro bbf-vdsl:snr
+        |  |        |  |  +--ro bbf-vdsl:snr-measurement-time?         uint16
+        |  |        |  |  +--ro bbf-vdsl:snr-sub-carrier-group-size?   sub-carrier-group-size
+        |  |        |  |  +--ro bbf-vdsl:snrps?                        per-sub-carrier-group-uint8
+        |  |        |  +--ro bbf-vdsl:bitsps?    per-sub-carrier-nibble
+        |  |        |  +--ro bbf-vdsl:gainsps?   per-sub-carrier-uint16
+        |  |        +--ro bbf-vdsl:upstream
+        |  |        |  +--ro bbf-vdsl:tssps?     per-sub-carrier-group-uint16-tuple
+        |  |        |  +--ro bbf-vdsl:mrefpsd?   per-sub-carrier-group-uint16-tuple
+        |  |        +--ro bbf-vdsl:data-gathering-report
+        |  |           +--ro bbf-vdsl:logging-depth?                    uint32
+        |  |           +--ro bbf-vdsl:actual-logging-depth-reporting?   uint32
+        |  |           +--ro bbf-vdsl:event-trace-buffer?               binary
+        |  +--ro bbf-vdsl:availability! {availability}?
+        |  |  +--ro bbf-vdsl:availability-status    union
+        |  |  +--ro bbf-vdsl:issues
+        |  |     +--ro bbf-vdsl:issue* [tag code]
+        |  |        +--ro bbf-vdsl:tag           identityref
+        |  |        +--ro bbf-vdsl:code          uint16
+        |  |        +--ro bbf-vdsl:message?      string
+        |  |        +--ro bbf-vdsl:root-cause*   resource
         |  +--ro bbf-fast:line!
         |  |  +--ro bbf-fast:channel
         |  |  |  +--ro bbf-fast:performance
@@ -703,668 +1244,127 @@ module: ietf-interfaces
         |  |        +--ro bbf-fast:annex-d-supported?      boolean {annex-d}?
         |  |        +--ro bbf-fast:srec-supported?         boolean {srec}?
         |  +--ro bbf-fast:availability! {availability}?
-        |  |  +--ro bbf-fast:availability-status    union
-        |  |  +--ro bbf-fast:issues
-        |  |     +--ro bbf-fast:issue* [tag code]
-        |  |        +--ro bbf-fast:tag           identityref
-        |  |        +--ro bbf-fast:code          uint16
-        |  |        +--ro bbf-fast:message?      string
-        |  |        +--ro bbf-fast:root-cause*   resource
-        |  +--ro bbf-vdsl:line!
-        |  |  +--ro bbf-vdsl:channel
-        |  |  |  +--ro bbf-vdsl:status
-        |  |  |  |  +--ro bbf-vdsl:xtu-c
-        |  |  |  |  |  +--ro bbf-vdsl:upstream
-        |  |  |  |  |     +--ro bbf-vdsl:actual-data-rate?                   bbf-yang:data-rate32-or-undetermined
-        |  |  |  |  |     +--ro bbf-vdsl:previous-data-rate?                 bbf-yang:data-rate32-or-undetermined
-        |  |  |  |  |     +--ro bbf-vdsl:actual-delay?                       uint16
-        |  |  |  |  |     +--ro bbf-vdsl:actual-inp?                         uint16
-        |  |  |  |  |     +--ro bbf-vdsl:inpreport?                          enumeration
-        |  |  |  |  |     +--ro bbf-vdsl:nfec?                               uint8
-        |  |  |  |  |     +--ro bbf-vdsl:rfec?                               uint8
-        |  |  |  |  |     +--ro bbf-vdsl:actual-number-of-bits-per-symbol?   uint32
-        |  |  |  |  |     +--ro bbf-vdsl:actual-interleaving-depth?          uint16
-        |  |  |  |  |     +--ro bbf-vdsl:actual-interleaving-block-length?   uint8
-        |  |  |  |  |     +--ro bbf-vdsl:actual-latency-path?                uint8
-        |  |  |  |  |     +--ro bbf-vdsl:fec-codewords-per-dtu?              uint8
-        |  |  |  |  |     +--ro bbf-vdsl:actual-ndr?                         bbf-yang:data-rate32-or-undetermined
-        |  |  |  |  |     +--ro bbf-vdsl:actual-inp-against-rein?            uint8
-        |  |  |  |  +--ro bbf-vdsl:xtu-r
-        |  |  |  |     +--ro bbf-vdsl:downstream
-        |  |  |  |        +--ro bbf-vdsl:actual-data-rate?                   bbf-yang:data-rate32-or-undetermined
-        |  |  |  |        +--ro bbf-vdsl:previous-data-rate?                 bbf-yang:data-rate32-or-undetermined
-        |  |  |  |        +--ro bbf-vdsl:actual-delay?                       uint16
-        |  |  |  |        +--ro bbf-vdsl:actual-inp?                         uint16
-        |  |  |  |        +--ro bbf-vdsl:inpreport?                          enumeration
-        |  |  |  |        +--ro bbf-vdsl:nfec?                               uint8
-        |  |  |  |        +--ro bbf-vdsl:rfec?                               uint8
-        |  |  |  |        +--ro bbf-vdsl:actual-number-of-bits-per-symbol?   uint32
-        |  |  |  |        +--ro bbf-vdsl:actual-interleaving-depth?          uint16
-        |  |  |  |        +--ro bbf-vdsl:actual-interleaving-block-length?   uint8
-        |  |  |  |        +--ro bbf-vdsl:actual-latency-path?                uint8
-        |  |  |  |        +--ro bbf-vdsl:fec-codewords-per-dtu?              uint8
-        |  |  |  |        +--ro bbf-vdsl:actual-ndr?                         bbf-yang:data-rate32-or-undetermined
-        |  |  |  |        +--ro bbf-vdsl:actual-inp-against-rein?            uint8
-        |  |  |  +--ro bbf-vdsl:performance
-        |  |  |     +--ro bbf-vdsl:intervals-15min
-        |  |  |     |  +--ro bbf-vdsl:current
-        |  |  |     |  |  +--ro bbf-vdsl:xtu-c
-        |  |  |     |  |  |  +--ro bbf-vdsl:measured-time?                 uint32
-        |  |  |     |  |  |  +--ro bbf-vdsl:invalid-data-flag?             boolean
-        |  |  |     |  |  |  +--ro bbf-vdsl:code-violations-c?             bbf-yang:performance-counter32
-        |  |  |     |  |  |  +--ro bbf-vdsl:forward-error-corrections-c?   bbf-yang:performance-counter32
-        |  |  |     |  |  |  +--ro bbf-vdsl:uncorrected-dtu-c?             bbf-yang:performance-counter32
-        |  |  |     |  |  +--ro bbf-vdsl:xtu-r
-        |  |  |     |  |     +--ro bbf-vdsl:measured-time?                   uint32
-        |  |  |     |  |     +--ro bbf-vdsl:invalid-data-flag?               boolean
-        |  |  |     |  |     +--ro bbf-vdsl:code-violations-cfe?             bbf-yang:performance-counter32
-        |  |  |     |  |     +--ro bbf-vdsl:forward-error-corrections-cfe?   bbf-yang:performance-counter32
-        |  |  |     |  |     +--ro bbf-vdsl:uncorrected-dtu-cfe?             bbf-yang:performance-counter32
-        |  |  |     |  +--ro bbf-vdsl:number-of-intervals?   performance-15min-interval
-        |  |  |     |  +--ro bbf-vdsl:non-valid-intervals?   performance-15min-interval
-        |  |  |     |  +--ro bbf-vdsl:history* [interval-number]
-        |  |  |     |     +--ro bbf-vdsl:interval-number    performance-15min-history-interval
-        |  |  |     |     +--ro bbf-vdsl:xtu-c
-        |  |  |     |     |  +--ro bbf-vdsl:time-stamp?                    yang:date-and-time
-        |  |  |     |     |  +--ro bbf-vdsl:measured-time?                 uint32
-        |  |  |     |     |  +--ro bbf-vdsl:invalid-data-flag?             boolean
-        |  |  |     |     |  +--ro bbf-vdsl:code-violations-c?             bbf-yang:performance-counter32
-        |  |  |     |     |  +--ro bbf-vdsl:forward-error-corrections-c?   bbf-yang:performance-counter32
-        |  |  |     |     |  +--ro bbf-vdsl:uncorrected-dtu-c?             bbf-yang:performance-counter32
-        |  |  |     |     +--ro bbf-vdsl:xtu-r
-        |  |  |     |        +--ro bbf-vdsl:time-stamp?                      yang:date-and-time
-        |  |  |     |        +--ro bbf-vdsl:measured-time?                   uint32
-        |  |  |     |        +--ro bbf-vdsl:invalid-data-flag?               boolean
-        |  |  |     |        +--ro bbf-vdsl:code-violations-cfe?             bbf-yang:performance-counter32
-        |  |  |     |        +--ro bbf-vdsl:forward-error-corrections-cfe?   bbf-yang:performance-counter32
-        |  |  |     |        +--ro bbf-vdsl:uncorrected-dtu-cfe?             bbf-yang:performance-counter32
-        |  |  |     +--ro bbf-vdsl:intervals-24hr {performance-24hr}?
-        |  |  |        +--ro bbf-vdsl:current
-        |  |  |        |  +--ro bbf-vdsl:xtu-c
-        |  |  |        |  |  +--ro bbf-vdsl:measured-time?                 uint32
-        |  |  |        |  |  +--ro bbf-vdsl:invalid-data-flag?             boolean
-        |  |  |        |  |  +--ro bbf-vdsl:code-violations-c?             bbf-yang:performance-counter32
-        |  |  |        |  |  +--ro bbf-vdsl:forward-error-corrections-c?   bbf-yang:performance-counter32
-        |  |  |        |  |  +--ro bbf-vdsl:uncorrected-dtu-c?             bbf-yang:performance-counter32
-        |  |  |        |  +--ro bbf-vdsl:xtu-r
-        |  |  |        |     +--ro bbf-vdsl:measured-time?                   uint32
-        |  |  |        |     +--ro bbf-vdsl:invalid-data-flag?               boolean
-        |  |  |        |     +--ro bbf-vdsl:code-violations-cfe?             bbf-yang:performance-counter32
-        |  |  |        |     +--ro bbf-vdsl:forward-error-corrections-cfe?   bbf-yang:performance-counter32
-        |  |  |        |     +--ro bbf-vdsl:uncorrected-dtu-cfe?             bbf-yang:performance-counter32
-        |  |  |        +--ro bbf-vdsl:number-of-intervals?   performance-24hr-interval
-        |  |  |        +--ro bbf-vdsl:non-valid-intervals?   performance-24hr-interval
-        |  |  |        +--ro bbf-vdsl:history* [interval-number]
-        |  |  |           +--ro bbf-vdsl:interval-number    performance-24hr-history-interval
-        |  |  |           +--ro bbf-vdsl:xtu-c
-        |  |  |           |  +--ro bbf-vdsl:time-stamp?                    yang:date-and-time
-        |  |  |           |  +--ro bbf-vdsl:measured-time?                 uint32
-        |  |  |           |  +--ro bbf-vdsl:invalid-data-flag?             boolean
-        |  |  |           |  +--ro bbf-vdsl:code-violations-c?             bbf-yang:performance-counter32
-        |  |  |           |  +--ro bbf-vdsl:forward-error-corrections-c?   bbf-yang:performance-counter32
-        |  |  |           |  +--ro bbf-vdsl:uncorrected-dtu-c?             bbf-yang:performance-counter32
-        |  |  |           +--ro bbf-vdsl:xtu-r
-        |  |  |              +--ro bbf-vdsl:time-stamp?                      yang:date-and-time
-        |  |  |              +--ro bbf-vdsl:measured-time?                   uint32
-        |  |  |              +--ro bbf-vdsl:invalid-data-flag?               boolean
-        |  |  |              +--ro bbf-vdsl:code-violations-cfe?             bbf-yang:performance-counter32
-        |  |  |              +--ro bbf-vdsl:forward-error-corrections-cfe?   bbf-yang:performance-counter32
-        |  |  |              +--ro bbf-vdsl:uncorrected-dtu-cfe?             bbf-yang:performance-counter32
-        |  |  +--ro bbf-vdsl:inventory
-        |  |  |  +--ro bbf-vdsl:xtu-c
-        |  |  |  |  +--ro bbf-vdsl:g.994.1-vendor-id?                  binary
-        |  |  |  |  +--ro bbf-vdsl:system-vendor-id?                   binary
-        |  |  |  |  +--ro bbf-vdsl:version-number?                     binary
-        |  |  |  |  +--ro bbf-vdsl:serial-number?                      binary
-        |  |  |  |  +--ro bbf-vdsl:self-test-result?                   uint32
-        |  |  |  |  +--ro bbf-vdsl:transmission-system-capabilities*   xts-descriptor
-        |  |  |  |  +--ro bbf-vdsl:vdsl2-lr-support?                   boolean {vdsl2-lr}?
-        |  |  |  |  +--ro bbf-vdsl:strongfext-support?                 boolean {strongfext}?
-        |  |  |  |  +--ro bbf-vdsl:vce-id?                             union
-        |  |  |  |  +--ro bbf-vdsl:vce-port-index?                     uint16
-        |  |  |  +--ro bbf-vdsl:xtu-r
-        |  |  |     +--ro bbf-vdsl:g.994.1-vendor-id?                  binary
-        |  |  |     +--ro bbf-vdsl:system-vendor-id?                   binary
-        |  |  |     +--ro bbf-vdsl:version-number?                     binary
-        |  |  |     +--ro bbf-vdsl:serial-number?                      binary
-        |  |  |     +--ro bbf-vdsl:self-test-result?                   uint32
-        |  |  |     +--ro bbf-vdsl:transmission-system-capabilities*   xts-descriptor
-        |  |  |     +--ro bbf-vdsl:vdsl2-lr-support?                   boolean {vdsl2-lr}?
-        |  |  |     +--ro bbf-vdsl:strongfext-support?                 boolean {strongfext}?
-        |  |  +--ro bbf-vdsl:status
-        |  |  |  +--ro bbf-vdsl:xdsl-transmission-system?               xts-descriptor
-        |  |  |  +--ro bbf-vdsl:line-power-management-state?            enumeration
-        |  |  |  +--ro bbf-vdsl:initialization-success-failure-cause?   enumeration
-        |  |  |  +--ro bbf-vdsl:vdsl2-lr-actual-op-type?                enumeration {vdsl2-lr}?
-        |  |  |  o--ro bbf-vdsl:snr-margin?                             union
-        |  |  |  +--ro bbf-vdsl:profile?                                profiles
-        |  |  |  +--ro bbf-vdsl:limitmask?                              limitmask-descriptor
-        |  |  |  +--ro bbf-vdsl:us0mask?                                us0mask-descriptor
-        |  |  |  +--ro bbf-vdsl:actual-cyclic-extension?                uint8
-        |  |  |  +--ro bbf-vdsl:actual-aele-mode?                       enumeration
-        |  |  |  +--ro bbf-vdsl:actual-vector-mode?                     enumeration
-        |  |  |  +--ro bbf-vdsl:attndr-actual-method?                   uint8
-        |  |  |  +--ro bbf-vdsl:xtu-c
-        |  |  |  |  +--ro bbf-vdsl:stamp-test-ne?   time-stamp-or-undefined
-        |  |  |  |  +--ro bbf-vdsl:failures
-        |  |  |  |  |  +--ro bbf-vdsl:los?              boolean
-        |  |  |  |  |  +--ro bbf-vdsl:lof?              boolean
-        |  |  |  |  |  +--ro bbf-vdsl:lpr?              boolean
-        |  |  |  |  |  +--ro bbf-vdsl:linit?            boolean
-        |  |  |  |  |  +--ro bbf-vdsl:loss-of-margin?   boolean
-        |  |  |  |  +--ro bbf-vdsl:downstream
-        |  |  |  |  |  +--ro bbf-vdsl:last-transmitted-state?            uint8
-        |  |  |  |  |  +--ro bbf-vdsl:actual-psd?                        union
-        |  |  |  |  |  +--ro bbf-vdsl:actual-aggregate-transmit-power?   union
-        |  |  |  |  |  +--ro bbf-vdsl:aggachndr?                         bbf-yang:data-rate32-or-undetermined
-        |  |  |  |  +--ro bbf-vdsl:upstream
-        |  |  |  |  |  +--ro bbf-vdsl:actual-snr-mode?            enumeration
-        |  |  |  |  |  +--ro bbf-vdsl:attainable-net-data-rate?   bbf-yang:data-rate32-or-undetermined
-        |  |  |  |  |  +--ro bbf-vdsl:trellis?                    boolean
-        |  |  |  |  |  +--ro bbf-vdsl:actual-ra-mode?             enumeration
-        |  |  |  |  |  +--ro bbf-vdsl:rxthrh?                     uint8
-        |  |  |  |  |  +--ro bbf-vdsl:actual-inp-roc?             uint8
-        |  |  |  |  |  +--ro bbf-vdsl:snr-margin-roc?             union
-        |  |  |  |  |  +--ro bbf-vdsl:stamp-olr?                  time-stamp-or-undefined
-        |  |  |  |  |  +--ro bbf-vdsl:actual-ripolicy?            enumeration
-        |  |  |  |  |  +--ro bbf-vdsl:rtx-used?                   enumeration
-        |  |  |  |  |  +--ro bbf-vdsl:attndr-actual-inp?          uint16
-        |  |  |  |  |  +--ro bbf-vdsl:attndr-actual-inp-rein?     uint8
-        |  |  |  |  |  +--ro bbf-vdsl:attndr-actual-delay?        uint8
-        |  |  |  |  |  +--ro bbf-vdsl:snr-margin?                 union
-        |  |  |  |  +--ro bbf-vdsl:band-status
-        |  |  |  |     +--ro bbf-vdsl:line-attenuation* [band]
-        |  |  |  |     |  +--ro bbf-vdsl:band           uint8
-        |  |  |  |     |  +--ro bbf-vdsl:attenuation?   union
-        |  |  |  |     +--ro bbf-vdsl:signal-attenuation* [band]
-        |  |  |  |     |  +--ro bbf-vdsl:band           uint8
-        |  |  |  |     |  +--ro bbf-vdsl:attenuation?   union
-        |  |  |  |     +--ro bbf-vdsl:snr-margin* [band]
-        |  |  |  |     |  +--ro bbf-vdsl:band      uint8
-        |  |  |  |     |  +--ro bbf-vdsl:margin?   union
-        |  |  |  |     +--ro bbf-vdsl:upbo-electrical-length-pbn* [band]
-        |  |  |  |        +--ro bbf-vdsl:band                      uint8
-        |  |  |  |        +--ro bbf-vdsl:upbo-electrical-length?   union
-        |  |  |  +--ro bbf-vdsl:xtu-r
-        |  |  |     +--ro bbf-vdsl:stamp-test-fe?   time-stamp-or-undefined
-        |  |  |     +--ro bbf-vdsl:failures
-        |  |  |     |  +--ro bbf-vdsl:los-fe?              boolean
-        |  |  |     |  +--ro bbf-vdsl:lof-fe?              boolean
-        |  |  |     |  +--ro bbf-vdsl:lpr-fe?              boolean
-        |  |  |     |  +--ro bbf-vdsl:loss-of-margin-fe?   boolean
-        |  |  |     +--ro bbf-vdsl:downstream
-        |  |  |     |  +--ro bbf-vdsl:actual-snr-mode?            enumeration
-        |  |  |     |  +--ro bbf-vdsl:attainable-net-data-rate?   bbf-yang:data-rate32-or-undetermined
-        |  |  |     |  +--ro bbf-vdsl:trellis?                    boolean
-        |  |  |     |  +--ro bbf-vdsl:actual-ra-mode?             enumeration
-        |  |  |     |  +--ro bbf-vdsl:rxthrh?                     uint8
-        |  |  |     |  +--ro bbf-vdsl:actual-inp-roc?             uint8
-        |  |  |     |  +--ro bbf-vdsl:snr-margin-roc?             union
-        |  |  |     |  +--ro bbf-vdsl:stamp-olr?                  time-stamp-or-undefined
-        |  |  |     |  +--ro bbf-vdsl:actual-ripolicy?            enumeration
-        |  |  |     |  +--ro bbf-vdsl:rtx-used?                   enumeration
-        |  |  |     |  +--ro bbf-vdsl:attndr-actual-inp?          uint16
-        |  |  |     |  +--ro bbf-vdsl:attndr-actual-inp-rein?     uint8
-        |  |  |     |  +--ro bbf-vdsl:attndr-actual-delay?        uint8
-        |  |  |     |  +--ro bbf-vdsl:snr-margin?                 union
-        |  |  |     +--ro bbf-vdsl:upstream
-        |  |  |     |  +--ro bbf-vdsl:last-transmitted-state?            uint8
-        |  |  |     |  +--ro bbf-vdsl:actual-psd?                        union
-        |  |  |     |  +--ro bbf-vdsl:actual-aggregate-transmit-power?   union
-        |  |  |     |  +--ro bbf-vdsl:aggachndr?                         bbf-yang:data-rate32-or-undetermined
-        |  |  |     +--ro bbf-vdsl:band-status
-        |  |  |        +--ro bbf-vdsl:line-attenuation* [band]
-        |  |  |        |  +--ro bbf-vdsl:band           uint8
-        |  |  |        |  +--ro bbf-vdsl:attenuation?   union
-        |  |  |        +--ro bbf-vdsl:signal-attenuation* [band]
-        |  |  |        |  +--ro bbf-vdsl:band           uint8
-        |  |  |        |  +--ro bbf-vdsl:attenuation?   union
-        |  |  |        +--ro bbf-vdsl:snr-margin* [band]
-        |  |  |        |  +--ro bbf-vdsl:band      uint8
-        |  |  |        |  +--ro bbf-vdsl:margin?   union
-        |  |  |        +--ro bbf-vdsl:upbo-electrical-length-pbn* [band]
-        |  |  |           +--ro bbf-vdsl:band                      uint8
-        |  |  |           +--ro bbf-vdsl:upbo-electrical-length?   union
-        |  |  +--ro bbf-vdsl:performance
-        |  |  |  +--ro bbf-vdsl:intervals-15min
-        |  |  |  |  +--ro bbf-vdsl:current
-        |  |  |  |  |  +--ro bbf-vdsl:xtu-c
-        |  |  |  |  |  |  +--ro bbf-vdsl:measured-time?                        uint32
-        |  |  |  |  |  |  +--ro bbf-vdsl:invalid-data-flag?                    boolean
-        |  |  |  |  |  |  +--ro bbf-vdsl:forward-error-correction-seconds-l?   bbf-yang:performance-counter32
-        |  |  |  |  |  |  +--ro bbf-vdsl:errored-seconds-l?                    bbf-yang:performance-counter32
-        |  |  |  |  |  |  +--ro bbf-vdsl:severely-errored-seconds-l?           bbf-yang:performance-counter32
-        |  |  |  |  |  |  +--ro bbf-vdsl:loss-of-signal-seconds-l?             bbf-yang:performance-counter32
-        |  |  |  |  |  |  +--ro bbf-vdsl:unavailable-seconds-l?                bbf-yang:performance-counter32
-        |  |  |  |  |  |  +--ro bbf-vdsl:inminpeq-l* [inminpeq-index]
-        |  |  |  |  |  |  |  +--ro bbf-vdsl:inminpeq-index    uint8
-        |  |  |  |  |  |  |  +--ro bbf-vdsl:inminpeq-l?       bbf-yang:performance-counter32-or-inactive
-        |  |  |  |  |  |  +--ro bbf-vdsl:inmme-l?                              bbf-yang:performance-counter32-or-inactive
-        |  |  |  |  |  |  +--ro bbf-vdsl:inmiat-l* [inminiat-index]
-        |  |  |  |  |  |  |  +--ro bbf-vdsl:inminiat-index    uint8
-        |  |  |  |  |  |  |  +--ro bbf-vdsl:inmiat-l?         bbf-yang:performance-counter32-or-inactive
-        |  |  |  |  |  |  +--ro bbf-vdsl:sos-success-ne?                       bbf-yang:performance-counter32-or-inactive
-        |  |  |  |  |  |  +--ro bbf-vdsl:leftr-defects-seconds-counter-ne?     bbf-yang:performance-counter32
-        |  |  |  |  |  |  +--ro bbf-vdsl:error-free-bits-counter-ne?           bbf-yang:performance-counter32
-        |  |  |  |  |  |  +--ro bbf-vdsl:minimum-error-free-throughput-ne?     bbf-yang:performance-counter32
-        |  |  |  |  |  |  +--ro bbf-vdsl:full-initializations?                 bbf-yang:performance-counter32
-        |  |  |  |  |  |  +--ro bbf-vdsl:failed-full-initializations?          bbf-yang:performance-counter32
-        |  |  |  |  |  |  +--ro bbf-vdsl:short-initializations?                bbf-yang:performance-counter32-or-inactive
-        |  |  |  |  |  |  +--ro bbf-vdsl:failed-short-initializations?         bbf-yang:performance-counter32-or-inactive
-        |  |  |  |  |  |  +--ro bbf-vdsl:loss-of-power-intrpt?                 bbf-yang:performance-counter32-or-inactive
-        |  |  |  |  |  |  +--ro bbf-vdsl:host-reinit-interruptions?            bbf-yang:performance-counter32-or-inactive
-        |  |  |  |  |  |  +--ro bbf-vdsl:spontaneous-intrpt?                   bbf-yang:performance-counter32-or-inactive
-        |  |  |  |  |  |  +--ro bbf-vdsl:loss-of-signal?                       bbf-yang:performance-counter32
-        |  |  |  |  |  |  +--ro bbf-vdsl:loss-of-frame?                        bbf-yang:performance-counter32
-        |  |  |  |  |  |  +--ro bbf-vdsl:loss-of-power?                        bbf-yang:performance-counter32
-        |  |  |  |  |  |  +--ro bbf-vdsl:maximum-error-free-throughput-ne?     bbf-yang:performance-counter32 {maxeftr}?
-        |  |  |  |  |  |  +--ro bbf-vdsl:sra-success-ne?                       bbf-yang:performance-counter32 {successful-sra}?
-        |  |  |  |  |  +--ro bbf-vdsl:xtu-r
-        |  |  |  |  |     +--ro bbf-vdsl:measured-time?                          uint32
-        |  |  |  |  |     +--ro bbf-vdsl:invalid-data-flag?                      boolean
-        |  |  |  |  |     +--ro bbf-vdsl:forward-error-correction-seconds-lfe?   bbf-yang:performance-counter32
-        |  |  |  |  |     +--ro bbf-vdsl:errored-seconds-lfe?                    bbf-yang:performance-counter32
-        |  |  |  |  |     +--ro bbf-vdsl:severely-errored-seconds-lfe?           bbf-yang:performance-counter32
-        |  |  |  |  |     +--ro bbf-vdsl:loss-of-signal-seconds-lfe?             bbf-yang:performance-counter32
-        |  |  |  |  |     +--ro bbf-vdsl:unavailable-seconds-lfe?                bbf-yang:performance-counter32
-        |  |  |  |  |     +--ro bbf-vdsl:inminpeq-lfe* [inminpeq-index]
-        |  |  |  |  |     |  +--ro bbf-vdsl:inminpeq-index    uint8
-        |  |  |  |  |     |  +--ro bbf-vdsl:inminpeq-lfe?     bbf-yang:performance-counter32-or-inactive
-        |  |  |  |  |     +--ro bbf-vdsl:inmme-lfe?                              bbf-yang:performance-counter32-or-inactive
-        |  |  |  |  |     +--ro bbf-vdsl:inmiat-lfe* [inminiat-index]
-        |  |  |  |  |     |  +--ro bbf-vdsl:inminiat-index    uint8
-        |  |  |  |  |     |  +--ro bbf-vdsl:inmiat-lfe?       bbf-yang:performance-counter32-or-inactive
-        |  |  |  |  |     +--ro bbf-vdsl:sos-success-fe?                         bbf-yang:performance-counter32-or-inactive
-        |  |  |  |  |     +--ro bbf-vdsl:leftr-defects-seconds-counter-lfe?      bbf-yang:performance-counter32
-        |  |  |  |  |     +--ro bbf-vdsl:error-free-bits-counter-lfe?            bbf-yang:performance-counter32
-        |  |  |  |  |     +--ro bbf-vdsl:minimum-error-free-throughput-lfe?      bbf-yang:performance-counter32
-        |  |  |  |  |     +--ro bbf-vdsl:loss-of-signal-fe?                      bbf-yang:performance-counter32
-        |  |  |  |  |     +--ro bbf-vdsl:loss-of-frame-fe?                       bbf-yang:performance-counter32
-        |  |  |  |  |     +--ro bbf-vdsl:loss-of-power-fe?                       bbf-yang:performance-counter32
-        |  |  |  |  |     +--ro bbf-vdsl:maximum-error-free-throughput-lfe?      bbf-yang:performance-counter32 {maxeftr}?
-        |  |  |  |  |     +--ro bbf-vdsl:sra-success-fe?                         bbf-yang:performance-counter32 {successful-sra}?
-        |  |  |  |  +--ro bbf-vdsl:number-of-intervals?   performance-15min-interval
-        |  |  |  |  +--ro bbf-vdsl:non-valid-intervals?   performance-15min-interval
-        |  |  |  |  +--ro bbf-vdsl:history* [interval-number]
-        |  |  |  |     +--ro bbf-vdsl:interval-number    performance-15min-history-interval
-        |  |  |  |     +--ro bbf-vdsl:xtu-c
-        |  |  |  |     |  +--ro bbf-vdsl:time-stamp?                           yang:date-and-time
-        |  |  |  |     |  +--ro bbf-vdsl:measured-time?                        uint32
-        |  |  |  |     |  +--ro bbf-vdsl:invalid-data-flag?                    boolean
-        |  |  |  |     |  +--ro bbf-vdsl:forward-error-correction-seconds-l?   bbf-yang:performance-counter32
-        |  |  |  |     |  +--ro bbf-vdsl:errored-seconds-l?                    bbf-yang:performance-counter32
-        |  |  |  |     |  +--ro bbf-vdsl:severely-errored-seconds-l?           bbf-yang:performance-counter32
-        |  |  |  |     |  +--ro bbf-vdsl:loss-of-signal-seconds-l?             bbf-yang:performance-counter32
-        |  |  |  |     |  +--ro bbf-vdsl:unavailable-seconds-l?                bbf-yang:performance-counter32
-        |  |  |  |     |  +--ro bbf-vdsl:inminpeq-l* [inminpeq-index]
-        |  |  |  |     |  |  +--ro bbf-vdsl:inminpeq-index    uint8
-        |  |  |  |     |  |  +--ro bbf-vdsl:inminpeq-l?       bbf-yang:performance-counter32-or-inactive
-        |  |  |  |     |  +--ro bbf-vdsl:inmme-l?                              bbf-yang:performance-counter32-or-inactive
-        |  |  |  |     |  +--ro bbf-vdsl:inmiat-l* [inminiat-index]
-        |  |  |  |     |  |  +--ro bbf-vdsl:inminiat-index    uint8
-        |  |  |  |     |  |  +--ro bbf-vdsl:inmiat-l?         bbf-yang:performance-counter32-or-inactive
-        |  |  |  |     |  +--ro bbf-vdsl:sos-success-ne?                       bbf-yang:performance-counter32-or-inactive
-        |  |  |  |     |  +--ro bbf-vdsl:leftr-defects-seconds-counter-ne?     bbf-yang:performance-counter32
-        |  |  |  |     |  +--ro bbf-vdsl:error-free-bits-counter-ne?           bbf-yang:performance-counter32
-        |  |  |  |     |  +--ro bbf-vdsl:minimum-error-free-throughput-ne?     bbf-yang:performance-counter32
-        |  |  |  |     |  +--ro bbf-vdsl:full-initializations?                 bbf-yang:performance-counter32
-        |  |  |  |     |  +--ro bbf-vdsl:failed-full-initializations?          bbf-yang:performance-counter32
-        |  |  |  |     |  +--ro bbf-vdsl:short-initializations?                bbf-yang:performance-counter32-or-inactive
-        |  |  |  |     |  +--ro bbf-vdsl:failed-short-initializations?         bbf-yang:performance-counter32-or-inactive
-        |  |  |  |     |  +--ro bbf-vdsl:loss-of-power-intrpt?                 bbf-yang:performance-counter32-or-inactive
-        |  |  |  |     |  +--ro bbf-vdsl:host-reinit-interruptions?            bbf-yang:performance-counter32-or-inactive
-        |  |  |  |     |  +--ro bbf-vdsl:spontaneous-intrpt?                   bbf-yang:performance-counter32-or-inactive
-        |  |  |  |     |  +--ro bbf-vdsl:loss-of-signal?                       bbf-yang:performance-counter32
-        |  |  |  |     |  +--ro bbf-vdsl:loss-of-frame?                        bbf-yang:performance-counter32
-        |  |  |  |     |  +--ro bbf-vdsl:loss-of-power?                        bbf-yang:performance-counter32
-        |  |  |  |     |  +--ro bbf-vdsl:maximum-error-free-throughput-ne?     bbf-yang:performance-counter32 {maxeftr}?
-        |  |  |  |     |  +--ro bbf-vdsl:sra-success-ne?                       bbf-yang:performance-counter32 {successful-sra}?
-        |  |  |  |     +--ro bbf-vdsl:xtu-r
-        |  |  |  |        +--ro bbf-vdsl:time-stamp?                             yang:date-and-time
-        |  |  |  |        +--ro bbf-vdsl:measured-time?                          uint32
-        |  |  |  |        +--ro bbf-vdsl:invalid-data-flag?                      boolean
-        |  |  |  |        +--ro bbf-vdsl:forward-error-correction-seconds-lfe?   bbf-yang:performance-counter32
-        |  |  |  |        +--ro bbf-vdsl:errored-seconds-lfe?                    bbf-yang:performance-counter32
-        |  |  |  |        +--ro bbf-vdsl:severely-errored-seconds-lfe?           bbf-yang:performance-counter32
-        |  |  |  |        +--ro bbf-vdsl:loss-of-signal-seconds-lfe?             bbf-yang:performance-counter32
-        |  |  |  |        +--ro bbf-vdsl:unavailable-seconds-lfe?                bbf-yang:performance-counter32
-        |  |  |  |        +--ro bbf-vdsl:inminpeq-lfe* [inminpeq-index]
-        |  |  |  |        |  +--ro bbf-vdsl:inminpeq-index    uint8
-        |  |  |  |        |  +--ro bbf-vdsl:inminpeq-lfe?     bbf-yang:performance-counter32-or-inactive
-        |  |  |  |        +--ro bbf-vdsl:inmme-lfe?                              bbf-yang:performance-counter32-or-inactive
-        |  |  |  |        +--ro bbf-vdsl:inmiat-lfe* [inminiat-index]
-        |  |  |  |        |  +--ro bbf-vdsl:inminiat-index    uint8
-        |  |  |  |        |  +--ro bbf-vdsl:inmiat-lfe?       bbf-yang:performance-counter32-or-inactive
-        |  |  |  |        +--ro bbf-vdsl:sos-success-fe?                         bbf-yang:performance-counter32-or-inactive
-        |  |  |  |        +--ro bbf-vdsl:leftr-defects-seconds-counter-lfe?      bbf-yang:performance-counter32
-        |  |  |  |        +--ro bbf-vdsl:error-free-bits-counter-lfe?            bbf-yang:performance-counter32
-        |  |  |  |        +--ro bbf-vdsl:minimum-error-free-throughput-lfe?      bbf-yang:performance-counter32
-        |  |  |  |        +--ro bbf-vdsl:loss-of-signal-fe?                      bbf-yang:performance-counter32
-        |  |  |  |        +--ro bbf-vdsl:loss-of-frame-fe?                       bbf-yang:performance-counter32
-        |  |  |  |        +--ro bbf-vdsl:loss-of-power-fe?                       bbf-yang:performance-counter32
-        |  |  |  |        +--ro bbf-vdsl:maximum-error-free-throughput-lfe?      bbf-yang:performance-counter32 {maxeftr}?
-        |  |  |  |        +--ro bbf-vdsl:sra-success-fe?                         bbf-yang:performance-counter32 {successful-sra}?
-        |  |  |  +--ro bbf-vdsl:intervals-24hr {performance-24hr}?
-        |  |  |     +--ro bbf-vdsl:current
-        |  |  |     |  +--ro bbf-vdsl:xtu-c
-        |  |  |     |  |  +--ro bbf-vdsl:measured-time?                        uint32
-        |  |  |     |  |  +--ro bbf-vdsl:invalid-data-flag?                    boolean
-        |  |  |     |  |  +--ro bbf-vdsl:forward-error-correction-seconds-l?   bbf-yang:performance-counter32
-        |  |  |     |  |  +--ro bbf-vdsl:errored-seconds-l?                    bbf-yang:performance-counter32
-        |  |  |     |  |  +--ro bbf-vdsl:severely-errored-seconds-l?           bbf-yang:performance-counter32
-        |  |  |     |  |  +--ro bbf-vdsl:loss-of-signal-seconds-l?             bbf-yang:performance-counter32
-        |  |  |     |  |  +--ro bbf-vdsl:unavailable-seconds-l?                bbf-yang:performance-counter32
-        |  |  |     |  |  +--ro bbf-vdsl:inminpeq-l* [inminpeq-index]
-        |  |  |     |  |  |  +--ro bbf-vdsl:inminpeq-index    uint8
-        |  |  |     |  |  |  +--ro bbf-vdsl:inminpeq-l?       bbf-yang:performance-counter32-or-inactive
-        |  |  |     |  |  +--ro bbf-vdsl:inmme-l?                              bbf-yang:performance-counter32-or-inactive
-        |  |  |     |  |  +--ro bbf-vdsl:inmiat-l* [inminiat-index]
-        |  |  |     |  |  |  +--ro bbf-vdsl:inminiat-index    uint8
-        |  |  |     |  |  |  +--ro bbf-vdsl:inmiat-l?         bbf-yang:performance-counter32-or-inactive
-        |  |  |     |  |  +--ro bbf-vdsl:sos-success-ne?                       bbf-yang:performance-counter32-or-inactive
-        |  |  |     |  |  +--ro bbf-vdsl:leftr-defects-seconds-counter-ne?     bbf-yang:performance-counter32
-        |  |  |     |  |  +--ro bbf-vdsl:error-free-bits-counter-ne?           bbf-yang:performance-counter32
-        |  |  |     |  |  +--ro bbf-vdsl:minimum-error-free-throughput-ne?     bbf-yang:performance-counter32
-        |  |  |     |  |  +--ro bbf-vdsl:full-initializations?                 bbf-yang:performance-counter32
-        |  |  |     |  |  +--ro bbf-vdsl:failed-full-initializations?          bbf-yang:performance-counter32
-        |  |  |     |  |  +--ro bbf-vdsl:short-initializations?                bbf-yang:performance-counter32-or-inactive
-        |  |  |     |  |  +--ro bbf-vdsl:failed-short-initializations?         bbf-yang:performance-counter32-or-inactive
-        |  |  |     |  |  +--ro bbf-vdsl:loss-of-power-intrpt?                 bbf-yang:performance-counter32-or-inactive
-        |  |  |     |  |  +--ro bbf-vdsl:host-reinit-interruptions?            bbf-yang:performance-counter32-or-inactive
-        |  |  |     |  |  +--ro bbf-vdsl:spontaneous-intrpt?                   bbf-yang:performance-counter32-or-inactive
-        |  |  |     |  |  +--ro bbf-vdsl:loss-of-signal?                       bbf-yang:performance-counter32
-        |  |  |     |  |  +--ro bbf-vdsl:loss-of-frame?                        bbf-yang:performance-counter32
-        |  |  |     |  |  +--ro bbf-vdsl:loss-of-power?                        bbf-yang:performance-counter32
-        |  |  |     |  |  +--ro bbf-vdsl:maximum-error-free-throughput-ne?     bbf-yang:performance-counter32 {maxeftr}?
-        |  |  |     |  |  +--ro bbf-vdsl:sra-success-ne?                       bbf-yang:performance-counter32 {successful-sra}?
-        |  |  |     |  +--ro bbf-vdsl:xtu-r
-        |  |  |     |     +--ro bbf-vdsl:measured-time?                          uint32
-        |  |  |     |     +--ro bbf-vdsl:invalid-data-flag?                      boolean
-        |  |  |     |     +--ro bbf-vdsl:forward-error-correction-seconds-lfe?   bbf-yang:performance-counter32
-        |  |  |     |     +--ro bbf-vdsl:errored-seconds-lfe?                    bbf-yang:performance-counter32
-        |  |  |     |     +--ro bbf-vdsl:severely-errored-seconds-lfe?           bbf-yang:performance-counter32
-        |  |  |     |     +--ro bbf-vdsl:loss-of-signal-seconds-lfe?             bbf-yang:performance-counter32
-        |  |  |     |     +--ro bbf-vdsl:unavailable-seconds-lfe?                bbf-yang:performance-counter32
-        |  |  |     |     +--ro bbf-vdsl:inminpeq-lfe* [inminpeq-index]
-        |  |  |     |     |  +--ro bbf-vdsl:inminpeq-index    uint8
-        |  |  |     |     |  +--ro bbf-vdsl:inminpeq-lfe?     bbf-yang:performance-counter32-or-inactive
-        |  |  |     |     +--ro bbf-vdsl:inmme-lfe?                              bbf-yang:performance-counter32-or-inactive
-        |  |  |     |     +--ro bbf-vdsl:inmiat-lfe* [inminiat-index]
-        |  |  |     |     |  +--ro bbf-vdsl:inminiat-index    uint8
-        |  |  |     |     |  +--ro bbf-vdsl:inmiat-lfe?       bbf-yang:performance-counter32-or-inactive
-        |  |  |     |     +--ro bbf-vdsl:sos-success-fe?                         bbf-yang:performance-counter32-or-inactive
-        |  |  |     |     +--ro bbf-vdsl:leftr-defects-seconds-counter-lfe?      bbf-yang:performance-counter32
-        |  |  |     |     +--ro bbf-vdsl:error-free-bits-counter-lfe?            bbf-yang:performance-counter32
-        |  |  |     |     +--ro bbf-vdsl:minimum-error-free-throughput-lfe?      bbf-yang:performance-counter32
-        |  |  |     |     +--ro bbf-vdsl:loss-of-signal-fe?                      bbf-yang:performance-counter32
-        |  |  |     |     +--ro bbf-vdsl:loss-of-frame-fe?                       bbf-yang:performance-counter32
-        |  |  |     |     +--ro bbf-vdsl:loss-of-power-fe?                       bbf-yang:performance-counter32
-        |  |  |     |     +--ro bbf-vdsl:maximum-error-free-throughput-lfe?      bbf-yang:performance-counter32 {maxeftr}?
-        |  |  |     |     +--ro bbf-vdsl:sra-success-fe?                         bbf-yang:performance-counter32 {successful-sra}?
-        |  |  |     +--ro bbf-vdsl:number-of-intervals?   performance-24hr-interval
-        |  |  |     +--ro bbf-vdsl:non-valid-intervals?   performance-24hr-interval
-        |  |  |     +--ro bbf-vdsl:history* [interval-number]
-        |  |  |        +--ro bbf-vdsl:interval-number    performance-24hr-history-interval
-        |  |  |        +--ro bbf-vdsl:xtu-c
-        |  |  |        |  +--ro bbf-vdsl:time-stamp?                           yang:date-and-time
-        |  |  |        |  +--ro bbf-vdsl:measured-time?                        uint32
-        |  |  |        |  +--ro bbf-vdsl:invalid-data-flag?                    boolean
-        |  |  |        |  +--ro bbf-vdsl:forward-error-correction-seconds-l?   bbf-yang:performance-counter32
-        |  |  |        |  +--ro bbf-vdsl:errored-seconds-l?                    bbf-yang:performance-counter32
-        |  |  |        |  +--ro bbf-vdsl:severely-errored-seconds-l?           bbf-yang:performance-counter32
-        |  |  |        |  +--ro bbf-vdsl:loss-of-signal-seconds-l?             bbf-yang:performance-counter32
-        |  |  |        |  +--ro bbf-vdsl:unavailable-seconds-l?                bbf-yang:performance-counter32
-        |  |  |        |  +--ro bbf-vdsl:inminpeq-l* [inminpeq-index]
-        |  |  |        |  |  +--ro bbf-vdsl:inminpeq-index    uint8
-        |  |  |        |  |  +--ro bbf-vdsl:inminpeq-l?       bbf-yang:performance-counter32-or-inactive
-        |  |  |        |  +--ro bbf-vdsl:inmme-l?                              bbf-yang:performance-counter32-or-inactive
-        |  |  |        |  +--ro bbf-vdsl:inmiat-l* [inminiat-index]
-        |  |  |        |  |  +--ro bbf-vdsl:inminiat-index    uint8
-        |  |  |        |  |  +--ro bbf-vdsl:inmiat-l?         bbf-yang:performance-counter32-or-inactive
-        |  |  |        |  +--ro bbf-vdsl:sos-success-ne?                       bbf-yang:performance-counter32-or-inactive
-        |  |  |        |  +--ro bbf-vdsl:leftr-defects-seconds-counter-ne?     bbf-yang:performance-counter32
-        |  |  |        |  +--ro bbf-vdsl:error-free-bits-counter-ne?           bbf-yang:performance-counter32
-        |  |  |        |  +--ro bbf-vdsl:minimum-error-free-throughput-ne?     bbf-yang:performance-counter32
-        |  |  |        |  +--ro bbf-vdsl:full-initializations?                 bbf-yang:performance-counter32
-        |  |  |        |  +--ro bbf-vdsl:failed-full-initializations?          bbf-yang:performance-counter32
-        |  |  |        |  +--ro bbf-vdsl:short-initializations?                bbf-yang:performance-counter32-or-inactive
-        |  |  |        |  +--ro bbf-vdsl:failed-short-initializations?         bbf-yang:performance-counter32-or-inactive
-        |  |  |        |  +--ro bbf-vdsl:loss-of-power-intrpt?                 bbf-yang:performance-counter32-or-inactive
-        |  |  |        |  +--ro bbf-vdsl:host-reinit-interruptions?            bbf-yang:performance-counter32-or-inactive
-        |  |  |        |  +--ro bbf-vdsl:spontaneous-intrpt?                   bbf-yang:performance-counter32-or-inactive
-        |  |  |        |  +--ro bbf-vdsl:loss-of-signal?                       bbf-yang:performance-counter32
-        |  |  |        |  +--ro bbf-vdsl:loss-of-frame?                        bbf-yang:performance-counter32
-        |  |  |        |  +--ro bbf-vdsl:loss-of-power?                        bbf-yang:performance-counter32
-        |  |  |        |  +--ro bbf-vdsl:maximum-error-free-throughput-ne?     bbf-yang:performance-counter32 {maxeftr}?
-        |  |  |        |  +--ro bbf-vdsl:sra-success-ne?                       bbf-yang:performance-counter32 {successful-sra}?
-        |  |  |        +--ro bbf-vdsl:xtu-r
-        |  |  |           +--ro bbf-vdsl:time-stamp?                             yang:date-and-time
-        |  |  |           +--ro bbf-vdsl:measured-time?                          uint32
-        |  |  |           +--ro bbf-vdsl:invalid-data-flag?                      boolean
-        |  |  |           +--ro bbf-vdsl:forward-error-correction-seconds-lfe?   bbf-yang:performance-counter32
-        |  |  |           +--ro bbf-vdsl:errored-seconds-lfe?                    bbf-yang:performance-counter32
-        |  |  |           +--ro bbf-vdsl:severely-errored-seconds-lfe?           bbf-yang:performance-counter32
-        |  |  |           +--ro bbf-vdsl:loss-of-signal-seconds-lfe?             bbf-yang:performance-counter32
-        |  |  |           +--ro bbf-vdsl:unavailable-seconds-lfe?                bbf-yang:performance-counter32
-        |  |  |           +--ro bbf-vdsl:inminpeq-lfe* [inminpeq-index]
-        |  |  |           |  +--ro bbf-vdsl:inminpeq-index    uint8
-        |  |  |           |  +--ro bbf-vdsl:inminpeq-lfe?     bbf-yang:performance-counter32-or-inactive
-        |  |  |           +--ro bbf-vdsl:inmme-lfe?                              bbf-yang:performance-counter32-or-inactive
-        |  |  |           +--ro bbf-vdsl:inmiat-lfe* [inminiat-index]
-        |  |  |           |  +--ro bbf-vdsl:inminiat-index    uint8
-        |  |  |           |  +--ro bbf-vdsl:inmiat-lfe?       bbf-yang:performance-counter32-or-inactive
-        |  |  |           +--ro bbf-vdsl:sos-success-fe?                         bbf-yang:performance-counter32-or-inactive
-        |  |  |           +--ro bbf-vdsl:leftr-defects-seconds-counter-lfe?      bbf-yang:performance-counter32
-        |  |  |           +--ro bbf-vdsl:error-free-bits-counter-lfe?            bbf-yang:performance-counter32
-        |  |  |           +--ro bbf-vdsl:minimum-error-free-throughput-lfe?      bbf-yang:performance-counter32
-        |  |  |           +--ro bbf-vdsl:loss-of-signal-fe?                      bbf-yang:performance-counter32
-        |  |  |           +--ro bbf-vdsl:loss-of-frame-fe?                       bbf-yang:performance-counter32
-        |  |  |           +--ro bbf-vdsl:loss-of-power-fe?                       bbf-yang:performance-counter32
-        |  |  |           +--ro bbf-vdsl:maximum-error-free-throughput-lfe?      bbf-yang:performance-counter32 {maxeftr}?
-        |  |  |           +--ro bbf-vdsl:sra-success-fe?                         bbf-yang:performance-counter32 {successful-sra}?
-        |  |  +---n bbf-vdsl:vdsl-15min-threshold-crossing-alert
-        |  |  |  +--ro bbf-vdsl:tca-identity    identityref
-        |  |  +---n bbf-vdsl:vdsl-24hr-threshold-crossing-alert {performance-24hr}?
-        |  |  |  +--ro bbf-vdsl:tca-identity    identityref
-        |  |  +--ro bbf-vdsl:diagnostics
-        |  |     +--ro bbf-vdsl:loop-diagnostics-mode-status?    enumeration
-        |  |     +--ro bbf-vdsl:loop-diagnostics-mode-results?   loop-diagnostics-result
-        |  |     +---n bbf-vdsl:loop-diagnostics-completed
-        |  |     |  +-- bbf-vdsl:result    loop-diagnostics-result
-        |  |     +--ro bbf-vdsl:xtu-c
-        |  |     |  +--ro bbf-vdsl:downstream
-        |  |     |  |  +--ro bbf-vdsl:tssps?     per-sub-carrier-group-uint16-tuple
-        |  |     |  |  +--ro bbf-vdsl:mrefpsd?   per-sub-carrier-group-uint16-tuple
-        |  |     |  |  +--ro bbf-vdsl:xlin
-        |  |     |  |     +--ro bbf-vdsl:xlin-scale?                    uint16
-        |  |     |  |     +--ro bbf-vdsl:xlin-sub-carrier-group-size?   sub-carrier-group-size
-        |  |     |  |     +--ro bbf-vdsl:xlin-disturber?                vce-port-index
-        |  |     |  |     +--ro bbf-vdsl:xlinbands* [band-index]
-        |  |     |  |     |  +--ro bbf-vdsl:band-index     uint16
-        |  |     |  |     |  +--ro bbf-vdsl:start-index    sub-carrier-index
-        |  |     |  |     |  +--ro bbf-vdsl:stop-index     sub-carrier-index
-        |  |     |  |     +--ro bbf-vdsl:xlinps?                        per-sub-carrier-group-int16-tuple
-        |  |     |  +--ro bbf-vdsl:upstream
-        |  |     |  |  +--ro bbf-vdsl:hlin
-        |  |     |  |  |  +--ro bbf-vdsl:hlin-scale?                    uint16
-        |  |     |  |  |  +--ro bbf-vdsl:hlin-sub-carrier-group-size?   sub-carrier-group-size
-        |  |     |  |  |  +--ro bbf-vdsl:hlinps?                        per-sub-carrier-group-int16-tuple
-        |  |     |  |  +--ro bbf-vdsl:hlog
-        |  |     |  |  |  +--ro bbf-vdsl:hlog-measurement-time?         uint16
-        |  |     |  |  |  +--ro bbf-vdsl:hlog-sub-carrier-group-size?   sub-carrier-group-size
-        |  |     |  |  |  +--ro bbf-vdsl:hlogps?                        per-sub-carrier-group-uint16
-        |  |     |  |  +--ro bbf-vdsl:qln
-        |  |     |  |  |  +--ro bbf-vdsl:qln-measurement-time?         uint16
-        |  |     |  |  |  +--ro bbf-vdsl:qln-sub-carrier-group-size?   sub-carrier-group-size
-        |  |     |  |  |  +--ro bbf-vdsl:qlnps?                        per-sub-carrier-group-uint8
-        |  |     |  |  +--ro bbf-vdsl:snr
-        |  |     |  |  |  +--ro bbf-vdsl:snr-measurement-time?         uint16
-        |  |     |  |  |  +--ro bbf-vdsl:snr-sub-carrier-group-size?   sub-carrier-group-size
-        |  |     |  |  |  +--ro bbf-vdsl:snrps?                        per-sub-carrier-group-uint8
-        |  |     |  |  +--ro bbf-vdsl:bitsps?    per-sub-carrier-nibble
-        |  |     |  |  +--ro bbf-vdsl:gainsps?   per-sub-carrier-uint16
-        |  |     |  |  +--ro bbf-vdsl:xlin
-        |  |     |  |     +--ro bbf-vdsl:xlin-scale?                    uint16
-        |  |     |  |     +--ro bbf-vdsl:xlin-sub-carrier-group-size?   sub-carrier-group-size
-        |  |     |  |     +--ro bbf-vdsl:xlin-disturber?                vce-port-index
-        |  |     |  |     +--ro bbf-vdsl:xlinbands* [band-index]
-        |  |     |  |     |  +--ro bbf-vdsl:band-index     uint16
-        |  |     |  |     |  +--ro bbf-vdsl:start-index    sub-carrier-index
-        |  |     |  |     |  +--ro bbf-vdsl:stop-index     sub-carrier-index
-        |  |     |  |     +--ro bbf-vdsl:xlinps?                        per-sub-carrier-group-int16-tuple
-        |  |     |  +--ro bbf-vdsl:data-gathering-report
-        |  |     |     +--ro bbf-vdsl:logging-depth?                    uint32
-        |  |     |     +--ro bbf-vdsl:actual-logging-depth-reporting?   uint32
-        |  |     |     +--ro bbf-vdsl:event-trace-buffer?               binary
-        |  |     +--ro bbf-vdsl:xtu-r
-        |  |        +--ro bbf-vdsl:downstream
-        |  |        |  +--ro bbf-vdsl:hlin
-        |  |        |  |  +--ro bbf-vdsl:hlin-scale?                    uint16
-        |  |        |  |  +--ro bbf-vdsl:hlin-sub-carrier-group-size?   sub-carrier-group-size
-        |  |        |  |  +--ro bbf-vdsl:hlinps?                        per-sub-carrier-group-int16-tuple
-        |  |        |  +--ro bbf-vdsl:hlog
-        |  |        |  |  +--ro bbf-vdsl:hlog-measurement-time?         uint16
-        |  |        |  |  +--ro bbf-vdsl:hlog-sub-carrier-group-size?   sub-carrier-group-size
-        |  |        |  |  +--ro bbf-vdsl:hlogps?                        per-sub-carrier-group-uint16
-        |  |        |  +--ro bbf-vdsl:qln
-        |  |        |  |  +--ro bbf-vdsl:qln-measurement-time?         uint16
-        |  |        |  |  +--ro bbf-vdsl:qln-sub-carrier-group-size?   sub-carrier-group-size
-        |  |        |  |  +--ro bbf-vdsl:qlnps?                        per-sub-carrier-group-uint8
-        |  |        |  +--ro bbf-vdsl:snr
-        |  |        |  |  +--ro bbf-vdsl:snr-measurement-time?         uint16
-        |  |        |  |  +--ro bbf-vdsl:snr-sub-carrier-group-size?   sub-carrier-group-size
-        |  |        |  |  +--ro bbf-vdsl:snrps?                        per-sub-carrier-group-uint8
-        |  |        |  +--ro bbf-vdsl:bitsps?    per-sub-carrier-nibble
-        |  |        |  +--ro bbf-vdsl:gainsps?   per-sub-carrier-uint16
-        |  |        +--ro bbf-vdsl:upstream
-        |  |        |  +--ro bbf-vdsl:tssps?     per-sub-carrier-group-uint16-tuple
-        |  |        |  +--ro bbf-vdsl:mrefpsd?   per-sub-carrier-group-uint16-tuple
-        |  |        +--ro bbf-vdsl:data-gathering-report
-        |  |           +--ro bbf-vdsl:logging-depth?                    uint32
-        |  |           +--ro bbf-vdsl:actual-logging-depth-reporting?   uint32
-        |  |           +--ro bbf-vdsl:event-trace-buffer?               binary
-        |  +--ro bbf-vdsl:availability! {availability}?
-        |     +--ro bbf-vdsl:availability-status    union
-        |     +--ro bbf-vdsl:issues
-        |        +--ro bbf-vdsl:issue* [tag code]
-        |           +--ro bbf-vdsl:tag           identityref
-        |           +--ro bbf-vdsl:code          uint16
-        |           +--ro bbf-vdsl:message?      string
-        |           +--ro bbf-vdsl:root-cause*   resource
-        +--ro bbf-melt:melt!
-        |  +--ro bbf-melt:pmd-status
-        |  |  +--ro bbf-melt:melt-status-c?       enumeration
-        |  |  +--ro bbf-melt:melt-results-c?      pmd-result
-        |  |  +--ro bbf-melt:results-timestamp?   yang:date-and-time
-        |  +---n bbf-melt:melt-pmd-completed
-        |  |  +--ro bbf-melt:function    pmd-function
-        |  |  +--ro bbf-melt:result      pmd-result
-        |  +--ro bbf-melt:pmd-reporting-parameters
-        |  |  +--ro bbf-melt:measurement-frequency?                         uint16
-        |  |  +--ro bbf-melt:foreign-voltage-input-impedance?               uint32
-        |  |  +--ro bbf-melt:loop-complex-admittance-measurement-voltage?   measurement-voltage
-        |  |  +--ro bbf-melt:unreliability-indicator?                       bits {melt-pmd-reporting-parameter-reliability}?
-        |  +--ro bbf-melt:pmd-measurement-parameters
-        |  |  +--ro bbf-melt:four-element-dc-resistance-tr?                             four-element-dc-resistance
-        |  |  +--ro bbf-melt:four-element-dc-resistance-rt?                             four-element-dc-resistance
-        |  |  +--ro bbf-melt:four-element-dc-resistance-tg?                             four-element-dc-resistance
-        |  |  +--ro bbf-melt:four-element-dc-resistance-rg?                             four-element-dc-resistance
-        |  |  +--ro bbf-melt:three-element-capacitance-tr?                              three-element-capacitance
-        |  |  +--ro bbf-melt:three-element-capacitance-tg?                              three-element-capacitance
-        |  |  +--ro bbf-melt:three-element-capacitance-rg?                              three-element-capacitance
-        |  |  +--ro bbf-melt:foreign-dc-voltage-tr?                                     foreign-dc-voltage
-        |  |  +--ro bbf-melt:foreign-dc-voltage-tg?                                     foreign-dc-voltage
-        |  |  +--ro bbf-melt:foreign-dc-voltage-rg?                                     foreign-dc-voltage
-        |  |  +--ro bbf-melt:foreign-ac-voltage-tr?                                     foreign-ac-voltage
-        |  |  +--ro bbf-melt:foreign-ac-voltage-tg?                                     foreign-ac-voltage
-        |  |  +--ro bbf-melt:foreign-ac-voltage-rg?                                     foreign-ac-voltage
-        |  |  +--ro bbf-melt:foreign-ac-voltage-frequency-tr?                           foreign-ac-voltage-frequency
-        |  |  +--ro bbf-melt:foreign-ac-voltage-frequency-tg?                           foreign-ac-voltage-frequency
-        |  |  +--ro bbf-melt:foreign-ac-voltage-frequency-rg?                           foreign-ac-voltage-frequency
-        |  |  +--ro bbf-melt:loop-capacitance-hv-tr?                                    int32
-        |  |  +--ro bbf-melt:loop-resistance-hv-tr?                                     loop-resistance
-        |  |  +--ro bbf-melt:loop-resistance-hv-rt?                                     loop-resistance
-        |  |  +--ro bbf-melt:four-element-dc-resistance-test-voltage-tr?                dc-test-voltage
-        |  |  +--ro bbf-melt:four-element-dc-resistance-test-voltage-rt?                dc-test-voltage
-        |  |  +--ro bbf-melt:four-element-dc-resistance-test-voltage-tg?                dc-test-voltage
-        |  |  +--ro bbf-melt:four-element-dc-resistance-test-voltage-rg?                dc-test-voltage
-        |  |  +--ro bbf-melt:four-element-dc-resistance-test-current-tr?                test-current
-        |  |  +--ro bbf-melt:four-element-dc-resistance-test-current-rt?                test-current
-        |  |  +--ro bbf-melt:four-element-dc-resistance-test-current-tg?                test-current
-        |  |  +--ro bbf-melt:four-element-dc-resistance-test-current-rg?                test-current
-        |  |  +--ro bbf-melt:loop-resistance-test-voltage-tr?                           loop-resistance-test-voltage
-        |  |  +--ro bbf-melt:loop-resistance-test-voltage-rt?                           loop-resistance-test-voltage
-        |  |  +--ro bbf-melt:three-element-complex-admittance-real-tr?                  complex-admittance
-        |  |  +--ro bbf-melt:three-element-complex-admittance-imaginary-tr?             complex-admittance
-        |  |  +--ro bbf-melt:three-element-complex-admittance-real-tg?                  complex-admittance
-        |  |  +--ro bbf-melt:three-element-complex-admittance-imaginary-tg?             complex-admittance
-        |  |  +--ro bbf-melt:three-element-complex-admittance-real-rg?                  complex-admittance
-        |  |  +--ro bbf-melt:three-element-complex-admittance-imaginary-rg?             complex-admittance
-        |  |  +--ro bbf-melt:loop-complex-admittance-real-hv-tr?                        loop-complex-admittance
-        |  |  +--ro bbf-melt:loop-complex-admittance-imaginary-hv-tr?                   loop-complex-admittance
-        |  |  +--ro bbf-melt:three-element-capacitance-measurement-voltage-tr?          measurement-voltage
-        |  |  +--ro bbf-melt:three-element-capacitance-measurement-voltage-tg?          measurement-voltage
-        |  |  +--ro bbf-melt:three-element-capacitance-measurement-voltage-rg?          measurement-voltage
-        |  |  +--ro bbf-melt:loop-capacitance-measurement-voltage-tr?                   measurement-voltage
-        |  |  +--ro bbf-melt:three-element-complex-admittance-measurement-voltage-tr?   measurement-voltage
-        |  |  +--ro bbf-melt:three-element-complex-admittance-measurement-voltage-tg?   measurement-voltage
-        |  |  +--ro bbf-melt:three-element-complex-admittance-measurement-voltage-rg?   measurement-voltage
-        |  |  +--ro bbf-melt:loop-complex-admittance-measurement-voltage-tr?            measurement-voltage
-        |  |  +--ro bbf-melt:unreliability-indicator?                                   bits {melt-pmd-measurement-parameter-reliability}?
-        |  +--ro bbf-melt:processing-derived-parameters {melt-p}?
-        |     +--ro bbf-melt:open-wire-failure-type?                           enumeration
-        |     +--ro bbf-melt:open-wire-failure-distance?                       uint16
-        |     +--ro bbf-melt:short-circuit-failure-type?                       enumeration
-        |     +--ro bbf-melt:leakage-identification?                           enumeration
-        |     +--ro bbf-melt:resistive-fault-identification?                   enumeration
-        |     +--ro bbf-melt:foreign-voltage-type-classification?              enumeration
-        |     +--ro bbf-melt:foreign-voltage-level-classification?             enumeration
-        |     +--ro bbf-melt:far-end-signature-topology-type-identification?   enumeration
-        |     +--ro bbf-melt:cpe-identification-capacitive?                    enumeration
-        |     +--ro bbf-melt:unreliability-indicator?                          bits {melt-processing-derived-parameter-reliability}?
+        |     +--ro bbf-fast:availability-status    union
+        |     +--ro bbf-fast:issues
+        |        +--ro bbf-fast:issue* [tag code]
+        |           +--ro bbf-fast:tag           identityref
+        |           +--ro bbf-fast:code          uint16
+        |           +--ro bbf-fast:message?      string
+        |           +--ro bbf-fast:root-cause*   resource
         +--ro bbf-selt:selt!
-           +--ro bbf-selt:pmd-status
-           |  +--ro bbf-selt:selt-status-c?   enumeration
-           |  +--ro bbf-selt:uer-results-c?   pmd-result
-           |  +--ro bbf-selt:qln-results-c?   pmd-result
-           +---n bbf-selt:selt-pmd-completed
-           |  +--ro bbf-selt:function    pmd-function
-           |  +--ro bbf-selt:result      pmd-result
-           +--ro bbf-selt:pmd-measurement-parameters
-           |  +--ro bbf-selt:c
-           |  |  +--ro bbf-selt:uncalibrated-echo-response
-           |  |  |  +--ro bbf-selt:scale-factor?   uint32
-           |  |  |  +--ro bbf-selt:uer-g?          uint8
-           |  |  |  +--ro bbf-selt:uer?            per-sub-carrier-int32-tuple
-           |  |  +--ro bbf-selt:uncalibrated-echo-response-variance?   per-sub-carrier-uint8
-           |  |  +--ro bbf-selt:quiet-line-noise
-           |  |     +--ro bbf-selt:seltqln-g?   uint8
-           |  |     +--ro bbf-selt:qln?         per-sub-carrier-uint8
-           |  +--ro bbf-selt:r
-           |     +--ro bbf-selt:uncalibrated-echo-response
-           |     |  +--ro bbf-selt:scale-factor?   uint32
-           |     |  +--ro bbf-selt:uer-g?          uint8
-           |     |  +--ro bbf-selt:uer?            per-sub-carrier-int32-tuple
-           |     +--ro bbf-selt:uncalibrated-echo-response-variance?   per-sub-carrier-uint8
-           |     +--ro bbf-selt:quiet-line-noise
-           |        +--ro bbf-selt:seltqln-g?   uint8
-           |        +--ro bbf-selt:qln?         per-sub-carrier-uint8
-           +--ro bbf-selt:processing-derived-parameters {selt-p}?
-              +--ro bbf-selt:loop-termination-indicator?    enumeration
-              +--ro bbf-selt:loop-length?                   uint16
-              +--ro bbf-selt:loop-topology
-              |  +--ro bbf-selt:loop* [i]
-              |     +--ro bbf-selt:i      uint8
-              |     +--ro bbf-selt:len?   uint16
-              |     +--ro bbf-selt:bti?   enumeration
-              +--ro bbf-selt:attenuation-characteristics
-              |  +--ro bbf-selt:tflog-g?   uint8
-              |  +--ro bbf-selt:tflog?     per-sub-carrier-uint16
-              +--ro bbf-selt:missing-micro-filter?          boolean
-              +--ro bbf-selt:downstream
-              |  +--ro bbf-selt:capacity-estimate?   bbf-yang:data-rate32
-              +--ro bbf-selt:upstream
-                 +--ro bbf-selt:capacity-estimate?   bbf-yang:data-rate32
+        |  +--ro bbf-selt:pmd-status
+        |  |  +--ro bbf-selt:selt-status-c?   enumeration
+        |  |  +--ro bbf-selt:uer-results-c?   pmd-result
+        |  |  +--ro bbf-selt:qln-results-c?   pmd-result
+        |  +---n bbf-selt:selt-pmd-completed
+        |  |  +--ro bbf-selt:function    pmd-function
+        |  |  +--ro bbf-selt:result      pmd-result
+        |  +--ro bbf-selt:pmd-measurement-parameters
+        |  |  +--ro bbf-selt:c
+        |  |  |  +--ro bbf-selt:uncalibrated-echo-response
+        |  |  |  |  +--ro bbf-selt:scale-factor?   uint32
+        |  |  |  |  +--ro bbf-selt:uer-g?          uint8
+        |  |  |  |  +--ro bbf-selt:uer?            per-sub-carrier-int32-tuple
+        |  |  |  +--ro bbf-selt:uncalibrated-echo-response-variance?   per-sub-carrier-uint8
+        |  |  |  +--ro bbf-selt:quiet-line-noise
+        |  |  |     +--ro bbf-selt:seltqln-g?   uint8
+        |  |  |     +--ro bbf-selt:qln?         per-sub-carrier-uint8
+        |  |  +--ro bbf-selt:r
+        |  |     +--ro bbf-selt:uncalibrated-echo-response
+        |  |     |  +--ro bbf-selt:scale-factor?   uint32
+        |  |     |  +--ro bbf-selt:uer-g?          uint8
+        |  |     |  +--ro bbf-selt:uer?            per-sub-carrier-int32-tuple
+        |  |     +--ro bbf-selt:uncalibrated-echo-response-variance?   per-sub-carrier-uint8
+        |  |     +--ro bbf-selt:quiet-line-noise
+        |  |        +--ro bbf-selt:seltqln-g?   uint8
+        |  |        +--ro bbf-selt:qln?         per-sub-carrier-uint8
+        |  +--ro bbf-selt:processing-derived-parameters {selt-p}?
+        |     +--ro bbf-selt:loop-termination-indicator?    enumeration
+        |     +--ro bbf-selt:loop-length?                   uint16
+        |     +--ro bbf-selt:loop-topology
+        |     |  +--ro bbf-selt:loop* [i]
+        |     |     +--ro bbf-selt:i      uint8
+        |     |     +--ro bbf-selt:len?   uint16
+        |     |     +--ro bbf-selt:bti?   enumeration
+        |     +--ro bbf-selt:attenuation-characteristics
+        |     |  +--ro bbf-selt:tflog-g?   uint8
+        |     |  +--ro bbf-selt:tflog?     per-sub-carrier-uint16
+        |     +--ro bbf-selt:missing-micro-filter?          boolean
+        |     +--ro bbf-selt:downstream
+        |     |  +--ro bbf-selt:capacity-estimate?   bbf-yang:data-rate32
+        |     +--ro bbf-selt:upstream
+        |        +--ro bbf-selt:capacity-estimate?   bbf-yang:data-rate32
+        +--ro bbf-melt:melt!
+           +--ro bbf-melt:pmd-status
+           |  +--ro bbf-melt:melt-status-c?       enumeration
+           |  +--ro bbf-melt:melt-results-c?      pmd-result
+           |  +--ro bbf-melt:results-timestamp?   yang:date-and-time
+           +---n bbf-melt:melt-pmd-completed
+           |  +--ro bbf-melt:function    pmd-function
+           |  +--ro bbf-melt:result      pmd-result
+           +--ro bbf-melt:pmd-reporting-parameters
+           |  +--ro bbf-melt:measurement-frequency?                         uint16
+           |  +--ro bbf-melt:foreign-voltage-input-impedance?               uint32
+           |  +--ro bbf-melt:loop-complex-admittance-measurement-voltage?   measurement-voltage
+           |  +--ro bbf-melt:unreliability-indicator?                       bits {melt-pmd-reporting-parameter-reliability}?
+           +--ro bbf-melt:pmd-measurement-parameters
+           |  +--ro bbf-melt:four-element-dc-resistance-tr?                             four-element-dc-resistance
+           |  +--ro bbf-melt:four-element-dc-resistance-rt?                             four-element-dc-resistance
+           |  +--ro bbf-melt:four-element-dc-resistance-tg?                             four-element-dc-resistance
+           |  +--ro bbf-melt:four-element-dc-resistance-rg?                             four-element-dc-resistance
+           |  +--ro bbf-melt:three-element-capacitance-tr?                              three-element-capacitance
+           |  +--ro bbf-melt:three-element-capacitance-tg?                              three-element-capacitance
+           |  +--ro bbf-melt:three-element-capacitance-rg?                              three-element-capacitance
+           |  +--ro bbf-melt:foreign-dc-voltage-tr?                                     foreign-dc-voltage
+           |  +--ro bbf-melt:foreign-dc-voltage-tg?                                     foreign-dc-voltage
+           |  +--ro bbf-melt:foreign-dc-voltage-rg?                                     foreign-dc-voltage
+           |  +--ro bbf-melt:foreign-ac-voltage-tr?                                     foreign-ac-voltage
+           |  +--ro bbf-melt:foreign-ac-voltage-tg?                                     foreign-ac-voltage
+           |  +--ro bbf-melt:foreign-ac-voltage-rg?                                     foreign-ac-voltage
+           |  +--ro bbf-melt:foreign-ac-voltage-frequency-tr?                           foreign-ac-voltage-frequency
+           |  +--ro bbf-melt:foreign-ac-voltage-frequency-tg?                           foreign-ac-voltage-frequency
+           |  +--ro bbf-melt:foreign-ac-voltage-frequency-rg?                           foreign-ac-voltage-frequency
+           |  +--ro bbf-melt:loop-capacitance-hv-tr?                                    int32
+           |  +--ro bbf-melt:loop-resistance-hv-tr?                                     loop-resistance
+           |  +--ro bbf-melt:loop-resistance-hv-rt?                                     loop-resistance
+           |  +--ro bbf-melt:four-element-dc-resistance-test-voltage-tr?                dc-test-voltage
+           |  +--ro bbf-melt:four-element-dc-resistance-test-voltage-rt?                dc-test-voltage
+           |  +--ro bbf-melt:four-element-dc-resistance-test-voltage-tg?                dc-test-voltage
+           |  +--ro bbf-melt:four-element-dc-resistance-test-voltage-rg?                dc-test-voltage
+           |  +--ro bbf-melt:four-element-dc-resistance-test-current-tr?                test-current
+           |  +--ro bbf-melt:four-element-dc-resistance-test-current-rt?                test-current
+           |  +--ro bbf-melt:four-element-dc-resistance-test-current-tg?                test-current
+           |  +--ro bbf-melt:four-element-dc-resistance-test-current-rg?                test-current
+           |  +--ro bbf-melt:loop-resistance-test-voltage-tr?                           loop-resistance-test-voltage
+           |  +--ro bbf-melt:loop-resistance-test-voltage-rt?                           loop-resistance-test-voltage
+           |  +--ro bbf-melt:three-element-complex-admittance-real-tr?                  complex-admittance
+           |  +--ro bbf-melt:three-element-complex-admittance-imaginary-tr?             complex-admittance
+           |  +--ro bbf-melt:three-element-complex-admittance-real-tg?                  complex-admittance
+           |  +--ro bbf-melt:three-element-complex-admittance-imaginary-tg?             complex-admittance
+           |  +--ro bbf-melt:three-element-complex-admittance-real-rg?                  complex-admittance
+           |  +--ro bbf-melt:three-element-complex-admittance-imaginary-rg?             complex-admittance
+           |  +--ro bbf-melt:loop-complex-admittance-real-hv-tr?                        loop-complex-admittance
+           |  +--ro bbf-melt:loop-complex-admittance-imaginary-hv-tr?                   loop-complex-admittance
+           |  +--ro bbf-melt:three-element-capacitance-measurement-voltage-tr?          measurement-voltage
+           |  +--ro bbf-melt:three-element-capacitance-measurement-voltage-tg?          measurement-voltage
+           |  +--ro bbf-melt:three-element-capacitance-measurement-voltage-rg?          measurement-voltage
+           |  +--ro bbf-melt:loop-capacitance-measurement-voltage-tr?                   measurement-voltage
+           |  +--ro bbf-melt:three-element-complex-admittance-measurement-voltage-tr?   measurement-voltage
+           |  +--ro bbf-melt:three-element-complex-admittance-measurement-voltage-tg?   measurement-voltage
+           |  +--ro bbf-melt:three-element-complex-admittance-measurement-voltage-rg?   measurement-voltage
+           |  +--ro bbf-melt:loop-complex-admittance-measurement-voltage-tr?            measurement-voltage
+           |  +--ro bbf-melt:unreliability-indicator?                                   bits {melt-pmd-measurement-parameter-reliability}?
+           +--ro bbf-melt:processing-derived-parameters {melt-p}?
+              +--ro bbf-melt:open-wire-failure-type?                           enumeration
+              +--ro bbf-melt:open-wire-failure-distance?                       uint16
+              +--ro bbf-melt:short-circuit-failure-type?                       enumeration
+              +--ro bbf-melt:leakage-identification?                           enumeration
+              +--ro bbf-melt:resistive-fault-identification?                   enumeration
+              +--ro bbf-melt:foreign-voltage-type-classification?              enumeration
+              +--ro bbf-melt:foreign-voltage-level-classification?             enumeration
+              +--ro bbf-melt:far-end-signature-topology-type-identification?   enumeration
+              +--ro bbf-melt:cpe-identification-capacitive?                    enumeration
+              +--ro bbf-melt:unreliability-indicator?                          bits {melt-processing-derived-parameter-reliability}?
 module: bbf-ghs
   +--rw ghs
      +--rw profiles

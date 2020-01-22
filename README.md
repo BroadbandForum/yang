@@ -1,5 +1,10 @@
 ## Broadband Forum YANG Modules
 
+### 2020-01-17: [TR-355a2c2](https://www.broadband-forum.org/technical/download/TR-355_Amendment-2.pdf) YANG Modules for FTTdp Management (PDF not updated)
+*Tag: [v1.2.2-TR-355a2c2](https://github.com/BroadbandForum/yang/tree/v1.2.2-TR-355a2c2)*
+
+* Correct *must* statements for *preferred-mds*, *minimum-mds* and *maximum-mds*
+
 ### 2019-10-21: [TR-355a2c1](https://www.broadband-forum.org/technical/download/TR-355_Amendment-2.pdf) YANG Modules for FTTdp Management (PDF not updated)
 *Tag: [v1.2.1-TR-355a2c1](https://github.com/BroadbandForum/yang/tree/v1.2.1-TR-355a2c1)*
 
