@@ -42,7 +42,7 @@ ietf_dir=`pwd`
 
 cd $cwd
 
-pyang_flags="--strict --max-line-length=70 --lint --lint-modulename-prefix=bbf --lint-namespace-prefix=urn:bbf:yang: --verbose --path=$bbf_dir --path=$ietf_dir"
+pyang_flags="--max-line-length=70 --lint --lint-modulename-prefix=bbf --lint-namespace-prefix=urn:bbf:yang: --lint-ensure-hyphenated-name --verbose --path=$bbf_dir --path=$ietf_dir"
 
 checkDir () {
     local dir="$bbf_dir/$1"

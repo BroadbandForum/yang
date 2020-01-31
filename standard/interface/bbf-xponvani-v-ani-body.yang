@@ -26,23 +26,23 @@ submodule bbf-xponvani-v-ani-body {
      Fiber Access Networks Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
 
-     Editor:      Samuel Chen, Broadcom
+     Editor:      Igor Ternovsky, Broadcom
 
      Editor:      Robert Peschi, Nokia
 
      WA Director: Marta Seda, Calix
 
-     WA Director: Lin Wei, Huawei";
+     WA Director: Samuel Chen, Broadcom";
   description
     "This submodule contains the data for managing the virtual ANI.
      A virtual ANI belongs to the OLT and represents an ONU as seen
      from the perspective of the OLT.
 
-     Copyright (c) 2018, Broadband Forum
+     Copyright (c) 2018-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -82,9 +82,19 @@ submodule bbf-xponvani-v-ani-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385; see
+     This version of this YANG module is part of TR-385c1; see
      the TR itself for full legal notices.";
 
+  revision 2020-01-31 {
+    description
+      "Corrigendum 1.
+       * Approval Date:    2020-01-31.
+       * Publication Date: 2020-01-31.";
+    reference
+      "TR-385c1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385.pdf>";
+  }
   revision 2019-02-25 {
     description
       "Initial revision.
@@ -132,8 +142,7 @@ submodule bbf-xponvani-v-ani-body {
       must "derived-from-or-self(/if:interfaces"
          + "/if:interface[if:name=current()]/if:type,"
          + "'bbf-xponift:channel-partition')" {
-        error-message
-          "Must reference a channel partition";
+        error-message "Must reference a channel partition";
       }
       description
         "Reference to the parent interface of the virtual ANI.";
@@ -155,18 +164,22 @@ submodule bbf-xponvani-v-ani-body {
     }
     leaf expected-registration-id {
       type string {
-        length "0..36";
+        length "0..72";
       }
       default "";
       description
         "A string that has been assigned to the subscriber
          on the management level, entered into and stored
-         in non-volatile storage at the ONU. Registration ID
-         may be useful in identifying a particular ONU installed
-         at a particular location. For ITU-T G.984.3, the leaf
-         can only be up to 10 octets long (refer to 'password'),
-         for ITU-T G.987.3, ITU-T G.9807.3 and ITU-T G.989.3
-         the leaf can be up to 36 bytes long.";
+         in non-volatile storage at the ONU. Registration ID may be
+         useful in identifying a particular ONU installed at a
+         particular location. Each octet is represented as 2
+         hexadecimal characters, therefore the leaf must contain an
+         even number of characters.
+         For ITU-T G.984.3, the leaf can only be up to 20 characters
+         long (refer to 'password' 10 bytes long).
+         For ITU-T G.987.3, ITU-T G.9807.3 and ITU-T G.989.3 the
+         leaf can be up to 72 characters long (refer to
+         'registration id' 36 bytes long).";
       reference
         "ITU-T G.984.3 clause 9.2.4.2
          ITU-T G.987.3 clause 11.3.4.2
@@ -304,7 +317,7 @@ submodule bbf-xponvani-v-ani-body {
              + "/if:interface[if:name=current()]/if:type,"
              + "'bbf-xponift:channel-termination') and "
              + "(/if:interfaces/if:interface[if:name="
-             + "/if:interfaces/if:interface[if:name=current()]" 
+             + "/if:interfaces/if:interface[if:name=current()]"
              + "/bbf-xpon:channel-termination"
              + "/bbf-xpon:channel-pair-ref]/bbf-xpon:channel-pair"
              + "/bbf-xpon:channel-partition-ref = "
@@ -314,7 +327,7 @@ submodule bbf-xponvani-v-ani-body {
                to a channel-pair which is in the same
                channel partition as the one which the ONU is
                configured on.";
-          } 
+          }
           description
             "Reference to the channel termination which the ONU
              should tune to. This channel termination must
@@ -334,8 +347,9 @@ submodule bbf-xponvani-v-ani-body {
              that the request is in progress or has been rejected.";
         }
         leaf onu-tune-request-reject-string {
-          when "not(derived-from-or-self(../onu-tune-request-status,"
-             + "'bbf-xpon-types:request-being-processed'))" {
+          when
+            "not(derived-from-or-self(../onu-tune-request-status,"
+          + "'bbf-xpon-types:request-being-processed'))" {
             description
               "Only valid when the OLT has rejected the tune
                request.";
@@ -463,14 +477,14 @@ submodule bbf-xponvani-v-ani-body {
     }
   }
 
-  augment '/if:interfaces/if:interface/bbf-xponvani:v-ani' {
+  augment "/if:interfaces/if:interface/bbf-xponvani:v-ani" {
     description
       "Configuration of an xPON virtual ANI, i.e. an ONU as seen
        by the OLT.";
     uses v-ani-config-data;
   }
 
-  augment '/if:interfaces-state/if:interface/bbf-xponvani:v-ani' {
+  augment "/if:interfaces-state/if:interface/bbf-xponvani:v-ani" {
     description
       "State data of an xPON virtual ANI, i.e. an ONU as seen
        by the OLT.";

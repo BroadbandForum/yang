@@ -1,5 +1,10 @@
 ## Broadband Forum YANG Modules
 
+### 2020-01-31: [TR-385c1](https://www.broadband-forum.org/technical/download/TR-385.pdf) ITU-T PON YANG Modules (PDF not updated)
+*Tag: [v3.0.1-TR-385c1](https://github.com/BroadbandForum/yang/tree/v3.0.1-TR-385c1)*
+
+* Increase length of *expected-registration-id* from 36 to 72 ASCII characters
+
 ### 2020-01-17: [TR-355a2c2](https://www.broadband-forum.org/technical/download/TR-355_Amendment-2.pdf) YANG Modules for FTTdp Management (PDF not updated)
 *Tag: [v1.2.2-TR-355a2c2](https://github.com/BroadbandForum/yang/tree/v1.2.2-TR-355a2c2)*
 
