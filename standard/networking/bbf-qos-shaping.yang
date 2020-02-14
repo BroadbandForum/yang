@@ -98,6 +98,11 @@ module bbf-qos-shaping {
                <https://www.broadband-forum.org/technical/download/
                         TR-383_Amendment-1.pdf>";
   }
+  
+  feature dual-rate-shaper {
+    description
+      "Indicates support for a dual rate shaper.";
+  }
 
   augment '/bbf-qos-tm:tm-profiles' {
     description
@@ -135,7 +140,7 @@ module bbf-qos-shaping {
               type uint32;
               units "kbits per second";
               description
-                "The Peak Information Rate, in kilobits per 
+                "The Peak Information Rate (PIR), in kilobits per 
                  second.";
             }
 
@@ -143,7 +148,38 @@ module bbf-qos-shaping {
               type uint32;
               units "bytes";
               description
-                "The Peak Burst Size, in bytes.";
+                "The Peak Burst Size (PBS), in bytes.";
+            }
+          }
+        }
+        
+        case dual-rate {
+          if-feature dual-rate-shaper;
+          container dual-rate {
+            description
+              "A shaper which shapes traffic up to a Peak Information
+               Rate (PIR) which also enforces a separate traffic rate
+               limit as specified by a Committed Information Rate 
+               (CIR).
+               
+               The rate of traffic which exceeds CIR but is less than
+               or equal to PIR, is considered to be the Excess 
+               Information Rate (EIR) traffic.";
+           
+            leaf pir {
+              type uint32;
+              units "kbits per second";
+              description
+                "The Peak Information Rate (PIR), in kilobits per
+                 second.";
+            }
+            
+            leaf cir {
+              type uint32;
+              units "kbits per second";
+              description
+                "The Committed Information Rate (CIR), in kilobits per
+                 second.";
             }
           }
         }

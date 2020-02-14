@@ -89,6 +89,13 @@ module bbf-qos-traffic-mngt {
      This version of this YANG module is part of TR-383; see
      the TR itself for full legal notices.";
 
+  revision 2019-08-19 {
+    description
+      "Changes for amendment 3.";
+    reference
+      "TBD";
+  }
+
   revision 2018-12-03 {
     description
       "Amendment 2.
@@ -131,8 +138,18 @@ module bbf-qos-traffic-mngt {
       "This feature indicates whether the network element supports
        configuring traffic-class-id to queue-id mapping profiles.";
   }
+  
+  feature extended-scheduling-weight {
+    description
+      "Indicates support for extending the maximum weight value from
+       255 to 65535.";
+  }
 
-
+  feature queue-sets {
+    description
+      "Indicates support for a the configuration of queue sets.";
+  }
+  
   typedef queue-id {
     type uint32 {
       range "0..7";
@@ -157,6 +174,14 @@ module bbf-qos-traffic-mngt {
 
   typedef scheduling-weight {
     type uint8;
+    description
+      "If scheduling is to be performed from multiple queues or
+       schedulers with the same priority, then the scheduling-weight
+       assigns a weight to each of them.";
+  }
+
+  typedef extended-scheduling-weight {
+    type uint16;
     description
       "If scheduling is to be performed from multiple queues or
        schedulers with the same priority, then the scheduling-weight
@@ -475,11 +500,29 @@ module bbf-qos-traffic-mngt {
          scheduler against the sum of the weights of all queues or
          schedulers with the same scope and the same priority.";
     }
+    
+    leaf extended-weight {
+      if-feature extended-scheduling-weight;
+      type extended-scheduling-weight;
+      must "not(boolean(../weight) and boolean(.))" {
+        description
+          "Both weight and extended weight must not be configured
+           at the same time.";
+      }
+      description
+        "Queues or schedulers that are defined in a particular
+         context, e.g. queues defined to schedule outgoing traffic to
+         an interface, can have the same priority. The weight defines
+         the the portion of traffic that will be taken from this queue
+         or scheduler by comparing the weight of this queue or
+         scheduler against the sum of the weights of all queues or
+         schedulers with the same scope and the same priority.";
+    }
   }
 
-  grouping queues {
+  grouping queue-list {
     description
-      "Configuration data for queues.";
+      "Configuration for a list of queues.";
 
     list queue {
       key "local-queue-id";
@@ -493,29 +536,100 @@ module bbf-qos-traffic-mngt {
           "The identification of a queue within the context of this
            list.";
       }
+    }
+  }
+  
+  grouping queue-common {
+    description
+      "Common configuration for each queue.";
 
-      uses bac-ref;
+    uses bac-ref;
 
-      choice queue-scheduling-cfg-type {
+    leaf pre-emption {
+      if-feature "pre-emption";
+      type boolean;
+      description
+        "Indicates whether the transmission of a packets from this
+         queue can be interrupted in favor of packets from a higher
+         priority queue.";
+    }
+  }
+
+  grouping queue-scheduling {
+    description
+      "Scheduling configuration for each queue.";
+
+    choice queue-scheduling-cfg-type {
+      description
+        "Choice of queue scheduling types.";
+
+      case inline {
         description
-          "Choice of queue scheduling types.";
+          "The queue parameters are directly configured here.";
 
-        case inline {
+        uses scheduling-gen-attr;
+      }
+    }
+  }
+
+
+  grouping queues {
+    description
+      "Configuration data for queues.";
+      
+    uses queue-list {
+      augment queue {
+        description
+          "Augment the list of queues with queue configuration.";
+          
+        uses queue-common;
+        
+        uses queue-scheduling;
+      }
+    }
+  }
+
+  container queue-sets {
+    if-feature queue-sets;
+    description
+      "Configuration associated with discrete sets of queues which 
+       can be referenced from multiple QoS entities, e.g. 
+       schedulers.";
+       
+    list queue-set {
+      key "name";
+      description
+        "A list of queue sets.";
+      
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "The name of the queue set.";
+      }
+      
+      uses queue-list {
+        augment queue {
           description
-            "The queue parameters are directly configured here.";
-
-          uses scheduling-gen-attr;
+            "Augment the list of queues with queue configuration.";
+            
+          uses queue-common;
         }
       }
-
-      leaf pre-emption {
-        if-feature "pre-emption";
-        type boolean;
-        description
-          "Indicates whether the transmission of a packets from this
-           queue can be interrupted in favor of packets from a higher
-           priority queue.";
+    }
+  }
+  
+  grouping queue-set-ref {
+    description
+      "Reference to a queue set.";
+    
+    leaf queue-set {
+      if-feature bbf-qos-tm:queue-sets;
+      type leafref {
+        path '/bbf-qos-tm:queue-sets/bbf-qos-tm:queue-set'
+           + '/bbf-qos-tm:name';
       }
+      description
+        "Reference to a queue set.";
     }
   }
 
@@ -569,4 +683,5 @@ module bbf-qos-traffic-mngt {
 
     uses tm-root;
   }
+    
 }
