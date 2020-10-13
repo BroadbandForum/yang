@@ -18,23 +18,22 @@ submodule bbf-xpongemtcont-gemport-body {
      Fiber Access Networks Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
 
-     Editor:      Samuel Chen, Broadcom
+     Editor:      Igor Ternovsky, Broadcom
 
      Editor:      Robert Peschi, Nokia
 
      WA Director: Marta Seda, Calix
 
-     WA Director: Lin Wei, Huawei";
+     WA Director: Samuel Chen, Broadcom";
   description
     "This submodule contains a collection of YANG definitions for
-     managing Gigabit-capable passive optical network Encapsulation
-     Method (GEM) ports.
+     managing G-PON Encapsulation Method (GEM) ports.
 
-     Copyright (c) 2018, Broadband Forum
+     Copyright (c) 2018-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -74,9 +73,19 @@ submodule bbf-xpongemtcont-gemport-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385; see
+     This version of this YANG module is part of TR-385i2; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
   revision 2019-02-25 {
     description
       "Initial revision.
@@ -90,55 +99,60 @@ submodule bbf-xpongemtcont-gemport-body {
 
   feature configurable-gemport-id {
     description
-      "Indicates support for configuration of the GEM port ID.";
+      "Indicates support for configuration of the G-PON Encapsulation
+       Method (GEM) port ID.";
   }
 
-  augment '/bbf-xpongemtcont:xpongemtcont' {
+  augment "/bbf-xpongemtcont:xpongemtcont" {
     description
-      "Augment the xPON GEM port and T-CONT configuration with
-       GEM port specific configuration.";
+      "Augment the xPON G-PON Encapsulation Method (GEM) port and
+       Transmission Container (T-CONT) configuration with GEM port
+       specific configuration.";
     container gemports {
       description
-        "GEM port configuration data.";
+        "G-PON Encapsulation Method (GEM) port configuration data.";
       uses gemports-config-data;
     }
   }
 
-  augment '/bbf-xpongemtcont:xpongemtcont-state' {
+  augment "/bbf-xpongemtcont:xpongemtcont-state" {
     description
-      "Augment the xPON GEM port and T-CONT state data with
-       GEM port specific state data.";
+      "Augment the xPON G-PON Encapsulation Method (GEM) port and
+       Transmission Container (T-CONT) state data with GEM port
+       specific state data.";
     container gemports {
       config false;
       description
-        "GEM port state data.";
+        "G-PON Encapsulation Method (GEM) port state data.";
       uses gemports-state-data;
     }
   }
 
   grouping gemports-config-data {
     description
-      "The config data for all GEM ports.";
+      "The configuration data for all G-PON Encapsulation Method (GEM)
+       ports.";
     list gemport {
       key "name";
       description
-        "List of GEM ports.";
+        "List of G-PON Encapsulation Method (GEM) ports.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
-          "Name of GEM port.";
+          "Name of G-PON Encapsulation Method (GEM) port.";
       }
       leaf gemport-id {
-        if-feature "configurable-gemport-id";
+        if-feature "bbf-xpongemtcont:configurable-gemport-id";
         type uint32;
         description
-          "ID of GEM port. When configured this is the value which
-           must actually be used between the OLT device and ONU
-           device for this GEM port. For G-PON the value should
-           be in [0..4095] and not conflicting with the
-           management-gemport-id, for XG-PON it should be
-           in [1023..65534] and for XGS-PON and NG-PON2 it should
-           be in [1021..65534].";
+          "ID of G-PON Encapsulation Method (GEM) port. When
+           configured this is the value which must actually be used
+           between the Optical Line Termination (OLT) device and
+           Optical Network Unit (ONU) device for this GEM port. For
+           G-PON the value should be in [0..4095] and not conflicting
+           with the 'management-gemport-id', for XG-PON it should be
+           in [1023..65534] and for XGS-PON and NG-PON2 it should be
+           in [1021..65534].";
         reference
           "ITU-T G.984.3 clause 5.5.5
            ITU-T G.987.3 clause 6.4.4
@@ -161,55 +175,67 @@ submodule bbf-xpongemtcont-gemport-body {
         type boolean;
         default "false";
         description
-          "Used to designate whether AES should be enabled/disabled
-           for this GEM port for the downstream direction.";
+          "Used to designate whether Advanced Encryption Standard
+           (AES) should be enabled/disabled for this G-PON
+           Encapsulation Method (GEM) port for the downstream
+           direction.";
         reference
-          "ITU-T G.9807.1 clause C.15.5.1
+          "ITU-T G.984.3 clause 12.1
+           ITU-T G.987.3 clause 15.5.1
+           ITU-T G.9807.1 clause C.15.5.1
            ITU-T G.989.3 clause 15.5.1";
       }
       leaf upstream-aes-indicator {
         type boolean;
         default "false";
         description
-          "Used to designate whether AES should be enabled/disabled
-           for this GEM port for the upstream direction.";
+          "Used to designate whether Advanced Encryption Standard
+           (AES) should be enabled/disabled for this G-PON
+           Encapsulation Method (GEM) port for the upstream direction.
+
+           This is not applicable for G-PON. Any configured value
+           will be ignored.";
         reference
-          "ITU-T G.9807.1 clause C.15.5.1
+          "ITU-T G.987.3 clause 15.5.1
+           ITU-T G.9807.1 clause C.15.5.1
            ITU-T G.989.3 clause 15.5.1";
       }
       leaf tcont-ref {
         type leafref {
-          path '/bbf-xpongemtcont:xpongemtcont/bbf-xpongemtcont:'
-             + 'tconts/bbf-xpongemtcont:tcont/bbf-xpongemtcont:'
-             + 'name';
+          path "/bbf-xpongemtcont:xpongemtcont/bbf-xpongemtcont:"
+             + "tconts/bbf-xpongemtcont:tcont/bbf-xpongemtcont:"
+             + "name";
         }
         description
-          "For the purpose of upstream scheduling in the ONU, a
-           GEM port needs to refer to the T-CONT into which it feeds
-           upstream traffic.";
+          "For the purpose of upstream scheduling in the Optical
+           Network Unit (ONU), a G-PON Encapsulation Method (GEM) port
+           needs to refer to the Transmission Container (T-CONT) into
+           which it feeds upstream traffic.";
       }
     }
   }
 
   grouping gemports-state-data {
     description
-      "The state data for all GEM ports.";
+      "The state data for all G-PON Encapsulation Method (GEM)
+       ports.";
     list gemport {
       key "name";
       description
-        "List of GEM ports.";
+        "List of G-PON Encapsulation Method (GEM) ports.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
-          "Name of GEM port.";
+          "Name of G-PON Encapsulation Method (GEM) port.";
       }
       leaf actual-gemport-id {
         type uint32;
         mandatory true;
         description
-          "TC layer ID of the GEM port. This is the value which is
-           actually used between the OLT device and ONU device
-           for this GEM port.";
+          "TC layer ID of the G-PON Encapsulation Method (GEM) port.
+           This is the value which is actually used between the
+           Optical Line Termination (OLT) device and Optical Network
+           Unit (ONU) device for this GEM port.";
         reference
           "ITU-T G.984.3 clause 5.5.5
            ITU-T G.987.3 clause 6.4.4

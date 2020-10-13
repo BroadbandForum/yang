@@ -1,7 +1,6 @@
 module bbf-l2-dhcpv4-relay-forwarding {
   yang-version 1.1;
   namespace "urn:bbf:yang:bbf-l2-dhcpv4-relay-forwarding";
-
   prefix bbf-l2-d4r-fwd;
 
   import bbf-l2-forwarding {
@@ -10,36 +9,34 @@ module bbf-l2-dhcpv4-relay-forwarding {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Project Stream";
-
+     Common YANG Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
-                  <mailto:ludwig.pauwels@nokia.com>
 
-     PS Leader:   Michael Shaffer, Nokia
-                  <mailto:michael.shaffer@nokia.com>
+     PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>";
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
   description
-    "This module contains a collection of YANG definitions for 
-     supporting the Broadband Forum requirements on subscriber 
-     management via the DHCPv4 protocol as applicable to access 
-     network equipment. As such, this module is specific to access 
-     network equipment (e.g., BBF-specified Access Nodes and FTTdp 
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on subscriber
+     management via the DHCPv4 protocol as applicable to access
+     network equipment. As such, this module is specific to access
+     network equipment (e.g., BBF-specified Access Nodes and FTTdp
      DPUs).
 
-     Specifically, this module augments bbf-l2-forwarding with 
+     Specifically, this module augments bbf-l2-forwarding with
      subscriber management via the DHCPv4 protocol.
 
-     Copyright (c) 2017, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -79,9 +76,19 @@ module bbf-l2-dhcpv4-relay-forwarding {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2017-05-08 {
     description
       "Initial revision.
@@ -93,27 +100,58 @@ module bbf-l2-dhcpv4-relay-forwarding {
                         TR-383.pdf>";
   }
 
-  augment '/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarders/bbf-l2-fwd:'
-        + 'forwarder' {
+  augment "/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarders/bbf-l2-fwd:"
+        + "forwarder" {
     description
       "Additions for L2 DHCPv4 Relay Agent at the forwarder level.";
-
     container l2-dhcpv4-relay {
+      presence
+        "Presence of this container indicates L2 DHCPv4 Relay Agent
+         functionality is supported in the context of this
+         forwarder.";
       description
         "L2 DHCPv4 Relay Agent related controls.";
-
       leaf downstream-broadcast-flooding {
-        type boolean;
+        type union {
+          type boolean;
+          type enumeration {
+            enum apply-layer2-forwarding {
+              description
+                "Downstream broadcast DHCP packets are forwarded
+                 according forwarding rules configured for the
+                 forwarder. Especially applicable to the forwarding of
+                 DHCP broadcast packets is the configuration of
+                 flooding rules for broadcast packets.";
+            }
+            enum single-user-with-fallback-to-layer2 {
+              description
+                "Downstream broadcast DHCP packets are first processed
+                 as defined for the value 'false', i.e. they are
+                 forwarded to only one port of the forwarder which is
+                 identified by the DHCP packet content. If however no
+                 port is identified in this way, then the packet will
+                 be processed as identified in 'apply-layer2-
+                 forwarding', i.e. based on the (flooding) forwarding
+                 rules of the forwarder.";
+            }
+          }
+        }
         default "false";
         description
           "If it is configured as 'true', the L2 DHCP Relay Agent will
-           flood downstream broadcast 'DHCPv4 packets' to all output 
-           ports of the forwarder; if it is configured as 'false', the
-           L2 DHCP Relay Agent will forward downstream 'broadcast 
-           DHCPv4 packets' to only one port of the forwarder, i.e. the
-           one for which the packet is intended. Identifying the port 
-           for which the packet is intended is based on packet 
-           content.";
+           flood downstream 'broadcast DHCPv4 packets' to all output
+           ports of the forwarder.
+
+           If it is configured as 'false', the L2 DHCP Relay Agent
+           will forward downstream 'broadcast DHCPv4 packets' to only
+           one port of the forwarder, i.e. the one for which the
+           packet is intended. Identifying the port for which the
+           packet is intended is based on packet content.
+
+           If it is configured with one of the enum values, then the
+           L2 DHCP Relay Agent will forward downstream 'broadcast
+           DHCPv4 packets' as defined in the description of the enum
+           value.";
       }
     }
   }

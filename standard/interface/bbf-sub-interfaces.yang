@@ -1,21 +1,14 @@
 module bbf-sub-interfaces {
   yang-version 1.1;
   namespace "urn:bbf:yang:bbf-sub-interfaces";
-
   prefix bbf-subif;
-
-  import iana-if-type {
-    prefix ianaift;
-  }
 
   import ietf-interfaces {
     prefix if;
   }
-
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import bbf-if-type {
     prefix bbfift;
   }
@@ -23,23 +16,21 @@ module bbf-sub-interfaces {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the management of
@@ -47,7 +38,10 @@ module bbf-sub-interfaces {
      such, this module is specific to access network equipment (e.g.,
      BBF-specified Access Nodes and FTTdp DPUs).
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Specifically, this module augments an interface with
+     sub-interface-specific frame processing configuration.
+
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -87,9 +81,19 @@ module bbf-sub-interfaces {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-12-03 {
     description
       "Amendment 2.
@@ -118,9 +122,8 @@ module bbf-sub-interfaces {
        rewrites.";
   }
 
-
-  augment '/if:interfaces/if:interface' {
-    when "derived-from-or-self (if:type, 'bbfift:sub-interface')" {
+  augment "/if:interfaces/if:interface" {
+    when "derived-from-or-self(if:type, 'bbfift:sub-interface')" {
       description
         "Common data that defines the relationship between the
          sub-interface and its lower-layer interface.";
@@ -128,48 +131,35 @@ module bbf-sub-interfaces {
     description
       "Add a reference pointing to a lower-layer interface to those
        interfaces that are of the type sub-interface.";
-
     container subif-lower-layer {
       description
         "Links the sub-interface to a lower-layer interface.";
-
       leaf interface {
         type if:interface-ref;
-
-        must
-          "derived-from-or-self(
-           /if:interfaces/if:interface[if:name = current()]
-           /if:type,'ianaift:ethernetCsmacd')
-           or
-           derived-from-or-self(
-           /if:interfaces/if:interface[if:name = current()]
-           /if:type,'ianaift:ieee8023adLag')
-           or
-           derived-from-or-self(
-           /if:interfaces/if:interface[if:name = current()]
-           /if:type,'ianaift:ptm')
-           or
-           derived-from-or-self(
-           /if:interfaces/if:interface[if:name = current()]
-           /if:type,'bbfift:sub-interface')
-           or
-           derived-from(
-           /if:interfaces/if:interface[if:name = current()]
-           /if:type,'bbfift:ethernet-like') ";
-
         mandatory true;
-
         description
           "References the lower-layer interface.";
       }
     }
-
     choice frame-processing {
       description
-        "Configuration of frame processing.";
+        "Configuration of frame processing.
 
+         Multiple alternatives can be defined. They all have in common
+         that the definition of the frame processing is relative to
+         the lower layer interface configured in leaf
+         'subif-lower-layer'.
+
+         For example, if there is configuration for ingress frame
+         processing, then this means that frames received on the
+         referenced lower layer interface are subject to evaluation
+         using the match criteria configured for this sub-interface.
+         Not configuring any frame processing case implies that there
+         are no ingress match criteria to select frames received from
+         the lower layer interface into this sub-interface, and hence
+         this sub-interface will not have to process any ingress
+         frame.";
       case inline-frame-processing {
-
         container inline-frame-processing {
           description
             "The frame processing refers to both directions:
@@ -184,18 +174,15 @@ module bbf-sub-interfaces {
                this sub-interface.
              - For both the ingress and egress direction, rewrite =
                tag manipulations can be supported.";
-
           container ingress-rule {
             description
               "The match used to classify ingress frames to this
                sub-interface, and it allows to specify re-tagging
                actions before sending it to higher layers in the
                interface stack or to a forwarder.";
-
             list rule {
               key "name";
               min-elements 1;
-
               description
                 "A rule contains a classification and for packets that
                  match this classification it specifies an ingress tag
@@ -204,19 +191,16 @@ module bbf-sub-interfaces {
                  The definition is: first match, then stop searching
                  for matches with other rules, then execute the
                  ingress-rewrite actions specified in this rule.";
-
               leaf name {
                 type bbf-yang:string-ascii64;
                 description
                   "The rule name.";
               }
-
               leaf priority {
                 type uint16 {
                   range "1..max";
                 }
                 mandatory true;
-
                 description
                   "This field indicates the priority for applying the
                    match criteria of this rule against the priority of
@@ -224,9 +208,24 @@ module bbf-sub-interfaces {
                    sub-interfaces on the same parent-interface.
 
                    The higher the value, the lower the priority, i.e.
-                   priority 1 is the highest priority.";
-              }
+                   priority 1 is the highest priority.
 
+                   Note that priorities of rules do not have to be
+                   unique within a lower-layer interface. For example,
+                   if there is no overlap in the 'flexible-match'
+                   criteria of of a different sub-interfaces having
+                   the same lower layer interface, then the
+                   configuration is still unambiguous. If different
+                   sub-interfaces with the same lower layer interface
+                   are configured such that there is overlap between
+                   their flexible-match criteria, then unambiguity is
+                   achieved by configuring the rules with different
+                   priorities. If the priority is configured equal,
+                   despite having overlapping match criteria, then the
+                   device's behavior is undefined, meaning, it can be
+                   different in different devices, even more it can be
+                   different in single device over time.";
+              }
               container flexible-match {
                 description
                   "This container provides a generic framework to
@@ -237,7 +236,6 @@ module bbf-sub-interfaces {
                    context match criteria can be augmented for MPLS
                    frames.";
               }
-
               container ingress-rewrite {
                 if-feature "tag-rewrites";
                 description
@@ -247,7 +245,6 @@ module bbf-sub-interfaces {
               }
             }
           }
-
           container egress-rewrite {
             if-feature "tag-rewrites";
             description

@@ -1,14 +1,11 @@
 module bbf-ptm {
   yang-version 1.1;
-
   namespace "urn:bbf:yang:bbf-ptm";
-
   prefix bbf-ptm;
 
   import ietf-interfaces {
     prefix if;
   }
-
   import iana-if-type {
     prefix ianaift;
   }
@@ -16,35 +13,33 @@ module bbf-ptm {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
-    "This module contains a collection of YANG definitions for 
-     supporting the Broadband Forum requirements on interface 
-     management as applicable to access network equipment. As such, 
-     this module is specific to access network equipment (e.g., 
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on interface
+     management as applicable to access network equipment. As such,
+     this module is specific to access network equipment (e.g.,
      BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module augments the IETF interfaces data 
-     model, ietf-interfaces (RFC7223), with nodes for managing 
+     Specifically, this module augments the IETF interfaces data
+     model, ietf-interfaces (RFC7223), with nodes for managing
      Packet Transfer Mode (PTM) interfaces.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -84,12 +79,22 @@ module bbf-ptm {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -98,31 +103,36 @@ module bbf-ptm {
                         TR-383_Amendment-1.pdf>";
   }
 
-  augment '/if:interfaces/if:interface' {
+  augment "/if:interfaces/if:interface" {
     when 'derived-from-or-self(if:type, "ianaift:ptm")' {
       description
-        "Common data that defines the relationship between the PTM 
+        "Common data that defines the relationship between the PTM
          interface and its lower-layer interface.";
     }
-
     description
-      "Add a reference to a lower-layer interface that is of the type 
+      "Add a reference to a lower-layer interface that is of the type
        PTM.";
-
     container ptm {
       description
         "Links the PTM interface to a lower-layer interface.";
-
       leaf lower-layer-if {
         type if:interface-ref;
-
-        must
-          "derived-from-or-self(
-           /if:interfaces/if:interface[if:name = current()]
-           /if:type,'ianaift:fastdsl')";
-
+        must "derived-from-or-self(/if:interfaces/if:interface"
+           + "[if:name = current()]/if:type,'ianaift:fastdsl') or "
+           + "derived-from-or-self(/if:interfaces/if:interface"
+           + "[if:name = current()]/if:type,'ianaift:g9981') or "
+           + "derived-from-or-self(/if:interfaces/if:interface"
+           + "[if:name = current()]/if:type,'ianaift:g9982') or "
+           + "derived-from-or-self(/if:interfaces/if:interface"
+           + "[if:name = current()]/if:type,'ianaift:g9983')" {
+          error-message
+            "The lower layer of a PTM interface must be a fastdsl "
+          + "or a bonding interface.";
+          description
+            "Only allow fastdsl interfaces or one of the bonding
+             interfaces as lower layer for a PTM interface.";
+        }
         mandatory true;
-
         description
           "References the lower-layer interface.
            The lower-layer must be of the type fastdsl.";
@@ -135,15 +145,12 @@ module bbf-ptm {
       "A reference to a PTM interface configuration data.";
     leaf interface {
       type if:interface-ref;
-
-      must
-        "derived-from-or-self(/if:interfaces/
-         if:interface[if:name = current()]/if:type,
-         'ianaift:ptm')" {
+      must "derived-from-or-self(/if:interfaces/
+            if:interface[if:name = current()]/if:type,
+            'ianaift:ptm')" {
         description
           "The referenced interface must be of the type PTM.";
       }
-
       description
         "A reference to a PTM interface's configuration data.";
     }
@@ -154,15 +161,12 @@ module bbf-ptm {
       "A reference to a PTM interface state data.";
     leaf interface {
       type if:interface-state-ref;
-
-      must
-        "derived-from-or-self(/if:interfaces-state/
-         if:interface[if:name = current()]/if:type,
-         'ianaift:ptm')" {
+      must "derived-from-or-self(/if:interfaces-state/
+            if:interface[if:name = current()]/if:type,
+            'ianaift:ptm')" {
         description
           "The referenced interface must be of the type PTM.";
       }
-
       description
         "A reference to a PTM interface's state data.";
     }

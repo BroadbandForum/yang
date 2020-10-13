@@ -18,7 +18,7 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -27,10 +27,10 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
      WA Director: Joey Boyd, ADTRAN";
   description
     "This submodule contains a collection of YANG definitions for
-     managing Broadband Forum TR-252i3 clause 9.1 xTU Sub-Carrier
-     Status.
+     managing Broadband Forum TR-252i3 clause 9.1 xDSL Transceiver
+     Unit (xTU) Sub-Carrier Status.
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Copyright (c) 2016-2020 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +70,19 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2019-10-21 {
     description
       "Amendment 2 Corrigendum 1.
@@ -209,9 +219,10 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
 
   grouping xtu-sub-carrier-status {
     description
-      "The xTU Sub-Carrier Status object represents current detailed
-       status / measurements relating to a particular sub-carrier or
-       a sub-carrier group in an xDSL Line at a particular xTU.";
+      "The xDSL Transceiver Unit (xTU) Sub-Carrier Status object
+       represents current detailed status / measurements relating to a
+       particular sub-carrier or a sub-carrier group in an xDSL Line
+       at a particular xTU.";
     container hlin {
       description
         "State data nodes related to sub-carrier Hlin.";
@@ -541,7 +552,7 @@ submodule bbf-vdsl-xtu-sub-carrier-status-body {
         leaf band-index {
           type uint16;
           description
-            "Xlin band index";
+            "Xlin band index.";
         }
         uses sub-carrier-range {
           refine "start-index" {

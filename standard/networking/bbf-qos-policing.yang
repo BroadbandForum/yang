@@ -1,53 +1,50 @@
 module bbf-qos-policing {
   yang-version 1.1;
   namespace "urn:bbf:yang:bbf-qos-policing";
-
   prefix bbf-qos-plc;
 
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import bbf-qos-classifiers {
     prefix bbf-qos-cls;
   }
-
   import bbf-qos-policing-types {
     prefix bbf-qos-plc-tp;
+  }
+  import bbf-dot1q-types {
+    prefix bbf-dot1qt;
   }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
-    "This module contains a collection of YANG definitions for 
+    "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the management of
-     Quality of Service (QoS) as applicable to access network 
-     equipment. As such, this module is specific to access network 
+     Quality of Service (QoS) as applicable to access network
+     equipment. As such, this module is specific to access network
      equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module contains a collection of type and data
-     definitions for use of some policer types that act on an 
-     individual flow.
+     Specifically, this module augments classifiers to manage the
+     policing of flows.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -87,12 +84,22 @@ module bbf-qos-policing {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -103,7 +110,7 @@ module bbf-qos-policing {
 
   feature single-rate-two-color-marker {
     description
-      "The system supports the single rate two color policer, also 
+      "The system supports the single rate two color policer, also
        called single bucket policer.";
   }
 
@@ -122,9 +129,15 @@ module bbf-qos-policing {
       "The system supports the two rate three color policer.";
   }
 
+  feature two-rate-three-color-marker-color-promotion {
+    description
+      "The system supports the two rate three color policer with
+       color promotion.";
+  }
+
   feature policing-profile-ref {
     description
-      "The system supports the single rate two color policer, also 
+      "The system supports the single rate two color policer, also
        called single bucket policer.";
   }
 
@@ -145,7 +158,7 @@ module bbf-qos-policing {
   identity bac-color {
     base bbf-qos-cls:action-type;
     description
-      "The action-type identity indicating the color used in the 
+      "The action-type identity indicating the color used in the
        buffer acceptance control process.";
   }
 
@@ -157,15 +170,15 @@ module bbf-qos-policing {
 
   typedef qos-color {
     type enumeration {
-      enum "green" {
+      enum green {
         description
           "Identifies the green color packet.";
       }
-      enum "yellow" {
+      enum yellow {
         description
           "Identifies the yellow color packet.";
       }
-      enum "red" {
+      enum red {
         description
           "Identifies the red color packet.";
       }
@@ -177,23 +190,21 @@ module bbf-qos-policing {
   grouping single-rate-two-color-marker {
     container single-rate-two-color-marker {
       description
-        "Single rate two color policer, also called single bucket 
+        "Single rate two color policer, also called single bucket
          policer.";
-
       leaf cir {
         type bbf-qos-plc-tp:information-rate;
         description
-          "Committed Information Rate (CIR) is used to define the 
-           average rate of traffic that respect the guarantees of 
-           bandwidth. This traffic is defined as green traffic its 
+          "Committed Information Rate (CIR) is used to define the
+           average rate of traffic that respect the guarantees of
+           bandwidth. This traffic is defined as green traffic its
            transmission is guaranteed across the network.";
       }
-
       leaf cbs {
         type bbf-qos-plc-tp:burst-size;
         description
-          "Committed Burst Size (CBS) defines the amount of traffic 
-           that can be admitted above the CIR and is considered 
+          "Committed Burst Size (CBS) defines the amount of traffic
+           that can be admitted above the CIR and is considered
            green.";
       }
     }
@@ -205,29 +216,26 @@ module bbf-qos-policing {
     container single-rate-three-color-marker {
       description
         "Single rate three color policer.";
-
       leaf cir {
         type bbf-qos-plc-tp:information-rate;
         description
-          "Committed Information Rate (CIR) is used to define the 
-           average rate of traffic that respect the guarantees of 
-           bandwidth. This traffic is defined as green traffic its 
+          "Committed Information Rate (CIR) is used to define the
+           average rate of traffic that respect the guarantees of
+           bandwidth. This traffic is defined as green traffic its
            transmission is guaranteed across the network.";
       }
-
       leaf cbs {
         type bbf-qos-plc-tp:burst-size;
         description
-          "Committed Burst Size (CBS) defines the amount of traffic 
-           that can be admitted above the CIR and is considered 
+          "Committed Burst Size (CBS) defines the amount of traffic
+           that can be admitted above the CIR and is considered
            green.";
       }
-
       leaf ebs {
         type bbf-qos-plc-tp:burst-size;
         description
-          "Excess burst size (EBS) defines the amount of excessive 
-           traffic that can be admitted above the CBS and is 
+          "Excess burst size (EBS) defines the amount of excessive
+           traffic that can be admitted above the CBS and is
            considered yellow.";
       }
     }
@@ -241,40 +249,36 @@ module bbf-qos-policing {
     container two-rate-three-color-marker {
       description
         "Two rate three color policer.";
-
       leaf cir {
         type bbf-qos-plc-tp:information-rate;
         description
-          "Committed Information Rate (CIR) is used to define the 
-           average rate of traffic that respect the guarantees of 
-           bandwidth. This traffic is defined as green traffic its 
+          "Committed Information Rate (CIR) is used to define the
+           average rate of traffic that respect the guarantees of
+           bandwidth. This traffic is defined as green traffic its
            transmission is guaranteed across the network.";
       }
-
       leaf cbs {
         type bbf-qos-plc-tp:burst-size;
         description
-          "Committed Burst Size (CBS) defines the amount of traffic 
-           that can be admitted above the CIR and is considered 
+          "Committed Burst Size (CBS) defines the amount of traffic
+           that can be admitted above the CIR and is considered
            green.";
       }
-
       leaf pir {
         type bbf-qos-plc-tp:information-rate;
         description
           "Peak Information Rate (PIR) is used to define the average
-           rate of traffic that is admitted in the network with the 
-           assurance that it will not be discarded directly by the 
-           policer, the traffic in excess to the green one can be 
-           discarded in case of congestion and is considered 
+           rate of traffic that is admitted in the network with the
+           assurance that it will not be discarded directly by the
+           policer, the traffic in excess to the green one can be
+           discarded in case of congestion and is considered
            yellow.";
       }
-
       leaf pbs {
         type bbf-qos-plc-tp:burst-size;
         description
-          "Peak burst size (PBS) defines the amount of traffic that 
-           can be admitted above the PIR (burst) without being 
+          "Peak burst size (PBS) defines the amount of traffic that
+           can be admitted above the PIR (burst) without being
            discarded directly by the policer (yellow).";
       }
     }
@@ -288,101 +292,137 @@ module bbf-qos-policing {
     container two-rate-three-color-marker-mef {
       description
         "MEF standard two rate three color policer.";
-
       leaf cir {
         type bbf-qos-plc-tp:information-rate;
         description
-          "Committed Information Rate (CIR) is used to define the 
-           average rate of traffic that respect the guarantees of 
-           bandwidth. This traffic is defined as green traffic its 
+          "Committed Information Rate (CIR) is used to define the
+           average rate of traffic that respect the guarantees of
+           bandwidth. This traffic is defined as green traffic its
            transmission is guaranteed across the network.";
       }
-
       leaf cbs {
         type bbf-qos-plc-tp:burst-size;
         description
-          "Committed Burst Size (CBS) defines the amount of traffic 
-           that can be admitted above the CIR and is considered 
+          "Committed Burst Size (CBS) defines the amount of traffic
+           that can be admitted above the CIR and is considered
            green.";
       }
-
       leaf eir {
         type bbf-qos-plc-tp:information-rate;
         description
-          "Excess Information Rate (EIR) is used to define how much 
+          "Excess Information Rate (EIR) is used to define how much
            traffic exceeding the CIR can be admitted in the network
-           with the assurance that it will not be discarded directly 
+           with the assurance that it will not be discarded directly
            by the policer, this traffic can be discarded in case of
            congestion and is considered yellow.";
       }
-
       leaf ebs {
         type bbf-qos-plc-tp:burst-size;
         description
-          "Excess burst size (EBS) defines the amount of excessive 
-           traffic that can be admitted above the EIR without being 
+          "Excess burst size (EBS) defines the amount of excessive
+           traffic that can be admitted above the EIR without being
            discarded directly by the policer (yellow).";
       }
-
       leaf couple-flag {
         type bbf-qos-plc-tp:coupling-flag;
         description
-          "The Coupling Flag CF controls the volume of the packets 
-           that are declared Yellow. 
+          "The Coupling Flag CF controls the volume of the packets
+           that are declared Yellow.
 
-           When CF is set to 0, the long term average bit rate of 
-           packets that are declared Yellow is bounded by EIR. 
+           When CF is set to 0, the long term average bit rate of
+           packets that are declared Yellow is bounded by EIR.
 
-           When CF is set to 1, the long term average bit rate of 
-           packets that are declared Yellow is bounded by CIR + EIR 
-           depending on volume of the offered Service Frames that 
-           are declared Green. In both cases the burst size of the 
+           When CF is set to 1, the long term average bit rate of
+           packets that are declared Yellow is bounded by CIR + EIR
+           depending on volume of the offered Service Frames that
+           are declared Green. In both cases the burst size of the
            packets that are declared Yellow is bounded by EBS.";
       }
-
       leaf color-mode {
         type bbf-qos-plc-tp:color-mode;
         description
-          "Configures the color mode of the policer. The color mode 
-           leaf indicates whether the color-aware or 
-           color-blind property is employed by the policer 
-           profile.";
+          "Configures the color mode of the policer. The color mode
+           leaf indicates whether the color-aware or color-blind
+           property is employed by the policer profile.";
       }
     }
-
     description
       "Two rate three color policer MEF attributes.";
     reference
       "MEF 10.2: Ethernet Services Attributes Phase 2";
   }
 
+  grouping two-rate-three-color-marker-color-promotion {
+    container two-rate-three-color-marker-color-promotion {
+      description
+        "Two rate three color policer with color promotion. This
+         policer behaves similar to the
+         'two-rate-three-color-marker-mef' policer with 'color-mode'
+         equal to 'color-aware' and 'couple-flag' set to 1 albeit with
+         one exception.
+
+         If the CIR is not fully utilized with green traffic, yellow
+         traffic entering the policer may be promoted to green in
+         order to satisfy a Service Level Agreement (SLA) which may
+         guarantee a certain CIR.";
+      leaf cir {
+        type bbf-qos-plc-tp:information-rate;
+        description
+          "Committed Information Rate (CIR) is used to define the
+           average rate of traffic that respect the guarantees of
+           bandwidth. This traffic is defined as green traffic its
+           transmission is guaranteed across the network.";
+      }
+      leaf cbs {
+        type bbf-qos-plc-tp:burst-size;
+        description
+          "Committed Burst Size (CBS) defines the amount of traffic
+           that can be admitted above the CIR and is considered
+           green.";
+      }
+      leaf eir {
+        type bbf-qos-plc-tp:information-rate;
+        description
+          "Excess Information Rate (EIR) is used to define how much
+           traffic exceeding the CIR can be admitted in the network
+           with the assurance that it will not be discarded directly
+           by the policer, this traffic can be discarded in case of
+           congestion and is considered yellow.";
+      }
+      leaf ebs {
+        type bbf-qos-plc-tp:burst-size;
+        description
+          "Excess burst size (EBS) defines the amount of excessive
+           traffic that can be admitted above the EIR without being
+           discarded directly by the policer (yellow).";
+      }
+    }
+    description
+      "Two rate three color policer with color promotion.";
+  }
+
   container policing-profiles {
     description
       "Configuration associated with policing profiles.";
-
     list policing-profile {
       key "name";
       description
         "List of policing profiles.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "The name of the policing profile.";
       }
-
       leaf scope {
         type bbf-qos-cls:action-scope;
         description
-          "Identifies the scope of the policer instance sharing is 
+          "Identifies the scope of the policer instance sharing is
            within Ethernet interface or VLAN sub-interface.";
       }
-
       choice policing-type {
         mandatory true;
         description
           "This defines the type of the policer.";
-
         case single-rate-two-color-marker-type {
           if-feature "single-rate-two-color-marker";
           uses single-rate-two-color-marker;
@@ -390,15 +430,13 @@ module bbf-qos-policing {
             "This represents the policer type of single rate two color
              marker.";
         }
-
         case single-rate-three-color-marker-type {
           if-feature "single-rate-three-color-marker";
           uses single-rate-three-color-marker;
           description
-            "This represents the policer type of single rate three 
+            "This represents the policer type of single rate three
              color marker.";
         }
-
         case two-rate-three-color-marker-type {
           if-feature "two-rate-three-color-marker";
           uses two-rate-three-color-marker;
@@ -406,23 +444,27 @@ module bbf-qos-policing {
             "This represents the policer type of two rate three color
              marker.";
         }
-
         case two-rate-three-color-marker-mef-type {
           if-feature "two-rate-three-color-marker-mef";
           uses two-rate-three-color-marker-mef;
           description
             "This represents the policer type of MEF standard.";
         }
+        case two-rate-three-color-marker-color-promotion-type {
+          if-feature "two-rate-three-color-marker-color-promotion";
+          uses two-rate-three-color-marker-color-promotion;
+          description
+            "This represents the policer type of two rate three color
+             with color promotion.";
+        }
       }
-
       container hierarchical-policing {
         description
-          "Hierarchical policing is the concept in which 
-           packets are evaluated against multiple policers. These 
-           multiple policers encompass one another. I.e. 
-           traffic processed in the scope of a first policer is also 
-           processed in the scope of a second policer.";
-
+          "Hierarchical policing is the concept in which packets are
+           evaluated against multiple policers. These multiple
+           policers encompass one another. I.e. traffic processed in
+           the scope of a first policer is also processed in the scope
+           of a second policer.";
         uses policing-profile-ref;
       }
     }
@@ -431,43 +473,80 @@ module bbf-qos-policing {
   grouping policing-profile-ref {
     description
       "A reference to a policing profile.";
-
     leaf policing-profile {
       type leafref {
-        path '/bbf-qos-plc:policing-profiles/bbf-qos-plc:policing-'
-           + 'profile/bbf-qos-plc:name';
+        path "/bbf-qos-plc:policing-profiles/bbf-qos-plc:policing-"
+           + "profile/bbf-qos-plc:name";
       }
       description
         "The name of the referenced policing-profile.";
     }
   }
 
-  augment '/bbf-qos-cls:classifiers/bbf-qos-cls:classifier-entry/'
-        + 'bbf-qos-cls:filter-method/bbf-qos-cls:inline/bbf-qos-'
-        + 'cls:match-criteria' {
+  augment "/bbf-qos-cls:classifiers/bbf-qos-cls:classifier-entry/"
+        + "bbf-qos-cls:filter-method/bbf-qos-cls:inline/bbf-qos-"
+        + "cls:match-criteria" {
     description
-      "Flexible match on the P-bit or DEI or flow color for assigning
+      "Flexible match on the p-bits or DEI or flow color for assigning
        packets to a flow.";
-
-    uses bbf-qos-cls:pbit-marking;
-
-    uses bbf-qos-cls:dei-marking;
-
+    list pbit-marking-list {
+      key "index";
+      status deprecated;
+      description
+        "Match on metadata created as the output of another
+         classifier. This metadata consists of a p-bits value
+         associated with a numeric index.";
+      leaf index {
+        type bbf-qos-cls:qos-pbit-marking-index;
+        status deprecated;
+        description
+          "The index associated with a p-bits value.";
+      }
+      leaf pbit-value {
+        type bbf-dot1qt:pbit;
+        status deprecated;
+        description
+          "A p-bits value to be used as match criteria from the output
+           of another classifier associated with the same QoS
+           policy.";
+      }
+    }
+    list dei-marking-list {
+      key "index";
+      status deprecated;
+      description
+        "Match on metadata created as the output of another
+         classifier. This metadata consists of a DEI value associated
+         with a numeric index.";
+      leaf index {
+        type bbf-qos-cls:qos-dei-marking-index;
+        status deprecated;
+        description
+          "The index associated with a DEI value.";
+      }
+      leaf dei-value {
+        type bbf-dot1qt:dei;
+        status deprecated;
+        description
+          "A DEI value to be used as match criteria from the output of
+           another classifier associated with the same QoS policy.";
+      }
+    }
     leaf-list flow-color {
       type qos-color;
+      status deprecated;
       description
-        "Defines the packet color as classification criterium for 
+        "Defines the packet color as a classification criterion for
          assigning packets to a flow.";
     }
   }
 
-  augment '/bbf-qos-cls:classifiers/bbf-qos-cls:classifier-entry/'
-        + 'bbf-qos-cls:classifier-action-entry-cfg/bbf-qos-cls:'
-        + 'action-cfg-params' {
+  augment "/bbf-qos-cls:classifiers/bbf-qos-cls:classifier-entry/"
+        + "bbf-qos-cls:classifier-action-entry-cfg/bbf-qos-cls:"
+        + "action-cfg-params" {
     description
-      "Choice of action types for packets matching a classification 
+      "Choice of action types for packets matching a classification
        criterium.";
-
     case flow-color {
       leaf flow-color {
         when '../bbf-qos-cls:action-type="bbf-qos-plc:flow-color"' {
@@ -476,12 +555,11 @@ module bbf-qos-policing {
         }
         type qos-color;
         description
-          "Defines the packet color for when color-aware 
-           classification/actions is needed in a proceeding QoS 
+          "Defines the packet color for when color-aware
+           classification/actions is needed in a proceeding QoS
            policy.";
       }
     }
-
     case bac-color {
       leaf bac-color {
         when '../bbf-qos-cls:action-type="bbf-qos-plc:bac-color"' {
@@ -493,7 +571,6 @@ module bbf-qos-policing {
           "Defines the packet color for color aware BAC queuing.";
       }
     }
-
     case discard {
       leaf discard {
         when '../bbf-qos-cls:action-type="bbf-qos-plc:discard"' {
@@ -505,7 +582,6 @@ module bbf-qos-policing {
           "Defines the action discard packets for a flow.";
       }
     }
-
     case policing {
       container policing {
         when '../bbf-qos-cls:action-type="bbf-qos-plc:policing"' {
@@ -514,7 +590,6 @@ module bbf-qos-policing {
         }
         description
           "Defines a policing function shall be applied to a flow.";
-
         uses policing-profile-ref;
       }
     }

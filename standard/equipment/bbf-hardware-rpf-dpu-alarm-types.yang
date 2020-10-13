@@ -1,0 +1,249 @@
+module bbf-hardware-rpf-dpu-alarm-types {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-hardware-rpf-dpu-alarm-types";
+  prefix bbf-hw-rpf-dpu-alt;
+
+  import bbf-alarm-types {
+    prefix bbf-alt;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Ken Kerpez, ASSIA, Inc.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia
+
+     WA Director: Joey Boyd, ADTRAN";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on management of
+     Reverse Power Feeding (RPF) as defined in ITU G.997.2 Annex A and
+     BBF TR-159. As such, this module is specific to access network
+     equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module contains a set of alarm definitions
+     related to RPF functionality.
+
+     Copyright (c) 2016-2020 Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-355a3; see
+     the TR itself for full legal notices.";
+
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
+
+  /* ABSTRACT IDENTITIES */
+
+  identity rpf-alarm {
+    base bbf-alt:bbf-alarm-type-id;
+    description
+      "Base identity for all Reverse Power Feeding (RPF) alarm type
+       identifiers defined in TR-355 YANG modules.
+
+       +--rpf                                              (abstract)
+          +--near-end-line-alarm                           (abstract)
+          |  +--loss-of-power-alarm-pse-unknown-reason     (concrete)
+          |  +--prp-error-status-alarm                     (concrete)
+          |  +--line-error-status-alarm                    (concrete)
+          +--far-end-line-alarm                            (abstract)
+          |  +--loss-of-power-alarm-pse-off-hook-phone     (concrete)
+          +--near-end-system-alarm                         (abstract)
+             +--loss-of-power-alarm-dpu-fault-condition    (concrete)
+             +--loss-of-power-alarm-dpu-insufficient-power (concrete)
+
+       This identity is abstract and SHOULD NOT generally be used for
+       alarms. If used to define an alarm that was not known at
+       design time, it MUST be qualified with an alarm type qualifier
+       string. This practice, however, should be generally avoided to
+       ensure all possible alarms are known at design time.";
+  }
+
+  identity near-end-line-alarm {
+    base rpf-alarm;
+    description
+      "Base identity for all Reverse Power Feeding (RPF) near end
+       line alarms.
+
+       This identity is abstract and SHOULD NOT generally be used for
+       alarms. If used to define an alarm that was not known at
+       design time, it MUST be qualified with an alarm type qualifier
+       string. This practice, however, should be generally avoided to
+       ensure all possible alarms are known at design time.";
+  }
+
+  identity far-end-line-alarm {
+    base rpf-alarm;
+    description
+      "Base identity for all Reverse Power Feeding (RPF) far end
+       line alarms.
+
+       This identity is abstract and SHOULD NOT generally be used for
+       alarms. If used to define an alarm that was not known at
+       design time, it MUST be qualified with an alarm type qualifier
+       string. This practice, however, should be generally avoided to
+       ensure all possible alarms are known at design time.";
+  }
+
+  identity near-end-system-alarm {
+    base rpf-alarm;
+    description
+      "Base identity for all Reverse Power Feeding (RPF) near end
+       system alarms.
+
+       This identity is abstract and SHOULD NOT generally be used for
+       alarms. If used to define an alarm that was not known at
+       design time, it MUST be qualified with an alarm type qualifier
+       string. This practice, however, should be generally avoided to
+       ensure all possible alarms are known at design time.";
+  }
+
+  /* NEAR END LINE ALARMS */
+
+  identity loss-of-power-alarm-pse-unknown-reason {
+    base near-end-line-alarm;
+    description
+      "If the Persistent Management Agent (PMA) has enabled the PE-UKN
+       alarm notification, the Distribution Point Unit (DPU) shall
+       autonomously send a PE-UKN alarm to the PMA when the PSE-RPF
+       state (see clause A.7.4.2.2) becomes PSE-UKN.";
+    reference
+      "ITU-T G.997.2 clause A.7.2.1.1";
+  }
+
+  identity prp-error-status-alarm {
+    base near-end-line-alarm;
+    description
+      "If the Persistent Management Agent (PMA) has enabled the
+       DPU-PRP-ERROR alarm notification, the Distribution Point Unit
+       (DPU) shall autonomously send a PRP Error Status
+       (DPU-PRP-ERROR) alarm upon the PRP Error Status (DPU-PRP-ERROR,
+       see clause A.7.4.1.4) indicating an error condition on the
+       line.";
+    reference
+      "ITU-T G.997.2 clause A.7.2.1.3";
+  }
+
+  identity line-error-status-alarm {
+    base near-end-line-alarm;
+    description
+      "If the Persistent Management Agent (PMA) has enabled the
+       DPU-LES alarm notification and the Distribution Point Unit
+       (DPU) supports the Line Error Status object, the DPU shall
+       autonomously send a Line Error Status (DPU-LES) alarm upon the
+       Line Error Status (DPU-LES, see clause A.7.4.1.5) indicating
+       an error condition on the line.";
+    reference
+      "ITU-T G.997.2 clause A.7.2.1.4";
+  }
+
+  /* FAR END LINE ALARMS */
+
+  identity loss-of-power-alarm-pse-off-hook-phone {
+    base far-end-line-alarm;
+    description
+      "If the Persistent Management Agent (PMA) has enabled the
+       PSE-OHP alarm notification, the Distribution Point Unit (DPU)
+       shall autonomously send a PSE-OHP alarm to the PMA when the
+       PSE-RPF state (see clause A.7.4.2.2) becomes PSE-OHP.";
+    reference
+      "ITU-T G.997.2 clause A.7.2.2.1";
+  }
+
+  /* NEAR END SYSTEM ALARMS */
+
+  identity loss-of-power-alarm-dpu-fault-condition {
+    base near-end-system-alarm;
+    description
+      "A DPU-LLPF failure is declared for the Distribution Point Unit
+       (DPU) when the DPU is about to shut down because the last
+       Reverse Power Feeding (RPF) line has ceased providing power due
+       to one of the following fault conditions:
+        - the PSE-RPF state (see clause A.7.4.2.2) becomes PSE-UKN;
+        - the PSE-RPF state (see clause A.7.4.2.2) becomes PSE-OHP.
+       If the Persistent Management Agent (PMA) has enabled DPU-LLPF
+       failure notification, the DPU shall autonomously indicate to
+       the PMA when a DPU-LLPF failure is declared, thereby
+       identifying the last RPF line that has ceased providing power
+       and indicating for that line the PSE-RPF state (see clause
+       A.7.4.2.2).";
+    reference
+      "ITU-T G.997.2 clause A.7.2.3.1";
+  }
+
+  identity loss-of-power-alarm-dpu-insufficient-power {
+    base near-end-system-alarm;
+    description
+      "A DPU-MLPF failure is declared for the Distribution Point Unit
+       (DPU) when the DPU is about to shut down because one or more
+       Reverse Power Feeding (RPF) lines have ceased providing power,
+       each due to one of the following (fault) conditions:
+         - the PSE-RPF state (see clause A.7.4.2.2) becomes PSE-UKN;
+         - the PSE-RPF state (see clause A.7.4.2.2) becomes PSE-OHP.
+         - the PSE-RPF state (see clause A.7.4.2.2) becomes PSE-DGL,
+       If the Persistent Management Agent (PMA) has enabled DPU-MLPF
+       failure notification, the DPU shall autonomously indicate to
+       the PMA when a DPU-MLPF failure is declared, thereby
+       identifying the one or more RPF lines that have ceased
+       providing power and indicating for those lines the PSE-RPF
+       state (see clause A.7.4.2.2).";
+    reference
+      "ITU-T G.997.2 clause A.7.2.3.2";
+  }
+}

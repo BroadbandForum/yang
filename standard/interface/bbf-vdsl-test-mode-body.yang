@@ -17,7 +17,7 @@ submodule bbf-vdsl-test-mode-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -28,7 +28,7 @@ submodule bbf-vdsl-test-mode-body {
     "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 5.1 xDSL Line.
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Copyright (c) 2016-2020 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +68,19 @@ submodule bbf-vdsl-test-mode-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2019-10-21 {
     description
       "Amendment 2 Corrigendum 1.
@@ -138,7 +148,7 @@ submodule bbf-vdsl-test-mode-body {
        update test parameters.";
     container test-mode {
       description
-        "update test parameters";
+        "Update test parameters.";
       leaf power-management-state-forced {
         type enumeration {
           enum 0 {
@@ -186,8 +196,9 @@ submodule bbf-vdsl-test-mode-body {
         default "4";
         description
           "This configuration parameter defines the line states to
-           be forced by the near-end xTU on this line.
-           The default is enum 4, no power management state forced.";
+           be forced by the near-end xDSL Transceiver Unit (xTU) on
+           this line. The default is enum 4, no power management state
+           forced.";
         reference
           "ITU-T G.997.1 7.3.1.1.3 Power management state forced
            (PMSF)";
@@ -196,15 +207,15 @@ submodule bbf-vdsl-test-mode-body {
         type enumeration {
           enum 0 {
             description
-              "Inhibits the near-end xTU from performing loop
-               diagnostic mode procedures on the line. Loop
-               diagnostic mode procedures may still be initiated
+              "Inhibits the near-end xDSL Transceiver Unit (xTU) from
+               performing loop diagnostic mode procedures on the line.
+               Loop diagnostic mode procedures may still be initiated
                by the far-end xTU.";
           }
           enum 1 {
             description
-              "Forces the near-end xTU to perform the loop
-               diagnostic procedures.";
+              "Forces the near-end xDSL Transceiver Unit (xTU) to
+               perform the loop diagnostic procedures.";
           }
           enum 2 {
             description
@@ -215,8 +226,9 @@ submodule bbf-vdsl-test-mode-body {
         description
           "This configuration parameter defines whether the line
            should be forced into the loop diagnostic mode by the
-           near-end xTU on this line. The default is no loop
-           diagnostic mode forced, corresponding to enum 2.
+           near-end xDSL Transceiver Unit (xTU) on this line. The
+           default is no loop diagnostic mode forced, corresponding to
+           enum 2.
 
            Upon completion of the loop diagnostics mode procedures,
            the xTUs return to the IDLE state. The loop diagnostic mode
@@ -262,7 +274,7 @@ submodule bbf-vdsl-test-mode-body {
     container xtu-c {
       description
         "The update-test-ne is performed on the xDSL Transceiver
-         Unit - Central office.";
+         Unit - Central office (xTU-C).";
       leaf update-test-ne {
         type uint8 {
           range "0..1";
@@ -319,7 +331,7 @@ submodule bbf-vdsl-test-mode-body {
     container xtu-r {
       description
         "The update-test-fe is performed on the xDSL Transceiver
-         Unit - Remote site.";
+         Unit - Remote site (xTU-R).";
       leaf update-test-fe {
         type uint8 {
           range "0..1";

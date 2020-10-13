@@ -22,7 +22,7 @@ submodule bbf-selt-base {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -34,7 +34,7 @@ submodule bbf-selt-base {
      managing top level Single Ended Line Test (SELT) configuration
      and augmenations to ietf-interfaces.
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Copyright (c) 2016-2020 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -74,9 +74,19 @@ submodule bbf-selt-base {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2019-06-11 {
     description
       "Amendment 2.
@@ -128,11 +138,11 @@ submodule bbf-selt-base {
   augment "/if:interfaces/if:interface" {
     when "if:type = 'ianaift:fastdsl'" {
       description
-        "Only applicable when the interface type is 'fastdsl'";
+        "Only applicable when the interface type is 'fastdsl'.";
     }
     description
       "Data nodes for the configuration of Single Ended Line Test
-       (SELT)";
+       (SELT).";
     container selt {
       presence
         "If present, indicates that the interface is capable of
@@ -146,11 +156,11 @@ submodule bbf-selt-base {
   augment "/if:interfaces-state/if:interface" {
     when "if:type = 'ianaift:fastdsl'" {
       description
-        "Only applicable when the interface type is 'fastdsl'";
+        "Only applicable when the interface type is 'fastdsl'.";
     }
     description
       "Data nodes for the operational state data of Single Ended Line
-       Test (SELT)";
+       Test (SELT).";
     container selt {
       presence
         "If present, indicates that the interface is capable of

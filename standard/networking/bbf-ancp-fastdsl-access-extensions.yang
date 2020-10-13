@@ -1,0 +1,458 @@
+module bbf-ancp-fastdsl-access-extensions {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-ancp-fastdsl-access-extensions";
+  prefix bbf-ancp-fastdsl-acc-ext;
+
+  import bbf-ancp {
+    prefix bbf-ancp;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, ADTRAN
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on the Access Node
+     Control Protocol (ANCP) as defined in RFC 6320. As such, this
+     module is specific to access network equipment (e.g., BBF-
+     specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module augments bbf-ancp to extend the
+     definitions for FastDSL access technologies, which are used in
+     the management of the Access Node side of the protocol.
+
+     Copyright (c) 2017-2020, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a3; see
+     the TR itself for full legal notices.";
+  reference
+    "RFC 6320";
+
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
+
+  feature port-down-line-attributes {
+    description
+      "Indicates support for the selection of whether FastDSL access
+       line attribute TLVs are included in the Port Down message.";
+  }
+
+  identity fastdsl {
+    base bbf-ancp:access-line-technology;
+    description
+      "Indicates that the access line technology is FastDSL.";
+  }
+
+  identity vdsl-access-line-attribute {
+    base bbf-ancp:access-line-attribute;
+    description
+      "Base identity for defining access line attributes for lines
+       operating in the mode Very high speed Digital Subscriber Line
+       Version 2 (as per ITU-T Recommendation G.993.2).
+
+       This is an abstract identity and MUST NOT be used for access
+       line attributes.";
+    reference
+      "RFC 6320 section 6.5";
+  }
+
+  identity fast-access-line-attribute {
+    base bbf-ancp:access-line-attribute;
+    description
+      "Base identity for defining access line attributes for lines
+       operating in the mode G.Fast (as per ITU-T Recommendation
+       G.9701).
+
+       This is an abstract identity and MUST NOT be used for access
+       line attributes.";
+    reference
+      "RFC 6320 section 6.5";
+  }
+
+  identity fastdsl-type {
+    base vdsl-access-line-attribute;
+    base fast-access-line-attribute;
+    description
+      "The type of transmission system in use.";
+    reference
+      "RFC 6320 section 6.5.2";
+  }
+
+  identity fastdsl-line-state {
+    base vdsl-access-line-attribute;
+    base fast-access-line-attribute;
+    description
+      "The state of the FastDSL access line.";
+    reference
+      "RFC 6320 section 6.5.17";
+  }
+
+  identity actual-net-data-rate-upstream {
+    base vdsl-access-line-attribute;
+    base fast-access-line-attribute;
+    description
+      "Actual upstream net data rate on a FastDSL access line.";
+    reference
+      "RFC 6320 section 6.5.3, ITU-T G.997.1 section 7.5.2.8,
+       ITU-T G.997.2 section 7.11.1.1";
+  }
+
+  identity actual-net-data-rate-downstream {
+    base vdsl-access-line-attribute;
+    base fast-access-line-attribute;
+    description
+      "Actual downstream net data rate on a FastDSL access line.";
+    reference
+      "RFC 6320 section 6.5.4, ITU-T G.997.1 section 7.5.2.8,
+       ITU-T G.997.2 section 7.11.1.1";
+  }
+
+  identity minimum-net-data-rate-upstream {
+    base vdsl-access-line-attribute;
+    description
+      "Minimum upstream net data rate desired by the operator.";
+    reference
+      "RFC 6320 section 6.5.5, ITU-T G.997.1 section 7.3.2.1.1";
+  }
+
+  identity minimum-net-data-rate-downstream {
+    base vdsl-access-line-attribute;
+    description
+      "Minimum downstream net data rate desired by the operator.";
+    reference
+      "RFC 6320 section 6.5.6, ITU-T G.997.1 section 7.3.2.1.1";
+  }
+
+  identity attainable-net-data-rate-upstream {
+    base vdsl-access-line-attribute;
+    base fast-access-line-attribute;
+    description
+      "Maximum net upstream rate that can be attained on the FastDSL
+       access line.";
+    reference
+      "RFC 6320 section 6.5.7, ITU-T G.997.1 section 7.5.1.20,
+       ITU-T G.997.2 section 7.11.2.1";
+  }
+
+  identity attainable-net-data-rate-downstream {
+    base vdsl-access-line-attribute;
+    base fast-access-line-attribute;
+    description
+      "Maximum net downstream rate that can be attained on the FastDSL
+       access line.";
+    reference
+      "RFC 6320 section 6.5.8, ITU-T G.997.1 section 7.5.1.19,
+       ITU-T G.997.2 section 7.11.2.1";
+  }
+
+  identity maximum-net-data-rate-upstream {
+    base vdsl-access-line-attribute;
+    base fast-access-line-attribute;
+    description
+      "Maximum net upstream data rate desired by the operator.";
+    reference
+      "RFC 6320 section 6.5.9, ITU-T G.997.1 section 7.3.2.1.3,
+       ITU-T G.997.2 section 7.2.1.1";
+  }
+
+  identity maximum-net-data-rate-downstream {
+    base vdsl-access-line-attribute;
+    base fast-access-line-attribute;
+    description
+      "Maximum net downstream data rate desired by the operator.";
+    reference
+      "RFC 6320 section 6.5.10, ITU-T G.997.1 section 7.3.2.1.3,
+       ITU-T G.997.2 section 7.2.1.1";
+  }
+
+  identity minimum-net-data-rate-low-power-upstream {
+    base vdsl-access-line-attribute;
+    description
+      "Minimum net upstream data rate desired by the operator in low
+       power state.";
+    reference
+      "RFC 6320 section 6.5.11, ITU-T G.997.1 section 7.3.2.1.5";
+  }
+
+  identity minimum-net-data-rate-low-power-downstream {
+    base vdsl-access-line-attribute;
+    description
+      "Minimum net downstream data rate desired by the operator in
+       low power state.";
+    reference
+      "RFC 6320 section 6.5.12, ITU-T G.997.1 section 7.3.2.1.5";
+  }
+
+  identity maximum-interleaving-delay-upstream {
+    base vdsl-access-line-attribute;
+    description
+      "Maximum one-way interleaving delay in upstream direction.";
+    reference
+      "RFC 6320 section 6.5.13, ITU-T G.997.1 section 7.3.2.2";
+  }
+
+  identity actual-interleaving-delay-upstream {
+    base vdsl-access-line-attribute;
+    description
+      "Actual one-way interleaving delay in upstream direction.";
+    reference
+      "RFC 6320 section 6.5.14, ITU-T G.997.1 section 7.5.2.3";
+  }
+
+  identity maximum-interleaving-delay-downstream {
+    base vdsl-access-line-attribute;
+    description
+      "Maximum one-way interleaving delay in downstream direction.";
+    reference
+      "RFC 6320 section 6.5.15, ITU-T G.997.1 section 7.3.2.2";
+  }
+
+  identity actual-interleaving-delay-downstream {
+    base vdsl-access-line-attribute;
+    description
+      "Actual one-way interleaving delay in downstream direction.";
+    reference
+      "RFC 6320 section 6.5.16, ITU-T G.997.1 section 7.5.2.3";
+  }
+
+  identity expected-throughput-upstream {
+    base fast-access-line-attribute;
+    description
+      "Expected throughput (ETR) in upstream direction.";
+    reference
+      "TR-301 table 14.1, ITU-T G.997.2 section 7.11.1.2";
+  }
+
+  identity expected-throughput-downstream {
+    base fast-access-line-attribute;
+    description
+      "Expected throughput (ETR) in downstream direction.";
+    reference
+      "TR-301 table 14.1, ITU-T G.997.2 section 7.11.1.2";
+  }
+
+  identity attainable-expected-throughput-upstream {
+    base fast-access-line-attribute;
+    description
+      "Attainable expected throughput (ETR) in upstream direction.";
+    reference
+      "TR-301 table 14.1, ITU-T G.997.2 section 7.11.2.2";
+  }
+
+  identity attainable-expected-throughput-downstream {
+    base fast-access-line-attribute;
+    description
+      "Attainable expected throughput (ETR) in downstream direction.";
+    reference
+      "TR-301 table 14.1, ITU-T G.997.2 section 7.11.2.2";
+  }
+
+  identity gamma-data-rate-upstream {
+    base fast-access-line-attribute;
+    description
+      "Attainable gamma data rate (GDR) in upstream direction.";
+    reference
+      "TR-301 table 14.1, ITU-T G.997.2 section 7.11.1.3";
+  }
+
+  identity gamma-data-rate-downstream {
+    base fast-access-line-attribute;
+    description
+      "Gamma data rate (GDR) in downstream direction.";
+    reference
+      "TR-301 table 14.1, ITU-T G.997.2 section 7.11.1.3";
+  }
+
+  identity attainable-gamma-data-rate-upstream {
+    base fast-access-line-attribute;
+    description
+      "Gamma data rate (GDR) in upstream direction.";
+    reference
+      "TR-301 table 14.1, ITU-T G.997.2 section 7.11.2.3";
+  }
+
+  identity attainable-gamma-data-rate-downstream {
+    base fast-access-line-attribute;
+    description
+      "Attainable gamma data rate (GDR) in downstream direction.";
+    reference
+      "TR-301 table 14.1, ITU-T G.997.2 section 7.11.2.3";
+  }
+
+  grouping access-line-attribute-config-parameters {
+    description
+      "Defines the configuration of line attributes to be included
+       in Port Up and Port Down messages.";
+    leaf-list access-line-attribute {
+      type union {
+        type identityref {
+          base bbf-ancp:technology-independent-access-line-attribute;
+        }
+        type identityref {
+          base vdsl-access-line-attribute;
+        }
+        type identityref {
+          base fast-access-line-attribute;
+        }
+      }
+      description
+        "An access line attribute to be included in the Port Up and
+         Port Down messages.";
+      reference
+        "RFC 6320 section 6.5.1";
+    }
+  }
+
+  augment "/bbf-ancp:ancp"
+        + "/bbf-ancp:partitions"
+        + "/bbf-ancp:partition"
+        + "/bbf-ancp:sessions"
+        + "/bbf-ancp:session"
+        + "/bbf-ancp:topology-discovery"
+        + "/bbf-ancp:port-up" {
+    when "../../../../bbf-ancp:technology = "
+       + "'bbf-ancp-fastdsl-acc-ext:fastdsl'" {
+      description
+        "The configuration for FastDSL is only applicable, when the
+         technology of the partition that the session manages is
+         configured for FastDSL.";
+    }
+    description
+      "Augments the configuration of the Port Up message for FastDSL
+       lines.";
+    container fastdsl {
+      description
+        "Configuration of the DSL-Line-Attributes TLV to be included
+         in the Port Up message for FastDSL access lines.";
+      reference
+        "RFC 6320 section 6.5.1";
+      uses access-line-attribute-config-parameters {
+        refine "access-line-attribute" {
+          min-elements 1;
+        }
+      }
+    }
+  }
+
+  augment "/bbf-ancp:ancp"
+        + "/bbf-ancp:partitions"
+        + "/bbf-ancp:partition"
+        + "/bbf-ancp:sessions"
+        + "/bbf-ancp:session"
+        + "/bbf-ancp:topology-discovery"
+        + "/bbf-ancp:port-down" {
+    when "../../../../bbf-ancp:technology = "
+       + "'bbf-ancp-fastdsl-acc-ext:fastdsl'" {
+      description
+        "The configuration for FastDSL is only applicable, when the
+         technology of the partition that the session manages is
+         configured for FastDSL.";
+    }
+    if-feature "port-down-line-attributes";
+    description
+      "Augments the configuration of the Port Down message for
+       FastDSL access lines.";
+    container fastdsl {
+      presence
+        "The presence of this container enables the inclusion of
+         FastDSL access line attributes in the Port Down message.
+
+         If this container is not present, no FastDSL access line
+         attributes will be included in the Port Down message.";
+      description
+        "Configuration of the FastDSL Access Line Attributes TLVs
+         to be included in the Port Down message.";
+      choice which-access-line-attributes {
+        mandatory true;
+        description
+          "Selects which FastDSL access line attribute TLVs to
+           include in the Port Down message for FastDSL access
+           lines.";
+        case same-access-line-attributes-as-port-up {
+          description
+            "Selects that the configuration for FastDSL access line
+             attribute TLVs for the Port Up message is to be
+             used for the Port Down message.";
+          leaf same-access-line-attributes-as-port-up {
+            type empty;
+            description
+              "The configuration for FastDSL access line attribute
+               TLVs for the Port Up message is to be used for the
+               Port Down message for FastDSL access lines.";
+          }
+        }
+        case access-line-attributes {
+          description
+            "Selects which FastDSL access line attribute TLVs to be
+             included in the Port Down message.";
+          uses access-line-attribute-config-parameters {
+            refine "access-line-attribute" {
+              min-elements 1;
+            }
+          }
+        }
+      }
+    }
+  }
+}

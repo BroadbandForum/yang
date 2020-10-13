@@ -15,7 +15,7 @@ submodule bbf-fast-fast-rate-adaptation-profile-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -24,7 +24,7 @@ submodule bbf-fast-fast-rate-adaptation-profile-body {
      WA Director: Joey Boyd, ADTRAN";
   description
     "This submodule contains a collection of YANG definitions for
-     managing fast rate adaptation profiles.
+     managing Fast Rate Adaptation (FRA) profiles.
 
      Copyright (c) 2016-2020 Broadband Forum
 
@@ -66,9 +66,19 @@ submodule bbf-fast-fast-rate-adaptation-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2020-01-17 {
     description
       "Amendment 2 Corrigendum 2.
@@ -201,15 +211,15 @@ submodule bbf-fast-fast-rate-adaptation-profile-body {
 
   grouping fast-rate-adaptation-profile {
     description
-      "Defines the contents of a FRA Profile.";
+      "Defines the contents of a Fast Rate Adaptation (FRA) Profile.";
     container downstream {
       description
-        "Downstream fast rate adaptation profile.";
+        "Downstream Fast Rate Adaptation (FRA) profile.";
       uses fast-rate-adaptation-parameters;
     }
     container upstream {
       description
-        "Upstream fast rate adaptation profile.";
+        "Upstream Fast Rate Adaptation (FRA) profile.";
       uses fast-rate-adaptation-parameters;
     }
   }

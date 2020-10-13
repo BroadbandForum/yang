@@ -20,22 +20,22 @@ submodule bbf-xpon-channel-partition-body {
      Fiber Access Networks Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
 
-     Editor:      Samuel Chen, Broadcom
+     Editor:      Igor Ternovsky, Broadcom
 
      Editor:      Robert Peschi, Nokia
 
      WA Director: Marta Seda, Calix
 
-     WA Director: Lin Wei, Huawei";
+     WA Director: Samuel Chen, Broadcom";
   description
     "This submodule contains a collection of YANG definitions for
      managing channel partitions.
 
-     Copyright (c) 2018, Broadband Forum
+     Copyright (c) 2018-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -75,9 +75,19 @@ submodule bbf-xpon-channel-partition-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385; see
+     This version of this YANG module is part of TR-385i2; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
   revision 2019-02-25 {
     description
       "Initial revision.
@@ -91,14 +101,13 @@ submodule bbf-xpon-channel-partition-body {
 
   grouping channel-partition-config-data {
     description
-      "All config data for a channel partition";
+      "All configuration data for a channel partition";
     leaf channel-group-ref {
       type if:interface-ref;
       must "derived-from-or-self(/if:interfaces"
          + "/if:interface[if:name=current()]/if:type,"
          + "'bbf-xponift:channel-group')" {
-        error-message
-          "Must reference a channel group.";
+        error-message "Must reference a channel group.";
       }
       mandatory true;
       description
@@ -109,8 +118,8 @@ submodule bbf-xpon-channel-partition-body {
         range "0..15";
       }
       description
-        "This attribute identifies the partition inside the
-         channel group.";
+        "This attribute identifies the partition inside the channel
+         group.";
       reference
         "ITU-T G.989.3 clause 6.1.5.9 and clause 11.3.3.14.";
     }
@@ -118,7 +127,7 @@ submodule bbf-xpon-channel-partition-body {
       type boolean;
       default "true";
       description
-        "Enable/Disable downstream FEC.
+        "Enable/Disable downstream Forward Error Correciton (FEC).
          Note that downstream FEC is always enabled for XG-PON and
          XGS-PON and thus a value of 'false' is ignored.";
       reference
@@ -134,9 +143,9 @@ submodule bbf-xpon-channel-partition-body {
       units "km";
       default "0";
       description
-        "Establishes the distance of the closest ONU.
-         Used to determine how to equalize delay
-         between the ONUs.";
+        "Establishes the distance of the closest Optical Network Unit
+         (ONU). Used to determine how to equalize delay between the
+         ONUs.";
     }
     leaf maximum-differential-xpon-distance {
       type uint16 {
@@ -155,8 +164,8 @@ submodule bbf-xpon-channel-partition-body {
       type bbf-xpon-types:auth-method-type;
       default "serial-number";
       description
-        "ONU Authentication mode option for this
-         channel partition.";
+        "Optical Network Unit (ONU) Authentication mode option for
+         this channel partition.";
       reference
         "ITU-T G.984.3, section VI.1.";
     }
@@ -164,8 +173,8 @@ submodule bbf-xpon-channel-partition-body {
       type boolean;
       default "false";
       description
-        "Used to designate whether AES should be
-         enabled/disabled for multicast GEM ports.";
+        "If true, enables Advanced Encryption Standard (AES) for
+         multicast G-PON Encapsulation Method (GEM) ports.";
       reference
         "ITU-T G.984.3, section 12.2. and 9.2.3.8
          ITU-T G.987.3, section 15.5.1 and 15.5.4
@@ -174,7 +183,7 @@ submodule bbf-xpon-channel-partition-body {
     }
   }
 
-  augment '/if:interfaces/if:interface/bbf-xpon:channel-partition' {
+  augment "/if:interfaces/if:interface/bbf-xpon:channel-partition" {
     description
       "Configuration of an xPON channel partition.";
     uses channel-partition-config-data;

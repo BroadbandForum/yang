@@ -23,7 +23,7 @@ submodule bbf-vdsl-xtu-channel-performance-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -32,10 +32,10 @@ submodule bbf-vdsl-xtu-channel-performance-body {
      WA Director: Joey Boyd, ADTRAN";
   description
     "This submodule contains a collection of YANG definitions for
-     managing Broadband Forum TR-252i3 clause 7.2 xTU Channel
-     Performance.
+     managing Broadband Forum TR-252i3 clause 7.2 xDSL Transceiver
+     Unit (xTU) Channel Performance.
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Copyright (c) 2016-2020 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -75,9 +75,19 @@ submodule bbf-vdsl-xtu-channel-performance-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2019-10-21 {
     description
       "Amendment 2 Corrigendum 1.
@@ -121,9 +131,10 @@ submodule bbf-vdsl-xtu-channel-performance-body {
 
   grouping xtu-channel-performance-c {
     description
-      "The xTU Channel (near-end) performance object represents
-       channel performance related data for a particular channel
-       associated with a particular xTU-C.";
+      "The xDSL Transceiver Unit (xTU) Channel (near-end) performance
+       object represents channel performance related data for a
+       particular channel associated with a particular xDSL
+       Transceiver Unit - Central office (xTU-C).";
     leaf measured-time {
       type uint32;
       description
@@ -174,16 +185,17 @@ submodule bbf-vdsl-xtu-channel-performance-body {
          ITU-T G.998.4. This parameter is subject to inhibiting -
          see ITU-T G.997.1 clause 7.2.7.13.";
       reference
-        "ITU-T G.997.1 clause 7.2.2.1.3\tUncorrected DTU - Channel
+        "ITU-T G.997.1 clause 7.2.2.1.3 Uncorrected DTU - Channel
          (RTXUC-C).";
     }
   }
 
   grouping xtu-channel-performance-cfe {
     description
-      "The xTU Channel far-end performance object represents channel
-       performance related data for a particular channel associated
-       with a particular xTU-R.";
+      "The xDSL Transceiver Unit (xTU) Channel far-end performance
+       object represents channel performance related data for a
+       particular channel associated with a particular xDSL
+       Transceiver Unit - Remote side (xTU-R).";
     leaf measured-time {
       type uint32;
       description
@@ -232,7 +244,7 @@ submodule bbf-vdsl-xtu-channel-performance-body {
          ITU-T G.998.4. This parameter is subject to inhibiting -
          see ITU-T G.997.1 clause 7.2.7.13.";
       reference
-        "ITU-T G.997.1 clause 7.2.2.2.3\tUncorrected DTU - Channel
+        "ITU-T G.997.1 clause 7.2.2.2.3 Uncorrected DTU - Channel
          far-end (RTXUC-CFE)";
     }
   }

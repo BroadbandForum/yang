@@ -6,7 +6,6 @@ module bbf-if-type {
   import iana-if-type {
     prefix ianaift;
   }
-
   import ietf-interfaces {
     prefix if;
   }
@@ -14,23 +13,21 @@ module bbf-if-type {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on reusable data
@@ -41,7 +38,7 @@ module bbf-if-type {
      Specifically, this module defines interface types that are needed
      for BBF applications but are not defined in iana-if-type.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +78,19 @@ module bbf-if-type {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-12-03 {
     description
       "Amendment 2.
@@ -96,7 +103,7 @@ module bbf-if-type {
   }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -133,7 +140,17 @@ module bbf-if-type {
     base ianaift:l2vlan;
     base sub-interface;
     description
-      "Base type for generic sub-interfaces. ";
+      "A sub-interface which carries traffic that is parsed for VLAN
+       tags. I.e. either the frames carries VLAN tags, or the first
+       Ethertype differs from one of the VLAN TPIDs defined by IEEE
+       and then the frame is considered as untagged. ";
+  }
+
+  identity l2-termination {
+    base bbf-interface-type;
+    description
+      "An interface which terminates layer 2 traffic without the
+       need to be associated with any Ethernet-like interface.";
   }
 
   identity ethernet-like {

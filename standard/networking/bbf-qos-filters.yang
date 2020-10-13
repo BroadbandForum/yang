@@ -1,17 +1,14 @@
 module bbf-qos-filters {
   yang-version 1.1;
   namespace "urn:bbf:yang:bbf-qos-filters";
-
   prefix bbf-qos-filt;
 
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import bbf-qos-classifiers {
     prefix bbf-qos-cls;
   }
-
   import bbf-frame-classification {
     prefix bbf-classif;
   }
@@ -19,34 +16,32 @@ module bbf-qos-filters {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
-    "This module contains a collection of YANG definitions for 
+    "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the management of
-     Quality of Service (QoS) as applicable to access network 
-     equipment. As such, this module is specific to access network 
+     Quality of Service (QoS) as applicable to access network
+     equipment. As such, this module is specific to access network
      equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module contains definitions of filter 
+     Specifically, this module contains definitions of filter
      criteria.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -86,12 +81,22 @@ module bbf-qos-filters {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -113,39 +118,34 @@ module bbf-qos-filters {
   container filters {
     description
       "Filters configuration.";
-
     list filter {
       key "name";
       description
         "List of filter entries.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "Filter name.";
       }
-
       leaf description {
         type bbf-yang:string-ascii64-or-empty;
         description
-          "Description of the class template.";
+          "Description of the filter.";
       }
-
       leaf filter-match {
         type boolean;
         default "true";
         description
-          "This is logical operator for a filter. 
+          "This is logical operator for a filter.
+
            When true, it indicates the filter looks for a match with
            a pattern defined by the filter-field. When false, it looks
-           for a 'no match' with the pattern defined by the filter 
+           for a 'no match' with the pattern defined by the filter
            field.";
       }
-
       choice filter-field {
         description
           "A field to be classified.";
-
         case source-mac-address {
           container source-mac-address {
             uses bbf-classif:mac-address-match;
@@ -153,7 +153,6 @@ module bbf-qos-filters {
               "Filter containing source MAC address.";
           }
         }
-
         case destination-mac-address {
           container destination-mac-address {
             uses bbf-classif:mac-address-match;
@@ -168,40 +167,33 @@ module bbf-qos-filters {
   grouping filter-entry-ref {
     description
       "A reference to a filter.";
-
     leaf filter-name {
       type leafref {
-        path '/bbf-qos-filt:filters/bbf-qos-filt:filter/bbf-qos-'
-           + 'filt:name';
+        path "/bbf-qos-filt:filters/bbf-qos-filt:filter/bbf-qos-"
+           + "filt:name";
       }
       description
         "A reference to a filter.";
     }
   }
 
-
-  augment '/bbf-qos-cls:classifiers/bbf-qos-cls:classifier-entry/'
-        + 'bbf-qos-cls:filter-method' {
+  augment "/bbf-qos-cls:classifiers/bbf-qos-cls:classifier-entry/"
+        + "bbf-qos-cls:filter-method" {
     description
       "The QoS policy framework allows to configure criteria to be
        applied to frames. The basic method allows to specify simple
-       'in-line' classifiers. Here this is extended with a more 
+       'in-line' classifiers. Here this is extended with a more
        advanced classification method.";
-
-
     case by-reference {
       description
         "The classifier criteria are configured in a separate list.";
-
       list filter {
         key "name";
-
         leaf name {
           type bbf-yang:string-ascii64;
           description
             "Name of the filter.";
         }
-
         description
           "Filters to be matched.";
         uses filter-entry-ref;

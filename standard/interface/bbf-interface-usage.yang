@@ -6,11 +6,9 @@ module bbf-interface-usage {
   import ietf-interfaces {
     prefix if;
   }
-
   import iana-if-type {
     prefix ianaift;
   }
-
   import bbf-if-type {
     prefix bbfift;
   }
@@ -18,23 +16,21 @@ module bbf-interface-usage {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on interface
@@ -45,7 +41,7 @@ module bbf-interface-usage {
      Specifically, this module contains a collection of YANG
      definitions defining how interfaces are used.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -85,9 +81,19 @@ module bbf-interface-usage {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-12-03 {
     description
       "Amendment 2.
@@ -111,22 +117,22 @@ module bbf-interface-usage {
 
   typedef interface-usage {
     type enumeration {
-      enum "user-port" {
+      enum user-port {
         description
           "The interface having this interface usage connects the
            Access Node to a user.";
       }
-      enum "network-port" {
+      enum network-port {
         description
           "The interface having this interface usage connects the
            Access Node to a network.";
       }
-      enum "subtended-node-port" {
+      enum subtended-node-port {
         description
           "The interface having this interface usage connects the
            Access Node to a another Access Node.";
       }
-      enum "inherit" {
+      enum inherit {
         description
           "The interface usage is not defined for this interface.
            Instead the interface usage is inherited from the interface
@@ -145,23 +151,22 @@ module bbf-interface-usage {
        interface matters.";
   }
 
-  augment '/if:interfaces/if:interface' {
+  augment "/if:interfaces/if:interface" {
     when
       "derived-from-or-self(if:type, 'ianaift:ethernetCsmacd') or
        derived-from-or-self(if:type, 'ianaift:ieee8023adLag') or
        derived-from-or-self(if:type, 'ianaift:ptm') or
        derived-from-or-self(if:type, 'bbfift:vlan-sub-interface') or
+       derived-from-or-self(if:type, 'bbfift:l2-termination') or
        derived-from(if:type, 'bbfift:ethernet-like')" {
       description
         "The interfaces applicable for interface usage data.";
     }
     description
       "Augments interfaces with nodes relative to interface usage.";
-
     container interface-usage {
       description
         "Provides the interface with an interface usage.";
-
       leaf interface-usage {
         type interface-usage;
         description

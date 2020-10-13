@@ -15,7 +15,7 @@ submodule bbf-vdsl-base-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -26,7 +26,7 @@ submodule bbf-vdsl-base-body {
     "This submodule contains a collection of YANG definitions for
      managing common aspects of VDSL used among other submodules.
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Copyright (c) 2016-2020 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -66,9 +66,19 @@ submodule bbf-vdsl-base-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2019-10-21 {
     description
       "Amendment 2 Corrigendum 1.
@@ -163,7 +173,7 @@ submodule bbf-vdsl-base-body {
       length "1..64";
     }
     description
-      "identifies a line";
+      "Identifies a line.";
   }
 
   typedef performance-15min-history-interval {
@@ -206,13 +216,13 @@ submodule bbf-vdsl-base-body {
     type enumeration {
       enum xts1 {
         description
-          "Regional standards. It is recommended that
-           bit1 be used for ATIS-0600413.";
+          "Regional standards. The transmission system is recommended
+           to be used for ATIS-0600413.";
       }
       enum xts2 {
         description
-          "Regional standards. It is recommended that
-           bit2 be used for Annex C of ETSI TS 101 388.";
+          "Regional standards. The transmission system is recommended
+           to be used for Annex C of ETSI TS 101 388.";
       }
       enum xts3 {
         description
@@ -232,7 +242,7 @@ submodule bbf-vdsl-base-body {
       enum xts6 {
         description
           "G.992.1 operation over ISDN overlapped spectrum
-           (Annex B of [ITU-T G.992.1])";
+           (Annex B of [ITU-T G.992.1]).";
       }
       enum xts7 {
         description
@@ -594,9 +604,7 @@ submodule bbf-vdsl-base-body {
        Transceiver Unit (xTU) on the line. This parameter is only
        defined for Annex A of [ITU-T G.993.2]. It is represented as a
        bitmap (0 or false if not allowed, and 1 or true if allowed)
-       with the definitions of Table 7-8 of [ITU-T G.997.1]. The
-       default is all 1s, corresponding to all US0 PSD masks
-       allowed.";
+       with the definitions of Table 7-8 of [ITU-T G.997.1].";
     reference
       "ITU-T G.997.1 clause 7.3.1.2.18 VDSL2 US0 PSD masks
        (US0MASK)";
@@ -789,8 +797,9 @@ submodule bbf-vdsl-base-body {
       "One CLASSMASK parameter is defined per the G.993.2 Annex
        enabled in the xDSL Transmission System Enabling (XTSE). It
        selects a single Power Spectral Density (PSD) mask class
-       per the G.993.2 Annex that is activated at the VTU-O.
-       The coding is as indicated in Table 7-6 of [ITU-T G.997.1].";
+       per the G.993.2 Annex that is activated at the VDSL
+       Transceiver Unit - central Office (VTU-O). The coding is as
+       indicated in Table 7-6 of [ITU-T G.997.1].";
     reference
       "ITU-T G.997.1 clause 7.3.1.2.15 VDSL2 PSD mask class
        selection (CLASSMASK)";
@@ -845,7 +854,7 @@ submodule bbf-vdsl-base-body {
       }
     }
     description
-      "Delineates the VDSL2 profiles.";
+      "VDSL2 profiles.";
     reference
       "ITU-T G.993.2.";
   }
@@ -879,8 +888,8 @@ submodule bbf-vdsl-base-body {
          mask.";
     }
     description
-      "This grouping is used in other *-body submodules to define
-       a Power Spectral Density (PSD) or PSD mask";
+      "This grouping is used to define a Power Spectral Density (PSD)
+       mask.";
   }
 
   typedef band {
@@ -890,7 +899,7 @@ submodule bbf-vdsl-base-body {
           "Transmission from the xDSL Transceiver Unit - Remote side
            (xTU-R) to the xDSL Transceiver Unit - Central office
            (xTU-C) (refers to the single upstream band for
-           ADSL/ADSL2/ADSL2plus or to the whole upstream traffic for
+           ADSL/ADSL2/ADSL2plus or to all upstream traffic for
            VDSL2).";
       }
       enum downstream {
@@ -898,8 +907,8 @@ submodule bbf-vdsl-base-body {
           "Transmission from the xDSL Transceiver Unit - Central
            office (xTU-R) to the xDSL Transceiver Unit - Remote side
            (xTU-C) (refers to the single downstream band for
-           ADSL/ADSL2/ADSL2plus or to the whole downstream traffic
-           for VDSL2).";
+           ADSL/ADSL2/ADSL2plus or to all downstream traffic for
+           VDSL2).";
       }
       enum us0 {
         description

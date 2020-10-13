@@ -7,42 +7,37 @@ submodule bbf-l2-forwarding-forwarders {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import bbf-if-type {
     prefix bbfift;
   }
-
   import ietf-interfaces {
     prefix if;
   }
-
   include bbf-l2-forwarding-base;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing forwarders.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -82,9 +77,19 @@ submodule bbf-l2-forwarding-forwarders {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-12-03 {
     description
       "Amendment 2.
@@ -97,7 +102,7 @@ submodule bbf-l2-forwarding-forwarders {
   }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -123,8 +128,8 @@ submodule bbf-l2-forwarding-forwarders {
 
   typedef forwarder-ref {
     type leafref {
-      path '/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarders/bbf-l2-'
-         + 'fwd:forwarder/bbf-l2-fwd:name';
+      path "/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarders/bbf-l2-"
+         + "fwd:forwarder/bbf-l2-fwd:name";
     }
     description
       "This type is used by data models that need to reference
@@ -133,8 +138,8 @@ submodule bbf-l2-forwarding-forwarders {
 
   typedef forwarder-state-ref {
     type leafref {
-      path '/bbf-l2-fwd:forwarding-state/bbf-l2-fwd:forwarders/bbf-'
-         + 'l2-fwd:forwarder/bbf-l2-fwd:name';
+      path "/bbf-l2-fwd:forwarding-state/bbf-l2-fwd:forwarders/bbf-"
+         + "l2-fwd:forwarder/bbf-l2-fwd:name";
     }
     description
       "This type is used by data models that need to reference
@@ -145,19 +150,17 @@ submodule bbf-l2-forwarding-forwarders {
     description
       "This grouping is use by data models that need to reference
        configured forwarder ports.";
-
     leaf forwarder {
       type forwarder-ref;
       description
         "This leaf references a forwarder.";
     }
-
     leaf port {
       type leafref {
-        path '/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarders/bbf-l2-'
-           + 'fwd:forwarder[bbf-l2-fwd:name = current()/../'
-           + 'forwarder]/bbf-l2-fwd:ports/bbf-l2-fwd:port/bbf-l2-'
-           + 'fwd:name';
+        path "/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarders/bbf-l2-"
+           + "fwd:forwarder[bbf-l2-fwd:name = current()/../"
+           + "forwarder]/bbf-l2-fwd:ports/bbf-l2-fwd:port/bbf-l2-"
+           + "fwd:name";
       }
       description
         "This leaf references a port within the forwarder identified
@@ -169,19 +172,17 @@ submodule bbf-l2-forwarding-forwarders {
     description
       "This grouping is use by data models that need to reference
        operational forwarder ports.";
-
     leaf forwarder {
       type forwarder-state-ref;
       description
         "This leaf references a forwarder.";
     }
-
     leaf port {
       type leafref {
-        path '/bbf-l2-fwd:forwarding-state/bbf-l2-fwd:forwarders/'
-           + 'bbf-l2-fwd:forwarder[bbf-l2-fwd:name = current()/../'
-           + 'forwarder]/bbf-l2-fwd:ports/bbf-l2-fwd:port/bbf-l2-'
-           + 'fwd:name';
+        path "/bbf-l2-fwd:forwarding-state/bbf-l2-fwd:forwarders/"
+           + "bbf-l2-fwd:forwarder[bbf-l2-fwd:name = current()/../"
+           + "forwarder]/bbf-l2-fwd:ports/bbf-l2-fwd:port/bbf-l2-"
+           + "fwd:name";
       }
       description
         "This leaf references a port within the forwarder identified
@@ -193,19 +194,17 @@ submodule bbf-l2-forwarding-forwarders {
     description
       "This grouping is use by data models that need to reference
        configured forwarder port-groups.";
-
     leaf forwarder {
       type forwarder-ref;
       description
         "This leaf references a forwarder.";
     }
-
     leaf group {
       type leafref {
-        path '/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarders/bbf-l2-'
-           + 'fwd:forwarder[bbf-l2-fwd:name = current()/../'
-           + 'forwarder]/bbf-l2-fwd:port-groups/bbf-l2-fwd:port-'
-           + 'group/bbf-l2-fwd:name';
+        path "/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarders/bbf-l2-"
+           + "fwd:forwarder[bbf-l2-fwd:name = current()/../"
+           + "forwarder]/bbf-l2-fwd:port-groups/bbf-l2-fwd:port-"
+           + "group/bbf-l2-fwd:name";
       }
       description
         "This leaf references a port-group within the forwarder
@@ -217,19 +216,17 @@ submodule bbf-l2-forwarding-forwarders {
     description
       "This grouping is use by data models that need to reference
        operational forwarder port-groups.";
-
     leaf forwarder {
       type forwarder-state-ref;
       description
         "This leaf references a forwarder.";
     }
-
     leaf group {
       type leafref {
-        path '/bbf-l2-fwd:forwarding-state/bbf-l2-fwd:forwarders/'
-           + 'bbf-l2-fwd:forwarder[bbf-l2-fwd:name = current()/../'
-           + 'forwarder]/bbf-l2-fwd:port-groups/bbf-l2-fwd:port-'
-           + 'group/bbf-l2-fwd:name';
+        path "/bbf-l2-fwd:forwarding-state/bbf-l2-fwd:forwarders/"
+           + "bbf-l2-fwd:forwarder[bbf-l2-fwd:name = current()/../"
+           + "forwarder]/bbf-l2-fwd:port-groups/bbf-l2-fwd:port-"
+           + "group/bbf-l2-fwd:name";
       }
       description
         "This leaf references a port-group within the forwarder
@@ -237,89 +234,83 @@ submodule bbf-l2-forwarding-forwarders {
     }
   }
 
-  augment '/bbf-l2-fwd:forwarding' {
+  augment "/bbf-l2-fwd:forwarding" {
     description
       "Augment the configuration nodes associated with layer 2
-       forwarding with forwarder objects.";
-
+       forwarding with forwarder data nodes.";
     container forwarders {
       description
         "A forwarder is used to forward traffic between interfaces.";
-
       list forwarder {
         key "name";
         description
           "A list of forwarders.";
-
         leaf name {
           type bbf-yang:string-ascii64;
           description
             "The name of the forwarder.";
         }
-
         container ports {
           description
             "Configuration for ports associated with this forwarder.";
-
           list port {
             key "name";
             description
               "The list of ports associated with this forwarder.";
-
             leaf name {
               type bbf-yang:string-ascii64;
               description
                 "The name of the forwarder port.";
             }
-
             leaf sub-interface {
               type if:interface-ref;
               must
                 "derived-from-or-self(
                  /if:interfaces/if:interface[if:name = current()]
-                 /if:type, 'bbfift:vlan-sub-interface' )" {
+                 /if:type, 'bbfift:vlan-sub-interface') or
+                 derived-from-or-self(
+                 /if:interfaces/if:interface[if:name = current()]
+                 /if:type, 'bbfift:l2-termination')" {
                 description
-                  "The type of interface being referenced MUST be a
-                   vlan-sub-interface.";
+                  "The type of interface being referenced MUST either
+                   be a 'vlan-sub-interface',
+                   'l2-termination' or a derivation of
+                   either type.";
               }
               must
                 "count(/bbf-l2-fwd:forwarding
-                 /bbf-l2-fwd:forwarders
-                 /bbf-l2-fwd:forwarder
-                 /bbf-l2-fwd:ports/bbf-l2-fwd:port
-                 [bbf-l2-fwd:sub-interface = current()])< 2" {
+                       /bbf-l2-fwd:forwarders
+                       /bbf-l2-fwd:forwarder
+                       /bbf-l2-fwd:ports/bbf-l2-fwd:port
+                       [bbf-l2-fwd:sub-interface = current()])< 2" {
                 description
                   "No two forwarder ports can refer to the same
                    sub-interface.";
               }
               description
-                "The VLAN sub-interface associated with this port.";
+                "The VLAN sub-interface or layer 2 termination
+                 associated with this port.";
             }
           }
         }
-
         container port-groups {
           if-feature "forwarder-port-groups";
-
           description
             "A group of ports associated with this forwarder that
              have common forwarding characteristics.";
-
           list port-group {
             key "name";
             description
               "A list of port groups";
-
             leaf name {
               type bbf-yang:string-ascii64;
               description
                 "The name of the group.";
             }
-
             leaf-list port {
               type leafref {
-                path '../../../bbf-l2-fwd:ports/bbf-l2-fwd:port/'
-                   + 'bbf-l2-fwd:name';
+                path "../../../bbf-l2-fwd:ports/bbf-l2-fwd:port/"
+                   + "bbf-l2-fwd:name";
               }
               description
                 "A grouping of ports associated with this forwarder.";
@@ -330,47 +321,42 @@ submodule bbf-l2-forwarding-forwarders {
     }
   }
 
-  augment '/bbf-l2-fwd:forwarding-state' {
+  augment "/bbf-l2-fwd:forwarding-state" {
     description
       "Augment the state data nodes associated with layer 2
-       forwarding with forwarder objects.";
+       forwarding with forwarder data nodes.";
     container forwarders {
       description
         "A forwarder is used to forward traffic between interfaces.";
-
       list forwarder {
         key "name";
         description
           "A list of forwarders.";
-
         leaf name {
           type bbf-yang:string-ascii64;
           description
             "The name of the forwarder.";
         }
-
         container ports {
           description
             "Configuration for ports associated with this forwarder.";
-
           list port {
             key "name";
             description
               "The list of ports associated with this forwarder.";
-
             leaf name {
               type bbf-yang:string-ascii64;
               description
                 "The name of the forwarder port.";
             }
-
             leaf sub-interface {
               type if:interface-state-ref;
-              must
-                "derived-from-or-self(
-                 /if:interfaces-state/if:interface
-                 [if:name = current()]/if:type,
-                 'bbfift:vlan-sub-interface' )" {
+              must "derived-from-or-self(/if:interfaces-state"
+                 + "/if:interface[if:name = current()]/if:type,"
+                 + "'bbfift:vlan-sub-interface' ) or "
+                 + "derived-from-or-self( /if:interfaces-state"
+                 + "/if:interface[if:name = current()]/if:type,"
+                 + "'bbfift:l2-termination')" {
                 description
                   "The type of interface being referenced must be a
                    VLAN sub-interface.";

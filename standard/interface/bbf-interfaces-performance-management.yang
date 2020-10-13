@@ -20,13 +20,13 @@ module bbf-interfaces-performance-management {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
@@ -42,7 +42,7 @@ module bbf-interfaces-performance-management {
      statistics defined by the IETF interfaces data model,
      ietf-interfaces (RFC7223).
 
-     Copyright (c) 2017-2019, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -82,9 +82,19 @@ module bbf-interfaces-performance-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2019-10-21 {
     description
       "Amendment 2 Corrigendum 1.
@@ -97,7 +107,7 @@ module bbf-interfaces-performance-management {
   }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -392,14 +402,15 @@ module bbf-interfaces-performance-management {
         type boolean;
         default "false";
         description
-          "If true, enables counting of performance statistics.
-           Then performance statistics will be available in
-           /interfaces/interface/performance.
-           i.e. 15 minutes statistics and 24 hours statistics,
-           and for both there are current statistics and history
-           data.
+          "If true, enables performance counters on this interface.
 
-           If false, then there are no performance statistics.";
+           The performance counters will be available under
+           '/if:interfaces-state/if:interface/bbf-if-pm:performance/'
+           for 15 minute and, if supported, 24 hour current and
+           historic intervals.
+
+           If false, then there are no performance counters available
+           on this interface.";
       }
     }
   }

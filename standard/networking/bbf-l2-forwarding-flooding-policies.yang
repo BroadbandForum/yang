@@ -7,43 +7,38 @@ submodule bbf-l2-forwarding-flooding-policies {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import bbf-interface-usage {
     prefix bbf-if-usg;
   }
-
   import bbf-frame-classification {
     prefix bbf-classif;
   }
-
   include bbf-l2-forwarding-base;
   include bbf-l2-forwarding-forwarders;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing flooding policies.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -83,9 +78,19 @@ submodule bbf-l2-forwarding-flooding-policies {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-12-03 {
     description
       "Amendment 2.
@@ -98,7 +103,7 @@ submodule bbf-l2-forwarding-flooding-policies {
   }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -127,15 +132,14 @@ submodule bbf-l2-forwarding-flooding-policies {
       "Indicates support for flooding policies profiles.";
   }
 
-  augment '/bbf-l2-fwd:forwarding' {
+  augment "/bbf-l2-fwd:forwarding" {
     description
       "Augment the configuration nodes associated with layer 2
-       forwarding with flooding policies profile objects.";
-
+       forwarding with flooding policies profile data nodes.";
     container flooding-policies-profiles {
       if-feature "flooding-policies-profiles";
       description
-        "Contains a set of flooding-policies-profiles.
+        "Contains a set of flooding policies profiles.
 
          The flooding policies define how the system shall forward
          frames in case the other forwarding mechanisms did not come
@@ -148,25 +152,20 @@ submodule bbf-l2-forwarding-flooding-policies {
 
          For broadcast frames this applies when there is no other
          protocol specific behaviour knowledge.";
-
       list flooding-policies-profile {
         key "name";
-
         description
           "The configuration of a flooding policies profile.
            One flooding policies profile can contain multiple
            policies.";
-
         leaf name {
           type bbf-yang:string-ascii64;
           description
             "The name of a flooding policies profile.";
         }
-
         list flooding-policy {
           key "name";
           ordered-by user;
-
           description
             "A flooding-policy defines for the tuple (list of
              in-interface-usages, a frame classification), if and to
@@ -176,13 +175,11 @@ submodule bbf-l2-forwarding-flooding-policies {
              in the default forwarding behavior to flood the frame to
              all ports of the forwarder, except the one on which the
              frame is received.";
-
           leaf name {
             type bbf-yang:string-ascii64;
             description
               "The name of a flooding policy.";
           }
-
           container in-interface-usages {
             description
               "Identifies the forwarder ports on which the
@@ -190,7 +187,6 @@ submodule bbf-l2-forwarding-flooding-policies {
                is indirect: a forwarder port references a VLAN
                sub-interface and this VLAN sub-interface has an
                interface usage.";
-
             leaf-list interface-usages {
               type bbf-if-usg:interface-usage;
               description
@@ -202,7 +198,6 @@ submodule bbf-l2-forwarding-flooding-policies {
                  does not make sense.";
             }
           }
-
           container destination-address {
             description
               "The frame classification to be performed on the
@@ -210,16 +205,16 @@ submodule bbf-l2-forwarding-flooding-policies {
                also allows specification of unicast addresses. If used
                this will apply to frames for which there was no
                forwarding decision identified via other means.";
-
             uses bbf-classif:frame-destination-match;
           }
-
           choice frame-forwarding {
-            default "discard";
             description
               "Identifies the action to be performed on frames that
-               match the classification.";
-
+               match the classification. Not configuring a frame
+               forwarding case means that the frames in scope shall be
+               discarded. In order not to discard these frames one
+               shall configure a non-empty 'out-interface-usages
+               leaf-list.";
             case discard {
               leaf discard {
                 type empty;
@@ -227,7 +222,6 @@ submodule bbf-l2-forwarding-flooding-policies {
                   "The frame will be discarded.";
               }
             }
-
             case forward {
               container out-interface-usages {
                 description
@@ -236,7 +230,6 @@ submodule bbf-l2-forwarding-flooding-policies {
                    indirect: a forwarder port references a
                    VLAN sub-interface and this VLAN sub-interface has
                    an interface usage.";
-
                 leaf-list interface-usages {
                   type bbf-if-usg:interface-usage;
                   description
@@ -251,12 +244,11 @@ submodule bbf-l2-forwarding-flooding-policies {
     }
   }
 
-  augment '/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarders/bbf-l2-fwd:'
-        + 'forwarder' {
+  augment "/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarders/bbf-l2-fwd:"
+        + "forwarder" {
     description
       "Augment the forwarder configuration with configuration for
        flooding policies.";
-
     container flooding-policies {
       if-feature "flooding-policies";
       description
@@ -264,7 +256,7 @@ submodule bbf-l2-forwarding-flooding-policies {
          frames in case the other forwarding mechanisms did not come
          to a forwarding decision.
 
-         E.g. when the destination  unicast MAC address is not
+         For example, when the destination unicast MAC address is not
          available in the forwarding database. For multicast frames
          this applies when there is no corresponding entry found in
          the (IGMP controled) multicast tree. For broadcast frames
@@ -275,24 +267,21 @@ submodule bbf-l2-forwarding-flooding-policies {
          that the frame is flooded to all ports of the forwarder,
          except to the port on which the frame is received. In other
          words, a flooding-policy intends to restrict this flooding.";
-
       choice flooding-policy-type {
         description
           "Provides alternative ways to define flooding policies.";
-
         case profile-based {
           if-feature "flooding-policies-profiles";
           leaf flooding-policies-profile {
             type leafref {
-              path '/bbf-l2-fwd:forwarding/bbf-l2-fwd:flooding-'
-                 + 'policies-profiles/bbf-l2-fwd:flooding-policies-'
-                 + 'profile/bbf-l2-fwd:name';
+              path "/bbf-l2-fwd:forwarding/bbf-l2-fwd:flooding-"
+                 + "policies-profiles/bbf-l2-fwd:flooding-policies-"
+                 + "profile/bbf-l2-fwd:name";
             }
             description
               "A reference to a flooding policies profile.";
           }
         }
-
         case forwarder-specific {
           list flooding-policy {
             key "name";
@@ -306,18 +295,15 @@ submodule bbf-l2-forwarding-flooding-policies {
                results in the default forwarding behavior to flood the
                frame to all ports of the forwarder, except the one on
                which the frame is received.";
-
             leaf name {
               type bbf-yang:string-ascii64;
               description
                 "The name of the flooding policy.";
             }
-
             container in-ports {
               description
                 "List of forwarder ports on which the frame
                  classification applies.";
-
               choice list-type {
                 description
                   "Provides alternatives to provide a single or a set
@@ -326,27 +312,23 @@ submodule bbf-l2-forwarding-flooding-policies {
                    The absence of a leaf of this choice means that the
                    classification is applied to none of the ports and
                    hence does not make sense.";
-
                 case forwarder-port {
                   leaf forwarder-port {
                     type leafref {
-                      path '../../../../bbf-l2-fwd:ports/bbf-l2-'
-                         + 'fwd:port/bbf-l2-fwd:name';
+                      path "../../../../bbf-l2-fwd:ports/bbf-l2-"
+                         + "fwd:port/bbf-l2-fwd:name";
                     }
-
                     description
                       "A reference to a forwarder port within this
                        forwarder.";
                   }
                 }
-
                 case forwarder-port-group {
                   if-feature "forwarder-port-groups";
-
                   leaf forwarder-port-group {
                     type leafref {
-                      path '../../../../bbf-l2-fwd:port-groups/bbf-'
-                         + 'l2-fwd:port-group/bbf-l2-fwd:name';
+                      path "../../../../bbf-l2-fwd:port-groups/bbf-"
+                         + "l2-fwd:port-group/bbf-l2-fwd:name";
                     }
                     description
                       "A reference to a forwarder port group within
@@ -355,7 +337,6 @@ submodule bbf-l2-forwarding-flooding-policies {
                 }
               }
             }
-
             container destination-address {
               description
                 "The frame classification to be performed on the
@@ -363,16 +344,16 @@ submodule bbf-l2-forwarding-flooding-policies {
                  filter also allows specifation of unicast addresses.
                  If used this will apply to frames for which there was
                  no forwarding decision identified via other means.";
-
               uses bbf-classif:frame-destination-match;
             }
-
             choice frame-forwarding {
-              default "discard";
-
               description
-                "Specifies how to act on matching frames.";
-
+                "Identifies the action to be performed on frames that
+                 match the classification. Not configuring a frame
+                 forwarding case means that the frames in scope shall
+                 be discarded. In order not to discard these frames
+                 one shall configure a non-empty 'out-ports'
+                 container.";
               case discard {
                 leaf discard {
                   type empty;
@@ -380,37 +361,32 @@ submodule bbf-l2-forwarding-flooding-policies {
                     "The frame shall be discarded.";
                 }
               }
-
               case forward {
                 container out-ports {
                   description
                     "List of ports to which the frame shall be
                      forwarded.";
-
                   choice list-type {
                     description
                       "Specifies how to where to forward the frames.";
-
                     case forwarder-port {
                       leaf forwarder-port {
                         type leafref {
-                          path '../../../../bbf-l2-fwd:ports/bbf-'
-                             + 'l2-fwd:port/bbf-l2-fwd:name';
+                          path "../../../../bbf-l2-fwd:ports/bbf-"
+                             + "l2-fwd:port/bbf-l2-fwd:name";
                         }
                         description
                           "A reference to a forwarder port within the
                            same forwarder.";
                       }
                     }
-
                     case forwarder-port-group {
                       if-feature "forwarder-port-groups";
-
                       leaf forwarder-port-group {
                         type leafref {
-                          path '../../../../bbf-l2-fwd:port-groups/'
-                             + 'bbf-l2-fwd:port-group/bbf-l2-fwd:'
-                             + 'name';
+                          path "../../../../bbf-l2-fwd:port-groups/"
+                             + "bbf-l2-fwd:port-group/bbf-l2-fwd:"
+                             + "name";
                         }
                         description
                           "A reference to a forwarder port group

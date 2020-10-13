@@ -1,17 +1,14 @@
 module bbf-qos-shaping {
   yang-version 1.1;
   namespace "urn:bbf:yang:bbf-qos-shaping";
-
   prefix bbf-qos-shap;
 
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import ietf-interfaces {
     prefix if;
   }
-
   import bbf-qos-traffic-mngt {
     prefix bbf-qos-tm;
   }
@@ -19,33 +16,33 @@ module bbf-qos-shaping {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
-    "This module contains a collection of YANG definitions for 
+    "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the management of
-     Quality of Service (QoS) as applicable to access network 
-     equipment. As such, this module is specific to access network 
+     Quality of Service (QoS) as applicable to access network
+     equipment. As such, this module is specific to access network
      equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module contains shaping configuration data.
+     Specifically, this module augments traffic management profiles
+     with shaper profiles and augments interfaces to reference a
+     shaper profile.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -85,12 +82,22 @@ module bbf-qos-shaping {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -99,51 +106,77 @@ module bbf-qos-shaping {
                         TR-383_Amendment-1.pdf>";
   }
 
-  augment '/bbf-qos-tm:tm-profiles' {
+  feature two-token-bucket-shaper {
+    description
+      "Indicates support for a two token bucket (dual rate) shaper.";
+  }
+
+  augment "/bbf-qos-tm:tm-profiles" {
     description
       "Augment the traffic management profile to add shaper
        configuration.";
-
     list shaper-profile {
       key "name";
-
       description
         "A list of shaper profiles.";
-
       leaf name {
         type bbf-yang:string-ascii64;
-
         description
           "The name of a shaper profile.";
       }
-
       choice shaper-type {
         mandatory true;
-
         description
           "Choice of shaper types.";
-
         case single-token-bucket {
           description
             "Applicable when the shaper type is single token.";
-
           container single-token-bucket {
             description
-              "Management objects associated with single token.";
-
+              "A shaper which shapes traffic up to a Peak Information
+               Rate (PIR).";
             leaf pir {
               type uint32;
               units "kbits per second";
               description
-                "The Peak Information Rate, in kilobits per 
+                "The Peak Information Rate (PIR), in kilobits per
                  second.";
             }
-
             leaf pbs {
               type uint32;
               units "bytes";
               description
-                "The Peak Burst Size, in bytes.";
+                "The Peak Burst Size (PBS), in bytes.";
+            }
+          }
+        }
+        case two-token-bucket {
+          if-feature "two-token-bucket-shaper";
+          container two-token-bucket {
+            description
+              "A shaper which shapes traffic up to a Peak Information
+               Rate (PIR) which also enforces a separate traffic rate
+               limit as specified by a Committed Information Rate
+               (CIR).
+
+               The rate of traffic which exceeds CIR but is less than
+               or equal to PIR, is considered to be the Excess
+               Information Rate (EIR) traffic.";
+            leaf pir {
+              type uint32;
+              units "kbits per second";
+              mandatory true;
+              description
+                "The Peak Information Rate (PIR), in kilobits per
+                 second.";
+            }
+            leaf cir {
+              type uint32;
+              units "kbits per second";
+              mandatory true;
+              description
+                "The Committed Information Rate (CIR), in kilobits per
+                 second.";
             }
           }
         }
@@ -153,31 +186,73 @@ module bbf-qos-shaping {
 
   grouping shaper-profile-ref {
     description
-      "A reference to a shaper profile.";
-
+      "A reference to a shaper profile of the single token bucket
+       type.";
     leaf shaper-name {
       type leafref {
-        path '/bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/'
-           + 'bbf-qos-shap:name';
+        path "/bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/"
+           + "bbf-qos-shap:name";
       }
       description
         "An absolute reference to a shaper profile.";
     }
   }
 
-  augment '/if:interfaces/if:interface/bbf-qos-tm:tm-root' {
+  grouping single-token-shaper-profile-ref {
     description
-      "Augments the traffic management root with a reference to a 
-       shaper profile.";
-    uses shaper-profile-ref;
+      "A reference to a shaper profile of the single token bucket
+       type.";
+    leaf shaper-name {
+      type leafref {
+        path "/bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/"
+           + "bbf-qos-shap:name";
+      }
+      must
+        'boolean(/bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile'
+      + '[bbf-qos-shap:name=current()]/bbf-qos-shap:'
+      + 'single-token-bucket)' {
+        error-message
+          "The referenced shaper shall be of the single-token bucket
+           type.";
+      }
+      description
+        "An absolute reference to a shaper profile.";
+    }
   }
 
-  augment '/if:interfaces/if:interface/bbf-qos-tm:tm-root/bbf-qos-'
-        + 'tm:children-type/bbf-qos-tm:queues/bbf-qos-tm:queue/bbf-'
-        + 'qos-tm:queue-scheduling-cfg-type/bbf-qos-tm:inline' {
+  augment "/if:interfaces/if:interface/bbf-qos-tm:tm-root" {
     description
-      "Augments the queues defined within the traffic management root 
+      "Augments the traffic management root with a reference to a
+       shaper profile.";
+    uses single-token-shaper-profile-ref;
+  }
+
+  augment "/if:interfaces/if:interface/bbf-qos-tm:tm-root/bbf-qos-"
+        + "tm:children-type/bbf-qos-tm:queues/bbf-qos-tm:queue" {
+    description
+      "Augments the queues defined within the traffic management root
        with a reference to a shaper profile.";
-    uses shaper-profile-ref;
+    leaf shaper-name {
+      type leafref {
+        path "/bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/"
+           + "bbf-qos-shap:name";
+      }
+      must
+        '(not(boolean(current()/../bbf-qos-tm:dual-rate-scheduling)) '
+      + 'and boolean(/bbf-qos-tm:tm-profiles/bbf-qos-shap:'
+      + 'shaper-profile[bbf-qos-shap:name=current()]/bbf-qos-shap:'
+      + 'single-token-bucket)) or '
+      + '(boolean(current()/../bbf-qos-tm:dual-rate-scheduling) and '
+      + 'boolean(/bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile'
+      + '[bbf-qos-shap:name=current()]/bbf-qos-shap:'
+      + 'two-token-bucket))' {
+        error-message
+          "The referenced shaper shall be two-token-bucket for a "
+        + "dual-rate-scheduling queues or shall be a single-"
+        + "token-bucket shaper.";
+      }
+      description
+        "An absolute reference to a shaper profile.";
+    }
   }
 }

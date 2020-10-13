@@ -18,7 +18,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -30,7 +30,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
      Metallic Line Test Physical Medium Dependent (MELT-PMD)
      measurement parameters.
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Copyright (c) 2016-2020 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +70,25 @@ submodule bbf-melt-pmd-measurement-parameter-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
+  revision 2019-06-17 {
+    description
+      "Changes for amendment 3.";
+    reference
+      "TBD";
+  }
   revision 2019-06-11 {
     description
       "Amendment 2.
@@ -118,7 +134,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
     base measurement-class;
     description
       "The 4-element DC resistance with controlled metallic
-       voltage";
+       voltage.";
     reference
       "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-xx)";
   }
@@ -126,7 +142,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
   identity melt-cc {
     base measurement-class;
     description
-      "The 3-element capacitance with controlled metallic voltage";
+      "The 3-element capacitance with controlled metallic voltage.";
     reference
       "ITU-T G.996.2 clause E.2.3.4 (MELT-CC-xx)";
   }
@@ -134,7 +150,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
   identity melt-fvdc {
     base measurement-class;
     description
-      "The foreign DC voltage";
+      "The foreign DC voltage.";
     reference
       "ITU-T G.996.2 clause E.2.3.5 (MELT-FVDC-xx)";
   }
@@ -142,7 +158,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
   identity melt-fvac {
     base measurement-class;
     description
-      "The foreign AC voltage";
+      "The foreign AC voltage.";
     reference
       "ITU-T G.996.2 clause E.2.3.5 (MELT-FVAC-xx)";
   }
@@ -150,7 +166,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
   identity melt-hc {
     base measurement-class;
     description
-      "The loop capacitance";
+      "The loop capacitance.";
     reference
       "ITU-T G.996.2 clause E.2.3.6 (MELT-HC-xx)";
   }
@@ -158,7 +174,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
   identity melt-hdcr {
     base measurement-class;
     description
-      "The loop resistance with high metallic voltage";
+      "The loop resistance with high metallic voltage.";
     reference
       "ITU-T G.996.2 clause E.2.3.7 (MELT-HDCR-xx)";
   }
@@ -226,7 +242,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
        The reported DC voltage polarity is defined with respect to
        ground for the VTG-DC and VRG-DC measurements and returns a
        positive result for the VTR-DC measurement if the tip wire
-       is more positive than the ring wire. ";
+       is more positive than the ring wire.";
     reference
       "ITU-T G.996.2 clause E.2.3.5 (MELT-FVDC-TR, MELT-FVDC-TG,
        MELT-FVDC-RG)";
@@ -405,6 +421,343 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       "ITU-T G.996.2 clause E.2.3.10 (MELT-HAG-TR, MELT-HAB-TR)";
   }
 
+  typedef melt-pmd-measurement-parameter {
+    type enumeration {
+      enum four-element-dc-resistance-tr {
+        description
+          "The 4-element DC resistance with controlled metallic
+           voltage, RTR (Tip-to-Ring).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-TR)";
+      }
+      enum four-element-dc-resistance-rt {
+        description
+          "The 4-element DC resistance with controlled metallic
+           voltage, RRT (Ring-to-Tip).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-RT)";
+      }
+      enum four-element-dc-resistance-tg {
+        description
+          "The 4-element DC resistance with controlled metallic
+           voltage, RTG (Tip-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-TG)";
+      }
+      enum four-element-dc-resistance-rg {
+        description
+          "The 4-element DC resistance with controlled metallic
+           voltage, RRG (Ring-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-RG)";
+      }
+      enum three-element-capacitance-tr {
+        description
+          "The 3-element capacitance with controlled metallic
+           voltage, CTR (Tip-to-Ring).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.4 (MELT-CC-TR)";
+      }
+      enum three-element-capacitance-tg {
+        description
+          "The 3-element capacitance with controlled metallic
+           voltage, CTG (Tip-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.4 (MELT-CC-TG)";
+      }
+      enum three-element-capacitance-rg {
+        description
+          "The 3-element capacitance with controlled metallic
+           voltage, CRG (Ring-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.4 (MELT-CC-RG)";
+      }
+      enum foreign-dc-voltage-tr {
+        description
+          "The foreign DC voltage, VTR-DC (Tip-to-Ring).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.5 (MELT-FVDC-TR)";
+      }
+      enum foreign-dc-voltage-tg {
+        description
+          "The foreign DC voltage, VTG-DC (Tip-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.5 (MELT-FVDC-TG)";
+      }
+      enum foreign-dc-voltage-rg {
+        description
+          "The foreign DC voltage, VRG-DC (Ring-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.5 (MELT-FVDC-RG)";
+      }
+      enum foreign-ac-voltage-tr {
+        description
+          "The foreign AC voltage, VTR-AC (Tip-to-Ring).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.5 (MELT-FVAC-TR)";
+      }
+      enum foreign-ac-voltage-tg {
+        description
+          "The foreign AC voltage, VTG-AC (Tip-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.5 (MELT-FVAC-TG)";
+      }
+      enum foreign-ac-voltage-rg {
+        description
+          "The foreign AC voltage, VRG-AC (Ring-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.5 (MELT-FVAC-RG)";
+      }
+      enum foreign-ac-voltage-frequency-tr {
+        description
+          "The foreign AC voltage frequency for VTR-AC
+           (Tip-to-Ring).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.5 (MELT-FVACF-TR)";
+      }
+      enum foreign-ac-voltage-frequency-tg {
+        description
+          "The foreign AC voltage frequency for VTG-AC
+           (Tip-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.5 (MELT-FVACF-TG)";
+      }
+      enum foreign-ac-voltage-frequency-rg {
+        description
+          "The foreign AC voltage frequency for VRG-AC
+           (Ring-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.5 (MELT-FVACF-RG)";
+      }
+      enum loop-capacitance-hv-tr {
+        description
+          "The loop capacitance CTR-HV (Tip-to-Ring) shall be
+           represented in linear format. The range of valid values
+           is from 0 to 5 uF with a granularity of 0.1 nF. The
+           CTR-HV value of the loop capacitance with high metallic
+           voltage test is the total capacitance measured. The CTR
+           value obtained from the 3-element capacitance with
+           controlled metallic voltage test is not subtracted from
+           the results.";
+        reference
+          "ITU-T G.996.2 clause E.2.3.6 (MELT-HV-TR)";
+      }
+      enum loop-resistance-hv-tr {
+        description
+          "The loop resistance with high metallic voltage, RTR-HV
+           (Tip-to-Ring).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.7 (MELT-HDCR-TR.";
+      }
+      enum loop-resistance-hv-rt {
+        description
+          "The loop resistance with high metallic voltage, RRT-HV
+           (Ring-to-Tip).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.7 (MELT-HDCR-RT)";
+      }
+      enum four-element-dc-resistance-test-voltage-tr {
+        description
+          "The DC test voltage for the measuremnt of 4-element DC
+           resistance with a controlled metallic voltage VDC-TR
+           (Tip-to-Ring).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-TR)";
+      }
+      enum four-element-dc-resistance-test-voltage-rt {
+        description
+          "The DC test voltage for the measuremnt of 4-element DC
+           resistance with a controlled metallic voltage VDC-RT
+           (Ring-to-Tip).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-RT)";
+      }
+      enum four-element-dc-resistance-test-voltage-tg {
+        description
+          "The DC test voltage for the measuremnt of 4-element DC
+           resistance with a controlled metallic voltage VDC-TG
+           (Tip-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-TG)";
+      }
+      enum four-element-dc-resistance-test-voltage-rg {
+        description
+          "The DC test voltage for the measuremnt of 4-element DC
+           resistance with a controlled metallic voltage VDC-RG
+           (Ring-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-RG)";
+      }
+      enum four-element-dc-resistance-test-current-tr {
+        description
+          "The test current for the measuremnt of 4-element DC
+           resistance with a controlled metallic voltage IDC-TR
+           (Tip-to-Ring).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-TR)";
+      }
+      enum four-element-dc-resistance-test-current-rt {
+        description
+          "The test current for the measuremnt of 4-element DC
+           resistance with a controlled metallic voltage IDC-RT
+           (Ring-to-Tip).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-RT)";
+      }
+      enum four-element-dc-resistance-test-current-tg {
+        description
+          "The test current for the measuremnt of 4-element DC
+           resistance with a controlled metallic voltage IDC-TG
+           (Tip-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-TG)";
+      }
+      enum four-element-dc-resistance-test-current-rg {
+        description
+          "The test current for the measuremnt of 4-element DC
+           resistance with a controlled metallic voltage IDC-RG
+           (Ring-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-RG)";
+      }
+      enum loop-resistance-test-voltage-tr {
+        description
+          "The test voltage for the measurement of the loop
+           resistance with a high metallic voltage VDCH-TR
+           (Tip-to-Ring).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.8 (MELT-HDCV-TR)";
+      }
+      enum loop-resistance-test-voltage-rt {
+        description
+          "The test voltage for the measurement of the loop
+           resistance with a high metallic voltage VDCH-RT
+           (Ring-to-Tip).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.8 (MELT-HDCV-RT)";
+      }
+      enum three-element-complex-admittance-real-tr {
+        description
+          "The real part of the 3-element complex admittance
+           with controlled metallic voltage (Tip-to-Ring).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.9 (MELT-CAG-TR)";
+      }
+      enum three-element-complex-admittance-imaginary-tr {
+        description
+          "The imaginary part of the 3-element complex admittance
+           with controlled metallic voltage (Tip-to-Ring).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.9 (MELT-CAB-TR)";
+      }
+      enum three-element-complex-admittance-real-tg {
+        description
+          "The real part of the 3-element complex admittance
+           with controlled metallic voltage (Tip-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.9 (MELT-CAG-TG)";
+      }
+      enum three-element-complex-admittance-imaginary-tg {
+        description
+          "The imaginary part of the 3-element complex admittance
+           with controlled metallic voltage (Tip-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.9 (MELT-CAB-TG)";
+      }
+      enum three-element-complex-admittance-real-rg {
+        description
+          "The real part of the 3-element complex admittance
+           with controlled metallic voltage (Ring-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.9 (MELT-CAG-RG)";
+      }
+      enum three-element-complex-admittance-imaginary-rg {
+        description
+          "The imaginary part of the 3-element complex admittance
+           with controlled metallic voltage (Ring-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.9 (MELT-CAB-RG)";
+      }
+      enum loop-complex-admittance-real-hv-tr {
+        description
+          "The real part of the loop complex admittance with high
+           metallic voltage (Tip-to-Ring).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.10 (MELT-HAG-TR)";
+      }
+      enum loop-complex-admittance-imaginary-hv-tr {
+        description
+          "The imaginary part of the loop complex admittance with
+           high metallic voltage (Tip-to-Ring).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.10 (MELT-HAB-TR)";
+      }
+      enum three-element-capacitance-measurement-voltage-tr {
+        description
+          "The AC voltage, VACTR-CC, for the 3-element capacitance
+           test with a controlled metallic voltage (Tip-to-Ring).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.11 (MELT-ACV-CC-TR)";
+      }
+      enum three-element-capacitance-measurement-voltage-tg {
+        description
+          "The AC voltage, VACTG-CC, for the 3-element capacitance
+           test with a controlled metallic voltage
+           (Tip-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.11 (MELT-ACV-CC-TG)";
+      }
+      enum three-element-capacitance-measurement-voltage-rg {
+        description
+          "The AC voltage, VACRG-CC, for the 3-element capacitance
+           test with a controlled metallic voltage
+           (Ring-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.11 (MELT-ACV-CC-RG)";
+      }
+      enum loop-capacitance-measurement-voltage-tr {
+        description
+          "The AC voltage, VACTR-HC, for the loop capacitance test
+           with a high metallic voltage (Tip-to-Ring).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.12 (MELT-ACV-HC-TR)";
+      }
+      enum three-element-complex-admittance-measurement-voltage-tr {
+        description
+          "The AC voltage, VACTR-CA, for the 3-element complex
+           admittance test with a controlled metallic voltage
+           (Tip-to-Ring).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.13 (MELT-ACV-CA-TR)";
+      }
+      enum three-element-complex-admittance-measurement-voltage-tg {
+        description
+          "The AC voltage, VACTG-CA, for the 3-element complex
+           admittance test with a controlled metallic voltage
+           (Tip-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.13 (MELT-ACV-CA-TG)";
+      }
+      enum three-element-complex-admittance-measurement-voltage-rg {
+        description
+          "The AC voltage, VACRG-CA, for the 3-element complex
+           admittance test with a controlled metallic voltage
+           (Ring-to-Ground).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.13 (MELT-ACV-CA-RG)";
+      }
+      enum loop-complex-admittance-measurement-voltage-tr {
+        description
+          "The AC voltage, VACTR-HA, for the loop complex admittance
+           test with a high metallic voltage (Tip-to-Ring).";
+        reference
+          "ITU-T G.996.2 clause E.2.3.14 (MELT-ACV-HA-TR)";
+      }
+    }
+    description
+      "An enumerated list of MELT PMD measurement parameters.";
+  }
+
   grouping pmd-measurement-parameters {
     description
       "Defines the Metallic Line Test Physical Medium Dependent
@@ -413,7 +766,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type four-element-dc-resistance;
       description
         "The 4-element DC resistance with controlled metallic
-         voltage, RTR (Tip-to-Ring)";
+         voltage, RTR (Tip-to-Ring).";
       reference
         "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-TR)";
     }
@@ -421,7 +774,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type four-element-dc-resistance;
       description
         "The 4-element DC resistance with controlled metallic
-         voltage, RRT (Ring-to-Tip)";
+         voltage, RRT (Ring-to-Tip).";
       reference
         "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-RT)";
     }
@@ -429,7 +782,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type four-element-dc-resistance;
       description
         "The 4-element DC resistance with controlled metallic
-         voltage, RTG (Tip-to-Ground)";
+         voltage, RTG (Tip-to-Ground).";
       reference
         "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-TG)";
     }
@@ -437,7 +790,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type four-element-dc-resistance;
       description
         "The 4-element DC resistance with controlled metallic
-         voltage, RRG (Ring-to-Ground)";
+         voltage, RRG (Ring-to-Ground).";
       reference
         "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-RG)";
     }
@@ -445,7 +798,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type three-element-capacitance;
       description
         "The 3-element capacitance with controlled metallic voltage,
-         CTR (Tip-to-Ring)";
+         CTR (Tip-to-Ring).";
       reference
         "ITU-T G.996.2 clause E.2.3.4 (MELT-CC-TR)";
     }
@@ -453,7 +806,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type three-element-capacitance;
       description
         "The 3-element capacitance with controlled metallic voltage,
-         CTG (Tip-to-Ground)";
+         CTG (Tip-to-Ground).";
       reference
         "ITU-T G.996.2 clause E.2.3.4 (MELT-CC-TG)";
     }
@@ -461,56 +814,56 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type three-element-capacitance;
       description
         "The 3-element capacitance with controlled metallic voltage,
-         CRG (Ring-to-Ground)";
+         CRG (Ring-to-Ground).";
       reference
         "ITU-T G.996.2 clause E.2.3.4 (MELT-CC-RG)";
     }
     leaf foreign-dc-voltage-tr {
       type foreign-dc-voltage;
       description
-        "The foreign DC voltage, VTR-DC (Tip-to-Ring)";
+        "The foreign DC voltage, VTR-DC (Tip-to-Ring).";
       reference
         "ITU-T G.996.2 clause E.2.3.5 (MELT-FVDC-TR)";
     }
     leaf foreign-dc-voltage-tg {
       type foreign-dc-voltage;
       description
-        "The foreign DC voltage, VTG-DC (Tip-to-Ground)";
+        "The foreign DC voltage, VTG-DC (Tip-to-Ground).";
       reference
         "ITU-T G.996.2 clause E.2.3.5 (MELT-FVDC-TG)";
     }
     leaf foreign-dc-voltage-rg {
       type foreign-dc-voltage;
       description
-        "The foreign DC voltage, VRG-DC (Ring-to-Ground)";
+        "The foreign DC voltage, VRG-DC (Ring-to-Ground).";
       reference
         "ITU-T G.996.2 clause E.2.3.5 (MELT-FVDC-RG)";
     }
     leaf foreign-ac-voltage-tr {
       type foreign-ac-voltage;
       description
-        "The foreign AC voltage, VTR-AC (Tip-to-Ring)";
+        "The foreign AC voltage, VTR-AC (Tip-to-Ring).";
       reference
         "ITU-T G.996.2 clause E.2.3.5 (MELT-FVAC-TR)";
     }
     leaf foreign-ac-voltage-tg {
       type foreign-ac-voltage;
       description
-        "The foreign AC voltage, VTG-AC (Tip-to-Ground)";
+        "The foreign AC voltage, VTG-AC (Tip-to-Ground).";
       reference
         "ITU-T G.996.2 clause E.2.3.5 (MELT-FVAC-TG)";
     }
     leaf foreign-ac-voltage-rg {
       type foreign-ac-voltage;
       description
-        "The foreign AC voltage, VRG-AC (Ring-to-Ground)";
+        "The foreign AC voltage, VRG-AC (Ring-to-Ground).";
       reference
         "ITU-T G.996.2 clause E.2.3.5 (MELT-FVAC-RG)";
     }
     leaf foreign-ac-voltage-frequency-tr {
       type foreign-ac-voltage-frequency;
       description
-        "The foreign AC voltage frequency for VTR-AC (Tip-to-Ring)";
+        "The foreign AC voltage frequency for VTR-AC (Tip-to-Ring).";
       reference
         "ITU-T G.996.2 clause E.2.3.5 (MELT-FVACF-TR)";
     }
@@ -518,7 +871,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type foreign-ac-voltage-frequency;
       description
         "The foreign AC voltage frequency for VTG-AC
-         (Tip-to-Ground)";
+         (Tip-to-Ground).";
       reference
         "ITU-T G.996.2 clause E.2.3.5 (MELT-FVACF-TG)";
     }
@@ -526,7 +879,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type foreign-ac-voltage-frequency;
       description
         "The foreign AC voltage frequency for VRG-AC
-         (Ring-to-Ground)";
+         (Ring-to-Ground).";
       reference
         "ITU-T G.996.2 clause E.2.3.5 (MELT-FVACF-RG)";
     }
@@ -550,7 +903,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type loop-resistance;
       description
         "The loop resistance with high metallic voltage, RTR-HV
-         (Tip-to-Ring)";
+         (Tip-to-Ring).";
       reference
         "ITU-T G.996.2 clause E.2.3.7 (MELT-HDCR-TR)";
     }
@@ -558,7 +911,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type loop-resistance;
       description
         "The loop resistance with high metallic voltage, RRT-HV
-         (Ring-to-Tip)";
+         (Ring-to-Tip).";
       reference
         "ITU-T G.996.2 clause E.2.3.7 (MELT-HDCR-RT)";
     }
@@ -567,7 +920,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       description
         "The DC test voltage for the measuremnt of 4-element DC
          resistance with a controlled metallic voltage VDC-TR
-         (Tip-to-Ring)";
+         (Tip-to-Ring).";
       reference
         "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-TR)";
     }
@@ -576,7 +929,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       description
         "The DC test voltage for the measuremnt of 4-element DC
          resistance with a controlled metallic voltage VDC-RT
-         (Ring-to-Tip)";
+         (Ring-to-Tip).";
       reference
         "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-RT)";
     }
@@ -585,7 +938,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       description
         "The DC test voltage for the measuremnt of 4-element DC
          resistance with a controlled metallic voltage VDC-TG
-         (Tip-to-Ground)";
+         (Tip-to-Ground).";
       reference
         "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-TG)";
     }
@@ -594,7 +947,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       description
         "The DC test voltage for the measuremnt of 4-element DC
          resistance with a controlled metallic voltage VDC-RG
-         (Ring-to-Ground)";
+         (Ring-to-Ground).";
       reference
         "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-RG)";
     }
@@ -603,7 +956,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       description
         "The test current for the measuremnt of 4-element DC
          resistance with a controlled metallic voltage IDC-TR
-         (Tip-to-Ring)";
+         (Tip-to-Ring).";
       reference
         "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-TR)";
     }
@@ -612,7 +965,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       description
         "The test current for the measuremnt of 4-element DC
          resistance with a controlled metallic voltage IDC-RT
-         (Ring-to-Tip)";
+         (Ring-to-Tip).";
       reference
         "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-RT)";
     }
@@ -621,7 +974,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       description
         "The test current for the measuremnt of 4-element DC
          resistance with a controlled metallic voltage IDC-TG
-         (Tip-to-Ground)";
+         (Tip-to-Ground).";
       reference
         "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-TG)";
     }
@@ -630,7 +983,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       description
         "The test current for the measuremnt of 4-element DC
          resistance with a controlled metallic voltage IDC-RG
-         (Ring-to-Ground)";
+         (Ring-to-Ground).";
       reference
         "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-RG)";
     }
@@ -638,7 +991,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type loop-resistance-test-voltage;
       description
         "The test voltage for the measurement of the loop resistance
-         with a high metallic voltage VDCH-TR (Tip-to-Ring)";
+         with a high metallic voltage VDCH-TR (Tip-to-Ring).";
       reference
         "ITU-T G.996.2 clause E.2.3.8 (MELT-HDCV-TR)";
     }
@@ -646,7 +999,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type loop-resistance-test-voltage;
       description
         "The test voltage for the measurement of the loop resistance
-         with a high metallic voltage VDCH-RT (Ring-to-Tip)";
+         with a high metallic voltage VDCH-RT (Ring-to-Tip).";
       reference
         "ITU-T G.996.2 clause E.2.3.8 (MELT-HDCV-RT)";
     }
@@ -654,7 +1007,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type complex-admittance;
       description
         "The real part of the 3-element complex admittance
-         with controlled metallic voltage (Tip-to-Ring)";
+         with controlled metallic voltage (Tip-to-Ring).";
       reference
         "ITU-T G.996.2 clause E.2.3.9 (MELT-CAG-TR)";
     }
@@ -662,7 +1015,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type complex-admittance;
       description
         "The imaginary part of the 3-element complex admittance
-         with controlled metallic voltage (Tip-to-Ring)";
+         with controlled metallic voltage (Tip-to-Ring).";
       reference
         "ITU-T G.996.2 clause E.2.3.9 (MELT-CAB-TR)";
     }
@@ -670,7 +1023,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type complex-admittance;
       description
         "The real part of the 3-element complex admittance
-         with controlled metallic voltage (Tip-to-Ground)";
+         with controlled metallic voltage (Tip-to-Ground).";
       reference
         "ITU-T G.996.2 clause E.2.3.9 (MELT-CAG-TG)";
     }
@@ -678,7 +1031,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type complex-admittance;
       description
         "The imaginary part of the 3-element complex admittance
-         with controlled metallic voltage (Tip-to-Ground)";
+         with controlled metallic voltage (Tip-to-Ground).";
       reference
         "ITU-T G.996.2 clause E.2.3.9 (MELT-CAB-TG)";
     }
@@ -686,7 +1039,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type complex-admittance;
       description
         "The real part of the 3-element complex admittance
-         with controlled metallic voltage (Ring-to-Ground)";
+         with controlled metallic voltage (Ring-to-Ground).";
       reference
         "ITU-T G.996.2 clause E.2.3.9 (MELT-CAG-RG)";
     }
@@ -694,7 +1047,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type complex-admittance;
       description
         "The imaginary part of the 3-element complex admittance
-         with controlled metallic voltage (Ring-to-Ground)";
+         with controlled metallic voltage (Ring-to-Ground).";
       reference
         "ITU-T G.996.2 clause E.2.3.9 (MELT-CAB-RG)";
     }
@@ -702,7 +1055,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type loop-complex-admittance;
       description
         "The real part of the loop complex admittance with high
-         metallic voltage (Tip-to-Ring)";
+         metallic voltage (Tip-to-Ring).";
       reference
         "ITU-T G.996.2 clause E.2.3.10 (MELT-HAG-TR)";
     }
@@ -710,7 +1063,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       type loop-complex-admittance;
       description
         "The imaginary part of the loop complex admittance with high
-         metallic voltage (Tip-to-Ring)";
+         metallic voltage (Tip-to-Ring).";
       reference
         "ITU-T G.996.2 clause E.2.3.10 (MELT-HAB-TR)";
     }
@@ -814,7 +1167,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
         bit four-element-dc-resistance-tg {
           description
             "The 4-element DC resistance with controlled metallic
-             voltage, RTG (Tip-to-Ground.)";
+             voltage, RTG (Tip-to-Ground).";
           reference
             "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-TG)";
         }
@@ -1139,6 +1492,28 @@ submodule bbf-melt-pmd-measurement-parameter-body {
              degraded due to external conditions.";
       reference
         "ITU-T G.996.2 clause E.2.2.15 (Reliability indicator)";
+    }
+    container melt-pmd-measurement-vendor-specific-status {
+      if-feature "melt-pmd-measurement-parameter-reliability";
+      description
+        "Vendor specific status associated with each MELT
+         measurement test.";
+      list status {
+        key "parameter";
+        description
+          "A list of per parameter test status.";
+        leaf parameter {
+          type melt-pmd-measurement-parameter;
+          description
+            "The MELT PMD measurement parameter.";
+        }
+        leaf message {
+          type string;
+          description
+            "Vendor specific status message for each of the
+             MELT PMD measurement parameters.";
+        }
+      }
     }
   }
 }

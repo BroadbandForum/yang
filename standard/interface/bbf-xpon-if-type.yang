@@ -12,23 +12,30 @@ module bbf-xpon-if-type {
      Fiber Access Networks Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
 
-     Editor:      Samuel Chen, Broadcom
+     Editor:      Igor Ternovsky, Broadcom
 
      Editor:      Robert Peschi, Nokia
 
      WA Director: Marta Seda, Calix
 
-     WA Director: Lin Wei, Huawei";
+     WA Director: Samuel Chen, Broadcom";
   description
-    "This module contains a collection of YANG definitions which
-     defines xPON interface types that are needed for BBF applications
-     but are not defined in iana-if-type.
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on management of
+     ITU-T Passive Optical Network (PON) interfaces as defined in
+     ITU-T G.984.x, G.987.x, ITU-T G.989.x and ITU-T G.9807.x. As
+     such, this module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
 
-     Copyright (c) 2018, Broadband Forum
+     Specifically, this module defines xPON interface types that are
+     needed for Broadband Forum aplications, but are not defined by
+     IANA.
+
+     Copyright (c) 2018-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +75,19 @@ module bbf-xpon-if-type {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385; see
+     This version of this YANG module is part of TR-385i2; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
   revision 2019-02-25 {
     description
       "Initial revision.
@@ -99,98 +116,113 @@ module bbf-xpon-if-type {
   identity channel-partition {
     base bbf-xpon-interface-type;
     description
-      "Any of the operator-specified non-overlapping subsets of TWDM
-       or PtP WDM channels in an NG-PON2 system.";
+      "Any of the operator-specified non-overlapping subsets of Time
+       Wavelength Division Multiplexing (TWDM) or Point-to-Point (PtP)
+       Wavelength Division Multiplexing (WDM) channels in an NG-PON2
+       system.";
   }
 
   identity channel-pair {
     base bbf-xpon-interface-type;
     description
       "A set of one downstream wavelength channel and one upstream
-       wavelength channel that provides connectivity between an OLT
-       and one or more ONUs.";
+       wavelength channel that provides connectivity between an
+       Optical Line Termination (OLT) and one or more Optical Network
+       Units (ONU).";
   }
 
   identity channel-termination {
     base bbf-xpon-interface-type;
     description
-      "A logical function that resides at the OLT network element and
-       terminates a single PtP WDM channel in a PtP WDM system or a
-       single TWDM channel in a TWDM system.";
+      "A logical function that resides at the Optical Line Termination
+       (OLT) network element and terminates a single Point-to-Point
+       (PtP) Wavelength Division Multiplexing (WDM) channel in a PtP
+       WDM system or a single Time Wavelength Division Multiplexing
+       (TWDM) channel in a TWDM system.";
   }
 
   identity ani {
     base bbf-xpon-interface-type;
     description
-      "The Access Network Interface located on the ONU.";
+      "The Access Network Interface (ANI) located on the Optical
+       Network Unit (ONU).";
   }
 
   identity v-ani {
     base bbf-xpon-interface-type;
     description
-      "A virtual representation of the 'ani' on the OLT.";
+      "A virtual representation of the Access Network Interface (vANI)
+       on the Optical Line Termination (OLT).";
   }
 
   identity onu-v-enet {
     base bbf-xpon-interface-type;
     base bbfift:ethernet-like;
     description
-      "Base type for onu-v-enet interfaces. The ONU-vENET
-       interfaces are virtual interfaces which carry ethernet
-       frames, which belong to the ONU and which are facing
-       the xPON side of the ONU i.e. facing the OLT.
+      "Base type for ONU-vENET interfaces. The ONU-vENET interfaces
+       are virtual interfaces which carry Ethernet frames, which
+       belong to the Optical Network Unit (ONU) and which are facing
+       the xPON side of the ONU i.e. facing the Optical Line
+       Termination (OLT).
 
-       ONU-vENET are virtual interfaces in the sense that they
-       do not directly refer to a physical port of an ONU.
-       Instead, ONU-vENET interfaces have the ANI interface of
-       the ONU as underlying interface. ONU-vENET are NOT
-       facing the user side of the ONU.
+       ONU-vENET are virtual interfaces in the sense that they do not
+       directly refer to a physical port of an ONU. Instead, ONU-vENET
+       interfaces have the Access Network Interfaces (ANI) of the ONU
+       as underlying interface. ONU-vENET are NOT facing the user side
+       of the ONU.
 
-       An ONU-vENET can be used as the xPON side Ehernet
+       An ONU-vENET can be used as the xPON side Ethernet
        aggregation interface of an ONU which performs Ethernet
-       traffic aggregation from several user-facing interfaces.";
+       traffic aggregation from several user-facing interfaces.
+
+       An ONU-vENET can also be used to support an IP host in the
+       ONU.";
   }
 
   identity olt-v-enet {
     base bbf-xpon-interface-type;
     base bbfift:ethernet-like;
     description
-      "Base type for olt-v-enet interfaces. The OLT-vENET
-       interfaces are virtual interfaces which carry ethernet
-       frames, which belong to the OLT and which are facing
-       the xPON side of the OLT i.e. facing the ONU.
+      "Base type for olt-v-enet interfaces. The OLT-vENET interfaces
+       are virtual interfaces which carry Ethernet frames, which
+       belong to the Optical Line Termination (OLT) and which are
+       facing the xPON side of the OLT i.e. facing the Optical Network
+       Unit (ONU).
 
-       OLT-vENET are virtual interfaces in the sense that they
-       do not directly refer to a physical port of an OLT.
-       Instead, OLT-vENET interfaces have the v-ANI interface
+       OLT-vENET are virtual interfaces in the sense that they do not
+       directly refer to a physical port of an OLT. Instead, OLT-vENET
+       interfaces have the virtual Access Network Interface (vANI)
        corresponding to a specific ONU as underlying interface.
        In the general case, an OLT-vENET 1-1 corresponds to a
        counter-part ONU-vENET interface on the ONU.
 
-       In the specific case of a TR-156 deployment scheme,
-       there is typically no need for the ONU to instanciate
-       ONU-vENET interfaces for subscriber traffic: in that
-       case OLT-vENET interfaces can directly 1-1 correspond
-       to individual user facing interface of the ONU, being
-       physical (per TR-156) or virtual (per TR-167).";
+       In the specific case of a TR-156 deployment scheme, there is
+       typically no need for the ONU to instanciate ONU-vENET
+       interfaces for subscriber traffic: in that case OLT-vENET
+       interfaces can directly 1-1 correspond to individual user
+       facing interface of the ONU, being physical (per TR-156) or
+       virtual (per TR-167).";
+    reference
+      "BBF TR-156; BBF TR-167";
   }
 
   identity onu-v-vrefpoint {
     base bbf-xpon-interface-type;
     base bbfift:ethernet-like;
     description
-      "Base type for ONU-vUNI interfaces. The ONU-vUNI
-       interface is a virtual interface which carry ethernet
-       frames, which belong to the ONU and which is facing
-       the user.
+      "Base type for ONU-vUNI interfaces. The ONU-vUNI interface is a
+       virtual interface which carry Ethernet frames, which belong to
+       the Optical Network Unit (ONU) and which is facing the user.
 
        It is intended for use as ONU 'Virtual V reference point'
-       defined in TR-167 (ref TR-167, Section 4 and 4.1).
-       ONU-vUNI are virtual interfaces in the sense that they
-       do not refer to a physical port of an ONU.
+       defined in TR-167 (ref TR-167, Section 4 and 4.1). ONU-vUNI are
+       virtual interfaces in the sense that they do not refer to a
+       physical port of an ONU.
 
-       ONU-vUNI are virtual equivalents of the physical
-       interfaces at the ONU U reference point defined in
-       TR-156 (ref. TR-156, Section 4).";
+       ONU-vUNI are virtual equivalents of the physical interfaces at
+       the ONU U reference point defined in TR-156 (ref. TR-156,
+       Section 4).";
+    reference
+      "BBF TR-156; BBF TR-167";
   }
 }

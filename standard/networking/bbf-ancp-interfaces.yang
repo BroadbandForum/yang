@@ -1,0 +1,225 @@
+module bbf-ancp-interfaces {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-ancp-interfaces";
+  prefix bbf-ancp-if;
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import bbf-ancp {
+    prefix bbf-ancp;
+  }
+  import bbf-dot1q-types {
+    prefix bbf-dot1qt;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, ADTRAN
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on the Access Node
+     Control Protocol (ANCP) as defined in RFC 6320. As such, this
+     module is specific to access network equipment (e.g., BBF-
+     specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module augments ietf-interfaces to manage
+     individual access lines that participate in ANCP.
+
+     Copyright (c) 2017-2020, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a3; see
+     the TR itself for full legal notices.";
+  reference
+    "RFC 6320";
+
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
+
+  feature access-aggregation-circuit-id {
+    description
+      "Indicates support for the configuration of which value(s) are
+       to be used in the Access-Aggregation-Circuit-ID-Binary and/or
+       in the Access-Aggregation-Circuit-ID-ASCII TLVs.";
+  }
+
+  augment "/if:interfaces/if:interface" {
+    description
+      "Additions for the management of access lines for ANCP.";
+    container ancp {
+      presence
+        "Presence of this container indicates ANCP functionality is
+         enabled on this interface. The set of interfaces on which
+         ANCP can be supported is dependent on the specific device
+         and type of interface.";
+      description
+        "ANCP access line configuration parameters.";
+      leaf partition {
+        type leafref {
+          path "/bbf-ancp:ancp"
+             + "/bbf-ancp:partitions"
+             + "/bbf-ancp:partition"
+             + "/bbf-ancp:partition-id";
+        }
+        mandatory true;
+        description
+          "Reference to the ANCP partition, in which the access line
+           is managed.";
+      }
+      container access-aggregation-circuit-id {
+        if-feature "access-aggregation-circuit-id";
+        presence
+          "Enables management of the value(s) to be used in the
+           Access-Aggregation-Circuit-ID-Binary and Access-
+           Aggregation-Circuit-ID-ASCII TLVs.";
+        description
+          "Configuration specific to the Access-Aggregation-Circuit-
+           ID-Binary and Access-Aggregation-Circuit-ID-ASCII TLVs.
+
+           If this container is not present, the system shall default
+           to the 'auto-derived' method of determining the value(s)
+           to be used in the Access-Aggregation-Circuit-ID-Binary
+           and Access-Aggregation-Circuit-ID-ASCII TLVs.";
+        choice access-aggregation-circuit-id {
+          mandatory true;
+          description
+            "Selects the mechanism for determining the value(s) to be
+             used in the Access-Aggregation-Circuit-ID-Binary and/or
+             in the Access-Aggregation-Circuit-ID-ASCII TLVs in ANCP
+             messages for this access line.
+
+             The format in which the values shall be used for the
+             Access-Aggregation-Circuit-ID-Binary TLV is defined in
+             the referenced standard. The  format to use in the
+             Access-Aggregation-Circuit-ID-ASCII is configurable per
+             ANCP session.";
+          reference
+            "RFC 6320 section 5.1.2.3 and 5.1.2.4";
+          case auto-derived {
+            description
+              "Configures that the value(s) to be used in the Access-
+               Aggregation-Circuit-ID-Binary and/or Access-
+               Aggregation-Circuit-ID-ASCII TLVs will be automatically
+               derived from the available VLAN sub-interface
+               configuration for this interface and related forwarding
+               and network side configuration.";
+            leaf auto-derived {
+              type empty;
+              description
+                "The value corresponds to the VLAN ID used in frames
+                 on the uplink interface that are the forwarding
+                 result of frames received on this subscriber
+                 interface. If all frames received on the subscriber
+                 interface are not forwarded with the same VLAN ID(s)
+                 to the network, then the VLAN ID(s) put in the ANCP
+                 messages is determined from the configuration
+                 associated with this interface that classifies
+                 ingress frames with the lowest VLAN ID value,
+                 combined with the related forwarding and network-
+                 side VLAN configuration.";
+            }
+          }
+          case explicit {
+            description
+              "Configures that the value(s) to be used in the Access-
+               Aggregation-Circuit-ID-Binary and/or in the Access-
+               Aggregation-Circuit-ID-ASCII TLVs will be specified
+               explicitly by the client.";
+            list access-aggregation-vlan-id {
+              key "index";
+              max-elements 2;
+              description
+                "The VLAN IDs to be inserted in the Access-
+                 Aggregation-Circuit-ID-Binary and Access-Aggregation-
+                 Circuit-ID-ASCII TLVs.";
+              leaf index {
+                type uint8 {
+                  range "0..1";
+                }
+                must
+                  '(count(../../access-aggregation-vlan-id[index=0])'
+                + ' > 0)' {
+                  error-message
+                    "A second VLAN ID can only be specified if also "
+                  + "a first VLAN ID specified.";
+                  description
+                    "Only allow a second if there is also a first
+                     VLAN ID.";
+                }
+                description
+                  "The index into the VLAN ID list.";
+              }
+              leaf vlan-id {
+                type bbf-dot1qt:vlan-id;
+                mandatory true;
+                description
+                  "The VLAN ID.";
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

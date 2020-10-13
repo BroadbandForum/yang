@@ -15,7 +15,7 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -27,7 +27,7 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
      managing Broadband Forum TR-252i3 clause 5.7 DSL Quality
      Management related profiles; INP-Delay Profile.
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Copyright (c) 2016-2020 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -67,9 +67,19 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2019-10-21 {
     description
       "Amendment 2 Corrigendum 1.
@@ -169,9 +179,9 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
          in Discrete Multi-Tone (DMT) symbols with a subcarrier
          spacing of 4.3125 kHz and can take the values and any integer
          from 0 to 16, inclusive.
-         If the xTU does not support the configured INPMIN value,
-         it will use the nearest supported impulse noise
-         protection greater than INPMIN.";
+         If the xDSL Transceiver Unit (xTU) does not support the
+         configured INPMIN value, it will use the nearest supported
+         impulse noise protection greater than INPMIN.";
       reference
         "ITU-T G.997.1 clause 7.3.2.3 Minimum impulse noise
          protection (INPMIN)";
@@ -235,9 +245,9 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
          individual ADSL Recommendations as Roundup(S*D) /4 ms, where
          S is the S-factor and D is the Interleaving Depth and
          Roundup(x) denotes rounding to the higher integer.
-         The xTUs will choose the S and D values such that the
-         actual one-way interleaving delay (see actual
-         interleaving delay status parameter in clause 7.5.2.3)
+         The xDSL Transceiver Units (xTU) will choose the S and D
+         values such that the actual one-way interleaving delay (see
+         actual interleaving delay status parameter in clause 7.5.2.3)
          is less than or equal to the configured maximum
          interleaving delay.";
       reference
@@ -475,8 +485,9 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
         type enumeration {
           enum vendor-discretionary {
             description
-              "Indicates that that the VTU-O is allowed to use a
-               vendor discretionary algorithm.";
+              "Indicates that that the VDSL Transceiver Unit - central
+               Office (VTU-O) is allowed to use a vendor discretionary
+               algorithm.";
           }
         }
       }
@@ -502,8 +513,8 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
          S1 (see clause 7.3.2.2 of ITU-T G.997.1) and
          retransmission is disabled in the upstream direction.
          A special value (enum vendor-discretionary) indicates
-         that the VTU-O is allowed to use a vendor discretionary
-         algorithm.";
+         that the VDSL Transceiver Unit - central Office (VTU-O) is
+         allowed to use a vendor discretionary algorithm.";
       reference
         "ITU-T G.997.1 clause 7.3.1.14 MAXDELAYOCTET-split
          parameter (MDOSPLIT)";
@@ -543,8 +554,9 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
         type enumeration {
           enum vendor-discretionary {
             description
-              "Indicates that the VTU-O is allowed to use a vendor
-               discretionary algorithm.";
+              "Indicates that the VDSL Transceiver Unit - central
+               Office (VTU-O) is allowed to use a vendor discretionary
+               algorithm.";
           }
         }
       }
@@ -562,8 +574,9 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
          specification is in ITU-T G.993.2 and G.998.4.
          The valid values are identical to the values of the line
          configuration parameter MDOSPLIT. A special value
-         (enum vendor-discretionary) indicates that the VTU-O is
-         allowed to use a vendor discretionary algorithm.";
+         (enum vendor-discretionary) indicates that the VDSL
+         Transceiver Unit - central Office (VTU-O) is allowed to use a
+         vendor discretionary algorithm.";
       reference
         "ITU-T G.997.1 clause 7.3.1.15.2 ATTNDR
          MAXDELAYOCTET-split parameter (ATTNDR_MDOSPLIT)";
@@ -582,8 +595,9 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
         type enumeration {
           enum vendor-discretionary {
             description
-              "Indicates that that the VTU-O is allowed to use a
-               vendor discretionary algorithm.";
+              "Indicates that that the VDSL Transceiver Unit - central
+               Office (VTU-O) is allowed to use a vendor discretionary
+               algorithm.";
           }
         }
       }
@@ -616,8 +630,8 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
          S1 (see clause 7.3.2.2 of ITU-T G.997.1) and
          retransmission is disabled in the upstream direction.
          A special value (enum vendor-discretionary) indicates
-         that the VTU-O is allowed to use a vendor discretionary
-         algorithm.";
+         that the VDSL Transceiver Unit - central Office (VTU-O) is
+         allowed to use a vendor discretionary algorithm.";
       reference
         "ITU-T G.997.1 clause 7.3.1.14 MAXDELAYOCTET-split
          parameter (MDOSPLIT)";
@@ -663,8 +677,9 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
         type enumeration {
           enum vendor-discretionary {
             description
-              "Indicates that the VTU-O is allowed to use a vendor
-               discretionary algorithm.";
+              "Indicates that the VDSL Transceiver Unit - central
+               Office (VTU-O) is allowed to use a vendor discretionary
+               algorithm.";
           }
         }
       }
@@ -683,12 +698,12 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
          downstream direction to be used in the improved method
          for calculation of the ATTNDR. All of the remaining
          MAXDELAYOCTET_ext or MAXDELAYOCTET will be allocated for
-         use in the upstream direction. The detailed
-         specification is in ITU-T G.993.2 and G.998.4.
-         The valid values are identical to the values of the line
-         configuration parameter MDOSPLIT. A special value
-         (enum vendor-discretionary) indicates that the VTU-O is
-         allowed to use a vendor discretionary algorithm.";
+         use in the upstream direction. The detailed specification is
+         in ITU-T G.993.2 and G.998.4. The valid values are identical
+         to the values of the line configuration parameter MDOSPLIT.
+         A special value (enum vendor-discretionary) indicates that
+         the VDSL Transceiver Unit - central Office (VTU-O) is allowed
+         to use a vendor discretionary algorithm.";
       reference
         "ITU-T G.997.1 clause 7.3.1.15.2 ATTNDR
          MAXDELAYOCTET-split parameter (ATTNDR_MDOSPLIT)";

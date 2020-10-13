@@ -1,5 +1,18 @@
 ## Broadband Forum YANG Modules
 
+### 2020-10-13: [TR-355 Amendment 3](https://www.broadband-forum.org/technical/download/TR-355_Amendment-3.pdf) YANG Modules for FTTdp Management, [TR-383 Amendment 3](https://www.broadband-forum.org/technical/download/TR-383_Amendment-3.pdf) Common YANG Modules for Access Networks, [TR-385 Issue 2](https://www.broadband-forum.org/technical/download/TR-385_Issue-2.pdf) ITU-T PON YANG Modules
+*Tags: [TR-355-v1.3.0](https://github.com/BroadbandForum/yang/tree/TR-355-v1.3.0), [TR-383-v1.3.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.3.0), [TR-385-v2.0.0](https://github.com/BroadbandForum/yang/tree/TR-385-v2.0.0)*
+
+* TR-355 Amendment 3
+    * Add support for bonding as defined in ITU-T G.998.1, G.998.2, G.998.3 and BBF TR-159
+    * Add alarming support for FAST and VDSL
+    * Add support for additions and changes from amendments to ITU-T G.997.1 and G.997.2
+* TR-383 Amendment 3
+    * Enhancements to existing models
+    * New models for ANCP and Hardware Management
+* TR-385 Issue 2
+    * Add support for performance monitoring, power management, ONU presences states and defect reporting
+
 ### 2020-01-31: [TR-385c1](https://www.broadband-forum.org/technical/download/TR-385.pdf) ITU-T PON YANG Modules (PDF not updated)
 *Tag: [v3.0.1-TR-385c1](https://github.com/BroadbandForum/yang/tree/v3.0.1-TR-385c1)*
 

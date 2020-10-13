@@ -15,7 +15,7 @@ submodule bbf-fast-threshold-crossing-alert-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -25,8 +25,6 @@ submodule bbf-fast-threshold-crossing-alert-body {
   description
     "This submodule contains a collection of identities associated
      with the management of FAST threshold crossing alerts.
-     YANG data types and grouping definitions for the management
-     of FAST bearer channels.
 
      Copyright (c) 2016-2020 Broadband Forum
 
@@ -68,9 +66,19 @@ submodule bbf-fast-threshold-crossing-alert-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2020-01-17 {
     description
       "Amendment 2 Corrigendum 2.
@@ -111,16 +119,6 @@ submodule bbf-fast-threshold-crossing-alert-body {
                  <https://www.broadband-forum.org/technical/download/
                         TR-355_Amendment-1.pdf>";
   }
-  revision 2017-05-01 {
-    description
-      "Initial revision.
-       * Approval Date:    see revision date above.
-       * Publication Date: TBD";
-    reference
-      "TR-355: YANG Modules for FTTdp Management
-               <https://www.broadband-forum.org/technical/download/
-                        TR-355.pdf>";
-  }
 
   /********************* ABSTRACT IDENTITIES *********/
 
@@ -137,7 +135,8 @@ submodule bbf-fast-threshold-crossing-alert-body {
     description
       "A threshold crossing alert associated with performance
        counters collected over the current 15 minute interval
-       for FTU-O/FTU-R channels and lines.
+       for FAST Transceiver Unit - central Office (FTU-O) or FAST
+       Transceiver Unit - Remote side (FTU-R) channels and lines.
 
        This identity is abstract and is not be used for a
        threshold crossing alert.";
@@ -148,7 +147,8 @@ submodule bbf-fast-threshold-crossing-alert-body {
     description
       "A threshold crossing alert associated with performance
        counters collected over the current 24 hour interval
-       for FTU-O/FTU-R channels and lines.
+       for FAST Transceiver Unit - central Office (FTU-O) or FAST
+       Transceiver Unit - Remote side (FTU-R) channels and lines.
 
        This identity is abstract and is not be used for a
        threshold crossing alert.";
@@ -160,8 +160,9 @@ submodule bbf-fast-threshold-crossing-alert-body {
     base fast-15min-threshold-crossing-alert;
     description
       "The number of channel code violations during the
-       current 15 minute interval has exceeded the configured FTU-O
-       threshold. This threshold crossing alert is optional.";
+       current 15 minute interval has exceeded the configured FAST
+       Transceiver Unit - central Office (FTU-O) threshold. This
+       threshold crossing alert is optional.";
   }
 
   identity ftu-o-15min-channel-uncorrectable-dtus-tca {
@@ -169,8 +170,8 @@ submodule bbf-fast-threshold-crossing-alert-body {
     description
       "The number of received uncorrectable Data Transfer Units (DTU)
        during the current 15 minute interval has exceeded the
-       configured FTU-O threshold. This threshold crossing alert is
-       optional.";
+       configured FAST Transceiver Unit - central Office (FTU-O)
+       threshold. This threshold crossing alert is optional.";
   }
 
   identity ftu-o-15min-channel-retransmitted-dtus-tca {
@@ -178,7 +179,8 @@ submodule bbf-fast-threshold-crossing-alert-body {
     description
       "The number of retransmitted Data Transfer Units (DTU) during
        the current 15 minute interval has exceeded the configured
-       FTU-O threshold. This threshold crossing alert is optional.";
+       FAST Transceiver Unit - central Office (FTU-O) threshold. This
+       threshold crossing alert is optional.";
   }
 
   /********** FTU-O 15-MIN LINE NOTIFICATIONS **********/
@@ -186,81 +188,88 @@ submodule bbf-fast-threshold-crossing-alert-body {
   identity ftu-o-15min-line-errored-seconds-tca {
     base fast-15min-threshold-crossing-alert;
     description
-      "The number of line errored seconds during the current 15 minute
-       interval has exceeded the configured FTU-O threshold.";
+      "The number of line Errored Seconds (ES) during the current 15
+       minute interval has exceeded the configured FAST Transceiver
+       Unit - central Office (FTU-O) threshold.";
   }
 
   identity ftu-o-15min-line-severely-errored-seconds-tca {
     base fast-15min-threshold-crossing-alert;
     description
-      "The number of line severly errored seconds during the current
-       15 minute interval has exceeded the configured FTU-O
-       threshold.";
+      "The number of line Severely Errored Seconds (SES) during the
+       current 15 minute interval has exceeded the configured FAST
+       Transceiver Unit - central Office (FTU-O) threshold.";
   }
 
   identity ftu-o-15min-line-loss-of-signal-seconds-tca {
     base fast-15min-threshold-crossing-alert;
     description
-      "The number of line loss of signal seconds during the current
-       15 minute interval has exceeded the configured FTU-O threshold.
-       This threshold crossing alert is optional.";
+      "The number of line Loss of Signal Seconds (LOSS) during the
+       current 15 minute interval has exceeded the configured FAST
+       Transceiver Unit - central Office (FTU-O) threshold. This
+       threshold crossing alert is optional.";
   }
 
   identity ftu-o-15min-line-loss-of-rmc-seconds-tca {
     base fast-15min-threshold-crossing-alert;
     description
-      "The number of line loss of Robust Management Channel (RMC)
-       seconds during the current 15 minute interval has exceeded the
-       configured FTU-O threshold. This threshold crossing alert is
-       optional.";
+      "The number of line Loss of Robust Management Channel (RMC)
+       Seconds (LORS) during the current 15 minute interval has
+       exceeded the configured FAST Transceiver Unit - central Office
+       (FTU-O) threshold. This threshold crossing alert is optional.";
   }
 
   identity ftu-o-15min-line-unavailable-seconds-tca {
     base fast-15min-threshold-crossing-alert;
     description
-      "The number of received line unavailable seconds during the
-       current 15 minute interval has exceeded the configured FTU-O
-       threshold.";
+      "The number of received line Unavailable Seconds (UAS) during
+       the current 15 minute interval has exceeded the configured FAST
+       Transceiver Unit - central Office (FTU-O) threshold.";
   }
 
   identity ftu-o-15min-line-full-initializations-tca {
     base fast-15min-threshold-crossing-alert;
     description
       "The number of line full initializations during the current
-       15 minute interval has exceeded the configured FTU-O threshold.
-       This threshold crossing alert is optional.";
+       15 minute interval has exceeded the configured FAST Transceiver
+       Unit - central Office (FTU-O) threshold. This threshold
+       crossing alert is optional.";
   }
 
   identity ftu-o-15min-line-failed-initializations-tca {
     base fast-15min-threshold-crossing-alert;
     description
       "The number of line failed initializations during the current
-       15 minute interval has exceeded the configured FTU-O threshold.
-       This threshold crossing alert is optional.";
+       15 minute interval has exceeded the configured FAST Transceiver
+       Unit - central Office (FTU-O) threshold. This threshold
+       crossing alert is optional.";
   }
 
   identity ftu-o-15min-line-fast-initializations-tca {
     base fast-15min-threshold-crossing-alert;
     description
       "The number of line fast initializations during the current 15
-       minute interval has exceeded the configured FTU-O threshold.
-       This threshold crossing alert is optional.";
+       minute interval has exceeded the configured FAST Transceiver
+       Unit - central Office (FTU-O) threshold. This threshold
+       crossing alert is optional.";
   }
 
   identity ftu-o-15min-line-failed-fast-initializations-tca {
     base fast-15min-threshold-crossing-alert;
     description
       "The number of line failed fast initializations during the
-       current 15 minute interval has exceeded the configured FTU-O
-       threshold. This threshold crossing alert is optional.";
+       current 15 minute interval has exceeded the configured FAST
+       Transceiver Unit - central Office (FTU-O) threshold. This
+       threshold crossing alert is optional.";
   }
 
   identity ftu-o-15min-line-spontaneous-interruptions-tca {
     base fast-15min-threshold-crossing-alert;
     description
       "The number of line spontaneous interuptions during the current
-       15 minute interval has exceeded the configured FTU-O threshold.
-       This threshold crossing alert is optional.";
+       15 minute interval has exceeded the configured FAST Transceiver
+       Unit - central Office (FTU-O) threshold. This threshold
+       crossing alert is optional.";
   }
 
   /********** FTU-R 15-MIN CHANNEL NOTIFICATIONS **********/
@@ -269,8 +278,9 @@ submodule bbf-fast-threshold-crossing-alert-body {
     base fast-15min-threshold-crossing-alert;
     description
       "The number of channel code violations during the
-       current 15 minute interval has exceeded the configured FTU-R
-       threshold. This threshold crossing alert is optional.";
+       current 15 minute interval has exceeded the configured FAST
+       Transceiver Unit - Remote side (FTU-R) threshold. This
+       threshold crossing alert is optional.";
   }
 
   identity ftu-r-15min-channel-uncorrectable-dtus-tca {
@@ -278,8 +288,8 @@ submodule bbf-fast-threshold-crossing-alert-body {
     description
       "The number of received uncorrectable Data Transfer Units (DTU)
        during the current 15 minute interval has exceeded the
-       configured FTU-R threshold. This threshold crossing alert is
-       optional.";
+       configured FAST Transceiver Unit - Remote side (FTU-R)
+       threshold. This threshold crossing alert is optional.";
   }
 
   identity ftu-r-15min-channel-retransmitted-dtus-tca {
@@ -287,7 +297,8 @@ submodule bbf-fast-threshold-crossing-alert-body {
     description
       "The number of retransmitted Data Transfer Units (DTU) during
        the current 15 minute interval has exceeded the configured
-       FTU-R threshold. This threshold crossing alert is optional.";
+       FAST Transceiver Unit - Remote side (FTU-R) threshold. This
+       threshold crossing alert is optional.";
   }
 
   /********************* FTU-R 15-MIN LINE NOTIFICATIONS *********/
@@ -295,41 +306,43 @@ submodule bbf-fast-threshold-crossing-alert-body {
   identity ftu-r-15min-line-errored-seconds-tca {
     base fast-15min-threshold-crossing-alert;
     description
-      "The number of line errored seconds during the current 15 minute
-       interval has exceeded the configured FTU-R threshold.";
+      "The number of line Errored Seconds (ES) during the current 15
+       minute interval has exceeded the configured FAST Transceiver
+       Unit - Remote side (FTU-R) threshold.";
   }
 
   identity ftu-r-15min-line-severely-errored-seconds-tca {
     base fast-15min-threshold-crossing-alert;
     description
-      "The number of line severly errored seconds during the current
-       15 minute interval has exceeded the configured FTU-R
-       threshold.";
+      "The number of line Severely Errored Seconds (SES) during the
+       current 15 minute interval has exceeded the configured FAST
+       Transceiver Unit - Remote side (FTU-R) threshold.";
   }
 
   identity ftu-r-15min-line-loss-of-signal-seconds-tca {
     base fast-15min-threshold-crossing-alert;
     description
-      "The number of line loss of signal seconds during the current
-       15 minute interval has exceeded the configured FTU-R threshold.
-       This threshold crossing alert is optional.";
+      "The number of line Loss of Signal Seconds (LOSS) during the
+       current 15 minute interval has exceeded the configured FAST
+       Transceiver Unit - Remote side (FTU-R) threshold. This
+       threshold crossing alert is optional.";
   }
 
   identity ftu-r-15min-line-loss-of-rmc-seconds-tca {
     base fast-15min-threshold-crossing-alert;
     description
-      "The number of line loss of Robust Management Channel (RMC)
-       seconds during the current 15 minute interval has exceeded the
-       configured FTU-R threshold. This threshold crossing alert is
-       optional.";
+      "The number of line Loss of Robust Management Channel (RMC)
+       Seconds (LORS) during the current 15 minute interval has
+       exceeded the configured FAST Transceiver Unit - Remote side
+       (FTU-R) threshold. This threshold crossing alert is optional.";
   }
 
   identity ftu-r-15min-line-unavailable-seconds-tca {
     base fast-15min-threshold-crossing-alert;
     description
-      "The number of received line unavailable seconds during the
-       current 15 minute interval has exceeded the configured FTU-R
-       threshold.";
+      "The number of received line Unavailable Seconds (UAS) during
+       the current 15 minute interval has exceeded the configured FAST
+       Transceiver Unit - Remote side (FTU-R) threshold.";
   }
 
   /********** FTU-O 24-HR CHANNEL NOTIFICATIONS **********/
@@ -337,9 +350,10 @@ submodule bbf-fast-threshold-crossing-alert-body {
   identity ftu-o-24hr-channel-code-violations-tca {
     base fast-24hr-threshold-crossing-alert;
     description
-      "The number of channel code violations during the
-       current 24 hour interval has exceeded the configured FTU-O
-       threshold. This threshold crossing alert is optional.";
+      "The number of channel code violations during the current 24
+       hour interval has exceeded the configured FAST Transceiver
+       Unit - central Office (FTU-O) threshold. This threshold
+       crossing alert is optional.";
   }
 
   identity ftu-o-24hr-channel-uncorrectable-dtus-tca {
@@ -347,15 +361,17 @@ submodule bbf-fast-threshold-crossing-alert-body {
     description
       "The number of received uncorrectable Data Transfer Units (DTU)
        during the current 24 hour interval has exceeded the configured
-       FTU-O threshold. This threshold crossing alert is optional.";
+       FAST Transceiver Unit - central Office (FTU-O) threshold. This
+       threshold crossing alert is optional.";
   }
 
   identity ftu-o-24hr-channel-retransmitted-dtus-tca {
     base fast-24hr-threshold-crossing-alert;
     description
       "The number of retransmitted Data Transfer Units (DTU) during
-       the current 24 hour interval has exceeded the configured FTU-O
-       threshold. This threshold crossing alert is optional.";
+       the current 24 hour interval has exceeded the configured FAST
+       Transceiver Unit - central Office (FTU-O) threshold. This
+       threshold crossing alert is optional.";
   }
 
   /********** FTU-O 24-HR LINE NOTIFICATIONS **********/
@@ -363,81 +379,88 @@ submodule bbf-fast-threshold-crossing-alert-body {
   identity ftu-o-24hr-line-errored-seconds-tca {
     base fast-24hr-threshold-crossing-alert;
     description
-      "The number of line errored seconds during the current 24 hour
-       interval has exceeded the configured FTU-O threshold.";
+      "The number of line Errored Seconds (ES) during the current 24
+       hour interval has exceeded the configured FAST Transceiver
+       Unit - central Office (FTU-O) threshold.";
   }
 
   identity ftu-o-24hr-line-severely-errored-seconds-tca {
     base fast-24hr-threshold-crossing-alert;
     description
-      "The number of line severly errored seconds during the current
-       24 hour interval has exceeded the configured FTU-O
-       threshold.";
+      "The number of line Severely Errored Seconds (SES) during the
+       current 24 hour interval has exceeded the configured FAST
+       Transceiver Unit - central Office (FTU-O) threshold.";
   }
 
   identity ftu-o-24hr-line-loss-of-signal-seconds-tca {
     base fast-24hr-threshold-crossing-alert;
     description
-      "The number of line loss of signal seconds during the current
-       24 hour interval has exceeded the configured FTU-O threshold.
-       This threshold crossing alert is optional.";
+      "The number of line Loss of Signal Seconds (LOSS) during the
+       current 24 hour interval has exceeded the configured FAST
+       Transceiver Unit - central Office (FTU-O) threshold. This
+       threshold crossing alert is optional.";
   }
 
   identity ftu-o-24hr-line-loss-of-rmc-seconds-tca {
     base fast-24hr-threshold-crossing-alert;
     description
-      "The number of line loss of Robust Management Channel (RMC)
-       seconds during the current 24 hour interval has exceeded the
-       configured FTU-O threshold. This threshold crossing alert is
-       optional.";
+      "The number of line Loss of Robust Management Channel (RMC)
+       Seconds (LORS) during the current 24 hour interval has exceeded
+       the configured FAST Transceiver Unit - central Office (FTU-O)
+       threshold. This threshold crossing alert is optional.";
   }
 
   identity ftu-o-24hr-line-unavailable-seconds-tca {
     base fast-24hr-threshold-crossing-alert;
     description
-      "The number of received line unavailable seconds during the
-       current 24 hour interval has exceeded the configured FTU-O
-       threshold.";
+      "The number of received line Unavailable Seconds (UAS) during
+       the current 24 hour interval has exceeded the configured FAST
+       Transceiver Unit - central Office (FTU-O) threshold.";
   }
 
   identity ftu-o-24hr-line-full-initializations-tca {
     base fast-24hr-threshold-crossing-alert;
     description
       "The number of line full initializations during the current
-       24 hour interval has exceeded the configured FTU-O threshold.
-       This threshold crossing alert is optional.";
+       24 hour interval has exceeded the configured FAST Transceiver
+       Unit - central Office (FTU-O) threshold. This threshold
+       crossing alert is optional.";
   }
 
   identity ftu-o-24hr-line-failed-initializations-tca {
     base fast-24hr-threshold-crossing-alert;
     description
       "The number of line failed initializations during the current
-       24 hour interval has exceeded the configured FTU-O threshold.
-       This threshold crossing alert is optional.";
+       24 hour interval has exceeded the configured FAST Transceiver
+       Unit - central Office (FTU-O) threshold. This threshold
+       crossing alert is optional.";
   }
 
   identity ftu-o-24hr-line-fast-initializations-tca {
     base fast-24hr-threshold-crossing-alert;
     description
       "The number of line fast initializations during the current 24
-       hour interval has exceeded the configured FTU-O threshold.
-       This threshold crossing alert is optional.";
+       hour interval has exceeded the configured FAST Transceiver
+       Unit - central Office (FTU-O) threshold. This threshold
+       crossing alert is optional.";
   }
 
   identity ftu-o-24hr-line-failed-fast-initializations-tca {
     base fast-24hr-threshold-crossing-alert;
     description
       "The number of line failed fast initializations during the
-       current 24 hour interval has exceeded the configured FTU-O
-       threshold. This threshold crossing alert is optional.";
+       current 24 hour interval has exceeded the configured FAST
+       Transceiver Unit - central Office (FTU-O) threshold. This
+       threshold crossing alert is optional.";
   }
 
   identity ftu-o-24hr-line-spontaneous-interruptions-tca {
     base fast-24hr-threshold-crossing-alert;
     description
       "The number of line spontaneous interuptions during the current
-       24 hour interval has exceeded the configured FTU-O threshold.
-       This threshold crossing alert is optional.";
+       24 hour interval has exceeded the configured FAST Transceiver
+       Unit - central Office (FTU-O) threshold. This threshold
+       crossing alert is optional.";
   }
 
   /********** FTU-R 24-HR CHANNEL NOTIFICATIONS **********/
@@ -446,8 +469,9 @@ submodule bbf-fast-threshold-crossing-alert-body {
     base fast-24hr-threshold-crossing-alert;
     description
       "The number of channel code violations during the
-       current 24 hour interval has exceeded the configured FTU-R
-       threshold. This threshold crossing alert is optional.";
+       current 24 hour interval has exceeded the configured FAST
+       Transceiver Unit - Remote side (FTU-R) threshold. This
+       threshold crossing alert is optional.";
   }
 
   identity ftu-r-24hr-channel-uncorrectable-dtus-tca {
@@ -455,15 +479,17 @@ submodule bbf-fast-threshold-crossing-alert-body {
     description
       "The number of received uncorrectable Data Transfer Units (DTU)
        during the current 24 hour interval has exceeded the configured
-       FTU-R threshold. This threshold crossing alert is optional.";
+       FAST Transceiver Unit - Remote side (FTU-R) threshold. This
+       threshold crossing alert is optional.";
   }
 
   identity ftu-r-24hr-channel-retransmitted-dtus-tca {
     base fast-24hr-threshold-crossing-alert;
     description
       "The number of retransmitted Data Transfer Units (DTU) during
-       the current 24 hour interval has exceeded the configured FTU-R
-       threshold. This threshold crossing alert is optional.";
+       the current 24 hour interval has exceeded the configured FAST
+       Transceiver Unit - Remote side (FTU-R) threshold. This
+       threshold crossing alert is optional.";
   }
 
   /********** FTU-R 24-HR LINE NOTIFICATIONS **********/
@@ -471,24 +497,26 @@ submodule bbf-fast-threshold-crossing-alert-body {
   identity ftu-r-24hr-line-errored-seconds-tca {
     base fast-24hr-threshold-crossing-alert;
     description
-      "The number of line errored seconds during the current 24 hour
-       interval has exceeded the configured FTU-R threshold.";
+      "The number of line Errored Seconds (ES) during the current 24
+       hour interval has exceeded the configured FAST Transceiver
+       Unit - Remote side (FTU-R) threshold.";
   }
 
   identity ftu-r-24hr-line-severely-errored-seconds-tca {
     base fast-24hr-threshold-crossing-alert;
     description
-      "The number of line severly errored seconds during the current
-       24 hour interval has exceeded the configured FTU-R
-       threshold.";
+      "The number of line Severely Errored Seconds (SES) during the
+       current 24 hour interval has exceeded the configured FAST
+       Transceiver Unit - Remote side (FTU-R) threshold.";
   }
 
   identity ftu-r-24hr-line-loss-of-signal-seconds-tca {
     base fast-24hr-threshold-crossing-alert;
     description
-      "The number of line loss of signal seconds during the current
-       24 hour interval has exceeded the configured FTU-R threshold.
-       This threshold crossing alert is optional.";
+      "The number of line Loss of Signal Seconds (LOSS) during the
+       current 24 hour interval has exceeded the configured FAST
+       Transceiver Unit - Remote side (FTU-R) threshold. This
+       threshold crossing alert is optional.";
   }
 
   identity ftu-r-24hr-line-loss-of-rmc-seconds-tca {
@@ -496,15 +524,15 @@ submodule bbf-fast-threshold-crossing-alert-body {
     description
       "The number of line loss of Robust Management Channel (RMC)
        seconds during the current 24 hour interval has exceeded the
-       configured FTU-R threshold. This threshold crossing alert is
-       optional.";
+       configured FAST Transceiver Unit - Remote side (FTU-R)
+       threshold. This threshold crossing alert is optional.";
   }
 
   identity ftu-r-24hr-line-unavailable-seconds-tca {
     base fast-24hr-threshold-crossing-alert;
     description
-      "The number of received line unavailable seconds during the
-       current 24 hour interval has exceeded the configured FTU-R
-       threshold.";
+      "The number of received line Unavailable Seconds (UAS) during
+       the current 24 hour interval has exceeded the configured FAST
+       Transceiver Unit - Remote side (FTU-R) threshold.";
   }
 }

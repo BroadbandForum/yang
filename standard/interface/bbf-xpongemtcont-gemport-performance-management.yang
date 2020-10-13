@@ -1,0 +1,238 @@
+module bbf-xpongemtcont-gemport-performance-management {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:"
+          + "bbf-xpongemtcont-gemport-performance-management";
+  prefix bbf-xpongemtcont-gemport-pm;
+
+  import bbf-interfaces-performance-management {
+    prefix bbf-if-pm;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import bbf-xpongemtcont {
+    prefix bbf-xpongemtcont;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Fiber Access Networks Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     Editor:      Igor Ternovsky, Broadcom
+
+     Editor:      Robert Peschi, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Samuel Chen, Broadcom";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on management of
+     ITU-T Passive Optical Network (PON) interfaces as defined in
+     ITU-T G.984.x, G.987.x, ITU-T G.989.x and ITU-T G.9807.x. As
+     such, this module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module defines the management of performance
+     monitoring of G-PON Encapsulation Method (GEM) ports.
+
+     Copyright (c) 2018-2020, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385i2; see
+     the TR itself for full legal notices.";
+
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
+
+  grouping gemport-performance-counters {
+    description
+      "Counters associated with current and historical 15 minute and
+       24 hour performance counters.";
+    reference
+      "ITU-T G.987.3 (01/2014) Table 14.1
+       ITU-T G.989.3 (2015)/Amd.2 (11/2018) Table 14-1
+       ITU-T G.9807.1 (2016)/Amd.1 (10/2017) Table C.14.1";
+    leaf out-frames {
+      type bbf-yang:performance-counter64;
+      description
+        "Total number of G-PON Encapsulation Method (GEM) frames
+         transmitted.";
+      reference
+        "ITU-T G.987.3 (01/2014)
+         Table 14-1 Transmitted XGEM frames per XGEM port
+
+         ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+         Table 14-1 Transmitted XGEM frames per XGEM port
+
+         ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+         Table C.14.1 Transmitted XGEM frames per XGEM port";
+    }
+    leaf in-frames {
+      type bbf-yang:performance-counter64;
+      description
+        "Total number of G-PON Encapsulation Method (GEM) frames
+         received.";
+      reference
+        "ITU-T G.987.3 (01/2014)
+         Table 14-1 Received XGEM frames per XGEM port
+
+         ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+         Table 14-1 Received XGEM frames per XGEM port
+
+         ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+         Table C.14.1 Received XGEM frames per XGEM port";
+    }
+  }
+
+  grouping gemport-performance {
+    description
+      "G-PON Encapsulation Method (GEM) port performance counters.";
+    container ani-side {
+      description
+        "Counters from the Optical Network Unit's (ONU) perspective.";
+      uses gemport-performance-counters;
+    }
+    container v-ani-side {
+      description
+        "Counters from the Optical Line Termination's (OLT)
+         perspective.";
+      uses gemport-performance-counters;
+    }
+  }
+
+  augment "/bbf-xpongemtcont:xpongemtcont/"
+        + "bbf-xpongemtcont:gemports/bbf-xpongemtcont:gemport" {
+    description
+      "Data nodes for the performance configuration parameters.";
+    container performance {
+      description
+        "Performance parameters.";
+      leaf enable {
+        type boolean;
+        default "false";
+        description
+          "If true, enables counting of performance statistics.
+           Then performance statistics will be available in
+           /xpongemtcont-state/gemports/gemport/performance.
+           i.e. 15 minutes statistics and 24 hours statistics,
+           and for both there are current statistics and history
+           data.
+
+           If false, then there are no performance statistics.";
+      }
+    }
+  }
+
+  augment "/bbf-xpongemtcont:xpongemtcont-state"
+        + "/bbf-xpongemtcont:gemports/bbf-xpongemtcont:gemport" {
+    description
+      "Data nodes for the performance status parameters.";
+    container performance {
+      description
+        "Performance counters associated with G-PON Encapsulation
+         Method (GEM) ports.";
+      container intervals-15min {
+        description
+          "15 minute interval performance history.";
+        container current {
+          description
+            "Current 15 minute interval counters.";
+          uses gemport-performance;
+        }
+        uses bbf-if-pm:performance-15min-history-parameters;
+        list history {
+          key "interval-number";
+          max-elements 96;
+          description
+            "A history of 15 minute intervals.";
+          leaf interval-number {
+            type bbf-if-pm:performance-15min-history-interval;
+            description
+              "The number of the interval relative to the current
+               interval.";
+          }
+          uses "bbf-if-pm:"
+             + "performance-history-15min-interval-parameters";
+          uses gemport-performance;
+        }
+      }
+      container intervals-24hr {
+        if-feature "bbf-if-pm:performance-24hr";
+        description
+          "24 hour interval performance history.";
+        container current {
+          description
+            "Current 24 hour interval counters.";
+          uses gemport-performance;
+        }
+        uses bbf-if-pm:performance-24hr-history-parameters;
+        list history {
+          key "interval-number";
+          max-elements 7;
+          description
+            "A history of 24 hour intervals.";
+          leaf interval-number {
+            type bbf-if-pm:performance-24hr-history-interval;
+            description
+              "The number of the interval relative to the current
+               interval.";
+          }
+          uses "bbf-if-pm:"
+             + "performance-history-24hr-interval-parameters";
+          uses gemport-performance;
+        }
+      }
+    }
+  }
+}

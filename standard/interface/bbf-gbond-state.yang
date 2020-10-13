@@ -1,0 +1,615 @@
+module bbf-gbond-state {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-gbond-state";
+  prefix bbf-gbond-state;
+
+  import iana-if-type {
+    prefix ianaift;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import bbf-fastdsl {
+    prefix bbf-fastdsl;
+  }
+  import bbf-gbond {
+    prefix bbf-gbond;
+  }
+  import bbf-interfaces-performance-management {
+    prefix bbf-if-pm;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Ken Kerpez, ASSIA, Inc.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia
+
+     WA Director: Joey Boyd, ADTRAN";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on bonding of
+     physical interfaces as defined in ITU-T G.998.1, ITU-T G.998.2,
+     ITU-T G.998.3 and BBF TR-159. As such, this module is specfic to
+     access network equipment (e.g., BBF-specified Access Nodes and
+     FTTdp DPUs).
+
+     Specifically, this module is to be used when the server does not
+     support Network Management Datastore Architecture (NMDA) as
+     defined in RFC 8342.
+
+     Copyright (c) 2016-2020 Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-355a3; see
+     the TR itself for full legal notices.";
+
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
+
+  grouping bonding-group-performance-counters {
+    description
+      "Bonding group performance counters.";
+    leaf errored-seconds {
+      type yang:counter64;
+      description
+        "A count of Errored Seconds(ES) on the Generic Bonded
+         Sub-layer (GBS) in the specified performance interval.
+
+         The definition of an Errored Second is dependent on
+         the bonding scheme currently in use.";
+    }
+    leaf severely-errored-seconds {
+      type yang:counter64;
+      description
+        "A count of Severely Errored Seconds(SES) on the Generic
+         Bonded Sub-layer (GBS) in the specified performance interval.
+
+         The definition of a Severly Errored Second is
+         dependent on the bonding scheme currently in use.";
+    }
+    leaf unavailable-seconds {
+      type yang:counter64;
+      description
+        "A count of Unavailable Seconds(UAS) on the Generic Bonded
+         Sub-layer (GBS) in the specified performance interval.
+
+         The definition of an Unavailable Second is
+         dependent on the bonding scheme currently in use.";
+    }
+  }
+
+  grouping bonding-group-performance {
+    description
+      "Bonding group performance.";
+    container gbs-c {
+      description
+        "Performance associated with the Generic Bonded Sub-layer,
+         CO side (GBS-C).";
+      uses bonding-group-performance-counters;
+    }
+  }
+
+  augment "/if:interfaces-state/if:interface" {
+    when "derived-from-or-self(if:type,'ianaift:g9981') or "
+       + "derived-from-or-self(if:type,'ianaift:g9982') or "
+       + "derived-from-or-self(if:type,'ianaift:g9983')" {
+      description
+        "Only applicable if the interface type is G.998.1, G.998.2,
+         G.998.3, or derived from one of those types.";
+    }
+    description
+      "Augment the basic interface state data with parameters
+       associated with a G.bond bonding group.";
+    container bonding-group {
+      description
+        "State parameters associated with a G.bond bonding group.";
+      container status {
+        description
+          "Status objects associated with a bonding group.";
+        leaf upstream-data-rate {
+          type bbf-yang:data-rate32-or-undetermined;
+          mandatory true;
+          description
+            "The current operating data rate of the Generic Bonded
+             Sub-layer (GBS) in the upstream direction, in kbits per
+             second. A special value, 'undetermined', is used when the
+             bonding group is not operational.
+
+             For G.fast, the upstream data rate represents the sum of
+             the Gamma Data Rates (GDR) of the G.fast lines associated
+             with this GBS.
+
+             For VDSL, the upstream data rate represents the sum of
+             the Net Data Rates (NDR) of the VDSL lines associated
+             with this GBS.";
+          reference
+            "TR-159 section 5.5.1.15, aGroupUpRate.";
+        }
+        leaf downstream-data-rate {
+          type bbf-yang:data-rate32-or-undetermined;
+          mandatory true;
+          description
+            "The current operating data rate of the Generic Bonded
+             Sub-layer (GBS) in the downstream direction, in kbits per
+             second. A special value, 'undetermined', is used when the
+             bonding group is not operational.
+
+             For G.fast, the downstream data rate represents the sum
+             of the Gamma Data Rates (GDR) of the G.fast lines
+             associated with this GBS.
+
+             For VDSL, the downstream data rate represents the sum of
+             the Net Data Rates (NDR) of the VDSL lines associated
+             with this GBS.";
+          reference
+            "TR-159 section 5.5.1.16, aGroupDownRate.";
+        }
+        leaf number-of-channels {
+          type uint32;
+          mandatory true;
+          description
+            "The number of channels that are actually aggregated/
+             bonded by this particular G.998.x port (Generic Bonded
+             Sub-layer (GBS)). Within each G.998.x port, the Bonded
+             Channel Entities (BCE) are uniquely numbered in the range
+             from 1 to 'capacity'. Some BCEs may not be present in a
+             given GBS instance, in which case 'number-of-channels' is
+             less than 'capacity'. The number of BCEs present is never
+             greater than 'capacity'.";
+          reference
+            "TR-159 section 5.5.1.14, aGroupNumChannels.";
+        }
+        leaf fault-status {
+          type bits {
+            bit no-peer {
+              description
+                "Indicates that the peer physical layer is unreachable
+                 (e.g., no Bonded Channel Entity (BCE) is associated
+                 with this Generic Bonded Sub-layer (GBS), no BCE is
+                 operationally 'up').";
+            }
+            bit peer-power-loss {
+              description
+                "Indicates that the local device received a 'dying
+                 gasp' message (preceding a loss-of-power) from the
+                 peer device.";
+            }
+            bit peer-bond-scheme-mismatch {
+              description
+                "Indicates that the operating bonding scheme of the
+                 peer port is different from the local one.";
+            }
+            bit low-rate {
+              description
+                "Indicates that either 'upstream-data-rate' or
+                 'downstream-data-rate' value has dropped to or below
+                 'low-upstream-data-rate-threshold' or
+                 'low-downstream-data-rate-threshold', respectively.";
+            }
+            bit aggregation-error {
+              description
+                "Indicates an error during the aggregation control
+                 protocol, e.g. 'no common Generic Bonded Sub-layer,
+                 RT side (GBS-R)' or 'Physical Medium Entity
+                 Identifier (PME-ID) allocation error'.";
+            }
+          }
+          mandatory true;
+          description
+            "The current fault status of a bonding group.";
+          reference
+            "TR-159 section 5.5.1.9, aGroupStatus.";
+        }
+        container g9982 {
+          when "../../../if:type='ianaift:g9982'" {
+            description
+              "Only applicable when the bonding group type is
+               G.998.2.";
+          }
+          description
+            "Status specific to ITU-T G.998.2";
+          leaf operational-control-protocol {
+            type identityref {
+              base bbf-gbond:control-protocol;
+            }
+            description
+              "Reports the control protocol currently in used on the
+               line.";
+            reference
+              "TR-159 section 5.5.3.2, aEthAdminCP.";
+          }
+        }
+      }
+      container capabilities {
+        description
+          "Capabilities associated with a bonding group.";
+        container gbs-c {
+          description
+            "Capabilities associated with the Generic Bonded
+             Sub-layer, CO side (GBS-C).";
+          leaf capacity {
+            type uint8 {
+              range "1..32";
+            }
+            mandatory true;
+            description
+              "The 'capacity' is the maximum number of channels that
+               can be aggregated by a particular G.998.x port (Generic
+               Bonded Sub-layer (GBS)). Within each G.998.x port, the
+               Bonded Channel Entities (BCE) are uniquely numbered in
+               the range from 1 to 'capacity'. Some BCEs may not be
+               present in a given GBS instance, in which case the
+               actual number of BCEs present is less than 'capacity'.
+               The number of BCEs present is never greater than
+               'capacity'.";
+            reference
+              "TR-159 section 5.5.1.12, aGroupCapacity.";
+          }
+        }
+      }
+      container statistics {
+        if-feature "bbf-gbond:bonding-group-statistics";
+        description
+          "Statistics associated with a bonding group.";
+        container g9982 {
+          when "../../../if:type='ianaift:g9982'" {
+            description
+              "Only applicable when the bonding group type is
+               G.998.2.";
+          }
+          description
+            "Statistics specific to ITU-T G.998.2";
+          container gbs-c {
+            description
+              "Statistics associated with the Generic Bonded
+               Sub-layer, CO side (GBS-C).";
+            leaf in-errors {
+              type yang:counter64;
+              mandatory true;
+              description
+                "A number of errored fragments that have been received
+                 across the gamma interface and discarded.";
+              reference
+                "TR-159 section 5.5.3.7, aEthRxErrors.";
+            }
+            leaf in-small-fragments {
+              type yang:counter64;
+              mandatory true;
+              description
+                "A number of fragments smaller than minimum fragment
+                 size (64 Bytes), that have been received across the
+                 gamma interface and discarded.";
+              reference
+                "TR-159 section 5.5.3.8, aEthRxSmallFragments.";
+            }
+            leaf in-large-fragments {
+              type yang:counter64;
+              mandatory true;
+              description
+                "A number of fragments larger than maximum fragment
+                 size (512 Bytes), that have been received across the
+                 gamma interface and discarded.";
+              reference
+                "TR-159 section 5.5.3.9, aEthRxLargeFragments.";
+            }
+            leaf in-bad-fragments {
+              type yang:counter64;
+              mandatory true;
+              description
+                "A number of fragments which do not fit into the
+                 sequence expected by the frame assembly function,
+                 that have been received across the gamma interface
+                 and discarded.";
+              reference
+                "TR-159 section 5.5.3.10, aEthRxBadFragments.";
+            }
+            leaf in-lost-fragments {
+              type yang:counter64;
+              mandatory true;
+              description
+                "A number of gaps in the sequence of fragments that
+                 have been received across the gamma interface (the
+                 frame buffer is flushed to the next valid frame
+                 start, when fragment/fragments expected by the frame
+                 assembly function is/are not received).";
+              reference
+                "TR-159 section 5.5.3.11 aEthRxLostFragments.";
+            }
+            leaf in-lost-starts {
+              type yang:counter64;
+              mandatory true;
+              description
+                "A number of missing 'start of packet' indicators
+                 expected by the frame assembly function.";
+              reference
+                "TR-159 section 5.5.3.12, aEthRxLostStarts.";
+            }
+            leaf in-lost-ends {
+              type yang:counter64;
+              mandatory true;
+              description
+                "A number of missing 'end of packet' indicators
+                 expected by the frame assembly function.";
+              reference
+                "TR-159 section 5.5.3.13, aEthRxLostEnds.";
+            }
+            leaf in-overflows {
+              type yang:counter64;
+              mandatory true;
+              description
+                "A numbers of fragments, received across the gamma
+                 interface and discarded, which would have caused the
+                 frame assembly buffer to overflow";
+              reference
+                "TR-159 section 5.5.3.14, aEthRxOverflows.";
+            }
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces-state/if:interface/bbf-fastdsl:line" {
+    description
+      "Augment the basic interface state data with state data
+       associated with a G.bond line and associated bonded channel
+       entity.";
+    container bonded-channel-entity {
+      description
+        "State data of the Bonded Channel Entity (BCE) associated
+         with this line.";
+      container status {
+        description
+          "Status associated with a Bonded Channel Entity (BCE).";
+        leaf group-id {
+          type union {
+            type bbf-gbond:undefined;
+            type uint8 {
+              range "0..31";
+            }
+          }
+          description
+            "A value identifying a particular bonding channel
+             within a bonding group, i.e. logical number of a Bonded
+             Channel Entity (BCE) in a Generic Bonded Sub-layer (GBS),
+             if such a logical number is defined for the BCE.
+
+             This object maps to the Physical Medium Entity Identifier
+             (PME ID) variable of G.998.2 Amendment 2 or to the
+             aPairID attribute of G.998.3 or to the Tx link number of
+             G.998.1.";
+          reference
+            "TR-159 section 5.5.7.2, aChannelGroupID.";
+        }
+      }
+      container capabilities {
+        presence
+          "Presence of this container indicates there are one or
+           more data nodes associated with the capabilities of this
+           line.";
+        description
+          "Capabilities associated with a Bonded Channel Entity
+           (BCE).";
+        container bce-c {
+          description
+            "Bonding Channel Entity - CO side (BCE-C).";
+          leaf bonding-scheme-supported {
+            type bbf-gbond:boolean-or-undefined;
+            description
+              "If true, the bonding scheme indicated by the interface
+               type, e.g. G.998.2, is supported.
+
+               This is reported per Bonding Channel Entity (BCE) which
+               is beyond the requirements of TR-159.";
+            reference
+              "TR-159 section 5.5.1.2, aGroupBondSchemesSupported.";
+          }
+          container g9982 {
+            presence
+              "The presence of this container indicates the interface
+               is capable of bonding using the G.998.2 bonding
+               scheme.";
+            description
+              "Capabilities specific to ITU-T G.998.2";
+            leaf bacp-supported {
+              type bbf-gbond:boolean-or-undefined;
+              description
+                "If true, Bonding Aggregation Control Protocol (BACP)
+                 is supported on the line.
+
+                 This is reported per Bonding Channel Entity (BCE)
+                 which is beyond the requirements of TR-159.";
+              reference
+                "TR-159 section 5.5.3.1, aEthBACPSupported";
+            }
+          }
+        }
+        container bce-r {
+          description
+            "Bonding Channel Entity - RT (or CPE) side.";
+          leaf bonding-scheme-supported {
+            type bbf-gbond:boolean-or-undefined;
+            description
+              "If true, the bonding scheme indicated by the interface
+               type, e.g. G.998.2, is supported.
+
+               This is reported per Bonding Channel Entity (BCE) which
+               is beyond the requirements of TR-159.";
+            reference
+              "TR-159 section 5.5.1.2, aGroupBondSchemesSupported.";
+          }
+          container g9982 {
+            presence
+              "The presence of this container indicates the interface
+               is capable of bonding using the G.998.2 bonding
+               scheme.";
+            description
+              "Capabilities specific to ITU-T G.998.2";
+            leaf bacp-supported {
+              type bbf-gbond:boolean-or-undefined;
+              description
+                "If true, Bonding Aggregation Control Protocol (BACP)
+                 is supported on the line.
+
+                 This is reported per Bonding Channel Entity (BCE)
+                 which is beyond the requirements of TR-159.";
+              reference
+                "TR-159 section 5.5.3.1, aEthBACPSupported";
+            }
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces-state/if:interface/bbf-if-pm:performance/"
+        + "bbf-if-pm:intervals-15min/bbf-if-pm:current" {
+    when
+      "derived-from-or-self(../../../if:type,'ianaift:g9981') or "
+    + "derived-from-or-self(../../../if:type,'ianaift:g9982') or "
+    + "derived-from-or-self(../../../if:type,'ianaift:g9983')" {
+      description
+        "Only applicable if the interface type is G.998.1, G.998.2,
+         G.998.3, or derived from one of those types.";
+    }
+    description
+      "Augment the current 15 minute interface performance counts
+       with bonding group specific attributes.";
+    container bonding-group {
+      if-feature "bbf-gbond:bonding-group-performance-15min";
+      description
+        "Current 15 minute bonding group performance counters.";
+      uses bonding-group-performance;
+    }
+  }
+
+  augment "/if:interfaces-state/if:interface/bbf-if-pm:performance/"
+        + "bbf-if-pm:intervals-15min/bbf-if-pm:history" {
+    when
+      "derived-from-or-self(../../../if:type,'ianaift:g9981') or "
+    + "derived-from-or-self(../../../if:type,'ianaift:g9982') or "
+    + "derived-from-or-self(../../../if:type,'ianaift:g9983')" {
+      description
+        "Only applicable if the interface type is G.998.1, G.998.2,
+         G.998.3, or derived from one of those types.";
+    }
+    description
+      "Augment the historic 15 minute interface performance counts
+       with bonding group specific attributes.";
+    container bonding-group {
+      if-feature "bbf-gbond:bonding-group-performance-15min";
+      description
+        "Historic 15 minute bonding group performance counters.";
+      uses bonding-group-performance;
+    }
+  }
+
+  augment "/if:interfaces-state/if:interface/bbf-if-pm:performance/"
+        + "bbf-if-pm:intervals-24hr/bbf-if-pm:current" {
+    when
+      "derived-from-or-self(../../../if:type,'ianaift:g9981') or "
+    + "derived-from-or-self(../../../if:type,'ianaift:g9982') or "
+    + "derived-from-or-self(../../../if:type,'ianaift:g9983')" {
+      description
+        "Only applicable if the interface type is G.998.1, G.998.2,
+         G.998.3, or derived from one of those types.";
+    }
+    if-feature
+      "bbf-if-pm:performance-24hr and
+       bbf-gbond:bonding-group-performance-24hr";
+    description
+      "Augment the current 24 hour interface performance counts with
+       bonding group specific attributes.";
+    container bonding-group {
+      description
+        "Current 24 hour bonding group performance counters.";
+      uses bonding-group-performance;
+    }
+  }
+
+  augment "/if:interfaces-state/if:interface/bbf-if-pm:performance/"
+        + "bbf-if-pm:intervals-24hr/bbf-if-pm:history" {
+    when
+      "derived-from-or-self(../../../if:type,'ianaift:g9981') or "
+    + "derived-from-or-self(../../../if:type,'ianaift:g9982') or "
+    + "derived-from-or-self(../../../if:type,'ianaift:g9983')" {
+      description
+        "Only applicable if the interface type is G.998.1, G.998.2,
+         G.998.3, or derived from one of those types.";
+    }
+    if-feature
+      "bbf-if-pm:performance-24hr and
+       bbf-gbond:bonding-group-performance-24hr";
+    description
+      "Augment the historic 24 hour interface performance counts with
+       bonding group specific attributes.";
+    container bonding-group {
+      description
+        "Historic 24 hour bonding group performance counters.";
+      uses bonding-group-performance;
+    }
+  }
+}

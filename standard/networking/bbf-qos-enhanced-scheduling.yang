@@ -1,25 +1,20 @@
 module bbf-qos-enhanced-scheduling {
   yang-version 1.1;
   namespace "urn:bbf:yang:bbf-qos-enhanced-scheduling";
-
   prefix bbf-qos-sched;
 
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import ietf-interfaces {
     prefix if;
   }
-
   import bbf-if-type {
     prefix bbfift;
   }
-
   import bbf-qos-traffic-mngt {
     prefix bbf-qos-tm;
   }
-
   import bbf-qos-shaping {
     prefix bbf-qos-shap;
   }
@@ -27,34 +22,32 @@ module bbf-qos-enhanced-scheduling {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
-    "This module contains a collection of YANG definitions for 
+    "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the management of
-     Quality of Service (QoS) as applicable to access network 
-     equipment. As such, this module is specific to access network 
+     Quality of Service (QoS) as applicable to access network
+     equipment. As such, this module is specific to access network
      equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module contains a collection of enhanced 
-     traffic scheduling configuration.
+     Specifically, this module augments interfaces to add additional
+     configuration to manage enhanced traffic scheduling.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -94,12 +87,22 @@ module bbf-qos-enhanced-scheduling {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -108,145 +111,469 @@ module bbf-qos-enhanced-scheduling {
                         TR-383_Amendment-1.pdf>";
   }
 
+  feature child-traffic-type {
+    description
+      "Indicates support for configuring the type of traffic a
+       scheduler consumes from its child.";
+  }
+
+  feature child-scheduler-queue-references {
+    description
+      "Indicates support for configuring references from a parent
+       scheduler to queues within a child scheduler.";
+  }
+
+  feature dual-rate-scheduling-from-scheduler {
+    description
+      "Indicates support for dual rate scheduling, i.e. configuring
+       from a parent scheduler a separate priority and/or weight for
+       the CIR and EIR traffic from a single child scheduler.";
+  }
+
+  identity traffic-type {
+    description
+      "Defines types of traffic coming from a child scheduler or
+       queue.";
+  }
+
+  identity pir {
+    base traffic-type;
+    description
+      "All traffic which is shaped to a shaper's configured Peak
+       Information Rate (PIR).";
+  }
+
+  identity cir {
+    base traffic-type;
+    description
+      "All traffic which is shaped to a shaper's configured Committed
+       Information Rate (CIR).";
+  }
+
+  identity eir {
+    base traffic-type;
+    description
+      "All traffic which is shaped to a shaper's configured Peak
+       Information Rate (PIR) but does not include the traffic shaped
+       to the Committed Information Rate (CIR).";
+  }
+
   grouping child-scheduling {
     description
-      "A grouping that models the method to schedule from child 
+      "A grouping that models the method to schedule from child
        schedulers.";
-
     choice scheduling-type {
       description
-        "Defines the child node's type of a scheduling node in 
-         case of hierachical scheduling.";
+        "Defines the child node's type of a scheduling node in case of
+         hierachical scheduling.";
       case inline {
         uses bbf-qos-tm:scheduling-gen-attr;
+      }
+      case dual-rate-scheduling {
+        if-feature
+          "bbf-qos-sched:dual-rate-scheduling-from-scheduler";
+        container cir-traffic {
+          description
+            "Configuration that determines the processing of the CIR
+             type of traffic from the child scheduler.";
+          uses bbf-qos-tm:scheduling-attributes;
+        }
+        container eir-traffic {
+          description
+            "Configuration that determines the processing of the EIR
+             type of traffic from the child scheduler.";
+          uses bbf-qos-tm:scheduling-attributes;
+        }
       }
     }
   }
 
-  augment '/if:interfaces/if:interface/bbf-qos-tm:tm-root/bbf-qos-'
-        + 'tm:children-type' {
+  augment "/if:interfaces/if:interface/bbf-qos-tm:tm-root/bbf-qos-"
+        + "tm:children-type" {
     description
-      "Extends the traffic management root with a possibility to have 
+      "Extends the traffic management root with a possibility to have
        a scheduling hierarchy.";
-
     case scheduler-node {
       description
-        "The data to manage a scheduling hierarchy. A scheduling 
-         hierarchy starts with schedulers and ends with schedulers 
-         that contain queues. The schedulers are organized as a flat 
-         list where the hierarchy is managed through references from 
+        "The data to manage a scheduling hierarchy. A scheduling
+         hierarchy starts with schedulers and ends with schedulers
+         that contain queues. The schedulers are organized as a flat
+         list where the hierarchy is managed through references from
          'parent' schedulers to 'child' schedulers.";
-
       list scheduler-node {
         key "name";
         description
-          "A list of schedulers. A scheduler will be at a position in 
-           a hierarchy as specified through references. A particular 
-           scheduler will get its input from its childs from which it 
+          "A list of schedulers. A scheduler will be at a position in
+           a hierarchy as specified through references. A particular
+           scheduler will get its input from its childs from which it
            merges the traffic into a single output stream. This output
-           can be shaped if a reference to a shaper-profile is 
+           can be shaped if a reference to a shaper-profile is
            configured.";
-
         leaf name {
           type bbf-yang:string-ascii64;
           description
             "A name of scheduler-node.";
         }
-
         leaf description {
           type bbf-yang:string-ascii64;
           description
-            "A free format description assigned to this scheduler.
-             It can be used to identify the purpose of the
-             scheduler instance in the hierarchy. For example, the
-             description could be the name of an interface in the 
-             hierarchy of an interface stack.";
+            "A free format description assigned to this scheduler. It
+             can be used to identify the purpose of the scheduler
+             instance in the hierarchy. For example, the description
+             could be the name of an interface in the hierarchy of an
+             interface stack.";
         }
-
         leaf scheduling-level {
           type uint8;
           mandatory true;
           description
             "The level of a scheduler helps in organizing a hierarchy.
-             The requirement is that the scheduling level of a parent 
+             The requirement is that the scheduling level of a parent
              must be lower than the scheduling-level of its referenced
              children.";
         }
-
         uses bbf-qos-shap:shaper-profile-ref;
-
         choice children-type {
           description
-            "Defines the child's node type of a scheduling node in 
+            "Defines the child's node type of a scheduling node in
              case of hierachical scheduling.";
           case scheduler-node {
             description
               "The children are a list of scheduler-nodes.";
-
             list child-scheduler-nodes {
               key "name";
               description
-                "Provides a child scheduler nodes list and related 
+                "Provides a child scheduler nodes list and related
                  scheduling data.";
               leaf name {
                 type leafref {
-                  path '../../bbf-qos-sched:name';
+                  path "../../../scheduler-node/name";
                 }
-
                 must
-                  "../../../bbf-qos-sched:scheduler-node
+                  "current()/../../../bbf-qos-sched:scheduler-node
                    [bbf-qos-sched:name=current()]
                    /scheduling-level>
                    current()/../../scheduling-level" {
-
                   error-message
-                    "The scheduler-level should be bigger than the 
-                     value of parent node.";
+                    "The referenced child scheduler node must have "
+                  + "a configured scheduling level which is greater "
+                  + "than the configured scheduling level of the "
+                  + "parent scheduler node which references it.";
                 }
-
                 description
-                  "The name of the referenced scheduling-nodes entry.
-                   The child scheduler nodes must locate on the same 
-                   Traffic Management (TM) root with the parent 
-                   scheduler node. 
+                  "The name of the referenced 'scheduler-node' entry.
+                   The child scheduler nodes must be located on the
+                   same Traffic Management (TM) root with the parent
+                   scheduler node.
 
                    The scheduling level of the child scheduler node
-                   must be higher than the scheduling level of the 
+                   must be higher than the scheduling level of the
                    parent scheduler node.";
               }
-              uses child-scheduling;
+              choice scheduling-type {
+                description
+                  "Defines the child node's type of a scheduling node
+                   in case of hierachical scheduling.";
+                case inline {
+                  uses bbf-qos-tm:scheduling-gen-attr;
+                  leaf traffic-type {
+                    when
+                      'boolean(current()/../../../bbf-qos-sched:'
+                    + 'scheduler-node[bbf-qos-sched:name=current()/..'
+                    + '/name]/bbf-qos-sched:shaper-name)' {
+                      description
+                        "Traffic type is only applicable when the
+                         referenced scheduler has a shaper
+                         applied.";
+                    }
+                    if-feature "child-traffic-type";
+                    type identityref {
+                      base traffic-type;
+                    }
+                    must
+                      '(current() = "bbf-qos-sched:pir" and '
+                    + 'boolean(/bbf-qos-tm:tm-profiles/bbf-qos-shap:'
+                    + 'shaper-profile[bbf-qos-shap:name = current()/'
+                    + '../../../bbf-qos-sched:scheduler-node'
+                    + '[bbf-qos-sched:name = current()/../name]/'
+                    + 'bbf-qos-sched:shaper-name]/bbf-qos-shap:'
+                    + 'single-token-bucket)) or '
+                    + '(current() != "bbf-qos-sched:pir" and '
+                    + 'boolean(/bbf-qos-tm:tm-profiles/bbf-qos-shap:'
+                    + 'shaper-profile[bbf-qos-shap:name = current()/'
+                    + '../../../bbf-qos-sched:scheduler-node'
+                    + '[bbf-qos-sched:name = current()/../name]/'
+                    + 'bbf-qos-sched:shaper-name]/bbf-qos-shap:'
+                    + 'two-token-bucket))' {
+                      error-message
+                        "A child's scheduler shaper type must be "
+                      + "consistent with the traffic type a parent "
+                      + "scheduler expects to receive from that "
+                      + "scheduler";
+                      description
+                        "A child's scheduler shaper type must be
+                         consistent with the traffic type a parent
+                         scheduler expects to receive from that
+                         scheduler.";
+                    }
+                    default "pir";
+                    description
+                      "Configuration which determines the type of
+                       traffic from the child scheduler that is used
+                       by the parent scheduler.";
+                  }
+                }
+                case dual-rate-scheduling {
+                  if-feature "dual-rate-scheduling-from-scheduler";
+                  container cir-traffic {
+                    when
+                      "boolean(../../../bbf-qos-sched:scheduler-node
+                       [bbf-qos-sched:name=current()/../name]
+                       /bbf-qos-sched:shaper-name)" {
+                      description
+                        "Dual rate scheduling is only applicable when
+                         the referenced scheduler has a shaper
+                         applied.";
+                    }
+                    must
+                      'boolean(/bbf-qos-tm:tm-profiles/bbf-qos-shap:'
+                    + 'shaper-profile[bbf-qos-shap:name = current()/'
+                    + '../../../bbf-qos-sched:scheduler-node'
+                    + '[bbf-qos-sched:name = current()/../name]/'
+                    + 'bbf-qos-sched:shaper-name]/bbf-qos-shap:'
+                    + 'two-token-bucket)' {
+                      error-message
+                        "The child's scheduler shaper type must be "
+                      + "of the two tocken bucket type when the "
+                      + "parent scheduler expects to receive CIR "
+                      + "traffic.";
+                      description
+                        "The child's scheduler shaper type must be of
+                         the two tocken bucket type when the parent
+                         scheduler expects to receive CIR traffic.";
+                    }
+                    description
+                      "Configuration which determines the type of
+                       traffic from the child scheduler that is used
+                       by the parent scheduler.";
+                    uses bbf-qos-tm:scheduling-attributes;
+                  }
+                  container eir-traffic {
+                    when
+                      "boolean(../../../bbf-qos-sched:scheduler-node
+                       [bbf-qos-sched:name=current()/../name]
+                       /bbf-qos-sched:shaper-name)" {
+                      description
+                        "Dual rate scheduling is only applicable when
+                         the referenced scheduler has a shaper
+                         applied.";
+                    }
+                    must
+                      'boolean(/bbf-qos-tm:tm-profiles/bbf-qos-shap:'
+                    + 'shaper-profile[bbf-qos-shap:name = current()/'
+                    + '../../../bbf-qos-sched:scheduler-node'
+                    + '[bbf-qos-sched:name = current()/../name]/'
+                    + 'bbf-qos-sched:shaper-name]/bbf-qos-shap:'
+                    + 'two-token-bucket)' {
+                      error-message
+                        "The child's scheduler shaper type must be "
+                      + "of the two tocken bucket type when the "
+                      + "parent scheduler expects to receive EIR "
+                      + "traffic.";
+                      description
+                        "The child's scheduler shaper type must be of
+                         the two tocken bucket type when the parent
+                         scheduler expects to receive eir traffic.";
+                    }
+                    description
+                      "Configuration which determines the type of
+                       traffic from the child scheduler that is used
+                       by the parent scheduler.";
+                    uses bbf-qos-tm:scheduling-attributes;
+                  }
+                }
+              }
             }
           }
-
           case queue {
             description
               "The children are a list of queues.";
-
             leaf contains-queues {
               type boolean;
               default "true";
               description
                 "Indicates the scheduler contains queues.";
             }
-
             uses bbf-qos-tm:queues;
+          }
+          case child-scheduler-queues {
+            if-feature "child-scheduler-queue-references";
+            container child-scheduler-queues {
+              description
+                "Configuration to reference one or more queues within
+                 one or more child schedulers.";
+              list child-scheduler {
+                key "name";
+                description
+                  "A list of child scheduler nodes from which queues
+                   can be referenced.";
+                leaf name {
+                  type leafref {
+                    path "../../../../scheduler-node/name";
+                  }
+                  must
+                    "../../../../bbf-qos-sched:scheduler-node
+                     [bbf-qos-sched:name=current()]
+                     /scheduling-level>
+                     current()/../../../scheduling-level" {
+                    error-message
+                      "The referenced child scheduler node must have "
+                    + "a configured scheduling level which is greater"
+                    + " than the configured scheduling level of the "
+                    + "parent scheduler node which references it.";
+                  }
+                  description
+                    "The name of the referenced 'scheduler-node'
+                     entry. The child scheduler nodes must be located
+                     on the same Traffic Management (TM) root with the
+                     parent scheduler node.
+
+                     The scheduling level of the child scheduler node
+                     must be higher than the scheduling level of the
+                     parent scheduler node.";
+                }
+                container queues {
+                  must "../../../../bbf-qos-sched:scheduler-node
+                        [bbf-qos-sched:name=current()/../name]/
+                        bbf-qos-sched:contains-queues = 'true'" {
+                    error-message
+                      "The referenced scheduler must contain queues.";
+                    description
+                      "The referenced scheduler must contain queues
+                       in order for queues to be referenced.";
+                  }
+                  description
+                    "Configuration associated with the referenced
+                     scheduler's queues.";
+                  list queue {
+                    key "queue-id";
+                    description
+                      "List of queues belonging to the referenced
+                       child scheduler node from which traffic will be
+                       directed to this scheduler.";
+                    leaf queue-id {
+                      type leafref {
+                        path "../../../../../../bbf-qos-sched:"
+                           + "scheduler-node"
+                           + "[name=current()/../../../name]/"
+                           + "bbf-qos-sched:queue/"
+                           + "bbf-qos-sched:local-queue-id";
+                      }
+                      description
+                        "The ID of the queue associated with the
+                         referenced child scheduler.";
+                    }
+                    choice scheduling-type {
+                      description
+                        "Defines how traffic from this queue will be
+                         scheduled.";
+                      case inline {
+                        leaf priority {
+                          type bbf-qos-tm:scheduling-priority;
+                          description
+                            "The priority used to schedule packets
+                             from a queue or scheduler, relative to
+                             the priority assigned to other queues or
+                             schedulers that are defined in the same
+                             traffic scheduling context. For example,
+                             the set of queues defined for a
+                             particular interface form the context for
+                             scheduling outgoing traffic to this
+                             interface.";
+                        }
+                        leaf extended-weight {
+                          type bbf-qos-tm:extended-scheduling-weight;
+                          description
+                            "Queues or schedulers that are defined in
+                             a particular context, e.g. queues defined
+                             to schedule outgoing traffic to an
+                             interface, can have the same priority.
+                             The weight defines the portion of traffic
+                             that will be taken from this queue or
+                             scheduler by comparing the weight of this
+                             queue or scheduler against the sum of the
+                             weights of all queues or schedulers with
+                             the same scope and the same priority.";
+                        }
+                        leaf traffic-type {
+                          when
+                            'boolean(../../../../../../'
+                          + 'scheduler-node[name=current()/../../../'
+                          + 'name]/queue[local-queue-id=current()/../'
+                          + 'queue-id]/shaper-name)' {
+                            description
+                              "Traffic type is only applicable when a
+                               queue has a shaper applied.";
+                          }
+                          if-feature "child-traffic-type";
+                          type identityref {
+                            base traffic-type;
+                          }
+                          must
+                            '(current() = "bbf-qos-sched:pir" and '
+                          + 'boolean(/bbf-qos-tm:tm-profiles/'
+                          + 'bbf-qos-shap:shaper-profile[bbf-qos-shap'
+                          + ':name = current()/../../../../../../'
+                          + 'scheduler-node[name=current()/../../../'
+                          + 'name]/queue[local-queue-id=current()/../'
+                          + 'queue-id]/bbf-qos-sched:shaper-name]/'
+                          + 'bbf-qos-shap:single-token-bucket)) or '
+                          + '(current() != "bbf-qos-sched:pir" and '
+                          + 'boolean(/bbf-qos-tm:tm-profiles/'
+                          + 'bbf-qos-shap:shaper-profile[bbf-qos-shap'
+                          + ':name = current()/../../../../../../'
+                          + 'scheduler-node[name=current()/../../../'
+                          + 'name]/queue[local-queue-id=current()/../'
+                          + 'queue-id]/bbf-qos-sched:shaper-name]/'
+                          + 'bbf-qos-shap:two-token-bucket))' {
+                            error-message
+                              "A queue's shaper type must be "
+                            + "consistent with the traffic type a "
+                            + "scheduler expects to receive from "
+                            + "that queue.";
+                            description
+                              "A queue's shaper type must be 
+                               consistent with the traffic type a 
+                               scheduler expects to receive from that 
+                               queue.";
+                          }
+                          default "pir";
+                          description
+                            "Configuration which determines the type
+                             of traffic from the queue that is used by
+                             the parent scheduler.";
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
       list child-scheduler-nodes {
         key "name";
         description
-          "Provides the list of direct child scheduler nodes of the 
+          "Provides the list of direct child scheduler nodes of the
            traffic management root.";
-
         leaf name {
           type leafref {
-            path '../../bbf-qos-sched:scheduler-node/bbf-qos-sched:'
-               + 'name';
+            path "../../bbf-qos-sched:scheduler-node/bbf-qos-sched:"
+               + "name";
           }
-
           description
-            "The first set of schedulers that are scheduled from the 
+            "The first set of schedulers that are scheduled from the
              traffic management root.";
         }
         uses child-scheduling;
@@ -254,84 +581,97 @@ module bbf-qos-enhanced-scheduling {
     }
   }
 
-  augment '/if:interfaces/if:interface/bbf-qos-tm:tm-root/bbf-qos-'
-        + 'tm:children-type/bbf-qos-sched:scheduler-node/bbf-qos-'
-        + 'sched:scheduler-node/bbf-qos-sched:children-type/bbf-'
-        + 'qos-sched:queue/bbf-qos-sched:queue/bbf-qos-sched:queue-'
-        + 'scheduling-cfg-type/bbf-qos-sched:inline' {
+  augment "/if:interfaces/if:interface/bbf-qos-tm:tm-root/bbf-qos-"
+        + "tm:children-type/bbf-qos-sched:scheduler-node/bbf-qos-"
+        + "sched:scheduler-node/bbf-qos-sched:children-type/bbf-"
+        + "qos-sched:queue/bbf-qos-sched:queue" {
     description
       "Augment a queue defined within a scheduler with extra data.";
-
-    uses bbf-qos-shap:shaper-profile-ref;
+    leaf shaper-name {
+      type leafref {
+        path "/bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/"
+           + "bbf-qos-shap:name";
+      }
+      must
+        '(not(boolean(current()/../bbf-qos-sched:'
+      + 'dual-rate-scheduling)) and boolean(/bbf-qos-tm:tm-profiles/'
+      + 'bbf-qos-shap:shaper-profile[bbf-qos-shap:name=current()]/'
+      + 'bbf-qos-shap:single-token-bucket)) or '
+      + '(boolean(current()/../bbf-qos-sched:dual-rate-scheduling) '
+      + 'and boolean(/bbf-qos-tm:tm-profiles/bbf-qos-shap:'
+      + 'shaper-profile[bbf-qos-shap:name=current()]/bbf-qos-shap:'
+      + 'two-token-bucket))' {
+        error-message
+          "The referenced shaper shall be two-token-bucket for a "
+        + "dual-rate-scheduling queues or shall be a single-"
+        + "token-bucket shaper.";
+      }
+      description
+        "An absolute reference to a shaper profile.";
+    }
   }
 
   grouping scheduler-containing-queues-ref {
     description
       "An absolute reference to a scheduling node.";
-
     leaf root-if-name {
       type leafref {
-        path '/if:interfaces/if:interface/if:name';
+        path "/if:interfaces/if:interface/if:name";
       }
       description
-        "The name of the referenced interface that is the traffic 
-         management root of a scheduling hierarchy. This interface 
-         must be a lower layer interface of the interface that 
-         contains the reference to it. However, due to interface 
-         stacking it is not necessarily the adjacent lower layer 
-         interface.";
-    }
+        "The name of the interface that is the traffic management root
+         of a scheduling hierarchy.
 
+         In the case that this reference is being made from an
+         interface that is 'stacked' on lower layer interfaces, the
+         referenced interface must be to an interface that is lower in
+         the stack.
+
+         For example, a 'vlan-sub-interface' is stacked on top of an
+         'ethernet-like' interface which contains the 'tm-root'. If
+         the reference is being made from the 'vlan-sub-interface',
+         the 'root-if-name' must be of the 'ethernet-like' interface
+         on which it is stacked.";
+    }
     leaf scheduler-node-name {
       type leafref {
         path '/if:interfaces/if:interface[if:name = current()/../'
-           + 'root-if-name]/bbf-qos-tm:tm-root/bbf-qos-sched:'
-           + 'scheduler-node/bbf-qos-sched:name';
+           + "root-if-name]/bbf-qos-tm:tm-root/bbf-qos-sched:"
+           + "scheduler-node/bbf-qos-sched:name";
       }
-
-      must
-        "/if:interfaces/if:interface[if:name =
-         current()/../root-if-name]/bbf-qos-tm:tm-root
-         /bbf-qos-sched:scheduler-node
-         [bbf-qos-sched:name=current()]
-         /bbf-qos-sched:contains-queues = 'true'" {
-
-        error-message
-          "The referenced scheduler must contain queues.";
+      must "/if:interfaces/if:interface[if:name =
+            current()/../root-if-name]/bbf-qos-tm:tm-root
+            /bbf-qos-sched:scheduler-node
+            [bbf-qos-sched:name=current()]
+            /bbf-qos-sched:contains-queues = 'true'" {
+        error-message "The referenced scheduler must contain queues.";
       }
-
       description
         "The name of the referenced scheduling-nodes entry.";
     }
   }
 
-  augment '/if:interfaces/if:interface' {
-    when
-      "derived-from-or-self(if:type, 
-       'bbfift:vlan-sub-interface')" {
+  augment "/if:interfaces/if:interface" {
+    when "derived-from-or-self(if:type,
+          'bbfift:vlan-sub-interface')" {
       description
         "Augments a VLAN sub-interface.";
     }
-
     description
-      "Augments a VLAN sub-interface with configuration that links it 
+      "Augments a VLAN sub-interface with configuration that links it
        to traffic management configuration.";
-
     container egress-tm-objects {
       description
-        "Defines the traffic management node(s), to which the 
-         egress traffic of the interface shall be directed to.";
-
+        "Defines the traffic management node(s), to which the egress
+         traffic of the interface shall be directed to.";
       choice select-tm-objects-method {
         description
           "Choice of a type of traffic management node.";
-
         case scheduler {
           description
-            "The traffic will be directed to a single scheduler. This 
-             scheduler must contain queues. The queue selection for a 
-             packet is based on a tc-id-2-queue-id-mapping-profile.";
-
+            "The traffic will be directed to a single scheduler. This
+             scheduler must contain queues. The queue selection for a
+             frame is based on a 'tc-id-2-queue-id-mapping-profile'.";
           uses scheduler-containing-queues-ref;
         }
       }

@@ -21,7 +21,7 @@ submodule bbf-fast-channel-performance-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -73,9 +73,19 @@ submodule bbf-fast-channel-performance-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2020-01-17 {
     description
       "Amendment 2 Corrigendum 2.
@@ -202,10 +212,10 @@ submodule bbf-fast-channel-performance-body {
         "ITU-T G.997.2 clause 7.8.6 (CURR/PREV_NE/FE_15/24_RTXTX).";
     }
     leaf minimum-andeftr {
-      if-feature "andeftr";
+      if-feature "bbf-fast:andeftr";
       type bbf-yang:data-rate32;
       description
-        "Reports the minimum all-NOI with Data symbols Error-Free
+        "Reports the minimum All NOI with Data symbols Error-Free
          Throughput Rate (ANDEFTR) over the associated time
          interval.";
       reference
@@ -213,10 +223,10 @@ submodule bbf-fast-channel-performance-body {
          (MINANDEFTR_CURR/PREV_NE/FE_15/24)";
     }
     leaf maximum-andeftr {
-      if-feature "andeftr";
+      if-feature "bbf-fast:andeftr";
       type bbf-yang:data-rate32;
       description
-        "Reports the maximum all-NOI with Data symbols Error-Free
+        "Reports the maximum All NOI with Data symbols Error-Free
          Throughput Rate (ANDEFTR) over the associated time
          interval.";
       reference
@@ -224,11 +234,11 @@ submodule bbf-fast-channel-performance-body {
          (MAXANDEFTR_CURR/PREV_NE/FE_15/24)";
     }
     leaf sum-andeftr {
-      if-feature "andeftr";
+      if-feature "bbf-fast:andeftr";
       type uint32;
       units "65536 bits";
       description
-        "Reports the sum of all-NOI with Data symbols Error-Free
+        "Reports the sum of All NOI with Data symbols Error-Free
          Throughput Rate (ANDEFTR) bits, divided by 65536, over the
          associated time interval.
 
@@ -245,7 +255,7 @@ submodule bbf-fast-channel-performance-body {
       "Defines the 15 minute performance parameters for FAST bearer
        channels.";
     leaf low-andeftr-seconds {
-      if-feature "andeftr";
+      if-feature "bbf-fast:andeftr";
       type seconds-counter-15min;
       description
         "Reports the count of Low All NOI with Data symbols Error-Free
@@ -254,7 +264,7 @@ submodule bbf-fast-channel-performance-body {
         "ITU-T G.997.2 clause 7.8.7 (CURR/PREV_NE/FE_15_LANDEFTRS)";
     }
     leaf andeftr-defined-seconds {
-      if-feature "andeftr";
+      if-feature "bbf-fast:andeftr";
       type seconds-counter-15min;
       description
         "Reports the count of All NOI with Data symbols Error-Free
@@ -269,7 +279,7 @@ submodule bbf-fast-channel-performance-body {
       "Defines the 24 hour performance parameters for FAST bearer
        channels.";
     leaf low-andeftr-seconds {
-      if-feature "andeftr";
+      if-feature "bbf-fast:andeftr";
       type seconds-counter-24hr;
       description
         "Reports the count of Low All NOI with Data symbols Error-Free
@@ -278,7 +288,7 @@ submodule bbf-fast-channel-performance-body {
         "ITU-T G.997.2 clause 7.8.7 (CURR/PREV_NE/FE_24_LANDEFTRS)";
     }
     leaf andeftr-defined-seconds {
-      if-feature "andeftr";
+      if-feature "bbf-fast:andeftr";
       type seconds-counter-24hr;
       description
         "Reports the count of All NOI with Data symbols Error-Free
@@ -346,7 +356,7 @@ submodule bbf-fast-channel-performance-body {
         }
       }
       container intervals-24hr {
-        if-feature "performance-24hr";
+        if-feature "bbf-fast:performance-24hr";
         description
           "24 hour interval performance history.";
         container current {

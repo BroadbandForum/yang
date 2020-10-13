@@ -1,45 +1,36 @@
 module bbf-subscriber-profiles {
   yang-version 1.1;
   namespace "urn:bbf:yang:bbf-subscriber-profiles";
-
   prefix bbf-subprof;
 
   import ietf-interfaces {
     prefix if;
   }
-
   import ietf-system {
     prefix sys;
   }
-
   import bbf-yang-types {
     prefix bbf-yang;
-  }
-
-  import bbf-if-type {
-    prefix bbfift;
   }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the management of
@@ -47,9 +38,12 @@ module bbf-subscriber-profiles {
      this module is specific to access network equipment (e.g.,
      BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module defines subscriber profiles.
+     Specifically, this module adds support for subscriber profiles
+     and augments an interface to enable an interface to reference a
+     subscriber profile. It also augments ietf-system to add
+     system-specific subscriber management.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -89,9 +83,19 @@ module bbf-subscriber-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-12-03 {
     description
       "Amendment 2.
@@ -104,7 +108,7 @@ module bbf-subscriber-profiles {
   }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -117,7 +121,6 @@ module bbf-subscriber-profiles {
       "Initial revision.
        * Approval Date:    see revision date above.
        * Publication Date: 2017-06-02.";
-
     reference
       "TR-383: Common YANG Modules
                <https://www.broadband-forum.org/technical/download/
@@ -126,8 +129,8 @@ module bbf-subscriber-profiles {
 
   typedef subscriber-profile-ref {
     type leafref {
-      path '/bbf-subprof:subscriber-profiles/bbf-subprof:'
-         + 'subscriber-profile/bbf-subprof:name';
+      path "/bbf-subprof:subscriber-profiles/bbf-subprof:"
+         + "subscriber-profile/bbf-subprof:name";
     }
     description
       "A reference to a subscriber profile.";
@@ -136,10 +139,8 @@ module bbf-subscriber-profiles {
   container subscriber-profiles {
     description
       "Subscriber configuration profile.";
-
     list subscriber-profile {
       key "name";
-
       description
         "List containing the parameters for a subscriber profile.
          Various protocols need to insert strings in options /
@@ -149,13 +150,11 @@ module bbf-subscriber-profiles {
          the protocol and most likely identical for all VLAN
          sub-interfaces on top of the same physical line. Therefore
          this data is provided in a profile.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "Name of the profile.";
       }
-
       leaf circuit-id {
         type bbf-yang:string-ascii63-or-empty;
         default "";
@@ -165,7 +164,6 @@ module bbf-subscriber-profiles {
         reference
           "TR-178 - R117 and TR-177 - R08";
       }
-
       leaf remote-id {
         type bbf-yang:string-ascii63-or-empty;
         default "";
@@ -175,7 +173,6 @@ module bbf-subscriber-profiles {
         reference
           "TR-178 - R120 and TR-177 - R10";
       }
-
       leaf subscriber-id {
         type bbf-yang:string-ascii63-or-empty;
         default "";
@@ -194,23 +191,13 @@ module bbf-subscriber-profiles {
     }
   }
 
-  augment '/if:interfaces/if:interface' {
-    when
-      "derived-from-or-self (if:type,
-       'bbfift:vlan-sub-interface')" {
-      description
-        "Applies only to VLAN sub-interfaces that are not
-         network ports.";
-    }
-
+  augment "/if:interfaces/if:interface" {
     description
       "Additions for subscriber management on the VLAN
        sub-interface.";
-
     container subscriber-profile {
       description
         "Subscriber configuration parameters.";
-
       leaf profile {
         type subscriber-profile-ref;
         description
@@ -221,20 +208,16 @@ module bbf-subscriber-profiles {
     }
   }
 
-  augment '/sys:system' {
+  augment "/sys:system" {
     description
-      "Augment the system with generic subscriber management
-       objects.";
-
+      "Augment the system with generic subscriber management data
+       nodes.";
     container subscriber-management {
       description
         "Subscriber management system data.";
-
       leaf access-node-id {
         type bbf-yang:string-ascii63-or-empty;
-
         default "access-node-not-configured";
-
         description
           "An identifier representing the access node. This string
            will be inserted in case the keyword Access_Node_ID is part

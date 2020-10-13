@@ -1,0 +1,2405 @@
+module bbf-xpon-performance-management {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-xpon-performance-management";
+  prefix bbf-xpon-pm;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
+  import bbf-xpon-if-type {
+    prefix bbf-xponift;
+  }
+  import bbf-interfaces-performance-management {
+    prefix bbf-if-pm;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Fiber Access Networks Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     Editor:      Igor Ternovsky, Broadcom
+
+     Editor:      Robert Peschi, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Samuel Chen, Broadcom";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on management of
+     ITU-T Passive Optical Network (PON) interfaces as defined in
+     ITU-T G.984.x, G.987.x, ITU-T G.989.x and ITU-T G.9807.x. As
+     such, this module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module augments
+     bbf-interfaces-performance-management to manage performance
+     monitoring of xPON interfaces.
+
+     Copyright (c) 2018-2020, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385i2; see
+     the TR itself for full legal notices.";
+
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
+
+  grouping xpon-phy-pm {
+    description
+      "xPON PHY performance counters.";
+    container phy {
+      description
+        "xPON PHY performance counters.";
+      leaf corrected-fec-bytes {
+        type bbf-yang:performance-counter64;
+        description
+          "The number of bytes that were corrected by the Forward
+           Error Correction (FEC) function.
+
+           For G-PON, reported per v-ANI.
+           For XG-PON, reported per ANI and v-ANI.
+           For XGS-PON, reported per ANI and v-ANI.
+           For NG-PON2, reported per ANI and v-ANI.";
+        reference
+          "ITU-T G.987.3 (01/2014),
+           Table 14-1: Corrected FEC bytes.
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017),
+           Table C.14.1 Corrected FEC bytes.
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018),
+           Table 14-1: Corrected FEC bytes.";
+      }
+      leaf corrected-fec-codewords {
+        type bbf-yang:performance-counter64;
+        description
+          "Count of Forward Error Correction (FEC) codewords that
+           contained errors but were corrected by the FEC function.
+
+           For G-PON, reported per v-ANI.
+           For XG-PON, reported per ANI and v-ANI.
+           For XGS-PON, reported per ANI and v-ANI.
+           For NG-PON2, reported per ANI and v-ANI.";
+        reference
+          "ITU-T G.987.3 (01/2014),
+           Table 14-1: Corrected FEC codewords.
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017),
+           Table C.14.1 Corrected FEC codewords.
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018),
+           Table 14-1: Corrected FEC codewords.";
+      }
+      leaf uncorrectable-fec-codewords {
+        type bbf-yang:performance-counter64;
+        description
+          "Count of Forward Error Correction (FEC) codewords that
+           contained errors and could not be corrected by the FEC
+           function.
+
+           For G-PON, reported per v-ANI and CT.
+           For XG-PON, reported per ANI, v-ANI and CT.
+           For XGS-PON, reported per ANI, v-ANI and CT.
+           For NG-PON2, reported per ANI, v-ANI and CT.";
+        reference
+          "ITU-T G.987.3 (01/2014),
+           Table 14-1: Uncorrectable FEC codewords.
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017),
+           Table C.14.1 Uncorrectable FEC codewords.
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018),
+           Table 14-1: Uncorrectable FEC codewords.";
+      }
+      leaf in-fec-codewords {
+        type bbf-yang:performance-counter64;
+        description
+          "Count of total received Forward Error Correction (FEC)
+           codewords.
+
+           For G-PON, reported per v-ANI and CT.
+           For XG-PON, reported per ANI, v-ANI and CT.
+           For XGS-PON, reported per ANI, v-ANI and CT.
+           For NG-PON2, reported per ANI, v-ANI and CT.";
+        reference
+          "ITU-T G.987.3 (01/2014),
+           Table 14-1: Total FEC codewords.
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017),
+           Table C.14.1 Total FEC codewords.
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018),
+           Table 14-1: Total FEC codewords.";
+      }
+      leaf fec-seconds {
+        type bbf-yang:performance-counter32;
+        description
+          "The seconds during which there was a Forward Error
+           Correction (FEC) anomaly.
+
+           For G-PON, reported per ANI.
+           For XG-PON, reported per ANI.
+           For XGS-PON, reported per ANI.
+           For NG-PON2, reported per ANI.";
+        reference
+          "ITU-T G.988 (11/2017),
+           Section 9.2.9 FEC Seconds.";
+      }
+      leaf in-bip-protected-words {
+        type bbf-yang:performance-counter64;
+        description
+          "Count of received 4-byte words that are included in the
+           Bit-Interleaved even Parity (BIP-32) check.
+
+           For G-PON, reported per ANI (via PLOAM), v-ANI and CT.
+           For XG-PON, reported per v-ANI and CT.
+           For XGS-PON, reported per v-ANI and CT.
+           For NG-PON2, reported per ANI (via OMCI), vANI and CT.";
+        reference
+          "ITU-T G.984.3 (2014),
+           Sections 8.1.3.4 and 8.2.2.1.
+
+           ITU-T G.987.3 (01/2014)
+           Table 14-1: Total received words protected by BIP-32.
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1, Total received words protected by BIP-32.
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Total received words protected by BIP-32.";
+      }
+      leaf in-bip-errors {
+        type bbf-yang:performance-counter64;
+        description
+          "Count of the bit errors according to Bit-Interleaved
+           even Parity (BIP-32).
+
+           For G-PON, reported per ANI (via PLOAM), v-ANI and CT.
+           For XG-PON, reported per v-ANI and CT.
+           For XGS-PON, reported per v-ANI and CT.
+           For NG-PON2, reported per ANI (via OMCI), vANI and CT.";
+        reference
+          "ITU-T G.984.3 (2014)
+           Sections 8.1.3.4, 8.2.2.1, 9.2.2 and 11.2:
+           BIP-8 errors of ONUi at OLT side (section 11.2.1) and
+           BIP-8 errors at ONU side (section 11.2.2)
+
+           ITU-T G.987.3 (01/2014)
+           Table 14-1: BIP-32 error count
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 BIP-32 error count
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: BIP-32 error count.";
+      }
+      leaf psbd-hec-errors {
+        type bbf-yang:performance-counter64;
+        description
+          "Hybrid Error Correction (HEC) error in any of the fields of
+           the Downstream Physical Synchronization Block (PSBd).
+
+           For G-PON, not applicable.
+           For XG-PON, reported per ANI.
+           For XGS-PON, reported per ANI.
+           For NG-PON2, reported per ANI.";
+        reference
+          "ITU-T G.987.3 (01/2014)
+           Table 14-1: PSBd HEC error count
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 PSBd HEC error count
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: PSBd HEC error count.";
+      }
+      leaf fs-hec-errors {
+        type bbf-yang:performance-counter64;
+        description
+          "For XG-PON, the XG-PON Transmission Convergence (XGTC)
+           header Hybrid Error Correction (HEC) errors received.
+           For XGS-PON and NG-PON2, the Downstream (DS) Framing
+           Sublayer (FS) header Hybrid Error Correction (HEC) errors
+           received.
+
+           For G-PON, not applicable.
+           For XG-PON, reported per ANI and v-ANI.
+           For XGS-PON, reported per ANI and v-ANI.
+           For NG-PON2, reported per ANI and v-ANI.";
+        reference
+          "ITU-T G.987.3 (01/2014)
+           Table 14-1: XGTC HEC error count
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 FS HEC error count
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: FS HEC error count.";
+      }
+      leaf unknown-profiles {
+        type bbf-yang:performance-counter64;
+        description
+          "Count of the instances where the Optical Network Unit (ONU)
+           could not transmit because the specified burst profile was
+           unknown.
+
+           For G-PON, not applicable.
+           For XG-PON, reported per ANI.
+           For XGS-PON, reported per ANI.
+           For NG-PON2, reported per ANI.";
+        reference
+          "ITU-T G.987.3 (01/2014)
+           Table 14-1: Unknown profile
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 Unknown profile count
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Unknown profile count.";
+      }
+    }
+  }
+
+  grouping xpon-lods-pm {
+    description
+      "xPON LODS performance counters.";
+    container lods {
+      description
+        "xPON Loss of Downstream Synchronization (LODS) performance
+         counters.";
+      leaf total-events {
+        type bbf-yang:performance-counter64;
+        description
+          "Counter of state transitions from O5.1/O5.2 to O6.
+
+           For G-PON, not applicable.
+           For XG-PON, not applicable.
+           For XGS-PON, reported per ANI.
+           For NG-PON2, reported per ANI.";
+        reference
+          "ITU-T G.9807.1 (2016)/Amd.1 (10/2017),
+           Table C.14.1 Total number of LODS events.
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018),
+           Table 14-1: Total number of LODS events.";
+      }
+      container restored {
+        description
+          "Counters associated with Loss of Downstream Sychronization
+           (LODS) events restored relative to a Time and Division
+           Wavelength Multiplexing (TWDM) channel.";
+        leaf operating-twdm {
+          type bbf-yang:performance-counter64;
+          description
+            "Loss of Downstream Synchronization (LODS) cleared
+             without returning.
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, reported per ANI.
+             For NG-PON2, reported per ANI.";
+          reference
+            "ITU-T G.9807.1 (2016)/Amd.1 (10/2017),
+             Table C.14.1 LODS events restored.
+
+             ITU-T G.989.3 (2015)/Amd.2 (11/2018),
+             Table 14-1: LODS events restored
+             in the operating TWDM channel.";
+        }
+        leaf precfg-protect-twdm {
+          type bbf-yang:performance-counter64;
+          description
+            "Wavelength Channel Protection (WLCP) on.
+             Optical Network Unit (ONU) retunes to the pre-configured
+             channel.
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For NG-PON2, reported per ANI.";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018),
+             Table 14-1: LODS events restored in the
+             pre-configured protection TWDM channel";
+        }
+        leaf discretionary-twdm {
+          type bbf-yang:performance-counter64;
+          description
+            "Wavelength Channel Protection (WLCP) off.
+             Optical Network Unit (ONU) retunes to the channel of its
+             choice.
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For NG-PON2, reported per ANI.";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018),
+             Table 14-1: LODS events restored
+             in a discretionary TWDM channel";
+        }
+      }
+      container onu-reactivation {
+        description
+          "Counters associated with Loss of Downstream Sychronization
+           (LODS) events resulting in Optical Network Unit (ONU)
+           reactivation.";
+        leaf no-sync-reacquired {
+          type bbf-yang:performance-counter64;
+          description
+            "Either TO2 (without Wavelength Channel Protection (WLCP))
+             or TO3+TO4 (with WLCP) expire before the downstream
+             channel is reacquired.
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, reported per ANI.
+             For NG-PON2, reported per ANI.";
+          reference
+            "ITU-T G.9807.1 (2016)/Amd.1 (10/2017),
+             Table C.14.1 LODS events resulting in ONU reactivation
+             without synchronization being reacquired
+
+             ITU-T G.989.3 (2015)/Amd.2 (11/2018),
+             Table 14-1: LODS events resulting in ONU reactivation
+             without synchronization being reacquired";
+        }
+        leaf after-us-hs-fail-precfg-twdm {
+          type bbf-yang:performance-counter64;
+          description
+            "Timer TO5 expiration in pre-configured Time Wavelength
+             Division Multiplexing (TWDM) channel.
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For NG-PON2, reported per ANI.";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018),
+             Table 14-1: LODS events resulting in ONU reactivation
+             after upstream handshake failure in pre-configured TWDM
+             channel.";
+        }
+        leaf after-us-hs-fail-discretionary-twdm {
+          type bbf-yang:performance-counter64;
+          description
+            "Timer TO5 expiration in discretionary Time Wavelength
+             Division Multiplexing (TWDM) channel to which Optical
+             Network Unit (ONU) retunes as a channel of its choice.
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For NG-PON2, reported per ANI.";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018),
+             Table 14-1: LODS events resulting in ONU reactivation
+             after upstream handshake failure in discretionary TWDM
+             channel.";
+        }
+      }
+    }
+  }
+
+  grouping xpon-gemport-pm {
+    description
+      "xPON G-PON Encapsulation Method (GEM) port performance
+       counters.";
+    container gemport {
+      description
+        "xPON G-PON Encapsulation Method (GEM) port performance
+         counters.";
+      leaf out-frames {
+        type bbf-yang:performance-counter64;
+        description
+          "Total number of G-PON Encapsulation Method (GEM) frames
+           transmitted.
+
+           For G-PON, reported per ANI (via OMCI). While not
+           explicitly defined in G.984.3, implementations may report
+           this count per CT.
+           For XG-PON, reported per ANI and CT.
+           For XGS-PON, reported per ANI and CT.
+           For NG-PON2, reported per ANI and CT.";
+        reference
+          "ITU-T G.987.3 (01/2014)
+           Table 14-1: Transmitted XGEM frames
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 Transmitted XGEM frames
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Transmitted XGEM frames.";
+      }
+      leaf in-frames {
+        type bbf-yang:performance-counter64;
+        description
+          "Total number of G-PON Encapsulation Method (GEM) frames
+           received.
+
+           For G-PON, reported per ANI (via OMCI). While not
+           explicitly defined in G.984.3, implementations may report
+           this count per CT.
+           For XG-PON, reported per ANI and CT.
+           For XGS-PON, reported per ANI and CT.
+           For NG-PON2, reported per ANI and CT.";
+        reference
+          "ITU-T G.987.3 (01/2014)
+           Table 14-1: Received XGEM frames
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 Received XGEM frames
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Received XGEM frames.";
+      }
+      leaf out-frames-lf-bit-not-set {
+        type bbf-yang:performance-counter64;
+        description
+          "Number of transmit fragmentation operations.
+
+           For G-PON, not applicable.
+           For XG-PON, reported per ANI and CT.
+           For XGS-PON, reported per ANI and CT.
+           For NG-PON2, reported per ANI and CT.";
+        reference
+          "ITU-T G.987.3 (01/2014)
+           Table 14-1: Count of the number of transmitted
+           XGEM frames with LF bit NOT set
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 Count of the number of transmitted
+           XGEM frames with LF bit NOT set
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Count of the number of transmitted
+           XGEM frames with LF bit NOT set.";
+      }
+      leaf hec-errors {
+        type bbf-yang:performance-counter64;
+        description
+          "Number of events involving loss of G-PON Encapsulation
+           Method (GEM) channel delineation.
+
+           For G-PON, not applicable.
+           For XG-PON, reported per ANI and v-ANI.
+           For XGS-PON, reported per ANI and v-ANI.
+           For NG-PON2, reported per ANI and v-ANI.";
+        reference
+          "ITU-T G.987.3 (01/2014)
+           Table 14-1: XGEM frame header HEC errors
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 Count of XGEM frame header HEC errors
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Count of XGEM frame header HEC errors.";
+      }
+      leaf fs-frame-words-lost {
+        type bbf-yang:performance-counter64;
+        description
+          "Aggregate severity measure of the loss of G-PON
+           Encapsulation Method (GEM) channel delineation events. Note
+           that the number of lost GEM frames is not available.
+
+           For G-PON, not applicable.
+           For XG-PON, reported per ANI and v-ANI.
+           For XGS-PON, reported per ANI and v-ANI.
+           For NG-PON2, reported per ANI and v-ANI.";
+        reference
+          "ITU-T G.987.3 (01/2014)
+           Table 14-1: Count of XGTC frame words lost
+           due to GEM frame HEC error
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 Count of FS frame words lost
+           due to XGEM frame HEC error
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Count of FS frame words lost
+           due to XGEM frame HEC error.";
+      }
+      leaf key-errors {
+        type bbf-yang:performance-counter64;
+        description
+          "G-PON Encapsulation Method (GEM) frames discarded because
+           of unknown or invalid encryption key. Examples include: no
+           unicast or broadcast key established for specified key
+           index, key index indicating encrypted GEM frame on an GEM
+           port that is not provisioned for encryption, key index
+           indicating upstream encryption on an GEM port that is
+           provisioned for downstream encryption only, or invalid key
+           index. This count is included in the 'in-frames' count.
+
+           For G-PON, not applicable.
+           For XG-PON, reported per ANI and v-ANI.
+           For XGS-PON, reported per ANI and v-ANI.
+           For NG-PON2, reported per ANI and v-ANI.";
+        reference
+          "ITU-T G.987.3 (01/2014)
+           Table 14-1: XGEM key errors
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 XGEM key error count
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: XGEM key error count.";
+      }
+    }
+  }
+
+  grouping xpon-utilization-pm {
+    description
+      "xPON utilization performance counters.";
+    container utilization {
+      description
+        "xPON utilization performance counters.";
+      leaf out-bytes-non-idle-xgem-frames {
+        type bbf-yang:performance-counter64;
+        description
+          "Measure of downstream utilization.
+
+           For G-PON, not applicable.
+           For XG-PON, not applicable.
+           For XGS-PON, reported per ANI, v-ANI and CT.
+           For NG-PON2, reported per ANI, v-ANI and CT";
+        reference
+          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Transmitted bytes in non-idle XGEM frames
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 Transmitted bytes in non-idle XGEM frames.";
+      }
+      leaf in-bytes-non-idle-xgem-frames {
+        type bbf-yang:performance-counter64;
+        description
+          "Measure of upstream utilization.
+
+           For G-PON, not applicable.
+           For XG-PON, not applicable.
+           For XGS-PON, reported per ANI, v-ANI and CT.
+           For NG-PON2, reported per ANI, v-ANI and CT";
+        reference
+          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Received bytes in non-idle XGEM frames
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 Received bytes in non-idle XGEM frames";
+      }
+      leaf bw-not-assigned {
+        type bbf-yang:performance-counter64;
+        description
+          "Count of Dynamic Bandwidth Assignment (DBA) inability to
+           assign guaranteed bandwidth in the presence of demand.
+           Indication of upstream congestion.
+
+           For G-PON, not applicable.
+           For XG-PON, not applicable.
+           For XGS-PON, reported per v-ANI and CT.
+           For NG-PON2, reported per v-ANI and CT";
+        reference
+          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Count of DBA inability to assign
+           guaranteed bandwidth in the presence of demand
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 Count of DBA inability to assign
+           guaranteed bandwidth in the presence of demand";
+      }
+    }
+  }
+
+  grouping xpon-ploam-pm {
+    description
+      "xPON Physical Layer Operation, Administration and Maintenance
+       (PLOAM) performance counters.";
+    container ploam {
+      description
+        "xPON Physical Layer Operation, Administration and Maintenance
+         (PLOAM) performance counters.";
+      leaf sn-grants {
+        type bbf-yang:performance-counter64;
+        description
+          "Serial number grants for Optical Network Unit (ONU)
+           discovery.
+
+           For G-PON, not applicable.
+           For XG-PON, reported per CT.
+           For XGS-PON, reported per CT.
+           For NG-PON2, reported per CT.";
+        reference
+          "ITU-T G.987.3 (01/2014)
+           Table 14-1: SN grant count
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: SN grant count
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 SN grant count";
+      }
+      leaf mic-errors {
+        type bbf-yang:performance-counter64;
+        description
+          "Counter of received Physical Layer Operations,
+           Administrations and Maintenance (PLOAM) messages with
+           Message Integrity Check (MIC) errors.
+
+           For G-PON, not applicable.
+           For XG-PON, reported per ANI and v-ANI.
+           For XGS-PON, reported per ANI and v-ANI.
+           For NG-PON2, reported per ANI and v-ANI.";
+        reference
+          "ITU-T G.987.3 (01/2014)
+           Table 14-1: PLOAM MIC errors
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: PLOAM MIC errors
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 PLOAM MIC errors";
+      }
+      leaf timeouts {
+        type bbf-yang:performance-counter64;
+        description
+          "Retransmission count: missing, late or errored response.
+           No response to key request or Request_Registration,
+           lack of ACK, etc.
+
+           For G-PON, not applicable.
+           For XG-PON, reported per CT.
+           For XGS-PON, reported per CT.
+           For NG-PON2, reported per CT.";
+        reference
+          "ITU-T G.987.3 (01/2014)
+           Table 14-1: PLOAM timeouts
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: PLOAM timeouts
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 PLOAM timeouts";
+      }
+      leaf dying-gasps {
+        type bbf-yang:performance-counter64;
+        description
+          "Count of dying gasp bursts received.
+
+           For G-PON, not applicable.
+           For XG-PON, reported per v-ANI.
+           For XGS-PON, reported per v-ANI.
+           For NG-PON2, reported per v-ANI.";
+        reference
+          "ITU-T G.987.3 (01/2014)
+           Table 14-1: DG count
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: DG count
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 DG count";
+      }
+      container downstream-messages {
+        description
+          "Performance counters associated with Physical Layer
+           Operations, Administrations and Maintenance (PLOAM)
+           messages sent by the Optical Line Termination (OLT)
+           Channel Termination (CT).";
+        leaf total {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Physical Layer Operations, Administrations and
+             Maintenance (PLOAM) messages sent by the Optical Line
+             Termination (OLT) Channel Termination (CT), received by
+             Optical Network Unit (ONU), either broadcast or
+             directed to the specific ONU-ID.
+
+             For G-PON, not applicable.
+             For XG-PON, reported per ANI, v-ANI and CT.
+             For XGS-PON, reported per ANI, v-ANI and CT.
+             For NG-PON2, reported per ANI, v-ANI and CT.";
+          reference
+            "ITU-T G.987.3 (01/2014)
+             Table 14-1: Downstream PLOAM message count
+
+             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Downstream PLOAM message count
+
+             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+             Table C.14.1 Downstream PLOAM message count";
+        }
+        leaf system-profile {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of System_Profile Physical Layer Operations,
+             Administrations and Maintenance (PLOAM) messages sent by
+             the Optical Line Termination (OLT) Channel Termination
+             (CT).
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For NG-PON2, reported per ANI and CT.";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: System_Profile message count";
+        }
+        leaf channel-profile {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Channel_Profile Physical Layer Operations,
+             Administrations and Maintenance (PLOAM) messages sent by
+             the Optical Line Termination (OLT) Channel Termination
+             (CT).
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For NG-PON2, reported per ANI and CT.";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Channel_Profile message count";
+        }
+        leaf burst-profile {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Burst_Profile Physical Layer Operations,
+             Administrations and Maintenance (PLOAM) messages sent by
+             the Optical Line Termination (OLT) Channel Termination
+             (CT).
+
+             For G-PON, not applicable.
+             For XG-PON, reported per ANI and CT.
+             For XGS-PON, reported per ANI and CT.
+             For NG-PON2, reported per ANI and CT.";
+          reference
+            "ITU-T G.987.3 (01/2014)
+             Table 14-1: Profile
+
+             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Burst_Profile message count
+
+             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+             Table C.14.1 Burst_Profile message count";
+        }
+        leaf assign-onu-id {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Assign_ONU-ID Physical Layer Operations,
+             Administrations and Maintenance (PLOAM) messages sent by
+             the Optical Line Termination (OLT) Channel Termination
+             (CT).
+
+             For G-PON, not applicable.
+             For XG-PON, reported per ANI and CT.
+             For XGS-PON, reported per ANI and CT.
+             For NG-PON2, reported per ANI and CT.";
+          reference
+            "ITU-T G.987.3 (01/2014)
+             Table 14-1: Assign_ONU-ID
+
+             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Assign_ONU-ID message count
+
+             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+             Table C.14.1 Assign_ONU-ID message count";
+        }
+        leaf ranging-time {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Ranging_Time Physical Layer Operations,
+             Administrations and Maintenance (PLOAM) messages sent by
+             the Optical Line Termination (OLT) Channel Termination
+             (CT).
+
+             For G-PON, not applicable.
+             For XG-PON, reported per ANI, v-ANI and CT.
+             For XGS-PON, reported per ANI, v-ANI and CT.
+             For NG-PON2, reported per ANI, v-ANI and CT.";
+          reference
+            "ITU-T G.987.3 (01/2014)
+             Table 14-1: Ranging_Time message count
+
+             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Ranging_Time message count
+
+             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+             Table C.14.1 Ranging_Time message count";
+        }
+        leaf protect-control {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Protection_Control Physical Layer Operations,
+             Administrations and Maintenance (PLOAM) messages sent by
+             the Optical Line Termination (OLT) Channel Termination
+             (CT).
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For NG-PON2, reported per ANI, v-ANI and CT.";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Protection_Control message count";
+        }
+        container adjust-tx-wavelength {
+          description
+            "Performance counters associated with Adjust_Tx_Wavelength
+             Physical Layer Operations, Administrations and
+             Maintenance (PLOAM) messages.";
+          leaf total {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of Adjust_Tx_Wavelength Physical Layer
+               Operations, Administrations and Maintenance (PLOAM)
+               messages sent by the Optical Line Termination (OLT)
+               Channel Termination (CT).
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and
+               CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Adjust_Tx_Wavelength message count";
+          }
+          leaf wavelength-dithering {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of Physical Layer Operations, Administrations and
+               Maintenance (PLOAM) messages generated by the
+               wavelength dithering process and send by the Optical
+               Line Termination (OLT) Channel Termination (CT).
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and
+               CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Wavelength dithering
+               Adjust_Tx_Wavelength message count";
+          }
+          leaf adjustment-amplitude {
+            type bbf-yang:performance-counter64;
+            description
+              "An estimator of the absolute value of the transmission
+               wavelength adjustment.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI and v-ANI.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Adjust_Tx_Wavelength adjustment amplitude";
+          }
+          leaf unsatisfied-requests {
+            type bbf-yang:performance-counter64;
+            description
+              "Adjust_Tx_Wavelength requests not applied or partially
+               applied due to target upstream wavelength being out of
+               transmit tuning range.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Unsatisfied Adjust_Tx_Wavelength requests";
+          }
+        }
+        leaf deactivate-onu-id {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Deactivate_ONU-ID Physical Layer Operations,
+             Administrations and Maintenance (PLOAM) messages sent by
+             the Optical Line Termination (OLT) Channel Termination
+             (CT).
+
+             For G-PON, not applicable.
+             For XG-PON, reported per ANI and CT.
+             For XGS-PON, reported per ANI and CT.
+             For NG-PON2, reported per ANI and CT.";
+          reference
+            "ITU-T G.987.3 (01/2014)
+             Table 14-1: Deactivate_ONU-ID
+
+             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Deactivate_ONU-ID message count
+
+             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+             Table C.14.1 Deactivate_ONU-ID message count";
+        }
+        leaf disable-serial-number {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Disable_Serial_Number Physical Layer
+             Operations, Administrations and Maintenance (PLOAM)
+             messages sent by the Optical Line Termination (OLT)
+             Channel Termination (CT).
+
+             For G-PON, not applicable.
+             For XG-PON, reported per ANI and CT.
+             For XGS-PON, reported per ANI and CT.
+             For NG-PON2, reported per ANI and CT.";
+          reference
+            "ITU-T G.987.3 (01/2014)
+             Table 14-1: Disable_Serial_Number
+
+             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Disable_Serial_Number message count
+
+             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+             Table C.14.1 Disable_Serial_Number message count";
+        }
+        leaf request-registration {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Request_Registration Physical Layer Operations,
+             Administrations and Maintenance (PLOAM) messages sent by
+             the Optical Line Termination (OLT) Channel Termination
+             (CT).
+
+             For G-PON, not applicable.
+             For XG-PON, reported per ANI and v-ANI.
+             For XGS-PON, reported per ANI and v-ANI.
+             For NG-PON2, reported per ANI and v-ANI.";
+          reference
+            "ITU-T G.987.3 (01/2014)
+             Table 14-1: Request_Registration
+
+             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Request_Registration message count
+
+             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+             Table C.14.1 Request_Registration message count";
+        }
+        leaf assign-alloc-id {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Assign_Alloc-ID Physical Layer Operations,
+             Administrations and Maintenance (PLOAM) messages sent by
+             the Optical Line Termination (OLT) Channel Termination
+             (CT).
+
+             For G-PON, not applicable.
+             For XG-PON, reported per ANI and v-ANI.
+             For XGS-PON, reported per ANI and v-ANI.
+             For NG-PON2, reported per ANI and v-ANI.";
+          reference
+            "ITU-T G.987.3 (01/2014)
+             Table 14-1: Assign_Alloc-ID
+
+             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Assign_Alloc-ID message count
+
+             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+             Table C.14.1 Assign_Alloc-ID message count";
+        }
+        leaf key-control {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Key_Control Physical Layer Operations,
+             Administrations and Maintenance (PLOAM) messages sent by
+             the Optical Line Termination (OLT) Channel Termination
+             (CT).
+
+             For G-PON, not applicable.
+             For XG-PON, reported per ANI, v-ANI and CT.
+             For XGS-PON, reported per ANI, v-ANI and CT.
+             For NG-PON2, reported per ANI, v-ANI and CT.";
+          reference
+            "ITU-T G.987.3 (01/2014)
+             Table 14-1: Key_Control
+
+             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Key_Control message count
+
+             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+             Table C.14.1 Key_Control message count";
+        }
+        leaf sleep-allow {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Sleep_Allow Physical Layer Operations,
+             Administrations and Maintenance (PLOAM) messages sent by
+             the Optical Line Termination (OLT) Channel Termination
+             (CT).
+
+             For G-PON, not applicable.
+             For XG-PON, reported per ANI, v-ANI and CT.
+             For XGS-PON, reported per ANI, v-ANI and CT.
+             For NG-PON2, reported per ANI, v-ANI and CT.";
+          reference
+            "ITU-T G.987.3 (01/2014)
+             Table 14-1: Sleep_Allow
+
+             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Sleep_Allow message count
+
+             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+             Table C.14.1 Sleep_Allow message count";
+        }
+        container tuning-control {
+          description
+            "Performance counters associated with the Tuning_Control
+             Physical Layer Operations, Administrations and
+             Maintenance (PLOAM) messages.";
+          leaf request-operation {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of Tuning_Control with Request operation code
+               Physical Layer Operations, Administrations and
+               Maintenance (PLOAM) messages sent by the Optical Line
+               Termination (OLT) Channel Termination (CT).
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning_Control message count,
+               Request operation code";
+          }
+          leaf complete-operation {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of Tuning_Control with Complete_d operation code
+               Physical Layer Operations, Administrations and
+               Maintenance (PLOAM) messages sent by the Optical Line
+               Termination (OLT) Channel Termination (CT).
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning_Control message count,
+               Complete_d operation code";
+          }
+        }
+      }
+      leaf calibration-request {
+        type bbf-yang:performance-counter64;
+        description
+          "Count of Calibration_Request Physical Layer Operations,
+           Administrations and Maintenance (PLOAM) messages sent by
+           the Optical Line Termination (OLT) Channel Termination
+           (CT).
+
+           For G-PON, not applicable.
+           For XG-PON, not applicable.
+           For XGS-PON, not applicable.
+           For NG-PON2, reported per ANI, v-ANI and CT.";
+        reference
+          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Calibration_Request message count";
+      }
+      container upstream-messages {
+        description
+          "Performance counters associated with Physical Layer
+           Operations, Administrations and Maintenance (PLOAM)
+           messages sent by the Optical Network Unit (ONU).";
+        leaf total {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of messages (other than Acknowledgement)
+             sent by the Optical Network Unit (ONU), received by
+             Optical Line Termination (OLT).
+
+             For G-PON, not applicable.
+             For XG-PON, reported per ANI and v-ANI.
+             For XGS-PON, reported per ANI and v-ANI.
+             For NG-PON2, reported per ANI, v-ANI and CT.";
+          reference
+            "ITU-T G.987.3 (01/2014)
+             Table 14-1: Upstream PLOAM message count
+
+             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Upstream PLOAM message count
+
+             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+             Table C.14.1 Upstream PLOAM message count";
+        }
+        container serial-number-onu {
+          description
+            "Performance counters associated with the upstream
+             Serial_Number_ONU messages.";
+          leaf inband {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of Serial_Number_ONU Physical Layer Operations,
+               Administrations and Maintenance (PLOAM) messages sent
+               by the Optical Network Unit (ONU).
+
+               For G-PON, not applicable.
+               For XG-PON, reported per ANI, v-ANI and CT.
+               For XGS-PON, reported per ANI, v-ANI and CT.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.987.3 (01/2014)
+               Table 14-1: Serial_Number_ONU
+
+               ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Serial_Number_ONU (in-band) message count
+
+               ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+               Table C.14.1 Serial_Number_ONU message count";
+          }
+          leaf amcc {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of Serial_Number_ONU Physical Layer Operations,
+               Administrations and Maintenance (PLOAM) (AMCC) messages
+               sent by the Optical Network Unit (ONU).
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Serial_Number_ONU (AMCC) message count";
+          }
+        }
+        leaf registration {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Registration Physical Layer Operations,
+             Administrations and Maintenance (PLOAM) messages sent by
+             the Optical Network Unit (ONU).
+
+             For G-PON, not applicable.
+             For XG-PON, reported per ANI and v-ANI.
+             For XGS-PON, reported per ANI and v-ANI.
+             For NG-PON2, reported per ANI and v-ANI";
+          reference
+            "ITU-T G.987.3 (01/2014)
+             Table 14-1: Registration
+
+             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Registration message count
+
+             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+             Table C.14.1 Registration message count";
+        }
+        leaf key-report {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Key_Report Physical Layer Operations,
+             Administrations and Maintenance (PLOAM) messages sent by
+             the Optical Network Unit (ONU).
+
+             For G-PON, not applicable.
+             For XG-PON, reported per ANI and v-ANI.
+             For XGS-PON, reported per ANI and v-ANI.
+             For NG-PON2, reported per ANI and v-ANI";
+          reference
+            "ITU-T G.987.3 (01/2014)
+             Table 14-1: Key_Report
+
+             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Key_Report message count
+
+             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+             Table C.14.1 Key_Report message count";
+        }
+        leaf acknowledgement {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Acknowledgement Physical Layer Operations,
+             Administrations and Maintenance (PLOAM) messages sent by
+             the Optical Network Unit (ONU).
+
+             For G-PON, not applicable.
+             For XG-PON, reported per ANI and v-ANI.
+             For XGS-PON, reported per ANI and v-ANI.
+             For NG-PON2, reported per ANI and v-ANI";
+          reference
+            "ITU-T G.987.3 (01/2014)
+             Table 14-1: Acknowledgement
+
+             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Acknowledgement message count
+
+             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+             Table C.14.1 Acknowledgement message count";
+        }
+        leaf sleep-request {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Sleep_Request Physical Layer Operations,
+             Administrations and Maintenance (PLOAM) messages sent by
+             the Optical Network Unit (ONU).
+
+             For G-PON, not applicable.
+             For XG-PON, reported per ANI and v-ANI.
+             For XGS-PON, reported per ANI and v-ANI.
+             For NG-PON2, reported per ANI and v-ANI";
+          reference
+            "ITU-T G.987.3 (01/2014)
+             Table 14-1: Sleep_Request
+
+             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Sleep_Request message count
+
+             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+             Table C.14.1 Sleep_Request message count";
+        }
+        container tuning-response {
+          description
+            "Performance counters associated with the Tuning_Response
+             Physical Layer Operations, Administrations and
+             Maintenance (PLOAM) messages.";
+          leaf ack-nack {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of Tuning_Response with ACK/NACK operation code
+               Physical Layer Operations, Administrations and
+               Maintenance (PLOAM) messages sent by the Optical
+               Network Unit (ONU).
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI and v-ANI";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning_Response message count,
+               ACK/NACK operation codes";
+          }
+          leaf complete-rollback {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of Tuning_Respons with Complete_u/Rollback
+               operation codes Physical Layer Operations,
+               Administrations and Maintenance (PLOAM) messages sent
+               by the Optical Network Unit (ONU).
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI and v-ANI";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning_Response message count,
+               Complete_u/Rollback operation codes";
+          }
+        }
+        leaf power-consumption-report {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Power_Consumption_Report Physical Layer
+             Operations, Administrations and Maintenance (PLOAM)
+             messages sent by the Optical Network Unit (ONU).
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For NG-PON2, reported per ANI, v-ANI and CT";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Power_Consumption_Report message count";
+        }
+      }
+    }
+  }
+
+  grouping xpon-activation-pm {
+    description
+      "xPON activation performance counters";
+    container activation {
+      description
+        "xPON activation performance counters.";
+      container non-discernible-activation-attempts {
+        description
+          "Performance counters associated with non-discernible
+           activation attempts.";
+        leaf in-band {
+          type bbf-yang:performance-counter64;
+          description
+            "Quiet window bursts from which the Optical Line
+             Termination (OLT) Channel Termination (CT) is unable
+             obtain the sender's Serial Number (SN).
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, reported per CT.
+             For NG-PON2, reported per CT";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Non-discernible activation attempts (in-band)
+
+             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+             Table C.14.1 Non-discernible activation attempts";
+        }
+        leaf amcc {
+          type bbf-yang:performance-counter64;
+          description
+            "AMCC window bursts from which the Optical Line
+             Termination (OLT) Channel Termination (CT) is unable
+             obtain the sender's Serial Number (SN).
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGs-PON, not applicable.
+             For NG-PON2, reported per CT";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Non-discernible activation attempts (AMCC)";
+        }
+      }
+      container foreign-activation-attempts {
+        description
+          "Performance counters associated with non-discernible
+           activation attempts.";
+        leaf in-band {
+          type bbf-yang:performance-counter64;
+          description
+            "Unrecognized Serial Number (SN).
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, reported per CT.
+             For NG-PON2, reported per CT";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Foreign activation attempts (in-band)
+
+             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+             Table C.14.1 Foreign activation attempts";
+        }
+        leaf amcc {
+          type bbf-yang:performance-counter64;
+          description
+            "Unrecognized Serial Number (SN).
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For NG-PON2, reported per CT";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Foreign activation attempts (AMCC)";
+        }
+      }
+      container successful-new-activations {
+        description
+          "Performance counters associated with non-discernible
+           activation attempts.";
+        leaf in-band {
+          type bbf-yang:performance-counter64;
+          description
+            "Optical Network Unit (ONU) requires ONU-ID assignment and
+             ranging.
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, reported per v-ANI and CT.
+             For NG-PON2, reported per v-ANI and CT";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Successful new activations (in-band)
+
+             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+             Table C.14.1 Successful new activations";
+        }
+        leaf amcc {
+          type bbf-yang:performance-counter64;
+          description
+            "AMCC window bursts from which the Optical Line
+             Termination (OLT) Channel Termination (CT) is unable to
+             obtain the sender's Serial Number (SN).
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For NG-PON2, reported per v-ANI and CT";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Successful new activations (AMCC)";
+        }
+      }
+      container successful-precfg-twdm-channel-handovers {
+        description
+          "Performance counters associated with successful
+           pre-configured TWDM channel handovers.";
+        leaf in-band {
+          type bbf-yang:performance-counter64;
+          description
+            "Optical Network Unit (ONU) calibrated, pre-ranged;
+             downstream and upstream wavelength channels set in
+             advance with Protection_Control Physical Layer
+             Operations, Administrations and Maintenance (PLOAM)
+             message.
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For NG-PON2, reported per v-ANI and CT";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Successful pre-configured
+             TWDM channel handovers (in-band)";
+        }
+        leaf amcc {
+          type bbf-yang:performance-counter64;
+          description
+            "Optical Network Unit (ONU) retunes to the channel of its
+             choice. ONU calibrated, pre-ranged.
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For NG-PON2, reported per v-ANI and CT";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Successful discretionary
+             TWDM channel handovers (in-band)";
+        }
+      }
+    }
+  }
+
+  grouping xpon-tuning-control-pm {
+    description
+      "xPON tuning control performance counters.";
+    container tuning-control {
+      description
+        "xPON tuning control performance counters.";
+      leaf requests-for-rx-or-rx-and-tx {
+        type bbf-yang:performance-counter64;
+        description
+          "Count of PLOAMd Tuning_Control (Request) messages
+           for Receive or Receive/Transmit.
+
+           For G-PON, not applicable.
+           For XG-PON, not applicable.
+           For XGS-PON, not applicable.
+           For NG-PON2, reported per ANI, v-ANI and CT.";
+        reference
+          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Tuning control requests
+           for Rx only or Rx and Tx";
+      }
+      leaf requests-for-tx {
+        type bbf-yang:performance-counter64;
+        description
+          "Count of PLOAMd Tuning_Control (Request) messages for
+           Transmit.
+
+           For G-PON, not applicable.
+           For XG-PON, not applicable.
+           For XGS-PON, not applicable.
+           For NG-PON2, reported per ANI, v-ANI and CT.";
+        reference
+          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Tuning control requests for Tx only";
+      }
+      container rejected-requests {
+        description
+          "Performance counters associated with rejected tuning
+           control requests, Tuning_Response(NACK).";
+        leaf internal-condition {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of PLOAMu Tuning_Response(NACK) messages with
+             Response Code = INT_SFC
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For NG-PON2, reported per ANI, v-ANI and CT.";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Tuning control requests rejected
+             on internal condition
+             (not ready to start transceiver tuning by specified
+             time)";
+        }
+        container downstream {
+          description
+            "Performance counters associated with tuning control
+             requests rejected due to downstream wavelength channel
+             inconsistency.";
+          leaf total {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response(NACK) messages with
+               ResponseCode = DS_xxx.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests rejected
+               on target downstream
+               wavelength channel inconsistency";
+          }
+          leaf albl {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response(NACK) messages with
+               ResponseCode = DS_ALBL.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests rejected
+               on downstream administrative label inconsistency";
+          }
+          leaf void {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response(NACK) messages with
+               ResponseCode = DS_VOID.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests rejected
+               on void downstream wavelength channel descriptor";
+          }
+          leaf part {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response(NACK) messages with
+               ResponseCode = DS_PART.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests rejected
+               on channel partition violation";
+          }
+          leaf tunr {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response(NACK) messages with
+               ResponseCode = DS_TUNR.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests rejected
+               due to target DS wavelength channel being
+               out of Rx tuning range.";
+          }
+          leaf lnrt {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response(NACK) messages with
+               ResponseCode = DS_LNRT.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests rejected
+               on downstream line rate inconsistency";
+          }
+          leaf lncd {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response(NACK) messages with
+               ResponseCode = DS_LNCD.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests rejected
+               on downstream line code inconsistency";
+          }
+        }
+        container upstream {
+          description
+            "Performance counters associated with tuning control
+             requests rejected due to upstream wavelength channel
+             inconsistency.";
+          leaf total {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response(NACK) messages with
+               ResponseCode = US_xxx.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests rejected
+               on target upstream wavelength channel inconsistency";
+          }
+          leaf albl {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response(NACK) messages with
+               ResponseCode = US_ALBL.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests rejected
+               on upstream administrative label inconsistency";
+          }
+          leaf void {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response(NACK) messages with
+               ResponseCode = US_VOID.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests rejected
+               on void upstream wavelength channel descriptor";
+          }
+          leaf tunr {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response(NACK) messages with
+               ResponseCode = US_TUNR.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests rejected
+               due to target US wavelength channel being out of Tx
+               tuning range.";
+          }
+          leaf clbr {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response(NACK) messages
+               with ResponseCode = US_CLBR.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control request rejected
+               due to insufficient calibration accuracy.";
+          }
+          leaf lktp {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response(NACK) messages with
+               ResponseCode = US_LKTP.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests rejected
+               on upstream optical link type inconsistency";
+          }
+          leaf lnrt {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response(NACK) messages with
+               ResponseCode = US_LNRT.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests rejected
+               on upstream line rate inconsistency";
+          }
+          leaf lncd {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response(NACK) messages with
+               ResponseCode = US_LNCD.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests rejected
+               on upstream line code inconsistency";
+          }
+        }
+      }
+      leaf fulfilled-requests {
+        type bbf-yang:performance-counter64;
+        description
+          "Optical Line Termination (OLT) CT: Tuning_Control (Request)
+           Physical Layer Operations, Administrations and Maintenance
+           (PLOAM) messages sent, for which Inter Channel Termination
+           Protocol (ICTP) handover closure has been indicated.
+
+           Optical Network Unit (ONU): Tuning_Control (Request) PLOAM
+           messages received, for which US tuning confirmation has
+           been obtained in the specified target channel.
+
+           For G-PON, not applicable.
+           For XG-PON, not applicable.
+           For XGS-PON, not applicable.
+           For NG-PON2, reported per ANI, v-ANI and CT.";
+        reference
+          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Tuning control requests fulfilled
+           with ONU reacquired at target channel";
+      }
+      container failed-requests {
+        description
+          "Performance counters associated with failed tuning control
+           requests.";
+        leaf target-ds-wl-channel-not-found {
+          type bbf-yang:performance-counter64;
+          description
+            "Timer TO4 expiration in downstream Tuning state (O8)
+             in the target channel.
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For NG-PON2, reported per ANI.";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Tuning control requests failure reason:
+             target DS wavelength channel not found.";
+        }
+        leaf no-feedback-in-target-us-wl-channel {
+          type bbf-yang:performance-counter64;
+          description
+            "Timer TO4 expiration in downstream Tuning state (O8)
+             in the target channel.
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For NG-PON2, reported per ANI";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Tuning control requests failure reason:
+             no tuning feedback in target US wavelength channel.";
+        }
+      }
+      leaf resolved-requests {
+        type bbf-yang:performance-counter64;
+        description
+          "Optical Network Unit (ONU) fails to retune to the specified
+           target channel, but retunes to the channel of its choice.
+
+           For G-PON, not applicable.
+           For XG-PON, not applicable.
+           For XGS-PON, not applicable.
+           For NG-PON2, reported per ANI, v-ANI and CT.";
+        reference
+          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Tuning control requests resolved
+           with ONU reacquired at discretionary channel";
+      }
+      container failed-requests-rollback {
+        description
+          "Performance counters associated with failed tuning
+           control requests with Optical Network Unit (ONU) Rollback,
+           Tuning_Response(Rollback).";
+        leaf communication-condition {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of PLOAMu Tuning_Response (Rollback) messages with
+             ResponseCode = COM_DS.
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For NG-PON2, reported per ANI, v-ANI and CT.";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Tuning control requests failed
+             with ONU Rollback due to communication condition";
+        }
+        container downstream {
+          description
+            "Performance counters associated with tuning control
+             requests failed with Optical Network Unit (ONU) Rollback
+             due to downstream target wavelength channel
+             inconsistency.";
+          leaf total {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response (Rollback) messages
+               with ResponseCode = DS_xxx
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests failed
+               with ONU Rollback due to downstream target
+               wavelength channel inconsistency";
+          }
+          leaf albl {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response (Rollback) messages
+               with ResponseCode = DS_ALBL.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests failed
+               with ONU Rollback due to
+               downstream administrative label inconsistency";
+          }
+          leaf lktp {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response (Rollback) messages
+               with ResponseCode = DS_LKTP.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests failed
+               with ONU Rollback due to
+               downstream optical link type inconsistency";
+          }
+        }
+        container upstream {
+          description
+            "Performance counters associated with tuning control
+             requests failed with Optical Network Unit (ONU) Rollback
+             due to downstream target wavelength channel parameter
+             violation.";
+          leaf total {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response (Rollback) messages
+               with ResponseCode = US_xxx.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests failed with ONU
+               Rollback due to upstream target wavelength channel
+               parameter violation";
+          }
+          leaf albl {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response (Rollback) messages
+               with ResponseCode = US_ALBL.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests failed
+               with ONU Rollback due to
+               upstream administrative label violation";
+          }
+          leaf void {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response (Rollback) messages
+               with ResponseCode = US_VOID.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests rejected
+               on void upstream wavelength channel descriptor";
+          }
+          leaf tunr {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response (Rollback) messages
+               with ResponseCode = US_TUNR.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests rejected
+               on Tx tuning range violation";
+          }
+          leaf lktp {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response (Rollback) messages
+               with ResponseCode = US_LKPT.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1 Tuning control requests rejected
+               on upstream link type violation";
+          }
+          leaf lnrt {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response (Rollback) messages
+               with ResponseCode = US_LNRT.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests rejected
+               on upstream link type violation";
+          }
+          leaf lncd {
+            type bbf-yang:performance-counter64;
+            description
+              "Count of PLOAMu Tuning_Response (Rollback) messages
+               with ResponseCode = US_LNCD.
+
+               For G-PON, not applicable.
+               For XG-PON, not applicable.
+               For XGS-PON, not applicable.
+               For NG-PON2, reported per ANI, v-ANI and CT.";
+            reference
+              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+               Table 14-1: Tuning control requests rejected
+               on upstream line code violation";
+          }
+        }
+      }
+      leaf failed-requests-onu-reactivation {
+        type bbf-yang:performance-counter64;
+        description
+          "Count of state transitions from O5.2 to O8 followed by
+           expiration of timer TO4 or timer TO5, thus causing a
+           transition to O1 state.
+
+           For G-PON, not applicable.
+           For XG-PON, not applicable.
+           For XGS-PON, not applicable.
+           For NG-PON2, reported per ANI, v-ANI and CT.";
+        reference
+          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Tuning control requests failed
+           with ONU reactivation";
+      }
+    }
+  }
+
+  grouping xpon-power-levelling-pm {
+    description
+      "xPON power levelling performance counters.";
+    container power-levelling {
+      description
+        "xPON power levelling performance counters.";
+      container change-power-level-messages {
+        description
+          "Performance counters associated with Change_Power_Level
+           messages.";
+        leaf rejected {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Change_Power_Level Physical Layer Operations,
+             Administrations and Maintenance (PLOAM) messages
+             acknowledged with Parameter Error Completion code.
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For NG-PON2, reported per ANI, v-ANI and CT.";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Change_Power_Level messages rejected
+             due to Parameter Error";
+        }
+        leaf without-completion-ack {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Change_Power_Level Physical Layer Operations,
+             Administrations and Maintenance (PLOAM) messages
+             acknowledged with Busy Completion code, but for which no
+             acknowledgment with OK completion code is received.
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For NG-PON2, reported per ANI, v-ANI and CT.";
+          reference
+            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+             Table 14-1: Change_Power_Level messages without
+             completion acknowledgement";
+        }
+      }
+    }
+  }
+
+  grouping xpon-omci-pm {
+    description
+      "xPON Optical Network Unit Management and Control Interface
+       (OMCI) performance counters.";
+    container omci {
+      description
+        "xPON Optical Network Unit Management and Control Interface
+         (OMCI) performance counters.";
+      leaf baseline-messages {
+        type bbf-yang:performance-counter64;
+        description
+          "Optical Network Unit Management and Control Interface
+           (OMCI) baseline message count.
+
+           For G-PON, not applicable.
+           For XG-PON, reported per ANI and v-ANI.
+           For XGS-PON, reported per ANI and v-ANI.
+           For NG-PON2, reported per ANI and v-ANI.";
+        reference
+          "ITU-T G.987.3 (01/2014)
+           Table 14-1: OMCI baseline message count
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: OMCI baseline message count
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 OMCI baseline message count";
+      }
+      leaf extended-messages {
+        type bbf-yang:performance-counter64;
+        description
+          "Optical Network Unit Management and Control Interface
+           (OMCI) extended message count.
+
+           For G-PON, not applicable.
+           For XG-PON, reported per ANI and v-ANI.
+           For XGS-PON, reported per ANI and v-ANI.
+           For NG-PON2, reported per ANI and v-ANI.";
+        reference
+          "ITU-T G.987.3 (01/2014)
+           Table 14-1: OMCI extended message count
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: OMCI extended message count
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 OMCI extended message count";
+      }
+      leaf autonomus-messages {
+        type bbf-yang:performance-counter64;
+        description
+          "Optical Network Unit Management and Control Interface
+           (OMCI) Autonomous message count.
+
+           For G-PON, not applicable.
+           For XG-PON, reported per v-ANI.
+           For XGS-PON, reported per v-ANI.
+           For NG-PON2, reported per v-ANI.";
+        reference
+          "ITU-T G.987.3 (01/2014)
+           Table 14-1: Autonomous messages
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Autonomous messages
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 Autonomous messages";
+      }
+      leaf mic-errors {
+        type bbf-yang:performance-counter64;
+        description
+          "Count of received Optical Network Unit Management and
+           Control Interface (OMCI) messages with Message Integrity
+           Check (MIC) errors.
+
+           For G-PON, not applicable.
+           For XG-PON, reported per ANI and v-ANI.
+           For XGS-PON, reported per ANI and v-ANI.
+           For NG-PON2, reported per ANI and v-ANI.";
+        reference
+          "ITU-T G.987.3 (01/2014)
+           Table 14-1: OMCI MIC errors
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: OMCI MIC errors
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 OMCI MIC errors";
+      }
+    }
+  }
+
+  grouping xpon-power-monitoring-pm {
+    description
+      "xPON power monitoring performance counters.";
+    container power-monitoring {
+      description
+        "xPON power monitoring performance counters.";
+      leaf tx-optical-power-level {
+        type int32;
+        units "0.1 dBm";
+        description
+          "Depending on the network configuration (integrated vs.
+           external WM, presence of RE), the maintained value refers
+           to one of three reference points: S/R-CP, S/R-CG, or
+           S'R'.";
+        reference
+          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Transmit Optical power level
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 Transmit Optical power level";
+      }
+    }
+  }
+
+  grouping xpon-energy-conservation-pm {
+    description
+      "xPON energy conservation performance counters.";
+    container energy-conservation {
+      description
+        "xPON energy conservation performance counters.";
+      leaf time-spent-in-low-energy-state {
+        type bbf-yang:performance-counter64;
+        description
+          "Time spent in each of the Optical Line Termination (OLT)/
+           Optical Network Unit (ONU) low-power states, respectively.
+
+           For G-PON, not applicable.
+           For XG-PON, reported per ANI and v-ANI.
+           For XGS-PON, reported per ANI and v-ANI.
+           For NG-PON2, reported per ANI and v-ANI.";
+        reference
+          "ITU-T G.987.3 (01/2014)
+           Table 14-1: Time spent in each of the OLT/ONU
+           low-power states, respectively
+
+           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
+           Table 14-1: Time spent in each of the OLT/ONU
+           low-power states, respectively
+
+           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
+           Table C.14.1 Time spent in each of the OLT/ONU
+           low-power states, respectively";
+      }
+    }
+  }
+
+  grouping xpon-performance-counters {
+    description
+      "Counters associated with current and historical 15 minute
+       and 24 hour performance counters for xPON.";
+    uses xpon-phy-pm;
+    uses xpon-lods-pm;
+    uses xpon-gemport-pm;
+    uses xpon-utilization-pm;
+    uses xpon-ploam-pm;
+    uses xpon-activation-pm;
+    uses xpon-tuning-control-pm;
+    uses xpon-power-levelling-pm;
+    uses xpon-omci-pm;
+    uses xpon-power-monitoring-pm;
+    uses xpon-energy-conservation-pm;
+  }
+
+  augment "/if:interfaces-state/if:interface/bbf-if-pm:performance/"
+        + "bbf-if-pm:intervals-15min/bbf-if-pm:current" {
+    when " derived-from-or-self(../../../if:type, "
+       + "'bbf-xponift:ani') or "
+       + " derived-from-or-self(../../../if:type, "
+       + "'bbf-xponift:v-ani') or "
+       + " derived-from-or-self(../../../if:type, "
+       + "'bbf-xponift:channel-termination')" {
+      description
+        "Only applicable to Access Network Interface (ANI), virtual
+         Access Network Interface (vANI) or Channel Termination (CT)
+         interfaces.";
+    }
+    description
+      "Augment the current 15 minute interface performance counts
+       with xPON specific attributes.";
+    container xpon {
+      description
+        "Current 15 minute xPON performance counters";
+      uses xpon-performance-counters;
+    }
+  }
+
+  augment "/if:interfaces-state/if:interface/bbf-if-pm:performance/"
+        + "bbf-if-pm:intervals-15min/bbf-if-pm:history" {
+    when " derived-from-or-self(../../../if:type, "
+       + "'bbf-xponift:ani') or "
+       + " derived-from-or-self(../../../if:type, "
+       + "'bbf-xponift:v-ani') or "
+       + " derived-from-or-self(../../../if:type, "
+       + "'bbf-xponift:channel-termination')" {
+      description
+        "Only applicable to Access Network Interface (ANI), virtual
+         Access Network Interface (vANI) or Channel Termination (CT)
+         interfaces.";
+    }
+    description
+      "Augment the historic 15 minute interface performance counts
+       with xPON specific attributes.";
+    container xpon {
+      description
+        "Historic 15 minute xPON performance counters";
+      uses xpon-performance-counters;
+    }
+  }
+
+  augment "/if:interfaces-state/if:interface/bbf-if-pm:performance/"
+        + "bbf-if-pm:intervals-24hr/bbf-if-pm:current" {
+    when " derived-from-or-self(../../../if:type, "
+       + "'bbf-xponift:ani') or "
+       + " derived-from-or-self(../../../if:type, "
+       + "'bbf-xponift:v-ani') or "
+       + " derived-from-or-self(../../../if:type, "
+       + "'bbf-xponift:channel-termination')" {
+      description
+        "Only applicable to Access Network Interface (ANI), virtual
+         Access Network Interface (vANI) or Channel Termination (CT)
+         interfaces.";
+    }
+    if-feature "bbf-if-pm:performance-24hr";
+    description
+      "Augment the current 24 hour interface performance counts
+       with xPON specific attributes.";
+    container xpon {
+      description
+        "Current 24 hour xPON performance counters";
+      uses xpon-performance-counters;
+    }
+  }
+
+  augment "/if:interfaces-state/if:interface/bbf-if-pm:performance/"
+        + "bbf-if-pm:intervals-24hr/bbf-if-pm:history" {
+    when " derived-from-or-self(../../../if:type, "
+       + "'bbf-xponift:ani') or "
+       + " derived-from-or-self(../../../if:type, "
+       + "'bbf-xponift:v-ani') or "
+       + " derived-from-or-self(../../../if:type, "
+       + "'bbf-xponift:channel-termination')" {
+      description
+        "Only applicable to Access Network Interface (ANI), virtual
+         Access Network Interface (vANI) or Channel Termination (CT)
+         interfaces.";
+    }
+    if-feature "bbf-if-pm:performance-24hr";
+    description
+      "Augment the historic 24 hour interface performance counts
+       with xPON specific attributes.";
+    container xpon {
+      description
+        "Historic 24 hour xPON performance counters";
+      uses xpon-performance-counters;
+    }
+  }
+}

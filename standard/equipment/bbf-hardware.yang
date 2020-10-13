@@ -1,0 +1,236 @@
+module bbf-hardware {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-hardware";
+  prefix bbf-hw;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import iana-hardware {
+    prefix ianahw;
+  }
+  import ietf-hardware {
+    prefix hw;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, ADTRAN
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on hardware and
+     interface management as applicable to access network equipment.
+     As such, this module is specific to access network equipment
+     (e.g., BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module augments the ietf-hardware model with
+     additional management common to multiple classes of hardware
+     components and augments the ietf-interfaces model to enable
+     interfaces to reference hardware components.
+
+     Copyright (c) 2017-2020, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a3; see
+     the TR itself for full legal notices.";
+
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
+
+  feature additional-hardware-configuration {
+    description
+      "Indicates support for additional hardware configuration
+       provided by this model.";
+  }
+
+  feature model-name-configuration {
+    if-feature "additional-hardware-configuration";
+    description
+      "Indicates support of the configuration of a hardware
+       component's model name.";
+  }
+
+  feature hardware-component-reset {
+    description
+      "Indicates support of the reset of a hardware component.";
+  }
+
+  feature interface-hardware-management {
+    description
+      "Indicates support of providing hardware component related
+       data for an interface.";
+  }
+
+  feature interface-hardware-reference {
+    if-feature "interface-hardware-management";
+    description
+      "Indicates support of providing references from applicable
+       interfaces to hardware components.";
+  }
+
+  identity reset-type {
+    description
+      "Type of reset requested of the component.";
+  }
+
+  identity hardware-reset {
+    base reset-type;
+    description
+      "Hardware reset.";
+  }
+
+  augment "/hw:hardware/hw:component" {
+    when
+      "derived-from-or-self (hw:class, 'ianahw:chassis') or
+       derived-from-or-self (hw:class, 'ianahw:module')" {
+      description
+        "Augment specific hardware components.";
+    }
+    description
+      "Augment the hardware component to allow configuration of an
+       expected model name.";
+    leaf expected-model-name {
+      if-feature "model-name-configuration";
+      type string;
+      description
+        "The expected model name of the hardware component once it is
+         physically present.";
+    }
+  }
+
+  augment "/hw:hardware/hw:component" {
+    description
+      "Augment the hardware component to provide additional data nodes
+       and actions.";
+    action reset {
+      if-feature "hardware-component-reset";
+      description
+        "Request a reset of the component.";
+      input {
+        leaf reset-type {
+          type identityref {
+            base reset-type;
+          }
+          description
+            "Type of reset requested of the component.";
+        }
+      }
+    }
+    notification component-reset {
+      description
+        "Indicates that the component was reset. The reset can have
+         been forced by the client using the action 'reset', or it can
+         be a autonomous reset trigered inside the managed device.";
+      leaf reset-type {
+        type identityref {
+          base reset-type;
+        }
+        description
+          "Type of reset of the component that has been done, i.e.
+           what reset has been dome.";
+      }
+      leaf reason {
+        type bbf-yang:string-ascii64;
+        description
+          "The reason this reset was triggered.";
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface" {
+    description
+      "Only applicable for interfaces which need a reference to a
+       hardware component. It usually applies to interfaces that are
+       at the bottom of an interface stack.";
+    container hardware-component {
+      if-feature "interface-hardware-management";
+      presence
+        "The presence of this container enables management of hardware
+         components relative to an interface.";
+      description
+        "Interface data nodes related to hardware components.";
+      leaf-list port-layer-if {
+        if-feature "interface-hardware-reference";
+        type leafref {
+          path "/hw:hardware/hw:component/hw:name";
+        }
+        must "derived-from-or-self (/hw:hardware
+              /hw:component[hw:name=current()]/hw:class,
+              'ianahw:port')" {
+          error-message
+            "Referenced component is or is derived from class "
+          + "'port'.";
+        }
+        min-elements 1;
+        description
+          "A list of references to the physical port components
+           corresponding to this interface. For system controlled
+           interfaces, this relationship may also be system controlled
+           and not able to be modified.";
+      }
+    }
+  }
+}

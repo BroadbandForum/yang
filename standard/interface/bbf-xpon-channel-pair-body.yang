@@ -21,22 +21,22 @@ submodule bbf-xpon-channel-pair-body {
      Fiber Access Networks Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
 
-     Editor:      Samuel Chen, Broadcom
+     Editor:      Igor Ternovsky, Broadcom
 
      Editor:      Robert Peschi, Nokia
 
      WA Director: Marta Seda, Calix
 
-     WA Director: Lin Wei, Huawei";
+     WA Director: Samuel Chen, Broadcom";
   description
     "This submodule contains a collection of YANG definitions for
      managing channel pairs.
 
-     Copyright (c) 2018, Broadband Forum
+     Copyright (c) 2018-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -76,9 +76,19 @@ submodule bbf-xpon-channel-pair-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385; see
+     This version of this YANG module is part of TR-385i2; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
   revision 2019-02-25 {
     description
       "Initial revision.
@@ -98,12 +108,11 @@ submodule bbf-xpon-channel-pair-body {
       must "derived-from-or-self(/if:interfaces"
          + "/if:interface[if:name=current()]/if:type,"
          + "'bbf-xponift:channel-group')" {
-        error-message
-          "Must reference a channel group.";
+        error-message "Must reference a channel group.";
       }
       description
         "Reference to channel group. Note that it is not allowed
-         to have several channel-pairs with identical downsream
+         to have several channel-pairs with identical downstream
          channel-ID or upstream channel-ID or transmit wavelength
          simultaneously active on the same chnanel-group.
          In particular there may be only a maximum of one XGS-PON,
@@ -224,13 +233,13 @@ submodule bbf-xpon-channel-pair-body {
     }
   }
 
-  augment '/if:interfaces/if:interface/bbf-xpon:channel-pair' {
+  augment "/if:interfaces/if:interface/bbf-xpon:channel-pair" {
     description
       "Configuration of an xPON channel pair.";
     uses channel-pair-config-data;
   }
 
-  augment '/if:interfaces-state/if:interface/bbf-xpon:channel-pair' {
+  augment "/if:interfaces-state/if:interface/bbf-xpon:channel-pair" {
     description
       "State data of an xPON channel pair.";
     uses channel-pair-state-data;

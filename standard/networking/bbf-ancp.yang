@@ -1,0 +1,942 @@
+module bbf-ancp {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-ancp";
+  prefix bbf-ancp;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, ADTRAN
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on the Access Node
+     Control Protocol (ANCP) as defined in RFC 6320. As such, this
+     module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     This data model is designed for the Network Management Datastore
+     Architecture defined in RFC 8342.
+
+     Copyright (c) 2017-2020, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a3; see
+     the TR itself for full legal notices.";
+  reference
+    "RFC 6320";
+
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
+
+  /* Features */
+
+  feature protocol-version {
+    description
+      "Indicates support for the configuration of the protocol
+       version of ANCP sessions.";
+  }
+
+  feature partition-id-negotiation {
+    description
+      "Indicates that the device supports negotiation of the
+       Partition ID to be used to be used by ANCP sessions to
+       associate ANCP messages with the partition of the Access Node
+       (AN) managed by a session.";
+  }
+
+  feature session-statistics {
+    description
+      "Indicates support for statistics for ANCP sessions.";
+  }
+
+  feature tcp-port {
+    description
+      "Indicates support for the configuration of the TCP port for
+       ANCP.";
+  }
+
+  feature port-message-dampening {
+    description
+      "Indicates support for the configuration of the dampening
+       mechanism to limit the rate at which Port Up and Port Down
+       messages are sent to the Network Access Server (NAS).";
+  }
+
+  identity capabilities {
+    description
+      "Base identity for defining ANCP capabilities.";
+  }
+
+  identity topology-discovery {
+    base capabilities;
+    description
+      "The Access Topology Discovery function is intended to
+       allow the NAS to gain knowledge about the topology of the
+       access network, the various lines being used, and their
+       respective rates without having to rely on an integration
+       with an OSS system.";
+    reference
+      "RFC 6320 section 6";
+  }
+
+  identity access-line-technology {
+    description
+      "Base identity for defining the technology of access lines
+       managed by a partition.";
+    reference
+      "RFC 6320 section 6.5";
+  }
+
+  identity access-line-attribute {
+    description
+      "Base identity for defining access line attributes defined in
+       the ANCP.
+
+       This is an abstract identity and MUST NOT be used for access
+       line attributes.";
+    reference
+      "RFC 6320 section 6.5";
+  }
+
+  identity technology-independent-access-line-attribute {
+    base access-line-attribute;
+    description
+      "Base identity for defining technology-independent access line
+       attributes defined in the ANCP.
+
+       This is an abstract identity and MUST NOT be used for access
+       line attributes.";
+    reference
+      "RFC 6320 section 6.5";
+  }
+
+  identity access-loop-encapsulation {
+    base technology-independent-access-line-attribute;
+    description
+      "The data link protocol and, optionally, the encapsulation
+       overhead on the access loop.";
+    reference
+      "RFC 6320 section 6.5.18";
+  }
+
+  /* Typedefs */
+
+  typedef protocol-version {
+    type enumeration {
+      enum rfc6320 {
+        description
+          "RFC 6320 defines ANCP Version 1 which is identified by
+           version = 50 in protocol messages as defined the joint
+           GSMP / ANCP Version Registry. ";
+        reference
+          "RFC 6320 section 10.8";
+      }
+    }
+    description
+      "Defines the supported protocol versions.";
+  }
+
+  typedef partition-id {
+    type uint8 {
+      range "1..255";
+    }
+    description
+      "Defines the Partition ID.";
+    reference
+      "RFC 6320 section 3.5.1";
+  }
+
+  typedef entity-name {
+    type union {
+      type enumeration {
+        enum unknown {
+          description
+            "The name of the sending/receiving entity is unknown.";
+        }
+      }
+      type yang:hex-string {
+        length "17";
+      }
+    }
+    description
+      "An entity name used to identify the sender/receiver of an
+       ANCP message.";
+    reference
+      "RFC 6320 section 3.5.1";
+  }
+
+  typedef link-instance {
+    type union {
+      type uint32 {
+        range "1..16777216";
+      }
+      type enumeration {
+        enum undefined {
+          description
+            "The instance number is undefined.";
+        }
+      }
+    }
+    description
+      "The instance number used to identify the link within the
+       AN or NAS.";
+    reference
+      "RFC 6320 section 3.5.1";
+  }
+
+  /* Groupings */
+
+  grouping peer-operational-parameters {
+    description
+      "Defines the operational state only parameters applicable to
+       the adjacency protocol.";
+    leaf name {
+      type entity-name;
+      config false;
+      mandatory true;
+      description
+        "The Name used by the entity (AN or NAS) as advertised in
+         the adjacency message.
+
+         This leaf has value 'unknown', if adjacency state is not
+         ESTAB (established).";
+    }
+    leaf instance {
+      type link-instance;
+      config false;
+      mandatory true;
+      description
+        "The value for Instance used by the entity (AN or NAS) to
+         identify the link to the peer.
+
+         This leaf has value 'undefined', if adjacency state is not
+         ESTAB (established).";
+    }
+  }
+
+  grouping ancp-schema {
+    description
+      "Defines the schema tree for ANCP.";
+    container partitions {
+      must "(bbf-ancp:partition/bbf-ancp:partition-id='global' "
+         + "and "
+         + "count(bbf-ancp:partition)=1)"
+         + " or "
+         + "not(bbf-ancp:partition/bbf-ancp:partition-id='global')" {
+        error-message
+          "The device may only be configured for a single global "
+        + "partition or fixed partitions, but not both.";
+        description
+          "Prevent both the global partition and fixed partitions
+           from being configured at the same time.";
+      }
+      description
+        "Management of ANCP partitions on the device.";
+      list partition {
+        key "partition-id";
+        description
+          "A partition.";
+        leaf partition-id {
+          type union {
+            type enumeration {
+              enum global {
+                description
+                  "The partition represents a device that is
+                   configured to operate without fixed partitions.";
+              }
+            }
+            type partition-id;
+          }
+          description
+            "Uniquely identifies the partition.
+
+             If the device is to use fixed partitions, this leaf must
+             be set to a value between 1 and 255; this value will be
+             used to associate ANCP messages with this specific
+             partition.
+
+             If the device is not to use fixed partitions, i.e., is
+             not partitioned, this leaf must be set to 'global', in
+             which case no other partition may be configured.
+
+             If the single partition with 'partition-id' set to
+             'global' is configured, the PType and Partition ID in
+             the Adjacency Message must be being set to 0 (no
+             partition) and 0 respectively.";
+          reference
+            "RFC 6320 section 3.5.2.4.2";
+        }
+        leaf technology {
+          type identityref {
+            base access-line-technology;
+          }
+          mandatory true;
+          description
+            "The access line technology supported by the partition.";
+        }
+        container sessions {
+          description
+            "Management of ANCP sessions.";
+          list session {
+            key "name";
+            description
+              "An ANCP session.";
+            leaf name {
+              type string;
+              description
+                "An arbitrary name for the session.";
+            }
+            leaf protocol-version {
+              if-feature "bbf-ancp:protocol-version";
+              type protocol-version;
+              default "rfc6320";
+              description
+                "The ANCP protocol version to be used by the
+                 session.";
+              reference
+                "RFC 6320 section 3.5.1";
+            }
+            leaf-list capability {
+              type identityref {
+                base capabilities;
+              }
+              min-elements 1;
+              description
+                "The common set of ANCP capabilities supported by this
+                 session. At least one capability must be configured.
+
+                 The final negotiated value may be different to the
+                 intended value and is to be found by operational
+                 data.";
+              reference
+                "RFC 6320 section 3.5.1 (Capability Fields).";
+            }
+            leaf oper-state {
+              type enumeration {
+                enum down {
+                  description
+                    "The operational state of the session is down and
+                     it is non-operational.";
+                }
+                enum up {
+                  description
+                    "The operational state of the session is up and
+                     it is operational.";
+                }
+              }
+              config false;
+              mandatory true;
+              description
+                "The operational state of the session. A session is
+                 deemed to be 'up', only when adjacency is
+                 established ('adjacency-state' is set to 'estab').";
+            }
+            container access-node {
+              description
+                "Configuration relevant to the AN side of the ANCP
+                 session.";
+              container name-source {
+                presence
+                  "Enables selection of the source of the name to use
+                   to generate the Sender Name to be used for this
+                   ANCP session.
+
+                   If this container is not present, the system will
+                   use the a system MAC address to generate the
+                   Sender Name.";
+                description
+                  "Configuration of the source to use to generate the
+                   Sender Name to be used for this ANCP session.";
+                choice which-name-source {
+                  mandatory true;
+                  description
+                    "Configures which source to use to generate the
+                     Sender Name to use to identify the session at
+                     the AN to the NAS.";
+                  reference
+                    "RFC 6320 section 3.5.1 (Sender Name).";
+                  case use-mac-address {
+                    description
+                      "Configures the session to use a system MAC
+                       address to generate the Sender Name to be
+                       inserted into ANCP messages to identify the
+                       AN.";
+                    leaf use-mac-address {
+                      type empty;
+                      description
+                        "Configures the session to use a system MAC
+                         address to generate the Sender Name to be
+                         inserted into ANCP messages to identify the
+                         AN.";
+                    }
+                  }
+                }
+              }
+              uses peer-operational-parameters;
+              leaf address {
+                type inet:ip-address;
+                config false;
+                mandatory true;
+                description
+                  "The IP address of the AN.";
+              }
+              leaf port {
+                type inet:port-number;
+                config false;
+                mandatory true;
+                description
+                  "The IP port of the AN.";
+              }
+            }
+            container network-access-server {
+              description
+                "Configuration relevant to the Network Access Server
+                 (NAS) side of the ANCP session.";
+              uses peer-operational-parameters;
+              choice transport {
+                mandatory true;
+                description
+                  "Selects the transport for ANCP.";
+                case tcp {
+                  description
+                    "Configures TCP as the transport for ANCP.";
+                  reference
+                    "RFC 6320 section 3.2";
+                  container tcp {
+                    description
+                      "Contains TCP-specific configuration for ANCP.";
+                    leaf address {
+                      type inet:host;
+                      mandatory true;
+                      description
+                        "The IP address or the DNS domain name of the
+                         NAS.";
+                    }
+                    leaf port {
+                      if-feature "tcp-port";
+                      type inet:port-number;
+                      default "6068";
+                      description
+                        "The IP port of the NAS.";
+                      reference
+                        "RFC 6320 section 3.2";
+                    }
+                  }
+                }
+              }
+            }
+            container adjacency-protocol {
+              description
+                "Configuration to manage the adjacency protocol.";
+              leaf liveness-timer {
+                type uint8;
+                units "100 milliseconds";
+                default "250";
+                description
+                  "The nominal time between periodic adjacency
+                   protocol messages.
+
+                   The final negotiated value, which will be constant
+                   for the duration of the ANCP session, may be
+                   different to the intended value and is to be found
+                   by querying state data.";
+                reference
+                  "RFC 6320 section 3.5.1 (Timer).";
+              }
+              leaf adjacency-state {
+                type enumeration {
+                  enum malfunction {
+                    description
+                      "Adjacency could not be established, because of
+                       a malfunctioning of the malfunctioning of the
+                       adjacency protocol.";
+                    reference
+                      "RFC 5851 section 4.6.4 R-48.";
+                  }
+                  enum synchronization-lost {
+                    description
+                      "Indicates that the AN and NAS are no longer
+                       synchronized. This may occur, if
+                       - no valid ANCP messages are received in any
+                         period of time in excess of three times the
+                         value of the negotiated liveness timer;
+                       or
+                       - a mismatch in adjacency state is detected.";
+                    reference
+                      "RFC 6320 section 3.5.2.7";
+                  }
+                  enum estab {
+                    description
+                      "The state ESTAB (established) indicates that
+                       the AN has established a session.";
+                    reference
+                      "RFC 6320 section 3.5.2.2.7";
+                  }
+                  enum synrcvd {
+                    description
+                      "The state SYNRCVD (synchronization received)
+                       indicates that the AN has received a connection
+                       request and sent an acknowledgment.";
+                    reference
+                      "RFC 6320 section 3.5.2.2.1";
+                  }
+                  enum synsent {
+                    description
+                      "The state SYNSENT (synchronization sent)
+                       indicates that the AN is waiting for an
+                       acknowledgment from the NAS after having sent
+                       a connection request.";
+                    reference
+                      "RFC 6320 section 3.5.2.2.1";
+                  }
+                }
+                config false;
+                mandatory true;
+                description
+                  "The operational state of the adjacency protocol.";
+                reference
+                  "RFC 6320 section 3.5.2.2";
+              }
+              leaf partition-id {
+                when "count(/bbf-ancp:ancp/bbf-ancp:partitions"
+                   + "/bbf-ancp:partition)>0"
+                   + " and "
+                   + "not(boolean(/bbf-ancp:ancp"
+                   + "/bbf-ancp:partitions"
+                   + "/bbf-ancp:partition"
+                   + "[bbf-ancp:partition-id='global']))" {
+                  description
+                    "The use of a Partition ID is only applicable, if
+                     the AN has been partitioned.";
+                }
+                if-feature "bbf-ancp:partition-id-negotiation";
+                type partition-id;
+                config false;
+                mandatory true;
+                description
+                  "The Partition ID used by this session to associate
+                   ANCP messages with the partition of the AN managed
+                   by this session.
+
+                   The final negotiated value, which will be constant
+                   for the duration of the ANCP session, may be
+                   different to the Partition ID configured for the
+                   partition.";
+                reference
+                  "RFC 6320 section 3.5.2.4.2";
+              }
+            }
+            container access-line-identification {
+              description
+                "Configure Access Line Identification for ANCP.";
+              leaf-list access-line-identification {
+                type enumeration {
+                  enum access-loop-circuit-id {
+                    description
+                      "Add the Access Loop Circuit ID TLV in the ANCP
+                       message, i.e. the TLV with type value 0x0001.
+
+                       The value inserted in the TLV is the value
+                       defined by the data node '/bbf-subprof:
+                       subscriber-profiles/bbf-subprof:subscriber-
+                       profile/bbf-subprof:circuit-id' that is
+                       associated with the interface, if present. If
+                       not present, the value inserted will be
+                       generated according to the syntax defined in
+                       the leaf 'access-loop-circuit-id'. If this
+                       leaf is not present or empty, then an empty
+                       TLV will be inserted, i.e. a TLV with
+                       Length = 0.";
+                    reference
+                      "RFC 6320 section 5.1.2.1,
+                       TR-101i2 Section 3.9.3.";
+                  }
+                  enum access-loop-remote-id {
+                    description
+                      "Add the Access Loop Remote ID TLV in the ANCP
+                       message, i.e. the TLV with type value 0x0002.
+
+                       The value inserted in the TLV is the value
+                       defined by the data node '/bbf-subprof:
+                       subscriber-profiles/bbf-subprof:subscriber-
+                       profile/bbf-subprof:remote-id' that is
+                       associated with the interface, if present. If
+                       not present, then an empty TLV will be
+                       inserted, i.e. a TLV with Length = 0.";
+                    reference
+                      "RFC 6320 section 5.1.2.2,
+                       TR-101i2 Section 3.9.3.";
+                  }
+                  enum access-aggregation-circuit-id-binary {
+                    description
+                      "Add the Access Aggregation Circuit ID Binary
+                       TLV in the ANCP message, i.e. the TLV with
+                       type value 0x0006.
+
+                       This TLV identifies or partially identifies a
+                       specific access line by means of its logical
+                       circuit identifier on the NAS side of the AN.
+                       It is defined to contain VLAN ID(s).
+
+                       The value of the TLV contains the VLAN IDs of
+                       the VLAN tags to be used in data frames sent
+                       on a network interface. However, this is not
+                       necessarily the same for all data frames
+                       coming from a single access line. The
+                       selection of which values to use for the
+                       VLAN IDs is defined by the value configured
+                       via the interface.";
+                    reference
+                      "RFC 6320 section 5.1.2.3,
+                       TR-101i2 Section 3.9.3.";
+                  }
+                  enum access-aggregation-circuit-id-ascii {
+                    description
+                      "Add the Access Aggregation Circuit ID ASCII
+                       TLV in the ANCP message, i.e. the TLV with
+                       type value 0x0003.
+
+                       The value is identified in the same way as the
+                       value for the Access Aggregation Circuit ID
+                       Binary TLV.
+
+                       The difference for the TLV value is the
+                       produced format, i.e. for the Access
+                       Aggregation Circuit Id ASCII TLV the format is
+                       in ASCII and based on a syntax configured in
+                       the leaf 'access-aggregation-circuit-id-ascii'.
+                       If this leaf is empty, then an empty TLV will
+                       be inserted, i.e. a TLV with Length = 0.";
+                    reference
+                      "RFC 6320 section 5.1.2.4,
+                       TR-101i2 Section 3.9.3.";
+                  }
+                }
+                min-elements 1;
+                description
+                  "Identifies how to generate / interpret the Access
+                   Line Identification TLVs used in ANCP messages.";
+              }
+              leaf access-loop-circuit-id {
+                type bbf-yang:string-ascii63-or-empty;
+                default "";
+                description
+                  "ASCII string identifying the access loop logical
+                   port on the user side of the AN. It may contain
+                   any characters and variables, e.g.
+                   'Access_Node_ID eth slot/port'.";
+                reference
+                  "RFC 6320 section 5.1.2.1 and
+                   TR-101 Section 3.9.3.";
+              }
+              leaf access-aggregation-circuit-id-ascii {
+                type bbf-yang:string-ascii63-or-empty;
+                default "";
+                description
+                  "ASCII string identifying or partially identifying
+                   a specific access line by means of its logical
+                   circuit identifier on the NAS side of the Access
+                   Node. As per RFC 6320 it shall contain VLAN IDs
+                   similar as the Access Aggregation Circuit ID
+                   Binary TLV, but in a format as specified by
+                   TR-101.
+
+                   It may contain any characters and variables, e.g.
+                   'S-VID:C-VID'.";
+                reference
+                  "RFC 6320 section 5.1.2.4";
+              }
+              leaf start-numbering-from-zero {
+                type boolean;
+                default "false";
+                description
+                  "In case the leaf 'access-loop-circuit-id' or
+                   'access-aggregation-circuit-id-ascii' indicates the
+                   TLV shall contain a slot, a port or another
+                   variable for which the numbering is defined by the
+                   AN, then this leaf determines if the numbering
+                   MUST start from 0 or 1.";
+                reference
+                  "TR-178 - R118";
+              }
+              leaf use-leading-zeroes {
+                type boolean;
+                default "false";
+                description
+                  "In case the leaf 'access-loop-circuit-id' or the
+                   'access-aggregation-circuit-id-ascii' contain
+                   variables for which the value can be multiple
+                   digits, then this leaf determines if the
+                   slot/port/VLAN ID numbering MUST use leading 0's
+                   or not, i.e. generate a fixed length string or a
+                   string with only meaningful digits.";
+                reference
+                  "TR-178 - R119 and TR-101i2 - R153";
+              }
+            }
+            container topology-discovery {
+              when "../capability='bbf-ancp:topology-discovery'" {
+                description
+                  "Only applicable, if the topology discovery
+                   capability has been selected.";
+              }
+              description
+                "Configuration to manage line state reporting for
+                 topology discovery.";
+              container port-up {
+                description
+                  "Configuration to manage line state reporting for
+                   the Port Up message.";
+              }
+              container port-down {
+                description
+                  "Configuration to manage line state reporting for
+                   the Port Down message.";
+              }
+            }
+            container statistics {
+              if-feature "bbf-ancp:session-statistics";
+              config false;
+              description
+                "ANCP statistics for this session.";
+              leaf last-established-timestamp {
+                type yang:date-and-time;
+                mandatory true;
+                description
+                  "The date and time the session last entered the
+                   established state.";
+              }
+              leaf last-discontinuity-timestamp {
+                type yang:date-and-time;
+                mandatory true;
+                description
+                  "The date and time the session last suffered a
+                   discontinuity.";
+              }
+              leaf in-valid-messages {
+                type yang:zero-based-counter32;
+                mandatory true;
+                description
+                  "The number of messages that have been received and
+                   processed in this session by the AN.
+
+                   All ANCP messages pertaining to this session shall
+                   be counted, also including adjacency protocol
+                   messages and failure response messages.";
+              }
+              leaf in-discarded-messages {
+                type yang:zero-based-counter32;
+                mandatory true;
+                description
+                  "The number of messages that in this session have
+                   been received and discarded for whatever reason by
+                   the AN.
+
+                   All ANCP messages pertaining to this session shall
+                   be counted, also including adjacency protocol
+                   messages and failure response messages.";
+              }
+              leaf out-messages {
+                type yang:zero-based-counter32;
+                mandatory true;
+                description
+                  "The number of messages that have been sent in this
+                   session by the AN.
+
+                   All ANCP messages pertaining to this session shall
+                   be counted, also including adjacency protocol
+                   messages and failure response messages.";
+              }
+              leaf in-syn {
+                type yang:zero-based-counter32;
+                mandatory true;
+                description
+                  "The number of adjacency SYN messages that in this
+                   session have been received by the access node.";
+              }
+              leaf in-synack {
+                type yang:zero-based-counter32;
+                mandatory true;
+                description
+                  "The number of adjacency SYNACK messages that in
+                   this session have been received by the access
+                   node.";
+              }
+              leaf in-ack {
+                type yang:zero-based-counter32;
+                mandatory true;
+                description
+                  "The number of adjacency ACK messages that in this
+                   session have been received by the access node.";
+              }
+              leaf in-rstack {
+                type yang:zero-based-counter32;
+                mandatory true;
+                description
+                  "The number of adjacency RSTACK messages that in
+                   this session have been received by the access
+                   node.";
+              }
+              leaf out-syn {
+                type yang:zero-based-counter32;
+                mandatory true;
+                description
+                  "The number of adjacency SYN messages that in this
+                   session have been transmitted by the access node.";
+              }
+              leaf out-synack {
+                type yang:zero-based-counter32;
+                mandatory true;
+                description
+                  "The number of adjacency SYNACK messages that in
+                   this session have been transmitted by the access
+                   node.";
+              }
+              leaf out-rstack {
+                type yang:zero-based-counter32;
+                mandatory true;
+                description
+                  "The number of adjacency RSTACK messages that in
+                   this session have been transmitted by the access
+                   node.";
+              }
+              leaf out-ack {
+                type yang:zero-based-counter32;
+                mandatory true;
+                description
+                  "The number of adjacency ACK messages that in this
+                   session have been transmitted by the access node.";
+              }
+            }
+          }
+        }
+        container port-message-control {
+          description
+            "Configuration to control the generation of Port Up and
+             Port Down messages.";
+          choice which-dampening-mechanism {
+            if-feature "bbf-ancp:port-message-dampening";
+            default "port-up-port-down-withholding-interval";
+            description
+              "Selects the dampening mechanism for the sending of
+               Port Up and Port Down event messages.";
+            case port-up-port-down-withholding-interval {
+              description
+                "Configures withholding interval for Port Up and Port
+                 Down messages.";
+              leaf port-up-port-down-withholding-interval {
+                type union {
+                  type enumeration {
+                    enum disabled {
+                      description
+                        "The withholding interval is disabled and
+                         all line state changes will be reported
+                         to the NAS.";
+                    }
+                  }
+                  type uint16 {
+                    range "1..max";
+                  }
+                }
+                units "100 milliseconds";
+                default "disabled";
+                description
+                  "Configures the dampening mechanism controlling the
+                   rate at which Port Up and Port Down messages are
+                   sent to the NAS, applying individually to each
+                   access line. Specifically, it defines an interval
+                   following the sending of a Port Up or Port Down
+                   message for a given access line, during which no
+                   further Port Up or Port Down message is to be sent
+                   to the NAS for that given access line. If, at the
+                   end of the withholding interval, there has been a
+                   change in line state of the given line to that
+                   when the last Port Up or Port Down message was
+                   sent for that line, the new line state of that
+                   line is reported to the NAS (with the withholding
+                   interval for that line applying again).";
+                reference
+                  "RFC 6320 section 6.4.1";
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  container ancp {
+    description
+      "Management of the Access Node Control Protocol (ANCP).";
+    uses ancp-schema;
+  }
+}

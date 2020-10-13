@@ -15,7 +15,7 @@ submodule bbf-vdsl-xtu-band-status-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -24,9 +24,10 @@ submodule bbf-vdsl-xtu-band-status-body {
      WA Director: Joey Boyd, ADTRAN";
   description
     "This submodule contains a collection of YANG definitions for
-     managing Broadband Forum TR-252i3 clause 6.1.1 xTU Band Status.
+     managing Broadband Forum TR-252i3 clause 6.1.1 xDSL Transceiver
+     Unit (xTU) Band Status.
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Copyright (c) 2016-2020 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -66,9 +67,19 @@ submodule bbf-vdsl-xtu-band-status-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2019-10-21 {
     description
       "Amendment 2 Corrigendum 1.
@@ -122,8 +133,8 @@ submodule bbf-vdsl-xtu-band-status-body {
 
   grouping xtu-band-status {
     description
-      "The xTU Band Status object represents current band status
-       and measurements at a particular xTU.";
+      "The xDSL Transceiver Unit (xTU) Band Status object represents
+       current band status and measurements at a particular xTU.";
     list line-attenuation {
       key "band";
       description
@@ -154,13 +165,14 @@ submodule bbf-vdsl-xtu-band-status-body {
           "This parameter is defined per usable band. It is squared
            magnitude of the channel characteristics function H(f)
            averaged over this band, and measured during loop
-           diagnostic mode and initialization (LATNds for xTU-R /
-           LATNus for xTU-C). The exact definition is included in
-           the relevant xDSL ITU-T Recommendation. The line
-           attenuation ranges per band from 0 to +127 dB, with 0.1
-           dB steps. A special value (enum out-of-range) indicates
-           the line attenuation per band is out of range to be
-           represented.
+           diagnostic mode and initialization (LATNds for xDSL
+           Transceiver Unit - Remote side (xTU-R) / LATNus for xDSL
+           Transceiver Unit - Central office (xTU-C)). The exact
+           definition is included in the relevant xDSL ITU-T
+           Recommendation. The line attenuation ranges per band from
+           0 to +127 dB, with 0.1 dB steps. A special value (enum
+           out-of-range) indicates the line attenuation per band is
+           out of range to be represented.
            For ADSL systems, a single parameter is defined for
            band = 0, as only a single band is usable.";
         reference
@@ -200,8 +212,9 @@ submodule bbf-vdsl-xtu-band-status-body {
            measured difference between the total power transmitted
            in this band and the total power received in this band
            during loop diagnostic mode, initialization and showtime
-           (SATNds for xTU-R / SATNus for xTU-C). The exact
-           definition is included in the relevant DSL ITU-T
+           (SATNds for xDSL Transceiver Unit - Remote side (xTU-R) /
+           SATNus for xDSL Transceiver Unit - Central office (xTU-C)).
+           The exact definition is included in the relevant DSL ITU-T
            Recommendation. The signal attenuation per band ranges
            from 0 to +127 dB, with 0.1 dB steps. A special value
            (enum out-of-range) indicates the signal attenuation per
@@ -245,11 +258,12 @@ submodule bbf-vdsl-xtu-band-status-body {
            signal-to-noise ratio margin per band is the maximum
            increase in dB of the received noise power, such that
            the BER requirements are met for all bearer channels in
-           the direction of transmission (SNRMpbds for xTU-R /
-           SNRMpbus for xTU-C). The SNR margin per band ranges from
-           -64 dB to +63 dB, with 0.1 dB steps. A special value
-           (enum out-of-range) indicates the parameter is out of
-           range to be represented.
+           the direction of transmission (SNRMpbds for xDSL
+           Transceiver Unit - Remote side (xTU-R) / SNRMpbus for xDSL
+           Transceiver Unit - Central office (xTU-C)). The SNR margin
+           per band ranges from -64 dB to +63 dB, with 0.1 dB steps.
+           A special value (enum out-of-range) indicates the parameter
+           is out of range to be represented.
            For ADSL systems, a single parameter is defined for
            band = 0, as a single band is usable.";
         reference

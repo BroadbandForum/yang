@@ -17,7 +17,7 @@ submodule bbf-fast-tdd-profile-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -26,7 +26,7 @@ submodule bbf-fast-tdd-profile-body {
      WA Director: Joey Boyd, ADTRAN";
   description
     "This submodule contains a collection of YANG definitions for
-     managing TDD profiles.
+     managing Time Division Duplexing (TDD) profiles.
 
      Copyright (c) 2016-2020 Broadband Forum
 
@@ -68,9 +68,19 @@ submodule bbf-fast-tdd-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2020-01-17 {
     description
       "Amendment 2 Corrigendum 2.
@@ -134,7 +144,7 @@ submodule bbf-fast-tdd-profile-body {
 
   grouping time-division-duplexing-parameters {
     description
-      "Time division duplexing (TDD) configuration parameters.";
+      "Time Division Duplexing (TDD) configuration parameters.";
     reference
       "ITU-T G.997.2 clause 7.1.1.";
     leaf total-symbol-periods {
@@ -143,8 +153,8 @@ submodule bbf-fast-tdd-profile-body {
       }
       default "36";
       description
-        "Defines the total number of symbol periods in a Time division
-         duplexing (TDD) frame.";
+        "Defines the total number of symbol periods in a Time Division
+         Duplexing (TDD) frame.";
       reference
         "ITU-T G.997.2 clause 7.1.1.1 (MF);
          ITU-T G.9701 clause 10.5.";
@@ -153,18 +163,19 @@ submodule bbf-fast-tdd-profile-body {
       type uint8 {
         range "6..32";
       }
-      must '(../total-symbol-periods = 23 and .>= 6 and .<= 19) or
-            (../total-symbol-periods = 36 and .>= 10 and .<= 32)' {
+      must
+        "(../total-symbol-periods = 23 and .>= 6 and .<= 19) or
+         (../total-symbol-periods = 36 and .>= 10 and .<= 32)" {
         description
           "If the total symbol periods is 23, the number of downstream
            symbol periods must be between 6 to 19 inclusive. If the
            total symbol periods is 36, the number of downstream symbol
-           periods must be between 10 to 32 inclusive";
+           periods must be between 10 to 32 inclusive.";
       }
       default "28";
       description
         "Defines the total number of symbol positions in a Time
-         division duplexing (TDD) frame allocated for downstream
+         Division Duplexing (TDD) frame allocated for downstream
          transmission. The total number of symbol positions in a TDD
          frame allocated for upstream transmission is calculated as
          Mus = MF-1-Mds.";
@@ -188,17 +199,17 @@ submodule bbf-fast-tdd-profile-body {
          ITU-T G.9701 clause 10.4.4";
     }
     container dynamic-time-assignment {
-      if-feature "dta";
+      if-feature "bbf-fast:dta";
       description
         "Configuration of Dynamic Time Assignement (DTA).";
       leaf dta-allowed {
         type enumeration {
           enum none {
             description
-              "Dynamic Time Assignment is not allowed.";
+              "Dynamic Time Assignment (DTA) is not allowed.";
           }
           enum idta {
-            if-feature "annex-x";
+            if-feature "bbf-fast:annex-x";
             description
               "Operation according to ITU-T G.9701 Annex X (iDTA) is
                allowed. If 'annex-x-mode' in the vectoring profile
@@ -206,7 +217,7 @@ submodule bbf-fast-tdd-profile-body {
                be configured.";
           }
           enum cdta {
-            if-feature "annex-d";
+            if-feature "bbf-fast:annex-d";
             description
               "Operation according to ITU-T G.9701 Annex D (cDTA) is
                allowed. If 'annex-d-mode' in the vectoring profile
@@ -216,7 +227,7 @@ submodule bbf-fast-tdd-profile-body {
         }
         default "none";
         description
-          "The type of Dynamic Time Assignment allowed.";
+          "The type of Dynamic Time Assignment (DTA) allowed.";
         reference
           "ITU-T G.997.2 clause T.2.1.2 (IDTA_ALLOWED);
            ITU-T G.997.2 clause T.2.1.4 (CDTA_ALLOWED);
@@ -236,17 +247,17 @@ submodule bbf-fast-tdd-profile-body {
            ../../total-symbol-periods = 36 and .>= 10 and .<= 31))
            and (. >= ../minimum-mds) and (. <= ../maximum-mds))
            or ../dta-allowed='none'" {
-            description
-              "The preferred Mds for Dynamic Time Assignment (DTA)
-               must be equal to or higher than the minimum Mds for DTA
-               and less than or equal to the maximum Mds for DTA. The
-               valid range depends on total symbol period (MF) and DTA
-               type allowed.";
+          description
+            "The preferred Mds for Dynamic Time Assignment (DTA)
+             must be equal to or higher than the minimum Mds for DTA
+             and less than or equal to the maximum Mds for DTA. The
+             valid range depends on total symbol period (MF) and DTA
+             type allowed.";
         }
         default "28";
         description
           "Provides the number of downstream symbol
-           positions in a Time division duplexing (TDD) frame
+           positions in a Time Division Duplexing (TDD) frame
            requested by the Dynamic Resource Allocation (DRA) at the
            first opportunity upon entering showtime of a line on which
            Dynamic Time Assignment (DTA) operation is enabled.
@@ -268,17 +279,18 @@ submodule bbf-fast-tdd-profile-body {
            23 and .>= 1 and .<= 13) or (../dta-allowed='cdta' and
            ../../total-symbol-periods = 36 and .>= 1 and .<= 21) or
            ../dta-allowed='none'" {
-            description
-              "The maximum step size must be restricted to the valid
-               range depending on total symbol periods (MF) and
-               Dynamic Time Assignment (DTA) type allowed.";
+          description
+            "The maximum step size must be restricted to the valid
+             range depending on total symbol periods (MF) and
+             Dynamic Time Assignment (DTA) type allowed.";
         }
         default "25";
         description
           "Defines the maximum step size for Mds requested by the DRA
            for a single Dynamic Time Assignment (DTA) update. For
-           configurations other than iDTA allowed with MF=36, a value
-           different from the default value needs to be configured.";
+           configurations other than independent Dynamic Time
+           Assignment (iDTA) allowed with MF=36, a value different
+           from the default value needs to be configured.";
         reference
           "ITU-T G.997.2 clause T.2.2.2 (DTA_SMAX);
            ITU-T G.9701 clause T.2.3";
@@ -291,7 +303,7 @@ submodule bbf-fast-tdd-profile-body {
         default "0";
         description
           "Provides the minimum time between any two successive
-           DTA updates during showtime.";
+           Dynamic Time Assignment (DTA) updates during showtime.";
         reference
           "ITU-T G.997.2 clause T.2.2.8 (DTA_MIN_TIME);
            ITU-T G.9701 clause T.2.10";
@@ -306,14 +318,14 @@ submodule bbf-fast-tdd-profile-body {
            ../../total-symbol-periods = 36 and .>= 5 and .<= 30) or
            (../dta-allowed='cdta' and ../../total-symbol-periods =
            23 and .>= 6 and .<= 19) or (../dta-allowed='cdta' and
-           ../../total-symbol-periods = 36 and .>= 10 and .<= 31))
+           ../../total-symbol-periods = 36 and .>= 5 and .<= 31))
            and . <= ../../downstream-symbol-periods) or
            ../dta-allowed='none'" {
-            description
-              "The minimum Mds must be restricted to the valid
-               range depending on total symbol periods (MF), Dynamic
-               Time Assignment (DTA) type allowed, and downstream
-               symbol periods.";
+          description
+            "The minimum Mds must be restricted to the valid
+             range depending on total symbol periods (MF), Dynamic
+             Time Assignment (DTA) type allowed, and downstream
+             symbol periods.";
         }
         default "5";
         description
@@ -339,11 +351,11 @@ submodule bbf-fast-tdd-profile-body {
            ../../total-symbol-periods = 36 and .>= 10 and .<= 31))
            and . >= ../../downstream-symbol-periods) or
            ../dta-allowed='none'" {
-            description
-              "The maximum Mds must be restricted to the valid
-               range depending on total symbol periods (MF), Dynamic
-               Time Assignment (DTA) type allowed, and downstream
-               symbol periods.";
+          description
+            "The maximum Mds must be restricted to the valid
+             range depending on total symbol periods (MF), Dynamic
+             Time Assignment (DTA) type allowed, and downstream
+             symbol periods.";
         }
         default "30";
         description
@@ -362,14 +374,14 @@ submodule bbf-fast-tdd-profile-body {
             "Only applicable when Coordinated Dynamic Time Assignment
              (cDTA) is configured.";
         }
-        if-feature "annex-d";
+        if-feature "bbf-fast:annex-d";
         type enumeration {
           enum one-or-two-step {
             value 0;
             description
               "Dynamic Resource Allocation (DRA) is allowed to use the
                one-step or two-step Coordinated Dynamic Time
-               Assignment (cDTA) procedure (see clause Y.5.6)";
+               Assignment (cDTA) procedure (see clause Y.5.6).";
           }
           enum one-step-only {
             value 1;
@@ -390,9 +402,10 @@ submodule bbf-fast-tdd-profile-body {
         description
           "Provides the procedure type that the Dynamic Resource
            Allocation (DRA) is allowed to apply. If the CDTA_PROC_CTRL
-           is set to 2 and the FTU-O does not support the two-step
-           procedure, no Coordinated Dynamic Time Assignment (cDTA)
-           procedure is triggered by the DRA.";
+           is set to 2 and the FAST Transceiver Unit - central Office
+           (FTU-O) does not support the two-step procedure, no
+           Coordinated Dynamic Time Assignment (cDTA) procedure is
+           triggered by the DRA.";
         reference
           "ITU-T G.997.2 clause T.2.7 (CDTA_PROC_CTRL);
            ITU-T G.9701 clause T.2.9.";

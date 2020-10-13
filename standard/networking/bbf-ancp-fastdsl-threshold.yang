@@ -1,0 +1,329 @@
+module bbf-ancp-fastdsl-threshold {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-ancp-fastdsl-threshold";
+  prefix bbf-ancp-fastdsl-threshold;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import bbf-ancp {
+    prefix bbf-ancp;
+  }
+  import bbf-ancp-fastdsl-access-extensions {
+    prefix bbf-ancp-fastdsl-acc-ext;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, ADTRAN
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on the Access Node
+     Control Protocol (ANCP) as defined in RFC 6320. As such, this
+     module is specific to access network equipment (e.g., BBF-
+     specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module augments bbf-ancp to add the data
+     nodes to manage line state reporting of the Access Node.
+
+     This data model is designed for the Network Management Datastore
+     Architecture defined in RFC 6320. The line state reporting
+     requirements are defined in BBF TR-147.
+
+     Copyright (c) 2017-2020, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a3; see
+     the TR itself for full legal notices.";
+  reference
+    "TR-147";
+
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
+
+  feature delayed-port-up-reporting {
+    description
+      "Indicates support for the management of the generation of
+       Port Up message when the line comes in sync.";
+  }
+
+  feature delayed-data-rate-change-reporting {
+    description
+      "Indicates support for the management of the generation of
+       Port Up message when line attributes change.";
+  }
+
+  typedef delay {
+    type union {
+      type uint16 {
+        range "1..max";
+      }
+      type enumeration {
+        enum no-delay {
+          description
+            "The action will be taken immediately.";
+        }
+      }
+    }
+    units "100 milliseconds";
+    description
+      "Specifies the delay for taking an action.";
+  }
+
+  grouping threshold-setting {
+    description
+      "The configuration data to be applied to control the
+       reporting of changes of the value of line attributes in
+       Port Up messages.";
+    leaf threshold {
+      type bbf-yang:data-rate32 {
+        range "1..max";
+      }
+      units "kbits/second";
+      mandatory true;
+      description
+        "The threshold to be applied to evaluate the
+         difference in the line attribute of the interface,
+         compared to the previously reported value. A Port Up message
+         will be triggered, when the difference in the value of
+         the line attribute is equal to or has crossed the threshold
+         value.";
+      reference
+        "TR-147 - R61";
+    }
+    leaf qualification-period {
+      type delay;
+      default "no-delay";
+      description
+        "Sets a qualification period, in which a line attribute value
+         must have persistently crossed the configured threshold,
+         before a Port Up message is sent that reports the threshold
+         crossing.
+
+         Note that this qualification period controls how long a
+         line attribute must have crossed a threshold before sending
+         a Port Up message, whereas the dampening mechanism
+         configured in the container 'bbf-ancp:port-message-control'
+         controls the rate at which Port Up messages can be sent to
+         the NAS. Therefore, depending on the configuration for the
+         dampening mechanism and when the previous Port Up message was
+         sent for the given line, the dampening mechanism may delay
+         sending the Port Up message reporting the threshold crossing
+         past the expiration of the qualification period.";
+      reference
+        "TR-147 - R60";
+    }
+  }
+
+  grouping port-message-control {
+    description
+      "Defines the configuration to control the generation of Port Up
+       and Port Down messages.";
+    leaf initial-port-up-delay {
+      if-feature
+        "bbf-ancp-fastdsl-threshold:delayed-port-up-reporting";
+      type delay;
+      default "no-delay";
+      description
+        "Sets the delay to be applied for generating an ANCP Port Up
+         message.
+
+         This delay is applied after the line comes in sync.
+         Meaning, when the line changes from state 'out of sync' to
+         'in sync', then the line must be continuously 'in sync' for
+         that time in order to send the first ANCP Port Up
+         message.";
+      reference
+        "TR-147 - R60";
+    }
+  }
+
+  augment "/bbf-ancp:ancp"
+        + "/bbf-ancp:partitions"
+        + "/bbf-ancp:partition"
+        + "/bbf-ancp:port-message-control" {
+    description
+      "Augments the ANCP partition data with data to control
+       generating ANCP Port Up and Port Down messages.";
+    container vdsl {
+      when "../../bbf-ancp:technology = "
+         + "'bbf-ancp-fastdsl-acc-ext:fastdsl'" {
+        description
+          "To configure port message control specific to VDSL access
+           lines, the technology of the partition must be FastDSL.";
+      }
+      description
+        "Additions for controlling the generation of ANCP Port Up
+         and Port Down messages.";
+      uses port-message-control;
+      list data-rate-report {
+        if-feature "bbf-ancp-fastdsl-threshold:"
+                 + "delayed-data-rate-change-reporting";
+        must 'derived-from-or-self(access-line-attribute, '
+           + '"bbf-ancp-fastdsl-acc-ext:'
+           + 'actual-net-data-rate-upstream")'
+           + ' or '
+           + 'derived-from-or-self(access-line-attribute,'
+           + '"bbf-ancp-fastdsl-acc-ext:'
+           + 'actual-net-data-rate-downstream")'
+           + ' or '
+           + 'derived-from-or-self(access-line-attribute,'
+           + '"bbf-ancp-fastdsl-acc-ext:'
+           + 'attainable-net-data-rate-upstream")'
+           + ' or '
+           + 'derived-from-or-self(access-line-attribute,'
+           + '"bbf-ancp-fastdsl-acc-ext:'
+           + 'attainable-net-data-rate-downstream")';
+        key "access-line-attribute";
+        description
+          "Sets configuration data controlling the reporting of data
+           rate changes via ANCP Port up messages in a data-rate-
+           specific access line attribute.";
+        leaf access-line-attribute {
+          type identityref {
+            base bbf-ancp-fastdsl-acc-ext:vdsl-access-line-attribute;
+          }
+          description
+            "An access line attribute for which changes in the value
+             shall be reported.";
+          reference
+            "RFC 6320 section 6.5.1";
+        }
+        container shift-up {
+          description
+            "The configuration data to be applied to control the
+             reporting of positive changes of the line attribute in
+             ANCP Port Up messages.";
+          uses threshold-setting;
+        }
+        container shift-down {
+          description
+            "The configuration data to be applied to control the
+             reporting of negative changes of the line attribute in
+             ANCP Port Up messages.";
+          uses threshold-setting;
+        }
+      }
+    }
+    container fast {
+      when "../../bbf-ancp:technology = "
+         + "'bbf-ancp-fastdsl-acc-ext:fastdsl'" {
+        description
+          "To configure port message control specific to FAST access
+           lines, the technology of the partition must be FastDSL.";
+      }
+      description
+        "Additions for controlling the generation of ANCP Port Up
+         and Port Down messages.";
+      uses port-message-control;
+      list data-rate-report {
+        if-feature "bbf-ancp-fastdsl-threshold:"
+                 + "delayed-data-rate-change-reporting";
+        must 'derived-from-or-self(access-line-attribute, '
+           + '"bbf-ancp-fastdsl-acc-ext:'
+           + 'actual-net-data-rate-upstream")'
+           + ' or '
+           + 'derived-from-or-self(access-line-attribute,'
+           + '"bbf-ancp-fastdsl-acc-ext:'
+           + 'actual-net-data-rate-downstream")'
+           + ' or '
+           + 'derived-from-or-self(access-line-attribute,'
+           + '"bbf-ancp-fastdsl-acc-ext:'
+           + 'attainable-net-data-rate-upstream")'
+           + ' or '
+           + 'derived-from-or-self(access-line-attribute,'
+           + '"bbf-ancp-fastdsl-acc-ext:'
+           + 'attainable-net-data-rate-downstream")';
+        key "access-line-attribute";
+        description
+          "Sets configuration data controlling the reporting of data
+           rate changes via ANCP Port up messages in a data-rate-
+           specific access line attribute.";
+        leaf access-line-attribute {
+          type identityref {
+            base bbf-ancp-fastdsl-acc-ext:fast-access-line-attribute;
+          }
+          description
+            "An access line attribute for which changes in the value
+             shall be reported.";
+          reference
+            "RFC 6320 section 6.5.1";
+        }
+        container shift-up {
+          description
+            "The configuration data to be applied to control the
+             reporting of positive changes of the line attribute in
+             ANCP Port Up messages.";
+          uses threshold-setting;
+        }
+        container shift-down {
+          description
+            "The configuration data to be applied to control the
+             reporting of negative changes of the line attribute in
+             ANCP Port Up messages.";
+          uses threshold-setting;
+        }
+      }
+    }
+  }
+}

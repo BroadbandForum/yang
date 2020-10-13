@@ -1,7 +1,6 @@
 module bbf-qos-rate-control {
   yang-version 1.1;
   namespace "urn:bbf:yang:bbf-qos-rate-control";
-
   prefix bbf-qos-rc;
 
   import bbf-qos-classifiers {
@@ -10,35 +9,33 @@ module bbf-qos-rate-control {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Project Stream";
-
+     Common YANG Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
-                  <mailto:ludwig.pauwels@nokia.com>
 
-     PS Leader:   Michael Shaffer, Nokia
-                  <mailto:michael.shaffer@nokia.com>
+     PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>";
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
   description
-    "This module contains a collection of YANG definitions for 
+    "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the management of
-     Quality of Service (QoS) as applicable to access network 
-     equipment. As such, this module is specific to access network 
+     Quality of Service (QoS) as applicable to access network
+     equipment. As such, this module is specific to access network
      equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module contains a possibility to rate limit a 
-     number of frames.
+     Specifically, this module augments classifiers to control frame
+     rates.
 
-     Copyright (c) 2017, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -78,9 +75,19 @@ module bbf-qos-rate-control {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2017-05-08 {
     description
       "Initial revision.
@@ -92,51 +99,46 @@ module bbf-qos-rate-control {
                         TR-383.pdf>";
   }
 
-
   identity rate-limit-frames {
     base bbf-qos-cls:action-type;
     description
-      "The action-type identity indicating the system shall rate 
+      "The action-type identity indicating the system shall rate
        limit based on the number of frames.";
   }
 
-  augment '/bbf-qos-cls:classifiers/bbf-qos-cls:classifier-entry/'
-        + 'bbf-qos-cls:classifier-action-entry-cfg/bbf-qos-cls:'
-        + 'action-cfg-params' {
+  augment "/bbf-qos-cls:classifiers/bbf-qos-cls:classifier-entry/"
+        + "bbf-qos-cls:classifier-action-entry-cfg/bbf-qos-cls:"
+        + "action-cfg-params" {
     description
       "The QoS policy framework allows to configure a set of actions
        for frames with matching criteria.";
-
     case rate-limit-frames {
       description
         "The set of actions is extended with a possibility to rate
          limit the number of frames that match a classification. The
          rate limit specifies a limit for the number of frames.
          Frames that exceed this limit are discarded.";
-
       container rate-limit-frames {
-        when
-          "../bbf-qos-cls:action-type=
-           'bbf-qos-rc:rate-limit-frames'" {
+        when "../bbf-qos-cls:action-type=
+              'bbf-qos-rc:rate-limit-frames'" {
           description
-            "Only applicable when the action-type is 
+            "Only applicable when the action-type is
              rate-limit-frames.";
         }
         description
           "The set of leaves that specify the allowed rate.";
-
         leaf rate {
           type uint32;
           units "frames per second";
           description
-            "Limits the number of frames per second to this 
+            "Limits the number of frames per second to this
              number.";
         }
         leaf burst-size {
           type uint32;
           units "frames";
           description
-            "The burst-size together with the frame-rate define a 
+            "The burst-size together with the frame-rate define a
              mechanism to control a frame rate.";
         }
       }

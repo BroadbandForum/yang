@@ -17,7 +17,7 @@ submodule bbf-vdsl-data-gathering-profile-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -29,7 +29,7 @@ submodule bbf-vdsl-data-gathering-profile-body {
      managing Broadband Forum TR-252i3 clause 5.7 DSL Quality
      Management related profiles; Data Gathering Profile.
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Copyright (c) 2016-2020 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -69,9 +69,19 @@ submodule bbf-vdsl-data-gathering-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2019-10-21 {
     description
       "Amendment 2 Corrigendum 1.
@@ -122,8 +132,9 @@ submodule bbf-vdsl-data-gathering-profile-body {
       leaf event-number {
         type uint8;
         description
-          "Identifies the event type at the VTU-O as defined in
-           ITU-T G.993.2 Table 11-43.";
+          "Identifies the event type at the VDSL Transceiver Unit -
+           central Office (VTU-O) as defined in ITU-T G.993.2 Table
+           11-43.";
       }
       leaf percentage {
         type uint8 {
@@ -137,10 +148,10 @@ submodule bbf-vdsl-data-gathering-profile-body {
       }
       description
         "This parameter is the percentage of the data gathering
-         event buffer assigned to event type i at the VTU-O. The
-         ID, i, of the event type is defined in Table 11-43 of
-         [ITU-T G.993.2]. Values are expressed in increments of
-         0.5% from 0 to 100%";
+         event buffer assigned to event type i at the VDSL Transceiver
+         Unit - central Office (VTU-O). The ID, i, of the event type
+         is defined in Table 11-43 of [ITU-T G.993.2]. Values are
+         expressed in increments of 0.5% from 0 to 100%.";
       reference
         "ITU-T G.997.1 clause 7.3.6.1 Logging depth event
          percentage per event VTU-O
@@ -152,9 +163,10 @@ submodule bbf-vdsl-data-gathering-profile-body {
       default "0";
       description
         "This parameter is the logging depth that is requested for
-         reporting the VTU-O event trace buffer in the Central Office
-         Management Information Base (CO-MIB), in number of 6-byte
-         data gathering records.";
+         reporting the VDSL Transceiver Unit - central Office (VTU-O)
+         event trace buffer in the Central Office Management
+         Information Base (CO-MIB), in number of 6-byte data gathering
+         records.";
       reference
         "ITU-T G.997.1 clause 7.3.6.3 Logging depth for VTU-O
          reporting (LOGGING_DEPTH_REPORTING_O)";
@@ -175,14 +187,15 @@ submodule bbf-vdsl-data-gathering-profile-body {
         default "0";
         description
           "This parameter is the percentage of the data gathering
-           event buffer assigned to the event type for the VTU-R.";
+           event buffer assigned to the event type for the VDSL
+           Transceiver Unit - remote Side (VTU-R).";
       }
       description
         "This parameter is the percentage of the data gathering
-         event buffer assigned to event type i at the VTU-R. The
-         ID, i, of the event type is defined in Table 11-43 of
-         [ITU-T G.993.2]. Values are expressed in increments of
-         0.5% from 0 to 100%";
+         event buffer assigned to event type i at the VDSL Transceiver
+         Unit - remote Side (VTU-R). The ID, i, of the event type is
+         defined in Table 11-43 of [ITU-T G.993.2]. Values are
+         expressed in increments of 0.5% from 0 to 100%.";
       reference
         "ITU-T G.997.1 clause 7.3.6.2
          Logging depth event percentage per event VTU-R
@@ -194,9 +207,10 @@ submodule bbf-vdsl-data-gathering-profile-body {
       default "0";
       description
         "This parameter is the logging depth that is requested for
-         reporting the VTU-R event trace buffer in the Central Office
-         Management Information Base (CO-MIB), in number of 6-byte
-         data gathering records.";
+         reporting the VDSL Transceiver Unit - remote Side (VTU-R)
+         event trace buffer in the Central Office Management
+         Information Base (CO-MIB), in number of 6-byte data gathering
+         records.";
       reference
         "ITU-T G.997.1 clause 7.3.6.4 Logging depth for VTU-R
          reporting";
@@ -205,11 +219,12 @@ submodule bbf-vdsl-data-gathering-profile-body {
       type boolean;
       default "false";
       description
-        "If true, this parameter instructs the VTU-R to report newer
-         events first, from the beginning of the event trace buffer.
-         If false, this parameter instructs the VTU-R to report older
-         events first, from the end of the event trace buffer.
-         This parameter only applies to the VTU-R.";
+        "If true, this parameter instructs the VDSL Transceiver Unit -
+         remote Side (VTU-R) to report newer events first, from the
+         beginning of the event trace buffer. If false, this parameter
+         instructs the VTU-R to report older events first, from the
+         end of the event trace buffer. This parameter only applies to
+         the VTU-R.";
       reference
         "ITU-T G.997.1 clause 7.3.6.5 Logging data report newer
          events first VTU-R (LOGGING_REPORT_NEWER_FIRST)";

@@ -1,38 +1,35 @@
 module bbf-availability {
   yang-version 1.1;
   namespace "urn:bbf:yang:bbf-availability";
-
   prefix bbf-avail;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
-    "This module contains a collection of YANG definitions for 
-     supporting the Broadband Forum requirements on the general 
-     availability of specific resources as applicable to access 
-     network equipment. As such, this module is specific to access 
-     network equipment (e.g., BBF-specified Access Nodes and FTTdp 
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on the general
+     availability of specific resources as applicable to access
+     network equipment. As such, this module is specific to access
+     network equipment (e.g., BBF-specified Access Nodes and FTTdp
      DPUs).
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -72,12 +69,22 @@ module bbf-availability {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -93,29 +100,29 @@ module bbf-availability {
 
   identity issue-tag {
     description
-      "The base identity for issue tags to enable categorizing types 
+      "The base identity for issue tags to enable categorizing types
        issues which affect the availability of resources.";
   }
 
   identity hardware-fault {
     base bbf-avail:issue-tag;
     description
-      "The resource has an hardware fault that prevents it from 
+      "The resource has an hardware fault that prevents it from
        operating.";
   }
 
   identity peer-not-reachable {
     base bbf-avail:issue-tag;
     description
-      "A peer resource for which the resource inter-operates is not 
+      "A peer resource for which the resource inter-operates is not
        reachable.";
   }
 
   identity feature-not-supported {
     base bbf-avail:issue-tag;
     description
-      "A feature which the resource needs to provide the required 
-       service is not supported on the device which has to provide 
+      "A feature which the resource needs to provide the required
+       service is not supported on the device which has to provide
        the service.";
   }
 
@@ -128,7 +135,7 @@ module bbf-availability {
   identity unknown {
     base bbf-avail:issue-tag;
     description
-      "The type of issue which is affecting the availability of 
+      "The type of issue which is affecting the availability of
        resources is unknown.";
   }
 
@@ -140,48 +147,48 @@ module bbf-availability {
       }
       bit failed {
         description
-          "The resource has an internal fault that prevents it 
+          "The resource has an internal fault that prevents it
            from operating.";
       }
       bit offline {
         description
-          "The resource requires a routine operation to be 
+          "The resource requires a routine operation to be
            performed to place it online and make it available
-           for use. The operation may be manual or automatic, or 
+           for use. The operation may be manual or automatic, or
            both.";
       }
       bit off-duty {
         description
-          "The resource has been made inactive by a control 
-           process in accordance with a predetermined time 
-           schedule. Under normal conditions the control process 
-           can be expected to reactivate the resource at some 
+          "The resource has been made inactive by a control
+           process in accordance with a predetermined time
+           schedule. Under normal conditions the control process
+           can be expected to reactivate the resource at some
            scheduled time.";
       }
       bit dependency {
         description
-          "The resource cannot operate because some other 
+          "The resource cannot operate because some other
            resource on which it depends is unavailable.";
       }
       bit degraded {
         description
-          "The service available from the resource is degraded 
-           in some respect, such as in speed or operating 
-           capacity. Failure of a test or an unacceptable 
-           performance measurement has established that some or 
-           all services are not functional or are degraded, for 
-           example, due to the presence of a defect or an 
-           inappropriate configuration. However, the resource 
-           remains available for service, either because some 
-           services are satisfactory or because degraded service 
-           is preferable to no service at all. Further information 
-           indicating, for example, which services are not functional 
-           or which configuration is inappropriate and the nature of 
+          "The service available from the resource is degraded
+           in some respect, such as in speed or operating
+           capacity. Failure of a test or an unacceptable
+           performance measurement has established that some or
+           all services are not functional or are degraded, for
+           example, due to the presence of a defect or an
+           inappropriate configuration. However, the resource
+           remains available for service, either because some
+           services are satisfactory or because degraded service
+           is preferable to no service at all. Further information
+           indicating, for example, which services are not functional
+           or which configuration is inappropriate and the nature of
            the degradation, may be found in the container 'issues'.";
       }
       bit not-installed {
         description
-          "The resource or resources represented by the managed 
+          "The resource or resources represented by the managed
            object are not present or are incomplete.";
       }
       bit log-full {
@@ -191,7 +198,7 @@ module bbf-availability {
     }
     description
       "A set of availability status conditions.  An empty set of
-       bits implies that none of the status conditions are 
+       bits implies that none of the status conditions are
        present, i.e., the entity is available.";
     reference
       "ITU-T X.731 clause 8.1.2.3.";
@@ -199,19 +206,19 @@ module bbf-availability {
 
   typedef unspecified-availability-status {
     type enumeration {
-      enum "unspecified" {
+      enum unspecified {
         description
-          "The resource is impaired, but the X.731 availability 
-           status condition(s) cannot be determined or X.731 
-           availability condition(s) are not supported by the 
-           device. This permits devices that do not support X.731 
-           availability status condition(s) to nevertheless make use 
+          "The resource is impaired, but the X.731 availability
+           status condition(s) cannot be determined or X.731
+           availability condition(s) are not supported by the
+           device. This permits devices that do not support X.731
+           availability status condition(s) to nevertheless make use
            of the availability status parameters.";
       }
     }
     description
-      "Defines an alternative definition of availability where a 
-       device may not support specification of the availability 
+      "Defines an alternative definition of availability where a
+       device may not support specification of the availability
        status according to that defined by ITU-T X.731.";
   }
 
@@ -223,24 +230,23 @@ module bbf-availability {
       type string;
     }
     description
-      "This identifies a resource, such as an interface, which 
+      "This identifies a resource, such as an interface, which
        is a cause of one or more availability status conditions.
 
-       It should be as fine-grained as possible both to guide the 
-       operator.  If the instrumentation can detect a broken config, 
+       It should be as fine-grained as possible both to guide the
+       operator.  If the instrumentation can detect a broken config,
        this should be identified as the resource.
 
-       If the resource is modelled in YANG, this type will be an 
-       instance-identifier. If the resource is an SNMP object, the 
-       type will be an object-identifier. If the resource is 
-       anything else, for example a distinguished name, this type 
+       If the resource is modelled in YANG, this type will be an
+       instance-identifier. If the resource is an SNMP object, the
+       type will be an object-identifier. If the resource is
+       anything else, for example a distinguished name, this type
        will be a string.";
   }
 
   grouping availability-parameters {
     description
       "Defines the availability of entities.";
-
     leaf availability-status {
       type union {
         type availability-status;
@@ -248,25 +254,21 @@ module bbf-availability {
       }
       mandatory true;
       description
-        "The set of availability status conditions currently defining 
+        "The set of availability status conditions currently defining
          the availability status of the resource. An empty set of
-         bits implies that none of the status conditions are 
+         bits implies that none of the status conditions are
          present, i.e., the entity is available.";
       reference
         "ITU-T X.731 clause 8.1.2.3.";
     }
-
     container issues {
       description
         "Issues that have been identified by the instrumentation
          that are affecting the availability status";
-
       list issue {
-        must "derived-from(tag,'bbf-avail:issue-tag')";
         key "tag code";
         description
           "An issue affecting the availability status.";
-
         leaf tag {
           type identityref {
             base issue-tag;
@@ -275,28 +277,25 @@ module bbf-availability {
             "The specific issue tag indicating the type of issue
              encountered, if any.";
         }
-
         leaf code {
           type uint16;
-          must "not(../tag='bbf-avail:unknown') or 
+          must "not(../tag='bbf-avail:unknown') or
                 (../tag='bbf-avail:unknown' and .=0)";
           description
-            "A well-known code uniquely identifying the specific 
+            "A well-known code uniquely identifying the specific
              condition, if any. This code may be vendor-specific.";
         }
-
         leaf message {
           type string;
           description
             "A string suitable for human display that describes the
              condition causing the issue.";
         }
-
         leaf-list root-cause {
           type resource;
           description
-            "Identifies a resource, such as an interface, if any, 
-             which can be identified as a possible root cause of 
+            "Identifies a resource, such as an interface, if any,
+             which can be identified as a possible root cause of
              the issue.";
         }
       }
@@ -306,16 +305,14 @@ module bbf-availability {
   grouping availability {
     description
       "Defines the availability of entities.";
-
     container availability {
-      if-feature "availability";
+      if-feature "bbf-avail:availability";
       presence
         "If present, this container indicates supports for retrieving
          the availability of the entity for which it is used.";
       config false;
       description
         "Operational status defining the availability of an entity.";
-
       uses availability-parameters;
     }
   }

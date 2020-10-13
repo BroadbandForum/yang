@@ -1,41 +1,38 @@
 module bbf-inet-types {
   yang-version 1.1;
   namespace "urn:bbf:yang:bbf-inet-types";
-
   prefix bbf-inet;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Project Stream";
-
+     Common YANG Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
-                  <mailto:ludwig.pauwels@nokia.com>
 
-     PS Leader:   Michael Shaffer, Nokia
-                  <mailto:michael.shaffer@nokia.com>
+     PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>";
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
   description
-    "This module contains a collection of YANG definitions for 
+    "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on reusable data
-     types as applicable to access network equipment. As such, this 
-     module is specific to access network equipment (e.g., 
+     types as applicable to access network equipment. As such, this
+     module is specific to access network equipment (e.g.,
      BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module defines generally useful derived YANG
-     data types for Internet addresses and related things added by BBF
-     on top of the ones defined in IETF.
+     Specifically, this module defines additional YANG data types that
+     are useful in managing Internet-Protocol-related configuration
+     that are not defined by the IETF.
 
-     Copyright (c) 2017, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -75,9 +72,19 @@ module bbf-inet-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2017-05-08 {
     description
       "Initial revision.
@@ -96,12 +103,12 @@ module bbf-inet-types {
             + '0-9]|[6][0-3]))?)*)';
     }
     description
-      "Defines the type used to represent a list and/or ranges of 
+      "Defines the type used to represent a list and/or ranges of
        DSCP values.
 
        This type is used to match an ordered list of DSCP values, or
-       contiguous ranges of DSCP values. Valid DSCP values must be in 
-       the range 0 to 63, and included in the list in non 
+       contiguous ranges of DSCP values. Valid DSCP values must be in
+       the range 0 to 63, and included in the list in non
        overlapping ascending order.
 
        For example, '1,10-20,33,45-63'.";

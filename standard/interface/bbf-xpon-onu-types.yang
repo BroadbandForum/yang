@@ -1,0 +1,341 @@
+module bbf-xpon-onu-types {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-xpon-onu-types";
+  prefix bbf-xpon-onu-types;
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Fiber Access Networks Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     Editor:      Igor Ternovsky, Broadcom
+
+     Editor:      Robert Peschi, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Samuel Chen, Broadcom";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on management of
+     ITU-T Passive Optical Network (PON) interfaces as defined in
+     ITU-T G.984.x, G.987.x, ITU-T G.989.x and ITU-T G.9807.x. As
+     such, this module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module defines common YANG types used in the
+     management of Optical Network Units (ONU).
+
+     Copyright (c) 2018-2020, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385i2; see
+     the TR itself for full legal notices.";
+
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
+  revision 2019-02-25 {
+    description
+      "Initial revision.
+       * Approval Date:    2019-02-25.
+       * Publication Date: 2019-02-25.";
+    reference
+      "TR-385: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385.pdf>";
+  }
+
+  identity onu-presence-state-base {
+    description
+      "This identity is used to qualify the presence state of an
+       Optical Network Unit (ONU).";
+  }
+
+  identity onu-present {
+    base onu-presence-state-base;
+    description
+      "This identity is used to denote that an Optical Network Unit
+       (ONU) is currently using the optical signal of one of the
+       channel terminations local to this Optical Line Termination
+       (OLT) (Refer to 'inside-olt'). An OLT considers that an ONU is
+       using the optical signal of one of its local channel
+       terminations as early as it receives from the ONU a Physical
+       Layer Operations, Administrations and Maintenance (PLOAM)
+       Serial_Number_ONU message or as early as it receives a PLOAM
+       Tuning_Resp(Complete_u) message and as long as the ONU keeps
+       sending optical signal to the OLT though this channel
+       termination, either spontaneously or upon OLT solicitation
+       (for instance consistently responding to Downstream PLOAM
+       messages or consistently responding to bandwidth map messages).
+       If an ONU has shown initial optical activity and is not
+       solicited by the OLT, e.g. after it failed to reach O5, it will
+       be considered not present if it does not spontaneously show
+       optical activity anymore after some time limit (recommended
+       value for time limit is in the order of 10s or 20s, compatible
+       with TO1 Ranging Time). As an exception, an ONU put in ITU-T
+       'Emergency Stop state' because the OLT sent it a
+       'Disable_Serial_Number' downstream PLOAM when it was present on
+       a channel termination is still considered 'present' on the
+       channel termination.";
+    reference
+      "ITU-T G.984.3, section 10.2.1
+       ITU-T G.987.3, section 12.2.1
+       ITU-T G.9807.1, Table C.12.2
+       ITU-T G.989.3, Table 12-2";
+  }
+
+  identity onu-present-and-on-intended-channel-termination {
+    base onu-present;
+    description
+      "In case of G-PON, XG-PON and XGS-PON this identity applies to
+       an Optical Network Unit (ONU) which is present on a channel
+       termination local to this Optical Line Termination (OLT)
+       (Refer to 'inside-olt') and which corresponds to a local
+       virtual Access Network Interface (vANI) and has reached ONU
+       Transmission Convergence (TC) state O5.
+
+       In case of NG-PON2 this identity applies to an ONU which is
+       present on a channel termination local to this OLT (Refer to
+       'inside-olt') and which corresponds to a local virtual Access
+       Network Interface (vANI) and has reached ONU TC state O5
+       and for which it has been confirmed (e.g. by Inter Channel
+       Termination Protocol (ICTP) procedures) that the ONU is using
+       the intended channel-termination based on the configured
+       preferred and/or protection channel pair or resulting from the
+       execution of an 'in-service-onu-tune-request' action.";
+  }
+
+  identity onu-present-and-in-wavelength-discovery {
+    base onu-present;
+    description
+      "This identity is used to denote that an NG-PON2 Optical Network
+       Unit (ONU) has just been detected present on a channel
+       termination local to this Optical Line Termination (OLT) (Refer
+       to 'inside-olt') and which has reached ONU Transmission
+       Convergence (TC) state O5, but which potentially still needs to
+       tune to another wavelength while the OLT is assessing the
+       intended channel termination of the ONU.";
+  }
+
+  identity onu-present-and-discovery-tune-failed {
+    base onu-present;
+    description
+      "This identity is used to denote that an NG-PON2 Optical Network
+       Unit (ONU) has just been detected present on a channel
+       termination local to this Optical Line Termination (OLT)
+       (Refer to 'inside-olt') and which has reached ONU Transmission
+       Convergence (TC) state O5, but which is not on its intended
+       channel termination and which could not be tuned away towards
+       the identified intended channel termination.";
+  }
+
+  identity onu-present-and-no-v-ani-known-and-o5-failed {
+    base onu-present;
+    description
+      "This identity applies to an Optical Network Unit (ONU) which is
+       present on a channel termination local to this Optical Line
+       Termination (OLT) (Refer to 'inside-olt') but for which no
+       corresponding virtual Access Network Interface (vANI) could
+       (yet) be identified and which could not reach ONU Transmission
+       Convergence (TC) state O5.";
+  }
+
+  identity onu-present-and-no-v-ani-known-and-o5-failed-no-onu-id {
+    base onu-present-and-no-v-ani-known-and-o5-failed;
+    description
+      "This identity applies to an Optical Network Unit (ONU) which is
+       present on a channel termination local to this Optical Line
+       Termination (OLT) (Refer to 'inside-olt') but for which no
+       corresponding virtual Access Network Interface (vANI) could
+       (yet) be identified and which could not reach ONU Transmission
+       Convergence (TC) state O5 because the OLT could not determine
+       an ONU-ID for this ONU.";
+  }
+
+  identity onu-present-and-no-v-ani-known-and-o5-failed-undefined {
+    base onu-present-and-no-v-ani-known-and-o5-failed;
+    description
+      "This identity applies to an Optical Network Unit (ONU) which is
+       present on a channel termination local to this Optical Line
+       Termination (OLT) (Refer to 'inside-olt') but for which no
+       corresponding virtual Access Network Interface (vANI) could
+       (yet) be identified and which could not reach ONU Transmission
+       Convergence (TC) state O5 because of some unidentified
+       reason.";
+  }
+
+  identity onu-present-and-v-ani-known-and-o5-failed {
+    base onu-present;
+    description
+      "This identity applies to an Optical Network Unit (ONU) which is
+       present on a channel termination local to this Optical Line
+       Termination (OLT) (Refer to 'inside-olt') and for which a
+       corresponding virtual Access Network Interface (vANI) could be
+       identified but which could not reach ONU Transmission
+       Convergence (TC) state O5.";
+  }
+
+  identity onu-present-and-v-ani-known-and-o5-failed-no-onu-id {
+    base onu-present-and-v-ani-known-and-o5-failed;
+    description
+      "This identity applies to an Optical Network Unit (ONU) which is
+       present on a channel termination local to this Optical Line
+       Termination (OLT) (Refer to 'inside-olt') and for which a
+       corresponding virtual Access Network Interface (vANI) could be
+       identified but which could not reach ONU Transmission
+       Convergence (TC) state O5 because the OLT could not determine
+       an ONU-ID for this ONU.";
+  }
+
+  identity onu-present-and-v-ani-known-and-o5-failed-undefined {
+    base onu-present-and-v-ani-known-and-o5-failed;
+    description
+      "This identity applies to an Optical Network Unit (ONU) which is
+       present on a channel termination local to this Optical Line
+       Termination (OLT) (Refer to 'inside-olt') and for which a
+       corresponding virtual Access Network Interface (vANI) could be
+       identified but which could not reach ONU Transmission
+       Convergence (TC) state O5 because of some unidentified
+       reason.";
+  }
+
+  identity onu-present-and-no-v-ani-known-and-in-o5 {
+    base onu-present;
+    description
+      "This identity applies to a G-PON, XG-PON or XGS-PON Optical
+       Network Unit (ONU) which is present on a channel termination
+       local to this Optical Line Termination (OLT) (Refer to
+       'inside-olt') and which has reached ONU Transmission
+       Convergence (TC) state O5 but for which no corresponding
+       virtual Access Network Interface (vANI) could be identified.";
+  }
+
+  identity onu-present-and-no-v-ani-known-and-unclaimed {
+    base onu-present;
+    description
+      "This identity applies to an NG-PON2 Optical Network Unit (ONU)
+       which is present on a channel termination local to this Optical
+       Line Termination (OLT) (Refer to 'inside-olt') but for which no
+       corresponding virtual Access Network Interface (vANI) could be
+       identified and which has passed ONU Transmission Convergence
+       (TC) state O5 and for which no intended channel termination
+       could be identified (for instance by means of Inter Channel
+       Termination Protocol (ICTP) procedures).";
+  }
+
+  identity onu-present-and-v-ani-known-but-intended-ct-unknown {
+    base onu-present;
+    description
+      "This identity applies to an NG-PON2 Optical Network Unit (ONU)
+       which is present on a channel termination local to this Optical
+       Line Termination (OLT) (Refer to 'inside-olt') and for which a
+       corresponding virtual Access Network Interface (vANI) could be
+       identified and which has passed ONU Transmission Convergence
+       (TC) state O5 but for which no intended channel termination
+       could be identified (for instance by means of Inter Channel
+       Termination Protocol (ICTP) procedures).";
+  }
+
+  identity onu-present-and-emergency-stopped {
+    base onu-present;
+    description
+      "This identity applies to a G-PON, XG-PON, XGS-PON or NG-PON2
+       Optical Network Unit (ONU) to which the Optical Line
+       Termination (OLT) has sent a 'Disable_Serial_Number' downstream
+       Physical Layer Operations, Administrations and Maintenance
+       (PLOAM) when it was present on a channel termination local to
+       the OLT (Refer to 'inside-olt') which has put the ONU in ITU-T
+       'Emergency Stop state'.";
+    reference
+      "ITU-T G.984.3 Section 9.2.1
+       ITU-T G.987.3 Table 11.2
+       ITU-T G.9807.3 Table C.11.2
+       ITU-T G.989.3 Table 11.2";
+  }
+
+  identity onu-not-present {
+    base onu-presence-state-base;
+    description
+      "This identity is used to denote that from the Optical Line
+       Termination (OLT) point of view, the Optical Network Unit (ONU)
+       is not present on the OLT, i.e. the ONU is not transmitting
+       optical signal in upstream on any channel termination local to
+       this OLT (Refer to 'inside-olt') and is neither assumed to
+       accept any optical signal in downstream from any channel
+       termination local to this OLT. This could mean for instance
+       that the ONU is present on a channel termination belonging to
+       another OLT (Refer to 'outside-olt'), or that the ONU is not
+       connected at all to the channel group.";
+  }
+
+  identity onu-not-present-with-v-ani {
+    base onu-not-present;
+    description
+      "This identity is used to denote that an Optical Network Unit
+       (ONU), for which a virtual Access Network Interface (vANI) is
+       configured on the Optical Line Termination (OLT), is not
+       present on any channel termination local to this OLT.";
+  }
+
+  identity onu-not-present-without-v-ani {
+    base onu-not-present;
+    description
+      "This identity is used to denote that an Optical Network Unit
+       (ONU), for which no virtual Access Network Interface (vANI) is
+       configured on the Optical Line Termination (OLT), is not
+       present any longer on any channel termination local to this
+       OLT. This could mean that the ONU has been disconnected from
+       the channel group; in case of NG-PON2 it could also mean that
+       the ONU is tuned away to a channel termination belonging to
+       another OLT (Refer to 'outside-olt').";
+  }
+}

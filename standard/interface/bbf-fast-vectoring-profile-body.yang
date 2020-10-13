@@ -17,7 +17,7 @@ submodule bbf-fast-vectoring-profile-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -68,9 +68,19 @@ submodule bbf-fast-vectoring-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2020-01-17 {
     description
       "Amendment 2 Corrigendum 2.
@@ -140,6 +150,17 @@ submodule bbf-fast-vectoring-profile-body {
          clause 7.1.7.2 (FEXT_TO_CANCEL_ENABLEus); ITU-T G.9701
          clause 11.4.3.1.";
     }
+    leaf tgvn-allowed {
+      if-feature "tgvn";
+      type boolean;
+      default "false";
+      description
+        "Defines whether Targeted Generalized Vectoring with
+         Non-active G.9701 supporting lines (TGVN) is allowed on the
+         line.";
+      reference
+        "ITU-T G.997.2 clause 7.1.7.5 (TGVN_ALLOWED)";
+    }
   }
 
   grouping vectoring-downstream-parameters {
@@ -178,7 +199,7 @@ submodule bbf-fast-vectoring-profile-body {
       uses vectoring-parameters;
     }
     leaf annex-x-mode {
-      if-feature "annex-x";
+      if-feature "bbf-fast:annex-x";
       type enumeration {
         enum forbidden {
           description
@@ -205,10 +226,10 @@ submodule bbf-fast-vectoring-profile-body {
           then 'annex-d-mode', if supported, must be configured to
           'forbidden'.";
       reference
-        "ITU-T G.9701 xlause X.6.7.1 and T.2.1.";
+        "ITU-T G.9701 clause X.6.7.1 and T.2.1.";
     }
     leaf annex-d-mode {
-      if-feature "annex-d";
+      if-feature "bbf-fast:annex-d";
       type enumeration {
         enum forbidden {
           description

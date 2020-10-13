@@ -18,7 +18,7 @@ submodule bbf-vdsl-line-spectrum-profile-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -30,7 +30,7 @@ submodule bbf-vdsl-line-spectrum-profile-body {
      managing Broadband Forum TR-252i3 clause 5.6 Spectrum related
      profiles; Line Spectrum Profile.
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Copyright (c) 2016-2020 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +70,19 @@ submodule bbf-vdsl-line-spectrum-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2019-10-21 {
     description
       "Amendment 2 Corrigendum 1.
@@ -143,7 +153,7 @@ submodule bbf-vdsl-line-spectrum-profile-body {
       must '. <= ../stop-index' {
         description
           "The start index must be less than or equal to the stop
-           index";
+           index.";
       }
       description
         "The sub-carrier index identifying the start of a range of
@@ -154,7 +164,7 @@ submodule bbf-vdsl-line-spectrum-profile-body {
       must '. >= ../start-index' {
         description
           "The stop index must be greater than or equal to the
-           start index";
+           start index.";
       }
       mandatory true;
       description
@@ -191,11 +201,10 @@ submodule bbf-vdsl-line-spectrum-profile-body {
       default "all";
       description
         "This configuration parameter defines the line states the
-         xTU-C or xTU-R may autonomously transition to on this
-         line. It is coded in a bit-map representation
-         (0 if not allowed, 1 if allowed).
-         The default is 'all', corresponding to all power management
-         states allowed.";
+         xDSL Transceiver Unit - Central office (xTU-C) or xDSL
+         Transceiver Unit - Remote side (xTU-R) may autonomously
+         transition to on this line. The default is 'all',
+         corresponding to all power management states allowed.";
       reference
         "ITU-T G.997.1 clause 7.3.1.1.4 Power management state
          enabling (PMMode).";
@@ -355,12 +364,12 @@ submodule bbf-vdsl-line-spectrum-profile-body {
       default "16";
       description
         "This parameter defines the minimum rate of the message
-         based overhead that will be maintained by the xTU in the
-         downstream direction (MSGMINds). MSGMINds is expressed in
-         bits per second and ranges from 4,000 to 248,000 bit/s with
-         1,000 bit/s steps. Valid values are specified in the relevant
-         ITU-T Recommendation, e.g., [ITU-T G.992.3] and [ITU-T
-         G.993.2].";
+         based overhead that will be maintained by the xDSL
+         Transceiver Unit (xTU) in the downstream direction
+         (MSGMINds). MSGMINds is expressed in bits per second and
+         ranges from 4,000 to 248,000 bit/s with 1,000 bit/s steps.
+         Valid values are specified in the relevant ITU-T
+         Recommendation, e.g., [ITU-T G.992.3] and [ITU-T G.993.2].";
       reference
         "ITU-T G.997.1 clause 7.3.1.5.2 Minimum overhead rate
          downstream (MSGMINds)";
@@ -373,12 +382,12 @@ submodule bbf-vdsl-line-spectrum-profile-body {
       default "16";
       description
         "This parameter defines the minimum rate of the message
-         based overhead that will be maintained by the xTU in the
-         upstream direction (MSGMINus). MSGMINus is expressed in bits
-         per second and ranges from 4,000 to 248,000 bit/s with 1,000
-         bit/s steps. Valid values are specified in the relevant
-         ITU-T Recommendation, e.g., [ITU-T G.992.3] and [ITU-T
-         G.993.2].";
+         based overhead that will be maintained by the xDSL
+         Transceiver Unit (xTU) in the upstream direction (MSGMINus).
+         MSGMINus is expressed in bits per second and ranges from
+         4,000 to 248,000 bit/s with 1,000 bit/s steps. Valid values
+         are specified in the relevant ITU-T Recommendation, e.g.,
+         [ITU-T G.992.3] and [ITU-T G.993.2].";
       reference
         "ITU-T G.997.1 clause 7.3.1.5.1 Minimum overhead rate
          upstream (MSGMINus)";
@@ -396,10 +405,10 @@ submodule bbf-vdsl-line-spectrum-profile-body {
       default "all";
       description
         "This configuration parameter contains the ITU-T G.993.2
-         profiles to be allowed by the near-end xTU on this line.
-         It is coded as a list of profiles or the special value 'all'.
-         The default is 'all', corresponding to all profiles
-         allowed.";
+         profiles to be allowed by the near-end xDSL Transceiver Unit
+         (xTU) on this line. It is coded as a list of profiles or the
+         special value 'all'. The default is 'all', corresponding to
+         all profiles allowed.";
       reference
         "ITU-T G.997.1 clause 7.3.1.1.11 VDSL2 profiles enabling
          (PROFILES)";
@@ -409,9 +418,9 @@ submodule bbf-vdsl-line-spectrum-profile-body {
       default "all";
       description
         "This parameter contains the US0 Power Spectral Density (PSD)
-         masks to be allowed by the near-end xTU on the line.
-         The default is 'all', corresponding to all US0 PSD masks
-         allowed.
+         masks to be allowed by the near-end xDSL Transceiver Unit
+         (xTU) on the line. The default is 'all', corresponding to all
+         US0 PSD masks allowed.
 
          This parameter only applies to [ITU-T G.993.2 Annex A].";
     }
@@ -469,7 +478,7 @@ submodule bbf-vdsl-line-spectrum-profile-body {
          upstream direction will be ignored. In [ITU-T G.993.2],
          both parameters are relevant. This parameter has 4 valid
          values. The default value is enum 1, corresponding to
-         RTX_PREFERRED";
+         RTX_PREFERRED.";
       reference
         "ITU-T G.997.1 clause 7.3.1.11 Retransmission mode
          (RTX_MODE_ds)";
@@ -516,11 +525,10 @@ submodule bbf-vdsl-line-spectrum-profile-body {
          both parameters are relevant. This parameter has 4 valid
          values. The default value is enum 1, corresponding to
          RTX_PREFERRED.
-         NOTE - Due to the optionality of ITU-T G.998.4
-         retransmission in upstream direction, the use of
-         RTX_FORCED in upstream may lead to initialization
-         failure, even if the xTU is supporting ITU-T G.998.4 (in
-         downstream).";
+         NOTE - Due to the optionality of ITU-T G.998.4 retransmission
+         in upstream direction, the use of RTX_FORCED in upstream may
+         lead to initialization failure, even if the xDSL Transceiver
+         Unit (xTU) is supporting ITU-T G.998.4 (in downstream).";
       reference
         "ITU-T G.997.1 clause 7.3.1.11 Retransmission mode
          (RTX_MODE_us)";

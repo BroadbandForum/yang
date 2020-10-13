@@ -1,0 +1,288 @@
+module bbf-vdsl-alarm-types {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-vdsl-alarm-types";
+  prefix bbf-vdsl-alt;
+
+  import bbf-alarm-types {
+    prefix bbf-alt;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Ken Kerpez, ASSIA, Inc.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia
+
+     WA Director: Joey Boyd, ADTRAN";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on management of Very
+     High-speed Digital Subscriber Line (VDSL) interfaces as defined
+     in ITU-T G.993.x, ITU-T G.997.1 and BBF TR-252. As such, this
+     module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module contains a set of alarm definitions
+     related to VDSL interfaces.
+
+     Copyright (c) 2016-2020 Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-355a3; see
+     the TR itself for full legal notices.";
+
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
+  revision 2019-03-11 {
+    description
+      "Initial revision.";
+    reference
+      "TBD";
+  }
+
+  /* ABSTRACT IDENTITIES */
+
+  identity vdsl {
+    base bbf-alt:bbf-alarm-type-id;
+    description
+      "Base identity for all VDSL alarm type identifiers defined in
+       TR-355 YANG modules.
+
+       Hierarchy of identities defined in this module:
+
+       +--vdsl                                             (abstract)
+          +--vdsl-xtu-c-failures                           (abstract)
+          |  +--vdsl-xtu-c-line-initialization             (concrete)
+          |  +--vdsl-xtu-c-loss-of-signal                  (concrete)
+          |  +--vdsl-xtu-c-loss-of-frame                   (concrete)
+          |  +--vdsl-xtu-c-loss-of-margin                  (concrete)
+          |  +--vdsl-xtu-c-loss-of-power                   (concrete)
+          +--vdsl-ftu-r-failures                           (abstract)
+             +--vdsl-xtu-r-loss-of-signal                  (concrete)
+             +--vdsl-xtu-r-loss-of-frame                   (concrete)
+             +--vdsl-xtu-r-loss-of-margin                  (concrete)
+             +--vdsl-xtu-r-loss-of-power                   (concrete)
+
+       This identity is abstract and SHOULD NOT generally be used for
+       alarms. If used to define an alarm that was not known at
+       design time, it MUST be qualified with an alarm type qualifier
+       string. This practice, however, should be generally avoided to
+       ensure all possible alarms are known at design time.";
+  }
+
+  identity vdsl-xtu-c-failures {
+    base vdsl;
+    description
+      "Base identity for all VDSL xDSL Transceiver Unit - Central
+       office (xTU-C) failure alarms.
+
+       This identity is abstract and SHOULD NOT generally be used for
+       alarms. If used to define an alarm that was not known at
+       design time, it MUST be qualified with an alarm type qualifier
+       string. This practice, however, should be generally avoided to
+       ensure all possible alarms are known at design time.";
+  }
+
+  identity vdsl-xtu-r-failures {
+    base vdsl;
+    description
+      "Base identity for all VDSL xDSL Transceiver Unit - Remote side
+       (xTU-R) failure alarms.
+
+       This identity is abstract and SHOULD NOT generally be used for
+       alarms. If used to define an alarm that was not known at
+       design time, it MUST be qualified with an alarm type qualifier
+       string. This practice, however, should be generally avoided to
+       ensure all possible alarms are known at design time.";
+  }
+
+  /* xTU-C FAILURES */
+
+  identity vdsl-xtu-c-line-initialization {
+    base vdsl-xtu-c-failures;
+    description
+      "If the line is forced to the L0 state (or into loop diagnostic
+       mode) and an attempt to reach the L0 state (or to successfully
+       complete the loop diagnostic procedures) fails (after a vendor
+       discretionary number of retries and/or within a vendor
+       discretionary timeout), then an initialization failure occurs.
+       An initialization failure cause and last successful transmitted
+       state are given by the line initialization failure (see clause
+       7.5.1.6). A line initialization failure will be conveyed to the
+       NMS by the xDSL Transceiver Unit - Central office (xTU-C) (over
+       the Q-interface) and should be conveyed to the NMS by the xDSL
+       Transceiver Unit - Remote side (xTU-R) (over the
+       T-/S-interface) after it is detected.";
+    reference
+      "ITU-T G.997.1 clause 7.1.1.3 Line initialization (LINIT)
+       failure";
+  }
+
+  identity vdsl-xtu-c-loss-of-signal {
+    base vdsl-xtu-c-failures;
+    description
+      "A Loss of Signal (LOS) failure is declared after 2.5 +- 0.5 s
+       of contiguous LOS defect, or, if LOS defect is present when
+       the criteria for Loss of Frame (LOF) failure declaration have
+       been met (see LOF definition below). A LOS failure is cleared
+       after 10 +- 0.5 s of no LOS defect.";
+    reference
+      "ITU-T G.997.1 clause 7.1.1.1.1 Loss-of-signal (LOS)
+       failure";
+  }
+
+  identity vdsl-xtu-c-loss-of-frame {
+    base vdsl-xtu-c-failures;
+    description
+      "A Loss of Frame (LOF) failure is declared after 2.5 +- 0.5 s
+       of contiguous Severly Errored Frame (SEF) defect, except when
+       an LOS defect or failure is present (see LOS definition
+       above). A LOF failure is cleared when LOS failure is
+       declared, or after 10 +- 0.5 s of no SEF defect.";
+    reference
+      "ITU-T G.997.1 clause 7.1.1.1.2 Loss-of-frame (LOF)
+       failure";
+  }
+
+  identity vdsl-xtu-c-loss-of-margin {
+    base vdsl-xtu-c-failures;
+    description
+      "A Loss of Margin (LOM) failure is declared when a
+       re-initialization is triggered by a persistent near-end
+       lom defect, except when an Loss of Signal (LOS) or Loss of
+       Frame (LOF) defect or failure is present (see los and lof
+       definitions above). A LOM failure is cleared when LOS or LOF
+       failure is declared, or after 10 +- 0.5 seconds of no LOM
+       defect.";
+    reference
+      "ITU-T G.997.1 clause 7.1.1.1.4 Loss of margin (LOM)
+       failure";
+  }
+
+  identity vdsl-xtu-c-loss-of-power {
+    base vdsl-xtu-c-failures;
+    description
+      "A Loss of Power (LPR) failure is declared after 2.5 +- 0.5 s
+       of contiguous near-end LPR primitive presence. An LPR
+       failure is cleared after 10 +- 0.5 s of no near-end LPR
+       primitive presence.";
+    reference
+      "ITU-T G.997.1 clause 7.1.1.1.3 Loss-of-power (LPR)
+       failure";
+  }
+
+  /* xTU-R FAILURES */
+
+  identity vdsl-xtu-r-loss-of-signal {
+    base vdsl-xtu-r-failures;
+    description
+      "A Far-End Loss of Signal (LOS-FE) failure is declared
+       after 2.5 +- 0.5 s of contiguous far-end Loss of Signal (LOS)
+       defects, or, if far-end LOS defect is present when the
+       criteria for Loss of Frame (LOF) failure declaration have
+       been met (see LOF definition below). A far-end LOS failure is
+       cleared after 10 +- 0.5 s of no far-end LOS defect.";
+    reference
+      "ITU-T G.997.1 clause 7.1.1.2.1 Far-end loss-of-signal
+       (LOS-FE) failure";
+  }
+
+  identity vdsl-xtu-r-loss-of-frame {
+    base vdsl-xtu-r-failures;
+    description
+      "A Far-End Loss of Frame (LOF-FE) failure is declared
+       after 2.5 +- 0.5 s of contiguous Remote Defect Indication
+       (RDI) defects, except when a far-end Loss of Signal (LOS)
+       defect or failure is present (see LOS definition above). A
+       far-end Loss of Frame (LOF) failure is cleared when far-end
+       LOS failure is declared, or after 10 +- 0.5 s of no RDI
+       defect.";
+    reference
+      "ITU-T G.997.1 clause 7.1.1.2.2 Far-end loss-of-frame
+       (LOF-FE) failure";
+  }
+
+  identity vdsl-xtu-r-loss-of-margin {
+    base vdsl-xtu-r-failures;
+    description
+      "A Far-End Loss of Margin (LOM-FE) failure is declared
+       when a re-initialization is triggered by a persistent
+       far-end lom defect, except when an Far-End Loss of Signal
+       (LOS-FE) or Far-End Loss of Frame (LOF-FE) defect or failure
+       is present (see los-fe and lof-fe definitions above). A far
+       end LOM failure is cleared when far end LOS or LOF failure is
+       declared, or after 10 +- 0.5 s of no far end LOM defect.";
+    reference
+      "ITU-T G.997.1 clause 7.1.1.2.4 Loss of margin (LOM-FE)
+       failure";
+  }
+
+  identity vdsl-xtu-r-loss-of-power {
+    base vdsl-xtu-r-failures;
+    description
+      "A Far-End Loss of Power (LPR-FE) failure is declared
+       after the occurrence of a far-end LPR primitive followed
+       by 2.5 +- 0.5 s of contiguous near-end Loss of Signal (LOS)
+       defects. A far-end LPR failure is cleared after 10 +- 0.5 s
+       of no near-end LOS defect.";
+    reference
+      "ITU-T G.997.1 clause 7.1.1.2.3 Far-end loss-of-power
+       (LPR-FE) failure";
+  }
+}

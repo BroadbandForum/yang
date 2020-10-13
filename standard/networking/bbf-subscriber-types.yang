@@ -1,40 +1,37 @@
 module bbf-subscriber-types {
   yang-version 1.1;
   namespace "urn:bbf:yang:bbf-subscriber-types";
-
   prefix bbf-subtype;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Project Stream";
-
+     Common YANG Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
-                  <mailto:ludwig.pauwels@nokia.com>
 
-     PS Leader:   Michael Shaffer, Nokia
-                  <mailto:michael.shaffer@nokia.com>
+     PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>";
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
   description
-    "This module contains a collection of YANG definitions for 
+    "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the management of
-     subscribers as applicable to access network equipment. As such, 
-     this module is specific to access network equipment (e.g., 
+     subscribers as applicable to access network equipment. As such,
+     this module is specific to access network equipment (e.g.,
      BBF-specified Access Nodes and FTTdp DPUs).
 
      Specifically, this module defines common types associated with
      subscribers and subscriber protocols.
 
-     Copyright (c) 2017, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -74,15 +71,24 @@ module bbf-subscriber-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2017-05-08 {
     description
       "Initial revision.
        * Approval Date:    see revision date above.
        * Publication Date: 2017-06-02.";
-
     reference
       "TR-383: Common YANG Modules
                <https://www.broadband-forum.org/technical/download/
@@ -93,135 +99,196 @@ module bbf-subscriber-types {
     type bits {
       bit actual-data-rate-upstream {
         description
-          "Sub-option type 0x81 - Actual upstream data rate of an 
+          "Sub-option type 0x81 - Actual upstream data rate of an
            access loop.";
-
         reference
-          "ITU-T G.997 Section 7.5.2.1";
+          "TR-101i2 Table 3, sub-TLV 0x81
+           ITU-T G.997.1 Section 7.5.2.1
+           TR-301i2 Table 14-1, sub-TLV 129
+           ITU-T G.997.2 Section 7.11.1.1";
       }
       bit actual-data-rate-downstream {
         description
-          "Sub-option type 0x82 - Actual downstream data rate of an 
+          "Sub-option type 0x82 - Actual downstream data rate of an
            access loop.";
-
         reference
-          "ITU-T G.997 Section 7.5.2.1";
+          "TR-101i2 Table 3, sub-TLV 0x82
+           ITU-T G.997.1 Section 7.5.2.1
+           TR-301i2 Table 14-1, sub-TLV 130
+           ITU-T G.997.2 Section 7.11.1.1";
       }
       bit min-data-rate-upstream {
         description
-          "Sub-option type 0x83 - Minimum upstream data rate at which 
+          "Sub-option type 0x83 - Minimum upstream data rate at which
            the loop is set to operate.";
-
         reference
-          "ITU-T G.997 Section 7.3.1.1.1";
+          "TR-101i2 Table 3, sub-TLV 0x83
+           ITU-T G.997.1 Section 7.3.2.1.1";
       }
       bit min-data-rate-downstream {
         description
-          "Sub-option type 0x84 - Minimum downstream data rate at 
+          "Sub-option type 0x84 - Minimum downstream data rate at
            which the loop is set to operate.";
-
         reference
-          "ITU-T G.997 Section 7.3.1.1.1";
+          "TR-101i2 Table 3, sub-TLV 0x84
+           ITU-T G.997.1 Section 7.3.2.1.1";
       }
       bit attainable-data-rate-upstream {
         description
-          "Sub-option type 0x85 - Maximum upstream data rate that can 
+          "Sub-option type 0x85 - Maximum upstream data rate that can
            be achieved.";
-
         reference
-          "ITU-T G.997 Section 7.5.1.12 and 7.5.1.13";
+          "TR-101i2 Table 3, sub-TLV 0x85
+           ITU-T G.997.1 Section 7.5.1.20 (ATTNDRus)
+           TR-301i2 Table 14-1, sub-TLV 133
+           ITU-T G.997.2 Section 7.11.2.1";
       }
       bit attainable-data-rate-downstream {
         description
-          "Sub-option type 0x86 - Maximum downstream data rate that 
+          "Sub-option type 0x86 - Maximum downstream data rate that
            can be achieved.";
-
         reference
-          "ITU-T G.997 Section 7.5.1.12 and 7.5.1.13";
+          "TR-101i2 Table 3, sub-TLV 0x86
+           ITU-T G.997.1 Section 7.5.1.19 (ATTNDRds)
+           TR-301i2 Table 14-1, sub-TLV 134
+           ITU-T G.997.2 Section 7.11.2.1";
       }
       bit max-data-rate-upstream {
         description
-          "Sub-option type 0x87 - Maximum upstream data rate at which 
+          "Sub-option type 0x87 - Maximum upstream data rate at which
            the loop is set to operate.";
-
         reference
-          "ITU-T G.997 Section 7.3.2.1.3";
+          "TR-101i2 Table 3, sub-TLV 0x87
+           ITU-T G.997.1 Section 7.3.2.1.3";
       }
       bit max-data-rate-downstream {
         description
-          "Sub-option type 0x88 - Maximum downstream data rate at 
+          "Sub-option type 0x88 - Maximum downstream data rate at
            which the loop is set to operate.";
-
         reference
-          "ITU-T G.997 Section 7.3.2.1.3";
+          "TR-101i2 Table 3, sub-TLV 0x88
+           ITU-T G.997.1 Section 7.3.2.1.3";
       }
       bit min-data-rate-upstream-low-power-state {
         description
-          "Sub-option type 0x89 - Minimum upstream data rate at which 
-           the loop is set to operate during the low power state 
+          "Sub-option type 0x89 - Minimum upstream data rate at which
+           the loop is set to operate during the low power state
            (L1/L2).";
-
         reference
-          "ITU-T G.997 Section 7.3.2.1.5";
+          "TR-101i2 Table 3, sub-TLV 0x89
+           ITU-T G.997.1 Section 7.3.2.1.5";
       }
       bit min-data-rate-downstream-low-power-state {
         description
-          "Sub-option type 0x8A - Minimum downstream data rate at 
-           which the loop is set to operate during the low power 
+          "Sub-option type 0x8A - Minimum downstream data rate at
+           which the loop is set to operate during the low power
            state (L1/L2).";
-
         reference
-          "ITU-T G.997 Section 7.3.2.1.5";
+          "TR-101i2 Table 3, sub-TLV 0x8A
+           ITU-T G.997.1 Section 7.3.2.1.5";
       }
       bit max-interleaving-delay-upstream {
         description
-          "Sub-option type 0x8B - Maximum one-way interleaving delay 
+          "Sub-option type 0x8B - Maximum one-way interleaving delay
            in upstream.";
-
         reference
-          "ITU-T G.997 Section 7.3.2.2";
+          "TR-101i2 Table 3, sub-TLV 0x8B
+           ITU-T G.997.1 Section 7.3.2.2";
       }
       bit actual-interleaving-delay-upstream {
         description
-          "Sub-option type 0x8C - Actual one-way interleaving delay 
-           value in milliseconds corresponding to the interleaver 
+          "Sub-option type 0x8C - Actual one-way interleaving delay
+           value in milliseconds corresponding to the interleaver
            setting in upstream.";
-
         reference
-          "ITU-T G.997 Section 7.5.2.3";
+          "TR-101i2 Table 3, sub-TLV 0x8C
+           ITU-T G.997.1 Section 7.5.2.3";
       }
       bit max-interleaving-delay-downstream {
         description
-          "Sub-option type 0x8D - Maximum one-way interleaving delay 
+          "Sub-option type 0x8D - Maximum one-way interleaving delay
            in downstream.";
-
         reference
-          "ITU-T G.997 Section 7.3.2.2";
+          "TR-101i2 Table 3, sub-TLV 0x8D
+           ITU-T G.997.1 Section 7.3.2.2";
       }
       bit actual-interleaving-delay-downstream {
         description
-          "Sub-option type 0x8E - Actual one-way interleaving delay 
-           value in milliseconds corresponding to the interleaver 
+          "Sub-option type 0x8E - Actual one-way interleaving delay
+           value in milliseconds corresponding to the interleaver
            setting in downstream.";
-
         reference
-          "ITU-T G.997 Section 7.5.2.3";
+          "TR-101i2 Table 3, sub-TLV 0x8E
+           ITU-T G.997.1 Section 7.5.2.3";
       }
       bit access-loop-encapsulation {
         description
           "Sub-option type 0x90 - the data link protocol and the
            encapsulation overhead on the access loop.";
-
         reference
           "TR-101i2 - R164";
       }
+      bit expected-throughput-upstream {
+        description
+          "Expected throughput (ETR) upstream.";
+        reference
+          "TR-301i2 Table 14-1, sub-TLV 155
+           ITU-T G.997.2 Section 7.11.1.2";
+      }
+      bit expected-throughput-downstream {
+        description
+          "Expected throughput (ETR) downstream.";
+        reference
+          "TR-301i2 Table 14-1, sub-TLV 156
+           ITU-T G.997.2 Section 7.11.1.2";
+      }
+      bit attainable-expected-throughput-upstream {
+        description
+          "Attainable expected throughput (ETR) upstream.";
+        reference
+          "TR-301i2 Table 14-1, sub-TLV 157
+           ITU-T G.997.2 Section 7.11.2.2";
+      }
+      bit attainable-expected-throughput-downstream {
+        description
+          "Attainable expected throughput (ETR) downstream.";
+        reference
+          "TR-301i2 Table 14-1, sub-TLV 158
+           ITU-T G.997.2 Section 7.11.2.2";
+      }
+      bit gamma-data-rate-upstream {
+        description
+          "Attainable gamma data rate (GDR) upstream.";
+        reference
+          "TR-301i2 Table 14-1, sub-TLV 159
+           ITU-T G.997.2 Section 7.11.1.3.";
+      }
+      bit gamma-data-rate-downstream {
+        description
+          "Gamma data rate (GDR) downstream.";
+        reference
+          "TR-301i2 Table 14-1, sub-TLV 160
+           ITU-T G.997.2 Section 7.11.1.3";
+      }
+      bit attainable-gamma-data-rate-upstream {
+        description
+          "Gamma data rate (GDR) upstream.";
+        reference
+          "TR-301i2 Table 14-1, sub-TLV 161
+           ITU-T G.997.2 Section 7.11.2.3";
+      }
+      bit attainable-gamma-data-rate-downstream {
+        description
+          "Attainable gamma data rate (GDR) downstream.";
+        reference
+          "TR-301i2 Table 14-1, sub-TLV 162
+           ITU-T G.997.2 Section 7.11.2.3";
+      }
     }
-
     description
       "The type defined for the broadband line characteristics
-       listed in TR-101i2.";
-
+       listed in TR-101i2 and TR-301i2";
     reference
-      "TR-101i2 - R158";
+      "TR-101i2 - R158, TR-301i2 - R119";
   }
 }

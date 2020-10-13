@@ -1,0 +1,148 @@
+module bbf-hardware-transceivers-xpon {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-hardware-transceivers-xpon";
+  prefix bbf-hw-xcvr-xpon;
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import bbf-xpon-types {
+    prefix bbf-xpon-types;
+  }
+  import ietf-hardware {
+    prefix hw;
+  }
+  import bbf-hardware-transceivers {
+    prefix bbf-hw-xcvr;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Fiber Access Networks Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     Editor:      Igor Ternovsky, Broadcom
+
+     Editor:      Robert Peschi, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Samuel Chen, Broadcom";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on management of
+     ITU-T Passive Optical Network (PON) interfaces as defined in
+     ITU-T G.984.x, G.987.x, ITU-T G.989.x and ITU-T G.9807.x. As
+     such, this module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module augments the bbf-hardware-transceivers
+     model to define transceiver data specific to PON applications.
+
+     Copyright (c) 2018-2020, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385i2; see
+     the TR itself for full legal notices.";
+
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
+
+  augment "/hw:hardware/hw:component/bbf-hw-xcvr:transceiver-link/"
+        + "bbf-hw-xcvr:diagnostics" {
+    description
+      "Data nodes for components of identity class
+       'transceiver-link'.";
+    list rssi-onu {
+      key "detected-serial-number";
+      config false;
+      description
+        "This list is only applicable when the transceiver-link is
+         used for xPON. It contains the averaged power level of
+         each Optical Network Unit (ONU) (whether configured as a
+         virtual Access Network Interface (vANI) or non-configured)
+         which is currently present on the transceiver-link.";
+      leaf detected-serial-number {
+        type bbf-xpon-types:onu-serial-number;
+        description
+          "The serial number of the Optical Network Unit (ONU).";
+        reference
+          "ITU-T G.984.3, clause 9.2.4.1
+           ITU-T G.987.3, clause 11.3.3.2
+           ITU-T G.9807.1, clauses C11.2.6.1, C11.2.6.2 and
+           C11.3.4.1
+           ITU-T G.989.3, clauses 11.2.6.1, 11.2.6.2 and 11.3.4.1.";
+      }
+      leaf rssi {
+        type bbf-xpon-types:int16-or-unknown;
+        units "0.1 dBm";
+        mandatory true;
+        description
+          "Received Signal Strength Indication (RSSI). This is a
+           measurement at the Optical Line Termination (OLT) of the
+           averaged optical power received from a specific Optical
+           Network Unit (ONU) operating in burst mode.";
+        reference
+          "ITU-T G.Sup48, section 3.1.";
+      }
+      leaf v-ani-ref {
+        type if:interface-ref;
+        description
+          "The virtual Access Network Interface (ANI) related to this
+           Optical Network Unit (ONU) when configured on this Optical
+           Line Termination (OLT). This leaf is not present if no
+           virtual Access Network Interface (vANI) corresponds
+           to the ONU in the OLT.";
+      }
+    }
+  }
+}

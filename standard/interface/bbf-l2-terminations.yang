@@ -1,0 +1,177 @@
+module bbf-l2-terminations {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-l2-terminations";
+  prefix bbf-l2term;
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import bbf-if-type {
+    prefix bbfift;
+  }
+  import bbf-dot1q-types {
+    prefix bbf-dot1qt;
+  }
+  import bbf-frame-classification {
+    prefix bbf-classif;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, ADTRAN
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on the management of
+     Layer 2 terminations as applicable to access network equipment.
+     As such, this module is specific to access network equipment
+     (e.g., BBF-specified Access Nodes and FTTdp DPUs).
+
+     Copyright (c) 2017-2020, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a3; see
+     the TR itself for full legal notices.";
+
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
+
+  augment "/if:interfaces/if:interface" {
+    when "derived-from-or-self(if:type, 'bbfift:l2-termination')" {
+      description
+        "Only applicable for Layer 2 terminations.";
+    }
+    description
+      "Augment interface configuration for Layer 2 terminations.";
+    container l2-termination {
+      description
+        "Interface configuration specific to Layer 2 terminations.";
+      container ingress-rewrite {
+        description
+          "Ingress rewrite refers to the supported tag manipulations
+           before the frame is sent to a higher layer interface.";
+        leaf pop-tags {
+          type uint8 {
+            range "0..2";
+          }
+          default "0";
+          description
+            "The number of tags to remove before the frame is
+             sent to a higher layer interface.";
+        }
+      }
+      container egress-rewrite {
+        description
+          "Egress rewrite refers to the supported tag manipulations
+           before the frame is sent to a forwarder.";
+        list push-tag {
+          key "index";
+          max-elements 2;
+          description
+            "The list of tags to push.
+
+             Note that there is no need to configure the value of the
+             Drop Eligible Indicator (DEI) as packets transmitted from
+             a Layer 2 termination will always have the DEI set to
+             zero.";
+          leaf index {
+            type bbf-classif:tag-index;
+            must '(count(../../push-tag[index = 0]) > 0)' {
+              error-message
+                "An inner tag can only be pushed if an outer tag is "
+              + "also specified.";
+              description
+                "Only allow a push of an inner tag if an outer tag is
+                 also being pushed.";
+            }
+            description
+              "The index into the tag stack.";
+          }
+          leaf tag-type {
+            type union {
+              type bbf-dot1qt:dot1q-tag-type;
+              type bbf-dot1qt:ether-type;
+              type bbf-dot1qt:ether-type-hex;
+            }
+            mandatory true;
+            description
+              "VLAN tag type.";
+          }
+          leaf vlan-id {
+            type union {
+              type bbf-dot1qt:vlan-id-or-0;
+            }
+            mandatory true;
+            description
+              "The VLAN ID or the value 0 (priority-tagged).";
+          }
+          leaf pbit {
+            type bbf-dot1qt:pbit;
+            default "0";
+            description
+              "Specified p-bit value to write into the tag.";
+          }
+        }
+      }
+    }
+  }
+}

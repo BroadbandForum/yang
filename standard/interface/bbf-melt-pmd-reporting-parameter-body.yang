@@ -18,7 +18,7 @@ submodule bbf-melt-pmd-reporting-parameter-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -30,7 +30,7 @@ submodule bbf-melt-pmd-reporting-parameter-body {
      Metallic Line Test Physical Medium Dependent (MELT-PMD) reporting
      parameters.
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Copyright (c) 2016-2020 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +70,25 @@ submodule bbf-melt-pmd-reporting-parameter-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
+  revision 2019-06-17 {
+    description
+      "Changes for amendment 3.";
+    reference
+      "TBD";
+  }
   revision 2019-06-11 {
     description
       "Amendment 2.
@@ -102,6 +118,43 @@ submodule bbf-melt-pmd-reporting-parameter-body {
       "TR-355: YANG Modules for FTTdp Management
                <https://www.broadband-forum.org/technical/download/
                         TR-355.pdf>";
+  }
+
+  typedef melt-pmd-reporting-parameter {
+    type enumeration {
+      enum measurement-frequency {
+        description
+          "This parameter is the measurement frequency for a
+           3-element capacitance measurement, if performed with a
+           sinewave signal, or a for 3-element complex admittance
+           measurement. The range of valid values is from 10 to 1000
+           Hz with a granularity of 1 Hz.";
+        reference
+          "ITU-T G.996.2 clause E.2.2.1 (MELT-MFREQ)";
+      }
+      enum foreign-voltage-input-impedance {
+        description
+          "This parameter reports the nominal input impedance of the
+           measuring instrument during foreign voltage tests. The
+           range of valid values is from 0 to 10 Mohm with a
+           granularity of 1 ohm.";
+        reference
+          "ITU-T G.996.2 clause E.2.2.2 (MELT-IMP-V)";
+      }
+      enum loop-complex-admittance-measurement-voltage {
+        description
+          "This parameter is the peak amplitude of the differential
+           sinewave used by the measurement of the loop complex
+           admittance with a high voltage metallic test (see
+           clause E.1.1.7). The range of valid values is from 0 to
+           150 V and it shall be represented in linear format with a
+           granularity of 0.1 V.";
+        reference
+          "ITU-T G.996.2 clause E.2.2.3 (MELT-HCA-V)";
+      }
+    }
+    description
+      "An enumerated list of MELT PMD reporting parameters.";
   }
 
   grouping pmd-reporting-parameters {
@@ -148,7 +201,7 @@ submodule bbf-melt-pmd-reporting-parameter-body {
         "ITU-T G.996.2 clause E.2.2.3 (MELT-HCA-V)";
     }
     leaf unreliability-indicator {
-      if-feature "melt-pmd-reporting-parameter-reliability";
+      if-feature "bbf-melt:melt-pmd-reporting-parameter-reliability";
       type bits {
         bit measurement-frequency {
           description
@@ -192,6 +245,28 @@ submodule bbf-melt-pmd-reporting-parameter-body {
              degraded due to external conditions.";
       reference
         "ITU-T G.996.2 clause E.2.2.4 (Reliability indicator)";
+    }
+    container melt-pmd-reporting-vendor-specific-status {
+      if-feature "bbf-melt:melt-pmd-reporting-parameter-reliability";
+      description
+        "Vendor specific status associated with each MELT
+         reporting test.";
+      list status {
+        key "parameter";
+        description
+          "A list of per parameter test status.";
+        leaf parameter {
+          type melt-pmd-reporting-parameter;
+          description
+            "The MELT PMD reporting parameter.";
+        }
+        leaf message {
+          type string;
+          description
+            "Vendor specific status message for each of the
+             MELT PMD reporting parameters.";
+        }
+      }
     }
   }
 }

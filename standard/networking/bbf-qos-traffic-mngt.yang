@@ -1,17 +1,14 @@
 module bbf-qos-traffic-mngt {
   yang-version 1.1;
   namespace "urn:bbf:yang:bbf-qos-traffic-mngt";
-
   prefix bbf-qos-tm;
 
   import ietf-interfaces {
     prefix if;
   }
-
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import bbf-qos-types {
     prefix bbf-qos-t;
   }
@@ -19,23 +16,21 @@ module bbf-qos-traffic-mngt {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the management of
@@ -46,7 +41,7 @@ module bbf-qos-traffic-mngt {
      Specifically, this module contains a collection of functions for
      QoS traffic management (TM).
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -86,9 +81,19 @@ module bbf-qos-traffic-mngt {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-12-03 {
     description
       "Amendment 2.
@@ -101,7 +106,7 @@ module bbf-qos-traffic-mngt {
   }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -132,6 +137,18 @@ module bbf-qos-traffic-mngt {
        configuring traffic-class-id to queue-id mapping profiles.";
   }
 
+  feature extended-scheduling-weight {
+    description
+      "Indicates support for extending the maximum weight value from
+       255 to 65535.";
+  }
+
+  feature dual-rate-scheduling-from-queue {
+    description
+      "Indicates support for dual rate scheduling, i.e. configuring
+       from a parent scheduler a separate priority and/or weight
+       for the CIR and EIR traffic from a single child scheduler.";
+  }
 
   typedef queue-id {
     type uint32 {
@@ -155,8 +172,26 @@ module bbf-qos-traffic-mngt {
        Value 7 means highest priority and 0 means lowest priority.";
   }
 
+  typedef extended-scheduling-priority {
+    type uint8 {
+      range "0..15";
+    }
+    description
+      "This number represents the priority of the queue or a scheduler
+       competing with others in the context of scheduling traffic.
+       Value 15 means highest priority and 0 means lowest priority.";
+  }
+
   typedef scheduling-weight {
     type uint8;
+    description
+      "If scheduling is to be performed from multiple queues or
+       schedulers with the same priority, then the scheduling-weight
+       assigns a weight to each of them.";
+  }
+
+  typedef extended-scheduling-weight {
+    type uint16;
     description
       "If scheduling is to be performed from multiple queues or
        schedulers with the same priority, then the scheduling-weight
@@ -186,18 +221,15 @@ module bbf-qos-traffic-mngt {
       "Weighted taildrop BAC type.";
   }
 
-
   identity wred {
     base bac-type;
     description
       "Weighted Random Early Detection (WRED) BAC type.";
   }
 
-
   grouping min-threshold {
     description
       "Definition of minimum threshold.";
-
     leaf min-threshold {
       type bbf-yang:percent;
       description
@@ -213,10 +245,8 @@ module bbf-qos-traffic-mngt {
   grouping max-threshold {
     description
       "Definition of maximum threshold.";
-
     leaf max-threshold {
       type bbf-yang:percent;
-
       description
         "The threshold to discard all incoming packets.
 
@@ -228,10 +258,8 @@ module bbf-qos-traffic-mngt {
   grouping max-probability {
     description
       "Definition of maximum probability.";
-
     leaf max-probability {
       type bbf-yang:percent;
-
       description
         "The maximum discard probability of packets before the
          maximum threshold is reached.";
@@ -241,11 +269,8 @@ module bbf-qos-traffic-mngt {
   grouping common-random-early-detection-parameters {
     description
       "A set of parameters common to RED and WRED BAC algorithms.";
-
     uses min-threshold;
-
     uses max-threshold;
-
     uses max-probability;
   }
 
@@ -253,34 +278,27 @@ module bbf-qos-traffic-mngt {
     description
       "A set of types of profiles for traffic management
        configuration.";
-
     list tc-id-2-queue-id-mapping-profile {
       if-feature "tc-id-2-queue-id-mapping-config";
-
       key "name";
-
       description
         "A list of traffic-class-id to queue-id mapping profiles.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "The name of a traffic-class-id to queue-id mapping
            profile.";
       }
-
       list mapping-entry {
         key "traffic-class-id";
         description
           "A traffic-class-id to queue-id mapping profile. One profile
            maps each of the traffic-class-ids to a queue-id.";
-
         leaf traffic-class-id {
           type bbf-qos-t:traffic-class-id;
           description
             "A traffic-class-id.";
         }
-
         leaf local-queue-id {
           type queue-id;
           mandatory true;
@@ -290,125 +308,97 @@ module bbf-qos-traffic-mngt {
         }
       }
     }
-
     list bac-entry {
       key "name";
-
       description
         "A list of BAC entries.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "The name of a BAC entry.";
       }
-
       leaf max-queue-size {
         type uint32;
         units "bytes";
         description
           "The maximum queue length.";
       }
-
       choice bac-type {
         mandatory true;
         description
           "Choice of BAC types";
-
         case taildrop {
           description
             "Applicable when the BAC type is 'taildrop'.";
-
           container taildrop {
             description
-              "Management objects associated with taildrop.";
-
+              "Management data nodes associated with taildrop.";
             uses max-threshold;
           }
         }
-
         case red {
           description
             "Applicable when the BAC type is 'red'.";
-
           container red {
             description
-              "Management objects associated with Random Early
+              "Management data nodes associated with Random Early
                Detection (RED).";
-
             uses common-random-early-detection-parameters;
           }
         }
-
         case wtaildrop {
           description
             "Applicable when the BAC type is 'wtaildrop'.";
-
           container wtaildrop {
             description
-              "Management objects associated with weighted taildrop.";
-
+              "Management data nodes associated with weighted
+               taildrop.";
             container color {
               description
-                "Management objects associated with the marked color
-                 of the packet.";
-
+                "Management data nodes associated with the marked
+                 color of the packet.";
               container green {
                 description
                   "Green packets.";
-
                 uses max-threshold;
               }
-
               container yellow {
                 description
                   "Yellow packets.";
-
                 uses max-threshold;
               }
-
               container red {
                 description
                   "Red packets.";
-
                 uses max-threshold;
               }
             }
           }
         }
-
         case wred {
           description
             "Applicable when the BAC type is 'wred'.";
-
           container wred {
             description
-              "Management objects associated with Weighted
+              "Management data nodes associated with Weighted
                Random Early Detection.";
-
             container color {
               description
-                "Management objects associated with the marked color
-                 of the packet.";
-
+                "Management data nodes associated with the marked
+                 color of the packet.";
               container green {
                 description
                   "Green packets.";
-
                 uses common-random-early-detection-parameters;
               }
-
               container yellow {
                 description
                   "Yellow packets.";
-
                 uses common-random-early-detection-parameters;
               }
-
               container red {
                 description
                   "Red packets.";
-
                 uses common-random-early-detection-parameters;
               }
             }
@@ -422,12 +412,11 @@ module bbf-qos-traffic-mngt {
     description
       "A reference to a traffic-class-id to queue-id mapping
        profile.";
-
     leaf tc-id-2-queue-id-mapping-profile-name {
-      if-feature "tc-id-2-queue-id-mapping-config";
+      if-feature "bbf-qos-tm:tc-id-2-queue-id-mapping-config";
       type leafref {
-        path '/bbf-qos-tm:tm-profiles/bbf-qos-tm:tc-id-2-queue-id-'
-           + 'mapping-profile/bbf-qos-tm:name';
+        path "/bbf-qos-tm:tm-profiles/bbf-qos-tm:tc-id-2-queue-id-"
+           + "mapping-profile/bbf-qos-tm:name";
       }
       description
         "The name of a referenced traffic-class-id to queue-id mapping
@@ -438,11 +427,10 @@ module bbf-qos-traffic-mngt {
   grouping bac-ref {
     description
       "A reference to a BAC entry.";
-
     leaf bac-name {
       type leafref {
-        path '/bbf-qos-tm:tm-profiles/bbf-qos-tm:bac-entry/bbf-qos-'
-           + 'tm:name';
+        path "/bbf-qos-tm:tm-profiles/bbf-qos-tm:bac-entry/bbf-qos-"
+           + "tm:name";
       }
       description
         "The name of a referenced BAC entry.";
@@ -452,7 +440,6 @@ module bbf-qos-traffic-mngt {
   grouping scheduling-gen-attr {
     description
       "Configuration data for scheduling traffic from queues.";
-
     leaf priority {
       type scheduling-priority;
       description
@@ -463,53 +450,111 @@ module bbf-qos-traffic-mngt {
          particular interface form the context for scheduling outgoing
          traffic to this interface.";
     }
-
     leaf weight {
       type scheduling-weight;
       description
         "Queues or schedulers that are defined in a particular
          context, e.g. queues defined to schedule outgoing traffic to
          an interface, can have the same priority. The weight defines
-         the the portion of traffic that will be taken from this queue
+         the portion of traffic that will be taken from this queue
+         or scheduler by comparing the weight of this queue or
+         scheduler against the sum of the weights of all queues or
+         schedulers with the same scope and the same priority.";
+    }
+    leaf extended-weight {
+      if-feature "bbf-qos-tm:extended-scheduling-weight";
+      type extended-scheduling-weight;
+      must 'not(boolean(../weight))' {
+        description
+          "Both weight and extended weight must not be configured
+           at the same time.";
+      }
+      description
+        "Queues or schedulers that are defined in a particular
+         context, e.g. queues defined to schedule outgoing traffic to
+         an interface, can have the same priority. The weight defines
+         the portion of traffic that will be taken from this queue
          or scheduler by comparing the weight of this queue or
          scheduler against the sum of the weights of all queues or
          schedulers with the same scope and the same priority.";
     }
   }
 
+  grouping scheduling-attributes {
+    description
+      "Configuration data for scheduling traffic from queues.";
+    leaf priority {
+      type extended-scheduling-priority;
+      description
+        "The priority used to schedule packets from a queue or
+         scheduler, relative to the priority assigned to other queues
+         or schedulers that are defined in the same traffic scheduling
+         context. For example the set of queues defined for a
+         particular interface form the context for scheduling outgoing
+         traffic to this interface.";
+    }
+    leaf extended-weight {
+      type extended-scheduling-weight;
+      description
+        "Queues or schedulers that are defined in a particular
+         context, e.g. queues defined to schedule outgoing traffic to
+         an interface, can have the same priority. The weight defines
+         the portion of traffic that will be taken from this queue or
+         scheduler by comparing the weight of this queue or scheduler
+         against the sum of the weights of all queues or schedulers
+         with the same scope and the same priority.";
+    }
+  }
+
   grouping queues {
     description
       "Configuration data for queues.";
-
     list queue {
       key "local-queue-id";
-
       description
         "A list of queues.";
-
       leaf local-queue-id {
         type queue-id;
         description
           "The identification of a queue within the context of this
            list.";
       }
-
       uses bac-ref;
-
       choice queue-scheduling-cfg-type {
         description
           "Choice of queue scheduling types.";
-
         case inline {
           description
             "The queue parameters are directly configured here.";
-
           uses scheduling-gen-attr;
         }
+        case dual-rate-scheduling {
+          if-feature "bbf-qos-tm:dual-rate-scheduling-from-queue";
+          description
+            "The queue parameters are directly configured here.";
+          container dual-rate-scheduling {
+            description
+              "Configuration which determines the separate processing
+               of CIR and EIR traffic.";
+            container cir-traffic {
+              description
+                "Configuration for the CIR type of traffic from the
+                 child scheduler that is used by the parent
+                 scheduler.";
+              uses bbf-qos-tm:scheduling-attributes;
+            }
+            container eir-traffic {
+              description
+                "Configuration for the EIR type of traffic from the
+                 child scheduler that is used by the parent
+                 scheduler.";
+              uses bbf-qos-tm:scheduling-attributes;
+            }
+          }
+        }
       }
-
       leaf pre-emption {
-        if-feature "pre-emption";
+        if-feature "bbf-qos-tm:pre-emption";
         type boolean;
         description
           "Indicates whether the transmission of a packets from this
@@ -539,15 +584,12 @@ module bbf-qos-traffic-mngt {
          of each of queues.
        The tm-root represents the scheduling stage directly attached
        to the bottleneck resource (typically an interface).";
-
     container tm-root {
       description
         "The attributes of the root in the scheduling tree.";
-
       choice children-type {
         description
           "Choice of chidren types of a scheduler node.";
-
         case queues {
           description
             "In this mode the interface related to the tm-root can
@@ -558,15 +600,13 @@ module bbf-qos-traffic-mngt {
           uses queues;
         }
       }
-
       uses tc-id-2-queue-id-mapping-profile-ref;
     }
   }
 
-  augment '/if:interfaces/if:interface' {
+  augment "/if:interfaces/if:interface" {
     description
       "Augments the interface with traffic management data.";
-
     uses tm-root;
   }
 }

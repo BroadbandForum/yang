@@ -19,7 +19,7 @@ submodule bbf-fast-ftu-inventory-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -29,7 +29,7 @@ submodule bbf-fast-ftu-inventory-body {
   description
     "This submodule contains a collection of FTU inventory related
      YANG data types and grouping definitions for the management of
-     FAST lines.
+     FAST interfaces.
 
      Copyright (c) 2016-2020 Broadband Forum
 
@@ -71,9 +71,19 @@ submodule bbf-fast-ftu-inventory-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2020-01-17 {
     description
       "Amendment 2 Corrigendum 2.
@@ -137,8 +147,9 @@ submodule bbf-fast-ftu-inventory-body {
       }
       description
         "Reports the ITU-T G.994.1 vendor ID as inserted by the
-         FTU-O/FTU-R in the ITU-T G.994.1 CL message and as
-         defined in clause 9.3.3.1/G.994.1.";
+         FAST Transceiver Unit - central Office (FTU-O) or FAST
+         Transceiver Unit - Remote side (FTU-R) in the ITU-T G.994.1
+         CL message and as defined in clause 9.3.3.1/G.994.1.";
       reference
         "ITU-T G.997.2 clause 7.13.1.1 (FTUO_GHS_VENDOR) and
          7.13.1.2 (FTUR_GHS_VENDOR).";
@@ -149,10 +160,11 @@ submodule bbf-fast-ftu-inventory-body {
         // octets
       }
       description
-        "Reports the version number as inserted by the FTU-O/FTU-R
-         in the embedded operations channel (see clause
-         11.2.2.10/G.9701). It is for version control and is vendor
-         specific information.";
+        "Reports the version number as inserted by the FAST
+         Transceiver Unit - central Office (FTU-O) or FAST Transceiver
+         Unit - Remote side (FTU-R) in the embedded operations channel
+         (see clause 11.2.2.10/G.9701). It is for version control and
+         is vendor specific information.";
       reference
         "ITU-T G.997.2 clause 7.13.1.3 (FTUO_VERSION) and clause
          7.13.1.4 (FTUR_VERSION).";
@@ -165,8 +177,10 @@ submodule bbf-fast-ftu-inventory-body {
          The first octet of the self-test result is 00hex if the
          self-test passed and 01hex if the self-test failed. The
          interpretation of the other octets is vendor discretionary
-         and can be interpreted in combination with the FTU-O/FTU-R
-         ITU-T G.994.1 vendor ID and system vendor ID.";
+         and can be interpreted in combination with the FAST
+         Transceiver Unit - central Office (FTU-O) or FAST Transceiver
+         Unit - Remote side (FTU-R) ITU-T G.994.1 vendor ID and system
+         vendor ID.";
       reference
         "ITU-T G.997.2 clause 7.13.1.5 (FTUO_SELFTEST) and clause
          7.13.1.6 (FTUR_SELFTEST).";
@@ -178,9 +192,10 @@ submodule bbf-fast-ftu-inventory-body {
       }
       description
         "Reports the FAST Transceiver Unit (FTU) system vendor ID as
-         inserted by the FTU-O/FTU-R in the embedded operations
-         channel (see clause 11.2.2.10/G.9701) and as defined in
-         clause 9.3.3.1/G.994.1.";
+         inserted by the FAST Transceiver Unit - central Office
+         (FTU-O) or FAST Transceiver Unit - Remote side (FTU-R) in the
+         embedded operations channel (see clause 11.2.2.10/G.9701) and
+         as defined in clause 9.3.3.1/G.994.1.";
       reference
         "ITU-T G.997.2 clause 7.13.2.1 (DPU_SYSTEM_VENDOR) and
          clause 7.13.2.2 (NT_SYSTEM_VENDOR).";
@@ -192,10 +207,12 @@ submodule bbf-fast-ftu-inventory-body {
       }
       description
         "Reports the FAST Transceiver Unit (FTU) serial number as
-         inserted by the FTU-O/FTU-R in the embedded operations
-         channel (see clause 11.2.2.10/G.9701). It is vendor specific
-         information. The combination of system vendor ID and system
-         serial number creates a unique number for each FTU system.";
+         inserted by the FAST Transceiver Unit - central Office
+         (FTU-O) or FAST Transceiver Unit - Remote side (FTU-R) in the
+         embedded operations channel (see clause 11.2.2.10/G.9701). It
+         is vendor specific information. The combination of system
+         vendor ID and system serial number creates a unique number
+         for each FTU system.";
       reference
         "ITU-T G.997.2 clause 7.13.2.3 (DPU_SYSTEM_SERIALNR) and
          clause 7.13.2.4 (NT_SYSTEM_SERIALNR).";
@@ -210,7 +227,7 @@ submodule bbf-fast-ftu-inventory-body {
          7.13.1.8 (FTUR_PROFILES); ITU-T G.9701 clause 6";
     }
     leaf annex-x-supported {
-      if-feature "annex-x";
+      if-feature "bbf-fast:annex-x";
       type boolean;
       description
         "Indicates whether Annex X is supported by the FAST
@@ -221,7 +238,7 @@ submodule bbf-fast-ftu-inventory-body {
          ITU-T G.9701 clause X.7.1.1.1 and X.7.1.2.1.";
     }
     leaf annex-d-supported {
-      if-feature "annex-d";
+      if-feature "bbf-fast:annex-d";
       type boolean;
       description
         "Indicates whether Annex D is supported by the FAST
@@ -232,7 +249,7 @@ submodule bbf-fast-ftu-inventory-body {
          ITU-T G.9701 clause D.6.1.1.1 and D.6.1.2.1.";
     }
     leaf srec-supported {
-      if-feature "srec";
+      if-feature "bbf-fast:srec";
       type boolean;
       description
         "Indicates whether Showtime Reconfiguration (SREC) is
@@ -246,7 +263,8 @@ submodule bbf-fast-ftu-inventory-body {
 
   grouping ftu-o-inventory-parameters {
     description
-      "Inventory parameters applicable only to the FTU-O.";
+      "Inventory parameters applicable only to the FAST Transceiver
+       Unit - central Office (FTU-O).";
     leaf vce-id {
       type union {
         type enumeration {
@@ -286,18 +304,21 @@ submodule bbf-fast-ftu-inventory-body {
          identifies the VCE port to which the line is connected. It
          is an integer from 1 to the maximum number of lines supported
          by the VCE. The combination of VCE ID and VCE port index
-         creates a unique identifier for each vectored FTU-O/-R. A
-         special value (not-in-vectored-group) means the line is not
-         in a vectored group.";
+         creates a unique identifier for each vectored FAST
+         Transceiver Unit - central Office (FTU-O)/-R. A special value
+         (not-in-vectored-group) means the line is not in a vectored
+         group.";
       reference
         "ITU-T G.997.2 clause 7.13.2.6 (VCE_PORT_INDEX);
          ITU-T G.9701 clause 11.4.5.1.2";
     }
     leaf idta-supported {
-      if-feature "(dta and annex-x)";
+      if-feature "(bbf-fast:dta and bbf-fast:annex-x)";
       type boolean;
       description
-        "Indicates whether iDTA is supported by the FTU-O.";
+        "Indicates whether independent Dynamic Time Assignment (iDTA)
+         is supported by the FAST Transceiver Unit - central Office
+         (FTU-O).";
       reference
         "ITU-T G.997.2 clause T.4.3 (DTA_SUPPORT_FTU_O);
          ITU-T G.9701 clause X.7.1.1.1.";
@@ -306,16 +327,18 @@ submodule bbf-fast-ftu-inventory-body {
 
   grouping ftu-inventory {
     description
-      "Objects defining the structure and content of FTU inventory";
+      "Nodes defining the structure and content of FTU inventory.";
     container ftu-o {
       description
-        "Inventory parameters reported by the FTU-O.";
+        "Inventory parameters reported by the FAST Transceiver Unit -
+         central Office (FTU-O).";
       uses ftu-inventory-parameters;
       uses ftu-o-inventory-parameters;
     }
     container ftu-r {
       description
-        "Inventory parameters reported by the FTU-R.";
+        "Inventory parameters reported by the FAST Transceiver Unit -
+         Remote side (FTU-R).";
       uses ftu-inventory-parameters;
     }
   }

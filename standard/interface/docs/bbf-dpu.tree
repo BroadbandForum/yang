@@ -6,9 +6,34 @@ module: ietf-interfaces
   |     +--rw type                        identityref
   |     +--rw enabled?                    boolean
   |     +--rw link-up-down-trap-enable?   enumeration {if-mib}?
+  |     +--ro admin-status                enumeration {if-mib}?
+  |     +--ro oper-status                 enumeration
+  |     +--ro last-change?                yang:date-and-time
+  |     +--ro if-index                    int32 {if-mib}?
+  |     +--ro phys-address?               yang:phys-address
+  |     +--ro higher-layer-if*            interface-ref
+  |     +--ro lower-layer-if*             interface-ref
+  |     +--ro speed?                      yang:gauge64
+  |     +--ro statistics
+  |     |  +--ro discontinuity-time    yang:date-and-time
+  |     |  +--ro in-octets?            yang:counter64
+  |     |  +--ro in-unicast-pkts?      yang:counter64
+  |     |  +--ro in-broadcast-pkts?    yang:counter64
+  |     |  +--ro in-multicast-pkts?    yang:counter64
+  |     |  +--ro in-discards?          yang:counter32
+  |     |  +--ro in-errors?            yang:counter32
+  |     |  +--ro in-unknown-protos?    yang:counter32
+  |     |  +--ro out-octets?           yang:counter64
+  |     |  +--ro out-unicast-pkts?     yang:counter64
+  |     |  +--ro out-broadcast-pkts?   yang:counter64
+  |     |  +--ro out-multicast-pkts?   yang:counter64
+  |     |  +--ro out-discards?         yang:counter32
+  |     |  +--ro out-errors?           yang:counter32
   |     +--rw bbf-fastdsl:line!
   |     |  x--ro bbf-fastdsl:supported-mode*    fastdsl-mode-ref
   |     |  +--rw bbf-fastdsl:configured-mode*   fastdsl-mode-ref
+  |     |  +--rw bbf-ghs:ghs!
+  |     |  |  +--rw bbf-ghs:handshake-profile?   handshake-profile-ref
   |     |  +--rw bbf-vdsl:line!
   |     |  |  +--rw bbf-vdsl:test-mode
   |     |  |  |  +--rw bbf-vdsl:power-management-state-forced?   enumeration
@@ -35,59 +60,71 @@ module: ietf-interfaces
   |     |  |  |  |  +--rw bbf-vdsl:downstream-power-back-off-profile       bbf-vdsl:downstream-power-back-off-profile-ref
   |     |  |  |  |  +--rw bbf-vdsl:radio-frequency-interference-profile    bbf-vdsl:radio-frequency-interference-profile-ref
   |     |  |  |  |  +--rw bbf-vdsl:noise-margin-profile                    bbf-vdsl:noise-margin-profile-ref
-  |     |  |  |  |  +--rw bbf-vdsl:virtual-noise-profile                   -> /vdsl/quality/virtual-noise-profile/name {virtual-noise}?
-  |     |  |  |  |  +--rw bbf-vdsl:sos-profile                             -> /vdsl/quality/sos-profile/name {sos}?
-  |     |  |  |  |  +--rw bbf-vdsl:impulse-noise-monitoring-profile        -> /vdsl/quality/impulse-noise-monitoring-profile/name {impulse-noise-monitoring}?
-  |     |  |  |  |  +--rw bbf-vdsl:re-initialization-policy-profile        -> /vdsl/quality/re-initialization-policy-profile/name {re-initialization-policy}?
-  |     |  |  |  |  +--rw bbf-vdsl:vectoring-profile                       -> /vdsl/quality/vectoring-profile/name {vectoring}?
-  |     |  |  |  |  +--rw bbf-vdsl:data-gathering-profile                  -> /vdsl/quality/data-gathering-profile/name {data-gathering}?
+  |     |  |  |  |  +--rw bbf-vdsl:virtual-noise-profile                   -> /vdsl/quality/virtual-noise-profile/name {bbf-vdsl:virtual-noise}?
+  |     |  |  |  |  +--rw bbf-vdsl:sos-profile                             -> /vdsl/quality/sos-profile/name {bbf-vdsl:sos}?
+  |     |  |  |  |  +--rw bbf-vdsl:impulse-noise-monitoring-profile        -> /vdsl/quality/impulse-noise-monitoring-profile/name {bbf-vdsl:impulse-noise-monitoring}?
+  |     |  |  |  |  +--rw bbf-vdsl:re-initialization-policy-profile        -> /vdsl/quality/re-initialization-policy-profile/name {bbf-vdsl:re-initialization-policy}?
+  |     |  |  |  |  +--rw bbf-vdsl:vectoring-profile                       -> /vdsl/quality/vectoring-profile/name {bbf-vdsl:vectoring}?
+  |     |  |  |  |  +--rw bbf-vdsl:data-gathering-profile                  -> /vdsl/quality/data-gathering-profile/name {bbf-vdsl:data-gathering}?
   |     |  |  |  +--:(bbf-vdsl:indirect-attachment-mode)
   |     |  |  |     +--rw bbf-vdsl:line-config-vector?                     bbf-vdsl:line-config-vector-ref
   |     |  |  +--rw bbf-vdsl:threshold-template?                           bbf-vdsl:threshold-template-ref
   |     |  +--rw bbf-fast:line!
-  |     |  |  +--rw (bbf-fast:profile-config)?
-  |     |  |  |  +--:(bbf-fast:no-profiles-attached)
-  |     |  |  |  |  +--rw bbf-fast:no-profiles-attached?                   empty
-  |     |  |  |  +--:(bbf-fast:direct-attachment-mode)
-  |     |  |  |  |  +--rw bbf-fast:time-division-duplexing-profile         time-division-duplexing-profile-ref
-  |     |  |  |  |  +--rw bbf-fast:downstream-data-rate-profile            downstream-data-rate-profile-ref
-  |     |  |  |  |  +--rw bbf-fast:upstream-data-rate-profile              upstream-data-rate-profile-ref
-  |     |  |  |  |  +--rw bbf-fast:low-power-data-rate-profile             low-power-data-rate-profile-ref
-  |     |  |  |  |  +--rw bbf-fast:line-spectrum-profile                   line-spectrum-profile-ref
-  |     |  |  |  |  +--rw bbf-fast:upstream-power-back-off-profile         upstream-power-back-off-profile-ref
-  |     |  |  |  |  +--rw bbf-fast:radio-frequency-interference-profile    radio-frequency-interference-profile-ref
-  |     |  |  |  |  +--rw bbf-fast:noise-margin-profile                    noise-margin-profile-ref
-  |     |  |  |  |  +--rw bbf-fast:fast-rate-adaptation-profile            fast-rate-adaptation-profile-ref
-  |     |  |  |  |  +--rw bbf-fast:retransmission-profile                  retransmission-profile-ref
-  |     |  |  |  |  +--rw bbf-fast:fast-retrain-policy-profile             fast-retrain-policy-profile-ref
-  |     |  |  |  |  +--rw bbf-fast:vectoring-profile                       vectoring-profile-ref
-  |     |  |  |  |  +--rw bbf-fast:impulse-noise-monitoring-profile        -> /fast/quality/impulse-noise-monitoring-profile/name {impulse-noise-monitoring}?
-  |     |  |  |  +--:(bbf-fast:indirect-attachment-mode)
-  |     |  |  |     +--rw bbf-fast:line-config-vector                      line-config-vector-ref
-  |     |  |  +--rw bbf-fast:threshold-template?                           threshold-template-ref
-  |     |  |  +--rw bbf-fast:srec-allowed?                                 boolean {srec}?
-  |     |  |  +--rw bbf-fast:test-mode
-  |     |  |  |  +--rw bbf-fast:rtx-tc-test-mode?   boolean
-  |     |  |  |  +--rw bbf-fast:tps-tc-test-mode?   boolean
-  |     |  |  |  +--rw bbf-fast:dra-test-mode?      boolean
-  |     |  |  +--rw bbf-fast:update-test
-  |     |  |  |  +--rw bbf-fast:ftu-o
-  |     |  |  |  |  x--rw bbf-fast:update-ne-test?         near-end-test-groups
-  |     |  |  |  |  +---x bbf-fast:update-near-end-test
-  |     |  |  |  |     +---w bbf-fast:input
-  |     |  |  |  |        +---w bbf-fast:group?   near-end-test-groups
-  |     |  |  |  +--rw bbf-fast:ftu-r
-  |     |  |  |     x--rw bbf-fast:update-fe-test?        far-end-test-groups
-  |     |  |  |     +---x bbf-fast:update-far-end-test
-  |     |  |  |        +---w bbf-fast:input
-  |     |  |  |           +---w bbf-fast:group?   far-end-test-groups
-  |     |  |  +--rw bbf-fast:read-test
-  |     |  |  |  +--rw bbf-fast:downstream
-  |     |  |  |     +--rw bbf-fast:xlog-disturber-vce-port-index?   vce-port-index
-  |     |  |  +--rw bbf-fast:link-state
-  |     |  |     +--rw bbf-fast:link-state-forced?   enumeration
-  |     |  +--rw bbf-ghs:ghs!
-  |     |     +--rw bbf-ghs:handshake-profile?   handshake-profile-ref
+  |     |     +--rw (bbf-fast:profile-config)?
+  |     |     |  +--:(bbf-fast:no-profiles-attached)
+  |     |     |  |  +--rw bbf-fast:no-profiles-attached?                   empty
+  |     |     |  +--:(bbf-fast:direct-attachment-mode)
+  |     |     |  |  +--rw bbf-fast:time-division-duplexing-profile         time-division-duplexing-profile-ref
+  |     |     |  |  +--rw bbf-fast:downstream-data-rate-profile            downstream-data-rate-profile-ref
+  |     |     |  |  +--rw bbf-fast:upstream-data-rate-profile              upstream-data-rate-profile-ref
+  |     |     |  |  +--rw bbf-fast:low-power-data-rate-profile             low-power-data-rate-profile-ref
+  |     |     |  |  +--rw bbf-fast:line-spectrum-profile                   line-spectrum-profile-ref
+  |     |     |  |  +--rw bbf-fast:upstream-power-back-off-profile         upstream-power-back-off-profile-ref
+  |     |     |  |  +--rw bbf-fast:radio-frequency-interference-profile    radio-frequency-interference-profile-ref
+  |     |     |  |  +--rw bbf-fast:noise-margin-profile                    noise-margin-profile-ref
+  |     |     |  |  +--rw bbf-fast:fast-rate-adaptation-profile            fast-rate-adaptation-profile-ref
+  |     |     |  |  +--rw bbf-fast:retransmission-profile                  retransmission-profile-ref
+  |     |     |  |  +--rw bbf-fast:fast-retrain-policy-profile             fast-retrain-policy-profile-ref
+  |     |     |  |  +--rw bbf-fast:vectoring-profile                       vectoring-profile-ref
+  |     |     |  |  +--rw bbf-fast:impulse-noise-monitoring-profile        -> /fast/quality/impulse-noise-monitoring-profile/name {bbf-fast:impulse-noise-monitoring}?
+  |     |     |  +--:(bbf-fast:indirect-attachment-mode)
+  |     |     |     +--rw bbf-fast:line-config-vector                      line-config-vector-ref
+  |     |     +--rw bbf-fast:threshold-template?                           threshold-template-ref
+  |     |     +--rw bbf-fast:srec-allowed?                                 boolean {srec}?
+  |     |     +--rw bbf-fast:test-mode
+  |     |     |  +--rw bbf-fast:rtx-tc-test-mode?   boolean
+  |     |     |  +--rw bbf-fast:tps-tc-test-mode?   boolean
+  |     |     |  +--rw bbf-fast:dra-test-mode?      boolean
+  |     |     +--rw bbf-fast:update-test
+  |     |     |  +--rw bbf-fast:ftu-o
+  |     |     |  |  x--rw bbf-fast:update-ne-test?         near-end-test-groups
+  |     |     |  |  +---x bbf-fast:update-near-end-test
+  |     |     |  |     +---w bbf-fast:input
+  |     |     |  |        +---w bbf-fast:group?   near-end-test-groups
+  |     |     |  +--rw bbf-fast:ftu-r
+  |     |     |     x--rw bbf-fast:update-fe-test?        far-end-test-groups
+  |     |     |     +---x bbf-fast:update-far-end-test
+  |     |     |        +---w bbf-fast:input
+  |     |     |           +---w bbf-fast:group?   far-end-test-groups
+  |     |     +--rw bbf-fast:read-test
+  |     |     |  +--rw bbf-fast:downstream
+  |     |     |     +--rw bbf-fast:xlog-disturber-vce-port-index?   vce-port-index
+  |     |     +--rw bbf-fast:link-state
+  |     |        +--rw bbf-fast:link-state-forced?   enumeration
+  |     +--rw bbf-gbond:bonding-group!
+  |     |  +--rw bbf-gbond:profile                              bonding-group-profile-ref
+  |     |  +--rw bbf-gbond:threshold-template?                  bonding-group-threshold-template-ref {bonding-group-performance}?
+  |     |  +--rw bbf-gbond:bonded-interface-mode                bbf-fastdsl:fastdsl-mode-ref
+  |     |  +--rw bbf-gbond:lower-layer-if*                      if:interface-ref
+  |     |  +--rw bbf-gbond:primary-interface                    if:interface-ref {bonding-primary-interface}?
+  |     |  +---n bbf-gbond:low-upstream-data-rate-crossing
+  |     |  |  +-- bbf-gbond:event?   enumeration
+  |     |  +---n bbf-gbond:low-downstream-data-rate-crossing
+  |     |  |  +-- bbf-gbond:event?   enumeration
+  |     |  +---n bbf-gbond:link-up
+  |     |  +---n bbf-gbond:link-down
+  |     +--rw bbf-if-pm:performance
+  |     |  +--rw bbf-if-pm:enable?   boolean
   |     +--rw bbf-selt:selt!
   |     |  x--rw bbf-selt:pmd-profile?                    pmd-profile-ref
   |     |  x--rw bbf-selt:processing-profile?             -> /selt/profiles/processing-profile/name {selt-p}?
@@ -129,35 +166,47 @@ module: ietf-interfaces
   |                    +---x bbf-melt:request-pmd-function-c
   |                       +---w bbf-melt:input
   |                          +---w bbf-melt:pmd-function?   union
-  +--ro interfaces-state
-     +--ro interface* [name]
-        +--ro name                string
-        +--ro type                identityref
-        +--ro admin-status        enumeration {if-mib}?
-        +--ro oper-status         enumeration
-        +--ro last-change?        yang:date-and-time
-        +--ro if-index            int32 {if-mib}?
-        +--ro phys-address?       yang:phys-address
-        +--ro higher-layer-if*    interface-state-ref
-        +--ro lower-layer-if*     interface-state-ref
-        +--ro speed?              yang:gauge64
-        +--ro statistics
-        |  +--ro discontinuity-time    yang:date-and-time
-        |  +--ro in-octets?            yang:counter64
-        |  +--ro in-unicast-pkts?      yang:counter64
-        |  +--ro in-broadcast-pkts?    yang:counter64
-        |  +--ro in-multicast-pkts?    yang:counter64
-        |  +--ro in-discards?          yang:counter32
-        |  +--ro in-errors?            yang:counter32
-        |  +--ro in-unknown-protos?    yang:counter32
-        |  +--ro out-octets?           yang:counter64
-        |  +--ro out-unicast-pkts?     yang:counter64
-        |  +--ro out-broadcast-pkts?   yang:counter64
-        |  +--ro out-multicast-pkts?   yang:counter64
-        |  +--ro out-discards?         yang:counter32
-        |  +--ro out-errors?           yang:counter32
+  x--ro interfaces-state
+     x--ro interface* [name]
+        x--ro name                             string
+        x--ro type                             identityref
+        x--ro admin-status                     enumeration {if-mib}?
+        x--ro oper-status                      enumeration
+        x--ro last-change?                     yang:date-and-time
+        x--ro if-index                         int32 {if-mib}?
+        x--ro phys-address?                    yang:phys-address
+        x--ro higher-layer-if*                 interface-state-ref
+        x--ro lower-layer-if*                  interface-state-ref
+        x--ro speed?                           yang:gauge64
+        x--ro statistics
+        |  x--ro discontinuity-time    yang:date-and-time
+        |  x--ro in-octets?            yang:counter64
+        |  x--ro in-unicast-pkts?      yang:counter64
+        |  x--ro in-broadcast-pkts?    yang:counter64
+        |  x--ro in-multicast-pkts?    yang:counter64
+        |  x--ro in-discards?          yang:counter32
+        |  x--ro in-errors?            yang:counter32
+        |  x--ro in-unknown-protos?    yang:counter32
+        |  x--ro out-octets?           yang:counter64
+        |  x--ro out-unicast-pkts?     yang:counter64
+        |  x--ro out-broadcast-pkts?   yang:counter64
+        |  x--ro out-multicast-pkts?   yang:counter64
+        |  x--ro out-discards?         yang:counter32
+        |  x--ro out-errors?           yang:counter32
         +--ro bbf-fastdsl:line!
-        |  +--ro bbf-fastdsl:operational-mode?   union
+        |  +--ro bbf-fastdsl:operational-mode?            union
+        |  +--ro bbf-gbond-state:bonded-channel-entity
+        |  |  +--ro bbf-gbond-state:status
+        |  |  |  +--ro bbf-gbond-state:group-id?   union
+        |  |  +--ro bbf-gbond-state:capabilities!
+        |  |     +--ro bbf-gbond-state:bce-c
+        |  |     |  +--ro bbf-gbond-state:bonding-scheme-supported?   bbf-gbond:boolean-or-undefined
+        |  |     |  +--ro bbf-gbond-state:g9982!
+        |  |     |     +--ro bbf-gbond-state:bacp-supported?   bbf-gbond:boolean-or-undefined
+        |  |     +--ro bbf-gbond-state:bce-r
+        |  |        +--ro bbf-gbond-state:bonding-scheme-supported?   bbf-gbond:boolean-or-undefined
+        |  |        +--ro bbf-gbond-state:g9982!
+        |  |           +--ro bbf-gbond-state:bacp-supported?   bbf-gbond:boolean-or-undefined
         |  +--ro bbf-vdsl:line!
         |  |  +--ro bbf-vdsl:channel
         |  |  |  +--ro bbf-vdsl:status
@@ -691,7 +740,7 @@ module: ietf-interfaces
         |  |           +--ro bbf-vdsl:logging-depth?                    uint32
         |  |           +--ro bbf-vdsl:actual-logging-depth-reporting?   uint32
         |  |           +--ro bbf-vdsl:event-trace-buffer?               binary
-        |  +--ro bbf-vdsl:availability! {availability}?
+        |  +--ro bbf-vdsl:availability! {bbf-avail:availability,availability}?
         |  |  +--ro bbf-vdsl:availability-status    union
         |  |  +--ro bbf-vdsl:issues
         |  |     +--ro bbf-vdsl:issue* [tag code]
@@ -711,11 +760,11 @@ module: ietf-interfaces
         |  |  |  |  |  |  |  +--ro bbf-fast:code-violations?                 bbf-yang:performance-counter32
         |  |  |  |  |  |  |  +--ro bbf-fast:uncorrected-dtus?                bbf-yang:performance-counter32
         |  |  |  |  |  |  |  +--ro bbf-fast:retransmitted-dtus?              bbf-yang:performance-counter32
-        |  |  |  |  |  |  |  +--ro bbf-fast:minimum-andeftr?                 bbf-yang:data-rate32 {andeftr}?
-        |  |  |  |  |  |  |  +--ro bbf-fast:maximum-andeftr?                 bbf-yang:data-rate32 {andeftr}?
-        |  |  |  |  |  |  |  +--ro bbf-fast:sum-andeftr?                     uint32 {andeftr}?
-        |  |  |  |  |  |  |  +--ro bbf-fast:low-andeftr-seconds?             seconds-counter-15min {andeftr}?
-        |  |  |  |  |  |  |  +--ro bbf-fast:andeftr-defined-seconds?         seconds-counter-15min {andeftr}?
+        |  |  |  |  |  |  |  +--ro bbf-fast:minimum-andeftr?                 bbf-yang:data-rate32 {bbf-fast:andeftr}?
+        |  |  |  |  |  |  |  +--ro bbf-fast:maximum-andeftr?                 bbf-yang:data-rate32 {bbf-fast:andeftr}?
+        |  |  |  |  |  |  |  +--ro bbf-fast:sum-andeftr?                     uint32 {bbf-fast:andeftr}?
+        |  |  |  |  |  |  |  +--ro bbf-fast:low-andeftr-seconds?             seconds-counter-15min {bbf-fast:andeftr}?
+        |  |  |  |  |  |  |  +--ro bbf-fast:andeftr-defined-seconds?         seconds-counter-15min {bbf-fast:andeftr}?
         |  |  |  |  |  |  +--ro bbf-fast:ftu-r
         |  |  |  |  |  |     +--ro bbf-fast:measured-time?                   uint32
         |  |  |  |  |  |     +--ro bbf-fast:error-free-bits?                 error-free-bits-count
@@ -723,11 +772,11 @@ module: ietf-interfaces
         |  |  |  |  |  |     +--ro bbf-fast:code-violations?                 bbf-yang:performance-counter32
         |  |  |  |  |  |     +--ro bbf-fast:uncorrected-dtus?                bbf-yang:performance-counter32
         |  |  |  |  |  |     +--ro bbf-fast:retransmitted-dtus?              bbf-yang:performance-counter32
-        |  |  |  |  |  |     +--ro bbf-fast:minimum-andeftr?                 bbf-yang:data-rate32 {andeftr}?
-        |  |  |  |  |  |     +--ro bbf-fast:maximum-andeftr?                 bbf-yang:data-rate32 {andeftr}?
-        |  |  |  |  |  |     +--ro bbf-fast:sum-andeftr?                     uint32 {andeftr}?
-        |  |  |  |  |  |     +--ro bbf-fast:low-andeftr-seconds?             seconds-counter-15min {andeftr}?
-        |  |  |  |  |  |     +--ro bbf-fast:andeftr-defined-seconds?         seconds-counter-15min {andeftr}?
+        |  |  |  |  |  |     +--ro bbf-fast:minimum-andeftr?                 bbf-yang:data-rate32 {bbf-fast:andeftr}?
+        |  |  |  |  |  |     +--ro bbf-fast:maximum-andeftr?                 bbf-yang:data-rate32 {bbf-fast:andeftr}?
+        |  |  |  |  |  |     +--ro bbf-fast:sum-andeftr?                     uint32 {bbf-fast:andeftr}?
+        |  |  |  |  |  |     +--ro bbf-fast:low-andeftr-seconds?             seconds-counter-15min {bbf-fast:andeftr}?
+        |  |  |  |  |  |     +--ro bbf-fast:andeftr-defined-seconds?         seconds-counter-15min {bbf-fast:andeftr}?
         |  |  |  |  |  +--ro bbf-fast:number-of-intervals?   performance-15min-interval
         |  |  |  |  |  +--ro bbf-fast:non-valid-intervals?   performance-15min-interval
         |  |  |  |  |  +--ro bbf-fast:history* [interval-number]
@@ -741,11 +790,11 @@ module: ietf-interfaces
         |  |  |  |  |     |  +--ro bbf-fast:code-violations?                 bbf-yang:performance-counter32
         |  |  |  |  |     |  +--ro bbf-fast:uncorrected-dtus?                bbf-yang:performance-counter32
         |  |  |  |  |     |  +--ro bbf-fast:retransmitted-dtus?              bbf-yang:performance-counter32
-        |  |  |  |  |     |  +--ro bbf-fast:minimum-andeftr?                 bbf-yang:data-rate32 {andeftr}?
-        |  |  |  |  |     |  +--ro bbf-fast:maximum-andeftr?                 bbf-yang:data-rate32 {andeftr}?
-        |  |  |  |  |     |  +--ro bbf-fast:sum-andeftr?                     uint32 {andeftr}?
-        |  |  |  |  |     |  +--ro bbf-fast:low-andeftr-seconds?             seconds-counter-15min {andeftr}?
-        |  |  |  |  |     |  +--ro bbf-fast:andeftr-defined-seconds?         seconds-counter-15min {andeftr}?
+        |  |  |  |  |     |  +--ro bbf-fast:minimum-andeftr?                 bbf-yang:data-rate32 {bbf-fast:andeftr}?
+        |  |  |  |  |     |  +--ro bbf-fast:maximum-andeftr?                 bbf-yang:data-rate32 {bbf-fast:andeftr}?
+        |  |  |  |  |     |  +--ro bbf-fast:sum-andeftr?                     uint32 {bbf-fast:andeftr}?
+        |  |  |  |  |     |  +--ro bbf-fast:low-andeftr-seconds?             seconds-counter-15min {bbf-fast:andeftr}?
+        |  |  |  |  |     |  +--ro bbf-fast:andeftr-defined-seconds?         seconds-counter-15min {bbf-fast:andeftr}?
         |  |  |  |  |     +--ro bbf-fast:ftu-r
         |  |  |  |  |        +--ro bbf-fast:measured-time?                   uint32
         |  |  |  |  |        +--ro bbf-fast:invalid-data-flag?               boolean
@@ -755,12 +804,12 @@ module: ietf-interfaces
         |  |  |  |  |        +--ro bbf-fast:code-violations?                 bbf-yang:performance-counter32
         |  |  |  |  |        +--ro bbf-fast:uncorrected-dtus?                bbf-yang:performance-counter32
         |  |  |  |  |        +--ro bbf-fast:retransmitted-dtus?              bbf-yang:performance-counter32
-        |  |  |  |  |        +--ro bbf-fast:minimum-andeftr?                 bbf-yang:data-rate32 {andeftr}?
-        |  |  |  |  |        +--ro bbf-fast:maximum-andeftr?                 bbf-yang:data-rate32 {andeftr}?
-        |  |  |  |  |        +--ro bbf-fast:sum-andeftr?                     uint32 {andeftr}?
-        |  |  |  |  |        +--ro bbf-fast:low-andeftr-seconds?             seconds-counter-15min {andeftr}?
-        |  |  |  |  |        +--ro bbf-fast:andeftr-defined-seconds?         seconds-counter-15min {andeftr}?
-        |  |  |  |  +--ro bbf-fast:intervals-24hr {performance-24hr}?
+        |  |  |  |  |        +--ro bbf-fast:minimum-andeftr?                 bbf-yang:data-rate32 {bbf-fast:andeftr}?
+        |  |  |  |  |        +--ro bbf-fast:maximum-andeftr?                 bbf-yang:data-rate32 {bbf-fast:andeftr}?
+        |  |  |  |  |        +--ro bbf-fast:sum-andeftr?                     uint32 {bbf-fast:andeftr}?
+        |  |  |  |  |        +--ro bbf-fast:low-andeftr-seconds?             seconds-counter-15min {bbf-fast:andeftr}?
+        |  |  |  |  |        +--ro bbf-fast:andeftr-defined-seconds?         seconds-counter-15min {bbf-fast:andeftr}?
+        |  |  |  |  +--ro bbf-fast:intervals-24hr {bbf-fast:performance-24hr}?
         |  |  |  |     +--ro bbf-fast:current
         |  |  |  |     |  +--ro bbf-fast:ftu-o
         |  |  |  |     |  |  +--ro bbf-fast:measured-time?                   uint32
@@ -769,11 +818,11 @@ module: ietf-interfaces
         |  |  |  |     |  |  +--ro bbf-fast:code-violations?                 bbf-yang:performance-counter32
         |  |  |  |     |  |  +--ro bbf-fast:uncorrected-dtus?                bbf-yang:performance-counter32
         |  |  |  |     |  |  +--ro bbf-fast:retransmitted-dtus?              bbf-yang:performance-counter32
-        |  |  |  |     |  |  +--ro bbf-fast:minimum-andeftr?                 bbf-yang:data-rate32 {andeftr}?
-        |  |  |  |     |  |  +--ro bbf-fast:maximum-andeftr?                 bbf-yang:data-rate32 {andeftr}?
-        |  |  |  |     |  |  +--ro bbf-fast:sum-andeftr?                     uint32 {andeftr}?
-        |  |  |  |     |  |  +--ro bbf-fast:low-andeftr-seconds?             seconds-counter-24hr {andeftr}?
-        |  |  |  |     |  |  +--ro bbf-fast:andeftr-defined-seconds?         seconds-counter-24hr {andeftr}?
+        |  |  |  |     |  |  +--ro bbf-fast:minimum-andeftr?                 bbf-yang:data-rate32 {bbf-fast:andeftr}?
+        |  |  |  |     |  |  +--ro bbf-fast:maximum-andeftr?                 bbf-yang:data-rate32 {bbf-fast:andeftr}?
+        |  |  |  |     |  |  +--ro bbf-fast:sum-andeftr?                     uint32 {bbf-fast:andeftr}?
+        |  |  |  |     |  |  +--ro bbf-fast:low-andeftr-seconds?             seconds-counter-24hr {bbf-fast:andeftr}?
+        |  |  |  |     |  |  +--ro bbf-fast:andeftr-defined-seconds?         seconds-counter-24hr {bbf-fast:andeftr}?
         |  |  |  |     |  +--ro bbf-fast:ftu-r
         |  |  |  |     |     +--ro bbf-fast:measured-time?                   uint32
         |  |  |  |     |     +--ro bbf-fast:error-free-bits?                 error-free-bits-count
@@ -781,11 +830,11 @@ module: ietf-interfaces
         |  |  |  |     |     +--ro bbf-fast:code-violations?                 bbf-yang:performance-counter32
         |  |  |  |     |     +--ro bbf-fast:uncorrected-dtus?                bbf-yang:performance-counter32
         |  |  |  |     |     +--ro bbf-fast:retransmitted-dtus?              bbf-yang:performance-counter32
-        |  |  |  |     |     +--ro bbf-fast:minimum-andeftr?                 bbf-yang:data-rate32 {andeftr}?
-        |  |  |  |     |     +--ro bbf-fast:maximum-andeftr?                 bbf-yang:data-rate32 {andeftr}?
-        |  |  |  |     |     +--ro bbf-fast:sum-andeftr?                     uint32 {andeftr}?
-        |  |  |  |     |     +--ro bbf-fast:low-andeftr-seconds?             seconds-counter-24hr {andeftr}?
-        |  |  |  |     |     +--ro bbf-fast:andeftr-defined-seconds?         seconds-counter-24hr {andeftr}?
+        |  |  |  |     |     +--ro bbf-fast:minimum-andeftr?                 bbf-yang:data-rate32 {bbf-fast:andeftr}?
+        |  |  |  |     |     +--ro bbf-fast:maximum-andeftr?                 bbf-yang:data-rate32 {bbf-fast:andeftr}?
+        |  |  |  |     |     +--ro bbf-fast:sum-andeftr?                     uint32 {bbf-fast:andeftr}?
+        |  |  |  |     |     +--ro bbf-fast:low-andeftr-seconds?             seconds-counter-24hr {bbf-fast:andeftr}?
+        |  |  |  |     |     +--ro bbf-fast:andeftr-defined-seconds?         seconds-counter-24hr {bbf-fast:andeftr}?
         |  |  |  |     +--ro bbf-fast:number-of-intervals?   performance-24hr-interval
         |  |  |  |     +--ro bbf-fast:non-valid-intervals?   performance-24hr-interval
         |  |  |  |     +--ro bbf-fast:history* [interval-number]
@@ -799,11 +848,11 @@ module: ietf-interfaces
         |  |  |  |        |  +--ro bbf-fast:code-violations?                 bbf-yang:performance-counter32
         |  |  |  |        |  +--ro bbf-fast:uncorrected-dtus?                bbf-yang:performance-counter32
         |  |  |  |        |  +--ro bbf-fast:retransmitted-dtus?              bbf-yang:performance-counter32
-        |  |  |  |        |  +--ro bbf-fast:minimum-andeftr?                 bbf-yang:data-rate32 {andeftr}?
-        |  |  |  |        |  +--ro bbf-fast:maximum-andeftr?                 bbf-yang:data-rate32 {andeftr}?
-        |  |  |  |        |  +--ro bbf-fast:sum-andeftr?                     uint32 {andeftr}?
-        |  |  |  |        |  +--ro bbf-fast:low-andeftr-seconds?             seconds-counter-24hr {andeftr}?
-        |  |  |  |        |  +--ro bbf-fast:andeftr-defined-seconds?         seconds-counter-24hr {andeftr}?
+        |  |  |  |        |  +--ro bbf-fast:minimum-andeftr?                 bbf-yang:data-rate32 {bbf-fast:andeftr}?
+        |  |  |  |        |  +--ro bbf-fast:maximum-andeftr?                 bbf-yang:data-rate32 {bbf-fast:andeftr}?
+        |  |  |  |        |  +--ro bbf-fast:sum-andeftr?                     uint32 {bbf-fast:andeftr}?
+        |  |  |  |        |  +--ro bbf-fast:low-andeftr-seconds?             seconds-counter-24hr {bbf-fast:andeftr}?
+        |  |  |  |        |  +--ro bbf-fast:andeftr-defined-seconds?         seconds-counter-24hr {bbf-fast:andeftr}?
         |  |  |  |        +--ro bbf-fast:ftu-r
         |  |  |  |           +--ro bbf-fast:measured-time?                   uint32
         |  |  |  |           +--ro bbf-fast:invalid-data-flag?               boolean
@@ -813,11 +862,11 @@ module: ietf-interfaces
         |  |  |  |           +--ro bbf-fast:code-violations?                 bbf-yang:performance-counter32
         |  |  |  |           +--ro bbf-fast:uncorrected-dtus?                bbf-yang:performance-counter32
         |  |  |  |           +--ro bbf-fast:retransmitted-dtus?              bbf-yang:performance-counter32
-        |  |  |  |           +--ro bbf-fast:minimum-andeftr?                 bbf-yang:data-rate32 {andeftr}?
-        |  |  |  |           +--ro bbf-fast:maximum-andeftr?                 bbf-yang:data-rate32 {andeftr}?
-        |  |  |  |           +--ro bbf-fast:sum-andeftr?                     uint32 {andeftr}?
-        |  |  |  |           +--ro bbf-fast:low-andeftr-seconds?             seconds-counter-24hr {andeftr}?
-        |  |  |  |           +--ro bbf-fast:andeftr-defined-seconds?         seconds-counter-24hr {andeftr}?
+        |  |  |  |           +--ro bbf-fast:minimum-andeftr?                 bbf-yang:data-rate32 {bbf-fast:andeftr}?
+        |  |  |  |           +--ro bbf-fast:maximum-andeftr?                 bbf-yang:data-rate32 {bbf-fast:andeftr}?
+        |  |  |  |           +--ro bbf-fast:sum-andeftr?                     uint32 {bbf-fast:andeftr}?
+        |  |  |  |           +--ro bbf-fast:low-andeftr-seconds?             seconds-counter-24hr {bbf-fast:andeftr}?
+        |  |  |  |           +--ro bbf-fast:andeftr-defined-seconds?         seconds-counter-24hr {bbf-fast:andeftr}?
         |  |  |  +--ro bbf-fast:status
         |  |  |     +--ro bbf-fast:downstream
         |  |  |     |  +--ro bbf-fast:net-data-rate?                    bbf-yang:data-rate32-or-undetermined
@@ -868,14 +917,14 @@ module: ietf-interfaces
         |  |  |  |  |  |  +--ro bbf-fast:successful-autonomous-sra?      bbf-yang:performance-counter32
         |  |  |  |  |  |  +--ro bbf-fast:successful-fra?                 bbf-yang:performance-counter32
         |  |  |  |  |  |  +--ro bbf-fast:successful-rpa?                 bbf-yang:performance-counter32
-        |  |  |  |  |  |  +--ro bbf-fast:inminpeq* [inminpeq-index] {impulse-noise-monitoring}?
+        |  |  |  |  |  |  +--ro bbf-fast:inminpeq* [inminpeq-index] {bbf-fast:impulse-noise-monitoring}?
         |  |  |  |  |  |  |  +--ro bbf-fast:inminpeq-index    uint8
         |  |  |  |  |  |  |  +--ro bbf-fast:inminpeq?         bbf-yang:performance-counter32
-        |  |  |  |  |  |  +--ro bbf-fast:inmame?                         bbf-yang:performance-counter32 {impulse-noise-monitoring}?
-        |  |  |  |  |  |  +--ro bbf-fast:inmiat* [inminiat-index] {impulse-noise-monitoring}?
+        |  |  |  |  |  |  +--ro bbf-fast:inmame?                         bbf-yang:performance-counter32 {bbf-fast:impulse-noise-monitoring}?
+        |  |  |  |  |  |  +--ro bbf-fast:inmiat* [inminiat-index] {bbf-fast:impulse-noise-monitoring}?
         |  |  |  |  |  |  |  +--ro bbf-fast:inminiat-index    uint8
         |  |  |  |  |  |  |  +--ro bbf-fast:inmiat?           bbf-yang:performance-counter32
-        |  |  |  |  |  |  +--ro bbf-fast:inmblfc?                        bbf-yang:performance-counter32 {impulse-noise-monitoring}?
+        |  |  |  |  |  |  +--ro bbf-fast:inmblfc?                        bbf-yang:performance-counter32 {bbf-fast:impulse-noise-monitoring}?
         |  |  |  |  |  |  +--ro bbf-fast:errored-seconds?                seconds-counter-15min
         |  |  |  |  |  |  +--ro bbf-fast:severely-errored-seconds?       seconds-counter-15min
         |  |  |  |  |  |  +--ro bbf-fast:loss-of-signal-seconds?         seconds-counter-15min
@@ -889,8 +938,8 @@ module: ietf-interfaces
         |  |  |  |  |  |  +--ro bbf-fast:loss-of-power-interruptions?    bbf-yang:performance-counter32
         |  |  |  |  |  |  +--ro bbf-fast:host-reinit-interruptions?      bbf-yang:performance-counter32
         |  |  |  |  |  |  +--ro bbf-fast:spontaneous-interruptions?      bbf-yang:performance-counter32
-        |  |  |  |  |  |  +--ro bbf-fast:successful-srec?                bbf-yang:performance-counter32 {srec}?
-        |  |  |  |  |  |  +--ro bbf-fast:me-o-triggered-interruptions?   bbf-yang:performance-counter32 {srec}?
+        |  |  |  |  |  |  +--ro bbf-fast:successful-srec?                bbf-yang:performance-counter32 {bbf-fast:srec}?
+        |  |  |  |  |  |  +--ro bbf-fast:me-o-triggered-interruptions?   bbf-yang:performance-counter32 {bbf-fast:srec}?
         |  |  |  |  |  |  +--ro bbf-fast:link-state-l2.1n-seconds?       seconds-counter-15min
         |  |  |  |  |  |  +--ro bbf-fast:link-state-l2.1b-seconds?       seconds-counter-15min
         |  |  |  |  |  |  +--ro bbf-fast:link-state-l2.2-seconds?        seconds-counter-15min
@@ -904,14 +953,14 @@ module: ietf-interfaces
         |  |  |  |  |     +--ro bbf-fast:successful-autonomous-sra?   bbf-yang:performance-counter32
         |  |  |  |  |     +--ro bbf-fast:successful-fra?              bbf-yang:performance-counter32
         |  |  |  |  |     +--ro bbf-fast:successful-rpa?              bbf-yang:performance-counter32
-        |  |  |  |  |     +--ro bbf-fast:inminpeq* [inminpeq-index] {impulse-noise-monitoring}?
+        |  |  |  |  |     +--ro bbf-fast:inminpeq* [inminpeq-index] {bbf-fast:impulse-noise-monitoring}?
         |  |  |  |  |     |  +--ro bbf-fast:inminpeq-index    uint8
         |  |  |  |  |     |  +--ro bbf-fast:inminpeq?         bbf-yang:performance-counter32
-        |  |  |  |  |     +--ro bbf-fast:inmame?                      bbf-yang:performance-counter32 {impulse-noise-monitoring}?
-        |  |  |  |  |     +--ro bbf-fast:inmiat* [inminiat-index] {impulse-noise-monitoring}?
+        |  |  |  |  |     +--ro bbf-fast:inmame?                      bbf-yang:performance-counter32 {bbf-fast:impulse-noise-monitoring}?
+        |  |  |  |  |     +--ro bbf-fast:inmiat* [inminiat-index] {bbf-fast:impulse-noise-monitoring}?
         |  |  |  |  |     |  +--ro bbf-fast:inminiat-index    uint8
         |  |  |  |  |     |  +--ro bbf-fast:inmiat?           bbf-yang:performance-counter32
-        |  |  |  |  |     +--ro bbf-fast:inmblfc?                     bbf-yang:performance-counter32 {impulse-noise-monitoring}?
+        |  |  |  |  |     +--ro bbf-fast:inmblfc?                     bbf-yang:performance-counter32 {bbf-fast:impulse-noise-monitoring}?
         |  |  |  |  |     +--ro bbf-fast:errored-seconds?             seconds-counter-15min
         |  |  |  |  |     +--ro bbf-fast:severely-errored-seconds?    seconds-counter-15min
         |  |  |  |  |     +--ro bbf-fast:loss-of-signal-seconds?      seconds-counter-15min
@@ -933,14 +982,14 @@ module: ietf-interfaces
         |  |  |  |     |  +--ro bbf-fast:successful-autonomous-sra?      bbf-yang:performance-counter32
         |  |  |  |     |  +--ro bbf-fast:successful-fra?                 bbf-yang:performance-counter32
         |  |  |  |     |  +--ro bbf-fast:successful-rpa?                 bbf-yang:performance-counter32
-        |  |  |  |     |  +--ro bbf-fast:inminpeq* [inminpeq-index] {impulse-noise-monitoring}?
+        |  |  |  |     |  +--ro bbf-fast:inminpeq* [inminpeq-index] {bbf-fast:impulse-noise-monitoring}?
         |  |  |  |     |  |  +--ro bbf-fast:inminpeq-index    uint8
         |  |  |  |     |  |  +--ro bbf-fast:inminpeq?         bbf-yang:performance-counter32
-        |  |  |  |     |  +--ro bbf-fast:inmame?                         bbf-yang:performance-counter32 {impulse-noise-monitoring}?
-        |  |  |  |     |  +--ro bbf-fast:inmiat* [inminiat-index] {impulse-noise-monitoring}?
+        |  |  |  |     |  +--ro bbf-fast:inmame?                         bbf-yang:performance-counter32 {bbf-fast:impulse-noise-monitoring}?
+        |  |  |  |     |  +--ro bbf-fast:inmiat* [inminiat-index] {bbf-fast:impulse-noise-monitoring}?
         |  |  |  |     |  |  +--ro bbf-fast:inminiat-index    uint8
         |  |  |  |     |  |  +--ro bbf-fast:inmiat?           bbf-yang:performance-counter32
-        |  |  |  |     |  +--ro bbf-fast:inmblfc?                        bbf-yang:performance-counter32 {impulse-noise-monitoring}?
+        |  |  |  |     |  +--ro bbf-fast:inmblfc?                        bbf-yang:performance-counter32 {bbf-fast:impulse-noise-monitoring}?
         |  |  |  |     |  +--ro bbf-fast:errored-seconds?                seconds-counter-15min
         |  |  |  |     |  +--ro bbf-fast:severely-errored-seconds?       seconds-counter-15min
         |  |  |  |     |  +--ro bbf-fast:loss-of-signal-seconds?         seconds-counter-15min
@@ -954,8 +1003,8 @@ module: ietf-interfaces
         |  |  |  |     |  +--ro bbf-fast:loss-of-power-interruptions?    bbf-yang:performance-counter32
         |  |  |  |     |  +--ro bbf-fast:host-reinit-interruptions?      bbf-yang:performance-counter32
         |  |  |  |     |  +--ro bbf-fast:spontaneous-interruptions?      bbf-yang:performance-counter32
-        |  |  |  |     |  +--ro bbf-fast:successful-srec?                bbf-yang:performance-counter32 {srec}?
-        |  |  |  |     |  +--ro bbf-fast:me-o-triggered-interruptions?   bbf-yang:performance-counter32 {srec}?
+        |  |  |  |     |  +--ro bbf-fast:successful-srec?                bbf-yang:performance-counter32 {bbf-fast:srec}?
+        |  |  |  |     |  +--ro bbf-fast:me-o-triggered-interruptions?   bbf-yang:performance-counter32 {bbf-fast:srec}?
         |  |  |  |     |  +--ro bbf-fast:link-state-l2.1n-seconds?       seconds-counter-15min
         |  |  |  |     |  +--ro bbf-fast:link-state-l2.1b-seconds?       seconds-counter-15min
         |  |  |  |     |  +--ro bbf-fast:link-state-l2.2-seconds?        seconds-counter-15min
@@ -971,20 +1020,20 @@ module: ietf-interfaces
         |  |  |  |        +--ro bbf-fast:successful-autonomous-sra?   bbf-yang:performance-counter32
         |  |  |  |        +--ro bbf-fast:successful-fra?              bbf-yang:performance-counter32
         |  |  |  |        +--ro bbf-fast:successful-rpa?              bbf-yang:performance-counter32
-        |  |  |  |        +--ro bbf-fast:inminpeq* [inminpeq-index] {impulse-noise-monitoring}?
+        |  |  |  |        +--ro bbf-fast:inminpeq* [inminpeq-index] {bbf-fast:impulse-noise-monitoring}?
         |  |  |  |        |  +--ro bbf-fast:inminpeq-index    uint8
         |  |  |  |        |  +--ro bbf-fast:inminpeq?         bbf-yang:performance-counter32
-        |  |  |  |        +--ro bbf-fast:inmame?                      bbf-yang:performance-counter32 {impulse-noise-monitoring}?
-        |  |  |  |        +--ro bbf-fast:inmiat* [inminiat-index] {impulse-noise-monitoring}?
+        |  |  |  |        +--ro bbf-fast:inmame?                      bbf-yang:performance-counter32 {bbf-fast:impulse-noise-monitoring}?
+        |  |  |  |        +--ro bbf-fast:inmiat* [inminiat-index] {bbf-fast:impulse-noise-monitoring}?
         |  |  |  |        |  +--ro bbf-fast:inminiat-index    uint8
         |  |  |  |        |  +--ro bbf-fast:inmiat?           bbf-yang:performance-counter32
-        |  |  |  |        +--ro bbf-fast:inmblfc?                     bbf-yang:performance-counter32 {impulse-noise-monitoring}?
+        |  |  |  |        +--ro bbf-fast:inmblfc?                     bbf-yang:performance-counter32 {bbf-fast:impulse-noise-monitoring}?
         |  |  |  |        +--ro bbf-fast:errored-seconds?             seconds-counter-15min
         |  |  |  |        +--ro bbf-fast:severely-errored-seconds?    seconds-counter-15min
         |  |  |  |        +--ro bbf-fast:loss-of-signal-seconds?      seconds-counter-15min
         |  |  |  |        +--ro bbf-fast:loss-of-rmc-seconds?         seconds-counter-15min
         |  |  |  |        +--ro bbf-fast:unavailable-seconds?         seconds-counter-15min
-        |  |  |  +--ro bbf-fast:intervals-24hr {performance-24hr}?
+        |  |  |  +--ro bbf-fast:intervals-24hr {bbf-fast:performance-24hr}?
         |  |  |     +--ro bbf-fast:current
         |  |  |     |  +--ro bbf-fast:ftu-o
         |  |  |     |  |  +--ro bbf-fast:measured-time?                  uint32
@@ -996,14 +1045,14 @@ module: ietf-interfaces
         |  |  |     |  |  +--ro bbf-fast:successful-autonomous-sra?      bbf-yang:performance-counter32
         |  |  |     |  |  +--ro bbf-fast:successful-fra?                 bbf-yang:performance-counter32
         |  |  |     |  |  +--ro bbf-fast:successful-rpa?                 bbf-yang:performance-counter32
-        |  |  |     |  |  +--ro bbf-fast:inminpeq* [inminpeq-index] {impulse-noise-monitoring}?
+        |  |  |     |  |  +--ro bbf-fast:inminpeq* [inminpeq-index] {bbf-fast:impulse-noise-monitoring}?
         |  |  |     |  |  |  +--ro bbf-fast:inminpeq-index    uint8
         |  |  |     |  |  |  +--ro bbf-fast:inminpeq?         bbf-yang:performance-counter32
-        |  |  |     |  |  +--ro bbf-fast:inmame?                         bbf-yang:performance-counter32 {impulse-noise-monitoring}?
-        |  |  |     |  |  +--ro bbf-fast:inmiat* [inminiat-index] {impulse-noise-monitoring}?
+        |  |  |     |  |  +--ro bbf-fast:inmame?                         bbf-yang:performance-counter32 {bbf-fast:impulse-noise-monitoring}?
+        |  |  |     |  |  +--ro bbf-fast:inmiat* [inminiat-index] {bbf-fast:impulse-noise-monitoring}?
         |  |  |     |  |  |  +--ro bbf-fast:inminiat-index    uint8
         |  |  |     |  |  |  +--ro bbf-fast:inmiat?           bbf-yang:performance-counter32
-        |  |  |     |  |  +--ro bbf-fast:inmblfc?                        bbf-yang:performance-counter32 {impulse-noise-monitoring}?
+        |  |  |     |  |  +--ro bbf-fast:inmblfc?                        bbf-yang:performance-counter32 {bbf-fast:impulse-noise-monitoring}?
         |  |  |     |  |  +--ro bbf-fast:errored-seconds?                seconds-counter-24hr
         |  |  |     |  |  +--ro bbf-fast:severely-errored-seconds?       seconds-counter-24hr
         |  |  |     |  |  +--ro bbf-fast:loss-of-signal-seconds?         seconds-counter-24hr
@@ -1017,8 +1066,8 @@ module: ietf-interfaces
         |  |  |     |  |  +--ro bbf-fast:loss-of-power-interruptions?    bbf-yang:performance-counter32
         |  |  |     |  |  +--ro bbf-fast:host-reinit-interruptions?      bbf-yang:performance-counter32
         |  |  |     |  |  +--ro bbf-fast:spontaneous-interruptions?      bbf-yang:performance-counter32
-        |  |  |     |  |  +--ro bbf-fast:successful-srec?                bbf-yang:performance-counter32 {srec}?
-        |  |  |     |  |  +--ro bbf-fast:me-o-triggered-interruptions?   bbf-yang:performance-counter32 {srec}?
+        |  |  |     |  |  +--ro bbf-fast:successful-srec?                bbf-yang:performance-counter32 {bbf-fast:srec}?
+        |  |  |     |  |  +--ro bbf-fast:me-o-triggered-interruptions?   bbf-yang:performance-counter32 {bbf-fast:srec}?
         |  |  |     |  |  +--ro bbf-fast:link-state-l2.1n-seconds?       seconds-counter-24hr
         |  |  |     |  |  +--ro bbf-fast:link-state-l2.1b-seconds?       seconds-counter-24hr
         |  |  |     |  |  +--ro bbf-fast:link-state-l2.2-seconds?        seconds-counter-24hr
@@ -1032,14 +1081,14 @@ module: ietf-interfaces
         |  |  |     |     +--ro bbf-fast:successful-autonomous-sra?   bbf-yang:performance-counter32
         |  |  |     |     +--ro bbf-fast:successful-fra?              bbf-yang:performance-counter32
         |  |  |     |     +--ro bbf-fast:successful-rpa?              bbf-yang:performance-counter32
-        |  |  |     |     +--ro bbf-fast:inminpeq* [inminpeq-index] {impulse-noise-monitoring}?
+        |  |  |     |     +--ro bbf-fast:inminpeq* [inminpeq-index] {bbf-fast:impulse-noise-monitoring}?
         |  |  |     |     |  +--ro bbf-fast:inminpeq-index    uint8
         |  |  |     |     |  +--ro bbf-fast:inminpeq?         bbf-yang:performance-counter32
-        |  |  |     |     +--ro bbf-fast:inmame?                      bbf-yang:performance-counter32 {impulse-noise-monitoring}?
-        |  |  |     |     +--ro bbf-fast:inmiat* [inminiat-index] {impulse-noise-monitoring}?
+        |  |  |     |     +--ro bbf-fast:inmame?                      bbf-yang:performance-counter32 {bbf-fast:impulse-noise-monitoring}?
+        |  |  |     |     +--ro bbf-fast:inmiat* [inminiat-index] {bbf-fast:impulse-noise-monitoring}?
         |  |  |     |     |  +--ro bbf-fast:inminiat-index    uint8
         |  |  |     |     |  +--ro bbf-fast:inmiat?           bbf-yang:performance-counter32
-        |  |  |     |     +--ro bbf-fast:inmblfc?                     bbf-yang:performance-counter32 {impulse-noise-monitoring}?
+        |  |  |     |     +--ro bbf-fast:inmblfc?                     bbf-yang:performance-counter32 {bbf-fast:impulse-noise-monitoring}?
         |  |  |     |     +--ro bbf-fast:errored-seconds?             seconds-counter-24hr
         |  |  |     |     +--ro bbf-fast:severely-errored-seconds?    seconds-counter-24hr
         |  |  |     |     +--ro bbf-fast:loss-of-signal-seconds?      seconds-counter-24hr
@@ -1061,14 +1110,14 @@ module: ietf-interfaces
         |  |  |        |  +--ro bbf-fast:successful-autonomous-sra?      bbf-yang:performance-counter32
         |  |  |        |  +--ro bbf-fast:successful-fra?                 bbf-yang:performance-counter32
         |  |  |        |  +--ro bbf-fast:successful-rpa?                 bbf-yang:performance-counter32
-        |  |  |        |  +--ro bbf-fast:inminpeq* [inminpeq-index] {impulse-noise-monitoring}?
+        |  |  |        |  +--ro bbf-fast:inminpeq* [inminpeq-index] {bbf-fast:impulse-noise-monitoring}?
         |  |  |        |  |  +--ro bbf-fast:inminpeq-index    uint8
         |  |  |        |  |  +--ro bbf-fast:inminpeq?         bbf-yang:performance-counter32
-        |  |  |        |  +--ro bbf-fast:inmame?                         bbf-yang:performance-counter32 {impulse-noise-monitoring}?
-        |  |  |        |  +--ro bbf-fast:inmiat* [inminiat-index] {impulse-noise-monitoring}?
+        |  |  |        |  +--ro bbf-fast:inmame?                         bbf-yang:performance-counter32 {bbf-fast:impulse-noise-monitoring}?
+        |  |  |        |  +--ro bbf-fast:inmiat* [inminiat-index] {bbf-fast:impulse-noise-monitoring}?
         |  |  |        |  |  +--ro bbf-fast:inminiat-index    uint8
         |  |  |        |  |  +--ro bbf-fast:inmiat?           bbf-yang:performance-counter32
-        |  |  |        |  +--ro bbf-fast:inmblfc?                        bbf-yang:performance-counter32 {impulse-noise-monitoring}?
+        |  |  |        |  +--ro bbf-fast:inmblfc?                        bbf-yang:performance-counter32 {bbf-fast:impulse-noise-monitoring}?
         |  |  |        |  +--ro bbf-fast:errored-seconds?                seconds-counter-24hr
         |  |  |        |  +--ro bbf-fast:severely-errored-seconds?       seconds-counter-24hr
         |  |  |        |  +--ro bbf-fast:loss-of-signal-seconds?         seconds-counter-24hr
@@ -1082,8 +1131,8 @@ module: ietf-interfaces
         |  |  |        |  +--ro bbf-fast:loss-of-power-interruptions?    bbf-yang:performance-counter32
         |  |  |        |  +--ro bbf-fast:host-reinit-interruptions?      bbf-yang:performance-counter32
         |  |  |        |  +--ro bbf-fast:spontaneous-interruptions?      bbf-yang:performance-counter32
-        |  |  |        |  +--ro bbf-fast:successful-srec?                bbf-yang:performance-counter32 {srec}?
-        |  |  |        |  +--ro bbf-fast:me-o-triggered-interruptions?   bbf-yang:performance-counter32 {srec}?
+        |  |  |        |  +--ro bbf-fast:successful-srec?                bbf-yang:performance-counter32 {bbf-fast:srec}?
+        |  |  |        |  +--ro bbf-fast:me-o-triggered-interruptions?   bbf-yang:performance-counter32 {bbf-fast:srec}?
         |  |  |        |  +--ro bbf-fast:link-state-l2.1n-seconds?       seconds-counter-24hr
         |  |  |        |  +--ro bbf-fast:link-state-l2.1b-seconds?       seconds-counter-24hr
         |  |  |        |  +--ro bbf-fast:link-state-l2.2-seconds?        seconds-counter-24hr
@@ -1099,14 +1148,14 @@ module: ietf-interfaces
         |  |  |           +--ro bbf-fast:successful-autonomous-sra?   bbf-yang:performance-counter32
         |  |  |           +--ro bbf-fast:successful-fra?              bbf-yang:performance-counter32
         |  |  |           +--ro bbf-fast:successful-rpa?              bbf-yang:performance-counter32
-        |  |  |           +--ro bbf-fast:inminpeq* [inminpeq-index] {impulse-noise-monitoring}?
+        |  |  |           +--ro bbf-fast:inminpeq* [inminpeq-index] {bbf-fast:impulse-noise-monitoring}?
         |  |  |           |  +--ro bbf-fast:inminpeq-index    uint8
         |  |  |           |  +--ro bbf-fast:inminpeq?         bbf-yang:performance-counter32
-        |  |  |           +--ro bbf-fast:inmame?                      bbf-yang:performance-counter32 {impulse-noise-monitoring}?
-        |  |  |           +--ro bbf-fast:inmiat* [inminiat-index] {impulse-noise-monitoring}?
+        |  |  |           +--ro bbf-fast:inmame?                      bbf-yang:performance-counter32 {bbf-fast:impulse-noise-monitoring}?
+        |  |  |           +--ro bbf-fast:inmiat* [inminiat-index] {bbf-fast:impulse-noise-monitoring}?
         |  |  |           |  +--ro bbf-fast:inminiat-index    uint8
         |  |  |           |  +--ro bbf-fast:inmiat?           bbf-yang:performance-counter32
-        |  |  |           +--ro bbf-fast:inmblfc?                     bbf-yang:performance-counter32 {impulse-noise-monitoring}?
+        |  |  |           +--ro bbf-fast:inmblfc?                     bbf-yang:performance-counter32 {bbf-fast:impulse-noise-monitoring}?
         |  |  |           +--ro bbf-fast:errored-seconds?             seconds-counter-24hr
         |  |  |           +--ro bbf-fast:severely-errored-seconds?    seconds-counter-24hr
         |  |  |           +--ro bbf-fast:loss-of-signal-seconds?      seconds-counter-24hr
@@ -1116,10 +1165,10 @@ module: ietf-interfaces
         |  |  |  +--ro bbf-fast:profile?                                profiles
         |  |  |  +--ro bbf-fast:link-state?                             enumeration
         |  |  |  +--ro bbf-fast:initialization-success-failure-cause?   enumeration
-        |  |  |  +--ro bbf-fast:annex-x-enabled?                        boolean {annex-x}?
-        |  |  |  +--ro bbf-fast:annex-d-enabled?                        boolean {annex-d}?
-        |  |  |  +--ro bbf-fast:idta-enabled?                           boolean {(dta and annex-x)}?
-        |  |  |  +--ro bbf-fast:cdta-procedure-actual-type?             enumeration {(dta and annex-d)}?
+        |  |  |  +--ro bbf-fast:annex-x-enabled?                        boolean {bbf-fast:annex-x}?
+        |  |  |  +--ro bbf-fast:annex-d-enabled?                        boolean {bbf-fast:annex-d}?
+        |  |  |  +--ro bbf-fast:idta-enabled?                           boolean {(bbf-fast:dta and bbf-fast:annex-x)}?
+        |  |  |  +--ro bbf-fast:cdta-procedure-actual-type?             enumeration {(bbf-fast:dta and bbf-fast:annex-d)}?
         |  |  |  +--ro bbf-fast:ftu-o
         |  |  |  |  +--ro bbf-fast:update-test
         |  |  |  |  |  +--ro bbf-fast:time-stamp-at-g1-update?   time-stamp-or-undefined
@@ -1137,10 +1186,11 @@ module: ietf-interfaces
         |  |  |  |  |  +--ro bbf-fast:time-stamp-at-g2-update?   time-stamp-or-undefined
         |  |  |  |  |  +--ro bbf-fast:link-state-at-g1-update?   enumeration
         |  |  |  |  +--ro bbf-fast:failures
-        |  |  |  |     +--ro bbf-fast:loss-of-signal?   boolean
-        |  |  |  |     +--ro bbf-fast:loss-of-rmc?      boolean
-        |  |  |  |     +--ro bbf-fast:loss-of-margin?   boolean
-        |  |  |  |     +--ro bbf-fast:loss-of-power?    boolean
+        |  |  |  |  |  +--ro bbf-fast:loss-of-signal?   boolean
+        |  |  |  |  |  +--ro bbf-fast:loss-of-rmc?      boolean
+        |  |  |  |  |  +--ro bbf-fast:loss-of-margin?   boolean
+        |  |  |  |  |  +--ro bbf-fast:loss-of-power?    boolean
+        |  |  |  |  +--ro bbf-fast:minimum-mds-supported?   uint8
         |  |  |  +--ro bbf-fast:downstream
         |  |  |  |  +--ro bbf-fast:initialization-last-transmitted-signal?   uint8
         |  |  |  |  +--ro bbf-fast:snr-margin?                               snr-margin
@@ -1187,7 +1237,7 @@ module: ietf-interfaces
         |  |  |  |     +--ro bbf-fast:time-stamp-last-successful-fra?              time-stamp-or-undefined
         |  |  |  |     +--ro bbf-fast:time-stamp-last-successful-rpa?              time-stamp-or-undefined
         |  |  |  |     +--ro bbf-fast:time-stamp-last-successful-tiga?             time-stamp-or-undefined
-        |  |  |  |     +--ro bbf-fast:time-stamp-last-successful-srec?             time-stamp-or-undefined {srec}?
+        |  |  |  |     +--ro bbf-fast:time-stamp-last-successful-srec?             time-stamp-or-undefined {bbf-fast:srec}?
         |  |  |  +--ro bbf-fast:upstream
         |  |  |     +--ro bbf-fast:initialization-last-received-signal?   uint8
         |  |  |     +--ro bbf-fast:snr-margin?                            snr-margin
@@ -1227,12 +1277,12 @@ module: ietf-interfaces
         |  |     |  +--ro bbf-fast:system-vendor-id?       binary
         |  |     |  +--ro bbf-fast:system-serial-number?   binary
         |  |     |  +--ro bbf-fast:profiles-supported?     profiles
-        |  |     |  +--ro bbf-fast:annex-x-supported?      boolean {annex-x}?
-        |  |     |  +--ro bbf-fast:annex-d-supported?      boolean {annex-d}?
-        |  |     |  +--ro bbf-fast:srec-supported?         boolean {srec}?
+        |  |     |  +--ro bbf-fast:annex-x-supported?      boolean {bbf-fast:annex-x}?
+        |  |     |  +--ro bbf-fast:annex-d-supported?      boolean {bbf-fast:annex-d}?
+        |  |     |  +--ro bbf-fast:srec-supported?         boolean {bbf-fast:srec}?
         |  |     |  +--ro bbf-fast:vce-id?                 union
         |  |     |  +--ro bbf-fast:vce-port-index?         union
-        |  |     |  +--ro bbf-fast:idta-supported?         boolean {(dta and annex-x)}?
+        |  |     |  +--ro bbf-fast:idta-supported?         boolean {(bbf-fast:dta and bbf-fast:annex-x)}?
         |  |     +--ro bbf-fast:ftu-r
         |  |        +--ro bbf-fast:g.994.1-vendor-id?      binary
         |  |        +--ro bbf-fast:version-number?         binary
@@ -1240,10 +1290,10 @@ module: ietf-interfaces
         |  |        +--ro bbf-fast:system-vendor-id?       binary
         |  |        +--ro bbf-fast:system-serial-number?   binary
         |  |        +--ro bbf-fast:profiles-supported?     profiles
-        |  |        +--ro bbf-fast:annex-x-supported?      boolean {annex-x}?
-        |  |        +--ro bbf-fast:annex-d-supported?      boolean {annex-d}?
-        |  |        +--ro bbf-fast:srec-supported?         boolean {srec}?
-        |  +--ro bbf-fast:availability! {availability}?
+        |  |        +--ro bbf-fast:annex-x-supported?      boolean {bbf-fast:annex-x}?
+        |  |        +--ro bbf-fast:annex-d-supported?      boolean {bbf-fast:annex-d}?
+        |  |        +--ro bbf-fast:srec-supported?         boolean {bbf-fast:srec}?
+        |  +--ro bbf-fast:availability! {bbf-avail:availability,availability}?
         |     +--ro bbf-fast:availability-status    union
         |     +--ro bbf-fast:issues
         |        +--ro bbf-fast:issue* [tag code]
@@ -1251,6 +1301,121 @@ module: ietf-interfaces
         |           +--ro bbf-fast:code          uint16
         |           +--ro bbf-fast:message?      string
         |           +--ro bbf-fast:root-cause*   resource
+        +--ro bbf-if-pm:performance
+        |  +--ro bbf-if-pm:intervals-15min
+        |  |  +--ro bbf-if-pm:current
+        |  |  |  +--ro bbf-if-pm:in-octets?             bbf-yang:performance-counter64
+        |  |  |  +--ro bbf-if-pm:in-unicast-pkts?       bbf-yang:performance-counter64
+        |  |  |  +--ro bbf-if-pm:in-broadcast-pkts?     bbf-yang:performance-counter64
+        |  |  |  +--ro bbf-if-pm:in-multicast-pkts?     bbf-yang:performance-counter64
+        |  |  |  +--ro bbf-if-pm:in-discards?           bbf-yang:performance-counter32
+        |  |  |  +--ro bbf-if-pm:in-errors?             bbf-yang:performance-counter32
+        |  |  |  +--ro bbf-if-pm:in-unknown-protos?     bbf-yang:performance-counter32
+        |  |  |  +--ro bbf-if-pm:out-octets?            bbf-yang:performance-counter64
+        |  |  |  +--ro bbf-if-pm:out-unicast-pkts?      bbf-yang:performance-counter64
+        |  |  |  +--ro bbf-if-pm:out-broadcast-pkts?    bbf-yang:performance-counter64
+        |  |  |  +--ro bbf-if-pm:out-multicast-pkts?    bbf-yang:performance-counter64
+        |  |  |  +--ro bbf-if-pm:out-discards?          bbf-yang:performance-counter32
+        |  |  |  +--ro bbf-if-pm:out-errors?            bbf-yang:performance-counter32
+        |  |  |  +--ro bbf-gbond-state:bonding-group {bbf-gbond:bonding-group-performance-15min}?
+        |  |  |     +--ro bbf-gbond-state:gbs-c
+        |  |  |        +--ro bbf-gbond-state:errored-seconds?            yang:counter64
+        |  |  |        +--ro bbf-gbond-state:severely-errored-seconds?   yang:counter64
+        |  |  |        +--ro bbf-gbond-state:unavailable-seconds?        yang:counter64
+        |  |  +--ro bbf-if-pm:number-of-intervals?   performance-15min-interval
+        |  |  +--ro bbf-if-pm:non-valid-intervals?   performance-15min-interval
+        |  |  +--ro bbf-if-pm:history* [interval-number]
+        |  |     +--ro bbf-if-pm:interval-number        performance-15min-history-interval
+        |  |     +--ro bbf-if-pm:measured-time?         uint32
+        |  |     +--ro bbf-if-pm:invalid-data-flag?     boolean
+        |  |     +--ro bbf-if-pm:time-stamp?            yang:date-and-time
+        |  |     +--ro bbf-if-pm:in-octets?             bbf-yang:performance-counter64
+        |  |     +--ro bbf-if-pm:in-unicast-pkts?       bbf-yang:performance-counter64
+        |  |     +--ro bbf-if-pm:in-broadcast-pkts?     bbf-yang:performance-counter64
+        |  |     +--ro bbf-if-pm:in-multicast-pkts?     bbf-yang:performance-counter64
+        |  |     +--ro bbf-if-pm:in-discards?           bbf-yang:performance-counter32
+        |  |     +--ro bbf-if-pm:in-errors?             bbf-yang:performance-counter32
+        |  |     +--ro bbf-if-pm:in-unknown-protos?     bbf-yang:performance-counter32
+        |  |     +--ro bbf-if-pm:out-octets?            bbf-yang:performance-counter64
+        |  |     +--ro bbf-if-pm:out-unicast-pkts?      bbf-yang:performance-counter64
+        |  |     +--ro bbf-if-pm:out-broadcast-pkts?    bbf-yang:performance-counter64
+        |  |     +--ro bbf-if-pm:out-multicast-pkts?    bbf-yang:performance-counter64
+        |  |     +--ro bbf-if-pm:out-discards?          bbf-yang:performance-counter32
+        |  |     +--ro bbf-if-pm:out-errors?            bbf-yang:performance-counter32
+        |  |     +--ro bbf-gbond-state:bonding-group {bbf-gbond:bonding-group-performance-15min}?
+        |  |        +--ro bbf-gbond-state:gbs-c
+        |  |           +--ro bbf-gbond-state:errored-seconds?            yang:counter64
+        |  |           +--ro bbf-gbond-state:severely-errored-seconds?   yang:counter64
+        |  |           +--ro bbf-gbond-state:unavailable-seconds?        yang:counter64
+        |  +--ro bbf-if-pm:intervals-24hr {performance-24hr}?
+        |     +--ro bbf-if-pm:current
+        |     |  +--ro bbf-if-pm:in-octets?             bbf-yang:performance-counter64
+        |     |  +--ro bbf-if-pm:in-unicast-pkts?       bbf-yang:performance-counter64
+        |     |  +--ro bbf-if-pm:in-broadcast-pkts?     bbf-yang:performance-counter64
+        |     |  +--ro bbf-if-pm:in-multicast-pkts?     bbf-yang:performance-counter64
+        |     |  +--ro bbf-if-pm:in-discards?           bbf-yang:performance-counter32
+        |     |  +--ro bbf-if-pm:in-errors?             bbf-yang:performance-counter32
+        |     |  +--ro bbf-if-pm:in-unknown-protos?     bbf-yang:performance-counter32
+        |     |  +--ro bbf-if-pm:out-octets?            bbf-yang:performance-counter64
+        |     |  +--ro bbf-if-pm:out-unicast-pkts?      bbf-yang:performance-counter64
+        |     |  +--ro bbf-if-pm:out-broadcast-pkts?    bbf-yang:performance-counter64
+        |     |  +--ro bbf-if-pm:out-multicast-pkts?    bbf-yang:performance-counter64
+        |     |  +--ro bbf-if-pm:out-discards?          bbf-yang:performance-counter32
+        |     |  +--ro bbf-if-pm:out-errors?            bbf-yang:performance-counter32
+        |     |  +--ro bbf-gbond-state:bonding-group {bbf-if-pm:performance-24hr and
+bbf-gbond:bonding-group-performance-24hr}?
+        |     |     +--ro bbf-gbond-state:gbs-c
+        |     |        +--ro bbf-gbond-state:errored-seconds?            yang:counter64
+        |     |        +--ro bbf-gbond-state:severely-errored-seconds?   yang:counter64
+        |     |        +--ro bbf-gbond-state:unavailable-seconds?        yang:counter64
+        |     +--ro bbf-if-pm:number-of-intervals?   performance-24hr-interval
+        |     +--ro bbf-if-pm:non-valid-intervals?   performance-24hr-interval
+        |     +--ro bbf-if-pm:history* [interval-number]
+        |        +--ro bbf-if-pm:interval-number        performance-24hr-history-interval
+        |        +--ro bbf-if-pm:measured-time?         uint32
+        |        +--ro bbf-if-pm:invalid-data-flag?     boolean
+        |        +--ro bbf-if-pm:time-stamp?            yang:date-and-time
+        |        +--ro bbf-if-pm:in-octets?             bbf-yang:performance-counter64
+        |        +--ro bbf-if-pm:in-unicast-pkts?       bbf-yang:performance-counter64
+        |        +--ro bbf-if-pm:in-broadcast-pkts?     bbf-yang:performance-counter64
+        |        +--ro bbf-if-pm:in-multicast-pkts?     bbf-yang:performance-counter64
+        |        +--ro bbf-if-pm:in-discards?           bbf-yang:performance-counter32
+        |        +--ro bbf-if-pm:in-errors?             bbf-yang:performance-counter32
+        |        +--ro bbf-if-pm:in-unknown-protos?     bbf-yang:performance-counter32
+        |        +--ro bbf-if-pm:out-octets?            bbf-yang:performance-counter64
+        |        +--ro bbf-if-pm:out-unicast-pkts?      bbf-yang:performance-counter64
+        |        +--ro bbf-if-pm:out-broadcast-pkts?    bbf-yang:performance-counter64
+        |        +--ro bbf-if-pm:out-multicast-pkts?    bbf-yang:performance-counter64
+        |        +--ro bbf-if-pm:out-discards?          bbf-yang:performance-counter32
+        |        +--ro bbf-if-pm:out-errors?            bbf-yang:performance-counter32
+        |        +--ro bbf-gbond-state:bonding-group {bbf-if-pm:performance-24hr and
+bbf-gbond:bonding-group-performance-24hr}?
+        |           +--ro bbf-gbond-state:gbs-c
+        |              +--ro bbf-gbond-state:errored-seconds?            yang:counter64
+        |              +--ro bbf-gbond-state:severely-errored-seconds?   yang:counter64
+        |              +--ro bbf-gbond-state:unavailable-seconds?        yang:counter64
+        +--ro bbf-gbond-state:bonding-group
+        |  +--ro bbf-gbond-state:status
+        |  |  +--ro bbf-gbond-state:upstream-data-rate      bbf-yang:data-rate32-or-undetermined
+        |  |  +--ro bbf-gbond-state:downstream-data-rate    bbf-yang:data-rate32-or-undetermined
+        |  |  +--ro bbf-gbond-state:number-of-channels      uint32
+        |  |  +--ro bbf-gbond-state:fault-status            bits
+        |  |  +--ro bbf-gbond-state:g9982
+        |  |     +--ro bbf-gbond-state:operational-control-protocol?   identityref
+        |  +--ro bbf-gbond-state:capabilities
+        |  |  +--ro bbf-gbond-state:gbs-c
+        |  |     +--ro bbf-gbond-state:capacity    uint8
+        |  +--ro bbf-gbond-state:statistics {bbf-gbond:bonding-group-statistics}?
+        |     +--ro bbf-gbond-state:g9982
+        |        +--ro bbf-gbond-state:gbs-c
+        |           +--ro bbf-gbond-state:in-errors             yang:counter64
+        |           +--ro bbf-gbond-state:in-small-fragments    yang:counter64
+        |           +--ro bbf-gbond-state:in-large-fragments    yang:counter64
+        |           +--ro bbf-gbond-state:in-bad-fragments      yang:counter64
+        |           +--ro bbf-gbond-state:in-lost-fragments     yang:counter64
+        |           +--ro bbf-gbond-state:in-lost-starts        yang:counter64
+        |           +--ro bbf-gbond-state:in-lost-ends          yang:counter64
+        |           +--ro bbf-gbond-state:in-overflows          yang:counter64
         +--ro bbf-selt:selt!
         |  +--ro bbf-selt:pmd-status
         |  |  +--ro bbf-selt:selt-status-c?   enumeration
@@ -1306,7 +1471,11 @@ module: ietf-interfaces
            |  +--ro bbf-melt:measurement-frequency?                         uint16
            |  +--ro bbf-melt:foreign-voltage-input-impedance?               uint32
            |  +--ro bbf-melt:loop-complex-admittance-measurement-voltage?   measurement-voltage
-           |  +--ro bbf-melt:unreliability-indicator?                       bits {melt-pmd-reporting-parameter-reliability}?
+           |  +--ro bbf-melt:unreliability-indicator?                       bits {bbf-melt:melt-pmd-reporting-parameter-reliability}?
+           |  +--ro bbf-melt:melt-pmd-reporting-vendor-specific-status {bbf-melt:melt-pmd-reporting-parameter-reliability}?
+           |     +--ro bbf-melt:status* [parameter]
+           |        +--ro bbf-melt:parameter    melt-pmd-reporting-parameter
+           |        +--ro bbf-melt:message?     string
            +--ro bbf-melt:pmd-measurement-parameters
            |  +--ro bbf-melt:four-element-dc-resistance-tr?                             four-element-dc-resistance
            |  +--ro bbf-melt:four-element-dc-resistance-rt?                             four-element-dc-resistance
@@ -1354,6 +1523,10 @@ module: ietf-interfaces
            |  +--ro bbf-melt:three-element-complex-admittance-measurement-voltage-rg?   measurement-voltage
            |  +--ro bbf-melt:loop-complex-admittance-measurement-voltage-tr?            measurement-voltage
            |  +--ro bbf-melt:unreliability-indicator?                                   bits {melt-pmd-measurement-parameter-reliability}?
+           |  +--ro bbf-melt:melt-pmd-measurement-vendor-specific-status {melt-pmd-measurement-parameter-reliability}?
+           |     +--ro bbf-melt:status* [parameter]
+           |        +--ro bbf-melt:parameter    melt-pmd-measurement-parameter
+           |        +--ro bbf-melt:message?     string
            +--ro bbf-melt:processing-derived-parameters {melt-p}?
               +--ro bbf-melt:open-wire-failure-type?                           enumeration
               +--ro bbf-melt:open-wire-failure-distance?                       uint16
@@ -1365,6 +1538,10 @@ module: ietf-interfaces
               +--ro bbf-melt:far-end-signature-topology-type-identification?   enumeration
               +--ro bbf-melt:cpe-identification-capacitive?                    enumeration
               +--ro bbf-melt:unreliability-indicator?                          bits {melt-processing-derived-parameter-reliability}?
+              +--ro bbf-melt:melt-processing-derived-vendor-specific-status {melt-processing-derived-parameter-reliability}?
+                 +--ro bbf-melt:status* [parameter]
+                    +--ro bbf-melt:parameter    melt-processing-derived-parameter
+                    +--ro bbf-melt:message?     string
 module: bbf-ghs
   +--rw ghs
      +--rw profiles
@@ -1384,20 +1561,26 @@ module: bbf-fast
      |  |  +--rw minimum-expected-throughput?   bbf-yang:data-rate32
      |  |  +--rw maximum-gamma-data-rate?       bbf-yang:data-rate32
      |  |  +--rw minimum-gamma-data-rate?       bbf-yang:data-rate32
-     |  |  +--rw dynamic-time-assignment {dta}?
+     |  |  +--rw preferred-ndr {preferred-ndr}?
+     |  |  |  +--rw preferred-net-data-rate?        bbf-yang:data-rate32
+     |  |  |  +--rw preferred-net-data-rate-type?   enumeration
+     |  |  +--rw dynamic-time-assignment {bbf-fast:dta}?
      |  |  |  +--rw minimum-expected-throughput?   bbf-yang:data-rate32
      |  |  |  +--rw maximum-net-data-rate?         bbf-yang:data-rate32
-     |  |  +--rw low-andeftr-threshold?         bbf-yang:data-rate32 {andeftr}?
+     |  |  +--rw low-andeftr-threshold?         bbf-yang:data-rate32 {bbf-fast:andeftr}?
      |  +--rw upstream-data-rate-profile* [name]
      |  |  +--rw name                           bbf-yang:string-ascii64
      |  |  +--rw maximum-net-data-rate?         bbf-yang:data-rate32
      |  |  +--rw minimum-expected-throughput?   bbf-yang:data-rate32
      |  |  +--rw maximum-gamma-data-rate?       bbf-yang:data-rate32
      |  |  +--rw minimum-gamma-data-rate?       bbf-yang:data-rate32
-     |  |  +--rw dynamic-time-assignment {dta}?
+     |  |  +--rw preferred-ndr {preferred-ndr}?
+     |  |  |  +--rw preferred-net-data-rate?        bbf-yang:data-rate32
+     |  |  |  +--rw preferred-net-data-rate-type?   enumeration
+     |  |  +--rw dynamic-time-assignment {bbf-fast:dta}?
      |  |  |  +--rw minimum-expected-throughput?   bbf-yang:data-rate32
      |  |  |  +--rw maximum-net-data-rate?         bbf-yang:data-rate32
-     |  |  +--rw low-andeftr-threshold?         bbf-yang:data-rate32 {andeftr}?
+     |  |  +--rw low-andeftr-threshold?         bbf-yang:data-rate32 {bbf-fast:andeftr}?
      |  +--rw low-power-data-rate-profile* [name]
      |  |  +--rw name                                   bbf-yang:string-ascii64
      |  |  +--rw maximum-net-data-rate-in-l2.2?         bbf-yang:data-rate32
@@ -1415,14 +1598,14 @@ module: bbf-fast
      |     +--rw total-symbol-periods?        uint8
      |     +--rw downstream-symbol-periods?   uint8
      |     +--rw cyclic-extension?            uint8
-     |     +--rw dynamic-time-assignment {dta}?
+     |     +--rw dynamic-time-assignment {bbf-fast:dta}?
      |        +--rw dta-allowed?                    enumeration
      |        +--rw preferred-mds?                  uint8
      |        +--rw maximum-step-size?              uint8
      |        +--rw minimum-time-between-updates?   uint16
      |        +--rw minimum-mds?                    uint8
      |        +--rw maximum-mds?                    uint8
-     |        +--rw cdta-procedure-control?         enumeration {annex-d}?
+     |        +--rw cdta-procedure-control?         enumeration {bbf-fast:annex-d}?
      +--rw spectrum
      |  +--rw line-spectrum-profile* [name]
      |  |  +--rw name                           bbf-yang:string-ascii64
@@ -1434,6 +1617,9 @@ module: bbf-fast
      |  |  |  +--rw carmask* [start-index]
      |  |  |  |  +--rw start-index    sub-carrier-index
      |  |  |  |  +--rw stop-index     sub-carrier-index
+     |  |  |  +--rw rmccarmask* [start-index] {rmccarmask}?
+     |  |  |  |  +--rw start-index    sub-carrier-index
+     |  |  |  |  +--rw stop-index     sub-carrier-index
      |  |  |  +--rw mibpsdmask* [sub-carrier-index]
      |  |  |  |  +--rw sub-carrier-index    psd-level-sub-carrier-index
      |  |  |  |  +--rw psd-level            psd-level
@@ -1441,6 +1627,9 @@ module: bbf-fast
      |  |  +--rw upstream
      |  |     +--rw maximum-aggregate-transmit-power?   int16
      |  |     +--rw carmask* [start-index]
+     |  |     |  +--rw start-index    sub-carrier-index
+     |  |     |  +--rw stop-index     sub-carrier-index
+     |  |     +--rw rmccarmask* [start-index] {rmccarmask}?
      |  |     |  +--rw start-index    sub-carrier-index
      |  |     |  +--rw stop-index     sub-carrier-index
      |  |     +--rw mibpsdmask* [sub-carrier-index]
@@ -1514,11 +1703,13 @@ module: bbf-fast
      |  |  +--rw name            bbf-yang:string-ascii64
      |  |  +--rw downstream
      |  |  |  +--rw fext-to-cancel-enable?   boolean
+     |  |  |  +--rw tgvn-allowed?            boolean {tgvn}?
      |  |  |  +--rw xlog-group-size-req?     uint8
      |  |  +--rw upstream
      |  |  |  +--rw fext-to-cancel-enable?   boolean
-     |  |  +--rw annex-x-mode?   enumeration {annex-x}?
-     |  |  +--rw annex-d-mode?   enumeration {annex-d}?
+     |  |  |  +--rw tgvn-allowed?            boolean {tgvn}?
+     |  |  +--rw annex-x-mode?   enumeration {bbf-fast:annex-x}?
+     |  |  +--rw annex-d-mode?   enumeration {bbf-fast:annex-d}?
      |  +--rw fast-retrain-policy-profile* [name]
      |  |  +--rw name          bbf-yang:string-ascii64
      |  |  +--rw downstream
@@ -1611,7 +1802,7 @@ module: bbf-fast
            +--rw retransmission-profile                  retransmission-profile-ref
            +--rw fast-retrain-policy-profile             fast-retrain-policy-profile-ref
            +--rw vectoring-profile                       vectoring-profile-ref
-           +--rw impulse-noise-monitoring-profile        -> /fast/quality/impulse-noise-monitoring-profile/name {impulse-noise-monitoring}?
+           +--rw impulse-noise-monitoring-profile        -> /fast/quality/impulse-noise-monitoring-profile/name {bbf-fast:impulse-noise-monitoring}?
 module: bbf-vdsl
   +--rw vdsl
      +--rw service
@@ -1848,7 +2039,7 @@ module: bbf-vdsl
      |  +--rw vectoring-profile* [name] {vectoring}?
      |  |  +--rw name                  bbf-yang:string-ascii64
      |  |  +--rw vector-mode-enable?   union
-     |  |  +--rw strongfext-mode?      enumeration {strongfext}?
+     |  |  +--rw strongfext-mode?      enumeration {bbf-vdsl:strongfext}?
      |  |  +--rw downstream
      |  |  |  +--rw vector-band-control* [start-index]
      |  |  |  |  +--rw start-index    sub-carrier-index
@@ -1919,12 +2110,12 @@ module: bbf-vdsl
            +--rw downstream-power-back-off-profile       bbf-vdsl:downstream-power-back-off-profile-ref
            +--rw radio-frequency-interference-profile    bbf-vdsl:radio-frequency-interference-profile-ref
            +--rw noise-margin-profile                    bbf-vdsl:noise-margin-profile-ref
-           +--rw virtual-noise-profile                   -> /vdsl/quality/virtual-noise-profile/name {virtual-noise}?
-           +--rw sos-profile                             -> /vdsl/quality/sos-profile/name {sos}?
-           +--rw impulse-noise-monitoring-profile        -> /vdsl/quality/impulse-noise-monitoring-profile/name {impulse-noise-monitoring}?
-           +--rw re-initialization-policy-profile        -> /vdsl/quality/re-initialization-policy-profile/name {re-initialization-policy}?
-           +--rw vectoring-profile                       -> /vdsl/quality/vectoring-profile/name {vectoring}?
-           +--rw data-gathering-profile                  -> /vdsl/quality/data-gathering-profile/name {data-gathering}?
+           +--rw virtual-noise-profile                   -> /vdsl/quality/virtual-noise-profile/name {bbf-vdsl:virtual-noise}?
+           +--rw sos-profile                             -> /vdsl/quality/sos-profile/name {bbf-vdsl:sos}?
+           +--rw impulse-noise-monitoring-profile        -> /vdsl/quality/impulse-noise-monitoring-profile/name {bbf-vdsl:impulse-noise-monitoring}?
+           +--rw re-initialization-policy-profile        -> /vdsl/quality/re-initialization-policy-profile/name {bbf-vdsl:re-initialization-policy}?
+           +--rw vectoring-profile                       -> /vdsl/quality/vectoring-profile/name {bbf-vdsl:vectoring}?
+           +--rw data-gathering-profile                  -> /vdsl/quality/data-gathering-profile/name {bbf-vdsl:data-gathering}?
 module: bbf-melt
   +--rw melt
      +--rw profiles
@@ -2002,11 +2193,11 @@ module: bbf-hardware-rpf-dpu
        |  +--rw conditional-forced-reconfiguration-state-time?   uint8
        |  +--rw thresholds
        |     +--rw dpu-15min-extracted-energy-threshold?   uint32
-       |     +--rw dpu-24hr-extracted-energy-threshold?    uint32 {performance-24hr}?
+       |     +--rw dpu-24hr-extracted-energy-threshold?    uint32 {bbf-hw-rpf-dpu:performance-24hr}?
        +--rw far-end-line
        |  +--rw thresholds
        |     +--rw pse-15min-injected-energy-threshold?   uint32
-       |     +--rw pse-24hr-injected-energy-threshold?    uint32 {performance-24hr}?
+       |     +--rw pse-24hr-injected-energy-threshold?    uint32 {bbf-hw-rpf-dpu:performance-24hr}?
        +--ro line-id                               uint32
        +--ro inventory
        |  +--ro near-end-line
@@ -2052,7 +2243,7 @@ module: bbf-hardware-rpf-dpu
        |  |        +--ro invalid-data-flag?     boolean
        |  |        +--ro time-stamp?            yang:date-and-time
        |  |        +--ro pse-injected-energy?   bbf-yang:performance-counter32
-       |  +--ro intervals-24hr {performance-24hr}?
+       |  +--ro intervals-24hr {bbf-hw-rpf-dpu:performance-24hr}?
        |     +--ro current
        |     |  +--ro near-end
        |     |  |  +--ro measured-time?          uint32
@@ -2080,7 +2271,7 @@ module: bbf-hardware-rpf-dpu
        |  +-- rpf-state    pse-rpf-state
        +---n rpf-15min-threshold-crossing-alert
        |  +-- tca-identity    identityref
-       +---n rpf-24hr-threshold-crossing-alert {performance-24hr}?
+       +---n rpf-24hr-threshold-crossing-alert {bbf-hw-rpf-dpu:performance-24hr}?
           +-- tca-identity    identityref
 
   notifications:
@@ -2137,7 +2328,7 @@ module: bbf-hardware-rpf-dpu-state
           |        x--ro invalid-data-flag?     boolean
           |        x--ro time-stamp?            yang:date-and-time
           |        x--ro pse-injected-energy?   bbf-yang:performance-counter32
-          x--ro intervals-24hr {performance-24hr}?
+          x--ro intervals-24hr {bbf-hw-rpf-dpu-state:performance-24hr}?
              x--ro current
              |  x--ro near-end
              |  |  x--ro measured-time?          uint32
@@ -2159,3 +2350,24 @@ module: bbf-hardware-rpf-dpu-state
                    x--ro invalid-data-flag?     boolean
                    x--ro time-stamp?            yang:date-and-time
                    x--ro pse-injected-energy?   bbf-yang:performance-counter32
+module: bbf-gbond
+  +--rw gbond
+     +--rw profiles
+     |  +--rw bonding-group
+     |     +--rw profile* [name]
+     |        +--rw name                                  bbf-yang:string-ascii64
+     |        +--rw target-upstream-data-rate?            bbf-yang:data-rate32
+     |        +--rw target-downstream-data-rate?          bbf-yang:data-rate32
+     |        +--rw low-upstream-data-rate-threshold?     bbf-yang:data-rate32
+     |        +--rw low-downstream-data-rate-threshold?   bbf-yang:data-rate32
+     +--rw thresholds
+        +--rw bonding-group {bonding-group-performance}?
+           +--rw threshold-profile* [name]
+           |  +--rw name                                  bbf-yang:string-ascii64
+           |  +--rw errored-seconds-threshold?            uint32
+           |  +--rw severely-errored-seconds-threshold?   uint32
+           |  +--rw unavailable-seconds-threshold?        uint32
+           +--rw threshold-template* [name]
+              +--rw name                             bbf-yang:string-ascii64
+              +--rw gbs-c-15min-threshold-profile    bonding-group-threshold-profile-ref {bonding-group-performance-15min}?
+              +--rw gbs-c-24hr-threshold-profile     bonding-group-threshold-profile-ref {bonding-group-performance-24hr}?

@@ -20,22 +20,22 @@ submodule bbf-xpon-multicast-gemport-body {
      Fiber Access Networks Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
 
-     Editor:      Samuel Chen, Broadcom
+     Editor:      Igor Ternovsky, Broadcom
 
      Editor:      Robert Peschi, Nokia
 
      WA Director: Marta Seda, Calix
 
-     WA Director: Lin Wei, Huawei";
+     WA Director: Samuel Chen, Broadcom";
   description
     "This submodule contains a collection of YANG definitions for
-     managing multicast GEM ports.
+     managing multicast G-PON Encapsulation Method (GEM) ports.
 
-     Copyright (c) 2018, Broadband Forum
+     Copyright (c) 2018-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -75,9 +75,19 @@ submodule bbf-xpon-multicast-gemport-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385; see
+     This version of this YANG module is part of TR-385i2; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
   revision 2019-02-25 {
     description
       "Initial revision.
@@ -91,51 +101,56 @@ submodule bbf-xpon-multicast-gemport-body {
 
   typedef multicast-gemport-ref {
     type leafref {
-      path '/bbf-xpon:xpon/bbf-xpon:multicast-gemports/bbf-xpon:'
-         + 'multicast-gemport/bbf-xpon:name';
+      path "/bbf-xpon:xpon/bbf-xpon:multicast-gemports/bbf-xpon:"
+         + "multicast-gemport/bbf-xpon:name";
     }
     description
-      "Points to multicast GEM port.";
+      "Reference to a multicast G-PON Encapsulation Method (GEM)
+       port.";
   }
 
-  augment '/bbf-xpon:xpon' {
+  augment "/bbf-xpon:xpon" {
     description
-      "Augment system level xPON configuration with multicase GEM
-       port configuration.";
+      "Augment system level xPON configuration with multicast G-PON
+       Encapsulation Method (GEM) port configuration.";
     container multicast-gemports {
       description
-        "Multicast GEM ports configuration data.";
+        "Multicast G-PON Encapsulation Method (GEM) ports
+         configuration data.";
       uses multicast-gemports-config-data;
     }
   }
 
   grouping multicast-gemports-config-data {
     description
-      "The config data of multicast GEM ports. Multicast GEM ports
-       can be used for multicast or broadcast.";
+      "The configuration data of multicast G-PON Encapsulation Method
+       (GEM) ports. Multicast GEM ports can be used for multicast or
+       broadcast.";
     list multicast-gemport {
       key "name";
+      description
+        "List of multicast G-PON Encapsulation Method (GEM) ports.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
-          "The name of the multicast GEM port.";
+          "The name of the multicast G-PON Encapsulation Method (GEM)
+           port.";
       }
       leaf gemport-id {
         type uint32;
         description
-          "The ID of the multicast GEM port.";
+          "The ID of the multicast G-PON Encapsulation Method (GEM)
+           port.";
       }
       leaf interface {
         type if:interface-ref;
-        must
-          "/if:interfaces/if:interface[if:name=current()]
-           /if:type='bbf-xponift:channel-pair'" {
-          error-message
-            "Must reference a channel pair.";
+        must "/if:interfaces/if:interface[if:name=current()]
+              /if:type='bbf-xponift:channel-pair'" {
+          error-message "Must reference a channel pair.";
         }
         description
           "Each channel pair has in general one or several multicast
-           GEM ports.";
+           G-PON Encapsulation Method (GEM) ports.";
       }
       leaf traffic-class {
         type uint8 {
@@ -148,11 +163,9 @@ submodule bbf-xpon-multicast-gemport-body {
         type boolean;
         default "false";
         description
-          "If true, this multicast GEM port is used for broadcast
-           traffic.";
+          "If true, this multicast G-PON Encapsulation Method (GEM)
+           port is used for broadcast traffic.";
       }
-      description
-        "List of multicast GEM ports.";
     }
   }
 }

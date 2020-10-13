@@ -7,39 +7,35 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import bbf-interface-usage {
     prefix bbf-if-usg;
   }
-
   include bbf-l2-forwarding-base;
   include bbf-l2-forwarding-forwarders;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing split horizon profiles.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -79,9 +75,19 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-12-03 {
     description
       "Amendment 2.
@@ -94,7 +100,7 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
   }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -118,16 +124,14 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
       "Indicates support for split horizon profiles.";
   }
 
-  augment '/bbf-l2-fwd:forwarding' {
+  augment "/bbf-l2-fwd:forwarding" {
     description
       "Augment the configuration nodes associated with layer 2
-       forwarding with split horizon profile objects.";
-
+       forwarding with split horizon profile data nodes.";
     container split-horizon-profiles {
       if-feature "split-horizon-profiles";
       description
         "Split horizon profile configuration.";
-
       list split-horizon-profile {
         key "name";
         description
@@ -136,13 +140,11 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
            The absence of data for a particular in-interface-usage has
            a result that from that type of forwarder ports frames are
            allowed to be forwarded to any other forwarder port.";
-
         leaf name {
           type bbf-yang:string-ascii64;
           description
             "The name of the profile.";
         }
-
         list split-horizon {
           key "in-interface-usage";
           description
@@ -151,14 +153,12 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
              in-interface-usage to interfaces/ports that have an
              interface usage for which the value is in the leaf-list
              out-interface-usages.";
-
           leaf in-interface-usage {
             type bbf-if-usg:interface-usage;
             description
               "The interface usage from which forwarding is specified
                here.";
           }
-
           leaf-list out-interface-usage {
             type bbf-if-usg:interface-usage;
             description
@@ -172,12 +172,11 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
     }
   }
 
-  augment '/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarders/bbf-l2-fwd:'
-        + 'forwarder' {
+  augment "/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarders/bbf-l2-fwd:"
+        + "forwarder" {
     description
       "Augment the forwarder configuration to add a reference to a
        split horizon profile.";
-
     container split-horizon-profiles {
       if-feature "split-horizon-profiles";
       description
@@ -187,12 +186,11 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
          Without split-horizon-profile, packets can be forwarded
          within a forwarder from any of its forwarder ports to any
          other of its forwarder ports.";
-
       leaf split-horizon-profile {
         type leafref {
-          path '/bbf-l2-fwd:forwarding/bbf-l2-fwd:split-horizon-'
-             + 'profiles/bbf-l2-fwd:split-horizon-profile/bbf-l2-'
-             + 'fwd:name';
+          path "/bbf-l2-fwd:forwarding/bbf-l2-fwd:split-horizon-"
+             + "profiles/bbf-l2-fwd:split-horizon-profile/bbf-l2-"
+             + "fwd:name";
         }
         description
           "A reference to a split horizon profile associated with a

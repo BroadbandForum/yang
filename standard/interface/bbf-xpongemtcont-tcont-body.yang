@@ -21,22 +21,22 @@ submodule bbf-xpongemtcont-tcont-body {
      Fiber Access Networks Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
 
-     Editor:      Samuel Chen, Broadcom
+     Editor:      Igor Ternovsky, Broadcom
 
      Editor:      Robert Peschi, Nokia
 
      WA Director: Marta Seda, Calix
 
-     WA Director: Lin Wei, Huawei";
+     WA Director: Samuel Chen, Broadcom";
   description
     "This submodule contains a collection of YANG definitions for
      managing Transmission Containers (T-CONT).
 
-     Copyright (c) 2018, Broadband Forum
+     Copyright (c) 2018-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -76,9 +76,19 @@ submodule bbf-xpongemtcont-tcont-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385; see
+     This version of this YANG module is part of TR-385i2; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
   revision 2019-02-25 {
     description
       "Initial revision.
@@ -92,15 +102,17 @@ submodule bbf-xpongemtcont-tcont-body {
 
   feature configurable-alloc-id {
     description
-      "Indicates support for configuration of the Alloc-ID.";
+      "Indicates support for configuration of the Allocation
+       Identifier (Alloc-ID).";
   }
 
   typedef alloc-id {
     type uint16;
     description
-      "T-CONT Alloc-ID. For G-PON the value should be in
-       [256..4095] and for XG-PON, XGS-PON and NG-PON2 it should
-       be in [1024..16383].";
+      "Transmission Container (T-CONT) Allocation Identifier
+       (Alloc-ID). For G-PON the value should be in [256..4095] and
+       for XG-PON, XGS-PON and NG-PON2 it should be in
+       [1024..16383].";
     reference
       "ITU-T G.984.3 clause 5.5.3
        ITU-T G.987.3 clause 6.4.3
@@ -108,49 +120,54 @@ submodule bbf-xpongemtcont-tcont-body {
        ITU-T G.989.3 clause 6.1.5.7";
   }
 
-  augment '/bbf-xpongemtcont:xpongemtcont' {
+  augment "/bbf-xpongemtcont:xpongemtcont" {
     description
-      "Augment the xPON GEM port and T-CONT configuration with
-       T-CONT specific configuration.";
+      "Augment the xPON G-PON Encapsulation Method (GEM) port and
+       Transmission Container (T-CONT) configuration with T-CONT
+       specific configuration.";
     container tconts {
       description
-        "T-CONT configuration data.";
+        "Transmission Container (T-CONT) configuration data.";
       uses tconts-config-data;
     }
   }
 
-  augment '/bbf-xpongemtcont:xpongemtcont-state' {
+  augment "/bbf-xpongemtcont:xpongemtcont-state" {
     description
-      "Augment the xPON GEM port and T-CONT state data with
-       T-CONT specific state data.";
+      "Augment the xPON G-PON Encapsulation Method (GEM) port and
+       Transmission Container (T-CONT) state data with T-CONT specific
+       state data.";
     container tconts {
       description
-        "T-CONT state data.";
+        "Transmission Container (T-CONT) state data.";
       uses tconts-state-data;
     }
   }
 
   grouping tconts-config-data {
     description
-      "The config data for all T-CONTs.";
+      "The configuration data for all Transmission Containers
+       (T-CONT).";
     list tcont {
       key "name";
       description
-        "List of T-CONTs.";
+        "List of Transmission Containers (T-CONT).";
       leaf name {
         type bbf-yang:string-ascii64;
         description
-          "Name of the T-CONT.";
+          "Name of the Transmission Container (T-CONT).";
       }
       leaf alloc-id {
-        if-feature "configurable-alloc-id";
+        if-feature "bbf-xpongemtcont:configurable-alloc-id";
         type alloc-id;
         description
-          "T-CONT Alloc-ID. When configured this is the value which
-           must actually be used between the OLT device and ONU device
-           for this T-CONT. For G-PON the value should be in
-           [256..4095] and for XG-PON, XGS-PON and NG-PON2 it should
-           be in [1024..16383].";
+          "Transmission Container (T-CONT) Allocation Identifier
+           (Alloc-ID). When configured this is the value which must
+           actually be used between the Optical Line Termination (OLT)
+           device and Optical Network Unit (ONU) device for this
+           T-CONT. For G-PON the value should be in [256..4095] and
+           for XG-PON, XGS-PON and NG-PON2 it should be in
+           [1024..16383].";
         reference
           "ITU-T G.984.3 clause 5.5.3
            ITU-T G.987.3 clause 6.4.3
@@ -173,9 +190,9 @@ submodule bbf-xpongemtcont-tcont-body {
       }
       leaf traffic-descriptor-profile-ref {
         type leafref {
-          path '/bbf-xpongemtcont:xpongemtcont/bbf-xpongemtcont:'
-             + 'traffic-descriptor-profiles/bbf-xpongemtcont:'
-             + 'traffic-descriptor-profile/bbf-xpongemtcont:name';
+          path "/bbf-xpongemtcont:xpongemtcont/bbf-xpongemtcont:"
+             + "traffic-descriptor-profiles/bbf-xpongemtcont:"
+             + "traffic-descriptor-profile/bbf-xpongemtcont:name";
         }
         description
           "References an existing traffic descriptor profile.";
@@ -185,22 +202,23 @@ submodule bbf-xpongemtcont-tcont-body {
 
   grouping tconts-state-data {
     description
-      "The state data for all T-CONTs.";
+      "The state data for all Transmission Containers (T-CONT).";
     list tcont {
       key "name";
       description
-        "List of T-CONTs.";
+        "List of Transmission Containers (T-CONT).";
       leaf name {
         type bbf-yang:string-ascii64;
         description
-          "Name of the T-CONT.";
+          "Name of the Transmission Container (T-CONT).";
       }
       leaf actual-alloc-id {
         type alloc-id;
         description
-          "T-CONT Alloc-ID. This is the value which is
-           actually used between the OLT device and ONU device
-           for this T-CONT.";
+          "Transmission Container (T-CONT) Allocation Identifier
+           (Alloc-ID). This is the value which is actually used
+           between the Optical Line Termination (OLT) device and
+           Optical Network Unit (ONU) device for this T-CONT.";
         reference
           "ITU-T G.984.3 clause 5.5.3
            ITU-T G.987.3 clause 6.4.3

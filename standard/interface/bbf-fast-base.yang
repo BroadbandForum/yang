@@ -22,7 +22,7 @@ submodule bbf-fast-base {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -74,9 +74,19 @@ submodule bbf-fast-base {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2020-01-17 {
     description
       "Amendment 2 Corrigendum 2.
@@ -180,9 +190,33 @@ submodule bbf-fast-base {
       "Indicates support for Impulse Noise Monitoring (INM).";
   }
 
+  feature preferred-ndr {
+    description
+      "Indicates support for Preferred Net Data Rate.";
+    reference
+      "ITU-T G.997.2 clause 7.2.1.5 and 7.2.1.6";
+  }
+
+  feature rmccarmask {
+    description
+      "Indicates support for the Robust Managmenet Channel (RMC)
+       sub-carrier mask.";
+    reference
+      "ITU-T G.997.2 clause 7.1.2.16 and clause 7.1.2.17;
+       ITU-T G.9701 Clause 7.3.1.3.";
+  }
+
+  feature tgvn {
+    description
+      "Indicates support for Targeted Generalized Vectoring with
+       Non-active G.9701 supporting lines (TGVN).";
+    reference
+      "ITU-T G.997.2 clause 7.1.7.5";
+  }
+
   container fast {
     description
-      "FAST configuration";
+      "FAST configuration.";
     container service {
       description
         "Service profile configuration.";
@@ -224,7 +258,7 @@ submodule bbf-fast-base {
   augment "/if:interfaces-state/if:interface/bbf-fastdsl:line" {
     when "bbf-fastdsl:operational-mode = 'bbf-fastdsl:mode-fast'" {
       description
-        "Applicable when G.fast is the current mode of operation";
+        "Applicable when G.fast is the current mode of operation.";
     }
     description
       "Data nodes for the operational state of FAST lines.";

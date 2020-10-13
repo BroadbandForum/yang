@@ -7,39 +7,35 @@ submodule bbf-l2-forwarding-forwarding-databases {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import ietf-yang-types {
     prefix yang;
   }
-
   include bbf-l2-forwarding-base;
   include bbf-l2-forwarding-forwarders;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing forwarding databases.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -79,9 +75,19 @@ submodule bbf-l2-forwarding-forwarding-databases {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-12-03 {
     description
       "Amendment 2.
@@ -94,7 +100,7 @@ submodule bbf-l2-forwarding-forwarding-databases {
   }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -137,27 +143,23 @@ submodule bbf-l2-forwarding-forwarding-databases {
        together.";
   }
 
-  augment '/bbf-l2-fwd:forwarding' {
+  augment "/bbf-l2-fwd:forwarding" {
     description
       "Augment the configuration nodes associated with layer 2
-       forwarding with forwarding database objects.";
-
+       forwarding with forwarding database data nodes.";
     container forwarding-databases {
       if-feature "forwarding-databases";
       description
         "Forwarding databases configuration.";
-
       list forwarding-database {
         key "name";
         description
           "The configuration of a specific forwarding database.";
-
         leaf name {
           type bbf-yang:string-ascii64;
           description
             "The name associated with the forwarding database.";
         }
-
         leaf max-number-mac-addresses {
           type uint32;
           default "4294967295";
@@ -165,7 +167,6 @@ submodule bbf-l2-forwarding-forwarding-databases {
             "Limits the number of MAC addresses that can be stored in
              this forwarding database.";
         }
-
         leaf aging-timer {
           if-feature "mac-learning";
           type uint32;
@@ -180,7 +181,6 @@ submodule bbf-l2-forwarding-forwarding-databases {
              this MAC address is removed from the forwarding
              database.";
         }
-
         leaf shared-forwarding-database {
           if-feature "shared-forwarding-databases";
           type boolean;
@@ -192,10 +192,8 @@ submodule bbf-l2-forwarding-forwarding-databases {
              If false it can be referenced from only one forwarder
              instance.";
         }
-
         list static-mac-address {
           key "mac-address";
-
           description
             "A policy for a configured MAC address specifies a
              learning constraint for it. The static configuration of
@@ -209,21 +207,21 @@ submodule bbf-l2-forwarding-forwarding-databases {
              The absense of a policy for a particular MAC address
              means that there is no MAC learning constraint, i.e. the
              MAC address can be learned on any port or interface.";
-
           leaf mac-address {
             type yang:mac-address;
             description
               "The MAC address to which the constraint applies.";
           }
-
           choice learning-constraint {
-            default "do-not-learn-and-discard-frame";
-
             description
               "Provides alternative frame processing decisions for
                when the source MAC address of a frame matches the
-               value of the leaf mac-address.";
-
+               value of the leaf mac-address. Not configuring a
+               learning-constraint case means that the frame will be
+               discarded and the source MAC address will not be
+               learned. In order not to discard the frame, and/or to
+               learn the MAC address, one shall configure a data node
+               different from 'discard-frame'.";
             case do-not-learn-and-discard-frame {
               leaf discard-frame {
                 type empty;
@@ -231,7 +229,6 @@ submodule bbf-l2-forwarding-forwarding-databases {
                   "The frame shall be discarded.";
               }
             }
-
             case allowed-to-learn-on {
               if-feature "mac-learning";
               choice allow-to-learn-on {
@@ -239,7 +236,6 @@ submodule bbf-l2-forwarding-forwarding-databases {
                   "The source MAC address of the frame can be learned
                    on any of the ports or interfaces as identified
                    further.";
-
                 case forwarder-port {
                   container forwarder-port-ref {
                     description
@@ -260,19 +256,16 @@ submodule bbf-l2-forwarding-forwarding-databases {
                 }
               }
             }
-
             case install-in-fdb-on {
               choice install-on {
                 description
                   "The source MAC address is statically configured in
                    the forwarding database on a specified port or
                    interface.";
-
                 case static-port {
                   description
                     "The MAC address is added statically to a
                      forwarder port.";
-
                   container static-forwarder-port-ref {
                     description
                       "The reference to a forwarder port on which the
@@ -290,15 +283,14 @@ submodule bbf-l2-forwarding-forwarding-databases {
     }
   }
 
-  augment '/bbf-l2-fwd:forwarding-state' {
+  augment "/bbf-l2-fwd:forwarding-state" {
     description
       "Augment the state data nodes associated with layer 2
-       forwarding with forwarding database objects.";
-
+       forwarding with forwarding database data nodes.";
     container forwarding-databases {
       if-feature "forwarding-databases";
       description
-        "The following objects allow to read out the forwarding
+        "The following data nodes allow to read out the forwarding
          database (FDB), i.e. the MAC addresses being learned within
          the system.
 
@@ -313,7 +305,6 @@ submodule bbf-l2-forwarding-forwarding-databases {
             VLANs, a 2nd FDB for another set.
          To support this concept it is possible to have multiple
          forwarders assigned to a single FDB.";
-
       leaf max-number-mac-addresses {
         if-feature "read-system-fdb-capacity";
         type uint32;
@@ -322,35 +313,29 @@ submodule bbf-l2-forwarding-forwarding-databases {
            i.e. the total number of entries for all forwarding
            databases together.";
       }
-
       list forwarding-database {
         key "name";
         description
           "The state data of a specific forwarding database.";
-
         leaf name {
           type bbf-yang:string-ascii64;
           description
             "The name of the forwarding database.";
         }
-
         container mac-addresses {
           description
             "MAC address data in the forwarding database state.";
-
           list mac-address {
             key "mac-address";
             description
               "The list of MAC addresses that are stored in the
                forwarding database.";
-
             leaf mac-address {
               type yang:mac-address;
               description
                 "A specific MAC address that is stored in the
                  forwarding database.";
             }
-
             choice learned-on {
               description
                 "In case of a shared forwarding database the MAC
@@ -358,12 +343,9 @@ submodule bbf-l2-forwarding-forwarding-databases {
                  In case of a not-shared forwarding database the MAC
                  address is stored on a forwarder port of the single
                  forwarder that uses the forwarding database.";
-
               case forwarder-port {
                 description
-                  "Objects used to identify a specific fowarder
-                   port.";
-
+                  "Forwarder port identification.";
                 uses forwarder-port-state;
               }
             }
@@ -373,22 +355,20 @@ submodule bbf-l2-forwarding-forwarding-databases {
     }
   }
 
-  augment '/bbf-l2-fwd:forwarding-state/bbf-l2-fwd:forwarders/bbf-'
-        + 'l2-fwd:forwarder' {
+  augment "/bbf-l2-fwd:forwarding-state/bbf-l2-fwd:forwarders/bbf-"
+        + "l2-fwd:forwarder" {
     description
       "Augment the forwarder state data to add a reference to a
        forwarding database.";
-
     container forwarding-databases {
       if-feature "forwarding-databases";
       description
-        "Forwarder objects relative to forwarding databases.";
-
+        "Forwarder state data nodes for forwarding databases.";
       leaf forwarding-database {
         type leafref {
-          path '/bbf-l2-fwd:forwarding-state/bbf-l2-fwd:forwarding-'
-             + 'databases/bbf-l2-fwd:forwarding-database/bbf-l2-'
-             + 'fwd:name';
+          path "/bbf-l2-fwd:forwarding-state/bbf-l2-fwd:forwarding-"
+             + "databases/bbf-l2-fwd:forwarding-database/bbf-l2-"
+             + "fwd:name";
         }
         description
           "A reference to a forwarding database associated with a

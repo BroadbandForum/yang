@@ -1,40 +1,37 @@
 module bbf-dot1q-types {
   yang-version 1.1;
   namespace "urn:bbf:yang:bbf-dot1q-types";
-
   prefix bbf-dot1qt;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
-    "This module contains a collection of YANG definitions for 
+    "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on reusable data
-     types as applicable to access network equipment. As such, this 
-     module is specific to access network equipment (e.g., 
+     types as applicable to access network equipment. As such, this
+     module is specific to access network equipment (e.g.,
      BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module defines common types for support of 
-     some IEEE standards.
+     Specifically, this module defines common types for support of
+     IEEE 802.1Q.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -74,12 +71,22 @@ module bbf-dot1q-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -100,14 +107,14 @@ module bbf-dot1q-types {
 
   identity dot1q-tag-vlan-type {
     description
-      "Base identity from which all IEEE 802.1Q VLAN tag types are 
+      "Base identity from which all IEEE 802.1Q VLAN tag types are
        derived.";
   }
 
   identity c-vlan {
     base dot1q-tag-vlan-type;
     description
-      "An IEEE 802.1Q Customer VLAN tag, using the 0x8100 
+      "An IEEE 802.1Q Customer VLAN tag, using the 0x8100
        Ethertype.";
   }
 
@@ -115,7 +122,7 @@ module bbf-dot1q-types {
     base dot1q-tag-vlan-type;
     description
       "An IEEE 802.1Q Service VLAN tag, using a the 0x88a8 Ethertype,
-       originally introduced in IEEE 802.1ad, and incorporated into 
+       originally introduced in IEEE 802.1ad, and incorporated into
        IEEE 802.1Q-2014.";
   }
 
@@ -135,8 +142,8 @@ module bbf-dot1q-types {
     }
     description
       "The type uniquely identifies a VLAN. This is the
-       12-bit VLAN-ID used in the VLAN tag header. 
-       The range 1..4094 is defined by the referenced 
+       12-bit VLAN ID used in the VLAN tag header.
+       The range 1..4094 is defined by the referenced
        specification.";
     reference
       "IEEE 802.1Q-2014: Virtual Bridged Local Area Networks";
@@ -148,8 +155,8 @@ module bbf-dot1q-types {
     }
     description
       "The type uniquely identifies a VLAN. This is the
-       12-bit VLAN-ID used in the VLAN tag header. 
-       The range 1..4094 is defined by the referenced specification. 
+       12-bit VLAN ID used in the VLAN tag header.
+       The range 1..4094 is defined by the referenced specification.
        The value 0 allows support of priority-tagged frames.";
     reference
       "IEEE 802.1Q-2014: Virtual Bridged Local Area Networks";
@@ -163,7 +170,7 @@ module bbf-dot1q-types {
             + '409[0-4]))*)?';
     }
     description
-      "A list of VLAN-IDs, or non overlapping VLAN ranges, in 
+      "A list of VLAN IDs, or non overlapping VLAN ranges, in
        ascending order, between 1 and 4094.
 
        The format of this string can be any of the following:
@@ -199,9 +206,9 @@ module bbf-dot1q-types {
       pattern '([0-7](-[0-7])?(,[0-7](-[0-7])?)*)';
     }
     description
-      "A set of p-bit values.
-       A list of PBIT bits values, or non overlapping PBIT bits value 
-       ranges, in ascending order, between 0 and 7.
+      "A list of p-bits values, or non overlapping p-bits value
+       ranges, in ascending order. Each p-bits value shall be between
+       0 and 7.
 
        Example: 0,2-4,7
       ";
@@ -212,8 +219,8 @@ module bbf-dot1q-types {
       range "0..1";
     }
     description
-      "Drop Eligible Indicator. DEI is a 1-bit field in the VLAN tag. 
-       May be used separately or in conjunction with PCP to indicate 
+      "Drop Eligible Indicator. DEI is a 1-bit field in the VLAN tag.
+       May be used separately or in conjunction with PCP to indicate
        frames eligible to be dropped in the presence of congestion.";
     reference
       "IEEE 802.1Q-2014: Virtual Bridged Local Area Networks";
@@ -227,35 +234,47 @@ module bbf-dot1q-types {
       "IEEE 802.3-2012: IEEE Standard for Ethernet, clause 3.2.6";
   }
 
+  typedef ether-type-hex {
+    type string {
+      pattern '0x[A-Fa-f0-9]{4}';
+    }
+    description
+      "The Ethernet Type (or Length) value expressed as a 4 hex digits
+       in the form 0xABCD.";
+    reference
+      "IEEE 802.3-2012: IEEE Standard for Ethernet, clause 3.2.6";
+  }
+
   typedef ether-type-or-acronym {
     type union {
       type ether-type;
       type enumeration {
-        enum "any" {
+        enum any {
           description
             "Matches any Ethertype value.";
         }
-        enum "ipv4" {
+        enum ipv4 {
           description
-            "Matches the Ethertype value 0x0800 or 0x0806 or 
+            "Matches the Ethertype value 0x0800 or 0x0806 or
              0x8035.";
         }
-        enum "pppoe" {
+        enum pppoe {
           description
             "Matches the Ethertype value 0x8863 or 0x8864.";
         }
-        enum "ipv6" {
+        enum ipv6 {
           description
             "Matches the Ethertype value 0x86DD.";
         }
       }
+      type ether-type-hex;
     }
     description
-      "This type allows to specify 
-       - a specific integer value identifying a particular Ethertype 
-         value of packets, 
-       - a 'pre-defined' enumeration value identifying one or more 
-         specific Ethertype values, 
+      "This type allows to specify
+       - a specific integer value identifying a particular Ethertype
+         value of packets,
+       - a 'pre-defined' enumeration value identifying one or more
+         specific Ethertype values,
        - the enumeration value 'any' that identifies all packets.";
   }
 }

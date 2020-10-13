@@ -19,6 +19,12 @@ submodule bbf-xponvani-v-ani-body {
   import bbf-xpon-types {
     prefix bbf-xpon-types;
   }
+  import bbf-xpon-onu-types {
+    prefix bbf-xpon-onu-types;
+  }
+  import bbf-xpon-defects {
+    prefix bbf-xpon-def;
+  }
   include bbf-xponvani-base;
 
   organization
@@ -38,9 +44,10 @@ submodule bbf-xponvani-v-ani-body {
 
      WA Director: Samuel Chen, Broadcom";
   description
-    "This submodule contains the data for managing the virtual ANI.
-     A virtual ANI belongs to the OLT and represents an ONU as seen
-     from the perspective of the OLT.
+    "This submodule contains the data for managing the virtual Access
+     Network Interface (vANI). A vANI belongs to the Optical Line
+     Termination (OLT) and represents an Optical Network Unit (ONU) as
+     seen from the perspective of the OLT.
 
      Copyright (c) 2018-2020, Broadband Forum
 
@@ -82,9 +89,19 @@ submodule bbf-xponvani-v-ani-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385c1; see
+     This version of this YANG module is part of TR-385i2; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
   revision 2020-01-31 {
     description
       "Corrigendum 1.
@@ -108,26 +125,29 @@ submodule bbf-xponvani-v-ani-body {
 
   feature configurable-v-ani-onu-id {
     description
-      "Indicates support for configuration of the ONU ID associated
-       with the virtual ANI.";
+      "Indicates support for configuration of the Optical Network Unit
+       (ONU) ID associated with the virtual Access Network Interface
+       (vANI).";
   }
 
   feature configurable-v-ani-management-gem-port-id {
     description
       "Indicates support for configuration of the management
-       GEM port.";
+       G-PON Encapsulation Method (GEM) port.";
   }
 
   grouping v-ani-config-data {
     description
-      "Config data intended for the OLT about the ONU image.";
+      "Configuration data intended for the Optical Line Termination
+       (OLT) about the Optical Network Unit (ONU) image.";
     leaf onu-id {
-      if-feature "configurable-v-ani-onu-id";
+      if-feature "bbf-xponvani:configurable-v-ani-onu-id";
       type bbf-xpon-types:onu-id;
       description
-        "This is the TC layer ONU-ID identifier. When
-         configured this is the value which the OLT must assign
-         to an ONU during the ONU's activation using the
+        "This is the Transmission Convergence (TC) layer ONU-ID
+         identifier. When configured this is the value which the
+         Optical Line Termination (OLT) must assign to an Optical
+         Network Unit (ONU) during the ONU's activation using the
          Assign_ONU-ID PLOAM message. For G-PON the value should
          be in [0..253], for XG-PON it should be in [0..1022] and
          for XGS-PON and NG-PON2 it should be in [0..1020].";
@@ -145,38 +165,40 @@ submodule bbf-xponvani-v-ani-body {
         error-message "Must reference a channel partition";
       }
       description
-        "Reference to the parent interface of the virtual ANI.";
+        "Reference to the parent interface of the virtual Access
+         Network Interface (vANI).";
     }
     leaf expected-serial-number {
-      type string {
-        pattern '[a-zA-Z]{4}[0-9a-fA-F]{8}';
-      }
+      type bbf-xpon-types:onu-serial-number;
       description
-        "The serial number the OLT expects to retrieve from the ONU.
-         The serial number is unique for each ONU.
-         It contains the vendor ID and vendor specific serial
-         number. The first four bytes are an ASCII-encoded
-         vendor ID four letter mnemonic. The second four bytes
-         are a binary encoded serial number, under the control
+        "The serial number the Optical Line Termination (OLT) expects
+         to retrieve from the Optical Network Unit (ONU). The serial
+         number is unique for each ONU. It contains the vendor ID and
+         vendor specific serial number. The first four bytes are an
+         ASCII-encoded vendor ID four letter mnemonic. The second four
+         bytes are a binary encoded serial number, under the control
          of the ONU vendor.";
       reference
-        "ITU-T G.984.3, clause 9.2.4.1.";
+        "ITU-T G.984.3, clause 9.2.4.1
+         ITU-T G.987.3, clause 11.3.3.2
+         ITU-T G.9807.1, clauses C11.2.6.1, C11.2.6.2 and C11.3.4.1
+         ITU-T G.989.3, clauses 11.2.6.1, 11.2.6.2 and 11.3.4.1.";
     }
     leaf expected-registration-id {
-      type string {
-        length "0..72";
-      }
+      type bbf-xpon-types:onu-registration-id;
       default "";
       description
-        "A string that has been assigned to the subscriber
-         on the management level, entered into and stored
-         in non-volatile storage at the ONU. Registration ID may be
-         useful in identifying a particular ONU installed at a
+        "A string that has been assigned to the subscriber on the
+         management level, entered into and stored in non-volatile
+         storage at the Optical Network Unit (ONU). Registration ID
+         may be useful in identifying a particular ONU installed at a
          particular location. Each octet is represented as 2
          hexadecimal characters, therefore the leaf must contain an
          even number of characters.
+
          For ITU-T G.984.3, the leaf can only be up to 20 characters
          long (refer to 'password' 10 bytes long).
+
          For ITU-T G.987.3, ITU-T G.9807.3 and ITU-T G.989.3 the
          leaf can be up to 72 characters long (refer to
          'registration id' 36 bytes long).";
@@ -202,8 +224,8 @@ submodule bbf-xponvani-v-ani-body {
            the same as the protection channel pair";
       }
       description
-        "The preferred channel pair is the channel pair
-         that an activating ONU is intended to use.
+        "The preferred channel pair is the channel pair that an
+         activating Optical Network Unit (ONU) is intended to use.
          If the preferred channel pair interface is not available,
          the ONU should use the protection channel pair if it is
          provisioned and available. Modification of the preferred
@@ -226,30 +248,31 @@ submodule bbf-xponvani-v-ani-body {
            channel pair.";
       }
       description
-        "The protection channel pair is the channel pair that
-         an activating ONU is intended to use if the preferred
-         channel pair is not available. When the ONU is activated
-         on a given current channel pair, the protection channel pair
-         is also the channel pair which the ONU will tune to if the
-         current channel pair becomes not available. Modification of
-         the protection channel pair has no effect on the ONU when
-         it is activated (e.g. reconfiguration of the protection
-         channel pair should not cause an activated ONU to need to
-         retune its receiver).";
+        "The protection channel pair is the channel pair that an
+         activating Optical Network Unit (ONU) is intended to use if
+         the preferred channel pair is not available. When the ONU is
+         activated on a given current channel pair, the protection
+         channel pair is also the channel pair which the ONU will tune
+         to if the current channel pair becomes not available.
+         Modification of the protection channel pair has no effect on
+         the ONU when it is activated (e.g. reconfiguration of the
+         protection channel pair should not cause an activated ONU to
+         need to retune its receiver).";
     }
     leaf upstream-channel-speed {
       type yang:gauge64;
       units "bits/second";
       description
-        "Upstream channel speed for this interface in
-         bits per second.";
+        "Upstream channel speed for this interface in bits per
+         second.";
     }
     leaf upstream-fec {
       type boolean;
       default "false";
       description
-        "Used to Enable/Disable use of FEC in Upstream
-         direction for this specific ONU.";
+        "Used to Enable/Disable use of Forward Error Correction (FEC)
+         in the upstream direction for this specific Optical Network
+         Unit (ONU).";
       reference
         "ITU-T G.984.3 clause 13.3.1.1
          ITU-T G.987.3 clause 10.2
@@ -265,22 +288,27 @@ submodule bbf-xponvani-v-ani-body {
          + "/if:interface[if:name = current()/"
          + "../protection-channel-pair]/bbf-xpon:channel-pair"
          + "/bbf-xpon:channel-pair-type, 'bbf-xpon-types:gpon')";
-      if-feature "configurable-v-ani-management-gem-port-id";
+      if-feature
+        "bbf-xponvani:configurable-v-ani-management-gem-port-id";
       type uint32;
       description
         "In contrast with other xPON technologies, in the case of
-         G-PON, there is no requirement that the ITU-T TC Id of
-         the management GEM port for the ONU is numerically equal
-         to the ONU-ID. This leaf provides the capability to
-         specify a specific value to the management GEM port ID.
-         If this leaf is not configured the management GEM port
-         ID must be numerically equal to the ONU-ID.";
+         G-PON, there is no requirement that the ITU-T Transmission
+         Convergence (TC) ID of the management G-PON Encapsulation
+         Method (GEM) port for the Optical Network Unit (ONU) is
+         numerically equal to the ONU-ID. This leaf provides the
+         capability to specify a specific value to the management GEM
+         port ID. If this leaf is not configured the management GEM
+         port ID must be numerically equal to the ONU-ID.
+
+         This configuration is ignored for XG-PON, XGS-PON and
+         NG-PON2 as the 'management-gemport-id' is implicitly
+         configured to be the same as the ONU-ID.";
       reference
-        "Refer to 'OMCC Port-ID' in
-         ITU-T G.987.3, clause 6.1.5.8
-         ITU-T G.9807.1 clause C.6.1.5.8
+        "ITU-T G.984.3 clause 5.5.5
          ITU-T G.987.3 clause 6.4.4
-         ITU-T G.984.3 clause 5.5.5";
+         ITU-T G.9807.1 clause C.6.1.5.8
+         ITU-T G.989.3, clause 6.1.5.8";
     }
     leaf management-gemport-aes-indicator {
       type boolean;
@@ -288,28 +316,33 @@ submodule bbf-xponvani-v-ani-body {
       description
         "Used to designate whether Advanced Encryption Standard
          (AES) should be enabled/disabled for the management
-         GEM port of this ONU. This leaf applies for both the
-         upstream and downstream direction altogether.";
+         G-PON Encapsulation Method (GEM) port of this Optical Network
+         Unit (ONU).
+
+         For G-PON, this applies in the downstream direction. For
+         XG-PON, XGS-PON and NG-PON2, this applies to both the
+         upstream and downstream directions.";
       reference
-        "ITU-T G.9807.1 clause C.15.5.1 and ITU-T G.989.3
-         clause 15.5.1.";
+        "ITU-T G.984.3 section 12.1
+         ITU-T G.987.3 section 15.5.1
+         ITU-T G.9807.1 clause C.15.5.1
+         ITU-T G.989.3 clause 15.5.1.";
     }
     action in-service-onu-tune-request {
       description
-        "This action requests an ONU which is in service on a
-         current channel termination to tune to a specific target
-         channel termination. The action must be directed to the
-         OLT currently providing service to the ONU. The target
-         channel termination must relate to a channel pair which
-         belongs to the specific channel partition on which the ONU
-         is configured.
-         If the target channel termination is the same as the
-         channel ternmination currently used by the ONU, the action
-         will have no effect but will nevertheless be reported
-         as successful. If the action is sent to an OLT not
-         providing service to the ONU (e.g. because the ONU is
-         not activated or is getting service from another OLT, the
-         action must be rejected.";
+        "This action requests an Optical Network Unit (ONU) which is
+         in service on a current channel termination to tune to a
+         specific target channel termination. The action must be
+         directed to the Optical Line Termination (OLT) currently
+         providing service to the ONU. The target channel termination
+         must relate to a channel pair which belongs to the specific
+         channel partition on which the ONU is configured.
+         If the target channel termination is the same as the channel
+         ternmination currently used by the ONU, the action will have
+         no effect but will nevertheless be reported as successful. If
+         the action is sent to an OLT not providing service to the ONU
+         (e.g. because the ONU is not activated or is getting service
+         from another OLT, the action must be rejected.";
       input {
         leaf target-channel-termination-ref {
           type if:interface-ref;
@@ -324,15 +357,15 @@ submodule bbf-xponvani-v-ani-body {
              + "../../bbf-xponvani:channel-partition)" {
             error-message
               "Must reference a channel termination which is related
-               to a channel-pair which is in the same
-               channel partition as the one which the ONU is
-               configured on.";
+               to a channel pair which is in the same channel
+               partition as the one which the Optical Network Unit
+               (ONU) is configured on.";
           }
           description
-            "Reference to the channel termination which the ONU
-             should tune to. This channel termination must
-             relate to a channel pair belonging to the same
-             channel partition as the one which the ONU is
+            "Reference to the channel termination which the Optical
+             Network Unit (ONU) should tune to. This channel
+             termination must relate to a channel pair belonging to
+             the same channel partition as the one which the ONU is
              configured on.";
         }
       }
@@ -342,22 +375,23 @@ submodule bbf-xponvani-v-ani-body {
             base bbf-xpon-types:action-request-status;
           }
           description
-            "Indicates what the OLT is doing when receiving the
-             tune request action. The OLT can for instance indicate
-             that the request is in progress or has been rejected.";
+            "Indicates what the Optical Line Termination (OLT) is
+             doing when receiving the action. The OLT can for instance
+             indicate that the action is in progress or has been
+             rejected.";
         }
         leaf onu-tune-request-reject-string {
           when
             "not(derived-from-or-self(../onu-tune-request-status,"
           + "'bbf-xpon-types:request-being-processed'))" {
             description
-              "Only valid when the OLT has rejected the tune
-               request.";
+              "Only valid when the Optical Line Termination (OLT) has
+               rejected the tune request.";
           }
           type string;
           description
-            "A text string indicating the reason why the OLT
-             rejected the action.";
+            "A text string indicating the reason why the Optical Line
+             Termination (OLT) rejected the action.";
         }
       }
     }
@@ -365,14 +399,17 @@ submodule bbf-xponvani-v-ani-body {
 
   grouping v-ani-state-data {
     description
-      "State data which the OLT can form about its image of the ONU.";
+      "State data which the Optical Line Termination (OLT) can form
+       about its image of the Optical Network Unit (ONU).";
     leaf onu-id {
       type bbf-xpon-types:onu-id;
       description
-        "This is the ITU-T TC layer ONU-ID identifier which the OLT
-         has assigned to the ONU during the ONU's activation using
-         the Assign_ONU-ID PLOAM message. It identifies an ONU on
-         a channel group and is unique on a channel group.";
+        "This is the ITU-T Transmission Convergence (TC) layer ONU-ID
+         identifier which the Optical Line Termination (OLT) has
+         assigned to the Optical Network Unit (ONU) during the ONU's
+         activation using the Assign_ONU-ID PLOAM message. It
+         identifies an ONU on a channel group and is unique on a
+         channel group.";
       reference
         "ITU-T G.984.3 clause 5.5.2
          ITU-T G.987.3 clause 6.4.2
@@ -382,8 +419,10 @@ submodule bbf-xponvani-v-ani-body {
     leaf management-tcont-alloc-id {
       type uint32;
       description
-        "The ITU-T TC Alloc-ID of the management T-CONT for the ONU.
-         It has the same numerical value as the ITU-T TC ONU-ID.";
+        "The ITU-T Transmission Convergence (TC) Allocation ID
+         (Alloc-ID) of the management T-CONT for the Optical Network
+         Unit (ONU). It has the same numerical value as the ITU-T TC
+         ONU-ID.";
       reference
         "Refer to 'Default Alloc-ID' in
          ITU-T G.987.3 clause 6.1.5.7
@@ -394,10 +433,12 @@ submodule bbf-xponvani-v-ani-body {
     leaf management-gemport-id {
       type uint32;
       description
-        "The ITU-T TC Id of the management GEM port for the ONU.
-         For NG-PON2, XGS-PON and XG-PON, it has the same numerical
-         value as the ITU-T TC ONU-ID. For G-PON, its value is
-         not necessarily numerically equal to the ONU-ID.";
+        "The ITU-T Transmission Convergence (TC) Id of the management
+         G-PON Encapsulation Methiod (GEM) port for the Optical
+         Network Unit (ONU). For NG-PON2, XGS-PON and XG-PON, it has
+         the same numerical value as the ITU-T TC ONU-ID. For G-PON,
+         its value is not necessarily numerically equal to the
+         ONU-ID.";
       reference
         "Refer to 'OMCC Port-ID' in
          ITU-T G.987.3 clause 6.1.5.8
@@ -405,26 +446,54 @@ submodule bbf-xponvani-v-ani-body {
          ITU-T G.987.3 clause 6.4.4
          ITU-T G.984.3 clause 5.5.5";
     }
+    leaf onu-presence-state {
+      type identityref {
+        base bbf-xpon-onu-types:onu-presence-state-base;
+      }
+      description
+        "Presence state data which the Optical Line Termination
+         (OLT) can form about an Optical Network Unit (ONU) for
+         which a virtual Access Network Interface (vANI) is
+         configured. The most specific applicable identity should be
+         reported.";
+    }
+    leaf-list active-defects {
+      type identityref {
+        base bbf-xpon-def:items-detected-at-olt-for-v-ani;
+      }
+      description
+        "Defects detected by Optical Line Termination (OLT) for
+         given Optical Network Unit (ONU) for which a virtual Access
+         Network Interface (vANI) is configured. All applicable
+         identities should be reported.";
+      reference
+        "ITU-T G.984.3 (01/2014) 11.1.1
+         ITU-T G.987.3 (01/2014) 14.2.1
+         ITU-T G.989.3 (2015)/Amd.2 (11/2018) Table 14-2
+         ITU-T G.9807.1 (2016)/Amd.1 (10/2017) Table C.14.2";
+    }
     container onu-present-on-this-olt {
       presence
-        "If present, this container indicates that the ONU is using
-         the optical signal of one of the channel terminations local
-         to this OLT (Refer to 'inside-olt'). If the container is
-         not present it means that the ONU is not using the optical
-         signal of any channel termination local to this OLT; this
-         could mean that the ONU is using the optical signal of a
-         channel termination belonging to another OLT, or that the
-         ONU is not using any optical signal at all. An OLT considers
-         that an ONU is using the optical signal of one of its local
-         channel terminations as early as it receives from the ONU a
-         PLOAM Serial_Number_ONU message or as early as it receives
-         a PLOAM Tuning_Resp(Complete_u) message and as long as the
-         channel termination is not in LOBi state for this ONU (i.e
-         in practice the ONU keeps responding to downstream OLT
-         bandwidth map messages).";
+        "If present, this container indicates that the Optical Network
+         Unit (ONU) is using the optical signal of one of the channel
+         terminations local to this Optical Line Termination (OLT)
+         (Refer to 'inside-olt'). If the container is not present it
+         means that the ONU is not using the optical signal of any
+         channel termination local to this OLT; this could mean that
+         the ONU is using the optical signal of a channel termination
+         belonging to another OLT, or that the ONU is not using any
+         optical signal at all. An OLT considers that an ONU is using
+         the optical signal of one of its local channel terminations
+         as early as it receives from the ONU a PLOAM
+         Serial_Number_ONU message or as early as it receives a PLOAM
+         Tuning_Resp(Complete_u) message and as long as the channel
+         termination is not in LOBi state for this ONU (i.e in
+         practice the ONU keeps responding to downstream OLT bandwidth
+         map messages).";
       description
-        "When an ONU is using the optical signal of one of the channel
-         terminations local to this OLT (Refer to 'inside-olt'), this
+        "When an Optical Network Unit (ONU) is using the optical
+         signal of one of the channel terminations local to this
+         Optical Line Termination (OLT) (Refer to 'inside-olt'), this
          container contains state data such as which channel pair
          and which channel termination the ONU is using.";
       reference
@@ -433,44 +502,91 @@ submodule bbf-xponvani-v-ani-body {
         type if:interface-ref;
         mandatory true;
         description
-          "This leaf indicates the channel pair on which the ONU is
-           currently present in case the ONU is using optical signal
-           from this OLT.";
+          "This leaf indicates the channel pair on which the Optical
+           Network Unit (ONU) is currently present in case the ONU is
+           using optical signal from this Optical Line Termination
+           (OLT).";
       }
       leaf onu-present-on-this-channel-termination {
         type if:interface-ref;
         mandatory true;
         description
           "This leaf indicates the channel termination on which the
-           ONU is currently present in case the ONU is using optical
-           signal from this OLT.";
+           Optical Network Unit (ONU) is currently present in case
+           the ONU is using optical signal from this Optical Line
+           Termination (OLT).";
+      }
+      leaf onu-fiber-distance {
+        type uint32;
+        units "meters";
+        description
+          "This optional leaf reports Optical Network Unit (ONU) fiber
+           distance in meters. The measurement method is
+           implementation-specific. ITU-T recommendated method allows
+           fiber distance measurement with 1% precision.";
+        reference
+          "ITU-T G.9807.1 clause C.13.1.8, G.989.3,
+           G.987.3 clause 13.1.8 and G.984.3 clause 10.3.6.";
+      }
+      leaf detected-serial-number {
+        type bbf-xpon-types:onu-serial-number;
+        description
+          "The serial number of the Optical Network Unit (ONU).";
+        reference
+          "ITU-T G.984.3, clause 9.2.4.1
+           ITU-T G.987.3, clause 11.3.3.2
+           ITU-T G.9807.1, clauses C11.2.6.1, C11.2.6.2 and
+           C11.3.4.1
+           ITU-T G.989.3, clauses 11.2.6.1, 11.2.6.2 and 11.3.4.1.";
+      }
+      leaf detected-registration-id {
+        type bbf-xpon-types:onu-registration-id;
+        description
+          "The registration ID value which the Optical Line
+           Termination (OLT) has received from the Optical Network
+           Unit (ONU). This leaf is not present if the ONU has not
+           provided any registration ID to the OLT. Registration ID
+           may be useful in identifying a particular ONU installed
+           at a particular location. Each octet is represented as 2
+           hexadecimal characters, therefore the leaf must contain an
+           even number of characters. For ITU-T G.984.3, the leaf
+           can only be up to 20 octets long (refer to 'password'),
+           for ITU-T G.987.3, ITU-T G.9807.3 and ITU-T G.989.3
+           the leaf can be up to 72 octets long.";
+        reference
+          "ITU-T G.984.3 clause 9.2.4.2
+           ITU-T G.987.3 clause 11.3.4.2
+           ITU-T G.9807.3 clause C.11.3.4.2
+           ITU-T G.989.3 clause 11.3.4.2";
       }
     }
     container onu-wl-protected {
       presence
-        "If present, this container indicates that the ONU is
-         effectively wavelength protected, i.e. that it has been told
-         by the OLT about the 'protecting' channel termination it
-         should autonomously tune to in case the channel termination
-         currently used would fail. This container can only be present
-         in case that the ONU uses a multi-wavelength xPON technology
-         such as for instance NG-PON2. If the container is not present
-         it means that the ONU is not wavelength protected.";
+        "If present, this container indicates that the Optical Network
+         Unit (ONU) is effectively wavelength protected, i.e. that it
+         has been told by the Optical Line Termination (OLT) about the
+         'protecting' channel termination it should autonomously tune
+         to in case the channel termination currently used would fail.
+         This container can only be present in case that the ONU uses
+         a multi-wavelength xPON technology such as for instance
+         NG-PON2. If the container is not present it means that the
+         ONU is not wavelength protected.";
       description
-        "When the ONU is wavelength protected, this container contains
-         state data related to its wavelength protection, such as the
-         protecting channel-termination it has been told by the OLT.";
+        "When the Optical Network Unit (ONU) is wavelength protected,
+         this container contains state data related to its wavelength
+         protection, such as the protecting channel-termination it has
+         been told by the Optical Line Termination (OLT).";
       reference
         "ITU-T G.989.3 clause 11.3.2, 12.2.2.1 and 14.2.1";
       leaf wl-protecting-ct-announced-to-onu {
         type if:interface-ref;
         description
           "This leaf is relevant when wavelength protection is
-           provided to the ONU. It indicates the channel termination
-           which the ONU can tune to in case the current
-           channel termination would fail. This information is
-           announced to the ONU via the 'Protection_Control'
-           downstream PLOAM message.";
+           provided to the Optical Network Unit (ONU). It indicates
+           the channel termination which the ONU can tune to in case
+           the current channel termination would fail. This
+           information is announced to the ONU via the
+           'Protection_Control' downstream PLOAM message.";
         reference
           "ITU-T G.989.3 clause 11.3.1 and 11.3.3.15";
       }
@@ -479,15 +595,17 @@ submodule bbf-xponvani-v-ani-body {
 
   augment "/if:interfaces/if:interface/bbf-xponvani:v-ani" {
     description
-      "Configuration of an xPON virtual ANI, i.e. an ONU as seen
-       by the OLT.";
+      "Configuration of an xPON virtual Access Network Interface
+       (vANI), i.e. an Optical Network Unit (ONU) as seen by the
+       Optical Line Termination (OLT).";
     uses v-ani-config-data;
   }
 
   augment "/if:interfaces-state/if:interface/bbf-xponvani:v-ani" {
     description
-      "State data of an xPON virtual ANI, i.e. an ONU as seen
-       by the OLT.";
+      "State data of an xPON virtual Access Network Interface (vANI),
+       i.e. an Optical Network Unit (ONU) as seen by the Optical Line
+       Termination (OLT).";
     uses v-ani-state-data;
   }
 }

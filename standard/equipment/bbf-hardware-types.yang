@@ -14,17 +14,17 @@ module bbf-hardware-types {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Ken Kerpez, ASSIA, Inc.
+     Editor:      Nick Hancock, ADTRAN
 
-     Editor:      Joey Boyd, ADTRAN
-
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     WA Director: Sven Ooghe, Nokia
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on reusable data
@@ -35,7 +35,7 @@ module bbf-hardware-types {
      Specifically, this module specializes types defined in the
      iana-hardware model.
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -75,9 +75,19 @@ module bbf-hardware-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2019-06-11 {
     description
       "Amendment 2.
@@ -99,6 +109,49 @@ module bbf-hardware-types {
                         TR-355_Amendment-1.pdf>";
   }
 
+  identity slot {
+    base ianahw:container;
+    description
+      "A slot is a special type of container that can contain a
+       pluggable board.";
+  }
+
+  identity cage {
+    base ianahw:container;
+    description
+      "A cage is a special type of container that can contain a
+       pluggable transceiver.";
+  }
+
+  identity board {
+    base ianahw:module;
+    description
+      "A board is a special type of module that represents a physical
+       item, commonly known as a board or a card.";
+  }
+
+  identity transceiver {
+    base ianahw:module;
+    description
+      "A transceiver is a special type of module that represents a
+       physical item like a pluggable SFP, an SFP+, or an XFP; or a
+       soldered SFF.";
+  }
+
+  identity transceiver-link {
+    base ianahw:port;
+    description
+      "A transceiver-link is a special type of port that terminates an
+       optical fiber.";
+  }
+
+  identity rj45 {
+    base ianahw:port;
+    description
+      "A RJ45 is a special type of port that terminates an electrical
+       Ethernet link.";
+  }
+
   identity fastdsl-tp {
     base ianahw:port;
     description
@@ -112,5 +165,12 @@ module bbf-hardware-types {
     description
       "A fastdsl-coax is a special type of port that terminates a coax
        supporting a FAST or one of the DSL types of link.";
+  }
+
+  identity cpu-core {
+    base ianahw:cpu;
+    description
+      "A cpu-core refers to the CPU's core (when multiple cores are
+       supported).";
   }
 }

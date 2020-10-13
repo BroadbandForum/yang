@@ -15,7 +15,7 @@ submodule bbf-vdsl-xtu-data-gathering-report-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -24,10 +24,10 @@ submodule bbf-vdsl-xtu-data-gathering-report-body {
      WA Director: Joey Boyd, ADTRAN";
   description
     "This submodule contains a collection of YANG definitions for
-     managing Broadband Forum TR-252i3 clause 9.2 xTU Data Gathering
-     Report.
+     managing Broadband Forum TR-252i3 clause 9.2 xDSL Transceiver
+     Unit (xTU) Data Gathering Report.
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Copyright (c) 2016-2020 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -67,9 +67,19 @@ submodule bbf-vdsl-xtu-data-gathering-report-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2019-10-21 {
     description
       "Amendment 2 Corrigendum 1.
@@ -115,14 +125,14 @@ submodule bbf-vdsl-xtu-data-gathering-report-body {
     description
       "These parameters are obtained from the data gathering
        functionality in the xDSL modems for use in
-       testing/diagnostics";
+       testing/diagnostics.";
     leaf logging-depth {
       type uint32;
       units "6-byte data gathering records";
       description
         "This parameter is the maximum depth of the entire data
-         gathering event buffer at the VTU, in number of 6-byte
-         data gathering records.";
+         gathering event buffer at the VDSL Transceiver Unit (VTU),
+         in number of 6-byte data gathering records.";
       reference
         "ITU-T G.997.1 clause 7.5.3.1 Logging depth VTU-O
          (LOGGING_DEPTH_O) and clause 7.5.3.2 Logging depth VTU-R
@@ -133,10 +143,12 @@ submodule bbf-vdsl-xtu-data-gathering-report-body {
       units "6-byte data gathering records";
       description
         "This parameter is actual logging depth that is used for
-         reporting the VTU-O event trace buffer in the Central Office
-         Management Information Base (CO-MIB), or for reporting the
-         VTU-R event trace buffer over the embedded operations
-         channel (eoc), in number of 6-byte data gathering records.";
+         reporting the VDSL Transceiver Unit - central Office (VTU-O)
+         event trace buffer in the Central Office Management
+         Information Base (CO-MIB), or for reporting the VDSL
+         Transceiver Unit - Remote side (VTU-R) event trace buffer
+         over the embedded operations channel (eoc), in number of
+         6-byte data gathering records.";
       reference
         "ITU-T G.997.1 clause 7.5.3.3 Actual logging depth for
          reporting VTU-O (ACT_logging_depth_reporting_O) and
@@ -147,7 +159,8 @@ submodule bbf-vdsl-xtu-data-gathering-report-body {
       type binary;
       description
         "This parameter is the event trace buffer containing the
-         event records that originated at the VTU.";
+         event records that originated at the VDSL Transceiver Unit
+         (VTU).";
       reference
         "ITU-T G.997.1 clause 7.5.3.5 Event trace buffer VTU O
          (EVENT_TRACE_BUFFER_O) and clause 7.5.3.6 Event trace

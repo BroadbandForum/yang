@@ -3,42 +3,31 @@ module bbf-l2-forwarding-shared-fdb {
   namespace "urn:bbf:yang:bbf-l2-forwarding-shared-fdb";
   prefix bbf-l2-sfdb;
 
-  import iana-if-type {
-    prefix ianaift;
-  }
-
   import ietf-interfaces {
     prefix if;
   }
-
   import bbf-l2-forwarding {
     prefix bbf-l2-fwd;
-  }
-
-  import bbf-if-type {
-    prefix bbfift;
   }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on layer 2 forwarding
@@ -46,10 +35,10 @@ module bbf-l2-forwarding-shared-fdb {
      is specific to access network equipment (e.g., BBF-specified
      Access Nodes and FTTdp DPUs).
 
-     More specific this module contains a collection of YANG
+     Specifically, this module contains a collection of YANG
      definitions for managing shared forwarding databases.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -89,9 +78,19 @@ module bbf-l2-forwarding-shared-fdb {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-12-03 {
     description
       "Amendment 2.
@@ -104,7 +103,7 @@ module bbf-l2-forwarding-shared-fdb {
   }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -117,34 +116,8 @@ module bbf-l2-forwarding-shared-fdb {
     description
       "This grouping is use by data models that need to reference
        configured interfaces that are transporting Ethernet packets.";
-
     leaf interface {
       type if:interface-ref;
-
-      must
-        "derived-from-or-self(
-         /if:interfaces/if:interface[if:name = current()]
-         /if:type,'ianaift:ethernetCsmacd')
-         or
-         derived-from-or-self(
-         /if:interfaces/if:interface[if:name = current()]
-         /if:type,'ianaift:ieee8023adLag')
-         or
-         derived-from-or-self(
-         /if:interfaces/if:interface[if:name = current()]
-         /if:type,'ianaift:ptm')
-         or
-         derived-from(
-         /if:interfaces/if:interface[if:name = current()]
-         /if:type,'bbfift:ethernet-like')" {
-
-        error-message
-          "The interface type must be either derived from
-           'ethernetCsmacd', 'ieee8023adLag', 'ptm' or 'ethernet-like'
-           or it must be equal to 'ethernetCsmacd', 'ieee8023adLag'
-           or 'ptm'.";
-      }
-
       description
         "References an interface transporting Ethernet packets.";
     }
@@ -155,42 +128,17 @@ module bbf-l2-forwarding-shared-fdb {
       "This grouping is use by data models that need to reference the
        operationally present interfaces that are transporting Ethernet
        packets.";
-
     leaf interface {
       type if:interface-state-ref;
-
-      must
-        "derived-from-or-self(
-         /if:interfaces-state/if:interface[if:name = current()]
-         /if:type,'ianaift:ethernetCsmacd')
-         or
-         derived-from-or-self(
-         /if:interfaces-state/if:interface[if:name = current()]
-         /if:type,'ianaift:ieee8023adLag')
-         or
-         derived-from-or-self(
-         /if:interfaces-state/if:interface[if:name = current()]
-         /if:type,'ianaift:ptm')
-         or
-         derived-from(
-         /if:interfaces/if:interface[if:name = current()]
-         /if:type,'bbfift:ethernet-like')" {
-
-        error-message
-          "The interface type must be either derived from
-           'ethernetCsmacd', 'ieee8023adLag', 'ptm' or 'ethernet-like'
-           or it must be equal to 'ethernetCsmacd', 'ieee8023adLag'
-           or 'ptm'.";
-      }
       description
         "References an interface transporting Ethernet packets.";
     }
   }
 
-  augment '/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarding-databases/'
-        + 'bbf-l2-fwd:forwarding-database/bbf-l2-fwd:static-mac-'
-        + 'address/bbf-l2-fwd:learning-constraint/bbf-l2-fwd:'
-        + 'allowed-to-learn-on/bbf-l2-fwd:allow-to-learn-on' {
+  augment "/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarding-databases/"
+        + "bbf-l2-fwd:forwarding-database/bbf-l2-fwd:static-mac-"
+        + "address/bbf-l2-fwd:learning-constraint/bbf-l2-fwd:"
+        + "allowed-to-learn-on/bbf-l2-fwd:allow-to-learn-on" {
     if-feature
       "bbf-l2-fwd:forwarding-databases and
        bbf-l2-fwd:mac-learning";
@@ -199,7 +147,6 @@ module bbf-l2-forwarding-shared-fdb {
        configuration with a case to specify that the MAC address is
        allowed to learn on one of a list of Ethernet interfaces. This
        case is relevant when shared forwarding databases are used.";
-
     case ethernet-interfaces {
       if-feature "bbf-l2-fwd:shared-forwarding-databases";
       container interface-references {
@@ -209,31 +156,6 @@ module bbf-l2-forwarding-shared-fdb {
            these interfaces.";
         leaf-list interface {
           type if:interface-ref;
-
-          must
-            "derived-from-or-self(
-             /if:interfaces/if:interface[if:name = current()]
-             /if:type,'ianaift:ethernetCsmacd')
-             or
-             derived-from-or-self(
-             /if:interfaces/if:interface[if:name = current()]
-             /if:type,'ianaift:ieee8023adLag')
-             or
-             derived-from-or-self(
-             /if:interfaces/if:interface[if:name = current()]
-             /if:type,'ianaift:ptm')
-             or
-             derived-from(
-             /if:interfaces/if:interface[if:name = current()]
-             /if:type,'bbfift:ethernet-like')" {
-
-            error-message
-              "The interface type must be either derived from
-               'ethernetCsmacd', 'ieee8023adLag', 'ptm' or 
-               'ethernet-like' or it must be equal to 
-               'ethernetCsmacd', 'ieee8023adLag' or 'ptm'.";
-          }
-
           description
             "References an interface transporting Ethernet packets.";
         }
@@ -241,17 +163,16 @@ module bbf-l2-forwarding-shared-fdb {
     }
   }
 
-  augment '/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarding-databases/'
-        + 'bbf-l2-fwd:forwarding-database/bbf-l2-fwd:static-mac-'
-        + 'address/bbf-l2-fwd:learning-constraint/bbf-l2-fwd:'
-        + 'install-in-fdb-on/bbf-l2-fwd:install-on' {
+  augment "/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarding-databases/"
+        + "bbf-l2-fwd:forwarding-database/bbf-l2-fwd:static-mac-"
+        + "address/bbf-l2-fwd:learning-constraint/bbf-l2-fwd:"
+        + "install-in-fdb-on/bbf-l2-fwd:install-on" {
     if-feature "bbf-l2-fwd:forwarding-databases";
     description
       "Augments the forwarding database static MAC address
        configuration with a case to specify that the MAC address is
        statically assigned to a configured Ethernet interfaces. This
        case is relevant when shared forwarding databases are used.";
-
     case static-ethernet-interface {
       if-feature "bbf-l2-fwd:shared-forwarding-databases";
       container static-interface-reference {
@@ -264,24 +185,18 @@ module bbf-l2-forwarding-shared-fdb {
     }
   }
 
-  augment '/bbf-l2-fwd:forwarding-state/bbf-l2-fwd:forwarding-'
-        + 'databases/bbf-l2-fwd:forwarding-database/bbf-l2-fwd:mac-'
-        + 'addresses/bbf-l2-fwd:mac-address/bbf-l2-fwd:learned-on' {
+  augment "/bbf-l2-fwd:forwarding-state/bbf-l2-fwd:forwarding-"
+        + "databases/bbf-l2-fwd:forwarding-database/bbf-l2-fwd:mac-"
+        + "addresses/bbf-l2-fwd:mac-address/bbf-l2-fwd:learned-on" {
     if-feature
       "bbf-l2-fwd:forwarding-databases and
        bbf-l2-fwd:mac-learning";
     description
       "Augments the forwarding database state data with data per MAC
        address in case a shared forwarding database is used.";
-
     case interface {
       if-feature "bbf-l2-fwd:shared-forwarding-databases";
-      description
-        "Object referencing a specific interface transporting Ethernet
-         packets.";
-
       uses ethernet-interface-state;
-
       list forwarder-ports {
         key "index";
         description
@@ -289,7 +204,6 @@ module bbf-l2-forwarding-shared-fdb {
            affected by learning the address on the interface. A
            forwarder-port is identified by identifying the forwarder
            and by identifying the port within this forwarder.";
-
         leaf index {
           type uint32;
           description

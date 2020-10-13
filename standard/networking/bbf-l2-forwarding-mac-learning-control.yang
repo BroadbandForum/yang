@@ -7,11 +7,9 @@ submodule bbf-l2-forwarding-mac-learning-control {
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import bbf-interface-usage {
     prefix bbf-if-usg;
   }
-
   include bbf-l2-forwarding-base;
   include bbf-l2-forwarding-forwarders;
   include bbf-l2-forwarding-forwarding-databases;
@@ -19,29 +17,27 @@ submodule bbf-l2-forwarding-mac-learning-control {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
     "This submodule contains a collection of YANG definitions for
      managing MAC address learning constraints, i.e. to constrain MAC
      learning rules compared with the standard IEEE MAC learning.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +77,19 @@ submodule bbf-l2-forwarding-mac-learning-control {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-12-03 {
     description
       "Amendment 2.
@@ -96,7 +102,7 @@ submodule bbf-l2-forwarding-mac-learning-control {
   }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -120,21 +126,19 @@ submodule bbf-l2-forwarding-mac-learning-control {
       "Indicates support for MAC address learning control profiles.";
   }
 
-  augment '/bbf-l2-fwd:forwarding' {
+  augment "/bbf-l2-fwd:forwarding" {
     description
       "Augment the configuration nodes associated with layer 2
-       forwarding with MAC address learning control profile objects.";
-
+       forwarding with MAC address learning control profile data
+       nodes.";
     container mac-learning-control-profiles {
       if-feature
         "forwarding-databases and mac-learning and
          mac-learning-control-profiles";
       description
         "Contains a set of MAC address learning control profiles.";
-
       list mac-learning-control-profile {
         key "name";
-
         description
           "The configuration of a MAC address learning control
            profile.
@@ -148,24 +152,19 @@ submodule bbf-l2-forwarding-mac-learning-control {
            and that MAC movement is allowed from any port or interface
            to any other port or interface, except if this would be in
            conflict with static MAC address configuration.";
-
         leaf name {
           type bbf-yang:string-ascii64;
           description
             "The name of a MAC address learning control profile.";
         }
-
         list mac-learning-rule {
           key "receiving-interface-usage";
-
           description
             "Defines what to do when a frame is received with a
              particular source MAC address and this MAC address is not
              yet stored on that port or interface.";
-
           leaf receiving-interface-usage {
             type bbf-if-usg:interface-usage;
-
             description
               "Defines MAC address learning rules for frames received
                on a port for which the interface usage of the
@@ -176,7 +175,6 @@ submodule bbf-l2-forwarding-mac-learning-control {
               "Specifies how to learn a MAC address on a port or
                interface that has a usage specified by the leaf
                receiving-interface-usage.";
-
             case learn-and-translate {
               description
                 "In case this is not in conflict with static MAC
@@ -185,7 +183,6 @@ submodule bbf-l2-forwarding-mac-learning-control {
                  frame is received, and the system will perform
                  (source) MAC address translation before forwarding
                  the frame.";
-
               reference
                 "TR-101i2: Migration to Ethernet-Based DSL Aggregation
                  R-111";
@@ -215,14 +212,11 @@ submodule bbf-l2-forwarding-mac-learning-control {
                  associated to. The MAC address can move in case the
                  interface usage of the port or interface where the
                  frame is received is not part of this list.";
-
               reference
                 "TR-101i2: Migration to Ethernet-Based DSL Aggregation
                  R-112 and R-113";
-
               leaf-list mac-can-not-move-to {
                 type bbf-if-usg:interface-usage;
-
                 description
                   "Provides a list of interface-usage values to which
                    MAC addresses can not move.";
@@ -234,13 +228,12 @@ submodule bbf-l2-forwarding-mac-learning-control {
     }
   }
 
-  augment '/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarding-databases/'
-        + 'bbf-l2-fwd:forwarding-database' {
+  augment "/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarding-databases/"
+        + "bbf-l2-fwd:forwarding-database" {
     if-feature "forwarding-databases";
     description
       "Augment the forwarder configuration with configuration for MAC
        address learning control.";
-
     container mac-learning-control {
       if-feature "mac-learning and mac-learning-control-profiles";
       description
@@ -248,17 +241,15 @@ submodule bbf-l2-forwarding-mac-learning-control {
          when a frame is received for which the source MAC address was
          not learned before on the port or interface where the frame
          is received.";
-
       leaf mac-learning-control-profile {
         type leafref {
-          path '/bbf-l2-fwd:forwarding/bbf-l2-fwd:mac-learning-'
-             + 'control-profiles/bbf-l2-fwd:mac-learning-control-'
-             + 'profile/bbf-l2-fwd:name';
+          path "/bbf-l2-fwd:forwarding/bbf-l2-fwd:mac-learning-"
+             + "control-profiles/bbf-l2-fwd:mac-learning-control-"
+             + "profile/bbf-l2-fwd:name";
         }
         description
           "A reference to a MAC address learning control profile.";
       }
-
       leaf generate-mac-learning-alarm {
         type boolean;
         default "false";

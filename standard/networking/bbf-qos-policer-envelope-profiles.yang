@@ -1,17 +1,14 @@
 module bbf-qos-policer-envelope-profiles {
   yang-version 1.1;
   namespace "urn:bbf:yang:bbf-qos-policer-envelope-profiles";
-
   prefix bbf-qos-plc-ep;
 
   import bbf-qos-classifiers {
     prefix bbf-qos-cls;
   }
-
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import bbf-qos-policing-types {
     prefix bbf-qos-plc-tp;
   }
@@ -19,35 +16,32 @@ module bbf-qos-policer-envelope-profiles {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
-    "This module contains a collection of YANG definitions for 
+    "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the management of
-     Quality of Service (QoS) as applicable to access network 
-     equipment. As such, this module is specific to access network 
+     Quality of Service (QoS) as applicable to access network
+     equipment. As such, this module is specific to access network
      equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module contains management of Policer (also
-     known as Bandwidth Profile) Envelope Profiles as described in 
-     MEF 10.3.
+     Specifically, this module augments classifiers to add management
+     of envelope policing as described in MEF 10.3.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -87,12 +81,22 @@ module bbf-qos-policer-envelope-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -104,35 +108,32 @@ module bbf-qos-policer-envelope-profiles {
   identity envelope-policing {
     base bbf-qos-cls:action-type;
     description
-      "The action-type identity indicating the system will assign
-       a Policer flow as the classifier action.";
+      "The action-type identity indicating the system will assign a
+       Policer flow as the classifier action.";
   }
 
   grouping policer-flow-reference {
     description
-      "Nodes used to uniquely identify a Policer flow 
-       associated with an envelope.";
-
+      "Nodes used to uniquely identify a Policer flow associated with
+       an envelope.";
     container policer-envelope-flow {
       description
-        "Nodes used to uniquely identify a Policer flow 
-         associated with an envelope.";
-
+        "Nodes used to uniquely identify a Policer flow associated
+         with an envelope.";
       leaf envelope {
         type leafref {
-          path '/bbf-qos-plc-ep:envelope-profiles/bbf-qos-plc-ep:'
-             + 'envelope-profile/bbf-qos-plc-ep:name';
+          path "/bbf-qos-plc-ep:envelope-profiles/bbf-qos-plc-ep:"
+             + "envelope-profile/bbf-qos-plc-ep:name";
         }
         description
           "A reference to a Policer envelope profile.";
       }
-
       leaf flow {
         type leafref {
-          path '/bbf-qos-plc-ep:envelope-profiles/bbf-qos-plc-ep:'
-             + 'envelope-profile[bbf-qos-plc-ep:name=current()/../'
-             + 'envelope]/bbf-qos-plc-ep:flows/bbf-qos-plc-ep:flow/'
-             + 'bbf-qos-plc-ep:rank';
+          path "/bbf-qos-plc-ep:envelope-profiles/bbf-qos-plc-ep:"
+             + "envelope-profile[bbf-qos-plc-ep:name=current()/../"
+             + "envelope]/bbf-qos-plc-ep:flows/bbf-qos-plc-ep:flow/"
+             + "bbf-qos-plc-ep:rank";
         }
         description
           "A reference to a Policer flow within an envelope.";
@@ -145,31 +146,28 @@ module bbf-qos-policer-envelope-profiles {
       range "1..max";
     }
     description
-      "The rank of a flow with respect to all other flows
-       in the range of 1 to n where 1 represents the lowest
-       rank and n is the total number of flows.";
+      "The rank of a flow with respect to all other flows in the range
+       of 1 to n where 1 represents the lowest rank and n is the total
+       number of flows.";
   }
 
   container envelope-profiles {
     description
       "Reusable configuration for policer envelopes.
 
-       A Policer (also known as an Bandwidth Profile) is a 
-       characterization of the lengths and arrival times for Service 
-       Frames at a reference point. A Policer is specified using the 
+       A Policer (also known as an Bandwidth Profile) is a
+       characterization of the lengths and arrival times for Service
+       Frames at a reference point. A Policer is specified using the
        concepts of a flow and envelope.";
-
     list envelope-profile {
       key "name";
       description
         "A list of envelope profiles.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "The name of the profile.";
       }
-
       leaf scope {
         type identityref {
           base bbf-qos-cls:action-scope;
@@ -177,16 +175,13 @@ module bbf-qos-policer-envelope-profiles {
         description
           "The scope over which this profile is applied.";
       }
-
       leaf coupling-flag {
         type bbf-qos-plc-tp:coupling-flag;
-        must
-          "count(../flows/flow)>1 or 
-           (count(../flows/flow)=1 and .=0)" {
+        must "count(../flows/flow)>1 or
+              (count(../flows/flow)=1 and .=0)" {
           error-message
-            "If there is only one flow mapped to an envelope, the
-             envelope coupling flag must be 0.";
-
+            "If there is only one flow mapped to an envelope, the "
+          + "envelope coupling flag must be 0.";
           description
             "If there is only one flow mapped to an envelope, the
              envelope coupling flag must be 0.";
@@ -194,20 +189,17 @@ module bbf-qos-policer-envelope-profiles {
         description
           "The coupling flag (CF) used for the envelope.";
       }
-
       container flows {
         description
-          "A Policer flow is a set of Service Frames that
-           meet a specific set of criteria.";
+          "A Policer flow is a set of Service Frames that meet a
+           specific set of criteria.";
         reference
           "MEF 10.3";
-
         list flow {
           key "rank";
           min-elements 1;
           description
             "A list of flows associated with an envelope.";
-
           leaf rank {
             type flow-rank;
             description
@@ -215,81 +207,71 @@ module bbf-qos-policer-envelope-profiles {
                in the range of 1 to n where 1 represents the lowest
                rank and n is the total number of flows.";
           }
-
           leaf cir {
             type bbf-qos-plc-tp:information-rate;
             description
-              "The Committed Information Rate (CIR) limits the 
-               average rate in bits per second of Service Frames 
-               that will be declared Green by the bandwidth 
-               profile.";
+              "The Committed Information Rate (CIR) limits the average
+               rate in bits per second of Service Frames that will be
+               declared Green by the bandwidth profile.";
             reference
               "MEF 10.3, Section 12.1";
           }
-
           leaf cir-max {
             type bbf-qos-plc-tp:information-rate;
             description
-              "The Maximum Committed Information Rate (CIRmax) 
-               limits the rate of tokens added to the committed 
-               token bucket.";
-            reference
-              "MEF 10.3, Section 12.1";
-          }
-
-          leaf cbs {
-            type bbf-qos-plc-tp:burst-size;
-            description
-              "The Committed Burst Size (CBS) limits the maximum n
-               number of bytes available for a burst of Service 
-               Frames sent at ingress line speed that will be 
-               declared Green by the Policer.";
-            reference
-              "MEF 10.3, Section 12.1";
-          }
-
-          leaf eir {
-            type bbf-qos-plc-tp:information-rate;
-            description
-              "The Excess Information Rate (EIR) limits the average 
-               rate of in bits per second of Service Frames which 
-               will be declared Yellow by the Policer.";
-            reference
-              "MEF 10.3, Section 12.1";
-          }
-
-          leaf eir-max {
-            type bbf-qos-plc-tp:information-rate;
-            description
-              "The Maximum Excess Information Rate (EIRmax) limits 
-               the rate of tokens added to the excess token 
+              "The Maximum Committed Information Rate (CIRmax) limits
+               the rate of tokens added to the committed token
                bucket.";
             reference
               "MEF 10.3, Section 12.1";
           }
-
+          leaf cbs {
+            type bbf-qos-plc-tp:burst-size;
+            description
+              "The Committed Burst Size (CBS) limits the maximum
+               number of bytes available for a burst of Service Frames
+               sent at ingress line speed that will be declared Green
+               by the Policer.";
+            reference
+              "MEF 10.3, Section 12.1";
+          }
+          leaf eir {
+            type bbf-qos-plc-tp:information-rate;
+            description
+              "The Excess Information Rate (EIR) limits the average
+               rate of in bits per second of Service Frames which will
+               be declared Yellow by the Policer.";
+            reference
+              "MEF 10.3, Section 12.1";
+          }
+          leaf eir-max {
+            type bbf-qos-plc-tp:information-rate;
+            description
+              "The Maximum Excess Information Rate (EIRmax) limits the
+               rate of tokens added to the excess token bucket.";
+            reference
+              "MEF 10.3, Section 12.1";
+          }
           leaf ebs {
             type bbf-qos-plc-tp:burst-size;
             description
               "The Excess Burst Size (EBS) limits the maximum number
-               of bytes available for a burst of Service Frames at 
-               ingress line speed that will be declared Yellow by 
-               the Policer.";
+               of bytes available for a burst of Service Frames at
+               ingress line speed that will be declared Yellow by the
+               Policer.";
             reference
               "MEF 10.3, Section 12.1";
           }
-
           leaf coupling-flag {
             type bbf-qos-plc-tp:coupling-flag;
             must
-              "../../../coupling-flag = 0 or 
+              "../../../coupling-flag = 0 or
                (../../../coupling-flag = 1 and . = 0)" {
               error-message
-                "When the envelope coupling flag is equal to a 1, 
-                 all flow coupling flags must be equal to 0.";
-
+                "When the envelope coupling flag is equal to a 1, "
+              + "all flow coupling flags must be equal to 0.";
               description
-                "When the envelope coupling flag is equal to a 1, 
+                "When the envelope coupling flag is equal to a 1,
                  all flow coupling flags must be equal to 0.";
             }
             description
@@ -297,11 +279,10 @@ module bbf-qos-policer-envelope-profiles {
             reference
               "MEF 10.3, Section 12.1";
           }
-
           leaf color-mode {
             type bbf-qos-plc-tp:color-mode;
             description
-              "The Color Mode (CM) indicates the type of color 
+              "The Color Mode (CM) indicates the type of color
                awareness which is employed by the Policer.";
             reference
               "MEF 10.3, Section 12.1";
@@ -311,18 +292,16 @@ module bbf-qos-policer-envelope-profiles {
     }
   }
 
-  augment '/bbf-qos-cls:classifiers/bbf-qos-cls:classifier-entry/'
-        + 'bbf-qos-cls:classifier-action-entry-cfg/bbf-qos-cls:'
-        + 'action-cfg-params' {
+  augment "/bbf-qos-cls:classifiers/bbf-qos-cls:classifier-entry/"
+        + "bbf-qos-cls:classifier-action-entry-cfg/bbf-qos-cls:"
+        + "action-cfg-params" {
     description
       "The QoS policy framework allows to configure a set of actions
        for frames with matching criteria.";
-
     case envelope-policing {
       description
-        "The set of actions is extended with a possibility to 
+        "The set of actions is extended with a possibility to
          associate a Policer flow.";
-
       uses policer-flow-reference;
     }
   }

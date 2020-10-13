@@ -1,0 +1,253 @@
+module bbf-fast-alarm-types {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-fast-alarm-types";
+  prefix bbf-fast-alt;
+
+  import bbf-alarm-types {
+    prefix bbf-alt;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Ken Kerpez, ASSIA, Inc.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia
+
+     WA Director: Joey Boyd, ADTRAN";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on management of
+     FAST interfaces as defined in ITU-T G.9700, ITU-T G.9701, ITU-T
+     G.997.2 and BBF TR-371. As such, this module is specific to
+     access network equipment (e.g., BBF-specified Access Nodes and
+     FTTdp DPUs).
+
+     Specifically, this module contains a set of alarm definitions
+     related to FAST interfaces.
+
+     Copyright (c) 2016-2020 Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-355a3; see
+     the TR itself for full legal notices.";
+
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
+
+  /* ABSTRACT IDENTITIES */
+
+  identity fast {
+    base bbf-alt:bbf-alarm-type-id;
+    description
+      "Base identity for all FAST alarm type identifiers defined in
+       TR-355 YANG modules.
+
+       Hierarchy of identities defined in this module:
+
+       +--fast                                             (abstract)
+          +--fast-ftu-o-failures                           (abstract)
+          |  +--fast-ftu-o-line-initialization             (concrete)
+          |  +--fast-ftu-o-loss-of-signal                  (concrete)
+          |  +--fast-ftu-o-loss-of-rmc                     (concrete)
+          |  +--fast-ftu-o-loss-of-margin                  (concrete)
+          |  +--fast-ftu-o-loss-of-power                   (concrete)
+          +--fast-ftu-r-failures                           (abstract)
+             +--fast-ftu-r-loss-of-signal                  (concrete)
+             +--fast-ftu-r-loss-of-rmc                     (concrete)
+             +--fast-ftu-r-loss-of-margin                  (concrete)
+             +--fast-ftu-r-loss-of-power                   (concrete)
+
+       This identity is abstract and SHOULD NOT generally be used for
+       alarms. If used to define an alarm that was not known at
+       design time, it MUST be qualified with an alarm type qualifier
+       string. This practice, however, should be generally avoided to
+       ensure all possible alarms are known at design time.";
+  }
+
+  identity fast-ftu-o-failures {
+    base fast;
+    description
+      "Base identity for all FAST Transceiver Unit - central Office
+       (FTU-O) failure alarms.
+
+       This identity is abstract and SHOULD NOT generally be used for
+       alarms. If used to define an alarm that was not known at
+       design time, it MUST be qualified with an alarm type qualifier
+       string. This practice, however, should be generally avoided to
+       ensure all possible alarms are known at design time.";
+  }
+
+  identity fast-ftu-r-failures {
+    base fast;
+    description
+      "Base identity for all FAST Transceiver Unit - Remote side
+       (FTU-R) failure alarms.
+
+       This identity is abstract and SHOULD NOT generally be used for
+       alarms. If used to define an alarm that was not known at
+       design time, it MUST be qualified with an alarm type qualifier
+       string. This practice, however, should be generally avoided to
+       ensure all possible alarms are known at design time.";
+  }
+
+  /* FTU-O FAILURES */
+
+  identity fast-ftu-o-line-initialization {
+    base fast-ftu-o-failures;
+    description
+      "When the transmitter enters the SILENT state and
+       fails to reach the SHOWTIME state (after a vendor
+       discretionary number of retries and/or within a vendor
+       discretionary timeout), then an initialization failure
+       occurs and the alarm is raised. The alarm is subsequently
+       cleared when the transmitter next enters the SHOWTIME state.";
+    reference
+      "ITU-T G.997.2 clause 7.4.3 (LINIT).";
+  }
+
+  identity fast-ftu-o-loss-of-signal {
+    base fast-ftu-o-failures;
+    description
+      "A Loss of Signal (LOS) failure is declared when a
+       re-initialization is triggered by a persistent near-end los
+       defect. A LOS failure is cleared immediately at the start of
+       showtime in the receiving direction.";
+    reference
+      "ITU-T G.997.2 clause 7.4.1.1 (LOS).";
+  }
+
+  identity fast-ftu-o-loss-of-rmc {
+    base fast-ftu-o-failures;
+    description
+      "A Loss of Robust Management Channel (LOR) failure is declared
+       when a re-initialization is triggered by a persistent near-end
+       lor defect. A LOR failure is cleared immediately at the start
+       of showtime in the receiving direction.";
+    reference
+      "ITU-T G.997.2 clause 7.4.1.2 (LOR).";
+  }
+
+  identity fast-ftu-o-loss-of-margin {
+    base fast-ftu-o-failures;
+    description
+      "A Loss of Margin (LOM) failure is declared when a
+       re-initialization is triggered by a persistent near-end lom
+       defect. A LOM failure is cleared immediately at the start of
+       showtime in the receiving direction.";
+    reference
+      "ITU-T G.997.2 clause 7.4.1.3 (LOM).";
+  }
+
+  identity fast-ftu-o-loss-of-power {
+    base fast-ftu-o-failures;
+    description
+      "A Loss of Power (LPR) failure is declared after 2.5 +/- 0.5
+       seconds of contiguous near-end lpr primitive presence. An LPR
+       failure is cleared after 10 +/- 0.5 seconds of no near-end lpr
+       primitive presence.";
+    reference
+      "ITU-T G.997.2 clause 7.4.1.4 (LPR).";
+  }
+
+  /* FTU-R FAILURES */
+
+  identity fast-ftu-r-loss-of-signal {
+    base fast-ftu-r-failures;
+    description
+      "A Loss of Signal (LOS) failure is declared when a
+       re-initialization is triggered by a persistent far-end los
+       defect. A LOS failure is cleared immediately at the start of
+       showtime in the receiving direction.";
+    reference
+      "ITU-T G.997.2 clause 7.4.2.1 (LOS-FE).";
+  }
+
+  identity fast-ftu-r-loss-of-rmc {
+    base fast-ftu-r-failures;
+    description
+      "A Loss of Robust Management Channel (LOR) failure is declared
+       when a re-initialization is triggered by a persistent far-end
+       lor defect. A LOR failure is cleared immediately at the start
+       of showtime in the receiving direction.";
+    reference
+      "ITU-T G.997.2 clause 7.4.2.2 (LOR-FE).";
+  }
+
+  identity fast-ftu-r-loss-of-margin {
+    base fast-ftu-r-failures;
+    description
+      "A Loss of Margin (LOM) failure is declared when a
+       re-initialization is triggered by a persistent far-end lom
+       defect. A LOM failure is cleared immediately at the start of
+       showtime in the receiving direction.";
+    reference
+      "ITU-T G.997.2 clause 7.4.2.3 (LOM-FE).";
+  }
+
+  identity fast-ftu-r-loss-of-power {
+    base fast-ftu-r-failures;
+    description
+      "A Loss of Power (LPR) failure is declared after 2.5 +/- 0.5
+       seconds of contiguous far-end lpr primitive presence. An LPR
+       failure is cleared after 10 +/- 0.5 seconds of no near-end lpr
+       primitive presence.";
+    reference
+      "ITU-T G.997.2 clause 7.4.2.4 (LPR-FE).";
+  }
+}

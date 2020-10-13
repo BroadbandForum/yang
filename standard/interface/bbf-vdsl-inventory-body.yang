@@ -18,7 +18,7 @@ submodule bbf-vdsl-inventory-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -30,7 +30,7 @@ submodule bbf-vdsl-inventory-body {
      managing Broadband Forum TR-252i3 clause 5.3 xDSL Transceiver
      Unit (xTU).
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Copyright (c) 2016-2020 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +70,19 @@ submodule bbf-vdsl-inventory-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2019-10-21 {
     description
       "Amendment 2 Corrigendum 1.
@@ -128,29 +138,28 @@ submodule bbf-vdsl-inventory-body {
     description
       "An xDSL Transceiver Unit (xTU) object represents an xDSL
        transceiver at either end of the xDSL Line. This has two
-       instantiations: an xTU-C/xTU-O (central office or
-       cabinet-located transceiver), and an xTU-R (Remote-located
-       transceiver).";
+       instantiations: an xDSL Transceiver Unit - Central office
+       (xTU-C), and an xDSL Transceiver Unit - Remote side (xTU-R).";
     leaf g.994.1-vendor-id {
       type binary {
         length "8";
         // octets
       }
       description
-        "The xTU-C G.994.1 vendor ID is the vendor ID as inserted
-         by the xTU-C in the G.994.1 CL message. It consists of 8
-         binary octets, including a country code followed by a
-         (regionally allocated) provider code, as defined in
-         [ITU-T T.35]:
-         T.35 country code (2 octets)
-         T.35 provider code (vendor identification) (4 octets)
-         T.35 provider oriented code (vendor revision number) (2
-         octets)
-         The G.994.1 vendor ID should typically identify the
-         vendor of the xTU-C G.994.1 functionality, whether
-         implemented in hardware or software. It is not intended
-         to indicate the system integrator. Further details are
-         defined in [ITU-T G.994.1].";
+        "The xDSL Transceiver Unit - Central office (xTU-C) G.994.1
+         vendor ID is the vendor ID as inserted by the xTU-C in the
+         G.994.1 CL message. It consists of 8 binary octets, including
+         a country code followed by a (regionally allocated) provider
+         code, as defined in [ITU-T T.35]:
+          - T.35 country code (2 octets)
+          - T.35 provider code (vendor identification) (4 octets)
+          - T.35 provider oriented code (vendor revision number) (2
+            octets)
+         The G.994.1 vendor ID should typically identify the vendor of
+         the xTU-C G.994.1 functionality, whether implemented in
+         hardware or software. It is not intended to indicate the
+         system integrator. Further details are defined in
+         [ITU-T G.994.1].";
       reference
         "ITU-T G.997.1 clause 7.4.1 xTU-C G.994.1 vendor ID, and
          clause 7.4.2 xTU-R G.994.1 vendor ID";
@@ -161,11 +170,13 @@ submodule bbf-vdsl-inventory-body {
         // octets
       }
       description
-        "The xTU system vendor ID is the vendor ID as inserted by
-         the xTU-C in the overhead messages or by the by the
-         xTU-R in the embedded operations channel. It consists of
-         8 binary octets, with same format as the xTU-C G.994.1
-         vendor ID (xtu-g.994.1-vendor-id).";
+        "The xDSL Transceiver Unit system vendor ID is the vendor ID
+         as inserted by the xDSL Transceiver Unit - Central office
+         (xTU-C) in the overhead messages or by the by the xDSL
+         Transceiver Unit - Remote side (xTU-R) in the embedded
+         operations channel. It consists of 8 binary octets, with same
+         format as the xTU-C G.994.1 vendor ID
+         (xtu-g.994.1-vendor-id).";
       reference
         "ITU-T G.997.1 clause 7.4.3 xTU-C system vendor ID, and
          clause 7.4.4 xTU-R system vendor ID";
@@ -176,13 +187,14 @@ submodule bbf-vdsl-inventory-body {
         // octets
       }
       description
-        "The xTU version number is the version number as inserted
-         by the xTU-C in the overhead messages, or by the xTU-R
-         in the embedded operations channel. It is for version
-         control and is vendor specific information.
-         For the XTU-C, this consists of up to 16 binary octets.
-         For the XTU-R, this consists of up to 16 ASCII
-         characters. It contains the xTU-R firmware version and
+        "The xDSL Transceiver Unit version number is the version
+         number as inserted by the xDSL Transceiver Unit - Central
+         office (xTU-C) in the overhead messages, or by the xDSL
+         Transceiver Unit - Remote side (xTU-R) in the embedded
+         operations channel. It is for version control and is vendor
+         specific information. For the XTU-C, this consists of up to
+         16 binary octets. For the XTU-R, this consists of up to 16
+         ASCII characters. It contains the xTU-R firmware version and
          the xTU-R model. Both are encoded in this order and
          separated by a space character, i.e., <xTU-R firmware
          version> <xTU-R model>.";
@@ -196,17 +208,17 @@ submodule bbf-vdsl-inventory-body {
         // octets
       }
       description
-        "The xTU serial number is the serial number as inserted
-         by the xTU-C in the overhead messages, or by the xTU-R
-         in the embedded operations channel. It is vendor
-         specific information.
-         For the XTU-C, this consists of up to 32 ASCII
-         characters.
-         For this XTU-R, this contains the equipment serial
-         number, the equipment model and the equipment firmware
-         version. All are encoded in this order and separated by
-         space characters, i.e., <equipment serial number>
-         <equipment model> <equipment firmware version>.";
+        "The xDSL Transceiver Unit serial number is the serial number
+         as inserted by the xDSL Transceiver Unit - Central office
+         (xTU-C) in the overhead messages, or by the xDSL Transceiver
+         Unit - Remote side (xTU-R) in the embedded operations
+         channel. It is vendor specific information. For the XTU-C,
+         this consists of up to 32 ASCII characters. For this XTU-R,
+         this contains the equipment serial number, the equipment
+         model and the equipment firmware version. All are encoded in
+         this order and separated by space characters, i.e.,
+         <equipment serial number> <equipment model> <equipment
+         firmware version>.";
       reference
         "ITU-T G.997.1 clause 7.4.7 xTU-C serial number, and
          clause 7.4.8 xTU-R serial number";
@@ -214,13 +226,13 @@ submodule bbf-vdsl-inventory-body {
     leaf self-test-result {
       type uint32;
       description
-        "This parameter defines the xTU self-test result. It is
-         coded as a 32-bit integer. The most significant octet of
-         the self-test result is 00hex if the self-test passed
-         and 01hex if the self-test failed. The interpretation of
-         the other octets is vendor discretionary and can be
-         interpreted in combination with G.994.1 and system
-         vendor IDs.";
+        "This parameter defines the xDSL Transceiver Unit self-test
+         result. It is coded as a 32-bit integer. The most significant
+         octet of the self-test result is 00hex if the self-test
+         passed and 01hex if the self-test failed. The interpretation
+         of the other octets is vendor discretionary and can be
+         interpreted in combination with G.994.1 and system vendor
+         IDs.";
       reference
         "ITU-T G.997.1 clause 7.4.9 xTU-C self-test result, and
          clause 7.4.8 xTU-R serial number";
@@ -228,11 +240,11 @@ submodule bbf-vdsl-inventory-body {
     leaf-list transmission-system-capabilities {
       type xts-descriptor;
       description
-        "This parameter defines the xTU capability list of the
-         different transmission system types. It is coded in a
-         bit-map representation with the bits defined in the
-         reference. This parameter may be derived from the
-         handshaking procedures defined in [ITU-T G.994.1].";
+        "This parameter defines the xDSL Transceiver Unit capability
+         list of the different transmission system types. It is coded
+         in a bit-map representation with the bits defined in the
+         reference. This parameter may be derived from the handshaking
+         procedures defined in [ITU-T G.994.1].";
       reference
         "ITU-T G.997.1 clause 7.3.1.1.1, clause 7.4.11 xTU-C
          transmission system capabilities, and clause 7.4.12

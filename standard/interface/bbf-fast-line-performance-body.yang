@@ -21,7 +21,7 @@ submodule bbf-fast-line-performance-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -73,9 +73,19 @@ submodule bbf-fast-line-performance-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2020-01-17 {
     description
       "Amendment 2 Corrigendum 2.
@@ -130,7 +140,8 @@ submodule bbf-fast-line-performance-body {
   grouping line-performance-ftu-o-parameters {
     description
       "Defines the performance parameters applicable only
-       to the FTU-O of FAST lines.";
+       to the FAST Transceiver Unit - central Office (FTU-O) of FAST
+       lines.";
     leaf successful-tiga {
       type bbf-yang:performance-counter32;
       description
@@ -209,7 +220,7 @@ submodule bbf-fast-line-performance-body {
          (CURR/PREV_15/24_SPONT_INTRPT).";
     }
     leaf successful-srec {
-      if-feature "srec";
+      if-feature "bbf-fast:srec";
       type bbf-yang:performance-counter32;
       description
         "Reports a count of success_srec primitives.
@@ -220,7 +231,7 @@ submodule bbf-fast-line-performance-body {
          (CURR/PREV_15/24_SUCCESS_SREC).";
     }
     leaf me-o-triggered-interruptions {
-      if-feature "srec";
+      if-feature "bbf-fast:srec";
       type bbf-yang:performance-counter32;
       description
         "Reports a count of me_o_intrpt anomalies.
@@ -235,7 +246,8 @@ submodule bbf-fast-line-performance-body {
   grouping line-performance-ftu-o-15min-parameters {
     description
       "Defines the 15 minute performance parameters applicable only
-       to the FTU-O of FAST lines.";
+       to the FAST Transceiver Unit - central Office (FTU-O) of FAST
+       lines.";
     leaf link-state-l2.1n-seconds {
       type seconds-counter-15min;
       units "1 second";
@@ -274,7 +286,8 @@ submodule bbf-fast-line-performance-body {
   grouping line-performance-ftu-o-24hr-parameters {
     description
       "Defines the 24 hour performance parameters applicable only
-       to the FTU-O of FAST lines.";
+       to the FAST Transceiver Unit - central Office (FTU-O) of FAST
+       lines.";
     leaf link-state-l2.1n-seconds {
       type seconds-counter-24hr;
       units "1 second";
@@ -378,19 +391,19 @@ submodule bbf-fast-line-performance-body {
         "ITU-T G.997.2 clause 7.7.24 (CURR/PREV_NE/FE_15/24_RPA).";
     }
     list inminpeq {
-      if-feature "impulse-noise-monitoring";
+      if-feature "bbf-fast:impulse-noise-monitoring";
       key "inminpeq-index";
       leaf inminpeq-index {
         type uint8 {
           range "1..17";
         }
         description
-          "Identifies the INMAINPEQ histogram bin";
+          "Identifies the INMAINPEQ histogram bin.";
       }
       leaf inminpeq {
         type bbf-yang:performance-counter32;
         description
-          "Count of the INMAINPEQ anomalies";
+          "Count of the INMAINPEQ anomalies.";
       }
       description
         "Reports the count of the INMAINPEQi anomalies occurring on
@@ -401,7 +414,7 @@ submodule bbf-fast-line-performance-body {
          ITU-T G.9701 clause 11.4.4.7.3.1.";
     }
     leaf inmame {
-      if-feature "impulse-noise-monitoring";
+      if-feature "bbf-fast:impulse-noise-monitoring";
       type bbf-yang:performance-counter32;
       description
         "Reports the count of the INMAME anomalies occurring on the
@@ -412,7 +425,7 @@ submodule bbf-fast-line-performance-body {
          ITU-T G.9701 clause 11.4.4.7.3.2.";
     }
     list inmiat {
-      if-feature "impulse-noise-monitoring";
+      if-feature "bbf-fast:impulse-noise-monitoring";
       key "inminiat-index";
       leaf inminiat-index {
         type uint8 {
@@ -434,7 +447,7 @@ submodule bbf-fast-line-performance-body {
          ITU-T G.9701 clause 11.4.4.7.3.3.";
     }
     leaf inmblfc {
-      if-feature "impulse-noise-monitoring";
+      if-feature "bbf-fast:impulse-noise-monitoring";
       type bbf-yang:performance-counter32;
       description
         "Reports the count of the INMBLFC anomalies occurring on the
@@ -557,7 +570,7 @@ submodule bbf-fast-line-performance-body {
             "Contains the counts that are currently accumulating.";
           container ftu-o {
             description
-              "Fast Transceiver Unit - central Office.";
+              "Fast Transceiver Unit - central Office (FTU-O).";
             uses performance-history-measured-time;
             uses line-performance-parameters;
             uses line-performance-15min-parameters;
@@ -566,7 +579,7 @@ submodule bbf-fast-line-performance-body {
           }
           container ftu-r {
             description
-              "Fast Transceiver Unit - Remote side.";
+              "Fast Transceiver Unit - Remote side (FTU-R).";
             uses performance-history-measured-time;
             uses line-performance-parameters;
             uses line-performance-15min-parameters;
@@ -587,7 +600,7 @@ submodule bbf-fast-line-performance-body {
           }
           container ftu-o {
             description
-              "Fast Transceiver Unit - central Office.";
+              "Fast Transceiver Unit - central Office (FTU-O).";
             uses performance-history-15min-interval-parameters;
             uses line-performance-parameters;
             uses line-performance-15min-parameters;
@@ -596,7 +609,7 @@ submodule bbf-fast-line-performance-body {
           }
           container ftu-r {
             description
-              "Fast Transceiver Unit - Remote side.";
+              "Fast Transceiver Unit - Remote side (FTU-R).";
             uses performance-history-15min-interval-parameters;
             uses line-performance-parameters;
             uses line-performance-15min-parameters;
@@ -604,7 +617,7 @@ submodule bbf-fast-line-performance-body {
         }
       }
       container intervals-24hr {
-        if-feature "performance-24hr";
+        if-feature "bbf-fast:performance-24hr";
         description
           "24 hour interval performance history.";
         container current {
@@ -612,7 +625,7 @@ submodule bbf-fast-line-performance-body {
             "Contains the counts that are currently accumulating.";
           container ftu-o {
             description
-              "Fast Transceiver Unit - central Office.";
+              "Fast Transceiver Unit - central Office (FTU-O).";
             uses performance-history-measured-time;
             uses line-performance-parameters;
             uses line-performance-24hr-parameters;
@@ -621,7 +634,7 @@ submodule bbf-fast-line-performance-body {
           }
           container ftu-r {
             description
-              "Fast Transceiver Unit - Remote side.";
+              "Fast Transceiver Unit - Remote side (FTU-R).";
             uses performance-history-measured-time;
             uses line-performance-parameters;
             uses line-performance-24hr-parameters;
@@ -642,7 +655,7 @@ submodule bbf-fast-line-performance-body {
           }
           container ftu-o {
             description
-              "Fast Transceiver Unit - central Office.";
+              "Fast Transceiver Unit - central Office (FTU-O).";
             uses performance-history-24hr-interval-parameters;
             uses line-performance-parameters;
             uses line-performance-24hr-parameters;
@@ -651,7 +664,7 @@ submodule bbf-fast-line-performance-body {
           }
           container ftu-r {
             description
-              "Fast Transceiver Unit - Remote side.";
+              "Fast Transceiver Unit - Remote side (FTU-R).";
             uses performance-history-24hr-interval-parameters;
             uses line-performance-parameters;
             uses line-performance-24hr-parameters;

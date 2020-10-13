@@ -9,23 +9,23 @@ submodule bbf-xpongemtcont-base {
      Fiber Access Networks Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
 
-     Editor:      Samuel Chen, Broadcom
+     Editor:      Igor Ternovsky, Broadcom
 
      Editor:      Robert Peschi, Nokia
 
      WA Director: Marta Seda, Calix
 
-     WA Director: Lin Wei, Huawei";
+     WA Director: Samuel Chen, Broadcom";
   description
     "This submodule contains a collection of YANG definitions for
-     managing top level xPON GEM port and T-CONT configuration and
-     state data.
+     managing top level xPON G-PON Encapsulation Method (GEM) port and
+     Transmission Container (T-CONT) configuration and state data.
 
-     Copyright (c) 2018, Broadband Forum
+     Copyright (c) 2018-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -65,9 +65,19 @@ submodule bbf-xpongemtcont-base {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385; see
+     This version of this YANG module is part of TR-385i2; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
   revision 2019-02-25 {
     description
       "Initial revision.
@@ -81,13 +91,13 @@ submodule bbf-xpongemtcont-base {
 
   container xpongemtcont {
     description
-      "Configuration associated with xPON GEM ports, T-CONTs, and
-       traffic descriptors.";
+      "Configuration associated with xPON G-PON Encapsulation Method
+       (GEM) ports, T-CONTs, and traffic descriptors.";
   }
   container xpongemtcont-state {
     config false;
     description
-      "State data associated with xPON GEM ports, T-CONTs, and
-       traffic descriptors.";
+      "State data associated with xPON G-PON Encapsulation Method
+       (GEM) ports, T-CONTs, and traffic descriptors.";
   }
 }

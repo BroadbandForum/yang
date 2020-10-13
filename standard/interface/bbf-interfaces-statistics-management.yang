@@ -1,11 +1,7 @@
 module bbf-interfaces-statistics-management {
-
   yang-version 1.1;
-
   namespace "urn:bbf:yang:bbf-interfaces-statistics-management";
-
   prefix bbf-if-ctrs;
-
 
   import ietf-interfaces {
     prefix if;
@@ -14,34 +10,32 @@ module bbf-interfaces-statistics-management {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
-    "This module contains a collection of YANG definitions for 
-     supporting the Broadband Forum requirements on interface 
-     management as applicable to access network equipment. As such, 
-     this module is specific to access network equipment (e.g., 
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on interface
+     management as applicable to access network equipment. As such,
+     this module is specific to access network equipment (e.g.,
      BBF-specified Access Nodes and FTTdp DPUs).
 
      Specifically, this module augments ietf-interfaces with a reset
      action for statistics.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,12 +75,22 @@ module bbf-interfaces-statistics-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -105,18 +109,17 @@ module bbf-interfaces-statistics-management {
                         TR-383.pdf>";
   }
 
-  augment '/if:interfaces-state/if:interface' {
+  augment "/if:interfaces-state/if:interface" {
     description
-      "The 'interfaces' list in the 'interfaces-state' container  
+      "The 'interfaces' list in the 'interfaces-state' container
        contains counters, grouped in the container 'statistics'.
-       This augment provides the action to reset these 
+       This augment provides the action to reset these
        counters.";
-
     action reset-statistics {
       description
         "When this action is invoked, the counters of this
-         interface which are defined and/or augmented to the 
-         container interfaces-state/interface/statistics are 
+         interface which are defined and/or augmented to the
+         container interfaces-state/interface/statistics are
          cleared.";
     }
   }

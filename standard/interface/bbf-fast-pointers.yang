@@ -35,7 +35,7 @@ submodule bbf-fast-pointers {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -86,9 +86,19 @@ submodule bbf-fast-pointers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2020-01-17 {
     description
       "Amendment 2 Corrigendum 2.
@@ -156,7 +166,7 @@ submodule bbf-fast-pointers {
          + "vector/bbf-fast:name";
     }
     description
-      "Used to reference a line configuration vector of profiles";
+      "Used to reference a line configuration vector of profiles.";
   }
 
   typedef threshold-template-ref {
@@ -165,12 +175,12 @@ submodule bbf-fast-pointers {
          + "template/bbf-fast:name";
     }
     description
-      "Used to reference a line threshold template profile";
+      "Used to reference a line threshold template profile.";
   }
 
   grouping profile-vector {
     description
-      "A vector of profiles used to configure the line";
+      "A vector of profiles used to configure the line.";
     leaf time-division-duplexing-profile {
       type time-division-duplexing-profile-ref;
       mandatory true;
@@ -256,7 +266,7 @@ submodule bbf-fast-pointers {
          line.";
     }
     leaf impulse-noise-monitoring-profile {
-      if-feature "impulse-noise-monitoring";
+      if-feature "bbf-fast:impulse-noise-monitoring";
       type leafref {
         path "/bbf-fast:fast/bbf-fast:quality/bbf-fast:impulse-"
            + "noise-monitoring-profile/bbf-fast:name";
@@ -303,24 +313,25 @@ submodule bbf-fast-pointers {
         type line-threshold-profile-ref;
         mandatory true;
         description
-          "Reference to a line threshold profile for FTU-O
-           thresholds related to 15 minute performance
-           counters.";
+          "Reference to a line threshold profile for FAST Transceiver
+           Unit - central Office (FTU-O) thresholds related to 15
+           minute performance counters.";
       }
       leaf ftu-o-24hr-line-threshold-profile {
         if-feature "performance-24hr";
         type line-threshold-profile-ref;
         mandatory true;
         description
-          "Reference to a line threshold profile for FTU-O
-           thresholds related to 24 hour performance
-           counters.";
+          "Reference to a line threshold profile for FAST Transceiver
+           Unit - central Office (FTU-O) thresholds related to 24 hour
+           performance counters.";
       }
       leaf ftu-r-15min-line-threshold-profile {
         type line-threshold-profile-ref;
         mandatory true;
         description
-          "Reference to a line threshold profile for FTU-R
+          "Reference to a line threshold profile for FAST Transceiver
+           Unit - Remote side (FTU-R)
            thresholds related to 15 minute performance
            counters.";
       }
@@ -329,43 +340,43 @@ submodule bbf-fast-pointers {
         type line-threshold-profile-ref;
         mandatory true;
         description
-          "Reference to a line threshold profile for FTU-R
-           thresholds related to 24 hour performance
-           counters.";
+          "Reference to a line threshold profile for FAST Transceiver
+           Unit - Remote side (FTU-R) thresholds related to 24 hour
+           performance counters.";
       }
       leaf ftu-o-15min-channel-threshold-profile {
         type channel-threshold-profile-ref;
         mandatory true;
         description
-          "Reference to a channel threshold profile for FTU-O
-           thresholds related to 15 minute performance
-           counters.";
+          "Reference to a channel threshold profile for FAST
+           Transceiver Unit - central Office (FTU-O) thresholds
+           related to 15 minute performance counters.";
       }
       leaf ftu-o-24hr-channel-threshold-profile {
         if-feature "performance-24hr";
         type channel-threshold-profile-ref;
         mandatory true;
         description
-          "Reference to a channel threshold profile for FTU-O
-           thresholds related to 24 hour performance
-           counters.";
+          "Reference to a channel threshold profile for FAST
+           Transceiver Unit - central Office (FTU-O) thresholds
+           related to 24 hour performance counters.";
       }
       leaf ftu-r-15min-channel-threshold-profile {
         type channel-threshold-profile-ref;
         mandatory true;
         description
-          "Reference to a channel threshold profile for FTU-R
-           thresholds related to 15 minute performance
-           counters.";
+          "Reference to a channel threshold profile for FAST
+           Transceiver Unit - Remote side (FTU-R) thresholds related
+           to 15 minute performance counters.";
       }
       leaf ftu-r-24hr-channel-threshold-profile {
         if-feature "performance-24hr";
         type channel-threshold-profile-ref;
         mandatory true;
         description
-          "Reference to a channel threshold profile for FTU-R
-           thresholds related to 24 hour performance
-           counters.";
+          "Reference to a channel threshold profile for FAST
+           Transceiver Unit - Remote side (FTU-R) thresholds related
+           to 24 hour performance counters.";
       }
     }
   }
@@ -411,13 +422,11 @@ submodule bbf-fast-pointers {
       type boolean;
       default "false";
       description
-        "Indicates whether the Showtime Reconfiguration
-         (SREC) procedures shall not be used
-         (SREC_allowed = false), or the SREC procedures
-         may be used (SREC_allowed = true)
-         to force a new configuration onto the line.
-         The conditions to use the SREC procedures are
-         specified in Annex R of [ITU-T G.9701].";
+        "Indicates whether the Showtime Reconfiguration (SREC)
+         procedures shall not be used (SREC_allowed = false), or the
+         SREC procedures may be used (SREC_allowed = true) to force a
+         new configuration onto the line. The conditions to use the
+         SREC procedures are specified in Annex R of [ITU-T G.9701].";
       reference
         "ITU-T G.997.2 clause 7.1.13.1 (SREC_ALLOWED),
          ITU-T G.9701 annex R.";

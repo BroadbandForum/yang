@@ -11,22 +11,22 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
      Fiber Access Networks Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
 
-     Editor:      Samuel Chen, Broadcom
+     Editor:      Igor Ternovsky, Broadcom
 
      Editor:      Robert Peschi, Nokia
 
      WA Director: Marta Seda, Calix
 
-     WA Director: Lin Wei, Huawei";
+     WA Director: Samuel Chen, Broadcom";
   description
     "This submodule contains a collection of YANG definitions for
      managing traffic descriptor profiles.
 
-     Copyright (c) 2018, Broadband Forum
+     Copyright (c) 2018-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -66,9 +66,19 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385; see
+     This version of this YANG module is part of TR-385i2; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
   revision 2019-02-25 {
     description
       "Initial revision.
@@ -80,10 +90,11 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
                         TR-385.pdf>";
   }
 
-  augment '/bbf-xpongemtcont:xpongemtcont' {
+  augment "/bbf-xpongemtcont:xpongemtcont" {
     description
-      "Augment the xPON GEM port and T-CONT configuration with
-       traffic descriptor profile specific configuration.";
+      "Augment the xPON G-PON Encapsulation Method (GEM) port and
+       Transmission Container (T-CONT) configuration with traffic
+       descriptor profile specific configuration.";
     container traffic-descriptor-profiles {
       description
         "Traffic descriptor profile configuration.";
@@ -93,7 +104,7 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
 
   grouping traffic-descriptor-profile-data {
     description
-      "All config data for traffic descriptor profile.";
+      "All configuration data for traffic descriptor profile.";
     reference
       "ITU-T G.989.3";
     list traffic-descriptor-profile {
@@ -165,58 +176,59 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
           range "1..8";
         }
         description
-          "Used for scheduling traffic on a T-CONT.";
+          "Used for scheduling traffic on a Transmission Container
+           (T-CONT).";
         reference
           "ITU-T G.984.3 clause 7.4.5";
       }
       leaf weight {
         type uint8;
         description
-          "Used for scheduling traffic on a T-CONT.";
+          "Used for scheduling traffic on a Transmission Container
+           (T-CONT).";
         reference
           "ITU-T G.984.3 clause 7.4.5";
       }
       leaf additional-bw-eligibility-indicator {
         type enumeration {
-          enum "non-assured-sharing" {
+          enum non-assured-sharing {
             description
-              "The T-CONT is eligible for non-assured bandwidth
-               in addition to the bandwidth described by this
-               traffic descriptor.";
+              "The Transmission Container (T-CONT) is eligible for
+               non-assured bandwidth in addition to the bandwidth
+               described by this traffic descriptor.";
           }
-          enum "best-effort-sharing" {
+          enum best-effort-sharing {
             description
-              "The T-CONT is eligible for best effort bandwidth
-               in addition to the bandwidth described by this
-               traffic descriptor.";
+              "The Transmission Container (T-CONT) is eligible for
+               best effort bandwidth in addition to the bandwidth
+               described by this traffic descriptor.";
           }
-          enum "none" {
+          enum none {
             description
-              "The T-CONT is not eligible for any additional
-               bandwidth beyond the bandwidth described by
-               this traffic descriptor.";
+              "The Transmission Container (T-CONT) is not eligible for
+               any additional bandwidth beyond the bandwidth described
+               by this traffic descriptor.";
           }
         }
-        must
-          ". = 'non-assured-sharing' or
-           . = 'best-effort-sharing' or
-           (. = 'none' and
-           ((boolean(../fixed-bandwidth) and
-           boolean(../assured-bandwidth) and
-           (../maximum-bandwidth = ../fixed-bandwidth +
-           ../assured-bandwidth))
-           or
-           (boolean(../fixed-bandwidth) and
-           not(boolean(../assured-bandwidth)) and
-           (../maximum-bandwidth = ../fixed-bandwidth))
-           or
-           (not(boolean(../fixed-bandwidth)) and
-           boolean(../assured-bandwidth) and
-           (../maximum-bandwidth = ../assured-bandwidth))
-           or
-           (not(boolean(../fixed-bandwidth)) and
-           not(boolean(../assured-bandwidth)) and
-           ../maximum-bandwidth = 0)))";
+        must ". = 'non-assured-sharing' or
+              . = 'best-effort-sharing' or
+              (. = 'none' and
+              ((boolean(../fixed-bandwidth) and
+              boolean(../assured-bandwidth) and
+              (../maximum-bandwidth = ../fixed-bandwidth +
+              ../assured-bandwidth))
+              or
+              (boolean(../fixed-bandwidth) and
+              not(boolean(../assured-bandwidth)) and
+              (../maximum-bandwidth = ../fixed-bandwidth))
+              or
+              (not(boolean(../fixed-bandwidth)) and
+              boolean(../assured-bandwidth) and
+              (../maximum-bandwidth = ../assured-bandwidth))
+              or
+              (not(boolean(../fixed-bandwidth)) and
+              not(boolean(../assured-bandwidth)) and
+              ../maximum-bandwidth = 0)))";
         description
           "In case of rate-proportional assignment of
            additional bandwidth, additional bandwidth

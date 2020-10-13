@@ -27,7 +27,7 @@ module bbf-hardware-rpf-dpu-state {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -35,13 +35,17 @@ module bbf-hardware-rpf-dpu-state {
 
      WA Director: Joey Boyd, ADTRAN";
   description
-    "This module contains a collection of YANG definitions that are
-     used to manage the state data for Reverse Power Feeding (RPF)
-     requirements for a Distribution Point Unit (DPU) per ITU G.997.2,
-     Annex A. This module is to be used when the server does not
-     support Network Management Datastore Architecture (NMDA).
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on management of
+     Reverse Power Feeding (RPF) as defined in ITU G.997.2 Annex A and
+     BBF TR-159. As such, this module is specific to access network
+     equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Specifically, this module is to be used when the server does not
+     support Network Management Datastore Architecture (NMDA) as
+     defined in RFC 8342.
+
+     Copyright (c) 2016-2020 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +85,19 @@ module bbf-hardware-rpf-dpu-state {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2019-06-11 {
     description
       "Amendment 2.
@@ -471,7 +485,7 @@ module bbf-hardware-rpf-dpu-state {
 
   grouping performance-history-measured-time {
     description
-      "Reports the measured time for a given interval";
+      "Reports the measured time for a given interval.";
     leaf measured-time {
       type uint32;
       status deprecated;
@@ -587,7 +601,7 @@ module bbf-hardware-rpf-dpu-state {
     container intervals-15min {
       status deprecated;
       description
-        "15 minute interval performance history";
+        "15 minute interval performance history.";
       container current {
         status deprecated;
         description
@@ -656,10 +670,10 @@ module bbf-hardware-rpf-dpu-state {
       }
     }
     container intervals-24hr {
-      if-feature "performance-24hr";
+      if-feature "bbf-hw-rpf-dpu-state:performance-24hr";
       status deprecated;
       description
-        "24 hour interval performance history";
+        "24 hour interval performance history.";
       container current {
         status deprecated;
         description

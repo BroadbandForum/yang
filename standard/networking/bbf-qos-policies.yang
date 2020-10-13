@@ -1,25 +1,20 @@
 module bbf-qos-policies {
   yang-version 1.1;
   namespace "urn:bbf:yang:bbf-qos-policies";
-
   prefix bbf-qos-pol;
 
   import ietf-interfaces {
     prefix if;
   }
-
   import iana-if-type {
     prefix ianaift;
   }
-
   import bbf-if-type {
     prefix bbfift;
   }
-
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import bbf-qos-classifiers {
     prefix bbf-qos-cls;
   }
@@ -27,23 +22,21 @@ module bbf-qos-policies {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the management of
@@ -51,10 +44,10 @@ module bbf-qos-policies {
      equipment. As such, this module is specific to access network
      equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module contains a collection of policies
-     applied to packets.
+     Specifically, this module contains a collection of policies that
+     can be used to control the flow of packets.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -94,9 +87,19 @@ module bbf-qos-policies {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-12-03 {
     description
       "Amendment 2.
@@ -109,7 +112,7 @@ module bbf-qos-policies {
   }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -130,8 +133,8 @@ module bbf-qos-policies {
 
   typedef qos-policy-profile-ref {
     type leafref {
-      path '/bbf-qos-pol:qos-policy-profiles/bbf-qos-pol:policy-'
-         + 'profile/bbf-qos-pol:name';
+      path "/bbf-qos-pol:qos-policy-profiles/bbf-qos-pol:policy-"
+         + "profile/bbf-qos-pol:name";
     }
     description
       "The name of the referenced QoS policy profile.";
@@ -140,24 +143,20 @@ module bbf-qos-policies {
   container policies {
     description
       "Configuration associated with policies.";
-
     list policy {
       key "name";
       description
         "List of policies.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "Name of the policy.";
       }
-
       leaf description {
         type bbf-yang:string-ascii64-or-empty;
         description
           "Description of the policy.";
       }
-
       list classifiers {
         key "name";
         ordered-by user;
@@ -165,7 +164,6 @@ module bbf-qos-policies {
           "Provides a lists of classifiers which are evaluated in
            order as specified by the user. When a classifier is
            matched, no other classifiers are evaluated.";
-
         uses bbf-qos-cls:classifier-entry-ref;
       }
     }
@@ -174,11 +172,10 @@ module bbf-qos-policies {
   grouping policy-entry-ref {
     description
       "A reference to a policy entry.";
-
     leaf name {
       type leafref {
-        path '/bbf-qos-pol:policies/bbf-qos-pol:policy/bbf-qos-pol:'
-           + 'name';
+        path "/bbf-qos-pol:policies/bbf-qos-pol:policy/bbf-qos-pol:"
+           + "name";
       }
       description
         "The name of the referenced policy entry.";
@@ -189,18 +186,15 @@ module bbf-qos-policies {
     description
       "This container provides a framework for QoS policy profile
        configuration.";
-
     list policy-profile {
       key "name";
       description
         "A list of policy profiles.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "Name of the QoS policy profile.";
       }
-
       list policy-list {
         key "name";
         ordered-by user;
@@ -211,23 +205,22 @@ module bbf-qos-policies {
            The definition is that all policies are executed in the
            order of the list. The output of one policy is used as
            input for the next policy.";
-
         uses policy-entry-ref;
       }
     }
   }
 
-  augment '/if:interfaces/if:interface' {
+  augment "/if:interfaces/if:interface" {
     when
       "derived-from-or-self(if:type, 'ianaift:ethernetCsmacd') or
        derived-from-or-self(if:type, 'ianaift:ieee8023adLag') or
        derived-from-or-self(if:type, 'ianaift:ptm') or
        derived-from-or-self(if:type, 'bbfift:vlan-sub-interface') or
+       derived-from-or-self(if:type, 'bbfift:l2-termination') or
        derived-from(if:type, 'bbfift:ethernet-like')" {
       description
         "Interfaces that can have QoS policy profiles assigned.";
     }
-
     description
       "Interfaces that can have QoS policy profiles assigned.
 
@@ -245,14 +238,12 @@ module bbf-qos-policies {
        interface(s) (e.g. vlan-sub-interface) must first be applied
        before the one on the lower-level interface(s) (e.g.
        ethernetCsmacd).";
-
     leaf ingress-qos-policy-profile {
       type qos-policy-profile-ref;
       description
         "A reference to a QoS policy profile. The profile is to be
          applied to incoming packets.";
     }
-
     leaf egress-qos-policy-profile {
       type qos-policy-profile-ref;
       description

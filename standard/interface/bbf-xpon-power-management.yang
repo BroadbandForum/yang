@@ -1,0 +1,237 @@
+module bbf-xpon-power-management {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-xpon-power-management";
+  prefix bbf-xpon-pwr;
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Fiber Access Networks Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     Editor:      Igor Ternovsky, Broadcom
+
+     Editor:      Robert Peschi, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Samuel Chen, Broadcom";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on management of
+     ITU-T Passive Optical Network (PON) interfaces as defined in
+     ITU-T G.984.x, G.987.x, ITU-T G.989.x and ITU-T G.9807.x. As
+     such, this module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module contains a collection of YANG
+     definitions common to Optical Network Unit (ONU) power
+     management.
+
+     Copyright (c) 2018-2020, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385i2; see
+     the TR itself for full legal notices.";
+
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
+
+  feature xpon-power-management {
+    description
+      "Indicates support for Optical Network Unit (ONU) power
+       management.";
+    reference
+      "ITU-T G.9807.1 clause C.16.1
+       ITU-T G.989.3 clause 16
+       ITU-T G.987.3 clause 16
+       ITU-T G.984.3 Annex E.";
+  }
+
+  identity power-mode-base {
+    description
+      "Base identity for defining Optical Network Unit (ONU) dynamic
+       power management modes.";
+    reference
+      "ITU-T G.988.x clause 9.1.14.";
+  }
+
+  identity power-mode-doze {
+    base power-mode-base;
+    description
+      "Doze power saving mode.";
+  }
+
+  identity power-mode-cyclic-sleep {
+    base power-mode-base;
+    description
+      "Cyclic Sleep power saving mode.";
+  }
+
+  identity power-mode-watchful-sleep {
+    base power-mode-base;
+    description
+      "Watchful Sleep power saving mode.";
+  }
+
+  identity power-state-base {
+    description
+      "Base identity for defining Optical Network Unit (ONU) dynamic
+       power management states.";
+  }
+
+  identity power-state-disabled {
+    base power-state-base;
+    description
+      "Power management is disabled.";
+  }
+
+  identity power-state-not-supported {
+    base power-state-base;
+    description
+      "Power management is not supported by the Optical Network Unit
+       (ONU).";
+  }
+
+  identity power-state-awake-forced {
+    base power-state-base;
+    description
+      "The Optical Line Termination (OLT) Channel Termination (CT)
+       provides normal allocations to ONUi, forwards downstream
+       traffic, and expects a response to every bandwidth grant. The
+       OLT CT declares the LOBi defect on detection of the specified
+       number of missed allocations. On transition into this state,
+       the OLT CT sends a Sleep_Allow (OFF) PLOAM message, thus
+       revoking its permission to the Optical Network Unit (ONU) to
+       enter the LowPower state.";
+  }
+
+  identity power-state-awake-free {
+    base power-state-base;
+    description
+      "The Optical Line Termination (OLT) Channel Termination (CT)
+       provides normal allocations to the Optical Network Unit (ONU),
+       forwards downstream traffic, and is ready to accept a power
+       management transition indication from the ONU. On transition
+       into this state, the OLT CT sends a Sleep_Allow (ON) PLOAM
+       message,thus granting the ONU a permission to enter the
+       LowPower state at its own discretion.
+       The OLT CT expects a response to every bandwidth grant, and
+       in case of missed allocation transitions to the AwakeForced
+       state, where LOBi condition can be eventually declared.";
+  }
+
+  identity power-state-doze {
+    base power-state-base;
+    description
+      "The Optical Line Termination (OLT) Channel Termination (CT)
+       supports the Optical Network Unit (ONU) in a 'Watch' low power
+       state. When ONU is in the 'Watch' state its transmitter is
+       turned off. The ONU periodically turns on the receiver for a
+       brief time to check the downstream signal for remote wakeup
+       indications. When the downstream signal is checked, the ONU
+       does not respond to bandwidth allocations and does not forward
+       downstream traffic. This state persists for a configurable
+       duration if not truncated by the arrival of a local stimulus.
+
+       The OLT CT provides normal allocations to the ONU but expects
+       only intermittent responses from the ONU to bandwidth grants,
+       as defined by various timers. The OLT CT may either discard or
+       buffer the downstream traffic.";
+  }
+
+  identity power-state-sleep {
+    base power-state-base;
+    description
+      "The Optical Line Termination (OLT) Channel Termination (CT)
+       supports the Optical Network Unit (ONU) in an 'Asleep' low
+       power state. The ONU in the 'Asleep' state shuts down both its
+       transceiver and receiver. ONU 'Asleep' state persists for a
+       configurable duration if not truncated by the arrival of a
+       local stimulus.
+
+       The OLT CT provides normal allocations to the ONU but expects
+       only intermittent responses from the ONU to bandwidth grants,
+       as defined by various timers. The OLT CT forwards the
+       downstream traffic.";
+  }
+
+  identity power-state-watch {
+    base power-state-base;
+    description
+      "The Optical Line Termination (OLT) Channel Termination (CT)
+       supports the Optical Network Unit (ONU) in a low power state.
+       The OLT CT provides normal allocations to the ONU but expects
+       only intermittent responses from the ONU to bandwidth grants,
+       as defined by various timers. The OLT CT may either discard or
+       buffer the downstream traffic.";
+  }
+
+  identity power-state-alerted {
+    base power-state-base;
+    description
+      "The Optical Line Termination (OLT) Channel Termination (CT)
+       attempts to wake up the Optical Network Unit (ONU). Having sent
+       Sleep_Allow (OFF) message on transition to the state,
+       the OLT CT sets the FWI bit in every allocation to the ONU
+       along with the PLOAMu flag. The OLT CT discards or buffers
+       downstream traffic for the ONU, just as it did during the
+       immediately preceding LowPowerWatch state. The OLT CT goes
+       to the AwakeForced state if it receives a burst from the ONU
+       that includes a Sleep_Request (Awake) PLOAM message or if
+       timer Talerted expires..
+       In case of XGPON1 ONU this state corresponds to either
+       AlertedDoze or AlertedSleep [ITU-T] G.987.3 Table 16-5.
+       In case of GPON ONU this state corresponds to either
+       AlertedDoze, AlertedSleep or AlertedWatch [ITU-T]
+       G.984.3 Table E-5.";
+  }
+}

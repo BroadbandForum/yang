@@ -17,7 +17,7 @@ submodule bbf-fast-line-spectrum-profile-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -68,9 +68,19 @@ submodule bbf-fast-line-spectrum-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2020-01-17 {
     description
       "Amendment 2 Corrigendum 2.
@@ -163,12 +173,12 @@ submodule bbf-fast-line-spectrum-profile-body {
 
   typedef psd-level {
     type uint8 {
-      range "0..200";
+      range "0..255";
     }
     units "-0.5 dBm/Hz";
     description
       "Defines a Power Spectral Density (PSD) level in the range 0 to
-       -100 dBm/Hz.";
+       -127.5 dBm/Hz.";
   }
 
   typedef sub-carrier-index {
@@ -185,19 +195,19 @@ submodule bbf-fast-line-spectrum-profile-body {
     }
     description
       "Identifies a sub-carrier used for Power Spectral Density (PSD)
-       level configuration";
+       level configuration.";
   }
 
   grouping sub-carrier-range {
     description
-      "Defines a sub-carrier band, i.e., a set of contigious
+      "Defines a sub-carrier band, i.e., a set of contiguous
        sub-carriers.";
     leaf start-index {
       type sub-carrier-index;
       must '. <= ../stop-index' {
         description
           "The start index must be less than or equal to the stop
-           index";
+           index.";
       }
       description
         "The sub-carrier index identifying the start of a range of
@@ -208,7 +218,7 @@ submodule bbf-fast-line-spectrum-profile-body {
       must '. >= ../start-index' {
         description
           "The stop index must be greater than or equal to the
-           start index";
+           start index.";
       }
       mandatory true;
       description
@@ -250,6 +260,25 @@ submodule bbf-fast-line-spectrum-profile-body {
       reference
         "ITU-T G.997.2 clause 7.1.2.3 (CARMASKds) and clause 7.1.2.4
          (CARMASKus); ITU-T G.9701 Clause 7.3.1.3.";
+      uses sub-carrier-range;
+    }
+    list rmccarmask {
+      if-feature "rmccarmask";
+      key "start-index";
+      max-elements 2;
+      description
+        "Defines the RMC-masked sub-carrier bands. All sub-carriers
+         within the band, i.e., with indices greater than or equal to
+         the start sub-carrier index and less than or equal to the
+         stop sub-carrier index, are masked.
+
+         Masked sub-carriers for the Robust Management Channel (RMC)
+         are not included in the sub-carrier set for the RMC (RTSds)
+         nor in the backup sub-carrier set for the RMC (RTS-bds).";
+      reference
+        "ITU-T G.997.2 clause 7.1.2.16 (RMCCARMASKds) and clause
+         7.1.2.17 (RMCCARMASKus); ITU-T G.9701 clauses 12.3.3.2.1,
+         12.3.4.2.7,  13.2.1.3.1 and 13.3.1.2.3";
       uses sub-carrier-range;
     }
   }
@@ -343,10 +372,10 @@ submodule bbf-fast-line-spectrum-profile-body {
            (../../profiles='all' and
            (not(../mibpsdmask[sub-carrier-index=2048]) or
            not(../mibpsdmask[sub-carrier-index=4096])))))" {
-            description
-              "If the MIBPSDMASK is configured, then the mask must
-               include sub-carrier 39 as well as the highest
-               sub-carrier for the profile.";
+          description
+            "If the MIBPSDMASK is configured, then the mask must
+             include sub-carrier 39 as well as the highest
+             sub-carrier for the profile.";
         }
         key "sub-carrier-index";
         max-elements 32;
@@ -418,10 +447,10 @@ submodule bbf-fast-line-spectrum-profile-body {
            (../../profiles='all' and
            (not(../mibpsdmask[sub-carrier-index=2048]) or
            not(../mibpsdmask[sub-carrier-index=4096])))))" {
-            description
-              "If the MIBPSDMASK is configured, then the mask must
-               include sub-carrier 39 as well as the highest
-               sub-carrier for the profile.";
+          description
+            "If the MIBPSDMASK is configured, then the mask must
+             include sub-carrier 39 as well as the highest
+             sub-carrier for the profile.";
         }
         key "sub-carrier-index";
         max-elements 32;

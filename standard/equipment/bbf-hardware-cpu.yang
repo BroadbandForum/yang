@@ -1,0 +1,339 @@
+module bbf-hardware-cpu {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-hardware-cpu";
+  prefix bbf-hw-cpu;
+
+  import iana-hardware {
+    prefix ianahw;
+  }
+  import ietf-hardware {
+    prefix hw;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, ADTRAN
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on hardware
+     management as applicable to access network equipment. As such,
+     this module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module augments the ietf-hardware model with
+     the management of a CPU processor (with single or multiple
+     cores).
+
+     Copyright (c) 2017-2020, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a3; see
+     the TR itself for full legal notices.";
+
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
+
+  augment "/hw:hardware/hw:component" {
+    when 'derived-from-or-self (hw:class,"ianahw:cpu")' {
+      description
+        "Augment hardware component of the class 'ianahw:cpu' or based
+         on a class value that is a specialisation of it.
+
+         For example this applies to a single- and a multi-core CPU,
+         being a component of the class 'ianahw:cpu', and also to
+         individual cores of a multicore CPU which are of the class
+         'bbf-hwt:cpu-core'.
+
+          Data nodes being defined optional are for use as applicable
+          for the specific hardware component.";
+    }
+    description
+      "Data nodes for CPU processor hardware components of identity
+       class 'cpu'.";
+    container cpu-processor-data {
+      config false;
+      description
+        "CPU processor state data.";
+      leaf number-of-active-sessions {
+        type yang:gauge32;
+        description
+          "The number of active user sessions";
+        reference
+          "RFC2790 hrSystemNumUsers";
+      }
+      container system-load {
+        description
+          "System load data.";
+        leaf average-system-load-1-min {
+          type decimal64 {
+            fraction-digits 2;
+            range "0.01..max";
+          }
+          description
+            "The average calculated system load over the last minute.
+             System load is a measurement of CPU over or under
+             utilization, i.e., the number of processes in the running
+             or waiting state. Some systems (like Linux) includes
+             processes in the uninterruptible sleep state (e.g., those
+             waiting for other system resources like disk I/O).";
+        }
+        leaf average-system-load-5-min {
+          type decimal64 {
+            fraction-digits 2;
+            range "0.01..max";
+          }
+          description
+            "The average calculated system load over the last five
+             minutes. System load is a measurement of CPU over or
+             under utilization, i.e., the number of processes in the
+             running or waiting state. Some systems (like Linux)
+             includes processes in the uninterruptible sleep state
+             (e.g., those waiting for other system resources like disk
+             I/O).";
+        }
+        leaf average-system-load-15-min {
+          type decimal64 {
+            fraction-digits 2;
+            range "0.01..max";
+          }
+          description
+            "The average calculated system load over the last fifteen
+             minutes. System load is a measurement of CPU over or
+             under utilization, i.e., the number of processes in the
+             running or waiting state. Some systems (like Linux)
+             includes processes in the uninterruptible sleep state
+             (e.g., those waiting for other system resources like disk
+             I/O).";
+        }
+      }
+      container tasks {
+        description
+          "Counters associated with tasks.";
+        leaf total-tasks {
+          type yang:gauge32;
+          description
+            "The number of total tasks.";
+          reference
+            "RFC2790 hrSystemProcesses";
+        }
+        leaf running-tasks {
+          type yang:gauge32;
+          description
+            "Number of running tasks.";
+        }
+        leaf sleeping-tasks {
+          type yang:gauge32;
+          description
+            "Number of sleeping tasks.";
+        }
+        leaf stopped-tasks {
+          type yang:gauge32;
+          description
+            "Number of stopped tasks.";
+        }
+        leaf zombie-tasks {
+          type yang:gauge32;
+          description
+            "Number of tasks in zombie state.";
+        }
+      }
+      container threads {
+        description
+          "Counters associated with threads.";
+        leaf total-threads {
+          type yang:gauge32;
+          description
+            "Total number of threads.";
+          reference
+            "RFC2790 hrSystemProcesses";
+        }
+        leaf run-threads {
+          type yang:gauge32;
+          description
+            "Number of running threads.";
+        }
+        leaf sleep-threads {
+          type yang:gauge32;
+          description
+            "Number of threads in sleep mode.";
+        }
+        leaf stopped-threads {
+          type yang:gauge32;
+          description
+            "Number of stopped threads.";
+        }
+        leaf zombie-threads {
+          type yang:gauge32;
+          description
+            "Number of threads in zombie state.";
+        }
+      }
+      container cpu-usage {
+        description
+          "CPU usage container describing the percentage used by the
+           hardware component, which can be for the CPU or for an
+           individual core of the CPU.";
+        leaf cpu-core-processes {
+          type bbf-yang:percent;
+          description
+            "The percentage of time that the CPU was used for
+             processes.";
+        }
+        leaf cpu-user {
+          type bbf-yang:percent;
+          description
+            "The percentage of time that CPU was used for user
+             processes.";
+        }
+        leaf cpu-idle {
+          type bbf-yang:percent;
+          description
+            "The percentage of time that CPU was idle.";
+        }
+        leaf cpu-hwio {
+          type bbf-yang:percent;
+          description
+            "The percentage of time that CPU was serving hardware
+             interrupts.";
+        }
+        leaf cpu-io {
+          type bbf-yang:percent;
+          description
+            "The percentage of time that CPU core was waiting for I/O
+             operations.";
+        }
+        leaf cpu-nice {
+          type bbf-yang:percent;
+          description
+            "The percentage of time that CPU core was used for
+             priority upgrade nice.";
+        }
+        leaf cpu-swint {
+          type bbf-yang:percent;
+          description
+            "The percentage of time that CPU core was serving
+             software interrupts.";
+        }
+      }
+      container memory-usage {
+        description
+          "Statistics associated with memory utilization.";
+        leaf used-mem {
+          type uint64;
+          units "KiB";
+          description
+            "The total amount of memory in KiB(kibibytes).";
+        }
+        leaf total-memory {
+          type uint64;
+          units "KiB";
+          description
+            "The amount of memory, in kibibytes (KiB), currently in
+             use.";
+        }
+        leaf free-memory {
+          type uint64;
+          units "KiB";
+          description
+            "Total free memory in kibibytes (KiB).";
+        }
+        leaf buffer-memory {
+          type uint64;
+          units "KiB";
+          description
+            "Total buffer memory in kibibytes (KiB).";
+        }
+        leaf total-swap-memory {
+          type uint64;
+          units "KiB";
+          description
+            "Total Swap memory in kibibytes (KiB).";
+        }
+        leaf used-swap {
+          type uint64;
+          units "KiB";
+          description
+            "Used Swap Memory in kibibytes (KiB).";
+        }
+        leaf free-swap {
+          type uint64;
+          units "KiB";
+          description
+            "Total free swap memory in kibibytes (KiB).";
+        }
+        leaf available-mem {
+          type uint64;
+          units "KiB";
+          description
+            "Total available memory in kibibytes (KiB).";
+        }
+      }
+    }
+  }
+}

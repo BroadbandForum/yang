@@ -1,25 +1,20 @@
 module bbf-qos-classifiers {
   yang-version 1.1;
   namespace "urn:bbf:yang:bbf-qos-classifiers";
-
   prefix bbf-qos-cls;
 
   import ietf-inet-types {
     prefix inet;
   }
-
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import bbf-dot1q-types {
     prefix bbf-dot1qt;
   }
-
   import bbf-frame-classification {
     prefix bbf-classif;
   }
-
   import bbf-qos-types {
     prefix bbf-qos-t;
   }
@@ -27,34 +22,33 @@ module bbf-qos-classifiers {
   organization
     "Broadband Forum <https://www.broadband-forum.org>
      Common YANG Work Area";
-
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
-
   description
-    "This module contains a collection of YANG definitions for 
+    "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the management of
-     Quality of Service (QoS) as applicable to access network 
-     equipment. As such, this module is specific to access network 
+     Quality of Service (QoS) as applicable to access network
+     equipment. As such, this module is specific to access network
      equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module contains a collection of classifiers 
-     used by policies applied to packets.
+     Specifically, this module contains a collection of classifiers
+     that can be used to classify frames and assign actions to be
+     applied to those frames.
 
-     Copyright (c) 2017-2018, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -94,12 +88,22 @@ module bbf-qos-classifiers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -118,20 +122,32 @@ module bbf-qos-classifiers {
                         TR-383.pdf>";
   }
 
+  feature qos-action-permit {
+    description
+      "This feature indicates whether the system supports the action
+       'permit' for packets that are classified using a QoS
+       classification mechanism.";
+  }
+
+  feature qos-configurable-defaults {
+    description
+      "This feature indicates whether the configuration of QoS default
+       behaviors is supported.";
+  }
+
   typedef qos-pbit-marking-index {
     type uint8;
     description
-      "An index in a Priority Code Point bits (PBIT) marking list, 
+      "An index in a Priority Code Point bits (p-bits) marking list,
        generated via a QoS profile.";
   }
 
   typedef qos-dei-marking-index {
     type uint8;
     description
-      "An index in a Drop Eligibility Inidicator (DEI) marking list 
+      "An index in a Drop Eligibility Inidicator (DEI) marking list
        generated via a QoS profile.";
   }
-
 
   identity classifier-entry-filter-operation-type {
     description
@@ -158,31 +174,40 @@ module bbf-qos-classifiers {
   identity pbit-marking {
     base action-type;
     description
-      "The action-type identity indicating the system shall generate 
-       one or more values for the priority bit (PBIT) bits.";
+      "The action-type identity indicating the system shall generate
+       one or more values for the priority bits (p-bits).";
   }
 
   identity dei-marking {
     base action-type;
     description
-      "The action-type identity indicating the system shall generate 
-       one or more values for the Drop Eligibility Inidicator (DEI) 
+      "The action-type identity indicating the system shall generate
+       one or more values for the Drop Eligibility Inidicator (DEI)
        bit.";
   }
 
   identity scheduling-traffic-class {
     base action-type;
     description
-      "The action-type identity indicating a scheduling traffic 
+      "The action-type identity indicating a scheduling traffic
        class.";
   }
 
   identity dscp-marking {
     base action-type;
     description
-      "The action-type identity indicating the system shall generate 
-       a value for the Differentiated Services Code Point (DSCP) 
+      "The action-type identity indicating the system shall generate
+       a value for the Differentiated Services Code Point (DSCP)
        bits.";
+  }
+
+  identity permit {
+    base action-type;
+    description
+      "The action-type identity indicating the permit action. I.e.
+       packets to which this action is assigned are permitted and will
+       be subject to thenext step of packet processing where further
+       actions can be assigned.";
   }
 
   identity action-scope {
@@ -199,9 +224,9 @@ module bbf-qos-classifiers {
   identity ethernet-interface {
     base action-scope;
     description
-      "The scope of the action is the Ethernet like interface.
-       This encompasses all VLAN sub-interfaces within the
-       Ethernet like interface in scope.";
+      "The scope of the action is the Ethernet like interface. This
+       encompasses all VLAN sub-interfaces within the Ethernet like
+       interface in scope.";
   }
 
   typedef action-scope {
@@ -212,69 +237,84 @@ module bbf-qos-classifiers {
       "The scope of the action.";
   }
 
+  typedef qos-color {
+    type enumeration {
+      enum green {
+        description
+          "Identifies the green color packet.";
+      }
+      enum yellow {
+        description
+          "Identifies the yellow color packet.";
+      }
+      enum red {
+        description
+          "Identifies the red color packet.";
+      }
+    }
+    description
+      "Defines the packet color that match.";
+  }
+
   grouping pbit-marking {
+    description
+      "Nodes used to define a list of p-bits metadata.";
     list pbit-marking-list {
       key "index";
       description
-        "The list defines a set of values for the PBIT bits.
-
-         Each pbit-value from this list is a value provided to the 
-         ingress / egress packet editing process that can reference 
-         an entry in this list for writing PBIT bits to a VLAN tag.
-         Having a list of values allows different PBIT bits to be
-         written to different VLAN tags.";
-
+        "Creates metadata which can be used to determine p-bits values
+         to write to a VLAN tag or as match criteria for another
+         classifier associated with another QoS policy with which the
+         frame is to be processed. Each entry uses a unique numeric
+         index associated with a p-bits value.";
       leaf index {
         type qos-pbit-marking-index;
         description
-          "The index within the list.";
+          "The index associated with a p-bits value.";
       }
-
       leaf pbit-value {
         type bbf-dot1qt:pbit;
         description
-          "A pbit-value to be inserted in the PBIT bits of a tag of a 
-           packet.";
+          "A p-bits value to be inserted in the p-bits of a frame's
+           VLAN tag or as match criteria for another classifier
+           associated with another QoS policy with which the frame is
+           to be processed.";
       }
     }
-    description
-      "PBIT marking grouping.";
   }
 
   grouping dei-marking {
+    description
+      "Nodes used to define a list of DEI metadata.";
     list dei-marking-list {
       key "index";
       description
-        "The list defines a set of values for DEI bits.
-
-         Each dei-value from this list is a value provided to the 
-         ingress / egress packet editing process that can reference 
-         an entry in this list for writing a DEI bit to a VLAN tag.
-         Having a list of values allows a different DEI bit to be
-         written to different VLAN tags.";
-
+        "Creates metadata which can be used to determine DEI values to
+         write to a VLAN tag or as match criteria for another
+         classifier associated with another QoS policy with which the
+         frame is to be processed. Each entry uses a unique numeric
+         index associated with a DEI value.";
       leaf index {
         type qos-dei-marking-index;
         description
-          "The index within the list.";
+          "The index associated with a DEI value.";
       }
-
       leaf dei-value {
         type bbf-dot1qt:dei;
         description
-          "A dei-value to be inserted in the DEI bit of a tag of a 
-           packet.";
+          "A DEI value to be inserted in the DEI bit of a packet's
+           VLAN tag or as match criteria for another classifier
+           associated with another QoS policy with which the frame is
+           to be processed.";
       }
     }
-    description
-      "DEI marking grouping.";
   }
 
   grouping dscp-marking {
     leaf dscp {
       type inet:dscp;
       description
-        "The value to be inserted in the DSCP field in the header of 
+        "The value to be inserted in the DSCP field in the header of
          an IP packet.";
     }
     description
@@ -284,30 +324,175 @@ module bbf-qos-classifiers {
   grouping classifier-entry-inline-attr {
     description
       "Classifier inline attributes.";
-
     container match-criteria {
+      status deprecated;
       description
-        "Match criteria to be applied to a packet.";
+        "Filter operations are performed on all match criteria with
+         each having a default configuration.
 
-      uses bbf-classif:multiple-vlan-tag-match;
+         The 'match-all-filter' operation will logically AND each of
+         the criteria. For example, configuring 'match-all' and
+         dscp-range to 'any' will match on tagged and untagged packets
+         that contain a DSCP field and contain any protocol as the
+         default configuration for the protocol is 'any-protocol'.
 
-      uses bbf-classif:dscp-match;
+         The 'match-any-filter' operation will logically OR each of
+         the configured criteria. For example, configuring 'untagged'
+         and dscp-range to '10-20' will match on all untagged packets
+         as well as any packet containing a DSCP value of 10 to 20 as
+         well as packets containing any protocol as the default
+         configuration for the protocol is 'any-protocol'.";
+      choice vlan-tag-match-type {
+        status deprecated;
+        description
+          "Provides a choice of how the frames may be matched.
 
-      uses bbf-classif:protocol-match;
+           If no case is configured, then it has the same meaning as
+           if case 'match-all' has been configured.";
+        case match-all {
+          status deprecated;
+          leaf match-all {
+            type empty;
+            status deprecated;
+            description
+              "Matches all traffic, i.e; irrespective of the frame
+               being tagged or untagged.";
+          }
+        }
+        case untagged {
+          status deprecated;
+          leaf untagged {
+            type empty;
+            status deprecated;
+            description
+              "Untagged match. Matches all untagged traffic.";
+          }
+        }
+        case vlan-tagged {
+          status deprecated;
+          list tag {
+            key "index";
+            min-elements 1;
+            max-elements 2;
+            status deprecated;
+            description
+              "The tags to match, with the outermost tag to match
+               assigned index 0.";
+            leaf index {
+              type bbf-classif:tag-index;
+              must 'count(../../tag[index = 0]) > 0' {
+                error-message
+                  "An inner tag can only be matched on when also "
+                + "matching on an outer tag.";
+                description
+                  "Only allow matching on an inner tag, if also
+                   matching on the outer tags at the same time.";
+              }
+              status deprecated;
+              description
+                "The index into the tag stack, outermost tag first.";
+            }
+            leaf in-pbit-list {
+              type bbf-dot1qt:pbit-list;
+              status deprecated;
+              description
+                "Filter containing p-bits value(s) to be matched with
+                 the value of the corresponding packet field. The list
+                 of values form an OR condition: in case the value of
+                 the packet field matches with one of the values of
+                 the leaf then there is a match. In case the leaf
+                 specifies a set of values and none of them appear in
+                 the packet, then there is no match. In case the leaf
+                 specifies a value for a packet field that is not
+                 present, then no packets match the filter. For
+                 example, an untagged packet does not contain p-bits,
+                 hence this packet will not match a specified p-bits
+                 value. In case the leaf is an empty list, or unknown,
+                 then no match is required and all packets classify
+                 the filter, including untagged packets.
+
+                 An Ethernet frame can contain multiple VLAN tags or
+                 no VLAN tag. The vlan-tag-match-type/vlan-tagged/tag
+                 is a list and the element with index 0 is used to
+                 match with the p-bits of outermost VLAN tag of the
+                 packet, the element with index 1 is used to match
+                 with the p-bits of the second VLAN tag of the
+                 frame.";
+            }
+            leaf in-dei {
+              type uint8 {
+                range "0..1";
+              }
+              status deprecated;
+              description
+                "Filter containing DEI bit value(s) to be matched with
+                 the values of the corresponding packet fields. In
+                 case the leaf specifies a value for a packet field
+                 that is not present, then no packets match the
+                 filter. For example, an untagged packet does not
+                 contain a DEI bit, hence this packet will not match a
+                 specified DEI bit value. In case the leaf is unknown,
+                 no match is required and all packets classify the
+                 filter, including untagged packets.
+
+                 An Ethernet frame can contain multiple VLAN tags or
+                 no VLAN tag. The vlan-tag-match-type/vlan-tagged/tag
+                 is a list and the element with index 0 is used to
+                 match with the DEI bit of the outermost VLAN tag of
+                 the packet, the element with index 1 is used to match
+                 with the DEI bit of the second VLAN tag of the
+                 packet.";
+            }
+          }
+        }
+      }
+      leaf dscp-range {
+        type bbf-classif:dscp-range-or-any;
+        default "any";
+        status deprecated;
+        description
+          "String identifying the DSCP values and/or range.";
+      }
+      choice protocols {
+        status deprecated;
+        description
+          "The choice allows to specify combintations of packet field
+           values that identify a particular protocol or allows to
+           indicate any protocol.
+
+           If no case is configured, then it has the same meaning as
+           if case 'any-protocol' has been configured.";
+        case any-protocol {
+          status deprecated;
+          leaf any-protocol {
+            type empty;
+            status deprecated;
+            description
+              "Identifies any protocol, i.e. not match is specified
+               for any protocol.";
+          }
+        }
+        case protocol {
+          status deprecated;
+          leaf-list protocol {
+            type bbf-classif:protocols;
+            status deprecated;
+            description
+              "Defines the protocols which will be matched.";
+          }
+        }
+      }
     }
   }
 
   grouping classifier-action-entry-cfg {
     description
       "List of actions to be applied to a classified set of packets.";
-
     list classifier-action-entry-cfg {
       key "action-type";
       ordered-by user;
-
       description
         "Configuration of classifier associated actions.";
-
       leaf action-type {
         type identityref {
           base action-type;
@@ -315,42 +500,38 @@ module bbf-qos-classifiers {
         description
           "This defines the action type.";
       }
-
       choice action-cfg-params {
         description
           "Choice of action types.";
-
         case pbit-marking {
           container pbit-marking-cfg {
             when "../action-type='bbf-qos-cls:pbit-marking'" {
               description
-                "Only applicable when the action-type is 
-                 pbit-marking.";
+                "Only applicable when the action-type is
+                 'pbit-marking'.";
             }
-            uses pbit-marking;
             description
-              "PBIT bits marking configuration container.";
+              "P-bits marking configuration container.";
+            uses pbit-marking;
           }
         }
-
         case dei-marking {
           container dei-marking-cfg {
             when "../action-type='bbf-qos-cls:dei-marking'" {
               description
-                "Only applicable when the action-type is 
+                "Only applicable when the action-type is
                  dei-marking.";
             }
-            uses dei-marking;
             description
               "DEI marking configuration container.";
+            uses dei-marking;
           }
         }
-
         case dscp-marking {
           container dscp-marking-cfg {
             when "../action-type='bbf-qos-cls:dscp-marking'" {
               description
-                "Only applicable when the action-type is 
+                "Only applicable when the action-type is
                  dscp-marking.";
             }
             uses dscp-marking;
@@ -358,19 +539,34 @@ module bbf-qos-classifiers {
               "DSCP marking configuration container.";
           }
         }
-
         case scheduling-traffic-class {
           leaf scheduling-traffic-class {
-            when
-              "../action-type=
-               'bbf-qos-cls:scheduling-traffic-class'" {
+            when "../action-type=
+                  'bbf-qos-cls:scheduling-traffic-class'" {
               description
-                "Only applicable when the action-type is 
+                "Only applicable when the action-type is
                  scheduling-traffic-class.";
             }
             type bbf-qos-t:traffic-class-id;
             description
               "Define the traffic class for scheduling.";
+          }
+        }
+        case permit {
+          if-feature "bbf-qos-cls:qos-action-permit";
+          description
+            "The action type for packets matching a classification
+             criterium is that they are permitted and will be subject
+             to further processing.";
+          leaf permit {
+            when '../bbf-qos-cls:action-type="bbf-qos-cls:permit"' {
+              description
+                "Only applicable when the action-type is 'permit'.";
+            }
+            type empty;
+            description
+              "The action type for packets matching a classification
+               criterium is 'permit'.";
           }
         }
       }
@@ -379,43 +575,217 @@ module bbf-qos-classifiers {
 
   container classifiers {
     description
-      "List of classifier entries.";
+      "Provides data nodes that allow to manage methods to classify
+       frames and assign actions in the context of QoS.";
+    container system-default-actions {
+      config false;
+      description
+        "Reports the set of system defaults that apply when the
+         application of QoS policies does not generate such data, but
+         the processing of a packet requires this data.
 
+         When a packet is received or to be transmitted on an
+         interface, then it can be subject to QoS policies that are
+         configured for this interface. The definition of QoS policies
+         includes the assignment of 'meta-data' to packets which can
+         then be used during the further processing of the packet.
+
+         An example is the assignment of a traffic class. This traffic
+         class is used, after the forwarding decision has been made
+         and all QOS polices are applied, to identify the queue on the
+         outgoing interface. If a traffic class is not explictly
+         configured, a default must be used for each matched ingress
+         packet. This value is reported in 'scheduling-traffic-class'.
+
+         And similar for the other data nodes.";
+      leaf scheduling-traffic-class {
+        type union {
+          type bbf-qos-t:traffic-class-id;
+          type enumeration {
+            enum discard {
+              description
+                "The traffic class 'discard' means that packets will
+                 not get a traffic class by default. When the
+                 processing of the packet comes to a moment that a
+                 traffic class is needed, and none is assigned through
+                 having applied the QoS profiles, then the system
+                 shall discard the packet.";
+            }
+          }
+        }
+        description
+          "Defines the traffic class assigned by default to packets.";
+      }
+      leaf flow-color {
+        type union {
+          type bbf-qos-cls:qos-color;
+          type enumeration {
+            enum discard {
+              description
+                "The flow color 'discard' means that packets will not
+                 get a flow color by default. When the processing of
+                 the packet comes to a moment that a flow color is
+                 needed, and none is assigned through having applied
+                 the QoS profiles, then the system shall discard the
+                 packet.";
+            }
+          }
+        }
+        description
+          "Defines the packet's flow color for when color-aware
+           classification and/or actions are needed in the processing
+           of a packet.";
+      }
+      leaf bac-color {
+        type union {
+          type bbf-qos-cls:qos-color;
+          type enumeration {
+            enum discard {
+              description
+                "The BAC color 'discard' means that packets will not
+                 get a BAC color by default. When the processing of
+                 the packet comes to a moment that a BAC color is
+                 needed, and none is assigned through having applied
+                 the QoS profiles, then the system shall discard the
+                 packet.";
+            }
+          }
+        }
+        description
+          "Defines the packet's BAC color for when color-aware
+           classification and/or actions are needed in the processing
+           of a packet. More specific, when the packet is to be queued
+           using a color aware BAC method.";
+      }
+    }
+    container configurable-default-actions {
+      if-feature "qos-configurable-defaults";
+      description
+        "Defines data nodes that allow to configure the default
+         behavior for when the processing of a packet requires data,
+         and the former applying of QoS policies did not generate such
+         data. The configured defaults overrule the system defaults
+         provide in the container 'system-default-actions'.
+
+         More in detail, when a packet is received or to be
+         transmitted on an interface, then it can be subject to QoS
+         policies that are configured for this interface. The
+         definition of QoS policies includes the assignment of
+         'meta-data' to packets which can then be used during the
+         further processing of the packet.
+
+         An example is the assignment of a traffic class. This traffic
+         class is used, after the forwarding decision has been made
+         and all QOS polices are applied, to identify the queue on the
+         outgoing interface. If a traffic class is not explictly
+         configured, a default must be used for each matched ingress
+         packet. This value is configured in
+         'scheduling-traffic-class'.
+
+         And similar for the other data nodes.";
+      leaf scheduling-traffic-class {
+        type union {
+          type bbf-qos-t:traffic-class-id;
+          type enumeration {
+            enum discard {
+              description
+                "The traffic class 'discard' means that packets will
+                 not get a traffic class by default. When the
+                 processing of the packet comes to a moment that a
+                 traffic class is needed, and none is assigned through
+                 having applied the QoS profiles, then the system
+                 shall discard the packet.";
+            }
+          }
+        }
+        description
+          "Defines the traffic class assigned by default to packets.";
+      }
+      leaf flow-color {
+        type union {
+          type qos-color;
+          type enumeration {
+            enum discard {
+              description
+                "The flow color 'discard' means that packets will not
+                 get a flow color by default. When the processing of
+                 the packet comes to a moment that a flow color is
+                 needed, and none is assigned through having applied
+                 the QoS profiles, then the system shall discard the
+                 packet.";
+            }
+          }
+        }
+        description
+          "Defines the packet's flow color for when color-aware
+           classification and/or actions are needed in the processing
+           of a packet.";
+      }
+      leaf bac-color {
+        type union {
+          type qos-color;
+          type enumeration {
+            enum discard {
+              description
+                "The BAC color 'discard' means that packets will not
+                 get a BAC color by default. When the processing of
+                 the packet comes to a moment that a BAC color is
+                 needed, and none is assigned through having applied
+                 the QoS profiles, then the system shall discard the
+                 packet.";
+            }
+          }
+        }
+        description
+          "Defines the packet's BAC color for when color-aware
+           classification and/or actions are needed in the processing
+           of a packet. More specific, when the packet is to be queued
+           using a color aware BAC method.";
+      }
+    }
     list classifier-entry {
       key "name";
       description
         "Classifier entry template.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "Classifier name.";
       }
-
       leaf description {
         type bbf-yang:string-ascii64-or-empty;
         description
           "Description of the class template.";
       }
-
       leaf filter-operation {
         type identityref {
           base classifier-entry-filter-operation-type;
         }
-
         default "bbf-qos-cls:match-any-filter";
+        status deprecated;
         description
           "Filters are applicable as any or all filters.";
       }
-
       choice filter-method {
         description
-          "Choice of filter configuration way.";
-
+          "Configuration of filter methods.";
         case inline {
+          status deprecated;
           description
             "The classifier criteria are directly configured here.";
-          uses classifier-entry-inline-attr;
+          uses classifier-entry-inline-attr {
+            status deprecated;
+          }
+        }
+        case all-packets {
+          description
+            "The classifier applies to all packets that are in the
+             scope of the flow on which the classifier applies.";
+          leaf all-packets {
+            type empty;
+            description
+              "Identifies all packets.";
+          }
         }
       }
       uses classifier-action-entry-cfg;
@@ -425,65 +795,65 @@ module bbf-qos-classifiers {
   grouping classifier-entry-ref {
     description
       "A reference to a classifier entry.";
-
     leaf name {
       type leafref {
-        path '/bbf-qos-cls:classifiers/bbf-qos-cls:classifier-'
-           + 'entry/bbf-qos-cls:name';
+        path "/bbf-qos-cls:classifiers/bbf-qos-cls:classifier-"
+           + "entry/bbf-qos-cls:name";
       }
       description
         "The name of the referenced classifier entry.";
     }
   }
 
-  augment '/classifiers/classifier-entry/filter-method/inline/'
-        + 'match-criteria/vlan-tag-match-type/vlan-tagged/tag' {
+  grouping in-pbit-list {
     description
-      "Allows to classify packets based on their containing PBIT bits 
-       / DEI bit values.";
-
+      "Ingress Priority Bits (p-bits) configuration.";
     leaf in-pbit-list {
       type bbf-dot1qt:pbit-list;
       description
-        "Filter containing PBIT bits value(s) to be matched with the 
+        "Filter containing p-bits value(s) to be matched with the
          value of the corresponding packet field. The list of values
          form an OR condition: in case the value of the packet field
-         matches with one of the values of the leaf then there is a 
-         match. In case the leaf specifies a set of values and none
-         of them appear in the packet, then there is no match. In case
-         the leaf specifies a value for a packet field that is not 
-         present, then no packets match the filter. E.g. an untagged 
-         packet does not contain PBIT bits, hence this packet will not
-         match a specified PBIT bits value. In case the leaf is an 
-         empty list, or unknown, then no match is required and all 
-         packets classify the filter, including untagged packets.
+         matches with one of the values of the leaf then there is a
+         match. In case the leaf specifies a set of values and none of
+         them appear in the packet, then there is no match. In case
+         the leaf specifies a value for a packet field that is not
+         present, then no packets match the filter. E.g. an untagged
+         packet does not contain p-bits, hence this packet will not
+         match a specified p-bits value. In case the leaf is an empty
+         list, or unknown, then no match is required and all packets
+         classify the filter, including untagged packets.
 
-         An Ethernet frame can contain multiple VLAN tags or no VLAN 
-         tag. The vlan-tag-match-type/vlan-tagged/tag is a list and 
-         the element with index 0 is used to match with the PBIT bits 
-         of outermost VLAN tag of the packet, the element with index 
-         1 is used to match with the PBIT bits of the second VLAN tag 
-         of the packet.";
+         An Ethernet frame can contain multiple VLAN tags or no VLAN
+         tag. The vlan-tag-match-type/vlan-tagged/tag is a list and
+         the element with index 0 is used to match with the p-bits of
+         outermost VLAN tag of the packet, the element with index 1 is
+         used to match with the p-bits of the second VLAN tag of the
+         frame.";
     }
+  }
 
+  grouping in-dei {
+    description
+      "Ingress Drop Eligible Indicator (DEI) configuration.";
     leaf in-dei {
       type uint8 {
         range "0..1";
       }
       description
-        "Filter containing DEI bit value(s) to be matched with the 
-         values of the corresponding packet fields. In case the leaf 
-         specifies a value for a packet field that is not present, 
-         then no packets match the filter. E.g. an untagged packet 
-         does not contain a DEI bit, hence this packet will not match 
-         a specified DEI bit value. In case the leaf is unknown, 
-         no match is required and all packets classify the filter,
+        "Filter containing DEI bit value(s) to be matched with the
+         values of the corresponding packet fields. In case the leaf
+         specifies a value for a packet field that is not present,
+         then no packets match the filter. E.g. an untagged packet
+         does not contain a DEI bit, hence this packet will not match
+         a specified DEI bit value. In case the leaf is unknown, no
+         match is required and all packets classify the filter,
          including untagged packets.
 
-         An Ethernet frame can contain multiple VLAN tags or no VLAN 
-         tag. The vlan-tag-match-type/vlan-tagged/tag is a list and 
+         An Ethernet frame can contain multiple VLAN tags or no VLAN
+         tag. The vlan-tag-match-type/vlan-tagged/tag is a list and
          the element with index 0 is used to match with the DEI bit of
-         the outermost VLAN tag of the packet, the element with index 
+         the outermost VLAN tag of the packet, the element with index
          1 is used to match with the DEI bit of the second VLAN tag of
          the packet.";
     }

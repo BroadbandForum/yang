@@ -7,6 +7,34 @@
       <type/>
       <enabled>true</enabled>
       <link-up-down-trap-enable/>
+      <admin-status/>
+      <oper-status/>
+      <last-change/>
+      <if-index/>
+      <phys-address/>
+      <higher-layer-if>
+        <!-- # entries: 0.. -->
+      </higher-layer-if>
+      <lower-layer-if>
+        <!-- # entries: 0.. -->
+      </lower-layer-if>
+      <speed/>
+      <statistics>
+        <discontinuity-time/>
+        <in-octets/>
+        <in-unicast-pkts/>
+        <in-broadcast-pkts/>
+        <in-multicast-pkts/>
+        <in-discards/>
+        <in-errors/>
+        <in-unknown-protos/>
+        <out-octets/>
+        <out-unicast-pkts/>
+        <out-broadcast-pkts/>
+        <out-multicast-pkts/>
+        <out-discards/>
+        <out-errors/>
+      </statistics>
       <line xmlns="urn:bbf:yang:bbf-fastdsl">
         <supported-mode>
           <!-- # entries: 0.. -->
@@ -14,6 +42,9 @@
         <configured-mode>
           <!-- # entries: 0.. -->
         </configured-mode>
+        <ghs xmlns="urn:bbf:yang:bbf-ghs">
+          <handshake-profile/>
+        </ghs>
         <line xmlns="urn:bbf:yang:bbf-vdsl">
           <test-mode>
             <power-management-state-forced>4</power-management-state-forced>
@@ -88,10 +119,19 @@
             <link-state-forced>no-link-state</link-state-forced>
           </link-state>
         </line>
-        <ghs xmlns="urn:bbf:yang:bbf-ghs">
-          <handshake-profile/>
-        </ghs>
       </line>
+      <bonding-group xmlns="urn:bbf:yang:bbf-gbond">
+        <profile/>
+        <threshold-template/>
+        <bonded-interface-mode/>
+        <lower-layer-if>
+          <!-- # entries: 1.. -->
+        </lower-layer-if>
+        <primary-interface/>
+      </bonding-group>
+      <performance xmlns="urn:bbf:yang:bbf-interfaces-performance-management">
+        <enable>false</enable>
+      </performance>
       <selt xmlns="urn:bbf:yang:bbf-selt">
         <pmd-profile/>
         <processing-profile/>
@@ -161,6 +201,25 @@
       </statistics>
       <line xmlns="urn:bbf:yang:bbf-fastdsl">
         <operational-mode/>
+        <bonded-channel-entity xmlns="urn:bbf:yang:bbf-gbond-state">
+          <status>
+            <group-id/>
+          </status>
+          <capabilities>
+            <bce-c>
+              <bonding-scheme-supported/>
+              <g9982>
+                <bacp-supported/>
+              </g9982>
+            </bce-c>
+            <bce-r>
+              <bonding-scheme-supported/>
+              <g9982>
+                <bacp-supported/>
+              </g9982>
+            </bce-r>
+          </capabilities>
+        </bonded-channel-entity>
         <line xmlns="urn:bbf:yang:bbf-vdsl">
           <channel>
             <status>
@@ -1294,6 +1353,7 @@
                 <loss-of-margin/>
                 <loss-of-power/>
               </failures>
+              <minimum-mds-supported/>
             </ftu-r>
             <downstream>
               <initialization-last-transmitted-signal/>
@@ -1433,6 +1493,142 @@
           </issues>
         </availability>
       </line>
+      <performance xmlns="urn:bbf:yang:bbf-interfaces-performance-management">
+        <intervals-15min>
+          <current>
+            <in-octets/>
+            <in-unicast-pkts/>
+            <in-broadcast-pkts/>
+            <in-multicast-pkts/>
+            <in-discards/>
+            <in-errors/>
+            <in-unknown-protos/>
+            <out-octets/>
+            <out-unicast-pkts/>
+            <out-broadcast-pkts/>
+            <out-multicast-pkts/>
+            <out-discards/>
+            <out-errors/>
+            <bonding-group xmlns="urn:bbf:yang:bbf-gbond-state">
+              <gbs-c>
+                <errored-seconds/>
+                <severely-errored-seconds/>
+                <unavailable-seconds/>
+              </gbs-c>
+            </bonding-group>
+          </current>
+          <number-of-intervals/>
+          <non-valid-intervals/>
+          <history>
+            <interval-number/>
+            <measured-time/>
+            <invalid-data-flag/>
+            <time-stamp/>
+            <in-octets/>
+            <in-unicast-pkts/>
+            <in-broadcast-pkts/>
+            <in-multicast-pkts/>
+            <in-discards/>
+            <in-errors/>
+            <in-unknown-protos/>
+            <out-octets/>
+            <out-unicast-pkts/>
+            <out-broadcast-pkts/>
+            <out-multicast-pkts/>
+            <out-discards/>
+            <out-errors/>
+            <bonding-group xmlns="urn:bbf:yang:bbf-gbond-state">
+              <gbs-c>
+                <errored-seconds/>
+                <severely-errored-seconds/>
+                <unavailable-seconds/>
+              </gbs-c>
+            </bonding-group>
+          </history>
+        </intervals-15min>
+        <intervals-24hr>
+          <current>
+            <in-octets/>
+            <in-unicast-pkts/>
+            <in-broadcast-pkts/>
+            <in-multicast-pkts/>
+            <in-discards/>
+            <in-errors/>
+            <in-unknown-protos/>
+            <out-octets/>
+            <out-unicast-pkts/>
+            <out-broadcast-pkts/>
+            <out-multicast-pkts/>
+            <out-discards/>
+            <out-errors/>
+            <bonding-group xmlns="urn:bbf:yang:bbf-gbond-state">
+              <gbs-c>
+                <errored-seconds/>
+                <severely-errored-seconds/>
+                <unavailable-seconds/>
+              </gbs-c>
+            </bonding-group>
+          </current>
+          <number-of-intervals/>
+          <non-valid-intervals/>
+          <history>
+            <interval-number/>
+            <measured-time/>
+            <invalid-data-flag/>
+            <time-stamp/>
+            <in-octets/>
+            <in-unicast-pkts/>
+            <in-broadcast-pkts/>
+            <in-multicast-pkts/>
+            <in-discards/>
+            <in-errors/>
+            <in-unknown-protos/>
+            <out-octets/>
+            <out-unicast-pkts/>
+            <out-broadcast-pkts/>
+            <out-multicast-pkts/>
+            <out-discards/>
+            <out-errors/>
+            <bonding-group xmlns="urn:bbf:yang:bbf-gbond-state">
+              <gbs-c>
+                <errored-seconds/>
+                <severely-errored-seconds/>
+                <unavailable-seconds/>
+              </gbs-c>
+            </bonding-group>
+          </history>
+        </intervals-24hr>
+      </performance>
+      <bonding-group xmlns="urn:bbf:yang:bbf-gbond-state">
+        <status>
+          <upstream-data-rate/>
+          <downstream-data-rate/>
+          <number-of-channels/>
+          <fault-status/>
+          <g9982>
+            <operational-control-protocol/>
+          </g9982>
+        </status>
+        <capabilities>
+          <gbs-c>
+            <capacity/>
+          </gbs-c>
+        </capabilities>
+        <statistics>
+          <g9982>
+            <gbs-c>
+              <in-errors/>
+              <in-small-fragments/>
+              <in-large-fragments/>
+              <in-bad-fragments/>
+              <in-lost-fragments/>
+              <in-lost-starts/>
+              <in-lost-ends/>
+              <in-overflows/>
+            </gbs-c>
+          </g9982>
+        </statistics>
+      </bonding-group>
       <selt xmlns="urn:bbf:yang:bbf-selt">
         <pmd-status>
           <selt-status-c/>
@@ -1499,6 +1695,12 @@
           <foreign-voltage-input-impedance/>
           <loop-complex-admittance-measurement-voltage/>
           <unreliability-indicator/>
+          <melt-pmd-reporting-vendor-specific-status>
+            <status>
+              <parameter/>
+              <message/>
+            </status>
+          </melt-pmd-reporting-vendor-specific-status>
         </pmd-reporting-parameters>
         <pmd-measurement-parameters>
           <four-element-dc-resistance-tr/>
@@ -1547,6 +1749,12 @@
           <three-element-complex-admittance-measurement-voltage-rg/>
           <loop-complex-admittance-measurement-voltage-tr/>
           <unreliability-indicator/>
+          <melt-pmd-measurement-vendor-specific-status>
+            <status>
+              <parameter/>
+              <message/>
+            </status>
+          </melt-pmd-measurement-vendor-specific-status>
         </pmd-measurement-parameters>
         <processing-derived-parameters>
           <open-wire-failure-type/>
@@ -1559,6 +1767,12 @@
           <far-end-signature-topology-type-identification/>
           <cpe-identification-capacitive/>
           <unreliability-indicator/>
+          <melt-processing-derived-vendor-specific-status>
+            <status>
+              <parameter/>
+              <message/>
+            </status>
+          </melt-processing-derived-vendor-specific-status>
         </processing-derived-parameters>
       </melt>
     </interface>
@@ -1586,6 +1800,10 @@
         <minimum-expected-throughput>0</minimum-expected-throughput>
         <maximum-gamma-data-rate>4294967295</maximum-gamma-data-rate>
         <minimum-gamma-data-rate>0</minimum-gamma-data-rate>
+        <preferred-ndr>
+          <preferred-net-data-rate>0</preferred-net-data-rate>
+          <preferred-net-data-rate-type>high</preferred-net-data-rate-type>
+        </preferred-ndr>
         <dynamic-time-assignment>
           <minimum-expected-throughput>0</minimum-expected-throughput>
           <maximum-net-data-rate>4294967295</maximum-net-data-rate>
@@ -1598,6 +1816,10 @@
         <minimum-expected-throughput>0</minimum-expected-throughput>
         <maximum-gamma-data-rate>4294967295</maximum-gamma-data-rate>
         <minimum-gamma-data-rate>0</minimum-gamma-data-rate>
+        <preferred-ndr>
+          <preferred-net-data-rate>0</preferred-net-data-rate>
+          <preferred-net-data-rate-type>high</preferred-net-data-rate-type>
+        </preferred-ndr>
         <dynamic-time-assignment>
           <minimum-expected-throughput>0</minimum-expected-throughput>
           <maximum-net-data-rate>4294967295</maximum-net-data-rate>
@@ -1647,6 +1869,10 @@
             <start-index/>
             <stop-index/>
           </carmask>
+          <rmccarmask>
+            <start-index/>
+            <stop-index/>
+          </rmccarmask>
           <mibpsdmask>
             <sub-carrier-index/>
             <psd-level/>
@@ -1659,6 +1885,10 @@
             <start-index/>
             <stop-index/>
           </carmask>
+          <rmccarmask>
+            <start-index/>
+            <stop-index/>
+          </rmccarmask>
           <mibpsdmask>
             <sub-carrier-index/>
             <psd-level/>
@@ -1749,10 +1979,12 @@
         <name/>
         <downstream>
           <fext-to-cancel-enable>true</fext-to-cancel-enable>
+          <tgvn-allowed>false</tgvn-allowed>
           <xlog-group-size-req>1</xlog-group-size-req>
         </downstream>
         <upstream>
           <fext-to-cancel-enable>true</fext-to-cancel-enable>
+          <tgvn-allowed>false</tgvn-allowed>
         </upstream>
         <annex-x-mode>forbidden</annex-x-mode>
         <annex-d-mode>forbidden</annex-d-mode>
@@ -2338,4 +2570,32 @@
       <dying-gasp-udp-port/>
     </near-end-system>
   </rpf>
+  <gbond xmlns="urn:bbf:yang:bbf-gbond">
+    <profiles>
+      <bonding-group>
+        <profile>
+          <name/>
+          <target-upstream-data-rate>4294967295</target-upstream-data-rate>
+          <target-downstream-data-rate>4294967295</target-downstream-data-rate>
+          <low-upstream-data-rate-threshold>0</low-upstream-data-rate-threshold>
+          <low-downstream-data-rate-threshold>0</low-downstream-data-rate-threshold>
+        </profile>
+      </bonding-group>
+    </profiles>
+    <thresholds>
+      <bonding-group>
+        <threshold-profile>
+          <name/>
+          <errored-seconds-threshold>0</errored-seconds-threshold>
+          <severely-errored-seconds-threshold>0</severely-errored-seconds-threshold>
+          <unavailable-seconds-threshold>0</unavailable-seconds-threshold>
+        </threshold-profile>
+        <threshold-template>
+          <name/>
+          <gbs-c-15min-threshold-profile/>
+          <gbs-c-24hr-threshold-profile/>
+        </threshold-template>
+      </bonding-group>
+    </thresholds>
+  </gbond>
 </data>

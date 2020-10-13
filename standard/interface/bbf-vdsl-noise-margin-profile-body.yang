@@ -15,7 +15,7 @@ submodule bbf-vdsl-noise-margin-profile-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -27,7 +27,7 @@ submodule bbf-vdsl-noise-margin-profile-body {
      managing Broadband Forum TR-252i3 clause 5.7 DSL Quality
      Management related profiles; SNR Margin Profile.
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Copyright (c) 2016-2020 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -67,9 +67,19 @@ submodule bbf-vdsl-noise-margin-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2019-10-21 {
     description
       "Amendment 2 Corrigendum 1.
@@ -168,10 +178,10 @@ submodule bbf-vdsl-noise-margin-profile-body {
       units "0.1 dB";
       must "../maximum-noise-margin = 'unbounded' or
             . <= ../maximum-noise-margin" {
-          description
-            "If the maximum noise margin is not unbounded, the target
-             noise margin must be less than or equal to the maximum
-             noise margin.";
+        description
+          "If the maximum noise margin is not unbounded, the target
+           noise margin must be less than or equal to the maximum
+           noise margin.";
       }
       default "60";
       description
@@ -239,8 +249,8 @@ submodule bbf-vdsl-noise-margin-profile-body {
       default "4";
       description
         "This parameter specifies the mode of operation of a
-         rate-adaptive xTU in the transmit direction. The
-         parameter is used only if the rate-adaptive
+         rate-adaptive xDSL Transceiver Unit (xTU) in the transmit
+         direction. The parameter is used only if the rate-adaptive
          functionality is supported.
          The default is enum 4, corresponding to Mode 4
          = DYNAMIC with SOS.";
@@ -258,11 +268,11 @@ submodule bbf-vdsl-noise-margin-profile-body {
             (. >= ../target-noise-margin and
             (../maximum-noise-margin = 'unbounded' or
             . <= ../maximum-noise-margin))" {
-          description
-            "If the RA-MODE is equal to 3 or 4, the upshift target
-             noise margin must be greater than or equal to the
-             target noise margin and less than or equal to the
-             maximum noise margin.";
+        description
+          "If the RA-MODE is equal to 3 or 4, the upshift target
+           noise margin must be greater than or equal to the
+           target noise margin and less than or equal to the
+           maximum noise margin.";
       }
       default "70";
       description
@@ -303,11 +313,11 @@ submodule bbf-vdsl-noise-margin-profile-body {
       must "(../ra-mode != '3' and ../ra-mode != '4') or
             (. >= ../minimum-noise-margin and
             . <= ../target-noise-margin)" {
-          description
-            "If the RA-MODE is equal to 3 or 4, the downshift target
-             noise margin must be greater than or equal to the minimum
-             noise margin and less than or equal to the target noise
-             margin.";
+        description
+          "If the RA-MODE is equal to 3 or 4, the downshift target
+           noise margin must be greater than or equal to the minimum
+           noise margin and less than or equal to the target noise
+           margin.";
       }
       default "50";
       description

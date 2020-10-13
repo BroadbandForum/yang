@@ -30,8 +30,9 @@ submodule bbf-xponvani-v-enet-body {
      WA Director: Samuel Chen, Broadcom";
   description
     "This submodule contains data related to virtual Ethernet
-     interfaces belonging to the virtual ONU at the OLT, such as
-     the 'olt-v-enet' interface.
+     interfaces belonging to the virtual Optical Network Unit (ONU) at
+     the Optical Line Termination (OLT), such as the 'olt-v-enet'
+     interface.
 
      Copyright (c) 2018-2020, Broadband Forum
 
@@ -73,9 +74,19 @@ submodule bbf-xponvani-v-enet-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385c1; see
+     This version of this YANG module is part of TR-385i2; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
   revision 2020-01-31 {
     description
       "Corrigendum 1.
@@ -107,14 +118,15 @@ submodule bbf-xponvani-v-enet-body {
          + "'bbf-xponift:v-ani')";
       mandatory true;
       description
-        "References the vANI which is the lower-layer interface
-         under the OLT-vENET.";
+        "References the virtual Access Network Interface (vANI) which
+         is the lower-layer interface under the OLT-vENET.";
     }
   }
 
   augment "/if:interfaces/if:interface/bbf-xponvani:olt-v-enet" {
     description
-      "Configuration of an xPON virtual OLT virtual ENET interface.";
+      "Configuration of an xPON virtual Optical Line Termination (OLT)
+       virtual ENET interface.";
     uses olt-v-enet-config-data;
   }
 }

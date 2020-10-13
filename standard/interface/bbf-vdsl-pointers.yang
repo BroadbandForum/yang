@@ -33,7 +33,7 @@ submodule bbf-vdsl-pointers {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -44,7 +44,7 @@ submodule bbf-vdsl-pointers {
     "This submodule contains a collection of YANG definitions for
      managing Vector of Profiles (VoP) on VDSL interfaces.
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Copyright (c) 2016-2020 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -84,9 +84,19 @@ submodule bbf-vdsl-pointers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2019-10-21 {
     description
       "Amendment 2 Corrigendum 1.
@@ -231,7 +241,7 @@ submodule bbf-vdsl-pointers {
          line.";
     }
     leaf virtual-noise-profile {
-      if-feature "virtual-noise";
+      if-feature "bbf-vdsl:virtual-noise";
       type leafref {
         path "/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:virtual-"
            + "noise-profile/bbf-vdsl:name";
@@ -242,7 +252,7 @@ submodule bbf-vdsl-pointers {
          the line.";
     }
     leaf sos-profile {
-      if-feature "sos";
+      if-feature "bbf-vdsl:sos";
       type leafref {
         path "/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:sos-profile/"
            + "bbf-vdsl:name";
@@ -253,7 +263,7 @@ submodule bbf-vdsl-pointers {
          configure the line.";
     }
     leaf impulse-noise-monitoring-profile {
-      if-feature "impulse-noise-monitoring";
+      if-feature "bbf-vdsl:impulse-noise-monitoring";
       type leafref {
         path "/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:impulse-"
            + "noise-monitoring-profile/bbf-vdsl:name";
@@ -264,7 +274,7 @@ submodule bbf-vdsl-pointers {
          configure the line.";
     }
     leaf re-initialization-policy-profile {
-      if-feature "re-initialization-policy";
+      if-feature "bbf-vdsl:re-initialization-policy";
       type leafref {
         path "/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:re-"
            + "initialization-policy-profile/bbf-vdsl:name";
@@ -275,7 +285,7 @@ submodule bbf-vdsl-pointers {
          configure the line.";
     }
     leaf vectoring-profile {
-      if-feature "vectoring";
+      if-feature "bbf-vdsl:vectoring";
       type leafref {
         path "/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:vectoring-"
            + "profile/bbf-vdsl:name";
@@ -286,7 +296,7 @@ submodule bbf-vdsl-pointers {
          line.";
     }
     leaf data-gathering-profile {
-      if-feature "data-gathering";
+      if-feature "bbf-vdsl:data-gathering";
       type leafref {
         path "/bbf-vdsl:vdsl/bbf-vdsl:quality/bbf-vdsl:data-"
            + "gathering-profile/bbf-vdsl:name";
@@ -363,12 +373,14 @@ submodule bbf-vdsl-pointers {
 
       container xtu-c {
         description
-          "xTU-Central Office threshold profile pointer.";
+          "xDSL Tranceiver Unit - Central office (xTU-C) threshold
+           profile pointer.";
         uses threshold-profile;
       }
       container xtu-r {
         description
-          "xTU-Remote Side threshold profile pointer.";
+          "xDSL Tranceiver Unit - Remote side (xTU-R) threshold
+           profile pointer.";
         uses threshold-profile;
       }
     }

@@ -20,7 +20,7 @@ submodule bbf-fast-data-rate-profile-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -71,9 +71,19 @@ submodule bbf-fast-data-rate-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2020-01-17 {
     description
       "Amendment 2 Corrigendum 2.
@@ -144,7 +154,7 @@ submodule bbf-fast-data-rate-profile-body {
       must '. < ../maximum-net-data-rate' {
         description
           "The minimum expected throughput must be less than the
-           maximum net data rate";
+           maximum net data rate.";
       }
       default "0";
       description
@@ -158,7 +168,7 @@ submodule bbf-fast-data-rate-profile-body {
       must '. >= ../minimum-gamma-data-rate' {
         description
           "The maximum gamma data rate must be greater than or equal
-           to the mimimum gamma data rate";
+           to the mimimum gamma data rate.";
       }
       default "4294967295";
       description
@@ -174,7 +184,7 @@ submodule bbf-fast-data-rate-profile-body {
       must '. <= ../maximum-gamma-data-rate' {
         description
           "The minimum gamma data rate must be less than or equal to
-           the maximum gamma data rate";
+           the maximum gamma data rate.";
       }
       default "0";
       description
@@ -186,8 +196,61 @@ submodule bbf-fast-data-rate-profile-body {
       reference
         "ITU-T G.997.2 clause 7.2.1.4 (MINGDR).";
     }
+    container preferred-ndr {
+      if-feature "preferred-ndr";
+      description
+        "Preferred Net Data Rate (NDR) configuration.";
+      leaf preferred-net-data-rate {
+        type bbf-yang:data-rate32;
+        default "0";
+        description
+          "This parameter provides the informative value of
+           the Preferred Net Data Rate (PREFNDR) relating to the
+           services enabled on a line. There is no normative expected
+           behavior related to this parameter.";
+        reference
+          "ITU-T G.997.2 clause 7.2.1.5 (PREFNDR).";
+      }
+      leaf preferred-net-data-rate-type {
+        type enumeration {
+          enum high {
+            description
+              "Net Data Rate (NDR) should be as high as reasonably
+               possible, Preferred Net Data Rate (PREFNDR) may be
+               ignored.";
+          }
+          enum vendor-discretionary {
+            description
+              "Vendor discretionary interpretation of Preferred Net
+               Data Rate (PREFNDR), the behavior relative to the
+               configured PREFNDR is not specified.";
+          }
+          enum close-to {
+            description
+              "Net Data Rate (NDR) should be close to the Preferred
+               Net Data Rate (PREFNDR).";
+          }
+          enum at-least {
+            description
+              "Net Data Rate (NDR) should be greater than or equal to
+               the Preferred Net Data Rate (PREFNDR), if feasible and
+               reasonable.";
+          }
+        }
+        default "high";
+        description
+          "This parameter describes the interpretation of the
+           Preferred Net Data Rate (PREFNDR) parameter. All lines in
+           the same vectored group should be configured with a common
+           value for PREFNDR_TYPEus and a common value for
+           PREFNDR_TYPEds. There is no normative expected behavior
+           related to this parameter.";
+        reference
+          "ITU-T G.9701 clause 7.2.1.6 (PREFNDR_TYPE).";
+      }
+    }
     container dynamic-time-assignment {
-      if-feature "dta";
+      if-feature "bbf-fast:dta";
       description
         "Configuruation of Dynamic Time Assignment (DTA).";
       leaf minimum-expected-throughput {
@@ -223,7 +286,7 @@ submodule bbf-fast-data-rate-profile-body {
       }
     }
     leaf low-andeftr-threshold {
-      if-feature "andeftr";
+      if-feature "bbf-fast:andeftr";
       type bbf-yang:data-rate32;
       default "0";
       description

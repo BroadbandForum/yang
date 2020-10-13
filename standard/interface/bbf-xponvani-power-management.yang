@@ -1,0 +1,287 @@
+module bbf-xponvani-power-management {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-xponvani-power-management";
+  prefix bbf-xponvani-pwr;
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
+  import bbf-xponvani {
+    prefix bbf-xponvani;
+  }
+  import bbf-xpon-power-management {
+    prefix bbf-xpon-pwr;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Fiber Access Networks Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     Editor:      Igor Ternovsky, Broadcom
+
+     Editor:      Robert Peschi, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Samuel Chen, Broadcom";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on management of
+     ITU-T Passive Optical Network (PON) interfaces as defined in
+     ITU-T G.984.x, G.987.x, ITU-T G.989.x and ITU-T G.9807.x. As
+     such, this module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module defines Optical Network Unit (ONU)
+     power management at the virtual Access Network Interface (vANI).
+
+     Copyright (c) 2018-2020, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385i2; see
+     the TR itself for full legal notices.";
+
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
+
+  grouping v-ani-power-management-profiles-data {
+    description
+      "All Optical Line Termination (OLT)-side configuration data for
+       Optical Network Unit (ONU) power management.";
+    list power-management-profile {
+      key "name";
+      description
+        "Optical Network Unit (ONU) power management configuration
+         parameters.";
+      reference
+        "ITU-T G.984.3 Annex E
+         ITU-T G.987.3 clause 16
+         ITU-T G.9807.1 clause C.16.1
+         ITU-T G.989.3 clause 16";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "Power management profile name.";
+      }
+      leaf ilowpower {
+        type uint32;
+        units "125 us PHY frames";
+        description
+          "Ilowpower is the maximum time the Optical Network Unit
+           (ONU) spends in its LowPower states, as a count of 125 us
+           PHY frames. Local wake-up indications (LWIs) or remote
+           events, if detected, may truncate the ONU's sojourn in this
+           state.";
+        reference
+          "ITU-T G.984.3 Annex E
+           ITU-T G.987.3 clause 16
+           ITU-T G.9807.1 clause C.16.1
+           ITU-T G.989.3 clause 16";
+      }
+      leaf iaware {
+        type uint32;
+        units "125 us PHY frames";
+        description
+          "Iaware is the minimum time the Optical Network Unit (ONU)
+           spends in its Aware state before transitioning to the
+           LowPower state, as a count of 125 us PHY frames. During the
+           Iaware interval, local or remote events may independently
+           cause the ONU to enter the ActiveHeld state rather than
+           returning to the Low Power state.";
+        reference
+          "ITU-T G.984.3 Annex E
+           ITU-T G.987.3 clause 16
+           ITU-T G.9807.1 clause C.16.1
+           ITU-T G.989.3 clause 16";
+      }
+      leaf itransinit {
+        type uint32;
+        units "125 us PHY frames";
+        default "0";
+        description
+          "Complete transceiver initialization time: The time required
+           for the Optical Network Unit (ONU) to gain full
+           functionality when leaving the Asleep state (i.e., turning
+           on both receiver and transmitter), measured in units of
+           125 us PHY frames, and known by design. The value of zero
+           indicates that the sleeping ONU can respond to a bandwidth
+           grant without delay.
+
+           itransinit value must be not less than the itransinit value
+           reported in /interface-state/interface/bbf-xponani:ani/
+           power-management/itransinit leaf of the associated ONU.";
+        reference
+          "ITU-T G.984.3 Annex E
+           ITU-T G.987.3 clause 16
+           ITU-T G.9807.1 clause C.16.1
+           ITU-T G.989.3 clause 16";
+      }
+      leaf itxinit {
+        type uint32;
+        units "125 us PHY frames";
+        default "0";
+        description
+          "Transmitter initialization time: the time required for the
+           Optical Network Unit (ONU) to gain full functionality when
+           leaving the Listen state (i.e., turning on the transmitter
+           while the receiver has remained on), measured in units of
+           125 us PHY frames. The value of zero indicates that the
+           dozing ONU can respond to a bandwidth grant without delay.
+           This leaf is ignored for G.989.x ONU.
+
+           itxinit value must be not less than the itxinit value
+           reported in /interface-state/interface/bbf-xponani:ani/
+           power-management/itxinit leaf of the associated ONU.";
+        reference
+          "ITU-T G.984.3 Annex E
+           ITU-T G.987.3 clause 16
+           ITU-T G.9807.1 clause C.16.1
+           ITU-T G.989.3 clause 16";
+      }
+      leaf irxoff {
+        type uint32;
+        units "125 us PHY frames";
+        default "0";
+        description
+          "Irxoff is the maximum time the Optical Line Termination
+           (OLT) Channel Termination (CT) can afford to wait from the
+           moment it decides to wake up an Optical Network Unit (ONU)
+           in the LowPower state until the ONU is fully operational,
+           specified as a count of 125 us PHY frames.";
+        reference
+          "ITU-T G.984.3 Annex E
+           ITU-T G.987.3 clause 16
+           ITU-T G.9807.1 clause C.16.1
+           ITU-T G.989.3 clause 16";
+      }
+    }
+  }
+
+  container xponvani-power-management-profiles {
+    if-feature "bbf-xpon-pwr:xpon-power-management";
+    uses v-ani-power-management-profiles-data;
+    description
+      "Power management profiles.";
+  }
+
+  augment "/if:interfaces/if:interface/bbf-xponvani:v-ani" {
+    if-feature "bbf-xpon-pwr:xpon-power-management";
+    description
+      "Power management configuration for Optical Network Unit (ONU)
+       for which a virtual Access Network Interface (vANI) is
+       configured.";
+    container power-management {
+      presence
+        "The presence of this container indicates that Optical Network
+         Unit (ONU) power management is enabled.";
+      description
+        "Power management configuration.";
+      leaf power-management-profile-ref {
+        type leafref {
+          path "/xponvani-power-management-profiles/"
+             + "power-management-profile/name";
+        }
+        mandatory true;
+        description
+          "Optical Network Unit (ONU) power management profile
+           reference.";
+      }
+    }
+  }
+
+  notification onu-power-state-change {
+    if-feature "bbf-xpon-pwr:xpon-power-management";
+    description
+      "A notification traceable to a virtual Access Network Interface
+       (vANI) which signifies that an Optical Network Unit (ONU) has
+       transitioned into the indicated power management state.";
+    leaf v-ani-ref {
+      type if:interface-ref;
+      mandatory true;
+      description
+        "The virtual Access Network Interface (vANI) which is the
+         reference point of the current power management state of the
+         Optical Network Unit (ONU).";
+    }
+    leaf onu-state-last-change {
+      type yang:date-and-time;
+      mandatory true;
+      description
+        "The Optical Line Termination (OLT) system date and time when
+         the Optical Network Unit (ONU) has transitioned into the
+         indicated power state.";
+    }
+    leaf previous-state {
+      type identityref {
+        base bbf-xpon-pwr:power-state-base;
+      }
+      description
+        "Previous Optical Network Unit (ONU) power management state at
+         the Optical Line Termination (OLT).";
+    }
+    leaf current-state {
+      type identityref {
+        base bbf-xpon-pwr:power-state-base;
+      }
+      description
+        "Current Optical Network Unit (ONU) power management state at
+         the Optical Line Termination (OLT).";
+    }
+  }
+}

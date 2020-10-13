@@ -12,22 +12,29 @@ module bbf-xpon-types {
      Fiber Access Networks Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
 
-     Editor:      Samuel Chen, Broadcom
+     Editor:      Igor Ternovsky, Broadcom
 
      Editor:      Robert Peschi, Nokia
 
      WA Director: Marta Seda, Calix
 
-     WA Director: Lin Wei, Huawei";
+     WA Director: Samuel Chen, Broadcom";
   description
-    "This module contains a collection of YANG definitions which
-     defines common types used in the xPON YANG models.
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on management of
+     ITU-T Passive Optical Network (PON) interfaces as defined in
+     ITU-T G.984.x, G.987.x, ITU-T G.989.x and ITU-T G.9807.x. As
+     such, this module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
 
-     Copyright (c) 2018, Broadband Forum
+     Specifically, this module defines common YANG types used in the
+     management of xPON.
+
+     Copyright (c) 2018-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -67,9 +74,19 @@ module bbf-xpon-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385; see
+     This version of this YANG module is part of TR-385i2; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
   revision 2019-02-25 {
     description
       "Initial revision.
@@ -120,14 +137,14 @@ module bbf-xpon-types {
     base location-base;
     description
       "This identity is used to denote a location physically inside
-       the OLT chassis.";
+       the Optical Line Termination (OLT) chassis.";
   }
 
   identity outside-olt {
     base location-base;
     description
       "This identity is used to denote a location physically outside
-       the OLT chassis.";
+       the Optical Line Termination (OLT) chassis.";
   }
 
   identity channel-pair-type-base {
@@ -139,36 +156,46 @@ module bbf-xpon-types {
   identity ngpon2-twdm {
     base channel-pair-type-base;
     description
-      "This identity is used to denote a TWDM NG-PON2 channel-pair,
-       per ITU-T G.989.3.";
+      "This identity is used to denote a Time Wavelength Division
+       Multiplexing (TWDM) NG-PON2 channel-pair, per ITU-T G.989.3.";
+    reference
+      "ITU-T G.989.3";
   }
 
   identity ngpon2-ptp {
     base channel-pair-type-base;
     description
-      "This identity is used to denote a PtP NG-PON2 channel-pair, per
-       ITU-T G.989.3.";
+      "This identity is used to denote a Point-to-Point (PtP) NG-PON2
+       channel pair, per ITU-T G.989.3.";
+    reference
+      "ITU-T G.989.3";
   }
 
   identity xgs {
     base channel-pair-type-base;
     description
-      "This identity is used to denote an XGS-PON channel-pair,
+      "This identity is used to denote an XGS-PON channel pair,
        per ITU-T G.9807.1.";
+    reference
+      "ITU-T G.9807.1";
   }
 
   identity xgpon {
     base channel-pair-type-base;
     description
-      "This identity is used to denote an XG-PON channel-pair,
+      "This identity is used to denote an XG-PON channel pair,
        per ITU-T G.987.3.";
+    reference
+      "ITU-T G.987.3";
   }
 
   identity gpon {
     base channel-pair-type-base;
     description
-      "This identity is used to denote an G-PON channel-pair,
+      "This identity is used to denote an G-PON channel pair,
        per ITU-T G.984.3.";
+    reference
+      "ITU-T G.984.3";
   }
 
   identity channel-pair-line-rate-profile-base {
@@ -181,77 +208,78 @@ module bbf-xpon-types {
   identity unplanned-cp-line-rate {
     base channel-pair-line-rate-profile-base;
     description
-      "This identity is used to denote an NG-PON2 channel-pair with
+      "This identity is used to denote an NG-PON2 channel pair with
        yet undefined downstream and upstream line rates.";
   }
 
   identity down-10-up-10 {
     base channel-pair-line-rate-profile-base;
     description
-      "This identity is used to denote an NG-PON2 channel-pair with
+      "This identity is used to denote an NG-PON2 channel pair with
        downstream 10Gbps and upstream 10Gbps line rates.";
   }
 
   identity down-10-up-2.5 {
     base channel-pair-line-rate-profile-base;
     description
-      "This identity is used to denote an NG-PON2 channel-pair with
+      "This identity is used to denote an NG-PON2 channel pair with
        downstream 10Gbps and upstream 2.5Gbps line rates.";
   }
 
   identity down-2.5-up-2.5 {
     base channel-pair-line-rate-profile-base;
     description
-      "This identity is used to denote an NG-PON2 channel-pair with
+      "This identity is used to denote an NG-PON2 channel pair with
        downstream 2.5Gbps and upstream 2.5Gbps line rates.";
   }
 
   identity tcp-connection-state-base {
     description
       "This identity is used to denote the possible states of
-       a TCP connection.";
+       a Transmission Control Protocol (TCP) connection.";
   }
 
   identity established {
     base tcp-connection-state-base;
     description
-      "This identity is used to reflect that the TCP connection is
-       established.";
+      "This identity is used to reflect that the Transmission Control
+       Protocol (TCP) connection is established.";
   }
 
   identity not-established {
     base tcp-connection-state-base;
     description
-      "This identity is used to reflect that the TCP connection is
-       not established.";
+      "This identity is used to reflect that the Transmission Control
+       Protocol (TCP) connection is not established.";
   }
 
   identity unknown {
     base tcp-connection-state-base;
     description
-      "This identity is used to reflect that the TCP connection state
-       is not known.";
+      "This identity is used to reflect that the Transmission Control
+       Protocol (TCP) connection state is not known.";
   }
 
   identity action-request-status {
     description
       "This identity is used to denote the status following the
-       reception of a YANG action.";
+       reception of a action.";
   }
 
   identity request-being-processed {
     base action-request-status;
     description
-      "This identity is used to denote that the OLT has received
-       the action request and is handling it.";
+      "This identity is used to denote that the Optical Line
+       Termination (OLT) has received the action request and is
+       handling it.";
   }
 
   identity request-rejected {
     base action-request-status;
     description
-      "This identity is used to denote that the OLT has rejected
-       the action request and will not perform anything further
-       about it.";
+      "This identity is used to denote that the Optical Line
+       Termination (OLT) has rejected the action request and will not
+       perform anything further.";
   }
 
   typedef string-hex14 {
@@ -270,8 +298,8 @@ module bbf-xpon-types {
     }
     description
       "A type meant for the different formats of the PON-ID for the
-       various channel-pair types. The 'unint' is meant for NG-PON2,
-       XGS-PON and XG-PON and the 'string7only' is meant for G-PON.";
+       various channel-pair types. The 'uint32' is meant for NG-PON2,
+       XGS-PON and XG-PON and the 'string-hex14' is meant for G-PON.";
   }
 
   typedef composite-channel-id-type {
@@ -280,7 +308,7 @@ module bbf-xpon-types {
         range "0..7";
       }
       type enumeration {
-        enum "xgs" {
+        enum xgs {
           description
             "To be used in case of XGS-PON, rather than 0.";
         }
@@ -303,15 +331,15 @@ module bbf-xpon-types {
         range "0 | 156000..161000";
       }
       type enumeration {
-        enum "xgs" {
+        enum xgs {
           description
             "To be used in case of XGS-PON.";
         }
-        enum "xgpon" {
+        enum xgpon {
           description
             "To be used in case of XG-PON.";
         }
-        enum "gpon" {
+        enum gpon {
           description
             "To be used in case of G-PON.";
         }
@@ -331,49 +359,66 @@ module bbf-xpon-types {
 
   typedef auth-method-type {
     type enumeration {
-      enum "serial-number" {
+      enum serial-number {
         description
-          "Authentication based on ONU serial number.";
+          "Authentication based on Optical Network Unit (ONU) serial
+           number.";
         reference
           "ITU-T G.984.3 clause VI.1";
       }
-      enum "loid" {
+      enum loid {
         description
-          "Authentication based on the Logical ONU ID (LOID).";
+          "Authentication based on the Logical Optical Network Unit
+           (ONU) ID (LOID).";
         reference
           "ITU-T G.988 clause 9.1.1";
       }
-      enum "registration-id" {
+      enum registration-id {
         description
-          "Authentication based on ONU registration ID.";
+          "Authentication based on Optical Network Unit (ONU)
+           registration ID.";
         reference
           "ITU-T G.984.3 clause VI.2";
       }
-      enum "omci" {
+      enum omci {
         description
           "Authentication by use of the enhanced security control
            managed entity (ME) over OMCI.";
         reference
           "ITU-T G.987.3 Annex C";
       }
-      enum "dot1x" {
+      enum dot1x {
         description
           "Authentication according to IEEE 802.1x.";
         reference
           "ITU-T G.987.3 Annex D";
       }
+      enum as-per-v-ani-expected {
+        description
+          "Authentication according to the expected configuration
+           of virtual ANIs. In that case an Optical Network Unit (ONU)
+           will be considered authenticated with a given virtual
+           Access Network Interface (vANI) when it matches all
+           expected authentication data configured in this vANI or the
+           'learned-serial-number' in the vANI state data. For
+           instance, if a vANI is configured with an
+           'expected-serial-number' and an 'expected-registration-id',
+           an ONU can be considered authenticated with this vANI only
+           when it matches both the 'expected-serial-number' and the
+           'expected-registration-id' of this vANI.";
+      }
     }
     description
-      "Method for authenticating an ONU.";
+      "Method for authenticating an Optical Network Unit (ONU).";
   }
 
   typedef raman-mitigation-type {
     type enumeration {
-      enum "raman-none" {
+      enum raman-none {
         description
           "No Raman mitigation is performed.";
       }
-      enum "raman-8b10b" {
+      enum raman-8b10b {
         description
           "For Raman mitigation, the 8B10B sublayer is introduced
            between the downstream NG-PON2 physical interface (PHY)
@@ -381,7 +426,7 @@ module bbf-xpon-types {
         reference
           "ITU-T G.989.2 clause IX.1";
       }
-      enum "raman-miller" {
+      enum raman-miller {
         description
           "For Raman mitigation, Miller code is used.";
         reference
@@ -389,8 +434,8 @@ module bbf-xpon-types {
       }
     }
     description
-      "NG-PON2 Raman mitigation coding schemes when using RF video
-       overlay.";
+      "NG-PON2 Raman mitigation coding schemes when using Radio
+       Frequency (RF) video overlay.";
     reference
       "ITU-T G.989.2 Appendix IX";
   }
@@ -399,7 +444,7 @@ module bbf-xpon-types {
     type union {
       type inet:ip-address;
       type enumeration {
-        enum "unresolved" {
+        enum unresolved {
           description
             "To be used when the URL cannot be resolved into an
              IP address.";
@@ -417,5 +462,40 @@ module bbf-xpon-types {
     }
     description
       "A type meant for ONU-IDs.";
+  }
+
+  typedef onu-serial-number {
+    type string {
+      pattern '[a-zA-Z]{4}[0-9a-fA-F]{8}';
+    }
+    description
+      "A type meant for the serial number of an Optical Network Unit
+       (ONU).";
+  }
+
+  typedef int16-or-unknown {
+    type union {
+      type int16;
+      type enumeration {
+        enum unknown {
+          description
+            "To be used when a numerical value could not be
+             determined.";
+        }
+      }
+    }
+    description
+      "A type meant for a leaf which indicates an int16 numerical
+       value or that indicates that a numerical value could not be
+       determined.";
+  }
+
+  typedef onu-registration-id {
+    type string {
+      length "0..72";
+    }
+    description
+      "The registration ID of an Optical Network Unit (ONU) with each
+       octet represented as two hexadecimal characters.";
   }
 }

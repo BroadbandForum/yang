@@ -17,23 +17,23 @@ submodule bbf-xponani-v-enet-body {
      Fiber Access Networks Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
 
-     Editor:      Samuel Chen, Broadcom
+     Editor:      Igor Ternovsky, Broadcom
 
      Editor:      Robert Peschi, Nokia
 
      WA Director: Marta Seda, Calix
 
-     WA Director: Lin Wei, Huawei";
+     WA Director: Samuel Chen, Broadcom";
   description
     "This submodule contains data related to virtual Ethernet
-     interfaces belonging to the physical ONU, such as the
-     'onu-v-enet' and the 'onu-v-vrefpoint' interfaces.
+     interfaces belonging to the physical Optical Network Unit (ONU),
+     such as the'onu-v-enet' and the 'onu-v-vrefpoint' interfaces.
 
-     Copyright (c) 2018, Broadband Forum
+     Copyright (c) 2018-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -73,9 +73,19 @@ submodule bbf-xponani-v-enet-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385; see
+     This version of this YANG module is part of TR-385i2; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
   revision 2019-02-25 {
     description
       "Initial revision.
@@ -90,8 +100,10 @@ submodule bbf-xponani-v-enet-body {
   grouping onu-v-enet-config-data {
     description
       "Config data intended for the onu-v-enet interface.
-       This data is brought to the ONU physical device, when
-       present, for instance using OMCI on the Management GEM port.";
+       This data is brought to the Optical Network Unit (ONU) physical
+       device, when present, for instance using ONU Management and
+       Control Interface (OMCI) on the Management G-PON Encapsulation
+       Method (GEM) port.";
     leaf ani {
       type if:interface-ref;
       must "derived-from-or-self(/if:interfaces"
@@ -99,17 +111,19 @@ submodule bbf-xponani-v-enet-body {
          + "'bbf-xponift:ani')";
       mandatory true;
       description
-        "References the ANI which is the lower-layer interface
-         under the ONU-vENET.";
+        "References the Access Network Interface (ANI) which is the
+         lower-layer interface under the ONU-vENET.";
     }
   }
 
   grouping onu-v-vrefpoint-config-data {
     description
       "Config data intended for the onu-v-vrefpoint interface,
-       (sometimes also called 'virtual UNI').
-       This data is brought to the ONU physical device, when
-       present, for instance using OMCI on the Management GEM port.";
+       (sometimes also called 'virtual User Network Interface (UNI)').
+       This data is brought to the Optical Network Unit (ONU) physical
+       device, when present, for instance using ONU Management and
+       Control Interface (OMCI) on the Management G-PON Encapsulation
+       Method (GEM) port.";
     leaf related-onu {
       type if:interface-ref;
       must "derived-from-or-self(/if:interfaces"
@@ -117,21 +131,25 @@ submodule bbf-xponani-v-enet-body {
          + "'bbf-xponift:ani')";
       mandatory true;
       description
-        "References the ONU to which the virtual UNI relates.";
+        "References the Optical Network Unit (ONU) to which the
+         virtual User Network Interface (UNI) relates.";
     }
   }
 
-  augment '/if:interfaces/if:interface/bbf-xponani:onu-v-enet' {
+  augment "/if:interfaces/if:interface/bbf-xponani:onu-v-enet" {
     description
-      "Configuration of an xPON ONU virtual ENET interface.";
+      "Configuration of an xPON Optical Network Unit (ONU) virtual
+       Ethernet (ENET) interface.";
     uses onu-v-enet-config-data;
   }
 
-  augment '/if:interfaces/if:interface/bbf-xponani:onu-v-vrefpoint' {
+  augment "/if:interfaces/if:interface/bbf-xponani:onu-v-vrefpoint" {
     description
-      "Configuration of an xPON ONU virtual V reference point
-       interface per TR-167 (sometimes also called 'virtual UNI' for
-       short.";
+      "Configuration of an xPON Optical Network Unit (ONU) virtual V
+       reference point interface per TR-167 (sometimes also called
+       'virtual User Network Interface (UNI)').";
+    reference
+      "BBF TR-167";
     uses onu-v-vrefpoint-config-data;
   }
 }

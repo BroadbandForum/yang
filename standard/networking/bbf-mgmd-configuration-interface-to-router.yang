@@ -1,7 +1,7 @@
 submodule bbf-mgmd-configuration-interface-to-router {
   yang-version 1.1;
   belongs-to bbf-mgmd {
-    prefix bbf-mgmd-c-i2r;
+    prefix bbf-mgmd;
   }
 
   organization
@@ -11,26 +11,26 @@ submodule bbf-mgmd-configuration-interface-to-router {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
   description
-    "This module contains a collection of YANG definitions for
+    "This submodule contains a collection of YANG definitions for
      supporting the Multicast Group Membership Discovery (MGMD)
-     Protocols. In particular, it describes configuration objects used
-     for managing the Internet Group Management Protocol (IGMP) and
-     the Multicast Listener Discovery (MLD) protocol on interfaces
+     Protocols. In particular, it describes configuration data nodes
+     used for managing the Internet Group Management Protocol (IGMP)
+     and the Multicast Listener Discovery (MLD) protocol on interfaces
      that connect to multicast routers.
 
-     Copyright (c) 2017-2019, Broadband Forum
+     Copyright (c) 2017-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +70,19 @@ submodule bbf-mgmd-configuration-interface-to-router {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-383a3: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-3.pdf>";
+  }
   revision 2019-10-21 {
     description
       "Amendment 2 Corrigendum 1.
@@ -85,7 +95,7 @@ submodule bbf-mgmd-configuration-interface-to-router {
   }
   revision 2018-07-13 {
     description
-      "Initial revision.
+      "Amendment 1.
        * Approval Date:    2018-06-04.
        * Publication Date: see revision date above.";
     reference
@@ -96,9 +106,9 @@ submodule bbf-mgmd-configuration-interface-to-router {
 
   grouping interface-to-router {
     description
-      "Grouping of objects used for configuring the Internet Group
-       Management Protocol (IGMP) and the Multicast Listener Discovery
-       (MLD) protocol on interfaces that connect multicast routers.";
+      "Data nodes used for configuring the Internet Group Management
+       Protocol (IGMP) and the Multicast Listener Discovery (MLD)
+       protocol on interfaces that connect multicast routers.";
     leaf unsolicited-report-interval {
       type uint32 {
         range "1..255";

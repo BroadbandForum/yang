@@ -1,0 +1,526 @@
+module bbf-gbond {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-gbond";
+  prefix bbf-gbond;
+
+  import iana-if-type {
+    prefix ianaift;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
+  import bbf-fastdsl {
+    prefix bbf-fastdsl;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Ken Kerpez, ASSIA, Inc.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia
+
+     WA Director: Joey Boyd, ADTRAN";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on bonding of
+     physical interfaces as defined in ITU-T G.998.1, ITU-T G.998.2,
+     ITU-T G.998.3 and BBF TR-159. As such, this module is specfic to
+     access network equipment (e.g., BBF-specified Access Nodes and
+     FTTdp DPUs).
+
+     Copyright (c) 2016-2020 Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-355a3; see
+     the TR itself for full legal notices.";
+
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
+
+  feature bonding-primary-interface {
+    description
+      "Indicates support for assigning one of the interfaces of the
+       bonding group as primary interface.";
+  }
+
+  feature bonding-group-statistics {
+    description
+      "Indicates support for statistics associated with a bonding
+       group.";
+  }
+
+  feature bonding-group-performance {
+    description
+      "Indicates support for performance associated with a bonding
+       group.";
+  }
+
+  feature bonding-group-performance-15min {
+    if-feature "bonding-group-performance";
+    description
+      "Indicates support for 15 minute interval performance statistics
+       associated with a bonding group.";
+  }
+
+  feature bonding-group-performance-24hr {
+    if-feature "bonding-group-performance";
+    description
+      "Indicates support for 24 hour interval performance statistics
+       associated with a bonding group.";
+  }
+
+  identity control-protocol {
+    description
+      "Bonding control protocol for a G.998.2 based bonding group.";
+  }
+
+  identity ghs {
+    base control-protocol;
+    description
+      "G.hs based discovery.";
+  }
+
+  identity bacp {
+    base control-protocol;
+    description
+      "Bonding Aggregation Control Protocol.";
+  }
+
+  typedef undefined {
+    type enumeration {
+      enum undefined {
+        description
+          "Indicates data is not yet configured or available for
+           reporting.";
+      }
+    }
+    description
+      "Provides an enumeration for reporting data is undefined.";
+  }
+
+  typedef boolean-or-undefined {
+    type union {
+      type undefined;
+      type boolean;
+    }
+    description
+      "Boolean type which also provides a means of reporting that the
+       value is undefined rather than true or false.";
+  }
+
+  typedef bonding-group-profile-ref {
+    type leafref {
+      path "/bbf-gbond:gbond/bbf-gbond:profiles"
+         + "/bbf-gbond:bonding-group"
+         + "/bbf-gbond:profile"
+         + "/bbf-gbond:name";
+    }
+    description
+      "Used to reference a bonding group profile.";
+  }
+
+  typedef bonding-group-threshold-profile-ref {
+    type leafref {
+      path "/bbf-gbond:gbond/bbf-gbond:thresholds"
+         + "/bbf-gbond:bonding-group"
+         + "/bbf-gbond:threshold-profile"
+         + "/bbf-gbond:name";
+    }
+    description
+      "Used to reference a line threshold profile.";
+  }
+
+  typedef bonding-group-threshold-template-ref {
+    type leafref {
+      path "/bbf-gbond:gbond/bbf-gbond:thresholds"
+         + "/bbf-gbond:bonding-group"
+         + "/bbf-gbond:threshold-template/bbf-gbond:name";
+    }
+    description
+      "Used to reference a bonding group threshold template.";
+  }
+
+  container gbond {
+    description
+      "G.bond configuration";
+    container profiles {
+      description
+        "Profile configuration.";
+      container bonding-group {
+        description
+          "Profile configuration specific to a bonding group.";
+        list profile {
+          key "name";
+          description
+            "Profile defining the bonding group configuration.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "Uniquely identifies the configuration profile.";
+          }
+          leaf target-upstream-data-rate {
+            type bbf-yang:data-rate32;
+            default "4294967295";
+            description
+              "A desired maximum operating data rate of the Generic
+               Bonded Sub-layer (GBS) in the upstream direction, in
+               kbits per second.";
+            reference
+              "TR-159 section 5.5.1.17, aGroupTargetUpRate.";
+          }
+          leaf target-downstream-data-rate {
+            type bbf-yang:data-rate32;
+            default "4294967295";
+            description
+              "A desired maximum operating data rate of the Generic
+               Bonded Sub-layer (GBS) in the downstream direction, in
+               kbits per second.";
+            reference
+              "TR-159 section 5.5.1.18, aGroupTargetDownRate.";
+          }
+          leaf low-upstream-data-rate-threshold {
+            type bbf-yang:data-rate32;
+            default "0";
+            description
+              "A desired G.998.x port low upstream rate crossing alarm
+               threshold, in kbits per second.
+
+               When the current value of upstream-data-rate for this
+               port reaches/drops below or exceeds this threshold, a
+               notification MAY be generated.
+
+               A value of 0 effectively disables any notification.";
+            reference
+              "TR-159 section 5.5.1.21, aGroupThreshLowUpRate.";
+          }
+          leaf low-downstream-data-rate-threshold {
+            type bbf-yang:data-rate32;
+            default "0";
+            description
+              "A desired G.998.x port low downstream rate crossing
+               alarm threshold, in kbits per second.
+
+               When the current value of downstream-data-rate for this
+               port reaches/drops below or exceeds this threshold, a
+               notification MAY be generated.
+
+               A value of 0 effectively disables any notification.";
+            reference
+              "TR-159 section 5.5.1.22, aGroupThreshLowDownRate.";
+          }
+        }
+      }
+    }
+    container thresholds {
+      description
+        "Threshold configuration.";
+      container bonding-group {
+        if-feature "bonding-group-performance";
+        description
+          "Threshold configuration specific to a bonding group.";
+        list threshold-profile {
+          key "name";
+          description
+            "Profile defining the threshold for bonding group specific
+             performance parameters.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "Uniquely identifies the bonding group threshold
+               profile.";
+          }
+          leaf errored-seconds-threshold {
+            type uint32;
+            units "1 second";
+            default "0";
+            description
+              "Threshold for the count of errored seconds (ES). A
+               special value (0) indicates the threshold is
+               disabled.";
+          }
+          leaf severely-errored-seconds-threshold {
+            type uint32;
+            units "1 second";
+            default "0";
+            description
+              "Threshold for the count of severely errored seconds
+               (SES). A special value (0) indicates the threshold is
+               disabled. ";
+          }
+          leaf unavailable-seconds-threshold {
+            type uint32;
+            units "1 second";
+            default "0";
+            description
+              "Threshold for the count of unavailable seconds (UAS). A
+               special value (0) indicates the threshold is
+               disabled.";
+          }
+        }
+        list threshold-template {
+          key "name";
+          description
+            "A template defining the threshold profiles to apply to
+             performance parameters of a G.bond interface.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "Uniquely identifies the line configuration vector.";
+          }
+          leaf gbs-c-15min-threshold-profile {
+            if-feature "bonding-group-performance-15min";
+            type bonding-group-threshold-profile-ref;
+            mandatory true;
+            description
+              "Reference to a line threshold profile for Generic
+               Bonded Sub-layer, CO side (GBS-C) thresholds related to
+               15 minute performance counters.";
+          }
+          leaf gbs-c-24hr-threshold-profile {
+            if-feature "bonding-group-performance-24hr";
+            type bonding-group-threshold-profile-ref;
+            mandatory true;
+            description
+              "Reference to a line threshold profile for Generic
+               Bonded Sub-layer, CO side (GBS-C) thresholds related to
+               24 hour performance counters.";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface" {
+    when "derived-from-or-self(if:type,'ianaift:g9981') or "
+       + "derived-from-or-self(if:type,'ianaift:g9982') or "
+       + "derived-from-or-self(if:type,'ianaift:g9983')" {
+      description
+        "Only applicable if the interface type is G.998.1, G.998.2,
+         G.998.3, or derived from one of those types.";
+    }
+    description
+      "Augment the basic interface configuration with parameters
+       associated with a G.bond bonding group.";
+    container bonding-group {
+      presence
+        "The presence of this container indicates that this interface
+         is a bonding group representing a Generic Bonded Sub-layer
+         interface per TR-159.";
+      description
+        "Configuration parameters associated with a bonding group.";
+      leaf profile {
+        type bonding-group-profile-ref;
+        mandatory true;
+        description
+          "Assigns a profile to a bonding group.";
+      }
+      leaf threshold-template {
+        if-feature "bonding-group-performance";
+        type bonding-group-threshold-template-ref;
+        description
+          "Assigns a threshold template to a bonding group. If no
+           threshold template is assigned, threshold crossing alert
+           (TCA) reporting for all thresholds is disabled.";
+      }
+      leaf bonded-interface-mode {
+        type bbf-fastdsl:fastdsl-mode-ref;
+        mandatory true;
+        description
+          "The intended FastDSL mode of operation for all lines
+           associated with the bonded group.";
+      }
+      leaf-list lower-layer-if {
+        type if:interface-ref;
+        must "/if:interfaces/if:interface[if:name=current()]
+              /if:type='ianaift:fastdsl' and
+              /if:interfaces/if:interface[if:name=current()]
+              /bbf-fastdsl:line/bbf-fastdsl:configured-mode=
+              ../bonded-interface-mode" {
+          description
+            "Each lower layer interface must be either a 'fastdsl'
+             interface or an interface type derived from 'fastdsl'
+             and must also be of the same configured mode as the
+             overall bonded interface mode for the bonding group.";
+        }
+        min-elements 1;
+        description
+          "A reference to an interface representing a bonded channel
+           entity.";
+      }
+      leaf primary-interface {
+        if-feature "bonding-primary-interface";
+        type if:interface-ref;
+        must 'current() = current()/../lower-layer-if' {
+          error-message
+            "The primary interface must be an interface configured as"
+          + " a lower layer interface of this bonding group.";
+          description
+            "The primary interface must be an interface configured as
+             a lower layer interface of this bonding group.";
+        }
+        mandatory true;
+        description
+          "Mulitple protocols, such as ANCP and DHCPv4, define PDUs
+           that contains an 'Access Loop Circuit Id' (the terminology
+           is protocol dependent) which is to be generated by the
+           Access Node and which identifies the position in the
+           hardware where the line is physically connected to. When
+           such identification is to be generated for a bonding group,
+           then the issue is that this bonding group is composed of
+           multiple physical lines. In that situation the leaf
+           'primary-interface' identifies from which FastDSL line /
+           interface / port the access loop identification will be
+           generated.";
+      }
+      notification low-upstream-data-rate-crossing {
+        description
+          "This notification indicates that the G.998.x port upstream
+           data rate has reached/dropped below or exceeded the low
+           upstream rate threshold, specified by
+           'low-upstream-data-rate-threshold'.
+
+           This notification MAY be sent for the Generic Bonded
+           Sub-layer, CO side (GBS-C) ports while the port is up, on
+           the crossing event in both directions: from normal (rate is
+           above the threshold) to low (rate equals the threshold or
+           below it) and from low to normal. This notification is not
+           applicable to the Generic Bonded Sub-layer, RT side (GBS-R)
+           ports.
+
+           Generation of this notification is controlled by the
+           setting the 'low-upstream-data-rate-threshold' to 0.";
+        reference
+          "TR-159 section 5.5.1.24, nGroupLowUpRateCrossing";
+        leaf event {
+          type enumeration {
+            enum normal-to-low {
+              description
+                "G.998.x port upstream data rate has reached/dropped
+                 below the low upstream rate threshold ";
+            }
+            enum low-to-normal {
+              description
+                "G.998.x port upstream data rate has exceeded the
+                 low upstream rate threshold.";
+            }
+          }
+          description
+            "The type of threshold crossing event that triggered the
+             notification.";
+        }
+      }
+      notification low-downstream-data-rate-crossing {
+        description
+          "This notification indicates that the G.998.x port
+           downstream data rate has reached/dropped below or exceeded
+           the low downstream rate threshold, specified by
+           'low-downstream-data-rate-threshold'.
+
+           This notification MAY be sent for the Generic Bonded
+           Sub-layer, CO side (GBS-C) ports while the port is up, on
+           the crossing event in both directions: from normal (rate is
+           above the threshold) to low (rate equals the threshold or
+           below it) and from low to normal. This notification is not
+           applicable to the Generic Bonded Sub-layer, RT side (GBS-R)
+           ports.
+
+           Generation of this notification is controlled by the
+           setting the 'low-downstream-data-rate-threshold' to 0.";
+        reference
+          "TR-159 section 5.5.1.25, nGroupLowDownRateCrossing";
+        leaf event {
+          type enumeration {
+            enum normal-to-low {
+              description
+                "G.998.x port downstream data rate has reached/dropped
+                 below the low downstream rate threshold ";
+            }
+            enum low-to-normal {
+              description
+                "G.998.x port downstream data rate has exceeded the
+                 low downstream rate threshold.";
+            }
+          }
+          description
+            "The type of threshold crossing event that triggered the
+             notification.";
+        }
+      }
+      notification link-up {
+        description
+          "This notification indicates that the G.998.x interface has
+           transitioned to an 'up' status, as specified by
+           'oper-status'.";
+        reference
+          "TR-159 section 5.5.1.27, nGroupLinkUp";
+      }
+      notification link-down {
+        description
+          "This notification indicates that the G.998.x interface has
+           transitioned to an 'down' status, as specified by
+           'oper-status'.";
+        reference
+          "TR-159 section 5.5.1.28, nGroupLinkDown";
+      }
+    }
+  }
+}

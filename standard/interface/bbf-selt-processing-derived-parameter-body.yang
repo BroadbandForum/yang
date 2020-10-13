@@ -20,7 +20,7 @@ submodule bbf-selt-processing-derived-parameter-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -31,7 +31,7 @@ submodule bbf-selt-processing-derived-parameter-body {
     "This submodule contains a collection of YANG definitions for
      Single Ended Line Test Processing (SELT-P) derived parameters.
 
-     Copyright (c) 2016-2019 Broadband Forum
+     Copyright (c) 2016-2020 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -71,9 +71,19 @@ submodule bbf-selt-processing-derived-parameter-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2019-06-11 {
     description
       "Amendment 2.
@@ -146,7 +156,7 @@ submodule bbf-selt-processing-derived-parameter-body {
   grouping downstream-upstream-derived-parameters {
     description
       "Derived parameters that are common between the downstream and
-       upstream directions";
+       upstream directions.";
     leaf capacity-estimate {
       type bbf-yang:data-rate32;
       description
@@ -169,7 +179,7 @@ submodule bbf-selt-processing-derived-parameter-body {
          As the capacity is a best-effort estimate, accuracy for this
          parameter is vendor proprietary. The parameter in the
          downstream direction is CAPACITYds, and the parameter in the
-         upstream direction is CAPACITYus";
+         upstream direction is CAPACITYus.";
       reference
         "ITU-T G.996.2 clause B.2.2.7 (CAP-EST)";
     }
@@ -205,7 +215,7 @@ submodule bbf-selt-processing-derived-parameter-body {
          1) Open
          2) Short
          3) Powered on CPE
-         4) Unknown (i.e., failure in identifying the termination)";
+         4) Unknown (i.e., failure in identifying the termination).";
       reference
         "ITU-T G.996.2 clause B.2.2.1 (LOOP-TERM)";
     }
@@ -257,11 +267,11 @@ submodule bbf-selt-processing-derived-parameter-body {
           type enumeration {
             enum in-series {
               description
-                "In series";
+                "In series.";
             }
             enum bridged-tap {
               description
-                "Bridged tap";
+                "Bridged tap.";
             }
           }
           description
@@ -272,7 +282,7 @@ submodule bbf-selt-processing-derived-parameter-body {
              The valid values are:
 
              1) in series
-             2) bridged tap";
+             2) bridged tap.";
           reference
             "ITU-T G.996.2 clause B.1.1.3.1 (LOOP_SEGM_LENGTH)";
         }

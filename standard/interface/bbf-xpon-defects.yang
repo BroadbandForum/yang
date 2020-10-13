@@ -1,0 +1,459 @@
+module bbf-xpon-defects {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-xpon-defects";
+  prefix bbf-xpon-def;
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Fiber Access Networks Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Joey Boyd, ADTRAN
+
+     Editor:      Igor Ternovsky, Broadcom
+
+     Editor:      Robert Peschi, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Samuel Chen, Broadcom";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on management of
+     ITU-T Passive Optical Network (PON) interfaces as defined in
+     ITU-T G.984.x, G.987.x, ITU-T G.989.x and ITU-T G.9807.x. As
+     such, this module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module defines xPON defects.
+
+     Copyright (c) 2018-2020, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385i2; see
+     the TR itself for full legal notices.";
+
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
+
+  identity xpon-defect {
+    description
+      "Top level identity for xPON defects.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 LOSi, LOFi
+       ITU-T G.987.3 (01/2014) 14.2.1 LOBi
+       ITU-T G.989.3 (2015)/Amd.2 (11/2018) Table 14-2 LOBi
+       ITU-T G.9807.1 (2016)/Amd.1 (10/2017) Table C.14.2 LOBi";
+  }
+
+  identity items-detected-at-olt-by-onu-serial-number {
+    base xpon-defect;
+    description
+      "Base identity for the defects detected at the Optical Line
+       Termination (OLT) for an Optical Network Unit (ONU) whose only
+       association is its serial number.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1
+       ITU-T G.987.3 (01/2014) 14.2.1
+       ITU-T G.989.3 (2015)/Amd.2 (11/2018) Table 14-2
+       ITU-T G.9807.1 (2016)/Amd.1 (10/2017) Table C.14.2";
+  }
+
+  identity sufi {
+    base items-detected-at-olt-by-onu-serial-number;
+    description
+      "SUFi - Start-up failure of ONUi.
+
+       The ranging of ONUi has failed. The Optical Line Termination
+       (OLT) detects the Optical Network Unit's (ONU) serial number,
+       but the ONU fails to complete the bring-up sequence.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 SUFi
+       ITU-T G.987.3 (01/2014) 14.2.1 SUFi
+       ITU-T G.989.3 (2015)/Amd.2 (11/2018) Table 14-2 SUFi
+       ITU-T G.9807.1 (2016)/Amd.1 (10/2017) Table C.14.2 SUFi";
+  }
+
+  identity items-detected-at-olt-for-v-ani {
+    base xpon-defect;
+    description
+      "Base identity for the defects detected by Optical Line
+       Termination (OLT) for an Optical Network Unit (ONU) associated
+       with a virtual Access Network Interface (vANI).";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1
+       ITU-T G.987.3 (01/2014) 14.2.1
+       ITU-T G.989.3 (2015)/Amd.2 (11/2018) Table 14-2
+       ITU-T G.9807.1 (2016)/Amd.1 (10/2017) Table C.14.2";
+  }
+
+  identity lobi {
+    base items-detected-at-olt-for-v-ani;
+    description
+      "LOBi - lost of burst for ONUi.
+
+       Failure to delineate, for any reason, the specified number,
+       Clobi, of consecutive scheduled bursts from ONUi.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 LOSi, LOFi
+       ITU-T G.987.3 (01/2014) 14.2.1 LOBi
+       ITU-T G.989.3 (2015)/Amd.2 (11/2018) Table 14-2 LOBi
+       ITU-T G.9807.1 (2016)/Amd.1 (10/2017) Table C.14.2 LOBi";
+  }
+
+  identity tiwi {
+    base items-detected-at-olt-for-v-ani;
+    description
+      "TIWi - Transmission interference warning for ONUi.
+
+       The Optical Network Unit (ONU) transmission drift exceeds the
+       outer (TIW) threshold, and remains outside the threshold after
+       three consecutive attempts to correct it with a Ranging_Time
+       Physical Layer Operations, Administrations and Maintenance
+       (PLOAM) message.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 TIWi
+       ITU-T G.987.3 (01/2014) 14.2.1 TIW
+       ITU-T G.989.3 (2015)/Amd.2 (11/2018) Table 14-2 TIWi
+       ITU-T G.9807.1 (2016)/Amd.1 (10/2017) Table C.14.2 TIW";
+  }
+
+  identity dfi {
+    base items-detected-at-olt-for-v-ani;
+    description
+      "DFi - Disable failure of ONUi.
+
+       The Optical Network Unit (ONU) continues to respond to the
+       upstream allocations after an attempt to disable the ONU using
+       its serial number (with one or more Disable_Serial_Number
+       Physical Layer Operations, Administrations and Maintenance
+       (PLOAM) messages) which may have been preceded by a failed
+       attempt to deactivate the ONU (with one or more Dectivate_ONU
+       PLOAM messages).";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 DFi
+       ITU-T G.987.3 (01/2014) 14.2.1 DFi
+       ITU-T G.989.3 (2015)/Amd.2 (11/2018) Table 14-2 DFi
+       ITU-T G.9807.1 (2016)/Amd.1 (10/2017) Table C.14.2 DFi";
+  }
+
+  identity lopci {
+    base items-detected-at-olt-for-v-ani;
+    description
+      "LOPCi - Loss of Physical Layer Operations, Administrations and
+       Maintenance (PLOAM) channel with ONUi.
+
+       Generic defect indicating breakage of the PLOAM protocol:
+       persistent MIC failure in the upstream; lack of
+       acknowledgements or proper PLOAM responses from the Optical
+       Network Unit (ONU). Persistent means that the same irregular
+       condition is observed consecutively at least three times.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 LOAMi
+       ITU-T G.987.3 (01/2014) 14.2.1 LOPCi
+       ITU-T G.989.3 (2015)/Amd.2 (11/2018) Tab 14-2 LOPCi
+       ITU-T G.9807.1 (2016)/Amd.1 (10/2017) Tab C.14.2 LOPCi";
+  }
+
+  identity looci {
+    base items-detected-at-olt-for-v-ani;
+    description
+      "LOOCi - loss of OMCC channel with ONUi.
+
+       Recognized by the Optical Line Termination's (OLT) Optical
+       Network Unit Management and Control Interface (OMCI) processing
+       engine (based on the persistent MIC failure in the upstream).";
+    reference
+      "ITU-T G.987.3 (01/2014) 14.2.1 LOOCi
+       ITU-T G.989.3 (2015)/Amd.2 (11/2018) Tab 14-2 LOOCi
+       ITU-T G.9807.1 (2016)/Amd.1 (10/2017) Tab C.14.2 LOOCi";
+  }
+
+  identity dowi {
+    base items-detected-at-olt-for-v-ani;
+    description
+      "DOWi - Drift of window of ONUi.
+
+       In N sequential bursts from the given Optical Network Unit
+       (ONU), the transmission drift exceeds the lower of two
+       specified drift thresholds. This condition indicates that while
+       the transmission phase has shifted, it remains correctable via
+       EqD update.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 DOWi";
+  }
+
+  identity sfi {
+    base items-detected-at-olt-for-v-ani;
+    description
+      "Signal fail of ONUi.
+
+       When the upstream Bit Error Rate (BER) of ONUi becomes >=
+       10^-Y, this state is entered. Y is configurable.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 SFi";
+  }
+
+  identity sdi {
+    base items-detected-at-olt-for-v-ani;
+    description
+      "SDI - Signal degraded of ONUi.
+
+       When the upstream Bit Error Rate (BER) of ONUi becomes
+       >= 10^-X, this state is entered. Y is configurable and must be
+       higher than Y (the SFi threshold).";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 SDi";
+  }
+
+  identity lcdgi {
+    base items-detected-at-olt-for-v-ani;
+    description
+      "LCDGi - Loss of G-PON Encapulation Method (GEM) channel
+       delineation.
+
+       When GEM fragment delineation of ONUi is lost.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 LCDGi";
+  }
+
+  identity rdii {
+    base items-detected-at-olt-for-v-ani;
+    description
+      "RDIi - Remote defect indication of ONUi.
+
+       When the RDI field of ONUi is asserted. The Optical Line
+       Termination (OLT) transmission is received with defects at the
+       ONUi.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 RDIi";
+  }
+
+  identity loai {
+    base items-detected-at-olt-for-v-ani;
+    description
+      "LOAi - Loass of acknowledge with ONUi.
+
+       The Optical Line Termination (OLT) does not receive an
+       acknowledgement from ONUi after a set of downstream messages
+       that imply an upstream acknowledge.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 LOAi";
+  }
+
+  identity dgi {
+    base items-detected-at-olt-for-v-ani;
+    description
+      "DGi - Receive dying gasp (DG) of ONUi.
+
+       When the Optical Line Termination (OLT) receives DG message
+       from ONUi, DGi is asserted.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 DGi";
+  }
+
+  identity memi {
+    base items-detected-at-olt-for-v-ani;
+    description
+      "MEMi - Message_Error message from ONUi.
+
+       When the Optical Line Termination (OLT) receives an unknown
+       message from ONUi.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 MEMi";
+  }
+
+  identity misi {
+    base items-detected-at-olt-for-v-ani;
+    description
+      "MISi - Link mismatch of ONUi.
+
+       The Optical Line Termination (OLT) detects that the received
+       PSTi and the transmitted PST are different.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 MISi";
+  }
+
+  identity peei {
+    base items-detected-at-olt-for-v-ani;
+    description
+      "PEEi - Physical equipment error (PEE) of ONUi.
+
+       When the Optical Line Termination (OLT) receives a PEE message
+       from the Optical Network Unit (ONU).";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 PEEi";
+  }
+
+  identity loki {
+    base items-detected-at-olt-for-v-ani;
+    description
+      "LOKi - Loss of key synch with ONUi.
+
+       Key transmission from the Optical Network Unit (ONU) in
+       response to Request_Key message fails three times.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 LOKi";
+  }
+
+  identity items-detected-at-olt-for-ct {
+    base xpon-defect;
+    description
+      "Base identity for the defects detected by Optical Line
+       Termination (OLT) for a Channel Termination (CT).";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1
+       ITU-T G.987.3 (01/2014) 14.2.1
+       ITU-T G.989.3 (2015)/Amd.2 (11/2018) Table 14-2
+       ITU-T G.9807.1 (2016)/Amd.1 (10/2017) Table C.14.2";
+  }
+
+  identity los {
+    base items-detected-at-olt-for-ct;
+    description
+      "LOS - Loss of signal.
+
+       The Optical Line Termination (OLT) did not receive any expected
+       transmissions in the upstream (complete PON failure) for four
+       consecutive frames.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 LOS
+       ITU-T G.987.3 (01/2014) 14.2.1 LOS
+       ITU-T G.989.3 (2015)/Amd.2 (11/2018) Table 14-2 LOS
+       ITU-T G.9807.1 (2016)/Amd.1 (10/2017) Table C.14.2 LOS";
+  }
+
+  identity tf-ct {
+    base items-detected-at-olt-for-ct;
+    description
+      "TF - Transmitter failure.
+
+       The Optical Line Termination (OLT) transmitter is declared in
+       failure when there is no nominal backfacet photocurrent or when
+       the drive currents go beyond the maximum specification.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 TF";
+  }
+
+  identity tia {
+    base items-detected-at-olt-for-ct;
+    description
+      "TIA - Transmission interference alarm.
+
+       An Optical Network Unit (ONU) turns on its laser at a time
+       assigned to another ONU.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.1 TIA";
+  }
+
+  identity dotxi {
+    base items-detected-at-olt-for-ct;
+    description
+      "DOTXi - drift of transmitter wavelength warning.
+
+       The number of transmitter wavelength adjustment requests
+       in unit of time and/or estimated amplitude of transmitter
+       wavelength adjustment requests exceed the configured
+       thresholds. Note that thresholds should take into account
+       whether the Optical Network Unit (ONU) is under closed-loop
+       wavelength locking control.";
+    reference
+      "ITU-T G.989.3 (2015)/Amd.2 (11/2018) Table 14-2 DOTXi";
+  }
+
+  identity alrfi {
+    base items-detected-at-olt-for-ct;
+    description
+      "ALRFi - Attenuation level request failure.
+
+       The Optical Line Termination (OLT) Channel Termination (CT)
+       detects that no received power level change has occurred in
+       response to a Change_Power_Level Physical Layer Operations,
+       Administrations and Maintenance (PLOAM) message
+       acknowledged by the Optical Network Unit (ONU).";
+    reference
+      "ITU-T G.989.3 (2015)/Amd.2 (11/2018) Table 14-2 ALRFi";
+  }
+
+  identity items-detected-at-onu {
+    base xpon-defect;
+    description
+      "Base identity for the defects detected by Optical Network Unit
+       (ONU).";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.2
+       ITU-T G.987.3 (01/2014) 14.2.2
+       ITU-T G.989.3 (2015)/Amd.2 (11/2018) Table 14-3
+       ITU-T G.9807.1 (2016)/Amd.1 (10/2017) Table C.14.3";
+  }
+
+  identity sf {
+    base items-detected-at-onu;
+    description
+      "SF - Signal fail.
+
+       When the downstream Bit Error Rate (BER) of ONUi becomes
+       >= 10^-Y, this state is entered. Y is configurable.";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.2 SF";
+  }
+
+  identity sd {
+    base items-detected-at-onu;
+    description
+      "SD - Signal degraded.
+
+       When the downstream Bit Error Rate (BER) of ONUi becomes
+       >= 10^-X, this state is entered. Y is configurable and must be
+       higher than Y (the SF threshold).";
+    reference
+      "ITU-T G.984.3 (01/2014) 11.1.2 SD";
+  }
+}

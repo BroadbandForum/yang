@@ -16,23 +16,23 @@ submodule bbf-xponani-base {
      Fiber Access Networks Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
      Editor:      Joey Boyd, ADTRAN
 
-     Editor:      Samuel Chen, Broadcom
+     Editor:      Igor Ternovsky, Broadcom
 
      Editor:      Robert Peschi, Nokia
 
      WA Director: Marta Seda, Calix
 
-     WA Director: Lin Wei, Huawei";
+     WA Director: Samuel Chen, Broadcom";
   description
     "This submodule contains a collection of YANG definitions and
-     augmentations to ietf-interfaces for managing in xPON the ONU
-     physical devices.
+     augmentations to ietf-interfaces for managing in xPON the Optical
+     Newtork Unit (ONU) physical devices.
 
-     Copyright (c) 2018, Broadband Forum
+     Copyright (c) 2018-2020, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -72,9 +72,19 @@ submodule bbf-xponani-base {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385; see
+     This version of this YANG module is part of TR-385i2; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Issue 2.
+       * Approval Date:    2020-10-13.
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-385i2: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2.pdf>";
+  }
   revision 2019-02-25 {
     description
       "Initial revision.
@@ -86,46 +96,48 @@ submodule bbf-xponani-base {
                         TR-385.pdf>";
   }
 
-  augment '/if:interfaces/if:interface' {
+  augment "/if:interfaces/if:interface" {
     when "derived-from-or-self(if:type, 'bbf-xponift:ani')";
     description
-      "Augment interface configuration with xPON ANI configuration.
-       The ANI represents the ONU device itself.";
+      "Augment interface configuration with xPON Access Newtork
+       Interface (ANI) configuration.
+       The ANI represents the Optical Network Unit (ONU) device.";
     container ani {
       description
         "ANI configuration.";
     }
   }
 
-  augment '/if:interfaces/if:interface' {
+  augment "/if:interfaces/if:interface" {
     when "derived-from-or-self(if:type, 'bbf-xponift:onu-v-enet')";
     description
-      "Augment interface configuration with xPON ONU virtual ENET
-       interface configuration.";
+      "Augment interface configuration with xPON Optical Network Unit
+       (ONU) virtual ENET interface configuration.";
     container onu-v-enet {
       description
         "ONU virtual ENET configuration.";
     }
   }
 
-  augment '/if:interfaces/if:interface' {
+  augment "/if:interfaces/if:interface" {
     when "derived-from-or-self"
        + "(if:type,'bbf-xponift:onu-v-vrefpoint')";
     description
       "Augment interface configuration with xPON virtual V reference
-       point interface per TR-167 (sometimes also called 'virtual UNI'
-       for short).";
+       point interface per TR-167 (sometimes also called 'virtual User
+       Network Interface (UNI)').";
     container onu-v-vrefpoint {
       description
-        "Virtual UNI configuration.";
+        "Virtual User Network Interface (UNI) configuration.";
     }
   }
 
-  augment '/if:interfaces-state/if:interface' {
+  augment "/if:interfaces-state/if:interface" {
     when "derived-from-or-self(if:type, 'bbf-xponift:ani')";
     description
-      "Augment interface state data with xPON ANI state data.
-       The ANI represents the ONU device itself.";
+      "Augment interface state data with xPON Access Network Interface
+       (ANI) state data.
+       The ANI represents the Optical Network Unit (ONU) device.";
     container ani {
       config false;
       description

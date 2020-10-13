@@ -7,6 +7,34 @@
       <type/>
       <enabled>true</enabled>
       <link-up-down-trap-enable/>
+      <admin-status/>
+      <oper-status/>
+      <last-change/>
+      <if-index/>
+      <phys-address/>
+      <higher-layer-if>
+        <!-- # entries: 0.. -->
+      </higher-layer-if>
+      <lower-layer-if>
+        <!-- # entries: 0.. -->
+      </lower-layer-if>
+      <speed/>
+      <statistics>
+        <discontinuity-time/>
+        <in-octets/>
+        <in-unicast-pkts/>
+        <in-broadcast-pkts/>
+        <in-multicast-pkts/>
+        <in-discards/>
+        <in-errors/>
+        <in-unknown-protos/>
+        <out-octets/>
+        <out-unicast-pkts/>
+        <out-broadcast-pkts/>
+        <out-multicast-pkts/>
+        <out-discards/>
+        <out-errors/>
+      </statistics>
       <line xmlns="urn:bbf:yang:bbf-fastdsl">
         <supported-mode>
           <!-- # entries: 0.. -->
@@ -584,6 +612,7 @@
                 <loss-of-margin/>
                 <loss-of-power/>
               </failures>
+              <minimum-mds-supported/>
             </ftu-r>
             <downstream>
               <initialization-last-transmitted-signal/>
@@ -733,6 +762,10 @@
         <minimum-expected-throughput>0</minimum-expected-throughput>
         <maximum-gamma-data-rate>4294967295</maximum-gamma-data-rate>
         <minimum-gamma-data-rate>0</minimum-gamma-data-rate>
+        <preferred-ndr>
+          <preferred-net-data-rate>0</preferred-net-data-rate>
+          <preferred-net-data-rate-type>high</preferred-net-data-rate-type>
+        </preferred-ndr>
         <dynamic-time-assignment>
           <minimum-expected-throughput>0</minimum-expected-throughput>
           <maximum-net-data-rate>4294967295</maximum-net-data-rate>
@@ -745,6 +778,10 @@
         <minimum-expected-throughput>0</minimum-expected-throughput>
         <maximum-gamma-data-rate>4294967295</maximum-gamma-data-rate>
         <minimum-gamma-data-rate>0</minimum-gamma-data-rate>
+        <preferred-ndr>
+          <preferred-net-data-rate>0</preferred-net-data-rate>
+          <preferred-net-data-rate-type>high</preferred-net-data-rate-type>
+        </preferred-ndr>
         <dynamic-time-assignment>
           <minimum-expected-throughput>0</minimum-expected-throughput>
           <maximum-net-data-rate>4294967295</maximum-net-data-rate>
@@ -794,6 +831,10 @@
             <start-index/>
             <stop-index/>
           </carmask>
+          <rmccarmask>
+            <start-index/>
+            <stop-index/>
+          </rmccarmask>
           <mibpsdmask>
             <sub-carrier-index/>
             <psd-level/>
@@ -806,6 +847,10 @@
             <start-index/>
             <stop-index/>
           </carmask>
+          <rmccarmask>
+            <start-index/>
+            <stop-index/>
+          </rmccarmask>
           <mibpsdmask>
             <sub-carrier-index/>
             <psd-level/>
@@ -896,10 +941,12 @@
         <name/>
         <downstream>
           <fext-to-cancel-enable>true</fext-to-cancel-enable>
+          <tgvn-allowed>false</tgvn-allowed>
           <xlog-group-size-req>1</xlog-group-size-req>
         </downstream>
         <upstream>
           <fext-to-cancel-enable>true</fext-to-cancel-enable>
+          <tgvn-allowed>false</tgvn-allowed>
         </upstream>
         <annex-x-mode>forbidden</annex-x-mode>
         <annex-d-mode>forbidden</annex-d-mode>

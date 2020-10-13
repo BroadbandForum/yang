@@ -24,7 +24,7 @@ submodule bbf-fast-line-status-body {
 
      Editor:      Joey Boyd, ADTRAN
 
-     PS Leader:   Ken Kerpez, ASSIA, Inc.
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
 
      PS Leader:   Joey Boyd, ADTRAN
 
@@ -76,9 +76,19 @@ submodule bbf-fast-line-status-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a2; see
+     This version of this YANG module is part of TR-355a3; see
      the TR itself for full legal notices.";
 
+  revision 2020-10-13 {
+    description
+      "Amendment 3.
+       * Approval Date:    2020-10-13
+       * Publication Date: 2020-10-13.";
+    reference
+      "TR-355a3: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-3.pdf>";
+  }
   revision 2020-01-17 {
     description
       "Amendment 2 Corrigendum 2.
@@ -295,8 +305,8 @@ submodule bbf-fast-line-status-body {
          special value (+511) indicates that the signal-to-noise
          ratio margin is greater than or equal to +51.1dB.";
       reference
-        "ITU-T G.997.2 clause 7.10.8.1 (L2.1-SNRMds) and clause
-         7.10.8.2 (L2.1-SNRMus); ITU-T G.9701 Clause 9.8.3.2 and
+        "ITU-T G.997.2 clause 7.10.16.1 (L2.1-SNRMds) and clause
+         7.10.16.2 (L2.1-SNRMus); ITU-T G.9701 Clause 9.8.3.2 and
          11.4.1.1.10.";
     }
     leaf snr-margin-in-l2.2 {
@@ -313,8 +323,8 @@ submodule bbf-fast-line-status-body {
          signal-to-noise ratio margin is greater than or equal to
          +51.1dB.";
       reference
-        "ITU-T G.997.2 clause 7.10.8.3 (L2.2-SNRMds) and clause
-         7.10.8.4 (L2.2-SNRMus); ITU-T G.9701 Clause 9.8.3.2 and
+        "ITU-T G.997.2 clause 7.10.16.3 (L2.2-SNRMds) and clause
+         7.10.16.4 (L2.2-SNRMus); ITU-T G.9701 Clause 9.8.3.2 and
          11.4.1.1.10.";
     }
     leaf upbo-electrical-length {
@@ -403,7 +413,7 @@ submodule bbf-fast-line-status-body {
            group used to represent the SNR(f) values.
 
            Note that in ITU-T G.9701-2014 the only valid value is
-           G = 1";
+           G = 1.";
         reference
           "ITU-T G.997.2 clause 7.10.8.2 (SNRGds) and clause
            7.10.8.5 (SNRGus); ITU-T G.9701 Clause 11.4.1.2.2.";
@@ -445,7 +455,7 @@ submodule bbf-fast-line-status-body {
     container robust-management-channel {
       description
         "Managment objects associated with the robust management
-         channel(RMC)";
+         channel(RMC).";
       /* G.997.2 Clause 7.10.12 Robust Management Channel(RMC) */
       leaf snr-margin {
         type snr-margin;
@@ -476,8 +486,8 @@ submodule bbf-fast-line-status-body {
            indicates that the signal-to-noise ratio margin is greater
            than or equal to +51.1dB.";
         reference
-          "ITU-T G.997.2 clause 7.10.18.5 (L2-SNRM-RMCds) and clause
-           7.10.18.6 (L2-SNRM-RMCus); ITU-T G.9701 clause
+          "ITU-T G.997.2 clause 7.10.16.5 (L2-SNRM-RMCds) and clause
+           7.10.16.6 (L2-SNRM-RMCus); ITU-T G.9701 clause
            11.4.1.1.11";
       }
       leaf bitsps {
@@ -520,7 +530,7 @@ submodule bbf-fast-line-status-body {
         "ITU-T G.997.2 clause 7.10.15.1 (SATNds) and 7.10.15.2
          (SATNus); ITU-T G.9701 clause 11.4.1.7.";
     }
-    /* G.997.2 Clause 7.10.16 Quiet Line Noise (QLN) */
+    /* G.997.2 Clause 7.10.9 Quiet Line Noise (QLN) */
     container qln {
       description
         "State data nodes related to sub-carrier Quiet Line
@@ -532,7 +542,7 @@ submodule bbf-fast-line-status-body {
           "Reports the number of symbols used to measure the
            downstream QLN(f) values.";
         reference
-          "ITU-T G.997.2 clause 7.10.16.1 (QLNMTds) and 7.10.16.4
+          "ITU-T G.997.2 clause 7.10.9.1 (QLNMTds) and 7.10.9.4
            (QLNMTus); ITU-T G.9701 clause 11.4.1.2.3.";
       }
       leaf qln-sub-carrier-group-size {
@@ -541,8 +551,8 @@ submodule bbf-fast-line-status-body {
           "Reports the number of sub-carriers in any one sub-carrier
            group used to represent the QLN(f) values.";
         reference
-          "ITU-T G.997.2 clause 7.10.16.2 (QLNds) and 7.10.16.5
-           (QLNus); ITU-T G.9701 clause 11.4.1.2.3.";
+          "ITU-T G.997.2 clause 7.10.9.2 (QLNds) and 7.10.9.5 (QLNus);
+           ITU-T G.9701 clause 11.4.1.2.3.";
       }
       leaf qlnps {
         type per-sub-carrier-group-uint8 {
@@ -572,9 +582,12 @@ submodule bbf-fast-line-status-body {
            A fourth special value (251) indicates that the
            QLN(f) for this sub-carrier group is less than or equal to
            -160.5 dBm/Hz. The object is updated only in L0 link
-           state.";
+           state.
+
+           The value is updated only in L0 link state. For upstream,
+           the value is also updated in the O-IDLE-TGVN state.";
         reference
-          "ITU-T G.997.2 clause 7.10.16.3 (QLNpsds) and 7.10.6.6
+          "ITU-T G.997.2 clause 7.10.9.3 (QLNpsds) and 7.10.9.6
            (QLNpsus); ITU-T G.9701 clause 11.4.1.2.3.";
       }
     }
@@ -639,7 +652,7 @@ submodule bbf-fast-line-status-body {
   grouping line-ftu-update-test {
     description
       "Update test parameters associated with a Fast Transceiver
-       Unit";
+       Unit.";
     leaf time-stamp-at-g1-update {
       type time-stamp-or-undefined;
       description
@@ -690,7 +703,7 @@ submodule bbf-fast-line-status-body {
   grouping line-time-stamps {
     description
       "Time stamps associated with the upstream or downstream
-       direction";
+       direction.";
     leaf time-stamp-last-successful-bitswap {
       type time-stamp-or-undefined;
       description
@@ -791,7 +804,7 @@ submodule bbf-fast-line-status-body {
     }
   }
 
-  /* G.997.2 Clause 7.10.17 Active Line Noise (ALN) */
+  /* G.997.2 Clause 7.10.10 Active Line Noise (ALN) */
 
   grouping aln-parameters {
     description
@@ -807,7 +820,7 @@ submodule bbf-fast-line-status-body {
           "Reports the number of symbols used to measure ALN(f)
            values.";
         reference
-          "ITU-T G.997.2 clause 7.10.17.1 (ALNMT); ITU-T
+          "ITU-T G.997.2 clause 7.10.10.1 (ALNMT); ITU-T
            G.9701 clause 11.4.1.2.4.";
       }
       leaf aln-sub-carrier-group-size {
@@ -816,7 +829,7 @@ submodule bbf-fast-line-status-body {
           "Reports the number of sub-carriers in any one sub-carrier
            group used to represent the ALN(f) values.";
         reference
-          "ITU-T G.997.2 clause 7.10.17.2 (ALNG); ITU-T
+          "ITU-T G.997.2 clause 7.10.10.2 (ALNG); ITU-T
            G.9701 clause 11.4.1.2.4.";
       }
       leaf alnps {
@@ -849,13 +862,13 @@ submodule bbf-fast-line-status-body {
            -160.5 dBm/Hz. The object is updated only in L0 link
            state.";
         reference
-          "ITU-T G.997.2 clause 7.10.17.3 (ALNps); ITU-T
+          "ITU-T G.997.2 clause 7.10.10.3 (ALNps); ITU-T
            G.9701 clause 11.4.1.2.4.";
       }
     }
   }
 
-  /* G.997.2 Clause 7.10.16 FEXT Coupling Coefficients (XLOG) */
+  /* G.997.2 Clause 7.10.17 FEXT Coupling Coefficients (XLOG) */
 
   grouping xlog-parameters {
     description
@@ -893,13 +906,13 @@ submodule bbf-fast-line-status-body {
           key "band-index";
           max-elements 8;
           description
-            "List of XLOG band edges";
+            "List of XLOG band edges.";
           leaf band-index {
             type uint8 {
               range "1..8";
             }
             description
-              "Band index";
+              "Band index.";
           }
           uses sub-carrier-range {
             refine "start-index" {
@@ -911,7 +924,7 @@ submodule bbf-fast-line-status-body {
               range "1 | 2 | 4 | 8 | 16 | 32 | 64";
             }
             description
-              "The sub-carrier group size";
+              "The sub-carrier group size.";
           }
         }
         description
@@ -924,7 +937,7 @@ submodule bbf-fast-line-status-body {
            start_subcarrier_index+m*group_size, with m integer. The
            object is updated only in L0 link state.";
         reference
-          "ITU-T G.997.2 clause 7.10.16.1 (XLOGBANDSds); ITU-T G.9701
+          "ITU-T G.997.2 clause 7.10.17.1 (XLOGBANDSds); ITU-T G.9701
            clause 11.4.1.2.8.";
       }
       leaf xlogps {
@@ -955,7 +968,7 @@ submodule bbf-fast-line-status-body {
            this sub-carrier group is less than or equal to -85.5 dB.
            The object is updated only in L0 link state.";
         reference
-          "ITU-T G.997.2 clause 7.10.16.2 (XLOGpsds); ITU-T
+          "ITU-T G.997.2 clause 7.10.17.2 (XLOGpsds); ITU-T
            G.9701 clause 11.4.1.2.8.";
       }
     }
@@ -1059,7 +1072,7 @@ submodule bbf-fast-line-status-body {
          clause 12.3.1.";
     }
     leaf annex-x-enabled {
-      if-feature "annex-x";
+      if-feature "bbf-fast:annex-x";
       type boolean;
       description
         "Indicates whether Annex X operation is enabled.";
@@ -1068,7 +1081,7 @@ submodule bbf-fast-line-status-body {
          ITU-T G.9701 clause X.6.8.1.";
     }
     leaf annex-d-enabled {
-      if-feature "annex-d";
+      if-feature "bbf-fast:annex-d";
       type boolean;
       description
         "Indicates whether Annex D operation is enabled.";
@@ -1077,22 +1090,23 @@ submodule bbf-fast-line-status-body {
          ITU-T G.9701 clause D.5.8.1.";
     }
     leaf idta-enabled {
-      if-feature "(dta and annex-x)";
+      if-feature "(bbf-fast:dta and bbf-fast:annex-x)";
       type boolean;
       description
-        "Indicates whether iDTA is enabled.";
+        "Indicates whether independent Dynamic Time Assignment (iDTA)
+         is enabled.";
       reference
         "ITU-T G.9701 clause T.3.2 (DTA_ENABLED),
          ITU-T G.9701 clause X.6.8.2.";
     }
     leaf cdta-procedure-actual-type {
-      if-feature "(dta and annex-d)";
+      if-feature "(bbf-fast:dta and bbf-fast:annex-d)";
       type enumeration {
         enum disabled {
           value 0;
           description
             "Coordinated Dynamic Time Assignment (cDTA) is disabled
-             (see clause D.5.8.2)";
+             (see clause D.5.8.2).";
         }
         enum one-step {
           value 1;
@@ -1106,7 +1120,7 @@ submodule bbf-fast-line-status-body {
           description
             "Dynamic Resource Allocation (DRA) uses two-step
              Coordinated Dynamic Time Assignment (cDTA) procedure
-             (see clause D.5.8.2)";
+             (see clause D.5.8.2).";
         }
       }
       description
@@ -1120,7 +1134,7 @@ submodule bbf-fast-line-status-body {
     container ftu-o {
       description
         "Line status parameters associated with the Fast
-         Transceiver Unit - central Office (Near End).";
+         Transceiver Unit - central Office (FTU-O) (Near End).";
       container update-test {
         description
           "Test update parameters.";
@@ -1148,7 +1162,7 @@ submodule bbf-fast-line-status-body {
     container ftu-r {
       description
         "Line status parameters associated with the Fast
-         Transceiver Unit - Remote side (Far End).";
+         Transceiver Unit - Remote side (FTU-R) (Far End).";
       container update-test {
         description
           "Test update parameters.";
@@ -1159,11 +1173,22 @@ submodule bbf-fast-line-status-body {
           "Failure related status.";
         uses line-ftu-failure-parameters;
       }
+      leaf minimum-mds-supported {
+        type uint8 {
+          range "0 | 5..10";
+        }
+        description
+          "If Annex D is enabled (see clause T.3.3), it reports the
+           minimal Mds for use in cDTA supported by the FTU-R.
+           Otherwise, a special value (0) is reported.";
+        reference
+          "ITU-T G.997.2 Clause T.3.5.";
+      }
     }
     container downstream {
       description
         "Line status parameters associated with the downstream
-         direction";
+         direction.";
       leaf initialization-last-transmitted-signal {
         type uint8 {
           range "0..21";
@@ -1188,20 +1213,22 @@ submodule bbf-fast-line-status-body {
         leaf time-stamp-last-successful-tiga {
           type time-stamp-or-undefined;
           description
-            "Reports the date/time of the last successful FTU-O
-             initiated Transmitter-Initiated Gain Adjustment (TIGA)
+            "Reports the date/time of the last successful FAST
+             Transceiver Unit - central Office (FTU-O) initiated
+             Transmitter-Initiated Gain Adjustment (TIGA)
              execution.";
           reference
             "ITU-T G.997.2 clause 7.10.14.9 (STAMP-TIGA); ITU-T
              G.9701 clause 11.2.2.5.";
         }
         leaf time-stamp-last-successful-srec {
-          if-feature "srec";
+          if-feature "bbf-fast:srec";
           type time-stamp-or-undefined;
           description
-            "Reports the date/time of the last successful FTU-O
-             initiated (local or remote) Showtime Reconfiguration
-             (SREC) execution.";
+            "Reports the date/time of the last successful FAST
+             Transceiver Unit - central Office (FTU-O) initiated
+             (local or remote) Showtime Reconfiguration (SREC)
+             execution.";
           reference
             "ITU-T G.997.2 clause 7.10.14.10 (STAMP-SREC);
              ITU-T G.9701 Annex R.";
