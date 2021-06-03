@@ -1,0 +1,319 @@
+module bbf-device {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-device";
+  prefix bbf-dvc;
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import bbf-device-types {
+    prefix bbf-dvct;
+  }
+  import bbf-node-types {
+    prefix bbf-nodet;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, ADTRAN
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on managing physical
+     devices.
+
+     Copyright (c) 2017-2021, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a4; see
+     the TR itself for full legal notices.";
+
+  revision 2021-06-02 {
+    description
+      "Amendment 4.
+       * Approval Date:    2021-06-02.
+       * Publication Date: 2021-06-02.";
+    reference
+      "TR-383a4: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-4.pdf>";
+  }
+
+  // Features
+
+  feature reports-device-powering-state {
+    description
+      "Indicates the support for reporting the device powering
+       state.";
+  }
+
+  // Device Properties
+
+  grouping device-alias {
+    description
+      "Alias information for the device.";
+    leaf alias {
+      type bbf-yang:string-ascii64;
+      description
+        "The alias that can be used to identify a device.";
+    }
+  }
+
+  // Device hardware information
+
+  grouping hardware-management-info {
+    description
+      "The hardware related information for the device.";
+    leaf device-type {
+      type identityref {
+        base bbf-dvct:device-type;
+      }
+      description
+        "The type of device.";
+    }
+    leaf serial-num {
+      type bbf-yang:string-ascii64;
+      description
+        "The vendor-specific serial number string for the device. The
+         preferred value is the serial number string actually printed
+         on the device itself (if present).";
+      reference
+        "RFC 6933: Entity MIB (Version 4) - entPhysicalSerialNum";
+    }
+    leaf mfg-name {
+      type bbf-yang:string-ascii64;
+      description
+        "The name of the manufacturer of this physical device. The
+         preferred value is the manufacturer name string actually
+         printed on the device itself (if present).
+
+         Note that comparisons between instances of the 'model-name'
+         and 'serial-num' nodes are only meaningful amongst devices
+         with the same value of 'mfg-name'.";
+      reference
+        "RFC 6933: Entity MIB (Version 4) - entPhysicalMfgName";
+    }
+    leaf model-name {
+      type bbf-yang:string-ascii64;
+      description
+        "The vendor-specific model name identifier string associated
+         with this physical device.  The preferred value is the
+         customer-visible part number, which may be printed on the
+         component itself.";
+      reference
+        "RFC 6933: Entity MIB (Version 4) - entPhysicalModelName";
+    }
+  }
+
+  // Device software component management
+
+  grouping software-management-info-state {
+    description
+      "State data nodes relating to information that identifies a
+       software component within the device.";
+    leaf software-type {
+      type identityref {
+        base bbf-nodet:software-type;
+      }
+      config false;
+      description
+        "The type of software.";
+    }
+    leaf current-revision {
+      type bbf-yang:string-ascii64;
+      config false;
+      description
+        "A name to be used to identify the revision of the software
+         that is currently executing within the device.";
+    }
+    leaf previous-revision {
+      type bbf-yang:string-ascii64;
+      config false;
+      description
+        "A name to be used to identify the revision of the software
+         that was previously executing within the device.
+
+         If the device does not have have previous revision then an
+         empty string is returned.";
+    }
+    leaf current-revision-last-changed {
+      type yang:date-and-time;
+      config false;
+      description
+        "Date and time the current revision last changed.";
+    }
+  }
+
+  // Device Management Information
+
+  grouping device-management-info {
+    description
+      "Data nodes relating to management plane information needed to
+       reach and communicate with the device.";
+    leaf ip-address {
+      type inet:host;
+      description
+        "The IP address of the device.";
+    }
+    leaf port {
+      type inet:port-number;
+      description
+        "The port number used on the device for
+         management.";
+    }
+    leaf admin-state {
+      type bbf-nodet:admin-state;
+      description
+        "The administrative state of the device.";
+    }
+  }
+
+  grouping device-management-info-state {
+    description
+      "State data nodes relating to management plane information
+       needed to reach and communicate with the device.";
+    leaf admin-state-last-changed {
+      type yang:date-and-time;
+      config false;
+      description
+        "The date and time the device's administrative state last
+         changed.";
+    }
+    leaf powering-state {
+      if-feature "bbf-dvc:reports-device-powering-state";
+      type enumeration {
+        enum unpowered {
+          description
+            "The device is considered to be without power.";
+        }
+        enum powered {
+          description
+            "The device is considered to be powered.";
+        }
+      }
+      config false;
+      description
+        "The powering state of the device.
+
+         This information is typically provided using status
+         information (dying gasp) from the device.
+
+         If the device is reachable it is considered powered.";
+    }
+    leaf powering-state-last-changed {
+      if-feature "bbf-dvc:reports-device-powering-state";
+      type yang:date-and-time;
+      config false;
+      description
+        "The last date and time that the device powering state last
+         changed.";
+    }
+    leaf reachability-state {
+      type enumeration {
+        enum unreachable {
+          description
+            "The device is considered to be unreachable for management
+             purposes.";
+        }
+        enum reachable {
+          description
+            "The device is considered to be reachable for management
+             purposes if at least 1 management entity can reach
+             the device. This typically means that device is reachable
+             via the IP layer.";
+        }
+      }
+      config false;
+      description
+        "The reachability state of the device for management
+         purposes.";
+    }
+    leaf reachability-state-last-changed {
+      type yang:date-and-time;
+      config false;
+      description
+        "The last date and time that the device reachability state
+         last changed.";
+    }
+    leaf management-session-state {
+      type enumeration {
+        enum down {
+          description
+            "The management session to the device is down.";
+        }
+        enum up {
+          description
+            "The management session to the device is up if at least 1
+             management session has been established to the device.";
+        }
+      }
+      config false;
+      description
+        "The management session state to the device.";
+    }
+    leaf management-session-state-last-changed {
+      type yang:date-and-time;
+      config false;
+      description
+        "The date and time that the device management session state
+         last changed.";
+    }
+  }
+}

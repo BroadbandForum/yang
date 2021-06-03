@@ -1,19 +1,19 @@
-module bbf-qos-policies-sub-interface-rewrite {
+module bbf-qos-policing-state {
   yang-version 1.1;
-  namespace "urn:bbf:yang:bbf-qos-policies-sub-interface-rewrite";
-  prefix bbf-qos-pol-subif-rw;
+  namespace "urn:bbf:yang:bbf-qos-policing-state";
+  prefix bbf-qos-plc-s;
 
+  import bbf-qos-policies-state {
+    prefix bbf-qos-pol-s;
+  }
+  import bbf-qos-policing {
+    prefix bbf-qos-plc;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
   import ietf-interfaces {
     prefix if;
-  }
-  import bbf-qos-classifiers {
-    prefix bbf-qos-cls;
-  }
-  import bbf-frame-classification {
-    prefix bbf-classif;
-  }
-  import bbf-sub-interfaces {
-    prefix bbf-subif;
   }
 
   organization
@@ -41,8 +41,10 @@ module bbf-qos-policies-sub-interface-rewrite {
      equipment. As such, this module is specific to access network
      equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module contains augments to sub-interfaces to
-     support policies applied to frames.
+     Specifically, this module augments interfaces to add monitoring
+     the policing of flows. This module is to be used, along with
+     'bbf-qos-policing' when the server does not support Network
+     Management Datastore Architecture (NMDA) as defined in RFC 8342.
 
      Copyright (c) 2017-2021, Broadband Forum
 
@@ -97,65 +99,89 @@ module bbf-qos-policies-sub-interface-rewrite {
                  <https://www.broadband-forum.org/technical/download/
                           TR-383_Amendment-4.pdf>";
   }
-  revision 2020-10-13 {
+
+  grouping policing-state-data {
     description
-      "Amendment 3.
-       * Approval Date:    2020-10-13.
-       * Publication Date: 2020-10-13.";
-    reference
-      "TR-383a3: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-3.pdf>";
+      "Policing state data.";
+    list policer {
+      key "name";
+      description
+        "A policer's state data.";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "The name of a policer profile that defines a policer within
+           the current scope.";
+      }
+      uses bbf-qos-plc:policing-statistics;
+    }
   }
 
-  augment
-    "/if:interfaces/if:interface/bbf-subif:frame-processing/"
-  + "bbf-subif:inline-frame-processing/bbf-subif:inline-frame-"
-  + "processing/bbf-subif:ingress-rule/bbf-subif:rule/"
-  + "bbf-subif:ingress-rewrite" {
+  augment "/if:interfaces-state/if:interface"
+        + "/bbf-qos-pol-s:qos-policies"
+        + "/bbf-qos-pol-s:ingress"
+        + "/bbf-qos-pol-s:policy"
+        + "/bbf-qos-pol-s:classifier" {
     description
-      "Augments the VLAN sub-interface with ingress-rewrite actions.";
-    list copy-from-tags-to-marking-list {
-      key "tag-index";
+      "Augment policing state data onto classifiers associated with
+       the ingress QoS policies associated with an interface.";
+    container policing {
+      presence
+        "The presence of this container indicates the classifier
+         contains an entry whose action is to police or otherwise
+         mark the color of frames.";
       description
-        "An input VLAN tag from which p-bits and/or DEI field content
-         will be preserved.";
-      leaf tag-index {
-        type bbf-classif:tag-index;
-        description
-          "Specifies from which input VLAN tag fields MUST be copied
-           to the frame's marking-list.";
-      }
-      leaf pbit-marking-index {
-        type union {
-          type enumeration {
-            enum not-preserved {
-              description
-                "The p-bits are not preserved.";
-            }
-          }
-          type bbf-qos-cls:qos-pbit-marking-index;
-        }
-        default "not-preserved";
-        description
-          "Specifies the index of the frame's pbit marking list to
-           which the p-bits shall be copied.";
-      }
-      leaf dei-marking-index {
-        type union {
-          type enumeration {
-            enum not-preserved {
-              description
-                "The DEI bit is not preserved.";
-            }
-          }
-          type bbf-qos-cls:qos-pbit-marking-index;
-        }
-        default "not-preserved";
-        description
-          "Specifies the index of the frame's dei marking list to
-           which the DEI bit shall be copied.";
-      }
+        "Policing state data.";
+      uses bbf-qos-plc:policing-statistics;
+    }
+  }
+
+  augment "/if:interfaces-state/if:interface"
+        + "/bbf-qos-pol-s:qos-policies"
+        + "/bbf-qos-pol-s:egress"
+        + "/bbf-qos-pol-s:policy"
+        + "/bbf-qos-pol-s:classifier" {
+    description
+      "Augment policing state data onto classifiers associated with
+       the egress QoS policies associated with an interface.";
+    container policing {
+      presence
+        "The presence of this container indicates the classifier
+         contains an entry whose action is to police or otherwise
+         mark the color of frames.";
+      description
+        "Policing state data.";
+      uses bbf-qos-plc:policing-statistics;
+    }
+  }
+
+  augment "/if:interfaces-state/if:interface/"
+        + "bbf-qos-pol-s:qos-policies/bbf-qos-pol-s:ingress" {
+    description
+      "Augment the ingress QoS policy state data for interfaces to
+       report policing state data.";
+    container policing {
+      presence
+        "The presence of this container indicates ingress policing
+         state data is available on this interface.";
+      description
+        "Policing state data.";
+      uses policing-state-data;
+    }
+  }
+
+  augment "/if:interfaces-state/if:interface/"
+        + "bbf-qos-pol-s:qos-policies/bbf-qos-pol-s:egress" {
+    description
+      "Augment the egress QoS policy state data for interfaces to
+       report policing state data.";
+    container policing {
+      presence
+        "The presence of this container indicates egress policing
+         state data is available on this interface.";
+      description
+        "Policing state data.";
+      uses policing-state-data;
     }
   }
 }

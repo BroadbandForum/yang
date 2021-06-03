@@ -1,0 +1,212 @@
+module bbf-hardware-transceiver-alarm-types {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-hardware-transceiver-alarm-types";
+  prefix bbf-hw-xcvr-alt;
+
+  import bbf-alarm-types {
+    prefix bbf-alt;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, ADTRAN
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on hardware
+     management as applicable to access network equipment.
+     As such, this module is specific to access network equipment
+     (e.g., BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module contains a set of alarm definitions
+     related to the management of compact transceivers.
+
+     Copyright (c) 2017-2021, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a4; see
+     the TR itself for full legal notices.";
+
+  revision 2021-06-02 {
+    description
+      "Amendment 4.
+       * Approval Date:    2021-06-02.
+       * Publication Date: 2021-06-02.";
+    reference
+      "TR-383a4: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-4.pdf>";
+  }
+
+  identity transceiver-alarm-type-id {
+    base bbf-alt:bbf-threshold-crossing-alarm-type-id;
+    description
+      "Base identity for transceiver alarms.
+
+       This identity is abstract and SHOULD NOT generally be used for
+       alarms. If used to define an alarm that was not known at
+       design time, it MUST be qualified with an alarm type qualifier
+       string. This practice, however, should be generally avoided to
+       ensure all possible alarms are known at design time.";
+  }
+
+  identity temperature-high {
+    base transceiver-alarm-type-id;
+    description
+      "The internal temperature has exceeded the high level
+       threshold.";
+  }
+
+  identity temperature-low {
+    base transceiver-alarm-type-id;
+    description
+      "The internal temperature has dropped below the low level
+       threshold.";
+  }
+
+  identity supply-voltage-high {
+    base transceiver-alarm-type-id;
+    description
+      "The internal supply voltage has exceeded the high level
+       threshold.";
+  }
+
+  identity supply-voltage-low {
+    base transceiver-alarm-type-id;
+    description
+      "The internal supply voltage has dropped below the low level
+       threshold.";
+  }
+
+  identity transceiver-link-alarm-type-id {
+    base bbf-alt:bbf-threshold-crossing-alarm-type-id;
+    description
+      "Base identity for transceiver link alarms.
+
+       This identity is abstract and SHOULD NOT generally be used for
+       alarms. If used to define an alarm that was not known at
+       design time, it MUST be qualified with an alarm type qualifier
+       string. This practice, however, should be generally avoided to
+       ensure all possible alarms are known at design time.";
+  }
+
+  identity tx-bias-high {
+    base transceiver-link-alarm-type-id;
+    description
+      "The transmit (TX) bias current has exceeded the high level
+       threshold.";
+  }
+
+  identity tx-bias-low {
+    base transceiver-link-alarm-type-id;
+    description
+      "The transmit (TX) bias current has dropped below the low level
+       threshold.";
+  }
+
+  identity tx-power-high {
+    base transceiver-link-alarm-type-id;
+    description
+      "The transmit (TX) output power has exceeded the high level
+       threshold.";
+  }
+
+  identity tx-power-low {
+    base transceiver-link-alarm-type-id;
+    description
+      "The transmit (TX) output power has dropped below the low level
+       threshold.";
+  }
+
+  identity rx-power-high {
+    base transceiver-link-alarm-type-id;
+    description
+      "The receive (RX) input power has exceeded the high level
+       threshold.";
+  }
+
+  identity rx-power-low {
+    base transceiver-link-alarm-type-id;
+    description
+      "The receive (RX) input power has dropped below the low level
+       threshold.";
+  }
+
+  identity laser-temperature-high {
+    base transceiver-link-alarm-type-id;
+    description
+      "The laser temperature has exceeded the high level threshold.";
+  }
+
+  identity laser-temperature-low {
+    base transceiver-link-alarm-type-id;
+    description
+      "The laser temperature has dropped below the low level
+       threshold.";
+  }
+
+  identity tec-current-high {
+    base transceiver-link-alarm-type-id;
+    description
+      "The Thermoelectric Cooler (TEC) current has exceeded the high
+       level threshold.";
+  }
+
+  identity tec-current-low {
+    base transceiver-link-alarm-type-id;
+    description
+      "The Thermoelectric Cooler (TEC) current has dropped below the
+       low level threshold.";
+  }
+}

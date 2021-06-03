@@ -39,7 +39,7 @@ module bbf-ptm {
      model, ietf-interfaces (RFC7223), with nodes for managing
      Packet Transfer Mode (PTM) interfaces.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2021, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -79,9 +79,19 @@ module bbf-ptm {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a4; see
      the TR itself for full legal notices.";
 
+  revision 2021-06-02 {
+    description
+      "Amendment 4.
+       * Approval Date:    2021-06-02.
+       * Publication Date: 2021-06-02.";
+    reference
+      "TR-383a4: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -134,8 +144,7 @@ module bbf-ptm {
         }
         mandatory true;
         description
-          "References the lower-layer interface.
-           The lower-layer must be of the type fastdsl.";
+          "References the lower-layer interface.";
       }
     }
   }
@@ -145,9 +154,9 @@ module bbf-ptm {
       "A reference to a PTM interface configuration data.";
     leaf interface {
       type if:interface-ref;
-      must "derived-from-or-self(/if:interfaces/
-            if:interface[if:name = current()]/if:type,
-            'ianaift:ptm')" {
+      must
+        "derived-from-or-self(/if:interfaces/if:interface[if:name = "
+      + "current()]/if:type, 'ianaift:ptm')" {
         description
           "The referenced interface must be of the type PTM.";
       }
@@ -161,9 +170,8 @@ module bbf-ptm {
       "A reference to a PTM interface state data.";
     leaf interface {
       type if:interface-state-ref;
-      must "derived-from-or-self(/if:interfaces-state/
-            if:interface[if:name = current()]/if:type,
-            'ianaift:ptm')" {
+      must "derived-from-or-self(/if:interfaces-state/if:interface"
+         + "[if:name = current()]/if:type, 'ianaift:ptm')" {
         description
           "The referenced interface must be of the type PTM.";
       }

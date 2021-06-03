@@ -38,7 +38,7 @@ module bbf-hardware-transceivers {
      Specifically, this module augments the ietf-hardware model with
      management of compact transceivers.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2021, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -78,9 +78,19 @@ module bbf-hardware-transceivers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a4; see
      the TR itself for full legal notices.";
 
+  revision 2021-06-02 {
+    description
+      "Amendment 4.
+       * Approval Date:    2021-06-02.
+       * Publication Date: 2021-06-02.";
+    reference
+      "TR-383a4: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -90,6 +100,94 @@ module bbf-hardware-transceivers {
       "TR-383a3: Common YANG Modules
                  <https://www.broadband-forum.org/technical/download/
                           TR-383_Amendment-3.pdf>";
+  }
+
+  feature vendor-eeprom {
+    description
+      "Indicates support for reporting the contents of the vendor-
+       specific EEPROM data fields.";
+    reference
+      "SFF-8472 Rev 12.4, Table 4-1, Address A0h, Bytes 96-127;
+       SFF-8436 Rev 4.9, Table 29, Upper Memory Map Page 00h,
+       Bytes 224-255;
+       INF-8077i Rev 4.5, Table 46, Page 01h,
+       Bytes 224-255";
+  }
+
+  feature vendor-eeprom-string {
+    if-feature "vendor-eeprom";
+    description
+      "Indicates support for reporting the contents of the vendor-
+       specific EEPROM data fields as a string.";
+    reference
+      "SFF-8472 Rev 12.4, Table 4-1, Address A0h, Bytes 96-127;
+       SFF-8436 Rev 4.9, Table 29, Upper Memory Map Page 00h,
+       Bytes 224-255;
+       INF-8077i Rev 4.5, Table 46, Page 01h,
+       Bytes 224-255";
+  }
+
+  feature vendor-eeprom-binary {
+    if-feature "vendor-eeprom";
+    description
+      "Indicates support for reporting the contents of the vendor-
+       specific EEPROM data fields in binary format.";
+    reference
+      "SFF-8472 Rev 12.4, Table 4-1, Address A0h, Bytes 96-127;
+       SFF-8436 Rev 4.9, Table 29, Upper Memory Map Page 00h,
+       Bytes 224-255;
+       INF-8077i Rev 4.5, Table 46, Page 01h,
+       Bytes 224-255";
+  }
+
+  feature extended-information {
+    description
+      "Indicates whether reporting extended information data fields
+       of the transceiver are supported.";
+    reference
+      "SFF-8472 Rev 12.4, Section 10";
+  }
+
+  feature user-eeprom {
+    if-feature "extended-information";
+    description
+      "Indicates support for reporting the contents of the user-
+       writable EEPROM data fields.";
+    reference
+      "SFF-8472 Rev 12.4, Table 10-4, Address A2h, Page 00h/01h,
+       Bytes 128-247;
+       SFF-8436 Rev 4.9, Section 7.6.4 Upper Memory Map Page 02h,
+       Bytes 128-255;
+       INF-8077i Rev 4.5, Section 5.45 Upper Memory Map Table 02h,
+       Bytes 128-255";
+  }
+
+  feature user-eeprom-string {
+    if-feature "user-eeprom";
+    description
+      "Indicates support for reporting the contents of the user-
+       writable EEPROM data fields as a string.";
+    reference
+      "SFF-8472 Rev 12.4, Table 10-4, Address A2h, Page 00h/01h,
+       Bytes 128-247;
+       SFF-8436 Rev 4.9, Section 7.6.4 Upper Memory Map Page 02h,
+       Bytes 128-255;
+       INF-8077i Rev 4.5, Section 5.45 Upper Memory Map Table 02h,
+       Bytes 128-255";
+  }
+
+  feature user-eeprom-binary {
+    if-feature "user-eeprom";
+    description
+      "Indicates support for reporting the contents of the user-
+       writable EEPROM data fields in binary format.";
+    reference
+      "SFF-8472 Rev 12.4, Table 10-4, Address A2h, Page 00h/01h,
+       Bytes 128-247;
+       SFF-8436 Rev 4.9, Section 7.6.4 Upper Memory Map Page 02h,
+       Bytes 128-255;
+       INF-8077i Rev 4.5, Section 5.45 Upper Memory Map Table 02h,
+       Bytes 128-255";
   }
 
   // Alarm/warning flags
@@ -171,14 +269,14 @@ module bbf-hardware-transceivers {
   identity rx-power-high {
     base link-alarm-warning;
     description
-      "The receive (RX) output power has exceeded the high level
+      "The receive (RX) input power has exceeded the high level
        threshold.";
   }
 
   identity rx-power-low {
     base link-alarm-warning;
     description
-      "The receive (RX) output power has dropped below the low level
+      "The receive (RX) input power has dropped below the low level
        threshold.";
   }
 
@@ -205,8 +303,8 @@ module bbf-hardware-transceivers {
   identity tec-current-low {
     base link-alarm-warning;
     description
-      "The Thermoelectric Cooler (TEC) current has exceeded the low
-       level threshold.";
+      "The Thermoelectric Cooler (TEC) current has dropped below the
+       low level threshold.";
   }
 
   //Physical Device Identifiers
@@ -218,8 +316,7 @@ module bbf-hardware-transceivers {
        This identity is abstract and MUST NOT be used to represent a
        physical device.";
     reference
-      "SFF-8472 Revision 12.3, Section 5.1 - Physical Device
-       Identifier Values";
+      "SFF-8472 Rev 12.4, Table 5-1, Address A0h, Byte 0";
   }
 
   identity unknown-physical-device {
@@ -227,8 +324,8 @@ module bbf-hardware-transceivers {
     description
       "Unknown or unspecified.";
     reference
-      "SFF-8472 Revision 12.3, Table 5-1, Value 00h;
-       SFF-8024 Revision 4.1, Table 4-1, Value 04h";
+      "SFF-8472 Rev 12.4, Table 5-1, Address A0h, Byte 0, Value 00h;
+       SFF-8024 Rev 4.8a, Table 4-1, Value 00h";
   }
 
   identity gbic {
@@ -236,8 +333,8 @@ module bbf-hardware-transceivers {
     description
       "GBIC.";
     reference
-      "SFF-8472 Revision 12.3, Table 5-1, Value 01h;
-       SFF-8024 Revision 4.1, Table 4-1, Value 04h";
+      "SFF-8472 Rev 12.4, Table 5-1, Address A0h, Byte 0, Value 01h;
+       SFF-8024 Rev 4.8a, Table 4-1, Value 01h";
   }
 
   identity sff {
@@ -245,8 +342,8 @@ module bbf-hardware-transceivers {
     description
       "Module/connector soldered to a motherboard (using SFF-8472).";
     reference
-      "SFF-8472 Revision 12.3, Table 5-1, Value 02h;
-       SFF-8024 Revision 4.1, Table 4-1, Value 04h";
+      "SFF-8472 Rev 12.4, Table 5-1, Address A0h, Byte 0, Value 02h;
+       SFF-8024 Rev 4.8a, Table 4-1, Value 02h";
   }
 
   identity sfp {
@@ -254,8 +351,8 @@ module bbf-hardware-transceivers {
     description
       "SFP/SFP+/SFP28.";
     reference
-      "SFF-8472 Revision 12.3, Table 5-1, Value 03h;
-       SFF-8024 Revision 4.1, Table 4-1, Value 04h";
+      "SFF-8472 Rev 12.4, Table 5-1, Address A0h, Byte 0, Value 03h;
+       SFF-8024 Rev 4.8a, Table 4-1, Value 03h";
   }
 
   identity xbi-300-pin {
@@ -263,7 +360,7 @@ module bbf-hardware-transceivers {
     description
       "300 pin XBI.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 04h";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 04h";
   }
 
   identity xenpak {
@@ -271,7 +368,7 @@ module bbf-hardware-transceivers {
     description
       "XENPAK.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 05h";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 05h";
   }
 
   identity xfp {
@@ -279,7 +376,7 @@ module bbf-hardware-transceivers {
     description
       "XFP.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 06h";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 06h";
   }
 
   identity xff {
@@ -287,7 +384,7 @@ module bbf-hardware-transceivers {
     description
       "XFF.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 07h";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 07h";
   }
 
   identity xfp-e {
@@ -295,7 +392,7 @@ module bbf-hardware-transceivers {
     description
       "XFP-E.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 08h";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 08h";
   }
 
   identity xpak {
@@ -303,7 +400,7 @@ module bbf-hardware-transceivers {
     description
       "XPAK.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 09h";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 09h";
   }
 
   identity x2 {
@@ -311,7 +408,7 @@ module bbf-hardware-transceivers {
     description
       "X2.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 0Ah";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 0Ah";
   }
 
   identity dwdm-sfp {
@@ -319,7 +416,7 @@ module bbf-hardware-transceivers {
     description
       "DWDM-SFP/SFP+ (not using SFF-8472).";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 0Bh";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 0Bh";
   }
 
   identity qsfp {
@@ -327,7 +424,7 @@ module bbf-hardware-transceivers {
     description
       "QSFP (INF-8438).";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 0Ch";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 0Ch";
   }
 
   identity qsfp-plus-or-later {
@@ -336,7 +433,7 @@ module bbf-hardware-transceivers {
       "QSFP+ or later (SFF-8436, SFF-8635, SFF-8665, SFF-8685 et
        al).";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 0Dh";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 0Dh";
   }
 
   identity cxp-or-later {
@@ -344,7 +441,7 @@ module bbf-hardware-transceivers {
     description
       "CXP or later.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 0Eh";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 0Eh";
   }
 
   identity shielded-mini-multilane-hd-4x {
@@ -352,7 +449,7 @@ module bbf-hardware-transceivers {
     description
       "Shielded Mini Multilane HD 4x.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 0Fh";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 0Fh";
   }
 
   identity shielded-mini-multilane-hd-8x {
@@ -360,7 +457,7 @@ module bbf-hardware-transceivers {
     description
       "Shielded Mini Multilane HD 8x.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 10h";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 10h";
   }
 
   identity qsfp28-or-later {
@@ -368,7 +465,7 @@ module bbf-hardware-transceivers {
     description
       "QSFP28 or later (SFF-8665).";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 11h";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 11h";
   }
 
   identity cxp2-or-later {
@@ -376,7 +473,7 @@ module bbf-hardware-transceivers {
     description
       "CXP2 (aka CXP28) or later.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 12h";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 12h";
   }
 
   identity cdfp-style1-style2 {
@@ -384,7 +481,7 @@ module bbf-hardware-transceivers {
     description
       "CDFP (Style 1/Style 2).";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 13h";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 13h";
   }
 
   identity shielded-mini-multilane-hd-4x-fanout-cable {
@@ -392,7 +489,7 @@ module bbf-hardware-transceivers {
     description
       "Shielded Mini Multilane HD 4x Fanout Cable.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 14h";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 14h";
   }
 
   identity shielded-mini-multilane-hd-8x-fanout-cable {
@@ -400,7 +497,7 @@ module bbf-hardware-transceivers {
     description
       "Shielded Mini Multilane HD 8x Fanout Cable.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 15h";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 15h";
   }
 
   identity cdfp-style3 {
@@ -408,7 +505,7 @@ module bbf-hardware-transceivers {
     description
       "CDFP (Style 3).";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 16h";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 16h";
   }
 
   identity micro-qsfp {
@@ -416,7 +513,7 @@ module bbf-hardware-transceivers {
     description
       "Micro QSFP.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 17h";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 17h";
   }
 
   identity qsfp-dd {
@@ -424,7 +521,7 @@ module bbf-hardware-transceivers {
     description
       "QSFP-DD Double Density 8X Pluggable Transceiver (INF-8628).";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Value 18h";
+      "SFF-8024 Rev 4.8a, Table 4-1, Value 18h";
   }
 
   identity vendor-specific {
@@ -433,7 +530,7 @@ module bbf-hardware-transceivers {
       "Vendor specfic physical device. A vendor may derive specific
        idenities from this one.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-1, Values 80h-FFh";
+      "SFF-8024 Rev 4.8a, Table 4-1, Values 80h-FFh";
   }
 
   //Connector Types
@@ -446,7 +543,7 @@ module bbf-hardware-transceivers {
        This identity is abstract and MUST NOT be used to represent a
        connector type.";
     reference
-      "SFF-8472 Revision 12.3, Section 5.3 - Connector Values.";
+      "SFF-8472 Rev 12.4, Section 5.3, Address A0h, Byte 2";
   }
 
   identity unknown-connector-type {
@@ -454,7 +551,7 @@ module bbf-hardware-transceivers {
     description
       "Unknown or unspecified.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 00h";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 00h";
   }
 
   identity subscriber-connector {
@@ -462,7 +559,7 @@ module bbf-hardware-transceivers {
     description
       "SC (Subscriber Connector).";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 01h";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 01h";
   }
 
   identity fibre-channel-style-1-copper {
@@ -470,7 +567,7 @@ module bbf-hardware-transceivers {
     description
       "Fibre Channel Style 1 copper connector.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 02h";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 02h";
   }
 
   identity fibre-channel-style-2-copper {
@@ -478,7 +575,7 @@ module bbf-hardware-transceivers {
     description
       "Fibre Channel Style 2 copper connector.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 03h";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 03h";
   }
 
   identity bnc-tnc {
@@ -486,7 +583,7 @@ module bbf-hardware-transceivers {
     description
       "BNC/TNC (Bayonet/Threaded Neill-Concelman).";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 04h";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 04h";
   }
 
   identity fibre-channel-coax-headers {
@@ -494,7 +591,7 @@ module bbf-hardware-transceivers {
     description
       "Fibre Channel coax headers.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 05h";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 05h";
   }
 
   identity fibre-jack {
@@ -502,7 +599,7 @@ module bbf-hardware-transceivers {
     description
       "Fibre Jack.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 06h";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 06h";
   }
 
   identity lucent-connector {
@@ -510,7 +607,7 @@ module bbf-hardware-transceivers {
     description
       "LC (Lucent Connector).";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 07h";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 07h";
   }
 
   identity mt-rj {
@@ -518,7 +615,7 @@ module bbf-hardware-transceivers {
     description
       "MT-RJ (Mechanical Transfer - Registered Jack).";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 08h";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 08h";
   }
 
   identity mu {
@@ -526,7 +623,7 @@ module bbf-hardware-transceivers {
     description
       "MU (Multiple Optical).";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 09h";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 09h";
   }
 
   identity sg {
@@ -534,7 +631,7 @@ module bbf-hardware-transceivers {
     description
       "SG.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 0Ah";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 0Ah";
   }
 
   identity optical-pigtail {
@@ -542,7 +639,7 @@ module bbf-hardware-transceivers {
     description
       "Optical Pigtail.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 0Bh";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 0Bh";
   }
 
   identity mpo-1x12 {
@@ -550,7 +647,7 @@ module bbf-hardware-transceivers {
     description
       "MPO 1x12 (Multifiber Parallel Optic).";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 0Ch";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 0Ch";
   }
 
   identity mpo-2x16 {
@@ -558,7 +655,7 @@ module bbf-hardware-transceivers {
     description
       "MPO 2x16 (Multifiber Parallel Optic).";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 0Dh";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 0Dh";
   }
 
   identity hssdc-ii {
@@ -566,7 +663,7 @@ module bbf-hardware-transceivers {
     description
       "HSSDC II (High Speed Serial Data Connector).";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 20h";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 20h";
   }
 
   identity copper-pigtail {
@@ -574,7 +671,7 @@ module bbf-hardware-transceivers {
     description
       "Copper Pigtail.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 21h";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 21h";
   }
 
   identity rj45 {
@@ -582,7 +679,7 @@ module bbf-hardware-transceivers {
     description
       "RF45 (Registered Jack).";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 22h";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 22h";
   }
 
   identity no-separable-connector {
@@ -590,7 +687,7 @@ module bbf-hardware-transceivers {
     description
       "No separable connector.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 23h";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 23h";
   }
 
   identity mxc-2x16 {
@@ -598,7 +695,7 @@ module bbf-hardware-transceivers {
     description
       "MXC 2x16.";
     reference
-      "SFF-8024 Revision 4.1, Table 4-3, Value 24h";
+      "SFF-8024 Rev 4.8a, Table 4-3, Value 24h";
   }
 
   grouping link-parameters {
@@ -612,8 +709,7 @@ module bbf-hardware-transceivers {
          wavelength. For passive and active cable variants, report the
          specification compliance.";
       reference
-        "SFF-8472 Revision 12.3, Section 8.1 - Optical and Cable
-         Variants Specification Compliance.";
+        "SFF-8472 Rev 12.4, Section 8.1, Address A0h, Bytes 60-61";
       case unspecified-wavelength-or-cable-specification-compliance {
         leaf unspecified {
           type empty;
@@ -638,20 +734,22 @@ module bbf-hardware-transceivers {
               description
                 "Compliant to FC-PI-4 Appendix H.";
               reference
-                "SFF-8472 Revision 12.3, Table 8-1, A0=60, bit 1";
+                "SFF-8472 Rev 12.4, Table 8-1, Address A0h, Byte 60,
+                 bit 1";
             }
             enum sff-8431-appendix-e {
               description
                 "Compliant to SFF-8431 Appendix E.";
               reference
-                "SFF-8472 Revision 12.3, Table 8-1, A0=60, bit 0";
+                "SFF-8472 Rev 12.4, Table 8-1, Address A0h, Byte 60,
+                 bit 0";
             }
           }
           description
             "For passive cable variants, this denotes the passive
              cable specification compliance.";
           reference
-            "SFF-8472 Revision 12.3, Table 8-1.";
+            "SFF-8472 Rev 12.4, Table 8-1";
         }
       }
       case active-cable-specification-compliance {
@@ -661,32 +759,36 @@ module bbf-hardware-transceivers {
               description
                 "Compliant to FC-PI-4 Limiting.";
               reference
-                "SFF-8472 Revision 12.3, Table 8-2, A0=60, bit 3";
+                "SFF-8472 Rev 12.4, Table 8-2, Address A0h, Byte 60,
+                 bit 3";
             }
             enum sff-8431-limiting {
               description
                 "Compliant to SFF-8431 Limiting.";
               reference
-                "SFF-8472 Revision 12.3, Table 8-2, A0=60, bit 2";
+                "SFF-8472 Rev 12.4, Table 8-2, Address A0h, Byte 60,
+                 bit 2";
             }
             enum fc-pi-4-appendix-h {
               description
                 "Compliant to FC-PI-4 Appendix H.";
               reference
-                "SFF-8472 Revision 12.3, Table 8-2, A0=60, bit 1";
+                "SFF-8472 Rev 12.4, Table 8-2, Address A0h, Byte 60,
+                 bit 1";
             }
             enum sff-8431-appendix-e {
               description
                 "Compliant to SFF-8431 Appendix E.";
               reference
-                "SFF-8472 Revision 12.3, Table 8-2, A0=60, bit 0";
+                "SFF-8472 Rev 12.4, Table 8-2, Address A0h, Byte 60,
+                 bit 0";
             }
           }
           description
             "For active cable variants, this denotes the active cable
              specification compliance.";
           reference
-            "SFF-8472 Revision 12.3, Table 8-2.";
+            "SFF-8472 Rev 12.4, Table 8-2";
         }
       }
     }
@@ -709,7 +811,7 @@ module bbf-hardware-transceivers {
          degrees Celsius over specified operating temperature and
          voltage. ";
       reference
-        "SFF-8472 Revision 12.3, Section 9.7 - Byte 96-97";
+        "SFF-8472 Rev 12.4, Table 9-16, Address A2h, Bytes 96-97";
     }
     leaf supply-voltage {
       type uint16;
@@ -728,7 +830,7 @@ module bbf-hardware-transceivers {
          is monitored. Refer to the device specification for more
          detail.";
       reference
-        "SFF-8472 Revision 12.3, Section 9.7 - Byte 98-99";
+        "SFF-8472 Rev 12.4, Table 9-16, Address A2h, Bytes 98-99";
     }
   }
 
@@ -746,7 +848,7 @@ module bbf-hardware-transceivers {
          but must be better than +/- 10% of the manufacturer's nominal
          value over specified operating temperature and voltage.";
       reference
-        "SFF-8472 Revision 12.3, Section 9.7 - Byte 100-101";
+        "SFF-8472 Rev 12.4, Table 9-16, Address A2h, Bytes 100-101";
     }
     choice power {
       config false;
@@ -767,7 +869,8 @@ module bbf-hardware-transceivers {
              temperature and voltage. Data is not valid when the
              transmitter is disabled.";
           reference
-            "SFF-8472 Revision 12.3, Section 9.7 - Byte 102-103";
+            "SFF-8472 Rev 12.4, Table 9-16, Address A2h, Bytes 102-
+             103";
         }
         leaf rx-power {
           type uint16;
@@ -787,7 +890,8 @@ module bbf-hardware-transceivers {
              accuracy beyond this minimum required received input
              optical power range is vendor specific.";
           reference
-            "SFF-8472 Revision 12.3, Section 9.7 - Byte 104-105";
+            "SFF-8472 Rev 12.4, Table 9-16, Address A2h, Bytes 104-
+             105";
         }
       }
     }
@@ -803,7 +907,7 @@ module bbf-hardware-transceivers {
          accuracy of the reported temperature changes relative to the
          actual laser temperature changes";
       reference
-        "SFF-8472 Revision 12.3, Section 9.7 - Byte 106-107";
+        "SFF-8472 Rev 12.4, Table 9-16, Address A2h, Bytes 106-107";
     }
     leaf tec-current {
       type int16;
@@ -819,7 +923,7 @@ module bbf-hardware-transceivers {
          must be better than +/- 15% of the maximum TEC current as
          stored in the TEC current high alarm threshold.";
       reference
-        "SFF-8472 Revision 12.3, Section 9.7 - Byte 108-109";
+        "SFF-8472 Rev 12.4, Table 9-16, Address A2h, Bytes 108-109";
     }
   }
 
@@ -839,10 +943,8 @@ module bbf-hardware-transceivers {
          associated with an in-operational link and cause for
          immediate action.";
       reference
-        "SFF-8472 Revision 12.3, Section 9.8 - Alarm and Warning
-         Flag Bits.
-         SFF-8436 Version 4.8, Section 7.6.1.6 - Module and Channel
-         Masks.";
+        "SFF-8472 Rev 12.4, Table 9-7, Address A2h, Bytes 112-117;
+         SFF-8436 Rev 4.9, Table 25, Page A0, Address 100-106";
     }
     leaf-list warning-flag {
       type identityref {
@@ -859,10 +961,8 @@ module bbf-hardware-transceivers {
          higher than expected bias currents in a constant power
          control loop).";
       reference
-        "SFF-8472 Revision 12.3, Section 9.8 - Alarm and Warning
-         Flag Bits.
-         SFF-8436 Version 4.8, Section 7.6.1.6 - Module and Channel
-         Masks.";
+        "SFF-8472 Rev 12.4, Table 9-17, Address A2h, Bytes 112-117;
+         SFF-8436 Rev 4.9, Table 25, Page A0, Address 100-106";
     }
   }
 
@@ -882,10 +982,8 @@ module bbf-hardware-transceivers {
          likely to be associated with an in-operational link and cause
          for immediate action.";
       reference
-        "SFF-8472 Revision 12.3, Section 9.8 - Alarm and Warning
-         Flag Bits.
-         SFF-8436 Version 4.8, Section 7.6.1.6 - Module and Channel
-         Masks.";
+        "SFF-8472 Rev 12.4, Table 9-7, Address A2h, Bytes 112-117;
+         SFF-8436 Rev 4.9, Table 25, Page A0, Address 100-106";
     }
     leaf-list warning-flag {
       type identityref {
@@ -902,10 +1000,8 @@ module bbf-hardware-transceivers {
          (such as for higher than expected bias currents in a constant
          power control loop).";
       reference
-        "SFF-8472 Revision 12.3, Section 9.8 - Alarm and Warning
-         Flag Bits.
-         SFF-8436 Version 4.8, Section 7.6.1.6 - Module and Channel
-         Masks.";
+        "SFF-8472 Rev 12.4, Table 9-7, Address A2h, Bytes 112-117;
+         SFF-8436 Rev 4.9, Table 25, Page A0, Address 100-106";
     }
   }
 
@@ -918,8 +1014,8 @@ module bbf-hardware-transceivers {
          or optical interfaces that are supported by the
          transceiver.";
       reference
-        "SFF-8472 Revision 12.3, Section 5.4 - Transceiver Compliance
-         Codes.";
+        "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Bytes 3-10, 36,
+         62";
       leaf ten-gigabit-ethernet {
         type enumeration {
           enum not-applicable {
@@ -930,25 +1026,29 @@ module bbf-hardware-transceivers {
             description
               "10G Base-ER.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=3, bit 7";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 3,
+               bit 7";
           }
           enum 10g-base-lrm {
             description
               "10G Base-LRM.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=3, bit 6";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 3,
+               bit 6";
           }
           enum 10g-base-lr {
             description
               "10G Base-LR.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=3, bit 5";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 3,
+               bit 5";
           }
           enum 10g-base-sr {
             description
               "10G Base-SR.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=3, bit 4";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 3,
+               bit 4";
           }
         }
         config false;
@@ -965,25 +1065,29 @@ module bbf-hardware-transceivers {
             description
               "1X SX.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=3, bit 3";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 3,
+               bit 3";
           }
           enum 1x-lx {
             description
               "1X LX.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=3, bit 2";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 3,
+               bit 2";
           }
           enum 1x-copper-active {
             description
               "1X Copper Active.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=3, bit 1";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 3,
+               bit 1";
           }
           enum 1x-copper-passive {
             description
               "1X Copper Passive.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=3, bit 0";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 3,
+               bit 0";
           }
         }
         config false;
@@ -1000,13 +1104,15 @@ module bbf-hardware-transceivers {
             description
               "ESCON MMF, 1310nm LED.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=4, bit 7";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 4,
+               bit 7";
           }
           enum escon-smf {
             description
               "ESCON SMF, 1310nm Laser.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=4, bit 6";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 4,
+               bit 6";
           }
         }
         config false;
@@ -1023,73 +1129,85 @@ module bbf-hardware-transceivers {
             description
               "OC-192, short reach.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=4, bit 5";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 4,
+               bit 5";
           }
           enum sonet-reach-specifier-bit1 {
             description
               "SONET reach specifier bit 1.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=4, bit 4";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 4,
+               bit 4";
           }
           enum sonet-reach-specifier-bit2 {
             description
               "SONET reach specifier bit 2.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=4, bit 3";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 4,
+               bit 3";
           }
           enum oc-48-long-reach {
             description
               "OC-48, long reach.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=4, bit 2";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 4,
+               bit 2";
           }
           enum oc-48-intermediate-reach {
             description
               "OC-48, intermediate reach.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=4, bit 1";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 4,
+               bit 1";
           }
           enum oc-48-short-reach {
             description
               "OC-48, short reach.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=4, bit 0";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 4,
+               bit 0";
           }
           enum oc-12-single-mode-long-reach {
             description
               "OC-12, single mode, long reach.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=5, bit 6";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 5,
+               bit 6";
           }
           enum oc-12-single-mode-intermediate-reach {
             description
               "OC-12, single mode, intermediate reach.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=5, bit 5";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 5,
+               bit 5";
           }
           enum oc-12-short-reach {
             description
               "OC-12, short reach.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=5, bit 4";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 5,
+               bit 4";
           }
           enum oc-3-single-mode-long-reach {
             description
               "OC-3, single mode, long reach.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=5, bit 2";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 5,
+               bit 2";
           }
           enum oc-3-single-mode-intermediate-reach {
             description
               "OC-3, single mode, intermediate reach.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=5, bit 1";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 5,
+               bit 1";
           }
           enum oc-3-short-reach {
             description
               "OC-3, short reach.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=5, bit 0";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 5,
+               bit 0";
           }
         }
         config false;
@@ -1106,49 +1224,57 @@ module bbf-hardware-transceivers {
             description
               "BASE-PX.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=6, bit 7";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 6,
+               bit 7";
           }
           enum base-bx10 {
             description
               "BASE-BX10.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=6, bit 6";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 6,
+               bit 6";
           }
           enum 100base-fx {
             description
               "100BASE-FX.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=6, bit 5";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 6,
+               bit 5";
           }
           enum 100base-lx-or-lx-10 {
             description
               "100BASE-LX/LX-10.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=6, bit 4";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 6,
+               bit 4";
           }
           enum 1000base-t {
             description
               "1000BASE-T.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=6, bit 3";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 6,
+               bit 3";
           }
           enum 1000base-cx {
             description
               "1000BASE-CX.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=6, bit 2";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 6,
+               bit 2";
           }
           enum 1000base-lx {
             description
               "1000BASE-LX.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=6, bit 1";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 6,
+               bit 1";
           }
           enum 1000base-sx {
             description
               "1000BASE-SX.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=6, bit 0";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 6,
+               bit 0";
           }
         }
         config false;
@@ -1165,31 +1291,36 @@ module bbf-hardware-transceivers {
             description
               "Very long distance (V).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=7, bit 7";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 7,
+               bit 7";
           }
           enum short-distance {
             description
               "Short distance (S).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=7, bit 6";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 7,
+               bit 6";
           }
           enum intermediate-distance {
             description
               "Intermediate distance (I).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=7, bit 5";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 7,
+               bit 5";
           }
           enum long-distance {
             description
               "Long distance (L).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=7, bit 4";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 7,
+               bit 4";
           }
           enum medium-distance {
             description
               "Medium distance (M).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=7, bit 3";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 7,
+               bit 3";
           }
         }
         config false;
@@ -1206,43 +1337,50 @@ module bbf-hardware-transceivers {
             description
               "Shortwave laser, linear (SA).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=7, bit 2";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 7,
+               bit 2";
           }
           enum longwave-laser-lc {
             description
               "Longwave laser (LC).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=7, bit 1";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 7,
+               bit 1";
           }
           enum electrical-inter-enclosure {
             description
               "Electrical inter-enclosure (EL).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=7, bit 0";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 7,
+               bit 0";
           }
           enum electrical-intra-enclosure {
             description
               "Electrical intra-enclosure (EL).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=8, bit 7";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 8,
+               bit 7";
           }
           enum shortwave-laser-without-ofc {
             description
               "Shortwave laser w/o OFC (SN).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=8, bit 6";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 8,
+               bit 6";
           }
           enum shortwave-laser-with-ofc {
             description
               "Shortwave laser with OFC (SL).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=8, bit 5";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 8,
+               bit 5";
           }
           enum longwave-laser-ll {
             description
               "Longwave laser (LL).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=8, bit 4";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 8,
+               bit 4";
           }
         }
         config false;
@@ -1259,13 +1397,15 @@ module bbf-hardware-transceivers {
             description
               "Active Cable.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=8, bit 3";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 8,
+               bit 3";
           }
           enum passive-cable {
             description
               "Passive Cable.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=8, bit 2";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 8,
+               bit 2";
           }
         }
         config false;
@@ -1282,43 +1422,50 @@ module bbf-hardware-transceivers {
             description
               "Twin Axial Pair (TW).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=9, bit 7";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 9,
+               bit 7";
           }
           enum twin-twisted-pair {
             description
               "Twin Twisted Pair (TP).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=9, bit 6";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 9,
+               bit 6";
           }
           enum miniature-coax {
             description
               "Miniature Coax (MI).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=9, bit 5";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 9,
+               bit 5";
           }
           enum video-coax {
             description
               "Video Coax (TV).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=9, bit 4";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 9,
+               bit 4";
           }
           enum multimode-62.5um {
             description
               "Multimode, 62.5um (M6).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=9, bit 3";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 9,
+               bit 3";
           }
           enum multimode-50um {
             description
               "Multimode, 50um (M5 or M5E).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=9, bit 2";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 9,
+               bit 2";
           }
           enum single-mode {
             description
               "Single Mode (SM).";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=9, bit 0";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 9,
+                bit 0";
           }
         }
         config false;
@@ -1335,43 +1482,50 @@ module bbf-hardware-transceivers {
             description
               "1200 MBytes/sec.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=10, bit 7";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 10,
+               bit 7";
           }
           enum 800-mbytes-sec {
             description
               "800 MBytes/sec.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=10, bit 6";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 10,
+               bit 6";
           }
           enum 1000-mbytes-sec {
             description
               "1600 MBytes/sec.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=10, bit 5";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 10,
+               bit 5";
           }
           enum 400-mbytes-sec {
             description
               "400 MBytes/sec.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=10, bit 4";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 10,
+               bit 4";
           }
           enum 3200-mbytes-sec {
             description
               "3200 MBytes/sec.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=10, bit 3";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 10,
+               bit 3";
           }
           enum 200-mbytes-sec {
             description
               "200 MBytes/sec.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=10, bit 2";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 10,
+               bit 2";
           }
           enum 100-mbytes-sec {
             description
               "100 MBytes/sec.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-3, A0=10, bit 0";
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 10,
+               bit 0";
           }
         }
         config false;
@@ -1388,7 +1542,7 @@ module bbf-hardware-transceivers {
       description
         "Identifiers and codes specific to a given transceiver.";
       reference
-        "SFF-8472 Revision 12.3, Section 5 - Identifiers and Codes.";
+        "SFF-8472 Rev 12.4, Section 5";
       leaf physical-device {
         type identityref {
           base physical-device;
@@ -1398,8 +1552,7 @@ module bbf-hardware-transceivers {
           "The identifier value specifies the physical device
            described by two-wire interface information.";
         reference
-          "SFF-8472 Revision 12.3, Section 5.1 - Physical Device
-           Identifier Values";
+          "SFF-8472 Rev 12.4, Table 5-1, Address A0h, Byte 0";
       }
       leaf physical-device-extended-identifier {
         type enumeration {
@@ -1408,50 +1561,58 @@ module bbf-hardware-transceivers {
               "GBIC definition is not specified or the GBIC definition
                is not compliant with a defined MOD_DEF.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-2, Value 00h";
+              "SFF-8472 Rev 12.4, Table 5-2, Address A0h, Byte 1,
+               Value 00h";
           }
           enum mod-def1 {
             description
               "GBIC is compliant with MOD_DEF 1.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-2, Value 01h";
+              "SFF-8472 Rev 12.4, Table 5-2, Address A0h, Byte 1,
+               Value 01h";
           }
           enum mod-def2 {
             description
               "GBIC is compliant with MOD_DEF 2.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-2, Value 02h";
+              "SFF-8472 Rev 12.4, Table 5-2, Address A0h, Byte 1,
+               Value 02h";
           }
           enum mod-def3 {
             description
               "GBIC is compliant with MOD_DEF 3.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-2, Value 03h";
+              "SFF-8472 Rev 12.4, Table 5-2, Address A0h, Byte 1,
+               Value 03h";
           }
           enum two-wire-interface-id {
             description
               "GBIC/SFP function is defined by two-wire interface ID
                only.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-2, Value 04h";
+              "SFF-8472 Rev 12.4, Table 5-2, Address A0h, Byte 1,
+               Value 04h";
           }
           enum mod-def5 {
             description
               "GBIC is compliant with MOD_DEF 5.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-2, Value 05h";
+              "SFF-8472 Rev 12.4, Table 5-2, Address A0h, Byte 1,
+               Value 05h";
           }
           enum mod-def6 {
             description
               "GBIC is compliant with MOD_DEF 6.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-2, Value 06h";
+              "SFF-8472 Rev 12.4, Table 5-2, Address A0h, Byte 1,
+               Value 06h";
           }
           enum mod-def7 {
             description
               "GBIC is compliant with MOD_DEF 7.";
             reference
-              "SFF-8472 Revision 12.3, Table 5-2, Value 07h";
+              "SFF-8472 Rev 12.4, Table 5-2, Address A0h, Byte 1,
+               Value 07h";
           }
         }
         config false;
@@ -1468,8 +1629,7 @@ module bbf-hardware-transceivers {
            MOD_DEF value to be inferred from the other information
            provided.";
         reference
-          "SFF-8472 Revision 12.3, Section 5.2 - Physical Device
-           Extended Identifier Values";
+          "SFF-8472 Rev 12.4, Table 5-2, Address A0h, Byte 1";
       }
       leaf connector {
         type identityref {
@@ -1480,7 +1640,7 @@ module bbf-hardware-transceivers {
           "Indicates the external optical or electrical cable
            connector provided as the media interface.";
         reference
-          "SFF-8472 Revision 12.3, Section 5.3 - Connector Values.";
+          "SFF-8472 Rev 12.4, Section 5.3 Address A0h, Byte 2";
       }
       uses transceiver-compliance-codes;
       leaf encoding {
@@ -1489,45 +1649,45 @@ module bbf-hardware-transceivers {
             description
               "Unspecified encoding.";
             reference
-              "SFF-8024 Revision 4.1, Table 4-2, Common Value 00h";
+              "SFF-8024 Rev 4.8a, Table 4-2, Common Value 00h";
           }
           enum 8b-10b {
             description
               "8-bit words to 10-bit symbols (8B/10B).";
             reference
-              "SFF-8024 Revision 4.1, Table 4-2, Common Value 01h";
+              "SFF-8024 Rev 4.8a, Table 4-2, Common Value 01h";
           }
           enum 4b-5b {
             description
               "4-bits to 5-bits (4B/5B).";
             reference
-              "SFF-8024 Revision 4.1, Table 4-2, Common Value 02h";
+              "SFF-8024 Rev 4.8a, Table 4-2, Common Value 02h";
           }
           enum nrz {
             description
               "Non-return-to-zero (NRZ).";
             reference
-              "SFF-8024 Revision 4.1, Table 4-2, Common Value 03h";
+              "SFF-8024 Rev 4.8a, Table 4-2, Common Value 03h";
           }
           enum manchester {
             description
               "Manchester encoding.";
             reference
-              "SFF-8024 Revision 4.1, Table 4-2, SFF-8472 Value 04h;
+              "SFF-8024 Rev 4.8a, Table 4-2, SFF-8472 Value 04h;
                SFF-8x36 Value 06h";
           }
           enum sonet-scrambled {
             description
               "SONET scrambled.";
             reference
-              "SFF-8024 Revision 4.1, Table 4-2, SFF-8472 Value 05h;
+              "SFF-8024 Rev 4.8a, Table 4-2, SFF-8472 Value 05h;
                SFF-8x36 Value 04h";
           }
           enum 64b-66b {
             description
               "64-bit data to 66-bit line code (64B/66B).";
             reference
-              "SFF-8024 Revision 4.1, Table 4-2, SFF-8472 Value 06h;
+              "SFF-8024 Rev 4.8a, Table 4-2, SFF-8472 Value 06h;
                SFF-8x36 Value 05h";
           }
           enum 256b-257b {
@@ -1535,13 +1695,13 @@ module bbf-hardware-transceivers {
               "4 66 bit line code blocks to 257-bit block
                (256B/257B).";
             reference
-              "SFF-8024 Revision 4.1, Table 4-2, Common Value 07h";
+              "SFF-8024 Rev 4.8a, Table 4-2, Common Value 07h";
           }
           enum pam4 {
             description
               "4-bit Pulse Amplitude Modulation (PAM4).";
             reference
-              "SFF-8024 Revision 4.1, Table 4-2, Common Value 08h";
+              "SFF-8024 Rev 4.8a, Table 4-2, Common Value 08h";
           }
         }
         config false;
@@ -1551,7 +1711,7 @@ module bbf-hardware-transceivers {
            transceiver. The value shall be contained in the two-wire
            interface data.";
         reference
-          "SFF-8472 Revision 12.3, Section 5.6 - Encoding";
+          "SFF-8472 Rev 12.4, Section 5.5, Address A0h, Byte 11";
       }
       leaf nominal-bit-rate {
         type uint8;
@@ -1574,8 +1734,8 @@ module bbf-hardware-transceivers {
            actual information transfer rate will depend on the
            encoding of the data, as defined by the encoding value.";
         reference
-          "SFF-8472 Revision 12.3, Section 5.7 - BR, nominal;
-           SFF-8472 Revision 12.3, Section 8.4 - BR, max";
+          "SFF-8472 Rev 12.4, Table 5-6, Address A0h, Byte 13;
+           SFF-8472 Rev 12.4, Section 8.4, Address A0h, Byte 66";
       }
       leaf maximum-bit-rate {
         type uint8;
@@ -1585,8 +1745,7 @@ module bbf-hardware-transceivers {
           "The upper bit rate limit at which the transceiver will
            still meet its specifications.";
         reference
-          "SFF-8472 Revision 12.3, Section 8.4 - BR, max;
-           SFF-8472 Revision 12.3, Section 8.5 - BR, min";
+          "SFF-8472 Rev 12.4, Section 8.4, Address A0h, Byte 66";
       }
       leaf minimum-bit-rate {
         type uint8;
@@ -1596,7 +1755,7 @@ module bbf-hardware-transceivers {
           "The lower bit rate limit at which the transceiver will
            still meet its specifications.";
         reference
-          "SFF-8472 Revision 12.3, Section 8.5 - BR, min";
+          "SFF-8472 Rev 12.4, Section 8.5, Address A0h, Byte 67";
       }
     }
   }
@@ -1608,7 +1767,7 @@ module bbf-hardware-transceivers {
       description
         "Link lengths for various modes of operation.";
       reference
-        "SFF-8472 Revision 12.3, Section 5 - Link Length.";
+        "SFF-8472 Rev 12.4, Section 5";
       leaf length-single-mode-km {
         type uint8;
         units "km";
@@ -1623,8 +1782,7 @@ module bbf-hardware-transceivers {
            single mode fiber or that the length information must be
            determined from the transceiver technology.";
         reference
-          "SFF-8472 Revision 12.3, Section 6.1 - Length
-           (single mode)-km.";
+          "SFF-8472 Rev 12.4, Section 6.1, Address A0h, Byte 14";
       }
       leaf length-single-mode-100m {
         type uint8;
@@ -1640,8 +1798,7 @@ module bbf-hardware-transceivers {
            single mode fiber or that the length information must be
            determined from the transceiver technology.";
         reference
-          "SFF-8472 Revision 12.3, Section 6.2 - Length
-           (single mode)-(100's)m.";
+          "SFF-8472 Rev 12.4, Section 6.2, Address A0h, Byte 15";
       }
       leaf length-50um-om2 {
         type uint8;
@@ -1658,7 +1815,7 @@ module bbf-hardware-transceivers {
            that the length information must be determined from the
            transceiver technology.";
         reference
-          "SFF-8472 Revision 12.3, Section 6.3 - Length (50um, OM2).";
+          "SFF-8472 Rev 12.4, Section 6.3, Address A0h, Byte 16";
       }
       leaf length-62.5um-om2 {
         type uint8;
@@ -1677,8 +1834,7 @@ module bbf-hardware-transceivers {
            for a multimode transceiver to support OM1, OM2 and OM3
            fiber.";
         reference
-          "SFF-8472 Revision 12.3, Section 6.4 - Length
-           (62.5um, OM1).";
+          "SFF-8472 Rev 12.4, Section 6.4, Address A0h, Byte 17";
       }
       leaf length-50um-om4 {
         type uint8;
@@ -1695,7 +1851,7 @@ module bbf-hardware-transceivers {
            that the length information must be determined from the
            transceiver codes.";
         reference
-          "SFF-8472 Revision 12.3, Section 6.5 - Length (50um, OM4).";
+          "SFF-8472 Rev 12.4, Section 6.5, Address A0h, Byte 18";
       }
       leaf length-active-cable-or-copper {
         type uint8;
@@ -1714,8 +1870,7 @@ module bbf-hardware-transceivers {
            equalization, and connectors is usually required to
            guarantee meeting a particular length requirement.";
         reference
-          "SFF-8472 Revision 12.3, Section 6.5 - Length
-           (Active Cable or Copper).";
+          "SFF-8472 Rev 12.4, Section 6.5, Address A0h, Byte 18";
       }
       leaf length-50um-om3 {
         type uint8;
@@ -1732,7 +1887,7 @@ module bbf-hardware-transceivers {
            length information must be determined from the transceiver
            technology.";
         reference
-          "SFF-8472 Revision 12.3, Section 6.6 - Length (50um, OM3).";
+          "SFF-8472 Rev 12.4, Table 6-1, Address A0h, Byte 19";
       }
     }
   }
@@ -1783,8 +1938,7 @@ module bbf-hardware-transceivers {
 
          This is reported via 'mfg-date'.";
       reference
-        "SFF-8472 Revision 12.3, Section 7 - Vendor Fields;
-         Section 8.6 - Vendor SN and Section 8.7 - Date Code";
+        "SFF-8472 Rev 12.4, Section 7, 8.6, 8.7";
       leaf oui {
         type string {
           pattern '[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){2}';
@@ -1796,7 +1950,7 @@ module bbf-hardware-transceivers {
            Company Identifier for the vendor. A value of '00:00:00'
            indicates that the Vendor OUI is unspecified.";
         reference
-          "SFF-8472 Revision 12.3, Section 7.2 - Vendor OUI";
+          "SFF-8472 Rev 12.4, Section 7.2, Address 10h, Bytes 37-39";
       }
       leaf part-number {
         type string {
@@ -1810,7 +1964,46 @@ module bbf-hardware-transceivers {
            number or product name. An empty string indicates that the
            vendor PN is unspecified.";
         reference
-          "SFF-8472 Revision 12.3, Section 7.3 - Vendor PN";
+          "SFF-8472 Rev 12.4, Section 7.3, Address 10h, Bytes 40-45";
+      }
+      container eeprom {
+        if-feature "bbf-hw-xcvr:vendor-eeprom";
+        config false;
+        description
+          "Data nodes reporting the contents of the vendor-specific
+           EEPROM data fields.";
+        reference
+          "SFF-8472 Rev 12.4, Table 4-1, Address A0h, Bytes 96-127;
+           SFF-8436 Rev 4.9, Table 29, Upper Memory Map Page 00h,
+           Bytes 224-255;
+           INF-8077i Rev 4.5, Table 46, Page 01h,
+           Bytes 224-255";
+        leaf string {
+          if-feature "bbf-hw-xcvr:vendor-eeprom-string";
+          type string {
+            length "0..32";
+            pattern '[ -~]*';
+          }
+          description
+            "Contents of the vendor-specific EEPROM locations as a
+             sequence of an ASCII characters. Note that non-printable
+             characters will be ignored.
+
+             A zero length string indicates no octets are printable
+             ASCII characters
+
+             The binary representation provided by 'binary', if
+             supported, will return all octets regardless of value.";
+        }
+        leaf binary {
+          if-feature "bbf-hw-xcvr:vendor-eeprom-binary";
+          type binary {
+            length "0..32";
+          }
+          description
+            "Contents of the vendor-specific EEPROM locations as a
+             sequence of octets.";
+        }
       }
     }
   }
@@ -1839,8 +2032,7 @@ module bbf-hardware-transceivers {
          threshold compensation or adjustment is vendor specific and
          optional.";
       reference
-        "SFF-8472 Revision 12.3, Section 9.4 - Alarm and Warning
-         Thresholds";
+        "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 0-39";
       leaf temperature-high-alarm {
         type int32;
         units "0.001 degrees Celsius";
@@ -1849,7 +2041,7 @@ module bbf-hardware-transceivers {
           "The temperature above which will trigger a high temperature
            alarm.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=00-01";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 00-01";
       }
       leaf temperature-low-alarm {
         type int32;
@@ -1859,7 +2051,7 @@ module bbf-hardware-transceivers {
           "The temperature below which will trigger a low temperature
            alarm.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=02-03";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 02-03";
       }
       leaf temperature-high-warning {
         type int32;
@@ -1869,7 +2061,7 @@ module bbf-hardware-transceivers {
           "The temperature above which will trigger a high temperature
            warning.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=04-05";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 04-05";
       }
       leaf temperature-low-warning {
         type int32;
@@ -1879,7 +2071,7 @@ module bbf-hardware-transceivers {
           "The temperature below which will trigger a low temperature
            warning.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=06-07";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 06-07";
       }
       leaf supply-voltage-high-alarm {
         type uint16;
@@ -1889,7 +2081,7 @@ module bbf-hardware-transceivers {
           "The voltage above which will trigger a high supply voltage
            alarm.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=08-09";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 08-09";
       }
       leaf supply-voltage-low-alarm {
         type uint16;
@@ -1899,7 +2091,7 @@ module bbf-hardware-transceivers {
           "The voltage below which will trigger a low supply voltage
            alarm.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=10-11";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 10-11";
       }
       leaf supply-voltage-high-warning {
         type uint16;
@@ -1909,7 +2101,7 @@ module bbf-hardware-transceivers {
           "The voltage above which will trigger a high supply voltage
            warning.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=12-13";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 12-13";
       }
       leaf supply-voltage-low-warning {
         type uint16;
@@ -1919,7 +2111,7 @@ module bbf-hardware-transceivers {
           "The voltage below which will trigger a low supply voltage
            warning.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=14-15";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 14-15";
       }
       leaf tx-bias-high-alarm {
         type uint16;
@@ -1929,7 +2121,7 @@ module bbf-hardware-transceivers {
           "The bias current above which will trigger a high transmit
            bias alarm.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=16-17";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 16-17";
       }
       leaf tx-bias-low-alarm {
         type uint16;
@@ -1939,7 +2131,7 @@ module bbf-hardware-transceivers {
           "The bias current below which will trigger a low transmit
            bias alarm.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=18-19";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 18-19";
       }
       leaf tx-bias-high-warning {
         type uint16;
@@ -1949,7 +2141,7 @@ module bbf-hardware-transceivers {
           "The bias current above which will trigger a high transmit
            bias warning.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=20-21";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 20-21";
       }
       leaf tx-bias-low-warning {
         type uint16;
@@ -1959,7 +2151,7 @@ module bbf-hardware-transceivers {
           "The bias current below which will trigger a low transmit
            bias warning.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=22-23";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 22-23";
       }
       leaf tx-power-high-alarm {
         type uint16;
@@ -1969,7 +2161,7 @@ module bbf-hardware-transceivers {
           "The power above which will trigger a high transmit power
            alarm.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=24-25";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 24-25";
       }
       leaf tx-power-low-alarm {
         type uint16;
@@ -1979,7 +2171,7 @@ module bbf-hardware-transceivers {
           "The power below which will trigger a low transmit power
            alarm.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=26-27";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 26-27";
       }
       leaf tx-power-high-warning {
         type uint16;
@@ -1989,7 +2181,7 @@ module bbf-hardware-transceivers {
           "The power above which will trigger a high transmit power
            warning.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=28-29";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 28-29";
       }
       leaf tx-power-low-warning {
         type uint16;
@@ -1999,7 +2191,7 @@ module bbf-hardware-transceivers {
           "The power below which will trigger a low transmit power
            warning.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=30-31";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 30-31";
       }
       leaf rx-power-high-alarm {
         type uint16;
@@ -2009,7 +2201,7 @@ module bbf-hardware-transceivers {
           "The power above which will trigger a high receive power
            alarm.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=32-33";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 32-33";
       }
       leaf rx-power-low-alarm {
         type uint16;
@@ -2019,7 +2211,7 @@ module bbf-hardware-transceivers {
           "The power below which will trigger a low receive power
            alarm.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=34-35";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 34-35";
       }
       leaf rx-power-high-warning {
         type uint16;
@@ -2029,7 +2221,7 @@ module bbf-hardware-transceivers {
           "The power above which will trigger a high receive power
            warning.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=36-37";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 36-37";
       }
       leaf rx-power-low-warning {
         type uint16;
@@ -2039,7 +2231,7 @@ module bbf-hardware-transceivers {
           "The power below which will trigger a low receive power
            warning.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=38-39";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 38-39";
       }
       leaf laser-temperature-high-alarm {
         type int32;
@@ -2049,7 +2241,7 @@ module bbf-hardware-transceivers {
           "The temperature above which will trigger a high laser
            temperature alarm.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=40-41";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 40-41";
       }
       leaf laser-temperature-low-alarm {
         type int32;
@@ -2059,7 +2251,7 @@ module bbf-hardware-transceivers {
           "The temperature below which will trigger a low laser
            temperature alarm.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=42-43";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 42-43";
       }
       leaf laser-temperature-high-warning {
         type int32;
@@ -2069,7 +2261,7 @@ module bbf-hardware-transceivers {
           "The temperature above which will trigger a high laser
            temperature warning.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=44-45";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 44-45";
       }
       leaf laser-temperature-low-warning {
         type int32;
@@ -2079,7 +2271,7 @@ module bbf-hardware-transceivers {
           "The temperature below which will trigger a low laser
            temperature warning.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=46-47";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 46-47";
       }
       leaf tec-current-high-alarm {
         type int16;
@@ -2089,7 +2281,7 @@ module bbf-hardware-transceivers {
           "The current above which will trigger a high Thermoelectric
            Cooler (TEC) current alarm.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=48-49";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 48-49";
       }
       leaf tec-current-low-alarm {
         type int16;
@@ -2099,7 +2291,7 @@ module bbf-hardware-transceivers {
           "The current below which will trigger a low Thermoelectric
            Cooler (TEC) current alarm.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=50-51";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 50-51";
       }
       leaf tec-current-high-warning {
         type int16;
@@ -2109,7 +2301,7 @@ module bbf-hardware-transceivers {
           "The current above which will trigger a high Thermoelectric
            Cooler (TEC) current warning.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=52-53";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 52-53";
       }
       leaf tec-current-low-warning {
         type int16;
@@ -2119,7 +2311,69 @@ module bbf-hardware-transceivers {
           "The current below which will trigger a low Thermoelectric
            Cooler (TEC) current warning.";
         reference
-          "SFF-8472 Revision 12.3, Table 9-5, A2=54-55";
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 54-55";
+      }
+    }
+  }
+
+  grouping extended-information {
+    description
+      "Data nodes related to the extended information data fields of
+       the pluggable module.";
+    container extended-information {
+      if-feature "bbf-hw-xcvr:extended-information";
+      config false;
+      description
+        "Data nodes related to the extended information of the
+         pluggable module.";
+      reference
+        "SFF-8472 Rev 12.4, Section 10";
+      container user-eeprom {
+        if-feature "bbf-hw-xcvr:user-eeprom";
+        description
+          "Data nodes reporting the contents of the user-writable
+           EEPROM data fields.";
+        reference
+          "SFF-8472 Rev 12.4, Table 10-4, Address A2h, Page 00h/01h,
+           Bytes 128-247;
+           SFF-8436 Rev 4.9, Section 7.6.4 Upper Memory Map Page 02h,
+           Bytes 128-255;
+           INF-8077i Rev 4.5, Section 5.45 Upper Memory Map Table 02h,
+           Bytes 128-255";
+        leaf string {
+          if-feature "bbf-hw-xcvr:user-eeprom-string";
+          type string {
+            length "0..128";
+            pattern '[ -~]*';
+          }
+          description
+            "Content of the user-writable EEPROM locations, excluding
+             the Common Language Equipment Identifier (CLEI) code, if
+             any, represented as a sequence of ASCII characters.
+
+             Note, the CLEI code, if any, is provided in the
+             hardware's component leaf 'uri'.
+
+             Note that non-printable characters will be ignored. A
+             zero length string indicates no octets are printable
+             ASCII characters.
+
+             The binary representation provided by 'binary', if
+             supported, will return all octets regardless of value.";
+        }
+        leaf binary {
+          if-feature "bbf-hw-xcvr:user-eeprom-binary";
+          type binary {
+            length "0..128";
+          }
+          description
+            "Content of the user-writable EEPROM locations, excluding
+             the Common Language Equipment Identifier (CLEI) code, if
+             any, represented as a sequence of octets.
+
+             Note, the CLEI code, if any, is provided in the
+             hardware's component leaf 'uri'.";
+        }
       }
     }
   }
@@ -2142,7 +2396,8 @@ module bbf-hardware-transceivers {
             description
               "Legacy diagnositics implementation.";
             reference
-              "SFF-8472 Revision 12.3, Table 8-5, A0=92, bit 7";
+              "SFF-8472 Rev 12.4, Table 8-5, Address A0h, Byte 92,
+               bit 7";
           }
         }
         config false;
@@ -2150,8 +2405,7 @@ module bbf-hardware-transceivers {
           "Describes how diagnostic monitoring is implemented in the
            particular transceiver.";
         reference
-          "SFF-8472 Revision 12.3, Section 8.8 - Diagnostic Monitoring
-           Type.";
+          "SFF-8472 Rev 12.4, Section 8.8, Address A0h, Byte 92";
       }
       leaf enhanced-options {
         type bits {
@@ -2160,47 +2414,54 @@ module bbf-hardware-transceivers {
               "Optional Alarm/warning flags implemented for all
                monitored quantities (see Table 9-12).";
             reference
-              "SFF-8472 Revision 12.3, Table 8-6, A0=93, bit 7";
+              "SFF-8472 Rev 12.4, Table 8-6, Address A0h, Byte 93,
+               bit 7";
           }
           bit soft-tx-disable {
             description
               "Optional soft TX_DISABLE control and monitoring
                implemented.";
             reference
-              "SFF-8472 Revision 12.3, Table 8-6, A0=93, bit 6";
+              "SFF-8472 Rev 12.4, Table 8-6, Address A0h, Byte 93,
+               bit 6";
           }
           bit soft-tx-fault {
             description
               "Optional soft TX_FAULT monitoring implemented.";
             reference
-              "SFF-8472 Revision 12.3, Table 8-6, A0=93, bit 5";
+              "SFF-8472 Rev 12.4, Table 8-6, Address A0h, Byte 93,
+               bit 5";
           }
           bit soft-rx-los {
             description
               "Optional soft RX_LOS monitoring implemented.";
             reference
-              "SFF-8472 Revision 12.3, Table 8-6, A0=93, bit 4";
+              "SFF-8472 Rev 12.4, Table 8-6, Address A0h, Byte 93,
+               bit 4";
           }
           bit soft-rate-select {
             description
               "Optional soft RATE_SELECT control and monitoring
                implemented.";
             reference
-              "SFF-8472 Revision 12.3, Table 8-6, A0=93, bit 3";
+              "SFF-8472 Rev 12.4, Table 8-6, Address A0h, Byte 93,
+               bit 3";
           }
           bit application-select {
             description
               "Optional Application Select control implemented per
                SFF-8079.";
             reference
-              "SFF-8472 Revision 12.3, Table 8-6, A0=93, bit 2";
+              "SFF-8472 Rev 12.4, Table 8-6, Address A0h, Byte 93,
+               bit 2";
           }
           bit alarm-rate-select-sff-8431 {
             description
               "Optional soft Rate Select control implemented per
                SFF-8431.";
             reference
-              "SFF-8472 Revision 12.3, Table 8-6, A0=93, bit 1";
+              "SFF-8472 Rev 12.4, Table 8-6, Address A0h, Byte 93,
+               bit 1";
           }
         }
         config false;
@@ -2212,7 +2473,7 @@ module bbf-hardware-transceivers {
            system to determine which functions are available over the
            2 wire serial bus.";
         reference
-          "SFF-8472 Revision 12.3, Section 8.10 - Enhanced Options";
+          "SFF-8472 Rev 12.4, Table 8-6, Address A0h, Byte 93";
       }
       container diagnostics {
         presence
@@ -2223,12 +2484,13 @@ module bbf-hardware-transceivers {
         description
           "Diagnostic data of the transceiver.";
         reference
-          "SFF-8472 Revision 12.3, Section 8.8 - Diagnostic Monitoring
-           Type; Section 9 - Diagnostics";
+          "SFF-8472 Rev 12.4, Section 8.8, Address A0h, Byte 92;
+           SFF-8472 Rev 12.4, Section 9";
         uses transceiver-diagnostic-parameters;
         uses transceiver-alarm-diagnostic-parameters;
       }
       uses thresholds;
+      uses extended-information;
     }
   }
 
@@ -2251,8 +2513,8 @@ module bbf-hardware-transceivers {
         description
           "Diagnostic data of the transceiver link.";
         reference
-          "SFF-8472 Revision 12.3, Section 8.8 - Diagnostic Monitoring
-           Type; Section 9 - Diagnostics";
+          "SFF-8472 Rev 12.4, Section 8.8, Address A0h, Byte 92;
+           SFF-8472 Rev 12.4, Section 9";
         uses link-diagnostic-parameters;
         uses link-alarm-diagnostic-parameters;
       }

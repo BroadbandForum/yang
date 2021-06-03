@@ -47,7 +47,7 @@ module bbf-frame-classification {
      Specifically, this module contains reusable groupings defined for
      frame classification.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2021, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -87,9 +87,19 @@ module bbf-frame-classification {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a4; see
      the TR itself for full legal notices.";
 
+  revision 2021-06-02 {
+    description
+      "Amendment 4.
+       * Approval Date:    2021-06-02.
+       * Publication Date: 2021-06-02.";
+    reference
+      "TR-383a4: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -132,15 +142,15 @@ module bbf-frame-classification {
     type enumeration {
       enum igmp {
         description
-          "Identifies IPv4 IGMP packets, i.e. the IPv4 packets for
+          "Identifies IPv4 IGMP messages, i.e. the IPv4 packets for
            which in the IPv4 header the protocol field is set to the
            value 0x02.";
       }
       enum mld {
         description
-          "Identifies IPv6 MLD packets, MLD packets are a subset of
+          "Identifies IPv6 MLD messages, MLD messages are a subset of
            the ICMPv6 protocol. ICMPv6 messages are identified with
-           Next Header value of 58. MLD packets are identified by
+           Next Header value of 58. MLD messages are identified by
            specific values of the Type field. Type field values are
            defined in RFC 3810.";
       }
@@ -158,44 +168,44 @@ module bbf-frame-classification {
       }
       enum pppoe-discovery {
         description
-          "Identifies PPPoE discovery packets, which are Ethernet
-           packets with Ethertype=0x8863.";
+          "Identifies PPPoE discovery messages, which are Ethernet
+           frames with Ethertype=0x8863.";
       }
       enum icmpv6 {
         description
-          "Identifies ICMPv6 protocol packeets. ICMPv6 messages are
+          "Identifies ICMPv6 protocol messages. ICMPv6 messages are
            identified with Next Header value of 58. When the
-           individual ICMPv6 packet types are configured then the
+           individual ICMPv6 message types are configured then the
            individual configurations will take precedence over this
            configuration";
       }
       enum nd {
         description
-          "Identifies IPv6 ND packets, ND packets are a subset of the
+          "Identifies IPv6 ND messages, ND mesages are a subset of the
            ICMPv6 protocol. ICMPv6 messages are identified with Next
-           Header value of 58. ND packets are identified by specific
+           Header value of 58. ND messages are identified by specific
            values of the Type field. Type field values are defined in
            RFC 3810.";
       }
       enum arp {
         description
-          "Identifies the ARP packets, which are ethernet packets of
+          "Identifies the ARP messages, which are ethernet frames with
            ethertype 0x0806.";
       }
       enum cfm {
         description
-          "Identifies the CFM packets, which are ethernet packets of
+          "Identifies the CFM messages, which are ethernet frames with
            ethertype 0x8902.";
       }
       enum dot1x {
         description
-          "Identifies the DOT1X packets, which are ethernet packets of
-           ethertype 0x888E.";
+          "Identifies the DOT1X messages, which are ethernet frames
+           with ethertype 0x888E.";
       }
       enum lacp {
         description
-          "Identifies the LACP packets, which are ethernet packets of
-           ethertype 0x8809.";
+          "Identifies the LACP messages, which are ethernet frames
+           with ethertype 0x8809.";
       }
     }
     description
@@ -473,8 +483,8 @@ module bbf-frame-classification {
             type tag-index;
             must 'count(../../tag[index = 0]) > 0' {
               error-message
-                "An inner tag can only be matched on when also
-                 matching on an outer tag.";
+                "An inner tag can only be matched on when also "
+              + "matching on an outer tag.";
               description
                 "Only allow matching on an inner tag, if also
                  matching on the outer tags at the same time.";
@@ -647,14 +657,14 @@ module bbf-frame-classification {
 
          If no case is configured, then the destination of the frame
          is not a matching criterion and then, as to this matching
-         criterion, 'all packets match'.";
+         criterion, 'all frames match'.";
       case any-frame {
         description
           "Any frame.
 
            Configuring this 'any-frame' case is equivalent to not
            configuring any of the cases of this choice and means that
-           'all packets match'. Configuring allows to have some
+           'all frames match'. Configuring allows to have some
            explicit configuration, e.g. in case of the Transparent LAN
            service.";
         leaf any-frame {
@@ -696,7 +706,7 @@ module bbf-frame-classification {
 
          If the container is not present, then none of the destination
          fields of the frame are used as match criterion and then, as
-         to this match criterion, 'all packets match'. The same
+         to this match criterion, 'all frames match'. The same
          applies when the container exists but does not contain any
          configuration.";
       description
@@ -746,17 +756,17 @@ module bbf-frame-classification {
 
   grouping protocol-match {
     description
-      "Flexible match on possible packet field combinations that
+      "Flexible match on possible frame field combinations that
        identify a protocol.";
     choice protocols {
       description
-        "The choice allows to specify combintations of packet field
+        "The choice allows to specify combintations of frame field
          values that identify a particular protocol/ or allows to
          indicate any protocol.
 
          If no case is configured, then the type of protocol message
          conveyed in the frame is not a matching criterion and then,
-         as to this matching criterion, 'all packets match'.";
+         as to this matching criterion, 'all frames match'.";
       case any-protocol {
         leaf any-protocol {
           type empty;
@@ -777,7 +787,7 @@ module bbf-frame-classification {
 
   grouping protocol-match-specific {
     description
-      "Flexible match on possible packet field combinations that
+      "Flexible match on possible frame field combinations that
        identify a protocol.";
     leaf-list protocol {
       type protocols;

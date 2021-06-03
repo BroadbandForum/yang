@@ -1,20 +1,7 @@
-module bbf-qos-policies-sub-interface-rewrite {
+module bbf-location-types {
   yang-version 1.1;
-  namespace "urn:bbf:yang:bbf-qos-policies-sub-interface-rewrite";
-  prefix bbf-qos-pol-subif-rw;
-
-  import ietf-interfaces {
-    prefix if;
-  }
-  import bbf-qos-classifiers {
-    prefix bbf-qos-cls;
-  }
-  import bbf-frame-classification {
-    prefix bbf-classif;
-  }
-  import bbf-sub-interfaces {
-    prefix bbf-subif;
-  }
+  namespace "urn:bbf:yang:bbf-location-types";
+  prefix bbf-loct;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -36,13 +23,14 @@ module bbf-qos-policies-sub-interface-rewrite {
      WA Director: Sven Ooghe, Nokia";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements on the management of
-     Quality of Service (QoS) as applicable to access network
-     equipment. As such, this module is specific to access network
-     equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
+     supporting the Broadband Forum requirements on providing
+     location information associated with network functions.
 
-     Specifically, this module contains augments to sub-interfaces to
-     support policies applied to frames.
+     Specifically, this module defines common types associated with
+     location information.
+
+     This module contains a collection of YANG definitions for
+     types associated with BBF location information.
 
      Copyright (c) 2017-2021, Broadband Forum
 
@@ -97,65 +85,83 @@ module bbf-qos-policies-sub-interface-rewrite {
                  <https://www.broadband-forum.org/technical/download/
                           TR-383_Amendment-4.pdf>";
   }
-  revision 2020-10-13 {
+
+  // Identities
+
+  identity site-type {
     description
-      "Amendment 3.
-       * Approval Date:    2020-10-13.
-       * Publication Date: 2020-10-13.";
-    reference
-      "TR-383a3: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-3.pdf>";
+      "Base identity from which specific site types are derived.";
   }
 
-  augment
-    "/if:interfaces/if:interface/bbf-subif:frame-processing/"
-  + "bbf-subif:inline-frame-processing/bbf-subif:inline-frame-"
-  + "processing/bbf-subif:ingress-rule/bbf-subif:rule/"
-  + "bbf-subif:ingress-rewrite" {
+  identity central-office {
+    base site-type;
     description
-      "Augments the VLAN sub-interface with ingress-rewrite actions.";
-    list copy-from-tags-to-marking-list {
-      key "tag-index";
-      description
-        "An input VLAN tag from which p-bits and/or DEI field content
-         will be preserved.";
-      leaf tag-index {
-        type bbf-classif:tag-index;
-        description
-          "Specifies from which input VLAN tag fields MUST be copied
-           to the frame's marking-list.";
-      }
-      leaf pbit-marking-index {
-        type union {
-          type enumeration {
-            enum not-preserved {
-              description
-                "The p-bits are not preserved.";
-            }
-          }
-          type bbf-qos-cls:qos-pbit-marking-index;
-        }
-        default "not-preserved";
-        description
-          "Specifies the index of the frame's pbit marking list to
-           which the p-bits shall be copied.";
-      }
-      leaf dei-marking-index {
-        type union {
-          type enumeration {
-            enum not-preserved {
-              description
-                "The DEI bit is not preserved.";
-            }
-          }
-          type bbf-qos-cls:qos-pbit-marking-index;
-        }
-        default "not-preserved";
-        description
-          "Specifies the index of the frame's dei marking list to
-           which the DEI bit shall be copied.";
-      }
-    }
+      "The type of site is a Central Office site.";
+  }
+
+  identity cabinet {
+    base site-type;
+    description
+      "The type of site is a cabinet.";
+  }
+
+  identity basement {
+    base site-type;
+    description
+      "The type of site is a basement of a building.";
+  }
+
+  identity floor {
+    base site-type;
+    description
+      "The type of site is a floor of building.";
+  }
+
+  identity plant-type {
+    description
+      "Base identity from which specific plant types are derived. A
+       plant is the place where the resource is located";
+  }
+
+  identity indoor {
+    base plant-type;
+    description
+      "The location of the resource is indoor.";
+  }
+
+  identity outdoor {
+    base plant-type;
+    description
+      "The location of the resource is outdoor.";
+  }
+
+  identity manhole {
+    base plant-type;
+    description
+      "The location of the resource is in a manhole.";
+  }
+
+  identity outdoor-cabinet {
+    base plant-type;
+    description
+      "The location of the resource in an outdoor cabinet.";
+  }
+
+  identity pole {
+    base plant-type;
+    description
+      "The location of the resource is on a pole. ";
+  }
+
+  identity building-facade {
+    base plant-type;
+    description
+      "The location of the resource is on the building facade.";
+  }
+
+  identity pedestal {
+    base plant-type;
+    description
+      "The location of the resource is within a pedestal.";
   }
 }

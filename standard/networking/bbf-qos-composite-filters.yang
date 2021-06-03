@@ -49,7 +49,7 @@ module bbf-qos-composite-filters {
      packet payload fields, and it contains filters composed of a
      combination of these fields.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2021, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -89,9 +89,19 @@ module bbf-qos-composite-filters {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a4; see
      the TR itself for full legal notices.";
 
+  revision 2021-06-02 {
+    description
+      "Amendment 4.
+       * Approval Date:    2021-06-02.
+       * Publication Date: 2021-06-02.";
+    reference
+      "TR-383a4: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -470,7 +480,7 @@ module bbf-qos-composite-filters {
     list composite-filter {
       key "name";
       description
-        "List of composite filter entries.
+        "A composite filter.
 
          An composite filter entry can contain multiple filter
          entries. In case it contains multiple filter entries, then
@@ -508,7 +518,7 @@ module bbf-qos-composite-filters {
       list filter {
         key "name";
         description
-          "List of filter entries.
+          "A filter.
 
            When filter criteria are used for multiple fields, then all
            of them need a match in order to conclude there is a match

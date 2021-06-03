@@ -9,11 +9,20 @@ module bbf-qos-policing {
   import bbf-qos-classifiers {
     prefix bbf-qos-cls;
   }
+  import bbf-qos-policies {
+    prefix bbf-qos-pol;
+  }
   import bbf-qos-policing-types {
     prefix bbf-qos-plc-tp;
   }
   import bbf-dot1q-types {
     prefix bbf-dot1qt;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ietf-yang-types {
+    prefix yang;
   }
 
   organization
@@ -44,7 +53,7 @@ module bbf-qos-policing {
      Specifically, this module augments classifiers to manage the
      policing of flows.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2021, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -84,9 +93,19 @@ module bbf-qos-policing {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a4; see
      the TR itself for full legal notices.";
 
+  revision 2021-06-02 {
+    description
+      "Amendment 4.
+       * Approval Date:    2021-06-02.
+       * Publication Date: 2021-06-02.";
+    reference
+      "TR-383a4: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -141,6 +160,25 @@ module bbf-qos-policing {
        called single bucket policer.";
   }
 
+  feature interface-policing-management {
+    if-feature "bbf-qos-pol:interface-policy-management";
+    description
+      "Indicates support for managing policing per interface.";
+  }
+
+  feature policing-statistics {
+    description
+      "Indicates support for reporting statistics associated with
+       policing.";
+  }
+
+  feature counts-per-ingress-and-egress-color {
+    if-feature "policing-statistics";
+    description
+      "Indicates support for reporting octet and frame counts per
+       ingress color and egress color.";
+  }
+
   identity policing {
     base bbf-qos-cls:action-type;
     description
@@ -151,7 +189,7 @@ module bbf-qos-policing {
     base bbf-qos-cls:action-type;
     description
       "The action-type identity indicating a flow class. This is a
-       classification that can be assigned to a packet and multiple
+       classification that can be assigned to a frame and multiple
        QoS decisions can be coupled to this action type.";
   }
 
@@ -172,19 +210,19 @@ module bbf-qos-policing {
     type enumeration {
       enum green {
         description
-          "Identifies the green color packet.";
+          "Identifies the green color frame.";
       }
       enum yellow {
         description
-          "Identifies the yellow color packet.";
+          "Identifies the yellow color frame.";
       }
       enum red {
         description
-          "Identifies the red color packet.";
+          "Identifies the red color frame.";
       }
     }
     description
-      "Defines the packet color that match.";
+      "Defines the frame color that match.";
   }
 
   grouping single-rate-two-color-marker {
@@ -271,8 +309,7 @@ module bbf-qos-policing {
            rate of traffic that is admitted in the network with the
            assurance that it will not be discarded directly by the
            policer, the traffic in excess to the green one can be
-           discarded in case of congestion and is considered
-           yellow.";
+           discarded in case of congestion and is considered yellow.";
       }
       leaf pbs {
         type bbf-qos-plc-tp:burst-size;
@@ -326,17 +363,17 @@ module bbf-qos-policing {
       leaf couple-flag {
         type bbf-qos-plc-tp:coupling-flag;
         description
-          "The Coupling Flag CF controls the volume of the packets
+          "The Coupling Flag CF controls the volume of the frames
            that are declared Yellow.
 
            When CF is set to 0, the long term average bit rate of
-           packets that are declared Yellow is bounded by EIR.
+           frames that are declared Yellow is bounded by EIR.
 
            When CF is set to 1, the long term average bit rate of
-           packets that are declared Yellow is bounded by CIR + EIR
+           frames that are declared Yellow is bounded by CIR + EIR
            depending on volume of the offered Service Frames that
            are declared Green. In both cases the burst size of the
-           packets that are declared Yellow is bounded by EBS.";
+           frames that are declared Yellow is bounded by EBS.";
       }
       leaf color-mode {
         type bbf-qos-plc-tp:color-mode;
@@ -401,13 +438,183 @@ module bbf-qos-policing {
       "Two rate three color policer with color promotion.";
   }
 
+  grouping policing-statistics {
+    description
+      "Statistics associated with policing.";
+    container statistics {
+      if-feature "bbf-qos-plc:policing-statistics";
+      description
+        "Statistics associated with policing.";
+      container out-green {
+        description
+          "Statistics associated with frames that were marked green by
+           this policer.";
+        leaf total-octets {
+          type yang:counter64;
+          description
+            "The total number of octets from frames that were marked
+             green.";
+        }
+        leaf total-frames {
+          type yang:counter64;
+          description
+            "The total number of frames that were marked green.";
+        }
+        leaf in-green-octets {
+          if-feature
+            "bbf-qos-plc:counts-per-ingress-and-egress-color";
+          type yang:counter64;
+          description
+            "The number of octets from frames that ingressed the
+             policer marked green and egressed marked green.";
+        }
+        leaf in-green-frames {
+          if-feature
+            "bbf-qos-plc:counts-per-ingress-and-egress-color";
+          type yang:counter64;
+          description
+            "The number of frames that ingressed the policer marked
+             green and egressed marked green.";
+        }
+        leaf in-yellow-octets {
+          if-feature
+            "bbf-qos-plc:counts-per-ingress-and-egress-color";
+          type yang:counter64;
+          description
+            "The number of octets from frames that ingressed the
+             policer marked yellow and egressed marked green.";
+        }
+        leaf in-yellow-frames {
+          if-feature
+            "bbf-qos-plc:counts-per-ingress-and-egress-color";
+          type yang:counter64;
+          description
+            "The number of frames that ingressed the policer marked
+             yellow and egressed marked green.";
+        }
+      }
+      container out-yellow {
+        description
+          "Statistics associated with frames that were marked yellow
+           by this policer.";
+        leaf total-octets {
+          type yang:counter64;
+          description
+            "The total number of octets from frames that were marked
+             yellow.";
+        }
+        leaf total-frames {
+          type yang:counter64;
+          description
+            "The total number of frames that were marked yellow.";
+        }
+        leaf in-green-octets {
+          if-feature
+            "bbf-qos-plc:counts-per-ingress-and-egress-color";
+          type yang:counter64;
+          description
+            "The number of octets from frames that ingressed the
+             policer marked green and egressed marked yellow.";
+        }
+        leaf in-green-frames {
+          if-feature
+            "bbf-qos-plc:counts-per-ingress-and-egress-color";
+          type yang:counter64;
+          description
+            "The number of frames that ingressed the policer marked
+             green and egressed marked yellow.";
+        }
+        leaf in-yellow-octets {
+          if-feature
+            "bbf-qos-plc:counts-per-ingress-and-egress-color";
+          type yang:counter64;
+          description
+            "The number of octets from frames that ingressed the
+             policer marked yellow and egressed marked yellow.";
+        }
+        leaf in-yellow-frames {
+          if-feature
+            "bbf-qos-plc:counts-per-ingress-and-egress-color";
+          type yang:counter64;
+          description
+            "The number of frames that ingressed the policer marked
+             yellow and egressed marked yellow.";
+        }
+      }
+      container out-red {
+        description
+          "Statistics associated with frames that were marked red by
+           this policer.";
+        leaf total-octets {
+          type yang:counter64;
+          description
+            "The total number of octets from frames that were marked
+             red.";
+        }
+        leaf total-frames {
+          type yang:counter64;
+          description
+            "The total number of frames that were marked red.";
+        }
+        leaf in-green-octets {
+          if-feature
+            "bbf-qos-plc:counts-per-ingress-and-egress-color";
+          type yang:counter64;
+          description
+            "The number of octets from frames that ingressed the
+             policer marked green and egressed marked red.";
+        }
+        leaf in-green-frames {
+          if-feature
+            "bbf-qos-plc:counts-per-ingress-and-egress-color";
+          type yang:counter64;
+          description
+            "The number of frames that ingressed the policer marked
+             green and egressed marked red.";
+        }
+        leaf in-yellow-octets {
+          if-feature
+            "bbf-qos-plc:counts-per-ingress-and-egress-color";
+          type yang:counter64;
+          description
+            "The number of octets from frames that ingressed the
+             policer marked yellow and egressed marked red.";
+        }
+        leaf in-yellow-frames {
+          if-feature
+            "bbf-qos-plc:counts-per-ingress-and-egress-color";
+          type yang:counter64;
+          description
+            "The number of frames that ingressed the policer marked
+             yellow and egressed marked red.";
+        }
+        leaf in-red-octets {
+          if-feature
+            "bbf-qos-plc:counts-per-ingress-and-egress-color";
+          type yang:counter64;
+          description
+            "The number of octets from frames that ingressed the
+             policer marked red and egressed marked red.";
+        }
+        leaf in-red-frames {
+          if-feature
+            "bbf-qos-plc:counts-per-ingress-and-egress-color";
+          type yang:counter64;
+          description
+            "The number of frames that ingressed the policer marked
+             red and egressed marked red.";
+        }
+      }
+    }
+  }
+
   container policing-profiles {
     description
       "Configuration associated with policing profiles.";
     list policing-profile {
       key "name";
       description
-        "List of policing profiles.";
+        "A QoS policing profile.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
@@ -422,7 +629,18 @@ module bbf-qos-policing {
       choice policing-type {
         mandatory true;
         description
-          "This defines the type of the policer.";
+          "This defines the type of the policer.
+
+           Note that a policer takes as input a stream of frames (the
+           real frame possibly accompanied by meta data such as a
+           color), then polices the stream according to the policer's
+           configuration, and as a result assigns or modifies the
+           color of the frames.
+
+           The policer on its own does not take other actions on the
+           frame. Taking further actions such as for example
+           discarding the frame or assigning a DEI in the marking list
+           is to be configured as another action.";
         case single-rate-two-color-marker-type {
           if-feature "single-rate-two-color-marker";
           uses single-rate-two-color-marker;
@@ -460,7 +678,7 @@ module bbf-qos-policing {
       }
       container hierarchical-policing {
         description
-          "Hierarchical policing is the concept in which packets are
+          "Hierarchical policing is the concept in which frames are
            evaluated against multiple policers. These multiple
            policers encompass one another. I.e. traffic processed in
            the scope of a first policer is also processed in the scope
@@ -488,7 +706,7 @@ module bbf-qos-policing {
         + "cls:match-criteria" {
     description
       "Flexible match on the p-bits or DEI or flow color for assigning
-       packets to a flow.";
+       frames to a flow.";
     list pbit-marking-list {
       key "index";
       status deprecated;
@@ -536,8 +754,8 @@ module bbf-qos-policing {
       type qos-color;
       status deprecated;
       description
-        "Defines the packet color as a classification criterion for
-         assigning packets to a flow.";
+        "Defines the frame color as a classification criterion for
+         assigning frames to a flow.";
     }
   }
 
@@ -545,7 +763,7 @@ module bbf-qos-policing {
         + "bbf-qos-cls:classifier-action-entry-cfg/bbf-qos-cls:"
         + "action-cfg-params" {
     description
-      "Choice of action types for packets matching a classification
+      "Choice of action types for frames matching a classification
        criterium.";
     case flow-color {
       leaf flow-color {
@@ -555,7 +773,7 @@ module bbf-qos-policing {
         }
         type qos-color;
         description
-          "Defines the packet color for when color-aware
+          "Defines the frame color for when color-aware
            classification/actions is needed in a proceeding QoS
            policy.";
       }
@@ -568,7 +786,7 @@ module bbf-qos-policing {
         }
         type qos-color;
         description
-          "Defines the packet color for color aware BAC queuing.";
+          "Defines the frame color for color aware BAC queuing.";
       }
     }
     case discard {
@@ -579,7 +797,7 @@ module bbf-qos-policing {
         }
         type empty;
         description
-          "Defines the action discard packets for a flow.";
+          "Defines the action discard frames for a flow.";
       }
     }
     case policing {
@@ -591,6 +809,39 @@ module bbf-qos-policing {
         description
           "Defines a policing function shall be applied to a flow.";
         uses policing-profile-ref;
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/bbf-qos-pol:qos-policies" {
+    description
+      "Augment the QoS policy management for interfaces to manage
+       policing.";
+    container policing {
+      if-feature "interface-policing-management";
+      presence
+        "The presence of this container indicates policing is
+         managed on this interface.";
+      description
+        "Policing management per interface.";
+      container statistics {
+        if-feature "policing-statistics";
+        description
+          "Management of data nodes associated with the reporting of
+           policing statistics.";
+        leaf enabled {
+          type boolean;
+          default "false";
+          description
+            "If true, enables the accumulation and reporting of
+             statistics for all policers associated with this
+             interface.";
+        }
+        action reset {
+          description
+            "Resets all policing statistics associated with this
+             interface.";
+        }
       }
     }
   }

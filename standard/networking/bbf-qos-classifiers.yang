@@ -48,7 +48,7 @@ module bbf-qos-classifiers {
      that can be used to classify frames and assign actions to be
      applied to those frames.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2021, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -88,9 +88,19 @@ module bbf-qos-classifiers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a4; see
      the TR itself for full legal notices.";
 
+  revision 2021-06-02 {
+    description
+      "Amendment 4.
+       * Approval Date:    2021-06-02.
+       * Publication Date: 2021-06-02.";
+    reference
+      "TR-383a4: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -125,7 +135,7 @@ module bbf-qos-classifiers {
   feature qos-action-permit {
     description
       "This feature indicates whether the system supports the action
-       'permit' for packets that are classified using a QoS
+       'permit' for frames that are classified using a QoS
        classification mechanism.";
   }
 
@@ -138,15 +148,45 @@ module bbf-qos-classifiers {
   typedef qos-pbit-marking-index {
     type uint8;
     description
-      "An index in a Priority Code Point bits (p-bits) marking list,
-       generated via a QoS profile.";
+      "An index to a Priority Code Point bits (p-bits) marking list.
+
+       The marking list is a piece of metadata, i.e. it is data that
+       belongs to the frame but is not a field of the frame itself.
+       Once assigned to the frame it travels with the frame until the
+       frame is transmitted or discarded, this independent of all
+       frame manipulations that take place. The content of this
+       marking list is generated via a QoS profile or via a copy from
+       the frame's pbit in a VLAN sub-interface ingress rewrite. Note
+       that a frame has just one p-bits marking list, i.e. if multiple
+       actions write to the same position in the list, then the last
+       write overwrites the previous.
+
+       As an example, it is possible to provide a metadata pbit to a
+       frame at the ingress side, this data travels with the frame
+       through the switch, and the metadata is used at the egress side
+       when a VLAN tag is pushed into the frame.";
   }
 
   typedef qos-dei-marking-index {
     type uint8;
     description
-      "An index in a Drop Eligibility Inidicator (DEI) marking list
-       generated via a QoS profile.";
+      "An index to a Drop Eligibility Indicator (DEI) marking list.
+
+       The marking list is a piece of metadata, i.e. it is data that
+       belongs to the frame but is not a field of the frame itself.
+       Once assigned to the frame it travels with the frame until the
+       frame is transmitted or discarded, this independent of all
+       frame manipulations that take place. The content of this
+       marking list is generated via a QoS profile or via a copy from
+       the frame's DEI in a VLAN sub-interface ingress rewrite. Note
+       that a frame has just one DEI marking list, i.e. if multiple
+       actions write to the same position in the list, then the last
+       write overwrites the previous.
+
+       As an example, it is possible to provide a metadata DEI to a
+       frame at the ingress side, this data travels with the frame
+       through the switch, and the metadata is used at the egress side
+       when a VLAN tag is pushed into the frame.";
   }
 
   identity classifier-entry-filter-operation-type {
@@ -205,8 +245,8 @@ module bbf-qos-classifiers {
     base action-type;
     description
       "The action-type identity indicating the permit action. I.e.
-       packets to which this action is assigned are permitted and will
-       be subject to thenext step of packet processing where further
+       frames to which this action is assigned are permitted and will
+       be subject to the next step of frame processing where further
        actions can be assigned.";
   }
 
@@ -241,19 +281,19 @@ module bbf-qos-classifiers {
     type enumeration {
       enum green {
         description
-          "Identifies the green color packet.";
+          "Identifies the green color frame.";
       }
       enum yellow {
         description
-          "Identifies the yellow color packet.";
+          "Identifies the yellow color frame.";
       }
       enum red {
         description
-          "Identifies the red color packet.";
+          "Identifies the red color frame.";
       }
     }
     description
-      "Defines the packet color that match.";
+      "Defines the frame color that match.";
   }
 
   grouping pbit-marking {
@@ -302,10 +342,10 @@ module bbf-qos-classifiers {
       leaf dei-value {
         type bbf-dot1qt:dei;
         description
-          "A DEI value to be inserted in the DEI bit of a packet's
-           VLAN tag or as match criteria for another classifier
-           associated with another QoS policy with which the frame is
-           to be processed.";
+          "A DEI value to be inserted in the DEI bit of a frame's VLAN
+           tag or as match criteria for another classifier associated
+           with another QoS policy with which the frame is to be
+           processed.";
       }
     }
   }
@@ -332,15 +372,15 @@ module bbf-qos-classifiers {
 
          The 'match-all-filter' operation will logically AND each of
          the criteria. For example, configuring 'match-all' and
-         dscp-range to 'any' will match on tagged and untagged packets
+         dscp-range to 'any' will match on tagged and untagged frames
          that contain a DSCP field and contain any protocol as the
          default configuration for the protocol is 'any-protocol'.
 
          The 'match-any-filter' operation will logically OR each of
          the configured criteria. For example, configuring 'untagged'
-         and dscp-range to '10-20' will match on all untagged packets
-         as well as any packet containing a DSCP value of 10 to 20 as
-         well as packets containing any protocol as the default
+         and dscp-range to '10-20' will match on all untagged frames
+         as well as any IP packet containing a DSCP value of 10 to 20
+         as well as frames containing any protocol as the default
          configuration for the protocol is 'any-protocol'.";
       choice vlan-tag-match-type {
         status deprecated;
@@ -397,27 +437,26 @@ module bbf-qos-classifiers {
               status deprecated;
               description
                 "Filter containing p-bits value(s) to be matched with
-                 the value of the corresponding packet field. The list
+                 the value of the corresponding frame field. The list
                  of values form an OR condition: in case the value of
-                 the packet field matches with one of the values of
-                 the leaf then there is a match. In case the leaf
+                 the frame field matches with one of the values of the
+                 leaf then there is a match. In case the leaf
                  specifies a set of values and none of them appear in
-                 the packet, then there is no match. In case the leaf
-                 specifies a value for a packet field that is not
-                 present, then no packets match the filter. For
-                 example, an untagged packet does not contain p-bits,
-                 hence this packet will not match a specified p-bits
+                 the frame, then there is no match. In case the leaf
+                 specifies a value for a frame field that is not
+                 present, then no frames match the filter. For
+                 example, an untagged frame does not contain p-bits,
+                 hence this frame will not match a specified p-bits
                  value. In case the leaf is an empty list, or unknown,
-                 then no match is required and all packets classify
-                 the filter, including untagged packets.
+                 then no match is required and all frames classify
+                 the filter, including untagged frames.
 
                  An Ethernet frame can contain multiple VLAN tags or
                  no VLAN tag. The vlan-tag-match-type/vlan-tagged/tag
                  is a list and the element with index 0 is used to
                  match with the p-bits of outermost VLAN tag of the
-                 packet, the element with index 1 is used to match
-                 with the p-bits of the second VLAN tag of the
-                 frame.";
+                 frame, the element with index 1 is used to match with
+                 the p-bits of the second VLAN tag of the frame.";
             }
             leaf in-dei {
               type uint8 {
@@ -426,22 +465,22 @@ module bbf-qos-classifiers {
               status deprecated;
               description
                 "Filter containing DEI bit value(s) to be matched with
-                 the values of the corresponding packet fields. In
-                 case the leaf specifies a value for a packet field
-                 that is not present, then no packets match the
-                 filter. For example, an untagged packet does not
-                 contain a DEI bit, hence this packet will not match a
-                 specified DEI bit value. In case the leaf is unknown,
-                 no match is required and all packets classify the
-                 filter, including untagged packets.
+                 the values of the corresponding frame fields. In case
+                 the leaf specifies a value for a frame field that is
+                 not present, then no frames match the filter. For
+                 example, an untagged frame does not contain a DEI
+                 bit, hence this frame will not match a specified DEI
+                 bit value. In case the leaf is unknown, no match is
+                 required and all frames classify the filter,
+                 including untagged frames.
 
                  An Ethernet frame can contain multiple VLAN tags or
                  no VLAN tag. The vlan-tag-match-type/vlan-tagged/tag
                  is a list and the element with index 0 is used to
                  match with the DEI bit of the outermost VLAN tag of
-                 the packet, the element with index 1 is used to match
+                 the frame, the element with index 1 is used to match
                  with the DEI bit of the second VLAN tag of the
-                 packet.";
+                 frame.";
             }
           }
         }
@@ -456,7 +495,7 @@ module bbf-qos-classifiers {
       choice protocols {
         status deprecated;
         description
-          "The choice allows to specify combintations of packet field
+          "The choice allows to specify combintations of frame field
            values that identify a particular protocol or allows to
            indicate any protocol.
 
@@ -487,7 +526,7 @@ module bbf-qos-classifiers {
 
   grouping classifier-action-entry-cfg {
     description
-      "List of actions to be applied to a classified set of packets.";
+      "List of actions to be applied to a classified set of frames.";
     list classifier-action-entry-cfg {
       key "action-type";
       ordered-by user;
@@ -555,7 +594,7 @@ module bbf-qos-classifiers {
         case permit {
           if-feature "bbf-qos-cls:qos-action-permit";
           description
-            "The action type for packets matching a classification
+            "The action type for frames matching a classification
              criterium is that they are permitted and will be subject
              to further processing.";
           leaf permit {
@@ -565,7 +604,7 @@ module bbf-qos-classifiers {
             }
             type empty;
             description
-              "The action type for packets matching a classification
+              "The action type for frames matching a classification
                criterium is 'permit'.";
           }
         }
@@ -582,20 +621,20 @@ module bbf-qos-classifiers {
       description
         "Reports the set of system defaults that apply when the
          application of QoS policies does not generate such data, but
-         the processing of a packet requires this data.
+         the processing of a frame requires this data.
 
-         When a packet is received or to be transmitted on an
+         When a frame is received or to be transmitted on an
          interface, then it can be subject to QoS policies that are
          configured for this interface. The definition of QoS policies
-         includes the assignment of 'meta-data' to packets which can
-         then be used during the further processing of the packet.
+         includes the assignment of metadata to frames which can then
+         be used during the further processing of the frame.
 
          An example is the assignment of a traffic class. This traffic
          class is used, after the forwarding decision has been made
          and all QOS polices are applied, to identify the queue on the
          outgoing interface. If a traffic class is not explictly
          configured, a default must be used for each matched ingress
-         packet. This value is reported in 'scheduling-traffic-class'.
+         frame. This value is reported in 'scheduling-traffic-class'.
 
          And similar for the other data nodes.";
       leaf scheduling-traffic-class {
@@ -604,17 +643,17 @@ module bbf-qos-classifiers {
           type enumeration {
             enum discard {
               description
-                "The traffic class 'discard' means that packets will
+                "The traffic class 'discard' means that frames will
                  not get a traffic class by default. When the
-                 processing of the packet comes to a moment that a
+                 processing of the frame comes to a moment that a
                  traffic class is needed, and none is assigned through
                  having applied the QoS profiles, then the system
-                 shall discard the packet.";
+                 shall discard the frame.";
             }
           }
         }
         description
-          "Defines the traffic class assigned by default to packets.";
+          "Defines the traffic class assigned by default to frames.";
       }
       leaf flow-color {
         type union {
@@ -622,19 +661,19 @@ module bbf-qos-classifiers {
           type enumeration {
             enum discard {
               description
-                "The flow color 'discard' means that packets will not
+                "The flow color 'discard' means that frames will not
                  get a flow color by default. When the processing of
-                 the packet comes to a moment that a flow color is
+                 the frame comes to a moment that a flow color is
                  needed, and none is assigned through having applied
                  the QoS profiles, then the system shall discard the
-                 packet.";
+                 frame.";
             }
           }
         }
         description
-          "Defines the packet's flow color for when color-aware
+          "Defines the frame's flow color for when color-aware
            classification and/or actions are needed in the processing
-           of a packet.";
+           of a frame.";
       }
       leaf bac-color {
         type union {
@@ -642,19 +681,19 @@ module bbf-qos-classifiers {
           type enumeration {
             enum discard {
               description
-                "The BAC color 'discard' means that packets will not
+                "The BAC color 'discard' means that frames will not
                  get a BAC color by default. When the processing of
-                 the packet comes to a moment that a BAC color is
+                 the frame comes to a moment that a BAC color is
                  needed, and none is assigned through having applied
                  the QoS profiles, then the system shall discard the
-                 packet.";
+                 frame.";
             }
           }
         }
         description
-          "Defines the packet's BAC color for when color-aware
+          "Defines the frame's BAC color for when color-aware
            classification and/or actions are needed in the processing
-           of a packet. More specific, when the packet is to be queued
+           of a frame. More specific, when the frame is to be queued
            using a color aware BAC method.";
       }
     }
@@ -662,24 +701,24 @@ module bbf-qos-classifiers {
       if-feature "qos-configurable-defaults";
       description
         "Defines data nodes that allow to configure the default
-         behavior for when the processing of a packet requires data,
+         behavior for when the processing of a frame requires data,
          and the former applying of QoS policies did not generate such
          data. The configured defaults overrule the system defaults
          provide in the container 'system-default-actions'.
 
-         More in detail, when a packet is received or to be
+         More in detail, when a frame is received or to be
          transmitted on an interface, then it can be subject to QoS
          policies that are configured for this interface. The
          definition of QoS policies includes the assignment of
-         'meta-data' to packets which can then be used during the
-         further processing of the packet.
+         metadata to frames which can then be used during the
+         further processing of the frame.
 
          An example is the assignment of a traffic class. This traffic
          class is used, after the forwarding decision has been made
          and all QOS polices are applied, to identify the queue on the
          outgoing interface. If a traffic class is not explictly
          configured, a default must be used for each matched ingress
-         packet. This value is configured in
+         frame. This value is configured in
          'scheduling-traffic-class'.
 
          And similar for the other data nodes.";
@@ -689,17 +728,17 @@ module bbf-qos-classifiers {
           type enumeration {
             enum discard {
               description
-                "The traffic class 'discard' means that packets will
+                "The traffic class 'discard' means that frames will
                  not get a traffic class by default. When the
-                 processing of the packet comes to a moment that a
+                 processing of the frame comes to a moment that a
                  traffic class is needed, and none is assigned through
                  having applied the QoS profiles, then the system
-                 shall discard the packet.";
+                 shall discard the frame.";
             }
           }
         }
         description
-          "Defines the traffic class assigned by default to packets.";
+          "Defines the traffic class assigned by default to frames.";
       }
       leaf flow-color {
         type union {
@@ -707,19 +746,19 @@ module bbf-qos-classifiers {
           type enumeration {
             enum discard {
               description
-                "The flow color 'discard' means that packets will not
+                "The flow color 'discard' means that frames will not
                  get a flow color by default. When the processing of
-                 the packet comes to a moment that a flow color is
+                 the frame comes to a moment that a flow color is
                  needed, and none is assigned through having applied
                  the QoS profiles, then the system shall discard the
-                 packet.";
+                 frame.";
             }
           }
         }
         description
-          "Defines the packet's flow color for when color-aware
+          "Defines the frame's flow color for when color-aware
            classification and/or actions are needed in the processing
-           of a packet.";
+           of a frame.";
       }
       leaf bac-color {
         type union {
@@ -727,19 +766,19 @@ module bbf-qos-classifiers {
           type enumeration {
             enum discard {
               description
-                "The BAC color 'discard' means that packets will not
+                "The BAC color 'discard' means that frames will not
                  get a BAC color by default. When the processing of
-                 the packet comes to a moment that a BAC color is
+                 the frame comes to a moment that a BAC color is
                  needed, and none is assigned through having applied
                  the QoS profiles, then the system shall discard the
-                 packet.";
+                 frame.";
             }
           }
         }
         description
-          "Defines the packet's BAC color for when color-aware
+          "Defines the frame's BAC color for when color-aware
            classification and/or actions are needed in the processing
-           of a packet. More specific, when the packet is to be queued
+           of a frame. More specific, when the frame is to be queued
            using a color aware BAC method.";
       }
     }
@@ -779,12 +818,12 @@ module bbf-qos-classifiers {
         }
         case all-packets {
           description
-            "The classifier applies to all packets that are in the
+            "The classifier applies to all frames that are in the
              scope of the flow on which the classifier applies.";
           leaf all-packets {
             type empty;
             description
-              "Identifies all packets.";
+              "Identifies all frames.";
           }
         }
       }
@@ -812,22 +851,22 @@ module bbf-qos-classifiers {
       type bbf-dot1qt:pbit-list;
       description
         "Filter containing p-bits value(s) to be matched with the
-         value of the corresponding packet field. The list of values
-         form an OR condition: in case the value of the packet field
+         value of the corresponding frame field. The list of values
+         form an OR condition: in case the value of the frame field
          matches with one of the values of the leaf then there is a
          match. In case the leaf specifies a set of values and none of
-         them appear in the packet, then there is no match. In case
-         the leaf specifies a value for a packet field that is not
-         present, then no packets match the filter. E.g. an untagged
-         packet does not contain p-bits, hence this packet will not
+         them appear in the frame, then there is no match. In case
+         the leaf specifies a value for a frame field that is not
+         present, then no frames match the filter. E.g. an untagged
+         frame does not contain p-bits, hence this frame will not
          match a specified p-bits value. In case the leaf is an empty
-         list, or unknown, then no match is required and all packets
-         classify the filter, including untagged packets.
+         list, or unknown, then no match is required and all frames
+         classify the filter, including untagged frames.
 
          An Ethernet frame can contain multiple VLAN tags or no VLAN
          tag. The vlan-tag-match-type/vlan-tagged/tag is a list and
          the element with index 0 is used to match with the p-bits of
-         outermost VLAN tag of the packet, the element with index 1 is
+         outermost VLAN tag of the frame, the element with index 1 is
          used to match with the p-bits of the second VLAN tag of the
          frame.";
     }
@@ -842,20 +881,20 @@ module bbf-qos-classifiers {
       }
       description
         "Filter containing DEI bit value(s) to be matched with the
-         values of the corresponding packet fields. In case the leaf
-         specifies a value for a packet field that is not present,
-         then no packets match the filter. E.g. an untagged packet
-         does not contain a DEI bit, hence this packet will not match
-         a specified DEI bit value. In case the leaf is unknown, no
-         match is required and all packets classify the filter,
-         including untagged packets.
+         values of the corresponding frame fields. In case the leaf
+         specifies a value for a frame field that is not present, then
+         no frames match the filter. E.g. an untagged frame does not
+         contain a DEI bit, hence this frame will not match a
+         specified DEI bit value. In case the leaf is unknown, no
+         match is required and all frames classify the filter,
+         including untagged frames.
 
          An Ethernet frame can contain multiple VLAN tags or no VLAN
          tag. The vlan-tag-match-type/vlan-tagged/tag is a list and
          the element with index 0 is used to match with the DEI bit of
-         the outermost VLAN tag of the packet, the element with index
+         the outermost VLAN tag of the frame, the element with index
          1 is used to match with the DEI bit of the second VLAN tag of
-         the packet.";
+         the frame.";
     }
   }
 }

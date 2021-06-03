@@ -45,9 +45,9 @@ module bbf-qos-policies {
      equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
 
      Specifically, this module contains a collection of policies that
-     can be used to control the flow of packets.
+     can be used to control the flow of frames.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2021, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -87,9 +87,19 @@ module bbf-qos-policies {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a4; see
      the TR itself for full legal notices.";
 
+  revision 2021-06-02 {
+    description
+      "Amendment 4.
+       * Approval Date:    2021-06-02.
+       * Publication Date: 2021-06-02.";
+    reference
+      "TR-383a4: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -131,6 +141,11 @@ module bbf-qos-policies {
                         TR-383.pdf>";
   }
 
+  feature interface-policy-management {
+    description
+      "Indicates support for managing QoS policies per interface.";
+  }
+
   typedef qos-policy-profile-ref {
     type leafref {
       path "/bbf-qos-pol:qos-policy-profiles/bbf-qos-pol:policy-"
@@ -146,7 +161,7 @@ module bbf-qos-policies {
     list policy {
       key "name";
       description
-        "List of policies.";
+        "A QoS policy.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
@@ -189,7 +204,7 @@ module bbf-qos-policies {
     list policy-profile {
       key "name";
       description
-        "A list of policy profiles.";
+        "A QoS policy profile.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
@@ -212,12 +227,12 @@ module bbf-qos-policies {
 
   augment "/if:interfaces/if:interface" {
     when
-      "derived-from-or-self(if:type, 'ianaift:ethernetCsmacd') or
-       derived-from-or-self(if:type, 'ianaift:ieee8023adLag') or
-       derived-from-or-self(if:type, 'ianaift:ptm') or
-       derived-from-or-self(if:type, 'bbfift:vlan-sub-interface') or
-       derived-from-or-self(if:type, 'bbfift:l2-termination') or
-       derived-from(if:type, 'bbfift:ethernet-like')" {
+      "derived-from-or-self(if:type, 'ianaift:ethernetCsmacd') or "
+    + "derived-from-or-self(if:type, 'ianaift:ieee8023adLag') or "
+    + "derived-from-or-self(if:type, 'ianaift:ptm') or "
+    + "derived-from-or-self(if:type, 'bbfift:vlan-sub-interface') or "
+    + "derived-from-or-self(if:type, 'bbfift:l2-termination') or "
+    + "derived-from(if:type, 'bbfift:ethernet-like')" {
       description
         "Interfaces that can have QoS policy profiles assigned.";
     }
@@ -242,13 +257,37 @@ module bbf-qos-policies {
       type qos-policy-profile-ref;
       description
         "A reference to a QoS policy profile. The profile is to be
-         applied to incoming packets.";
+         applied to incoming frames.";
     }
     leaf egress-qos-policy-profile {
       type qos-policy-profile-ref;
       description
         "A reference to a QoS policy profile. The profile is to be
-         applied to outgoing packets.";
+         applied to outgoing frames.";
+    }
+  }
+
+  augment "/if:interfaces/if:interface" {
+    when
+      "derived-from-or-self(if:type, 'ianaift:ethernetCsmacd') or "
+    + "derived-from-or-self(if:type, 'ianaift:ieee8023adLag') or "
+    + "derived-from-or-self(if:type, 'ianaift:ptm') or "
+    + "derived-from-or-self(if:type, 'bbfift:vlan-sub-interface') or "
+    + "derived-from-or-self(if:type, 'bbfift:l2-termination') or "
+    + "derived-from(if:type, 'bbfift:ethernet-like')" {
+      description
+        "Interfaces that may support QoS policy management.";
+    }
+    description
+      "Augment interface management with QoS policy
+       management.";
+    container qos-policies {
+      if-feature "interface-policy-management";
+      presence
+        "The presence of this container enables management of QoS
+         policies.";
+      description
+        "Management associated with QoS policies.";
     }
   }
 }

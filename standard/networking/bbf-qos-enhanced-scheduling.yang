@@ -47,7 +47,7 @@ module bbf-qos-enhanced-scheduling {
      Specifically, this module augments interfaces to add additional
      configuration to manage enhanced traffic scheduling.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2021, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -87,9 +87,19 @@ module bbf-qos-enhanced-scheduling {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a4; see
      the TR itself for full legal notices.";
 
+  revision 2021-06-02 {
+    description
+      "Amendment 4.
+       * Approval Date:    2021-06-02.
+       * Publication Date: 2021-06-02.";
+    reference
+      "TR-383a4: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -203,12 +213,13 @@ module bbf-qos-enhanced-scheduling {
       list scheduler-node {
         key "name";
         description
-          "A list of schedulers. A scheduler will be at a position in
-           a hierarchy as specified through references. A particular
-           scheduler will get its input from its childs from which it
-           merges the traffic into a single output stream. This output
-           can be shaped if a reference to a shaper-profile is
-           configured.";
+          "A scheduler.
+
+           A scheduler will be at a position in a hierarchy as
+           specified through references. A particular scheduler will
+           get its input from its childs from which it merges the
+           traffic into a single output stream. This output can be
+           shaped if a reference to a shaper-profile is configured.";
         leaf name {
           type bbf-yang:string-ascii64;
           description
@@ -250,10 +261,9 @@ module bbf-qos-enhanced-scheduling {
                   path "../../../scheduler-node/name";
                 }
                 must
-                  "current()/../../../bbf-qos-sched:scheduler-node
-                   [bbf-qos-sched:name=current()]
-                   /scheduling-level>
-                   current()/../../scheduling-level" {
+                  'current()/../../../bbf-qos-sched:scheduler-node'
+                + '[bbf-qos-sched:name=current()]/scheduling-level > '
+                + 'current()/../../scheduling-level' {
                   error-message
                     "The referenced child scheduler node must have "
                   + "a configured scheduling level which is greater "
@@ -327,9 +337,9 @@ module bbf-qos-enhanced-scheduling {
                   if-feature "dual-rate-scheduling-from-scheduler";
                   container cir-traffic {
                     when
-                      "boolean(../../../bbf-qos-sched:scheduler-node
-                       [bbf-qos-sched:name=current()/../name]
-                       /bbf-qos-sched:shaper-name)" {
+                      'boolean(../../../bbf-qos-sched:scheduler-node'
+                    + '[bbf-qos-sched:name=current()/../name]'
+                    + '/bbf-qos-sched:shaper-name)' {
                       description
                         "Dual rate scheduling is only applicable when
                          the referenced scheduler has a shaper
@@ -360,9 +370,9 @@ module bbf-qos-enhanced-scheduling {
                   }
                   container eir-traffic {
                     when
-                      "boolean(../../../bbf-qos-sched:scheduler-node
-                       [bbf-qos-sched:name=current()/../name]
-                       /bbf-qos-sched:shaper-name)" {
+                      'boolean(../../../bbf-qos-sched:scheduler-node'
+                    + '[bbf-qos-sched:name=current()/../name]'
+                    + '/bbf-qos-sched:shaper-name)' {
                       description
                         "Dual rate scheduling is only applicable when
                          the referenced scheduler has a shaper
@@ -415,17 +425,16 @@ module bbf-qos-enhanced-scheduling {
               list child-scheduler {
                 key "name";
                 description
-                  "A list of child scheduler nodes from which queues
-                   can be referenced.";
+                  "A child scheduler node from which queues can be
+                   referenced.";
                 leaf name {
                   type leafref {
                     path "../../../../scheduler-node/name";
                   }
                   must
-                    "../../../../bbf-qos-sched:scheduler-node
-                     [bbf-qos-sched:name=current()]
-                     /scheduling-level>
-                     current()/../../../scheduling-level" {
+                    '../../../../bbf-qos-sched:scheduler-node'
+                  + '[bbf-qos-sched:name=current()]/scheduling-level '
+                  + '> current()/../../../scheduling-level' {
                     error-message
                       "The referenced child scheduler node must have "
                     + "a configured scheduling level which is greater"
@@ -443,9 +452,9 @@ module bbf-qos-enhanced-scheduling {
                      parent scheduler node.";
                 }
                 container queues {
-                  must "../../../../bbf-qos-sched:scheduler-node
-                        [bbf-qos-sched:name=current()/../name]/
-                        bbf-qos-sched:contains-queues = 'true'" {
+                  must "../../../../bbf-qos-sched:scheduler-node"
+                     + "[bbf-qos-sched:name=current()/../name]/"
+                     + "bbf-qos-sched:contains-queues = 'true'" {
                     error-message
                       "The referenced scheduler must contain queues.";
                     description
@@ -458,16 +467,16 @@ module bbf-qos-enhanced-scheduling {
                   list queue {
                     key "queue-id";
                     description
-                      "List of queues belonging to the referenced
-                       child scheduler node from which traffic will be
+                      "A queue belonging to the referenced child
+                       scheduler node from which traffic will be
                        directed to this scheduler.";
                     leaf queue-id {
                       type leafref {
-                        path "../../../../../../bbf-qos-sched:"
-                           + "scheduler-node"
-                           + "[name=current()/../../../name]/"
-                           + "bbf-qos-sched:queue/"
-                           + "bbf-qos-sched:local-queue-id";
+                        path
+                          "../../../../../../bbf-qos-sched:"
+                        + "scheduler-node[name=current()/../../../"
+                        + "name]/bbf-qos-sched:queue/bbf-qos-sched:"
+                        + "local-queue-id";
                       }
                       description
                         "The ID of the queue associated with the
@@ -481,7 +490,7 @@ module bbf-qos-enhanced-scheduling {
                         leaf priority {
                           type bbf-qos-tm:scheduling-priority;
                           description
-                            "The priority used to schedule packets
+                            "The priority used to schedule frames
                              from a queue or scheduler, relative to
                              the priority assigned to other queues or
                              schedulers that are defined in the same
@@ -542,9 +551,9 @@ module bbf-qos-enhanced-scheduling {
                             + "scheduler expects to receive from "
                             + "that queue.";
                             description
-                              "A queue's shaper type must be 
-                               consistent with the traffic type a 
-                               scheduler expects to receive from that 
+                              "A queue's shaper type must be
+                               consistent with the traffic type a
+                               scheduler expects to receive from that
                                queue.";
                           }
                           default "pir";
@@ -565,8 +574,8 @@ module bbf-qos-enhanced-scheduling {
       list child-scheduler-nodes {
         key "name";
         description
-          "Provides the list of direct child scheduler nodes of the
-           traffic management root.";
+          "A direct child scheduler nodes of the traffic management
+           root.";
         leaf name {
           type leafref {
             path "../../bbf-qos-sched:scheduler-node/bbf-qos-sched:"
@@ -635,15 +644,15 @@ module bbf-qos-enhanced-scheduling {
     }
     leaf scheduler-node-name {
       type leafref {
-        path '/if:interfaces/if:interface[if:name = current()/../'
+        path "/if:interfaces/if:interface[if:name = current()/../"
            + "root-if-name]/bbf-qos-tm:tm-root/bbf-qos-sched:"
            + "scheduler-node/bbf-qos-sched:name";
       }
-      must "/if:interfaces/if:interface[if:name =
-            current()/../root-if-name]/bbf-qos-tm:tm-root
-            /bbf-qos-sched:scheduler-node
-            [bbf-qos-sched:name=current()]
-            /bbf-qos-sched:contains-queues = 'true'" {
+      must
+        "/if:interfaces/if:interface[if:name = current()/../"
+      + "root-if-name]/bbf-qos-tm:tm-root/bbf-qos-sched:"
+      + "scheduler-node[bbf-qos-sched:name=current()]/bbf-qos-sched:"
+      + "contains-queues = 'true'" {
         error-message "The referenced scheduler must contain queues.";
       }
       description
@@ -652,8 +661,7 @@ module bbf-qos-enhanced-scheduling {
   }
 
   augment "/if:interfaces/if:interface" {
-    when "derived-from-or-self(if:type,
-          'bbfift:vlan-sub-interface')" {
+    when "derived-from-or-self(if:type,'bbfift:vlan-sub-interface')" {
       description
         "Augments a VLAN sub-interface.";
     }

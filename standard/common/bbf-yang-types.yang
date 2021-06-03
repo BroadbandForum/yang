@@ -31,7 +31,7 @@ module bbf-yang-types {
      Specifically, this module defines common types used throughout
      BBF data models.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2021, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -71,9 +71,19 @@ module bbf-yang-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a4; see
      the TR itself for full legal notices.";
 
+  revision 2021-06-02 {
+    description
+      "Amendment 4.
+       * Approval Date:    2021-06-02.
+       * Publication Date: 2021-06-02.";
+    reference
+      "TR-383a4: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -214,8 +224,8 @@ module bbf-yang-types {
       pattern '[ -~]*';
     }
     description
-      "Used where a string is represented using at least 1 and no more
-       than 64 ASCII characters.
+      "Used where a string is needed which has a maximum length of
+       64 characters and also allows for a null string (length = 0).
 
        The character set is limited to the 95 printable ASCII
        characters.";

@@ -1,19 +1,19 @@
-module bbf-qos-policies-sub-interface-rewrite {
+module bbf-qos-enhanced-scheduling-state {
   yang-version 1.1;
-  namespace "urn:bbf:yang:bbf-qos-policies-sub-interface-rewrite";
-  prefix bbf-qos-pol-subif-rw;
+  namespace "urn:bbf:yang:bbf-qos-enhanced-scheduling-state";
+  prefix bbf-qos-sched-s;
 
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
   import ietf-interfaces {
     prefix if;
   }
-  import bbf-qos-classifiers {
-    prefix bbf-qos-cls;
+  import bbf-qos-traffic-mngt {
+    prefix bbf-qos-tm;
   }
-  import bbf-frame-classification {
-    prefix bbf-classif;
-  }
-  import bbf-sub-interfaces {
-    prefix bbf-subif;
+  import bbf-qos-traffic-mngt-state {
+    prefix bbf-qos-tm-s;
   }
 
   organization
@@ -41,8 +41,11 @@ module bbf-qos-policies-sub-interface-rewrite {
      equipment. As such, this module is specific to access network
      equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module contains augments to sub-interfaces to
-     support policies applied to frames.
+     Specifically, this module augments interfaces to add monitoring
+     of enhanced traffic scheduling. This module is to be used, along
+     with 'bbf-qos-enhanced-scheduling' when the server does not
+     support Network Management Datastore Architecture (NMDA) as
+     defined in RFC 8342.
 
      Copyright (c) 2017-2021, Broadband Forum
 
@@ -97,64 +100,63 @@ module bbf-qos-policies-sub-interface-rewrite {
                  <https://www.broadband-forum.org/technical/download/
                           TR-383_Amendment-4.pdf>";
   }
-  revision 2020-10-13 {
-    description
-      "Amendment 3.
-       * Approval Date:    2020-10-13.
-       * Publication Date: 2020-10-13.";
-    reference
-      "TR-383a3: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-3.pdf>";
-  }
 
-  augment
-    "/if:interfaces/if:interface/bbf-subif:frame-processing/"
-  + "bbf-subif:inline-frame-processing/bbf-subif:inline-frame-"
-  + "processing/bbf-subif:ingress-rule/bbf-subif:rule/"
-  + "bbf-subif:ingress-rewrite" {
+  augment "/if:interfaces-state/if:interface"
+        + "/bbf-qos-tm-s:tm-root"
+        + "/bbf-qos-tm-s:children-type" {
     description
-      "Augments the VLAN sub-interface with ingress-rewrite actions.";
-    list copy-from-tags-to-marking-list {
-      key "tag-index";
+      "Augment the child data for the traffic management root with
+       scheduler state data.";
+    case scheduler-node {
       description
-        "An input VLAN tag from which p-bits and/or DEI field content
-         will be preserved.";
-      leaf tag-index {
-        type bbf-classif:tag-index;
+        "The state data associated with the scheduling hierarchy.";
+      list scheduler-node {
+        key "name";
         description
-          "Specifies from which input VLAN tag fields MUST be copied
-           to the frame's marking-list.";
-      }
-      leaf pbit-marking-index {
-        type union {
-          type enumeration {
-            enum not-preserved {
+          "A scheduler node. A scheduler will be at a position in
+           a hierarchy as specified through references. A particular
+           scheduler will obtain its input from its children from
+           which it merges the traffic into a single output stream.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "Name of the scheduler node.";
+        }
+        choice children-type {
+          description
+            "State data associated with a scheduler's children.";
+          case queue {
+            description
+              "The children are a list of queues.";
+            container queues {
               description
-                "The p-bits are not preserved.";
+                "State data associated with queues.";
+              action reset-statistics {
+                description
+                  "Reset all queue statistics associated with this
+                   scheduler.";
+              }
+              list queue {
+                key "local-queue-id";
+                description
+                  "A queue.";
+                leaf local-queue-id {
+                  type bbf-qos-tm:queue-id;
+                  description
+                    "The identification of a queue within the context
+                     of this list.";
+                }
+                container statistics {
+                  if-feature "bbf-qos-tm:queue-statistics";
+                  description
+                    "Statistics associated with a queue.";
+                  uses bbf-qos-tm:queue-statistics;
+                }
+                uses bbf-qos-tm:reset-queue-counters;
+              }
             }
           }
-          type bbf-qos-cls:qos-pbit-marking-index;
         }
-        default "not-preserved";
-        description
-          "Specifies the index of the frame's pbit marking list to
-           which the p-bits shall be copied.";
-      }
-      leaf dei-marking-index {
-        type union {
-          type enumeration {
-            enum not-preserved {
-              description
-                "The DEI bit is not preserved.";
-            }
-          }
-          type bbf-qos-cls:qos-pbit-marking-index;
-        }
-        default "not-preserved";
-        description
-          "Specifies the index of the frame's dei marking list to
-           which the DEI bit shall be copied.";
       }
     }
   }

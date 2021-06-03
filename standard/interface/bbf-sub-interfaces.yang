@@ -41,7 +41,7 @@ module bbf-sub-interfaces {
      Specifically, this module augments an interface with
      sub-interface-specific frame processing configuration.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2021, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +81,19 @@ module bbf-sub-interfaces {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a4; see
      the TR itself for full legal notices.";
 
+  revision 2021-06-02 {
+    description
+      "Amendment 4.
+       * Approval Date:    2021-06-02.
+       * Publication Date: 2021-06-02.";
+    reference
+      "TR-383a4: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -163,14 +173,14 @@ module bbf-sub-interfaces {
         container inline-frame-processing {
           description
             "The frame processing refers to both directions:
-             - Ingress, which refers to packets received from the
+             - Ingress, which refers to frames received from the
                lower-layer interface.
-             - Egress, which refers to packets received from a higher
+             - Egress, which refers to frames received from a higher
                layer of the interface stack, or from a forwarder, and
                to be transmitted to the lower-layer of the interface
                stack.
              - In the ingress direction classification criteria
-               identify whether a received packet shall be offered to
+               identify whether a received frame shall be offered to
                this sub-interface.
              - For both the ingress and egress direction, rewrite =
                tag manipulations can be supported.";
@@ -184,7 +194,7 @@ module bbf-sub-interfaces {
               key "name";
               min-elements 1;
               description
-                "A rule contains a classification and for packets that
+                "A rule contains a classification and for frames that
                  match this classification it specifies an ingress tag
                  manipulation action.
 
@@ -248,7 +258,7 @@ module bbf-sub-interfaces {
           container egress-rewrite {
             if-feature "tag-rewrites";
             description
-              "Egress refers to packets sent from the sub-interface
+              "Egress refers to frames sent from the sub-interface
                towards the the lower-layer in the interface stack,
                i.e. in the direction of the physical interface.
                Rewrite refers to the supported tag manipulations.";

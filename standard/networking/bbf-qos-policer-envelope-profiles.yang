@@ -41,7 +41,7 @@ module bbf-qos-policer-envelope-profiles {
      Specifically, this module augments classifiers to add management
      of envelope policing as described in MEF 10.3.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2021, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +81,19 @@ module bbf-qos-policer-envelope-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a4; see
      the TR itself for full legal notices.";
 
+  revision 2021-06-02 {
+    description
+      "Amendment 4.
+       * Approval Date:    2021-06-02.
+       * Publication Date: 2021-06-02.";
+    reference
+      "TR-383a4: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -162,7 +172,7 @@ module bbf-qos-policer-envelope-profiles {
     list envelope-profile {
       key "name";
       description
-        "A list of envelope profiles.";
+        "An envelope profile.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
@@ -199,7 +209,7 @@ module bbf-qos-policer-envelope-profiles {
           key "rank";
           min-elements 1;
           description
-            "A list of flows associated with an envelope.";
+            "A flow associated with an envelope.";
           leaf rank {
             type flow-rank;
             description
@@ -264,9 +274,8 @@ module bbf-qos-policer-envelope-profiles {
           }
           leaf coupling-flag {
             type bbf-qos-plc-tp:coupling-flag;
-            must
-              "../../../coupling-flag = 0 or
-               (../../../coupling-flag = 1 and . = 0)" {
+            must "../../../coupling-flag = 0 or
+                  (../../../coupling-flag = 1 and . = 0)" {
               error-message
                 "When the envelope coupling flag is equal to a 1, "
               + "all flow coupling flags must be equal to 0.";

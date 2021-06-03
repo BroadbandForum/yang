@@ -1,20 +1,7 @@
-module bbf-qos-policies-sub-interface-rewrite {
+module bbf-network-types {
   yang-version 1.1;
-  namespace "urn:bbf:yang:bbf-qos-policies-sub-interface-rewrite";
-  prefix bbf-qos-pol-subif-rw;
-
-  import ietf-interfaces {
-    prefix if;
-  }
-  import bbf-qos-classifiers {
-    prefix bbf-qos-cls;
-  }
-  import bbf-frame-classification {
-    prefix bbf-classif;
-  }
-  import bbf-sub-interfaces {
-    prefix bbf-subif;
-  }
+  namespace "urn:bbf:yang:bbf-network-types";
+  prefix bbf-ntwrkt;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -36,13 +23,14 @@ module bbf-qos-policies-sub-interface-rewrite {
      WA Director: Sven Ooghe, Nokia";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements on the management of
-     Quality of Service (QoS) as applicable to access network
-     equipment. As such, this module is specific to access network
-     equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
+     supporting the Broadband Forum requirements on providing
+     network information associated with network functions.
 
-     Specifically, this module contains augments to sub-interfaces to
-     support policies applied to frames.
+     Specifically, this module defines common types associated with
+     network information.
+
+     This module contains a collection of YANG definitions for
+     types associated with BBF network information.
 
      Copyright (c) 2017-2021, Broadband Forum
 
@@ -97,65 +85,77 @@ module bbf-qos-policies-sub-interface-rewrite {
                  <https://www.broadband-forum.org/technical/download/
                           TR-383_Amendment-4.pdf>";
   }
-  revision 2020-10-13 {
+
+  // Identities
+  // Deployment Types
+
+  identity deployment-type {
     description
-      "Amendment 3.
-       * Approval Date:    2020-10-13.
-       * Publication Date: 2020-10-13.";
-    reference
-      "TR-383a3: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-3.pdf>";
+      "Base identity from which specific network deployment types are
+       derived.";
   }
 
-  augment
-    "/if:interfaces/if:interface/bbf-subif:frame-processing/"
-  + "bbf-subif:inline-frame-processing/bbf-subif:inline-frame-"
-  + "processing/bbf-subif:ingress-rule/bbf-subif:rule/"
-  + "bbf-subif:ingress-rewrite" {
+  identity access-deployment-type {
+    base deployment-type;
     description
-      "Augments the VLAN sub-interface with ingress-rewrite actions.";
-    list copy-from-tags-to-marking-list {
-      key "tag-index";
-      description
-        "An input VLAN tag from which p-bits and/or DEI field content
-         will be preserved.";
-      leaf tag-index {
-        type bbf-classif:tag-index;
-        description
-          "Specifies from which input VLAN tag fields MUST be copied
-           to the frame's marking-list.";
-      }
-      leaf pbit-marking-index {
-        type union {
-          type enumeration {
-            enum not-preserved {
-              description
-                "The p-bits are not preserved.";
-            }
-          }
-          type bbf-qos-cls:qos-pbit-marking-index;
-        }
-        default "not-preserved";
-        description
-          "Specifies the index of the frame's pbit marking list to
-           which the p-bits shall be copied.";
-      }
-      leaf dei-marking-index {
-        type union {
-          type enumeration {
-            enum not-preserved {
-              description
-                "The DEI bit is not preserved.";
-            }
-          }
-          type bbf-qos-cls:qos-pbit-marking-index;
-        }
-        default "not-preserved";
-        description
-          "Specifies the index of the frame's dei marking list to
-           which the DEI bit shall be copied.";
-      }
-    }
+      "Derived identity for access network specific deployment
+       types.";
+  }
+
+  identity fttx-type {
+    base access-deployment-type;
+    description
+      "Derived identity from which specific access fttx types are
+       derived.";
+  }
+
+  identity ftth {
+    base fttx-type;
+    description
+      "Fiber to the home.";
+  }
+
+  identity fttdp {
+    base fttx-type;
+    description
+      "Fiber to the distribution point.";
+  }
+
+  identity fttb {
+    base fttx-type;
+    description
+      "Fiber to the building.";
+  }
+
+  identity fttcab {
+    base fttx-type;
+    description
+      "Fiber to the cabinet.";
+  }
+
+  identity ftte {
+    base fttx-type;
+    description
+      "Fiber to the equipment.";
+  }
+
+  // Network Distribution Frame Types
+
+  identity distribution-frame-type {
+    description
+      "Base identity from which specific distribution frame types are
+       derived.";
+  }
+
+  identity copper-distribution-frame {
+    base distribution-frame-type;
+    description
+      "The copper distribution frame.";
+  }
+
+  identity optical-distribution-frame {
+    base distribution-frame-type;
+    description
+      "The optical distribution frame.";
   }
 }

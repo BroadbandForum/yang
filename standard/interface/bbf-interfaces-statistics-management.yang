@@ -6,6 +6,9 @@ module bbf-interfaces-statistics-management {
   import ietf-interfaces {
     prefix if;
   }
+  import ietf-yang-types {
+    prefix yang;
+  }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -35,7 +38,7 @@ module bbf-interfaces-statistics-management {
      Specifically, this module augments ietf-interfaces with a reset
      action for statistics.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2021, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -75,9 +78,19 @@ module bbf-interfaces-statistics-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a4; see
      the TR itself for full legal notices.";
 
+  revision 2021-06-02 {
+    description
+      "Amendment 4.
+       * Approval Date:    2021-06-02.
+       * Publication Date: 2021-06-02.";
+    reference
+      "TR-383a4: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -109,6 +122,12 @@ module bbf-interfaces-statistics-management {
                         TR-383.pdf>";
   }
 
+  feature total-pkts {
+    description
+      "Indicates support for reporting the total transmitted and
+       received packets on an interface.";
+  }
+
   augment "/if:interfaces-state/if:interface" {
     description
       "The 'interfaces' list in the 'interfaces-state' container
@@ -121,6 +140,24 @@ module bbf-interfaces-statistics-management {
          interface which are defined and/or augmented to the
          container interfaces-state/interface/statistics are
          cleared.";
+    }
+  }
+
+  augment "/if:interfaces-state/if:interface/if:statistics" {
+    description
+      "Augment the interface statistics with additional counters.";
+    leaf in-pkts {
+      if-feature "bbf-if-ctrs:total-pkts";
+      type yang:counter64;
+      description
+        "The total number of packets received on the interface.";
+    }
+    leaf out-pkts {
+      if-feature "bbf-if-ctrs:total-pkts";
+      type yang:counter64;
+      description
+        "The total number of packets transmitted out of the
+         interface.";
     }
   }
 }

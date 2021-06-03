@@ -42,7 +42,7 @@ module bbf-qos-shaping {
      with shaper profiles and augments interfaces to reference a
      shaper profile.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2021, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -82,9 +82,19 @@ module bbf-qos-shaping {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a4; see
      the TR itself for full legal notices.";
 
+  revision 2021-06-02 {
+    description
+      "Amendment 4.
+       * Approval Date:    2021-06-02.
+       * Publication Date: 2021-06-02.";
+    reference
+      "TR-383a4: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -118,7 +128,7 @@ module bbf-qos-shaping {
     list shaper-profile {
       key "name";
       description
-        "A list of shaper profiles.";
+        "A shaper profile.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
@@ -212,8 +222,8 @@ module bbf-qos-shaping {
       + '[bbf-qos-shap:name=current()]/bbf-qos-shap:'
       + 'single-token-bucket)' {
         error-message
-          "The referenced shaper shall be of the single-token bucket
-           type.";
+          "The referenced shaper shall be of the single-token bucket "
+        + "type.";
       }
       description
         "An absolute reference to a shaper profile.";

@@ -1,0 +1,320 @@
+module bbf-location {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-location";
+  prefix bbf-loc;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, ADTRAN
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     PS Leader:   Sowrirajan Padmanabhan, Nokia
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on providing location
+     information associated with network functions.
+
+     Copyright (c) 2017-2021, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a4; see
+     the TR itself for full legal notices.";
+
+  revision 2021-06-02 {
+    description
+      "Amendment 4.
+       * Approval Date:    2021-06-02.
+       * Publication Date: 2021-06-02.";
+    reference
+      "TR-383a4: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-4.pdf>";
+  }
+
+  // Features
+
+  feature wgs84-location-support {
+    description
+      "Indicates the support of World Geodetic System 1984 (WGS84)
+       location information.";
+  }
+
+  // Groupings
+  // WGS84 location settings
+
+  grouping wgs84-location-settings {
+    description
+      "Latitude and longitude.";
+    leaf latitude {
+      type string {
+        pattern
+          '(\+|-)?([0-8]?\d{1}\.\d{0,4}|90\.0{0,4}|[0-8]?\d{1}|90)';
+      }
+      description
+        "The latitude of a point on Earth's surface is the angle
+         between the equatorial plane and the straight line that
+         passes through that point and through (or close to) the
+         center of the Earth.
+
+         The geodetic system used for latitude is the World Geodetic
+         System 1984 (WGS84), which is also used by the Global
+         Positioning System (GPS).
+
+         For example:
+          'hdd.dddd°' where
+          h(hemisphere): + or -
+          dd(degrees): 00 - 90
+          .dddd(decimal degrees): 0-9999";
+    }
+    leaf longitude {
+      type string {
+        pattern '(\+|-)?((\d{1}|[1-9]\d{1}|1[1-7]\d{1}|0)\.\d{0,4}|'
+              + '(\d|[1-9]\d{1}|1[1-7]\d{1}|0{1,3})|180\.0{0,4}|180)';
+      }
+      description
+        "The longitude of a point on Earth's surface is the angle east
+         or west of a reference meridian to another meridian that
+         passes through that point.
+
+         The geodetic system used for longitude is the World Geodetic
+         System 1984 (WGS84), which is also used by the Global
+         Positioning System (GPS).
+
+         For example:
+         'hddd.dddd°' where
+         h(hemisphere): + or -
+         ddd(degrees): 000 - 180
+         .dddd(decimal degrees): 0-9999";
+    }
+  }
+
+  // Building address
+
+  grouping on-site-information {
+    description
+      "The on-site information about the building where the resource
+       is hosted.";
+    leaf building {
+      type bbf-yang:string-ascii64;
+      description
+        "The building identifier where the resource is hosted.";
+    }
+    leaf floor {
+      type bbf-yang:string-ascii64;
+      description
+        "The floor identifier where the resource is hosted.";
+    }
+    leaf room {
+      type bbf-yang:string-ascii64;
+      description
+        "The room identifier where the resource is hosted.";
+    }
+  }
+
+  //Civic address settings
+
+  grouping civic-address-information {
+    description
+      "Information regarding the civic address where the resource is
+       hosted.
+
+       The civic address is based on RFC 4199 civicAddress complex
+       type.";
+    list civic-address {
+      key "label value";
+      description
+        "A list of civic address elements as defined in RFC 4119
+         civicAddress complex type.";
+      leaf label {
+        type enumeration {
+          enum country {
+            description
+              "The country as identified by the two-letter ISO 3166
+               code, e.g., 'US'.";
+          }
+          enum a1 {
+            description
+              "National subdivisions (state, region, province,
+               prefecture), e.g., 'New York'.";
+          }
+          enum a2 {
+            description
+              "County, parish, gun (JP), district (IN), e.g., 'King's
+               County'.";
+          }
+          enum a3 {
+            description
+              "City, township, shi (JP), e.g., 'New York'.";
+          }
+          enum a4 {
+            description
+              "City division, borough, city district, ward, chou
+               (JP), e.g., 'Manhattan'.";
+          }
+          enum a5 {
+            description
+              "Neighborhood, block, e.g., 'Morningside Heights'.";
+          }
+          enum a6 {
+            description
+              "Street, e.g., 'Broadway'.";
+          }
+          enum prd {
+            description
+              "Leading street direction, e.g., 'N', 'W'.";
+          }
+          enum pod {
+            description
+              "Trailing street suffix, e.g., 'SW'.";
+          }
+          enum sts {
+            description
+              "Street suffix, e.g., 'Avenue', 'Platz', 'Street'.";
+          }
+          enum hno {
+            description
+              "House number, numeric part only, e.g., '123'.";
+          }
+          enum hns {
+            description
+              "House number suffix, e.g., 'A', '1/2'.";
+          }
+          enum lmk {
+            description
+              "Landmark or vanity address, e.g., 'Low Library'.";
+          }
+          enum loc {
+            description
+              "Additional location information, e.g., 'Room 543'.";
+          }
+          enum flr {
+            description
+              "Floor, e.g., '5'.";
+          }
+          enum nam {
+            description
+              "Name (residence, business or office occupant), e.g.,
+               'Joe's Barbershop'.";
+          }
+          enum pc {
+            description
+              "Postal code, e.g., '10027-0401'.";
+          }
+          enum other {
+            description
+              "Other information.";
+          }
+        }
+        description
+          "The label used to identify the name attribute of the
+           RFC 4119 civicAddress complex type.";
+        reference
+          "RFC 4119 section 2.2.1 - 'location-info' Element";
+      }
+      leaf value {
+        type string;
+        description
+          "The value associated with the label leaf node for this
+           entry.";
+      }
+    }
+  }
+
+  //Geographical location settings
+
+  grouping geographic-location-information {
+    description
+      "The geographic location information about where the resource
+       is hosted.";
+    container civic-address {
+      description
+        "The address of the location.";
+      uses civic-address-information;
+    }
+    container wgs84-location {
+      if-feature "bbf-loc:wgs84-location-support";
+      description
+        "The WGS84 coordinates of the location.";
+      uses wgs84-location-settings;
+    }
+  }
+
+  // Site settings
+
+  grouping site-information {
+    description
+      "The information about the physical site where the resource is
+       hosted.";
+    uses on-site-information;
+    leaf line {
+      type uint16;
+      description
+        "The line or aisle number based on the site's numbering
+         scheme.";
+    }
+    leaf rack-position {
+      type uint16;
+      description
+        "The position of the rack based on the site's numbering
+         scheme.";
+    }
+    leaf frame-position {
+      type uint16;
+      description
+        "The position of the frame within the rack.";
+    }
+  }
+}

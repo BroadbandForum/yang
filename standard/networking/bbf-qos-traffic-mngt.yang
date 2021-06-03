@@ -6,6 +6,9 @@ module bbf-qos-traffic-mngt {
   import ietf-interfaces {
     prefix if;
   }
+  import ietf-yang-types {
+    prefix yang;
+  }
   import bbf-yang-types {
     prefix bbf-yang;
   }
@@ -41,7 +44,7 @@ module bbf-qos-traffic-mngt {
      Specifically, this module contains a collection of functions for
      QoS traffic management (TM).
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2021, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +84,19 @@ module bbf-qos-traffic-mngt {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a4; see
      the TR itself for full legal notices.";
 
+  revision 2021-06-02 {
+    description
+      "Amendment 4.
+       * Approval Date:    2021-06-02.
+       * Publication Date: 2021-06-02.";
+    reference
+      "TR-383a4: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -148,6 +161,11 @@ module bbf-qos-traffic-mngt {
       "Indicates support for dual rate scheduling, i.e. configuring
        from a parent scheduler a separate priority and/or weight
        for the CIR and EIR traffic from a single child scheduler.";
+  }
+
+  feature queue-statistics {
+    description
+      "Indicates support for reporting statistics per queue.";
   }
 
   typedef queue-id {
@@ -234,7 +252,7 @@ module bbf-qos-traffic-mngt {
       type bbf-yang:percent;
       description
         "The threshold from which the system begins to discard
-         incoming packets in a random way.
+         incoming frames in a random way.
 
          The value is a percentage to be calculated on the value of
          the leaf max-queue-size of the queue on which the BAC is
@@ -248,7 +266,7 @@ module bbf-qos-traffic-mngt {
     leaf max-threshold {
       type bbf-yang:percent;
       description
-        "The threshold to discard all incoming packets.
+        "The threshold to discard all incoming frames.
 
          The value is a percentage to be calculated on the value of
          the leaf max-queue-size.";
@@ -261,7 +279,7 @@ module bbf-qos-traffic-mngt {
     leaf max-probability {
       type bbf-yang:percent;
       description
-        "The maximum discard probability of packets before the
+        "The maximum discard probability of frames before the
          maximum threshold is reached.";
     }
   }
@@ -274,6 +292,91 @@ module bbf-qos-traffic-mngt {
     uses max-probability;
   }
 
+  grouping queue-counters-common {
+    description
+      "Queue counters common to each frame type, e.g. green frames.";
+    leaf out-frames {
+      type yang:counter64;
+      description
+        "The number of frames transmitted by this queue.";
+    }
+    leaf out-octets {
+      type yang:counter64;
+      description
+        "The number of octets in frames transmitted by this queue.";
+    }
+    leaf congestion-discard-frames {
+      type yang:counter64;
+      description
+        "The number of frames discarded by this queue due to
+         congestion.";
+    }
+    leaf congestion-discard-octets {
+      type yang:counter64;
+      description
+        "The number of octets in frames dropped by this
+         queue due to congestion.";
+    }
+  }
+
+  grouping queue-counters {
+    description
+      "Queue counters reported by frame type.";
+    container total {
+      description
+        "Counters associated with all traffic related to this queue.";
+      uses queue-counters-common;
+    }
+    container green {
+      description
+        "Counters associated with all traffic, which is considered
+         green, related to this queue.";
+      uses queue-counters-common;
+    }
+    container yellow {
+      description
+        "Counters associated with all traffic, which is considered
+         yellow, related to this queue.";
+      uses queue-counters-common;
+    }
+    container red {
+      description
+        "Counters associated with all traffic, which is considered
+         red, related to this queue.";
+      uses queue-counters-common;
+    }
+  }
+
+  grouping reset-queue-counters {
+    description
+      "Statistics associated with queues.";
+    action reset-counters {
+      description
+        "Reset all queue counters associated with this queue.
+
+         Note: this resets the 'counters', i.e. the leafs that
+         count and wrap around when coming to their maximum value.
+         This does not include a reset of other gauge statistics.";
+    }
+  }
+
+  grouping queue-statistics {
+    description
+      "Statistics associated with queues.";
+    leaf enqueued-frames {
+      type yang:gauge64;
+      description
+        "The number of frames currently enqueued by this queue.";
+    }
+    leaf enqueued-octets {
+      type yang:gauge64;
+      description
+        "The number of octets contained in frames currently enqueued
+         by this queue.";
+    }
+    uses queue-counters;
+  }
+
   container tm-profiles {
     description
       "A set of types of profiles for traffic management
@@ -282,7 +385,7 @@ module bbf-qos-traffic-mngt {
       if-feature "tc-id-2-queue-id-mapping-config";
       key "name";
       description
-        "A list of traffic-class-id to queue-id mapping profiles.";
+        "A traffic-class-id to queue-id mapping profile.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
@@ -311,7 +414,7 @@ module bbf-qos-traffic-mngt {
     list bac-entry {
       key "name";
       description
-        "A list of BAC entries.";
+        "A Buffer Acceptance Control (BAC) entry.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
@@ -326,7 +429,7 @@ module bbf-qos-traffic-mngt {
       choice bac-type {
         mandatory true;
         description
-          "Choice of BAC types";
+          "Choice of BAC types.";
         case taildrop {
           description
             "Applicable when the BAC type is 'taildrop'.";
@@ -356,20 +459,20 @@ module bbf-qos-traffic-mngt {
             container color {
               description
                 "Management data nodes associated with the marked
-                 color of the packet.";
+                 color of the frame.";
               container green {
                 description
-                  "Green packets.";
+                  "Green frames.";
                 uses max-threshold;
               }
               container yellow {
                 description
-                  "Yellow packets.";
+                  "Yellow frames.";
                 uses max-threshold;
               }
               container red {
                 description
-                  "Red packets.";
+                  "Red frames.";
                 uses max-threshold;
               }
             }
@@ -385,20 +488,20 @@ module bbf-qos-traffic-mngt {
             container color {
               description
                 "Management data nodes associated with the marked
-                 color of the packet.";
+                 color of the frame.";
               container green {
                 description
-                  "Green packets.";
+                  "Green frames.";
                 uses common-random-early-detection-parameters;
               }
               container yellow {
                 description
-                  "Yellow packets.";
+                  "Yellow frames.";
                 uses common-random-early-detection-parameters;
               }
               container red {
                 description
-                  "Red packets.";
+                  "Red frames.";
                 uses common-random-early-detection-parameters;
               }
             }
@@ -443,7 +546,7 @@ module bbf-qos-traffic-mngt {
     leaf priority {
       type scheduling-priority;
       description
-        "The priority used to schedule packets from a queue or
+        "The priority used to schedule frames from a queue or
          scheduler, relative to the priority assigned to other queues
          or schedulers that are defined in the same traffic scheduling
          context. For example the set of queues defined for a
@@ -456,27 +559,27 @@ module bbf-qos-traffic-mngt {
         "Queues or schedulers that are defined in a particular
          context, e.g. queues defined to schedule outgoing traffic to
          an interface, can have the same priority. The weight defines
-         the portion of traffic that will be taken from this queue
-         or scheduler by comparing the weight of this queue or
-         scheduler against the sum of the weights of all queues or
-         schedulers with the same scope and the same priority.";
+         the portion of traffic that will be taken from this queue or
+         scheduler by comparing the weight of this queue or scheduler
+         against the sum of the weights of all queues or schedulers
+         with the same scope and the same priority.";
     }
     leaf extended-weight {
       if-feature "bbf-qos-tm:extended-scheduling-weight";
       type extended-scheduling-weight;
       must 'not(boolean(../weight))' {
         description
-          "Both weight and extended weight must not be configured
-           at the same time.";
+          "Both weight and extended weight must not be configured at
+           the same time.";
       }
       description
         "Queues or schedulers that are defined in a particular
          context, e.g. queues defined to schedule outgoing traffic to
          an interface, can have the same priority. The weight defines
-         the portion of traffic that will be taken from this queue
-         or scheduler by comparing the weight of this queue or
-         scheduler against the sum of the weights of all queues or
-         schedulers with the same scope and the same priority.";
+         the portion of traffic that will be taken from this queue or
+         scheduler by comparing the weight of this queue or scheduler
+         against the sum of the weights of all queues or schedulers
+         with the same scope and the same priority.";
     }
   }
 
@@ -486,7 +589,7 @@ module bbf-qos-traffic-mngt {
     leaf priority {
       type extended-scheduling-priority;
       description
-        "The priority used to schedule packets from a queue or
+        "The priority used to schedule frames from a queue or
          scheduler, relative to the priority assigned to other queues
          or schedulers that are defined in the same traffic scheduling
          context. For example the set of queues defined for a
@@ -512,7 +615,7 @@ module bbf-qos-traffic-mngt {
     list queue {
       key "local-queue-id";
       description
-        "A list of queues.";
+        "A queue.";
       leaf local-queue-id {
         type queue-id;
         description
@@ -557,10 +660,21 @@ module bbf-qos-traffic-mngt {
         if-feature "bbf-qos-tm:pre-emption";
         type boolean;
         description
-          "Indicates whether the transmission of a packets from this
-           queue can be interrupted in favor of packets from a higher
+          "Indicates whether the transmission of a frames from this
+           queue can be interrupted in favor of frames from a higher
            priority queue.";
       }
+    }
+    leaf queue-statistics-enable {
+      if-feature "bbf-qos-tm:queue-statistics";
+      type boolean;
+      description
+        "If true, enable statistics collection per queue. When
+         transitioning from false to true (disabled to enabled), any
+         existing counts should be cleared.
+
+         The leaf not existing has the same meaning as queue
+         statistics being disabled.";
     }
   }
 
@@ -580,8 +694,8 @@ module bbf-qos-traffic-mngt {
          to queue-id mapping concept.
        - at any time, the scheduler resolves which queue should
          deliver the next frame to the egress traffic container by
-         looking at the scheduling-priority and scheduling-weight
-         of each of queues.
+         looking at the scheduling-priority and scheduling-weight of
+         each of queues.
        The tm-root represents the scheduling stage directly attached
        to the bottleneck resource (typically an interface).";
     container tm-root {

@@ -1,19 +1,13 @@
-module bbf-qos-policies-sub-interface-rewrite {
+module bbf-end-user {
   yang-version 1.1;
-  namespace "urn:bbf:yang:bbf-qos-policies-sub-interface-rewrite";
-  prefix bbf-qos-pol-subif-rw;
+  namespace "urn:bbf:yang:bbf-end-user";
+  prefix bbf-eu;
 
-  import ietf-interfaces {
-    prefix if;
+  import bbf-yang-types {
+    prefix bbf-yang;
   }
-  import bbf-qos-classifiers {
-    prefix bbf-qos-cls;
-  }
-  import bbf-frame-classification {
-    prefix bbf-classif;
-  }
-  import bbf-sub-interfaces {
-    prefix bbf-subif;
+  import bbf-contact {
+    prefix bbf-contact;
   }
 
   organization
@@ -36,13 +30,8 @@ module bbf-qos-policies-sub-interface-rewrite {
      WA Director: Sven Ooghe, Nokia";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements on the management of
-     Quality of Service (QoS) as applicable to access network
-     equipment. As such, this module is specific to access network
-     equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
-
-     Specifically, this module contains augments to sub-interfaces to
-     support policies applied to frames.
+     supporting the Broadband Forum requirements on providing
+     information for end users of network functions.
 
      Copyright (c) 2017-2021, Broadband Forum
 
@@ -97,65 +86,24 @@ module bbf-qos-policies-sub-interface-rewrite {
                  <https://www.broadband-forum.org/technical/download/
                           TR-383_Amendment-4.pdf>";
   }
-  revision 2020-10-13 {
-    description
-      "Amendment 3.
-       * Approval Date:    2020-10-13.
-       * Publication Date: 2020-10-13.";
-    reference
-      "TR-383a3: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-3.pdf>";
-  }
 
-  augment
-    "/if:interfaces/if:interface/bbf-subif:frame-processing/"
-  + "bbf-subif:inline-frame-processing/bbf-subif:inline-frame-"
-  + "processing/bbf-subif:ingress-rule/bbf-subif:rule/"
-  + "bbf-subif:ingress-rewrite" {
+  // Groupings
+  // End users management information
+
+  grouping end-users {
     description
-      "Augments the VLAN sub-interface with ingress-rewrite actions.";
-    list copy-from-tags-to-marking-list {
-      key "tag-index";
+      "The management information that identifies the end users for a
+       resource.";
+    list end-user {
+      key "end-user-id";
       description
-        "An input VLAN tag from which p-bits and/or DEI field content
-         will be preserved.";
-      leaf tag-index {
-        type bbf-classif:tag-index;
+        "The management information related to an end user.";
+      leaf end-user-id {
+        type bbf-yang:string-ascii64;
         description
-          "Specifies from which input VLAN tag fields MUST be copied
-           to the frame's marking-list.";
+          "The identifier of the end user";
       }
-      leaf pbit-marking-index {
-        type union {
-          type enumeration {
-            enum not-preserved {
-              description
-                "The p-bits are not preserved.";
-            }
-          }
-          type bbf-qos-cls:qos-pbit-marking-index;
-        }
-        default "not-preserved";
-        description
-          "Specifies the index of the frame's pbit marking list to
-           which the p-bits shall be copied.";
-      }
-      leaf dei-marking-index {
-        type union {
-          type enumeration {
-            enum not-preserved {
-              description
-                "The DEI bit is not preserved.";
-            }
-          }
-          type bbf-qos-cls:qos-pbit-marking-index;
-        }
-        default "not-preserved";
-        description
-          "Specifies the index of the frame's dei marking list to
-           which the DEI bit shall be copied.";
-      }
+      uses bbf-contact:contact-information;
     }
   }
 }

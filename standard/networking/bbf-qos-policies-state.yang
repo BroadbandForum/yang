@@ -1,19 +1,13 @@
-module bbf-qos-policies-sub-interface-rewrite {
+module bbf-qos-policies-state {
   yang-version 1.1;
-  namespace "urn:bbf:yang:bbf-qos-policies-sub-interface-rewrite";
-  prefix bbf-qos-pol-subif-rw;
+  namespace "urn:bbf:yang:bbf-qos-policies-state";
+  prefix bbf-qos-pol-s;
 
   import ietf-interfaces {
     prefix if;
   }
-  import bbf-qos-classifiers {
-    prefix bbf-qos-cls;
-  }
-  import bbf-frame-classification {
-    prefix bbf-classif;
-  }
-  import bbf-sub-interfaces {
-    prefix bbf-subif;
+  import bbf-yang-types {
+    prefix bbf-yang;
   }
 
   organization
@@ -41,8 +35,11 @@ module bbf-qos-policies-sub-interface-rewrite {
      equipment. As such, this module is specific to access network
      equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module contains augments to sub-interfaces to
-     support policies applied to frames.
+     Specifically, this module augments interfaces to add monitoring
+     of policies that can be used to control the flow of frames. This
+     module is to be used, along with 'bbf-qos-policies' when the
+     server does not support Network Management Datastore Architecture
+     (NMDA) as defined in RFC 8342.
 
      Copyright (c) 2017-2021, Broadband Forum
 
@@ -97,64 +94,57 @@ module bbf-qos-policies-sub-interface-rewrite {
                  <https://www.broadband-forum.org/technical/download/
                           TR-383_Amendment-4.pdf>";
   }
-  revision 2020-10-13 {
+
+  grouping policy-state-list {
     description
-      "Amendment 3.
-       * Approval Date:    2020-10-13.
-       * Publication Date: 2020-10-13.";
-    reference
-      "TR-383a3: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-3.pdf>";
+      "Defines a list of policies with associated classifiers.";
+    list policy {
+      key "name";
+      description
+        "A QoS policy.";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "Name of the policy.";
+      }
+      list classifier {
+        key "name";
+        description
+          "A QoS classifier.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "Name of the classifier.";
+        }
+      }
+    }
   }
 
-  augment
-    "/if:interfaces/if:interface/bbf-subif:frame-processing/"
-  + "bbf-subif:inline-frame-processing/bbf-subif:inline-frame-"
-  + "processing/bbf-subif:ingress-rule/bbf-subif:rule/"
-  + "bbf-subif:ingress-rewrite" {
+  augment "/if:interfaces-state/if:interface" {
     description
-      "Augments the VLAN sub-interface with ingress-rewrite actions.";
-    list copy-from-tags-to-marking-list {
-      key "tag-index";
+      "Augment the interface state data with state data specific to
+       QoS policies.";
+    container qos-policies {
+      presence
+        "The presence of this container indicates the interface has
+         QoS policy related state data.";
       description
-        "An input VLAN tag from which p-bits and/or DEI field content
-         will be preserved.";
-      leaf tag-index {
-        type bbf-classif:tag-index;
+        "State data associated with QoS policies.";
+      container ingress {
+        presence
+          "The presence of this container indicates the interface has
+           state data related to an ingress QoS policy.";
         description
-          "Specifies from which input VLAN tag fields MUST be copied
-           to the frame's marking-list.";
+          "State data associated with ingress QoS policies.";
+        uses policy-state-list;
       }
-      leaf pbit-marking-index {
-        type union {
-          type enumeration {
-            enum not-preserved {
-              description
-                "The p-bits are not preserved.";
-            }
-          }
-          type bbf-qos-cls:qos-pbit-marking-index;
-        }
-        default "not-preserved";
+      container egress {
+        presence
+          "The presence of this container indicates the interface has
+           state data related to an egress QoS policy.";
         description
-          "Specifies the index of the frame's pbit marking list to
-           which the p-bits shall be copied.";
-      }
-      leaf dei-marking-index {
-        type union {
-          type enumeration {
-            enum not-preserved {
-              description
-                "The DEI bit is not preserved.";
-            }
-          }
-          type bbf-qos-cls:qos-pbit-marking-index;
-        }
-        default "not-preserved";
-        description
-          "Specifies the index of the frame's dei marking list to
-           which the DEI bit shall be copied.";
+          "State data associated with egress QoS policies.";
+        uses policy-state-list;
       }
     }
   }

@@ -1,5 +1,14 @@
 ## Broadband Forum YANG Modules
 
+### 2021-06-02: [TR-383 Amendment 4](https://www.broadband-forum.org/technical/download/TR-383_Amendment-4.pdf) Common YANG Modules for Access Networks
+*Tag: [TR-383-v1.4.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.4.0)*
+
+* Add common modules used across Broadband Forum YANG modules
+* Add new statistics related to QoS
+* Add profiles for frame classification and ingress/egress rewrite actions on sub-interfaces
+* Extend hardware transceiver functionality for alarms and reading of vendor-specific and user  EEPROM 
+* Extend common interface and Ethernet interface statistics and PM
+
 ### 2020-10-13: [TR-355 Amendment 3](https://www.broadband-forum.org/technical/download/TR-355_Amendment-3.pdf) YANG Modules for FTTdp Management, [TR-383 Amendment 3](https://www.broadband-forum.org/technical/download/TR-383_Amendment-3.pdf) Common YANG Modules for Access Networks, [TR-385 Issue 2](https://www.broadband-forum.org/technical/download/TR-385_Issue-2.pdf) ITU-T PON YANG Modules
 *Tags: [TR-355-v1.3.0](https://github.com/BroadbandForum/yang/tree/TR-355-v1.3.0), [TR-383-v1.3.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.3.0), [TR-385-v2.0.0](https://github.com/BroadbandForum/yang/tree/TR-385-v2.0.0)*
 

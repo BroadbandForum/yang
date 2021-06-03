@@ -42,7 +42,7 @@ module bbf-interfaces-performance-management {
      statistics defined by the IETF interfaces data model,
      ietf-interfaces (RFC7223).
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2021, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -82,9 +82,19 @@ module bbf-interfaces-performance-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a4; see
      the TR itself for full legal notices.";
 
+  revision 2021-06-02 {
+    description
+      "Amendment 4.
+       * Approval Date:    2021-06-02.
+       * Publication Date: 2021-06-02.";
+    reference
+      "TR-383a4: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -130,6 +140,12 @@ module bbf-interfaces-performance-management {
     description
       "Indicates that collection of 24 hour performance intervals
        is supported.";
+  }
+
+  feature total-pkts {
+    description
+      "Indicates support for reporting the total transmitted and
+       received packets on an interface.";
   }
 
   typedef performance-15min-interval {
@@ -259,6 +275,12 @@ module bbf-interfaces-performance-management {
       reference
         "RFC 2863: The Interfaces Group MIB - ifHCInOctets";
     }
+    leaf in-pkts {
+      if-feature "bbf-if-pm:total-pkts";
+      type bbf-yang:performance-counter64;
+      description
+        "The total number of packets received on the interface.";
+    }
     leaf in-unicast-pkts {
       type bbf-yang:performance-counter64;
       description
@@ -333,6 +355,13 @@ module bbf-interfaces-performance-management {
          interface, including framing characters.";
       reference
         "RFC 2863: The Interfaces Group MIB - ifHCOutOctets";
+    }
+    leaf out-pkts {
+      if-feature "bbf-if-pm:total-pkts";
+      type bbf-yang:performance-counter64;
+      description
+        "The total number of packets transmitted out of the
+         interface.";
     }
     leaf out-unicast-pkts {
       type bbf-yang:performance-counter64;
