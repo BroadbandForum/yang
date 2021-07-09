@@ -1,0 +1,247 @@
+module bbf-equipment-inventory {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-equipment-inventory";
+  prefix bbf-inv;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import bbf-device {
+    prefix bbf-dvc;
+  }
+  import bbf-baa-pan {
+    prefix bbf-baa-pan;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Wenle Yang, Huawei
+
+     Editor:      Jie Chen, CAICT
+
+     PS Leader:   Yves Hertoghs, VMWare
+
+     WA Director: George Dobrowski, Morris Creek Consulting
+
+     WA Director: Bruno Cornaglia, Vodafone";
+  description
+    "This module contains a collection of YANG definitions for
+     representation of the equipment inventory that is exposed for
+     management information purposes. The equipment inventory includes
+     information about network nodes (devices), digital
+     representations of the physical access node (pAN) used in the
+     Broadband Access Abstraction (BAA) layer of CloudCO and
+     information about End-user Devices (EUD).
+
+     Copyright (c) 2019-2021, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-454; see
+     the TR itself for full legal notices.";
+
+  revision 2021-07-06 {
+    description
+      "Issue 1.
+       * Approval Date:    2021-07-06.
+       * Publication Date: 2021-07-06.";
+    reference
+      "TR-454: YANG Modules for Access Network Map & Equipment 
+               Inventory <https://www.broadband-forum.org/technical/
+                                  download/TR-454_Issue-1.pdf>";
+  }
+
+  //Features
+
+  feature reports-equipment-inventory {
+    description
+      "Indicates the support for the equipment inventory feature.";
+  }
+
+  feature reports-device-inventory {
+    description
+      "Indicates the support for the device inventory feature.";
+  }
+
+  feature reports-baa-pan-inventory {
+    description
+      "Indicates the support for the BAA pAN inventory feature.";
+  }
+
+  feature reports-end-user-device-inventory {
+    description
+      "Indicates the support for the end user device inventory
+       feature.";
+  }
+
+  feature reports-end-user-inventory {
+    description
+      "Indicates the support for the end user inventory for an end
+       user device.";
+  }
+
+  // Equipment Inventory
+
+  container equipment-inventory {
+    if-feature "bbf-inv:reports-equipment-inventory";
+    config false;
+    description
+      "This container reports the inventory information related
+       to devices, BAA pANs and End user devices. Each type
+       of inventory is an optional feature.";
+    container device-inventory {
+      if-feature "bbf-inv:reports-device-inventory";
+      description
+        "This container reports the inventory of devices.";
+      list device {
+        key "device-id";
+        description
+          "The key of the device instance.";
+        leaf device-id {
+          type string;
+          description
+            "The device identifier used for management purposes.";
+        }
+        container hardware-info {
+          description
+            "This container reports the hardware information of
+             the device.";
+          uses bbf-dvc:hardware-management-info;
+        }
+        container management-info {
+          description
+            "This container reports the management information of
+             the device.";
+          uses bbf-dvc:device-management-info;
+        }
+        container software-info {
+          description
+            "This container reports the management information of
+             software components within the device.";
+          list software-instance {
+            key "software-type current-revision";
+            description
+              "The list of software instances contained within the
+               device.";
+            uses bbf-dvc:software-management-info-state;
+          }
+        }
+      }
+    }
+    container pan-info {
+      if-feature "bbf-inv:reports-baa-pan-inventory";
+      description
+        "Group name for pAN instance information. This applies if the
+         pAN is managed and controlled via BAA hence its
+         Management Entity (ME) is virtualized inside BAA.";
+      list pan-instance {
+        key "pan-id";
+        description
+          "The key of a pAN instance.";
+        leaf pan-id {
+          type bbf-yang:string-ascii64;
+          description
+            "The management identifier of the pAN.
+             This value is the same value of the device name
+             leaf node in the BAA layer's northbound interface
+             for a device.";
+        }
+        leaf device-ref {
+          if-feature "bbf-inv:reports-device-inventory";
+          type leafref {
+            path "/bbf-inv:equipment-inventory"
+               + "/bbf-inv:device-inventory"
+               + "/bbf-inv:device"
+               + "/bbf-inv:device-id";
+          }
+          description
+            "This is the id of the physical AN the pAN is linked to,
+             representing its ME.";
+        }
+        uses bbf-baa-pan:pan-management-info;
+      }
+    }
+    container eud-inventory {
+      if-feature "bbf-inv:reports-end-user-device-inventory";
+      description
+        "This container reports a list of End User Devices (EUD)
+         for management purposes. Optionally end users that are
+         responsible for the management aspects of the EUD are
+         are also provided.";
+      list eud-equipment {
+        key "eud-id";
+        description
+          "The key of the EUD.";
+        leaf eud-id {
+          type string;
+          description
+            "End User Device identifier.";
+        }
+        container hardware-info {
+          description
+            "EUD hardware information.";
+          uses bbf-dvc:hardware-management-info;
+        }
+        container management-info {
+          description
+            "Management information of
+             the EUD.";
+          uses bbf-dvc:device-management-info;
+        }
+        container software-info {
+          description
+            "This container reports the management information of
+             software components within the device.";
+          list software-instance {
+            key "software-type current-revision";
+            description
+              "The list of software instances contained within the
+               device.";
+            uses bbf-dvc:software-management-info-state;
+          }
+        }
+      }
+    }
+  }
+}

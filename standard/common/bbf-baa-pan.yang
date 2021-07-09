@@ -1,0 +1,163 @@
+module bbf-baa-pan {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-baa-pan";
+  prefix bbf-baa-pan;
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import bbf-node-types {
+    prefix bbf-node-types;
+  }
+  import bbf-device {
+    prefix bbf-device;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Wenle Yang, Huawei
+
+     Editor:      Jie Chen, CAICT
+
+     PS Leader:   Yves Hertoghs, VMWare
+
+     WA Director: George Dobrowski, Morris Creek Consulting
+
+     WA Director: Bruno Cornaglia, Vodafone";
+  description
+    "This module contains a collection of YANG definitions for
+     information related to management of a physical access
+     node within the Broadband Access Abstraction (BAA)
+     layer of the BBF CloudCO.
+
+     Copyright (c) 2019-2021, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-454; see
+     the TR itself for full legal notices.";
+
+  revision 2021-07-06 {
+    description
+      "Issue 1.
+       * Approval Date:    2021-07-06.
+       * Publication Date: 2021-07-06.";
+    reference
+      "TR-454: YANG Modules for Access Network Map & Equipment 
+               Inventory <https://www.broadband-forum.org/technical/
+                                  download/TR-454_Issue-1.pdf>";
+  }
+
+  // Groupings
+  // Datastore management information
+
+  grouping datastore-management-info {
+    description
+      "The management information that identifies the
+       datastore feature associated with the pAN.";
+    leaf-list metamodel {
+      type string;
+      description
+        "List of YANG modules that represent the pAN instance.";
+    }
+    leaf metamodel-alignment-state {
+      type bbf-node-types:alignment-state;
+      description
+        "Describes the alignment state of the pANs metamodel and the
+         pAN datastore schema contained in the BAA layer.";
+    }
+    leaf schema-update-timestamp {
+      type yang:date-and-time;
+      description
+        "Date and time of last pAN datastore schema update.";
+    }
+    leaf an-alignment-state {
+      type bbf-node-types:alignment-state;
+      description
+        "Describes the alignment state between the
+         pAN's datastore and the AN.";
+    }
+    leaf an-alignment-state-change-timestamp {
+      type yang:date-and-time;
+      description
+        "Date and time of last change of the alignment state.";
+    }
+  }
+
+  // Physical Access Node Management Information
+
+  grouping pan-management-info {
+    description
+      "The management information for a BAA pAN instance.";
+    leaf admin-state {
+      type bbf-node-types:admin-state;
+      description
+        "The management administrative state of the pAN within
+         the context of the BAA layer.";
+    }
+    leaf admin-state-change-timestamp {
+      type yang:date-and-time;
+      description
+        "Date and time of last change.";
+    }
+    container datastore {
+      description
+        "Management information related to the
+         data store for the pAN.";
+      uses datastore-management-info;
+    }
+    container device-adapter {
+      description
+        "Management information related to the
+         device adapter used by the pAN.
+         The software use is the BAA device adapter.";
+      uses bbf-device:software-management-info-state;
+      leaf alignment-state-update-timestamp {
+        type yang:date-and-time;
+        description
+          "Date and time of last change.";
+      }
+    }
+  }
+}
