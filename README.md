@@ -1,5 +1,10 @@
 ## Broadband Forum YANG Modules
 
+### 2021-07-06: [TR-454 Issue 1](https://www.broadband-forum.org/technical/download/TR-454_Issue-1.pdf) YANG Modules for Access Network Map & Equipment Inventory
+*Tag: [TR-454-v1.0.0](https://github.com/BroadbandForum/yang/tree/TR-454-v1.0.0)*
+
+TR-454 defines YANG data models for maintaining and reporting Network Map and Equipment Inventory information that is applicable to the Broadband Forum's CloudCO Broadband Access Abstraction (BAA) layer as well as SDN Management and Control functions.
+
 ### 2021-06-02: [TR-383 Amendment 4](https://www.broadband-forum.org/technical/download/TR-383_Amendment-4.pdf) Common YANG Modules for Access Networks
 *Tag: [TR-383-v1.4.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.4.0)*
 
