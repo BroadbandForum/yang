@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<!-- BBF GitHub Pages pandoc template; modified from default.html template -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="generator" content="pandoc"/>
+  <meta name="description" content="OD-360 – Broadband Forum YANG Modules: A set of YANG modules for managing access networks"/>
+  <meta name="theme-color" content="#157878"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
+  <title>BBF – BBF YANG Guidelines</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="github.css"/>
+  <link rel="stylesheet" href="extra.css"/>
+  <link rel="stylesheet" href="toc.css"/>
+  <link rel="stylesheet" href="release.css"/>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <!-- XXX header includes are included just before the ToC (below) -->
+</head>
+
+<body>
+  <section class="page-header">
+    <h1 class="project-name">
+      <a href="index.html" style="text-decoration: none; color: white;">
+        <img src="bbflogo-bw.png"/><br>
+        Broadband Forum YANG Modules
+      </a>
+    </h1>
+    <h2 class="project-tagline">A set of YANG modules for managing access networks</h2>
+    <p></p>
+    <p></p>
+    <div class="project-buttons">
+      <a class="btn" href="index.htm" title="OD-360 Single-file HTML">HTML</a>
+      <a class="btn" href="index.pdf" title="OD-360 PDF">PDF</a>
+      <a class="btn" href="https://github.com/BroadbandForum/yang" title="YANG modules on GitHub">YANG Modules</a>
+    </div>
+  </section>
+
+  <section class="main-content">
+<nav>
+<p>
+   <a href="00-index-contents.html#contents">Cover Page</a>
+ | <a href="01-index-references.html#sec:references">References</a>
+ | <a href="02-index-overview.html#sec:overview">Overview</a>
+ | <a href="03-index-yang-guidelines.html#sec:yang-guidelines">YANG Guidelines</a>
+ | <a href="04-index-ietf-yang-guidelines.html#sec:ietf-yang-guidelines">IETF YANG Guidelines</a>
+ | <a href="05-index-bbf-yang-guidelines.html#sec:bbf-yang-guidelines">BBF YANG Guidelines</a>
+ | <a href="06-index-bbf-deviation-guidelines.html#sec:bbf-deviation-guidelines">BBF Deviation Guidelines</a>
+</p>
+</nav>
+
+<nav id="TOCFULL">
+<ul>
+  <li><a href="00-index-contents.html#contents">Cover Page</a></li>
+  <li><a href="01-index-references.html#sec:references">References</a></li>
+  <li><a href="02-index-overview.html#sec:overview">Overview</a></li>
+  <ul>
+    <li><a href="02-index-overview.html#sec:yang-language-version">YANG Language Version</a></li>
+  </ul>
+  <li><a href="03-index-yang-guidelines.html#sec:yang-guidelines">YANG Guidelines</a></li>
+  <ul>
+    <li><a href="03-index-yang-guidelines.html#sec:terminology">Terminology</a></li>
+    <li><a href="03-index-yang-guidelines.html#sec:template">Template</a></li>
+    <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-yang-guidelines">IETF YANG Guidelines</a></li>
+    <ul>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-1-yang-terms">IETF-1: YANG Terms</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-2-yang-validation">IETF-2: YANG Validation</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-3-yang-usage-guidelines">IETF-3: YANG Usage Guidelines</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-4-file-layout">IETF-4: File Layout</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-5-quoting">IETF-5: Quoting</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-6-module-naming-conventions">IETF-6: Module Naming Conventions</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-7-module-header-meta-and-revision-statements">IETF-7: Module Header, Meta and Revision Statements</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-8-module-header-meta-and-revision-statements---top-level-description">IETF-8: Module Header, Meta and Revision Statements - Top Level Description</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-9-namespace-assignments">IETF-9: Namespace Assignments</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-10-prefixes---imported-modules">IETF-10: Prefixes - Imported Modules</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-11-prefixes---usage">IETF-11: Prefixes - Usage</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-12-identifier-naming-conventions">IETF-12: Identifier Naming Conventions</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-13-conditional-statements">IETF-13: Conditional Statements</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-14-conditional-augment-statements">IETF-14: Conditional Augment Statements</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-15-import-or-include-by-revision">IETF-15: Import or Include By Revision</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-16-legal-characters-in-yang-modules">IETF-16: Legal Characters in YANG Modules</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-17-prefix-on-belongs-to-statements">IETF-17: Prefix on &ldquo;belongs-to&rdquo; Statements</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-18-error-message-sub-statement-to-the-must-statement">IETF-18: &lsquo;error-message&rsquo; sub-statement to the &lsquo;must&rsquo; statement</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-19-description-sub-statement-to-the-must-statement">IETF-19: &lsquo;description&rsquo; sub-statement to the &lsquo;must&rsquo; statement</a></li>
+      <li><a href="04-index-ietf-yang-guidelines.html#sec:ietf-20-tabs-and-spacing">IETF-20: Tabs and Spacing</a></li>
+    </ul>
+    <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-yang-guidelines">BBF YANG Guidelines</a></li>
+    <ul>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-1-use-of-ianaietf-yang-modules">BBF-1: Use of IANA/IETF YANG Modules</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-2-line-length">BBF-2: Line Length</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-3-deviations">BBF-3: Deviations</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-4-short-names">BBF-4: Short Names</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-5-descriptions-and-references">BBF-5: Descriptions and References</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-6-special-values">BBF-6: Special Values</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-7-paragraph-separation-in-description-statements">BBF-7: Paragraph Separation in Description Statements</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-8-revision-statements">BBF-8: Revision Statements</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-9-explicit-modeling">BBF-9: Explicit Modeling</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-10-retroactive-application-of-od-360-guidelines">BBF-10: Retroactive Application of OD-360 Guidelines</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-11-multi-word-identifiers">BBF-11: Multi-word Identifiers</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-12-acronyms-in-description-statements">BBF-12: Acronyms in Description Statements</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-13-abbreviations-in-description-statements">BBF-13: Abbreviations in Description Statements</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-14-adding-andor-creating-bbf-yang-models">BBF-14: Adding and/or Creating BBF YANG Models</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-15-yang-model-revisions-and-license">BBF-15: YANG Model Revisions and License</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-16-enum-naming">BBF-16: Enum Naming</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-17-value-statements">BBF-17: Value Statements</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-18-prefix-on-if-feature-statements">BBF-18: Prefix on &lsquo;if-feature&rsquo; Statements</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-19-default-case-of-a-choice-statement---empty-typed-leaf">BBF-19: Default Case of a Choice Statement - Empty Typed Leaf</a></li>
+      <li><a href="05-index-bbf-yang-guidelines.html#sec:bbf-20-formatting-error-string-statements">BBF-20: Formatting &lsquo;error-string&rsquo; statements</a></li>
+    </ul>
+    <li><a href="06-index-bbf-deviation-guidelines.html#sec:bbf-deviation-guidelines">BBF Deviation Guidelines</a></li>
+    <ul>
+      <li><a href="06-index-bbf-deviation-guidelines.html#sec:types-of-deviations">Types of Deviations</a></li>
+      <li><a href="06-index-bbf-deviation-guidelines.html#sec:dev-1-not-supported">DEV-1: not-supported</a></li>
+      <li><a href="06-index-bbf-deviation-guidelines.html#sec:dev-2-add---number-of-elements">DEV-2: add - Number of Elements</a></li>
+      <li><a href="06-index-bbf-deviation-guidelines.html#sec:dev-3-add---must-constraints">DEV-3: add - &lsquo;must&rsquo; Constraints</a></li>
+      <li><a href="06-index-bbf-deviation-guidelines.html#sec:dev-4-replace---data-type">DEV-4: replace - Data Type</a></li>
+      <li><a href="06-index-bbf-deviation-guidelines.html#sec:dev-5-replace---number-of-elements">DEV-5: replace - Number of Elements</a></li>
+      <li><a href="06-index-bbf-deviation-guidelines.html#sec:dev-6-delete">DEV-6: delete</a></li>
+    </ul>
+  </ul>
+</ul>
+</nav>
+
+    <header id="title-block-header">
+      <h1 class="title" id="sec:bbf-yang-guidelines">BBF YANG Guidelines<a href="#sec:bbf-yang-guidelines" class="headerlink" title="Permalink to this header"> <img src="permalink.png" style="width: 0.8em"/></a></h1>
+    </header>
+    <nav id="_TOC" role="doc-toc">
+<ul>
+<li><a href="#sec:bbf-1-use-of-ianaietf-yang-modules">BBF-1: Use of IANA/IETF YANG Modules <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-2-line-length">BBF-2: Line Length <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-3-deviations">BBF-3: Deviations <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-4-short-names">BBF-4: Short Names <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-5-descriptions-and-references">BBF-5: Descriptions and References <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-6-special-values">BBF-6: Special Values <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-7-paragraph-separation-in-description-statements">BBF-7: Paragraph Separation in Description Statements <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-8-revision-statements">BBF-8: Revision Statements <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-9-explicit-modeling">BBF-9: Explicit Modeling <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-10-retroactive-application-of-od-360-guidelines">BBF-10: Retroactive Application of OD-360 Guidelines <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-11-multi-word-identifiers">BBF-11: Multi-word Identifiers <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-12-acronyms-in-description-statements">BBF-12: Acronyms in Description Statements <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-13-abbreviations-in-description-statements">BBF-13: Abbreviations in Description Statements <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-14-adding-andor-creating-bbf-yang-models">BBF-14: Adding and/or Creating BBF YANG Models <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-15-yang-model-revisions-and-license">BBF-15: YANG Model Revisions and License <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-16-enum-naming">BBF-16: Enum Naming <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-17-value-statements">BBF-17: Value Statements <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-18-prefix-on-if-feature-statements">BBF-18: Prefix on ‘if-feature’ Statements <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-19-default-case-of-a-choice-statement---empty-typed-leaf">BBF-19: Default Case of a Choice Statement - Empty Typed Leaf <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+<li><a href="#sec:bbf-20-formatting-error-string-statements">BBF-20: Formatting ‘error-string’ statements <span><img src="permalink.png" style="width:0.8em" /></span></a></li>
+</ul>
+    </nav>
+<p>This section adds BBF-specific guidelines that go beyond the scope of the IETF YANG Guidelines.</p>
+<h3 id="sec:bbf-1-use-of-ianaietf-yang-modules">BBF-1: Use of IANA/IETF YANG Modules <a href="05-index-bbf-yang-guidelines.html#sec:bbf-1-use-of-ianaietf-yang-modules" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>BBF YANG modules MUST use standard IANA/IETF YANG modules whenever possible. In this context, “use” implies adherence to the letter and spirit of such modules and of their defining RFCs.</p>
+<p>Individual Working Text documents SHOULD reference the standard models which are applicable.</p>
+<h3 id="sec:bbf-2-line-length">BBF-2: Line Length <a href="05-index-bbf-yang-guidelines.html#sec:bbf-2-line-length" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>The length of each line of text in a YANG module MUST not exceed 70 characters.</p>
+<h3 id="sec:bbf-3-deviations">BBF-3: Deviations <a href="05-index-bbf-yang-guidelines.html#sec:bbf-3-deviations" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>Deviations MUST NOT be used in BBF YANG modules.</p>
+<p>However, deviations can be used alongside BBF YANG modules as described in the section BBF Deviation Guidelines.</p>
+<h3 id="sec:bbf-4-short-names">BBF-4: Short Names <a href="05-index-bbf-yang-guidelines.html#sec:bbf-4-short-names" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>Lists and leaf-lists may have many elements resulting in large amounts of data present on the line. For XML encoding, the name of each node appears twice for every element of the list or leaf-list. Although IETF-12 states that identifiers SHOULD include complete words, the expedient use of short names SHOULD be imposed to shorten on-the-wire messaging and improve efficiency.</p>
+<h3 id="sec:bbf-5-descriptions-and-references">BBF-5: Descriptions and References <a href="05-index-bbf-yang-guidelines.html#sec:bbf-5-descriptions-and-references" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>All descriptions MUST read as sentences or sentence fragments containing proper capitalization and punctuation, e.g., ending with periods. However, reference statements need not meet this requirement and do not need to terminate with a period.</p>
+<h3 id="sec:bbf-6-special-values">BBF-6: Special Values <a href="05-index-bbf-yang-guidelines.html#sec:bbf-6-special-values" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>Special values SHOULD be parameterized in an enumeration as part of a union with the normal values.</p>
+<p>Enumerations SHOULD NOT be used in cases where a special value means “XXX or less” or “YYY or more”, i.e. where the special value indicates clipping.</p>
+<p>Example:</p>
+<pre><code>  typedef snr-margin {
+    type union {
+      type enumeration {
+        enum &quot;undetermined&quot; {
+          description
+            &quot;Indicates the value is not determined.&quot;;
+        }
+      }
+      type int16 {
+        range &quot;-511..511&quot;;
+      }
+    }
+    description
+      &quot;Reports the signal-to-noise ratio margin. A first special value
+       (undetermined) indicates that the signal-to-noise ratio margin
+       is undetermined. A second special value (-511) indicates that
+       the signal-to-noise ratio margin is less than or equal to -51.1
+       dB. A third special value (+511) indicates that the
+       signal-to-noise ratio margin is greater than or equal to
+       +51.1dB.&quot;;</code></pre>
+<p>In the above example, -511 refers to a value less than or equal to -51.1; +511 refers to a value greater than or equal to +51.1 and the enum undetermined refers to a value which is undetermined.</p>
+<h3 id="sec:bbf-7-paragraph-separation-in-description-statements">BBF-7: Paragraph Separation in Description Statements <a href="05-index-bbf-yang-guidelines.html#sec:bbf-7-paragraph-separation-in-description-statements" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>For description statements which contain multiple paragraphs, each paragraph SHOULD be separated using a blank line.</p>
+<p>Example:</p>
+<pre><code>  description
+    &quot;This is the first paragraph of the description.
+   
+     This is the second paragraph of the description.&quot;;</code></pre>
+<h3 id="sec:bbf-8-revision-statements">BBF-8: Revision Statements <a href="05-index-bbf-yang-guidelines.html#sec:bbf-8-revision-statements" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>Unpublished versions of BBF YANG modules MAY have ‘revision’ statements corresponding to individual pull requests. However, published versions MUST remove these ‘revision’ statements and replace with a single ‘revision’ statement corresponding to the published version.</p>
+<h3 id="sec:bbf-9-explicit-modeling">BBF-9: Explicit Modeling <a href="05-index-bbf-yang-guidelines.html#sec:bbf-9-explicit-modeling" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>Where YANG allows something or some behavior to be explicitly modeled (e.g. enumerations, range, units, must, etc.) then this SHOULD always be done. Mandatory requirements in descriptions SHOULD be used only where it is not possible to use formal YANG modeling to convey the requirement.</p>
+<h3 id="sec:bbf-10-retroactive-application-of-od-360-guidelines">BBF-10: Retroactive Application of OD-360 Guidelines <a href="05-index-bbf-yang-guidelines.html#sec:bbf-10-retroactive-application-of-od-360-guidelines" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>OD-360 guidelines SHOULD NOT be retroactively applied to published BBF YANG modules and MUST NOT be applied if the resulting change is backward incompatible with the previously published version. For example, an existing node named using an underscore ’_’ instead of a dash ‘-’ MUST NOT be changed in published module as the resulting renaming is not backward compatible.</p>
+<h3 id="sec:bbf-11-multi-word-identifiers">BBF-11: Multi-word Identifiers <a href="05-index-bbf-yang-guidelines.html#sec:bbf-11-multi-word-identifiers" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>YANG identifiers which represent multiple words, e.g target margin, SHOULD use a dash between the normally whitespace separated words, e.g. ‘target-margin’.</p>
+<h3 id="sec:bbf-12-acronyms-in-description-statements">BBF-12: Acronyms in Description Statements <a href="05-index-bbf-yang-guidelines.html#sec:bbf-12-acronyms-in-description-statements" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>Acronyms can be used in description statements. However, the first instance of the acronym in a description statement SHOULD have its meaning clearly conveyed.</p>
+<p>For example:</p>
+<pre><code>  leaf cbs {
+    type bbf-qos-plc-tp:burst-size;
+    description
+      &quot;Committed Burst Size (CBS) defines the amount of traffic
+       that can be admitted above the Committed Information Rate
+       (CIR) and considered green.&quot;;
+  }</code></pre>
+<h3 id="sec:bbf-13-abbreviations-in-description-statements">BBF-13: Abbreviations in Description Statements <a href="05-index-bbf-yang-guidelines.html#sec:bbf-13-abbreviations-in-description-statements" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>Abbreviations can be used in description statements. However, the first instance of the acronym in a description statement SHOULD have its meaning clearly conveyed.</p>
+<h3 id="sec:bbf-14-adding-andor-creating-bbf-yang-models">BBF-14: Adding and/or Creating BBF YANG Models <a href="05-index-bbf-yang-guidelines.html#sec:bbf-14-adding-andor-creating-bbf-yang-models" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>This guideline defines the best practices when defining a new BBF YANG model and/or having BBF extend an existing (BBF or non-BBF) YANG model.</p>
+<p>When creating or editing BBF YANG models, the following use cases apply:</p>
+<ol>
+<li><p><strong>Requirements that are captured in a Broadband Forum Technical Report</strong> In this case, the BBF YANG model should meet the requirement set forward in the Technical Report. For example, the models contained in TR-383 build on the requirements of TR-101/156/167/301</p></li>
+<li><p><strong>Requirements (or information models) that are captured in standards documents published by other SDOs and referenced from a Broadband Forum Technical Report, for which the other SDO is not developing a YANG model</strong> In this case, the BBF YANG data model should reference the applicable standard and be able to meet the requirement(s) from that document. For example, the TR-355 G.fast YANG model contains attributes defined in ITU-T Recommendation G.997.2</p></li>
+<li><p><strong>A model requirement which is not formulated in a Broadband Forum Technical Report or a standard published by another SDO</strong> In this case, the following guidelines apply:</p>
+<ol>
+<li><p>First, the requirement must be formulated based on inputs brought forward to the BBF (i.e. a contribution explaining the need for the requirement).</p></li>
+<li><p>There must be consensus among the participants in the Work Area/Project Stream to move forward with this requirement.</p></li>
+<li><p>It is desirable, but not mandatory for the requirements to be captured in a BBF TR. But that should not hold up putting the requirement in the YANG model. In other words, if the Work Area agrees that something should be added in a BBF YANG model, then we do not need to wait until the requirement is captured in a TR.</p></li>
+<li><p>The new requirement must not break existing BBF TRs.</p></li>
+<li><p>The new requirement must be reviewed by any Work Area(s) or Project Stream(s) for which it is clearly applicable (e.g., a PON related requirement is to be reviewed by the FAN WA).</p></li>
+</ol></li>
+</ol>
+<h3 id="sec:bbf-15-yang-model-revisions-and-license">BBF-15: YANG Model Revisions and License <a href="05-index-bbf-yang-guidelines.html#sec:bbf-15-yang-model-revisions-and-license" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>BBF YANG Models are available in three possible states:</p>
+<ul>
+<li>Published: Models are made available to the public in GitHub and are associated with a Technical Report.</li>
+<li>Draft: Models are made available to the public in GitHub and are associated with a draft Working Text.</li>
+<li>Development: Models are made available to members in Bitbucket while they are in development.</li>
+</ul>
+<p>In order to allow BBF members to consume BBF YANG models in any state, the following apply with regards to revision statements and license text.</p>
+<h4 id="sec:published">Published <a href="05-index-bbf-yang-guidelines.html#sec:published" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h4>
+<p>Each published module and submodule SHALL:</p>
+<ul>
+<li>have a new, if previously published, or initial revision statement containing the TR publication date as the revision date. All submodules associated with a module SHALL have the same revision date as the parent module regardless of whether they were changed.</li>
+<li>maintain all revision statements from previously published revisions.</li>
+<li>contain the standard BBF software license.</li>
+</ul>
+<h4 id="sec:draft">Draft <a href="05-index-bbf-yang-guidelines.html#sec:draft" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h4>
+<p>Each draft module and submodule SHALL:</p>
+<ul>
+<li>have a new, if previously published, or initial revision statement containing the draft publication date as the revision date. All submodules associated with a module SHALL have the same revision date as the parent module regardless of whether they were changed.</li>
+<li>maintain all revision statements from previously published revisions.</li>
+<li>contain the draft BBF software license.</li>
+</ul>
+<h4 id="sec:development">Development <a href="05-index-bbf-yang-guidelines.html#sec:development" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h4>
+<p>Each development module and submodule SHALL:</p>
+<ul>
+<li>have a new, if previously published, or initial revision statement containing the date of the end of the review period of the last pull request that contained the module and/or submodule. All submodules associated with a module SHALL have the same revision date as the parent module regardless of whether they were changed as part of the recent pull request.</li>
+<li>maintain all revision statements from previously published revisions.</li>
+<li>contain the standard BBF software license with correct copyright year(s).</li>
+</ul>
+<p>The end of the license must state the following (replacing xxx with the Working Text number):</p>
+<pre><code>  This version of this YANG module is part of WT-xxx; see
+  the WT itself for full legal notices.&quot;;</code></pre>
+<p>The format of the revision statement in a development module shall be as follows:</p>
+<pre><code>  revision 2021-09-03 {
+    description
+      &quot;TBD
+       * Approval Date:    TBD.
+       * Publication Date: TBD.&quot;;
+    reference
+      &quot;TBD&quot;;
+  }</code></pre>
+<h3 id="sec:bbf-16-enum-naming">BBF-16: Enum Naming <a href="05-index-bbf-yang-guidelines.html#sec:bbf-16-enum-naming" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>All enums in an enumeration SHOULD be named using names which describe their functional meaning rather than something ambiguous such as an integer string, “1”.</p>
+<p>For example, this definition is preferred</p>
+<pre><code>  leaf ra-mode {
+    type enumeration {
+      enum manual {
+        description
+          &quot;Mode 1 = MANUAL.&quot;;
+      }
+      enum at-init {
+        description
+          &quot;Mode 2 = AT_INIT.&quot;;
+      }
+      enum dynamic {
+        description
+          &quot;Mode 3 = DYNAMIC.&quot;;
+      }
+      enum dynamic-with-sos {
+        description
+          &quot;Mode 4 = DYNAMIC with SOS.&quot;;
+      }
+    }</code></pre>
+<p>over this one.</p>
+<pre><code>  leaf ra-mode {
+    type enumeration {
+      enum 1 {
+        description
+          &quot;Mode 1 = MANUAL.&quot;;
+      }
+      enum 2 {
+        description
+          &quot;Mode 2 = AT_INIT.&quot;;
+      }
+      enum 3 {
+        description
+          &quot;Mode 3 = DYNAMIC.&quot;;
+      }
+      enum 4 {
+        description
+          &quot;Mode 4 = DYNAMIC with SOS.&quot;;
+      }
+    }</code></pre>
+<h3 id="sec:bbf-17-value-statements">BBF-17: Value Statements <a href="05-index-bbf-yang-guidelines.html#sec:bbf-17-value-statements" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>When modeling an enumeration where each enum corresponds to an integer value specified by a underlying standard specification, a model MAY choose to model those values in the ‘value’ statement.</p>
+<p><em>The ‘value’ carries no meaning via NETCONF nor RESTCONF but is used for an implementation and reference aid.</em></p>
+<p><em>For an enumeration whose underlying values are 0..n, the ‘value’ statements are not necessary as all enums have an implied value if not explicitly specified. The implied values begin with 0 and increment by 1 for each enum in the enumeration.</em></p>
+<pre><code>  leaf ra-mode {
+    type enumeration {
+      enum manual {
+        value 1;
+        description
+          &quot;Mode 1 = MANUAL.&quot;;
+      }
+      enum at-init {
+        value 2;
+        description
+          &quot;Mode 2 = AT_INIT.&quot;;
+      }
+      enum dynamic {
+        value 3;
+        description
+          &quot;Mode 3 = DYNAMIC.&quot;;
+      }
+      enum dynamic-with-sos {
+        value 4;
+        description
+          &quot;Mode 4 = DYNAMIC with SOS.&quot;;
+      }
+    }</code></pre>
+<h3 id="sec:bbf-18-prefix-on-if-feature-statements">BBF-18: Prefix on ‘if-feature’ Statements <a href="05-index-bbf-yang-guidelines.html#sec:bbf-18-prefix-on-if-feature-statements" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>An ‘if-feature’ statement on any node defined within a top level grouping which depends on a ‘feature’ that is defined in the same module as the grouping MUST use the prefix on the feature name contained within the ‘if-feature’ statement.</p>
+<pre><code>  module bbf-availability {
+    ...
+   
+    feature availability {
+      description
+        &quot;Indicates support for retrieving availability of resources.&quot;;
+    }
+   
+    ...
+   
+    grouping availability {
+      description
+        &quot;Defines the availability of entities.&quot;;
+   
+      container availability {
+        if-feature &quot;bbf-avail:availability&quot;;
+        presence
+          &quot;If present, this container indicates supports for
+           retrieving the availability of the entity for which it is
+           used.&quot;;
+        config false;
+        description
+          &quot;Operational status defining the availability of an
+           entity.&quot;;
+   
+        uses availability-parameters;
+      }
+    }
+   
+    ...
+  }    </code></pre>
+<h3 id="sec:bbf-19-default-case-of-a-choice-statement---empty-typed-leaf">BBF-19: Default Case of a Choice Statement - Empty Typed Leaf <a href="05-index-bbf-yang-guidelines.html#sec:bbf-19-default-case-of-a-choice-statement---empty-typed-leaf" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p><em>This requirement is derived from section <a href="https://datatracker.ietf.org/doc/html/rfc7950#section-7.9.3">7.9.3</a> and section <a href="https://datatracker.ietf.org/doc/html/rfc7950#section-9.11">9.11</a> of RFC 7950 <span class="cite" data-citation-ids="RFC7950"><a href="01-index-references.html#ref-RFC7950">[2]</a></span>.</em></p>
+<p>The default case of a choice statement MUST not contain sole descendant leaf node of type “empty”.</p>
+<p>Section 7.9.3 states that “The default case is only important when considering the ‘default’ statements of nodes under the cases (i.e., default values of leafs and leaf-lists, and default cases of nested choices).” It also states that “The default values and nested default cases under the default case are used if none of the nodes under any of the cases are present.”.</p>
+<p>Section 9.11 states that an empty type cannot have a default value</p>
+<p>In the example below, the choice ‘manual’ has a leaf with an empty type as the only child node. Since an empty leaf cannot have a default value, the behavior of an &lt;edit-config&gt; request that creates the ‘transfer’ container without providing any data for the choice ‘how’ will be the same irrespective of whether the default ‘manual’ statement is present or not.</p>
+<p>The leaf ‘manual’ will not be created.</p>
+<pre><code>  container transfer {
+    description
+      &quot;Configuration associated with the timing
+       of a transfer.&quot;;
+   
+    choice how {
+      default manual;
+      description
+        &quot;Transfer timing methods.&quot;;
+   
+      case interval {
+        leaf interval {
+          type uint16;
+          units minutes;
+          default 30;
+          description
+            &quot;Transfer every &#39;interval&#39; minutes.&quot;;
+        }
+      }
+   
+      case manual {
+        leaf manual {
+          type empty;
+          description
+            &quot;Only transfer when manually triggered.&quot;;
+        }
+      }
+    }
+  }</code></pre>
+<h3 id="sec:bbf-20-formatting-error-string-statements">BBF-20: Formatting ‘error-string’ statements <a href="05-index-bbf-yang-guidelines.html#sec:bbf-20-formatting-error-string-statements" class="headerlink" title="Permalink to this header"><img src="permalink.png" style="width:0.8em" /></a></h3>
+<p>To ensure ease of rendering in client tools such as GUIs etc. and regardless of their length, error-messages MUST be defined as a single line of text and MUST NOT contain explicit line breaks (\n) or tab (\t) characters or formatted in any way.</p>
+<p>‘error-string’ statements which span across multiple lines MUST be defined by concatenating individual quoted-string statements defined per line.</p>
+<p>This is necessary to ensure that the strings will be correctly concatenated and white space retained as intended and rendered correctly in client tools.</p>
+<p>Example:</p>
+<pre><code>error-message
+  &quot;The name of a multicast interface to host can not
+   be the name of a multicast network interface.&quot;;</code></pre>
+<p>Per RFC 7950 <span class="cite" data-citation-ids="RFC7950"><a href="01-index-references.html#ref-RFC7950">[2]</a></span>, section <a href="https://datatracker.ietf.org/doc/html/rfc7950#section-6.1.3">6.1.3</a>, this ‘error-message’ would be reported as:</p>
+<pre><code>&lt;error-message&gt;The name of a multicast interface to host can not\nbe the name of a multicast network interface.&lt;/error-message&gt;</code></pre>
+<p>Corrected:</p>
+<pre><code>error-message
+  &quot;The name of a multicast interface to host can not &quot;
++ &quot;be the name of a multicast network interface.&quot;;</code></pre>
+<p>Which would be reported as:</p>
+<pre><code>&lt;error-message&gt;The name of a multicast interface to host can not be the name of a multicast network interface.&lt;/error-message&gt;</code></pre>
+    <div style="clear: both;"/>
+    <footer class="site-footer">
+<nav>
+<p>
+   <a href="00-index-contents.html#contents">Cover Page</a>
+ | <a href="01-index-references.html#sec:references">References</a>
+ | <a href="02-index-overview.html#sec:overview">Overview</a>
+ | <a href="03-index-yang-guidelines.html#sec:yang-guidelines">YANG Guidelines</a>
+ | <a href="04-index-ietf-yang-guidelines.html#sec:ietf-yang-guidelines">IETF YANG Guidelines</a>
+ | <a href="05-index-bbf-yang-guidelines.html#sec:bbf-yang-guidelines">BBF YANG Guidelines</a>
+ | <a href="06-index-bbf-deviation-guidelines.html#sec:bbf-deviation-guidelines">BBF Deviation Guidelines</a>
+</p>
+</nav>
+
+      <span class="site-footer-owner">
+        OD-360 is developed and maintained
+        by <a href="https://www.broadband-forum.org">The Broadband Forum</a>.
+        &copy; The Broadband Forum 2022</a>. All Rights Reserved.
+      </span>
+      <span class="site-footer-credits">
+        This page was generated by <a href="https://pandoc.org">pandoc</a>
+        and <a href="https://pages.github.com">GitHub Pages</a>.
+        View the <a href="https://github.com/BroadbandForum/yang">Broadband Forum YANG Modules on GitHub</a>.
+        <span class="release"/>
+      </span>
+    </footer>
+  </section>
+</body>
+</html>

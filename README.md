@@ -1,5 +1,11 @@
 ## Broadband Forum YANG Modules
 
+### 2022-02-15 [OD-360 Issue 1](https://yang.broadband-forum.org) BBF YANG Best Current Practices
+
+*Tag: [OD-360-v1.0.0](https://github.com/BroadbandForum/yang/tree/OD-360-v1.0.0)*
+
+OD-360 provides a set of Best Current Practices for development of YANG Data Models in the Broadband Forum (BBF).
+
 ### 2021-07-06: [TR-454 Issue 1](https://www.broadband-forum.org/technical/download/TR-454_Issue-1.pdf) YANG Modules for Access Network Map & Equipment Inventory
 *Tag: [TR-454-v1.0.0](https://github.com/BroadbandForum/yang/tree/TR-454-v1.0.0)*
 
@@ -11,7 +17,7 @@ TR-454 defines YANG data models for maintaining and reporting Network Map and Eq
 * Add common modules used across Broadband Forum YANG modules
 * Add new statistics related to QoS
 * Add profiles for frame classification and ingress/egress rewrite actions on sub-interfaces
-* Extend hardware transceiver functionality for alarms and reading of vendor-specific and user  EEPROM 
+* Extend hardware transceiver functionality for alarms and reading of vendor-specific and user  EEPROM
 * Extend common interface and Ethernet interface statistics and PM
 
 ### 2020-10-13: [TR-355 Amendment 3](https://www.broadband-forum.org/technical/download/TR-355_Amendment-3.pdf) YANG Modules for FTTdp Management, [TR-383 Amendment 3](https://www.broadband-forum.org/technical/download/TR-383_Amendment-3.pdf) Common YANG Modules for Access Networks, [TR-385 Issue 2](https://www.broadband-forum.org/technical/download/TR-385_Issue-2.pdf) ITU-T PON YANG Modules
@@ -82,7 +88,7 @@ TR-374 defines YANG data models for the management of ITU-T G.hn technology when
 ### 2018-07-13: [TR-383a1](https://www.broadband-forum.org/technical/download/TR-383_Amendment-1.pdf) Common YANG Modules for Access Networks
 *Tag: [v2.1.0-TR-383a1](https://github.com/BroadbandForum/yang/tree/v2.1.0-TR-383a1)*
 
-* Extend functionality of Layer 2 forwarding and QoS models 
+* Extend functionality of Layer 2 forwarding and QoS models
 * Add new model for Layer 2 multicast management
 * Remove models which depended on an early draft of ietf-hardware (these will be published again in a subsequent release based on the revision of ietf-hardware contained in [RFC 8348](https://tools.ietf.org/html/rfc8348))
 
