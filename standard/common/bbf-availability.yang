@@ -16,8 +16,6 @@ module bbf-availability {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -29,7 +27,7 @@ module bbf-availability {
      network equipment (e.g., BBF-specified Access Nodes and FTTdp
      DPUs).
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -69,9 +67,19 @@ module bbf-availability {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -152,44 +160,41 @@ module bbf-availability {
       }
       bit offline {
         description
-          "The resource requires a routine operation to be
-           performed to place it online and make it available
-           for use. The operation may be manual or automatic, or
-           both.";
+          "The resource requires a routine operation to be performed
+           to place it online and make it available for use. The
+           operation may be manual or automatic, or both.";
       }
       bit off-duty {
         description
-          "The resource has been made inactive by a control
-           process in accordance with a predetermined time
-           schedule. Under normal conditions the control process
-           can be expected to reactivate the resource at some
-           scheduled time.";
+          "The resource has been made inactive by a control process in
+           accordance with a predetermined time schedule. Under normal
+           conditions the control process can be expected to
+           reactivate the resource at some scheduled time.";
       }
       bit dependency {
         description
-          "The resource cannot operate because some other
-           resource on which it depends is unavailable.";
+          "The resource cannot operate because some other resource on
+           which it depends is unavailable.";
       }
       bit degraded {
         description
-          "The service available from the resource is degraded
-           in some respect, such as in speed or operating
-           capacity. Failure of a test or an unacceptable
-           performance measurement has established that some or
-           all services are not functional or are degraded, for
-           example, due to the presence of a defect or an
-           inappropriate configuration. However, the resource
-           remains available for service, either because some
-           services are satisfactory or because degraded service
-           is preferable to no service at all. Further information
-           indicating, for example, which services are not functional
-           or which configuration is inappropriate and the nature of
-           the degradation, may be found in the container 'issues'.";
+          "The service available from the resource is degraded in some
+           respect, such as in speed or operating capacity. Failure of
+           a test or an unacceptable performance measurement has
+           established that some or all services are not functional or
+           are degraded, for example, due to the presence of a defect
+           or an inappropriate configuration. However, the resource
+           remains available for service, either because some services
+           are satisfactory or because degraded service is preferable
+           to no service at all. Further information indicating, for
+           example, which services are not functional or which
+           configuration is inappropriate and the nature of the
+           degradation, may be found in the container 'issues'.";
       }
       bit not-installed {
         description
-          "The resource or resources represented by the managed
-           object are not present or are incomplete.";
+          "The resource or resources represented by the data nodes
+           are not present or are incomplete.";
       }
       bit log-full {
         description
@@ -197,9 +202,9 @@ module bbf-availability {
       }
     }
     description
-      "A set of availability status conditions.  An empty set of
-       bits implies that none of the status conditions are
-       present, i.e., the entity is available.";
+      "A set of availability status conditions. An empty set of bits
+       implies that none of the status conditions are present, i.e.,
+       the entity is available.";
     reference
       "ITU-T X.731 clause 8.1.2.3.";
   }
@@ -208,18 +213,18 @@ module bbf-availability {
     type enumeration {
       enum unspecified {
         description
-          "The resource is impaired, but the X.731 availability
-           status condition(s) cannot be determined or X.731
-           availability condition(s) are not supported by the
-           device. This permits devices that do not support X.731
-           availability status condition(s) to nevertheless make use
-           of the availability status parameters.";
+          "The resource is impaired, but the X.731 availability status
+           condition(s) cannot be determined or X.731 availability
+           condition(s) are not supported by the device. This permits
+           devices that do not support X.731 availability status
+           condition(s) to nevertheless make use of the availability
+           status parameters.";
       }
     }
     description
       "Defines an alternative definition of availability where a
-       device may not support specification of the availability
-       status according to that defined by ITU-T X.731.";
+       device may not support specification of the availability status
+       according to that defined by ITU-T X.731.";
   }
 
   typedef resource {
@@ -230,18 +235,16 @@ module bbf-availability {
       type string;
     }
     description
-      "This identifies a resource, such as an interface, which
-       is a cause of one or more availability status conditions.
+      "This identifies a resource, such as an interface, which is a
+       cause of one or more availability status conditions.
 
        It should be as fine-grained as possible both to guide the
-       operator.  If the instrumentation can detect a broken config,
+       operator. If the instrumentation can detect a broken config,
        this should be identified as the resource.
 
-       If the resource is modelled in YANG, this type will be an
-       instance-identifier. If the resource is an SNMP object, the
-       type will be an object-identifier. If the resource is
-       anything else, for example a distinguished name, this type
-       will be a string.";
+       If the resource is modeled in YANG, this type will be an
+       instance-identifier. If the resource is anything else, for
+       example a distinguished name, this type will be a string.";
   }
 
   grouping availability-parameters {
@@ -255,16 +258,16 @@ module bbf-availability {
       mandatory true;
       description
         "The set of availability status conditions currently defining
-         the availability status of the resource. An empty set of
-         bits implies that none of the status conditions are
-         present, i.e., the entity is available.";
+         the availability status of the resource. An empty set of bits
+         implies that none of the status conditions are present, i.e.,
+         the entity is available.";
       reference
         "ITU-T X.731 clause 8.1.2.3.";
     }
     container issues {
       description
-        "Issues that have been identified by the instrumentation
-         that are affecting the availability status";
+        "Issues that have been identified by the instrumentation that
+         are affecting the availability status";
       list issue {
         key "tag code";
         description

@@ -20,8 +20,6 @@ module bbf-l2-dhcpv4-relay-forwarding {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -36,7 +34,7 @@ module bbf-l2-dhcpv4-relay-forwarding {
      Specifically, this module augments bbf-l2-forwarding with
      subscriber management via the DHCPv4 protocol.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -76,9 +74,19 @@ module bbf-l2-dhcpv4-relay-forwarding {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -117,20 +125,20 @@ module bbf-l2-dhcpv4-relay-forwarding {
           type enumeration {
             enum apply-layer2-forwarding {
               description
-                "Downstream broadcast DHCP packets are forwarded
+                "Downstream broadcast DHCP messages are forwarded
                  according forwarding rules configured for the
                  forwarder. Especially applicable to the forwarding of
-                 DHCP broadcast packets is the configuration of
-                 flooding rules for broadcast packets.";
+                 DHCP broadcast messages is the configuration of
+                 flooding rules for broadcast frames.";
             }
             enum single-user-with-fallback-to-layer2 {
               description
-                "Downstream broadcast DHCP packets are first processed
-                 as defined for the value 'false', i.e. they are
-                 forwarded to only one port of the forwarder which is
-                 identified by the DHCP packet content. If however no
-                 port is identified in this way, then the packet will
-                 be processed as identified in 'apply-layer2-
+                "Downstream broadcast DHCP messages are first
+                 processed as defined for the value 'false', i.e. they
+                 are forwarded to only one port of the forwarder which
+                 is identified by the DHCP message content. If however
+                 no port is identified in this way, then the message
+                 will be processed as identified in 'apply-layer2-
                  forwarding', i.e. based on the (flooding) forwarding
                  rules of the forwarder.";
             }
@@ -139,18 +147,18 @@ module bbf-l2-dhcpv4-relay-forwarding {
         default "false";
         description
           "If it is configured as 'true', the L2 DHCP Relay Agent will
-           flood downstream 'broadcast DHCPv4 packets' to all output
+           flood downstream 'broadcast DHCPv4 messages' to all output
            ports of the forwarder.
 
            If it is configured as 'false', the L2 DHCP Relay Agent
-           will forward downstream 'broadcast DHCPv4 packets' to only
+           will forward downstream 'broadcast DHCPv4 messages' to only
            one port of the forwarder, i.e. the one for which the
-           packet is intended. Identifying the port for which the
-           packet is intended is based on packet content.
+           message is intended. Identifying the port for which the
+           message is intended is based on frame content.
 
            If it is configured with one of the enum values, then the
            L2 DHCP Relay Agent will forward downstream 'broadcast
-           DHCPv4 packets' as defined in the description of the enum
+           DHCPv4 messages' as defined in the description of the enum
            value.";
       }
     }

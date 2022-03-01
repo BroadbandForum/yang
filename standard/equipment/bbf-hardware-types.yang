@@ -20,8 +20,6 @@ module bbf-hardware-types {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -35,7 +33,7 @@ module bbf-hardware-types {
      Specifically, this module specializes types defined in the
      iana-hardware model.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -75,9 +73,19 @@ module bbf-hardware-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -109,31 +117,39 @@ module bbf-hardware-types {
                         TR-355_Amendment-1.pdf>";
   }
 
+  feature fastdsl-nt {
+    description
+      "Indicates whether the device supports management of Network
+       Terminations (NT) connected to its FAST or DSL Lines as a
+       remote hardware component within the device's Hardware
+       Management YANG data model.";
+  }
+
   identity slot {
     base ianahw:container;
     description
-      "A slot is a special type of container that can contain a
+      "A 'slot' is a special type of container that can contain a
        pluggable board.";
   }
 
   identity cage {
     base ianahw:container;
     description
-      "A cage is a special type of container that can contain a
+      "A 'cage' is a special type of container that can contain a
        pluggable transceiver.";
   }
 
   identity board {
     base ianahw:module;
     description
-      "A board is a special type of module that represents a physical
-       item, commonly known as a board or a card.";
+      "A 'board' is a special type of module that represents a
+       physical item, commonly known as a board or a card.";
   }
 
   identity transceiver {
     base ianahw:module;
     description
-      "A transceiver is a special type of module that represents a
+      "A 'transceiver' is a special type of module that represents a
        physical item like a pluggable SFP, an SFP+, or an XFP; or a
        soldered SFF.";
   }
@@ -141,36 +157,61 @@ module bbf-hardware-types {
   identity transceiver-link {
     base ianahw:port;
     description
-      "A transceiver-link is a special type of port that terminates an
-       optical fiber.";
+      "A 'transceiver-link' is a special type of port that terminates
+       an optical fiber.";
   }
 
   identity rj45 {
     base ianahw:port;
     description
-      "A RJ45 is a special type of port that terminates an electrical
-       Ethernet link.";
+      "A 'rj45' is a special type of port that terminates an
+       electrical Ethernet link.";
   }
 
   identity fastdsl-tp {
     base ianahw:port;
     description
-      "A fastdsl-tp is a special type of port that terminates a copper
-       twisted pair supporting a FAST or one of the DSL types of
-       link.";
+      "A 'fastdsl-tp' is a special type of port that terminates a
+       copper twisted pair supporting a FAST or one of the DSL types
+       of link.";
   }
 
   identity fastdsl-coax {
     base ianahw:port;
     description
-      "A fastdsl-coax is a special type of port that terminates a coax
-       supporting a FAST or one of the DSL types of link.";
+      "A 'fastdsl-coax' is a special type of port that terminates a
+       coax supporting a FAST or one of the DSL types of link.";
   }
 
   identity cpu-core {
     base ianahw:cpu;
     description
-      "A cpu-core refers to the CPU's core (when multiple cores are
+      "A 'cpu-core' refers to the CPU's core (when multiple cores are
        supported).";
+  }
+
+  identity remote-hardware {
+    base ianahw:chassis;
+    description
+      "A 'remote-hardware' is an abstract identity representing
+       separate hardware that is not physically part of device's own
+       hardware hierarchy, but reported as a remote hardware component
+       within the device's Hardware Management YANG data model.";
+  }
+
+  identity remote-nt {
+    base bbf-hwt:remote-hardware;
+    description
+      "A 'remote-nt' is an abstract identity representing a device
+       that is a remote hardware component that provides the network
+       termination of a line.";
+  }
+
+  identity fastdsl-nt {
+    if-feature "fastdsl-nt";
+    base bbf-hwt:remote-nt;
+    description
+      "A 'fastdsl-nt' is a remote hardware component that provides the
+       network termination of a FAST or DSL line.";
   }
 }

@@ -32,8 +32,6 @@ module bbf-frame-classification {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -47,7 +45,7 @@ module bbf-frame-classification {
      Specifically, this module contains reusable groupings defined for
      frame classification.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -87,9 +85,19 @@ module bbf-frame-classification {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -177,34 +185,34 @@ module bbf-frame-classification {
            identified with Next Header value of 58. When the
            individual ICMPv6 message types are configured then the
            individual configurations will take precedence over this
-           configuration";
+           configuration.";
       }
       enum nd {
         description
-          "Identifies IPv6 ND messages, ND mesages are a subset of the
-           ICMPv6 protocol. ICMPv6 messages are identified with Next
-           Header value of 58. ND messages are identified by specific
-           values of the Type field. Type field values are defined in
-           RFC 3810.";
+          "Identifies IPv6 ND messages, ND messages are a subset of
+           the ICMPv6 protocol. ICMPv6 messages are identified with
+           Next Header value of 58. ND messages are identified by
+           specific values of the Type field. Type field values are
+           defined in RFC 3810.";
       }
       enum arp {
         description
-          "Identifies the ARP messages, which are ethernet frames with
+          "Identifies the ARP messages, which are Ethernet frames with
            ethertype 0x0806.";
       }
       enum cfm {
         description
-          "Identifies the CFM messages, which are ethernet frames with
+          "Identifies the CFM messages, which are Ethernet frames with
            ethertype 0x8902.";
       }
       enum dot1x {
         description
-          "Identifies the DOT1X messages, which are ethernet frames
+          "Identifies the DOT1X messages, which are Ethernet frames
            with ethertype 0x888E.";
       }
       enum lacp {
         description
-          "Identifies the LACP messages, which are ethernet frames
+          "Identifies the LACP messages, which are Ethernet frames
            with ethertype 0x8809.";
       }
     }
@@ -223,7 +231,7 @@ module bbf-frame-classification {
       }
     }
     description
-      "Specificies a range of DSCP values. A special value 'any'
+      "Specifies a range of DSCP values. A special value 'any'
        allows for any DSCP value.";
   }
 
@@ -274,7 +282,7 @@ module bbf-frame-classification {
           description
             "Indicates the MAC address is a CFM multicast address.";
           reference
-            "IEEE 802.1-2014, section 8.13.11";
+            "IEEE 802.1Q-2014, section 8.13.11";
         }
       }
       case ipv4-multicast-address {
@@ -432,7 +440,7 @@ module bbf-frame-classification {
           type enumeration {
             enum any {
               description
-                "Matches any Drop Eligible Inidicator (DEI) value,
+                "Matches any Drop Eligible Indicator (DEI) value,
                  i.e. value 0 or 1.";
             }
           }
@@ -643,6 +651,21 @@ module bbf-frame-classification {
       default "any";
       description
         "String identifying the DSCP values and/or range.";
+      reference
+        "RFC 2474";
+    }
+  }
+
+  grouping dscp-match-specific {
+    description
+      "Flexible match on the IPv4 or IPv6 Differentiated Services
+       Code Point (DSCP) field.";
+    leaf dscp-range {
+      type bbf-inet:dscp-range;
+      description
+        "String identifying the DSCP values and/or range.";
+      reference
+        "RFC 2474";
     }
   }
 
@@ -760,7 +783,7 @@ module bbf-frame-classification {
        identify a protocol.";
     choice protocols {
       description
-        "The choice allows to specify combintations of frame field
+        "The choice allows to specify combinations of frame field
          values that identify a particular protocol/ or allows to
          indicate any protocol.
 

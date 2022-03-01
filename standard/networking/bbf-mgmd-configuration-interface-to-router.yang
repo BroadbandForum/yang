@@ -17,8 +17,6 @@ submodule bbf-mgmd-configuration-interface-to-router {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -30,7 +28,7 @@ submodule bbf-mgmd-configuration-interface-to-router {
      and the Multicast Listener Discovery (MLD) protocol on interfaces
      that connect to multicast routers.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +68,19 @@ submodule bbf-mgmd-configuration-interface-to-router {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -119,8 +127,8 @@ submodule bbf-mgmd-configuration-interface-to-router {
         "The interval between repetitions of a host's initial report
          of interest in a multicast address.";
       reference
-        "RFC 3376 Section 8.11;
-         RFC 3810 Section 9.11";
+        "RFC 3376 section 8.11;
+         RFC 3810 section 9.11";
     }
     leaf robustness {
       type uint32 {
@@ -133,8 +141,8 @@ submodule bbf-mgmd-configuration-interface-to-router {
          robustness variable may be increased. IGMP and MLD are robust
          to (robustness variable - 1) packet losses.";
       reference
-        "RFC 3376 Section 8.1;
-         RFC 5519 mgmdHostInterfaceVersion3Robustness";
+        "RFC 3376 section 8.1;
+         RFC 5519 section 5, mgmdHostInterfaceVersion3Robustness";
     }
   }
 }

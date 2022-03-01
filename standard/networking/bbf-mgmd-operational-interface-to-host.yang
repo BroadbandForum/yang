@@ -21,8 +21,6 @@ submodule bbf-mgmd-operational-interface-to-host {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -34,7 +32,7 @@ submodule bbf-mgmd-operational-interface-to-host {
      Multicast Listener Discovery (MLD) protocol on interfaces that
      connect a system to multicast hosts.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -74,9 +72,19 @@ submodule bbf-mgmd-operational-interface-to-host {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -137,7 +145,8 @@ submodule bbf-mgmd-operational-interface-to-host {
          counts the number of joins that in successfully associating
          the interface to a tree.";
       reference
-        "TR-101 - R-217, per DSL port, per multicast VLAN, item 1";
+        "TR-101 section 6.2.2.1, R-217, per DSL port, per multicast
+         VLAN, item 1";
     }
     leaf in-unsuccessful-join-requests {
       type yang:counter32;
@@ -162,7 +171,8 @@ submodule bbf-mgmd-operational-interface-to-host {
          counts the number of joins that did not result in
          successfully associating the interface to a tree.";
       reference
-        "TR-101 - R-217, per DSL port, per multicast VLAN, item 2";
+        "TR-101 section 6.2.2.1, R-217, per DSL port, per multicast
+         VLAN, item 2";
     }
     leaf in-leaves {
       type yang:counter32;
@@ -198,7 +208,8 @@ submodule bbf-mgmd-operational-interface-to-host {
         "Counts the number of invalid MGMD messages received on this
          interface.";
       reference
-        "TR-101 - R-217, per DSL port, per multicast VLAN, item 6";
+        "TR-101 section 6.2.2.1, R-217, per DSL port, per multicast
+         VLAN, item 6";
     }
   }
 
@@ -225,7 +236,8 @@ submodule bbf-mgmd-operational-interface-to-host {
          Query messages that are sent to the router, where N is the
          number of source addresses in the Query message.";
       reference
-        "TR-101 - R-217, per DSL port, per multicast VLAN, item 5";
+        "TR-101 section 6.2.2.1, R-217, per DSL port, per multicast
+         VLAN, item 5";
     }
     leaf out-general-queries {
       type yang:counter32;
@@ -240,7 +252,8 @@ submodule bbf-mgmd-operational-interface-to-host {
          sources addresses. The counter out-generic-queries is
          incremented once per sent MGMD General Query message.";
       reference
-        "TR-101 - R-217, per DSL port, per multicast VLAN, item 4";
+        "TR-101 section 6.2.2.1, R-217, per DSL port, per multicast
+         VLAN, item 4";
     }
   }
 }

@@ -17,8 +17,6 @@ submodule bbf-mgmd-configuration-multicast-snoop {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -30,7 +28,7 @@ submodule bbf-mgmd-configuration-multicast-snoop {
      and the Multicast Listener Discovery (MLD) protocol in case the
      system acts as a snooper.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +68,19 @@ submodule bbf-mgmd-configuration-multicast-snoop {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -151,8 +159,8 @@ submodule bbf-mgmd-configuration-multicast-snoop {
          Membership Report on the interface in that time interval, it
          stops forwarding multicast traffic to the interface.";
       reference
-        "ITU-T G.988 Section 9.3.27 Immediate Leave;
-         RFC 3810 Section A.2";
+        "ITU-T G.988 clause 9.3.27, Immediate Leave;
+         RFC 3810 section A.2";
     }
     leaf group-membership-interval {
       type uint32 {
@@ -172,8 +180,8 @@ submodule bbf-mgmd-configuration-multicast-snoop {
          plus (one Query Response Interval) as calculated from
          parameters configured in the multicast router.";
       reference
-        "RFC 4541, Section 2.1.1, item 6;
-         RFC 3376, section 8.4";
+        "RFC 4541 section 2.1.1, item 6;
+         RFC 3376 section 8.4";
     }
     leaf last-member-query-interval {
       if-feature "bbf-mgmd:mgmd-snoop-last-leave";
@@ -196,8 +204,9 @@ submodule bbf-mgmd-configuration-multicast-snoop {
          MGMD Group-Specific Query message, it removes the group state
          and discontinuous multicast transmission for that channel";
       reference
-        "RFC3376 Section 8.8;
-         RFC5519 mgmdRouterInterfaceLastMemberQueryInterval";
+        "RFC 3376 section 8.8;
+         RFC 5519 section 5,
+         mgmdRouterInterfaceLastMemberQueryInterval";
     }
     leaf last-member-query-count {
       if-feature "bbf-mgmd:mgmd-snoop-last-leave";
@@ -218,7 +227,7 @@ submodule bbf-mgmd-configuration-multicast-snoop {
          MGMD Group-Specific Query message, it removes the group state
          and discontinuous multicast transmission for that channel";
       reference
-        "RFC3376 Section 8.9";
+        "RFC 3376 section 8.9";
     }
   }
 }

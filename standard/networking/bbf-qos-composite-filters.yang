@@ -32,8 +32,6 @@ module bbf-qos-composite-filters {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -49,7 +47,7 @@ module bbf-qos-composite-filters {
      packet payload fields, and it contains filters composed of a
      combination of these fields.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -89,9 +87,19 @@ module bbf-qos-composite-filters {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -377,8 +385,7 @@ module bbf-qos-composite-filters {
 
          If the container is not present, then the source and/or
          destination port number in IP headers are not a filter
-         criterion and then, as to this filter, 'all
-         packets match'.";
+         criterion and then, as to this filter, 'all packets match'.";
       uses acl-transport-header-fields;
       description
         "Rule set that matches port numbers in IP headers.";

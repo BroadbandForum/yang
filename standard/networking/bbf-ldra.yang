@@ -32,8 +32,6 @@ module bbf-ldra {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -48,7 +46,7 @@ module bbf-ldra {
      This functionality is also known as a Lightweight DHCPv6 Relay
      Agent (LDRA).
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -88,9 +86,19 @@ module bbf-ldra {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -202,9 +210,8 @@ module bbf-ldra {
                  circuit-id defined in the instance in the list
                  subscriber-profiles/subscriber-profile that is
                  associated with the interface, if any. If this leaf
-                 is unknown, then the option
-                 interface-ID will be generated according to the
-                 syntax defined in the leaf
+                 is unknown, then the option interface-ID will be
+                 generated according to the syntax defined in the leaf
                  default-interface-id-syntax.";
               reference
                 "RFC 6221 - Section 5.3.2";
@@ -218,9 +225,9 @@ module bbf-ldra {
                  remote-id defined in the instance in the list
                  subscriber-profiles/subscriber-profile that is
                  associated with the interface, if any. If this leaf
-                 is unknown, then the option
-                 remote-ID will be generated according to the syntax
-                 defined in the leaf default-remote-id-syntax.";
+                 is unknown, then the option remote-ID will be
+                 generated according to the syntax defined in the leaf
+                 default-remote-id-syntax.";
               reference
                 "RFC 4649 - Section 4";
             }
@@ -233,8 +240,8 @@ module bbf-ldra {
                  subscriber-id defined in the instance in the list
                  subscriber-profiles/subscriber-profile that is
                  associated with the interface, if any. If this leaf
-                 unknown, then the option will
-                 contain an empty string.";
+                 unknown, then the option will contain an empty
+                 string.";
               reference
                 "RFC 4580 - Section 3";
             }
@@ -327,10 +334,22 @@ module bbf-ldra {
              default-remote-id-syntax indicates a Slot or a Port
              identification shall be added to the sub-option value,
              then this leaf determines if the slot/port numbering
-             MUST use leading 0's or not, i.e. generate a fixed
-             length string or a string with only meaningful digits.";
+             MUST use leading 0's or not, i.e., generate a fixed-
+             length string or a string with only meaningful digits.
+
+             Note that the number of digits used to form the fixed-
+             length string is device specific. A device may use the
+             number of digits as specified in TR-101 Table 2/
+             TR-156 Table 1 or a device may determine the number of
+             digits by the maximum value for the Slot or a Port
+             identification applicable to the device, i.e., if the
+             maximum value is less than or equal to 9, one digit may
+             be used; if the maximum value is less than or equal to
+             99, two digits may be used, etc.";
           reference
-            "TR-178 - R119";
+            "TR-178 - R119;
+             TR-101i2 - Table 2 Circuit ID Syntax;
+             TR-156 - Table 1 Port Identification String Elements.";
         }
       }
     }
@@ -350,12 +369,12 @@ module bbf-ldra {
         "Statistics are provided when the DHCPv6 LDRA functionality is
          enabled.";
       description
-        "A container presents the packet statistics related to the
+        "A container presents the message statistics related to the
          DHCPv6 LDRA.";
       leaf in-bad-packets-from-client {
         type yang:counter32;
         description
-          "Bad DHCPv6 packets received on the interface. The packets
+          "Bad DHCPv6 messages received on the interface. The messages
            are received from a DHCPv6 Client connected to it (directly
            or indirectly through a network).
 
@@ -366,7 +385,7 @@ module bbf-ldra {
       leaf in-bad-packets-from-server {
         type yang:counter32;
         description
-          "Bad DHCPv6 packets received on the interface. The packets
+          "Bad DHCPv6 messages received on the interface. The messages
            are received from a DHCPv6 Server connected to it (directly
            or indirectly through a network).
 
@@ -377,7 +396,7 @@ module bbf-ldra {
       leaf option-17-inserted-packets-to-server {
         type yang:counter32;
         description
-          "DHCPv6 packets from a Client to a Server that passed this
+          "DHCPv6 messages from a Client to a Server that passed this
            interface and for which the DHCPv6 LDRA did insert
            option 17.
 
@@ -388,7 +407,7 @@ module bbf-ldra {
       leaf option-17-removed-packets-to-client {
         type yang:counter32;
         description
-          "DHCPv6 packets from a Server to a Client that passed this
+          "DHCPv6 messages from a Server to a Client that passed this
            interface and for which the DHCPv6 LDRA did remove
            option 17.
 
@@ -399,7 +418,7 @@ module bbf-ldra {
       leaf option-18-inserted-packets-to-server {
         type yang:counter32;
         description
-          "DHCPv6 packets from a Client to a Server that passed this
+          "DHCPv6 messages from a Client to a Server that passed this
            interface and for which the DHCPv6 LDRA did insert
            option 18.
 
@@ -410,7 +429,7 @@ module bbf-ldra {
       leaf option-18-removed-packets-to-client {
         type yang:counter32;
         description
-          "DHCPv6 packets from a Server to a Client that passed this
+          "DHCPv6 messages from a Server to a Client that passed this
            interface and for which the DHCPv6 LDRA did remove
            option 18.
 
@@ -421,7 +440,7 @@ module bbf-ldra {
       leaf option-37-inserted-packets-to-server {
         type yang:counter32;
         description
-          "DHCPv6 packets from a Client to a Server that passed this
+          "DHCPv6 messages from a Client to a Server that passed this
            interface and for which the DHCPv6 LDRA did insert
            option 37.
 
@@ -432,7 +451,7 @@ module bbf-ldra {
       leaf option-37-removed-packets-to-client {
         type yang:counter32;
         description
-          "DHCPv6 packets from a Server to a Client that passed this
+          "DHCPv6 messages from a Server to a Client that passed this
            interface and for which the DHCPv6 LDRA did remove
            option 37.
 
@@ -443,7 +462,7 @@ module bbf-ldra {
       leaf outgoing-mtu-exceeded-packets-from-client {
         type yang:counter32;
         description
-          "DHCPv6 packets from a Client that are dropped because the
+          "DHCPv6 messages from a Client that are dropped because the
            Relay-Message size after adding the options would exceed
            the MTU of the outgoing interface.
 
@@ -451,7 +470,7 @@ module bbf-ldra {
            re-initialization of the management system, and/or when the
            DHCPv6 LDRA functionality is disabled/enabled.";
         reference
-          "RFC 6221 section 5.3.1";
+          "RFC 6221 - Section 5.3.1";
       }
     }
   }

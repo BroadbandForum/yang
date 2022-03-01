@@ -12,6 +12,9 @@ module bbf-ancp-interfaces {
   import bbf-dot1q-types {
     prefix bbf-dot1qt;
   }
+  import ietf-yang-types {
+    prefix yang;
+  }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -26,8 +29,6 @@ module bbf-ancp-interfaces {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -41,7 +42,7 @@ module bbf-ancp-interfaces {
      Specifically, this module augments ietf-interfaces to manage
      individual access lines that participate in ANCP.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,11 +82,21 @@ module bbf-ancp-interfaces {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
   reference
     "RFC 6320";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -104,6 +115,12 @@ module bbf-ancp-interfaces {
        in the Access-Aggregation-Circuit-ID-ASCII TLVs.";
   }
 
+  feature topology-discovery-statistics {
+    description
+      "Indicates support for Topology Discovery statistics per
+       interface managed by an ANCP session.";
+  }
+
   augment "/if:interfaces/if:interface" {
     description
       "Additions for the management of access lines for ANCP.";
@@ -112,7 +129,11 @@ module bbf-ancp-interfaces {
         "Presence of this container indicates ANCP functionality is
          enabled on this interface. The set of interfaces on which
          ANCP can be supported is dependent on the specific device
-         and type of interface.";
+         and type of interface.
+
+         For example, on DPUs ANCP is used to manage DSL lines, i.e.,
+         interfaces of the type 'fastdsl'; on OLTs ANCP is used to
+         manage 'v-ani' interfaces.";
       description
         "ANCP access line configuration parameters.";
       leaf partition {
@@ -129,10 +150,9 @@ module bbf-ancp-interfaces {
       }
       container access-aggregation-circuit-id {
         if-feature "access-aggregation-circuit-id";
-        presence
-          "Enables management of the value(s) to be used in the
-           Access-Aggregation-Circuit-ID-Binary and Access-
-           Aggregation-Circuit-ID-ASCII TLVs.";
+        presence "Enables management of the value(s) to be used in the
+                  Access-Aggregation-Circuit-ID-Binary and Access-
+                  Aggregation-Circuit-ID-ASCII TLVs.";
         description
           "Configuration specific to the Access-Aggregation-Circuit-
            ID-Binary and Access-Aggregation-Circuit-ID-ASCII TLVs.
@@ -151,7 +171,7 @@ module bbf-ancp-interfaces {
 
              The format in which the values shall be used for the
              Access-Aggregation-Circuit-ID-Binary TLV is defined in
-             the referenced standard. The  format to use in the
+             the referenced standard. The format to use in the
              Access-Aggregation-Circuit-ID-ASCII is configurable per
              ANCP session.";
           reference
@@ -218,6 +238,52 @@ module bbf-ancp-interfaces {
               }
             }
           }
+        }
+      }
+    }
+  }
+
+  augment "/bbf-ancp:ancp"
+        + "/bbf-ancp:partitions"
+        + "/bbf-ancp:partition"
+        + "/bbf-ancp:sessions"
+        + "/bbf-ancp:session"
+        + "/bbf-ancp:statistics" {
+    if-feature "bbf-ancp-if:topology-discovery-statistics";
+    description
+      "Augment ANCP session statistics with Topology Discovery
+       statistics.";
+    container access-lines {
+      presence
+        "Indicates availability of access line port message statistics
+         for the ANCP session.";
+      description
+        "Topology Discovery statistics for access lines managed by
+         this session.";
+      list access-line {
+        key "interface";
+        description
+          "An access line managed by this session.";
+        leaf interface {
+          type if:interface-ref;
+          description
+            "Identifies the interface representing the access line.";
+        }
+        leaf out-port-up {
+          type yang:zero-based-counter32;
+          mandatory true;
+          description
+            "The number of Port Up messages associated with this
+             interface that have been transmitted by the Access
+             Node within this session.";
+        }
+        leaf out-port-down {
+          type yang:zero-based-counter32;
+          mandatory true;
+          description
+            "The number of Port Down messages associated with this
+             interface that have been transmitted by the access
+             node within this session.";
         }
       }
     }

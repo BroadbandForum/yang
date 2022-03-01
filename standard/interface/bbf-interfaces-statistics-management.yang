@@ -23,8 +23,6 @@ module bbf-interfaces-statistics-management {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -38,7 +36,7 @@ module bbf-interfaces-statistics-management {
      Specifically, this module augments ietf-interfaces with a reset
      action for statistics.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -78,9 +76,19 @@ module bbf-interfaces-statistics-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -128,6 +136,77 @@ module bbf-interfaces-statistics-management {
        received packets on an interface.";
   }
 
+  feature interface-statistics-configuration {
+    description
+      "Indicates support for configuration used for accumulating
+       statistics per interface.";
+  }
+
+  feature interface-statistics-accumulation {
+    description
+      "Indicates support for managing the accumulation of statistics
+       per interface.";
+  }
+
+  augment "/if:interfaces/if:interface" {
+    if-feature "interface-statistics-configuration";
+    description
+      "Augment the 'interface' list with statistics configuration.";
+    leaf statistics-accumulation {
+      if-feature "interface-statistics-accumulation";
+      type enumeration {
+        enum enable {
+          description
+            "Enable accumulation of statistics that are reported
+             under '/if:interfaces-state/if:interface/if:statistics'.
+
+             Note that some interfaces may not accumulate certain
+             types of statistics due to limitations associated
+             with the hardware and/or type of interface. However,
+             accumulation set to 'enable' means that all possible
+             statistics will be provided, i.e., there is not any
+             device condition in which the non-provided statistics can
+             be provided.";
+        }
+        enum disable {
+          description
+            "Disable accumulation of statistics that are reported
+             under '/if:interfaces-state/if:interface/if:
+             statistics'.";
+        }
+        enum system-conditional {
+          description
+            "Enable the potential to accumulate statistics that are
+             reported under '/if:interfaces-state/if:interface/if:
+             statistics'. However, accumulation may not be possible
+             depending on the current state of the system. For
+             example, hardware resources used for statistics may be
+             exhausted.
+
+             Note that some interfaces may not accumulate certain
+             types of statistics due to limitations associated
+             with the hardware and/or type of interface.
+
+             Note that accumulation of statistics on an interface
+             in this state is under control of the system with no
+             guarantee as to which statistics, if any, are
+             accumulating. Further, the level of accumulation may
+             change over time depending on the current state of the
+             system. For example, explicit enabling of statistic
+             accumulation on one or more interfaces may cause the
+             system to shift resources as to fully support
+             explicitly enabled interfaces while reducing the amount
+             of accumulation support on an interface when set to
+             'system-conditional'.";
+        }
+      }
+      default "system-conditional";
+      description
+        "Configuration that controls the accumulation of statistics
+         for this interface.";
+    }
+  }
+
   augment "/if:interfaces-state/if:interface" {
     description
       "The 'interfaces' list in the 'interfaces-state' container
@@ -138,8 +217,8 @@ module bbf-interfaces-statistics-management {
       description
         "When this action is invoked, the counters of this
          interface which are defined and/or augmented to the
-         container interfaces-state/interface/statistics are
-         cleared.";
+         container '/if:interfaces-state/if:interface/if:statistics'
+         are cleared.";
     }
   }
 
@@ -158,6 +237,16 @@ module bbf-interfaces-statistics-management {
       description
         "The total number of packets transmitted out of the
          interface.";
+    }
+    leaf accumulating {
+      if-feature "interface-statistics-accumulation";
+      type boolean;
+      description
+        "If true, statistics are accumulating on this interface.
+
+         Note that some interfaces may not accumulate certain
+         types of statistics due to limitations associated
+         with the hardware and/or type of interface.";
     }
   }
 }

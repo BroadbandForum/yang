@@ -1,0 +1,193 @@
+module bbf-ancp-alarm-types {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-ancp-alarm-types";
+  prefix bbf-ancp-alt;
+
+  import bbf-alarm-types {
+    prefix bbf-alt;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, ADTRAN
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on the Access Node
+     Control Protocol (ANCP) as defined in RFC 6320. As such, this
+     module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module contains a set of alarm definitions.
+
+     Copyright (c) 2017-2022, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a5; see
+     the TR itself for full legal notices.";
+  reference
+    "RFC 6320";
+
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
+
+  feature adjacency-failure-alarm {
+    description
+      "Indicates support for the Adjacency Failure alarm.";
+  }
+
+  feature capability-negotiation-failure-alarm {
+    description
+      "Indicates support for the Capability Negotiation Failure
+       alarm.";
+  }
+
+  feature message-type-not-supported-alarm {
+    description
+      "Indicates support for the Message Type Not Supported alarm.";
+  }
+
+  feature nas-not-reachable-alarm {
+    description
+      "Indicates support for the Network Access Server (NAS) Not
+       Reachable alarm.";
+  }
+
+  identity ancp-alarm-type-id {
+    base bbf-alt:bbf-alarm-type-id;
+    description
+      "Base identity for defining ANCP alarm identities.
+
+       This identity is abstract and SHOULD NOT generally be used for
+       alarms. If used to define an alarm that was not known at
+       design time, it MUST be qualified with an alarm type qualifier
+       string. This practice, however, should be generally avoided to
+       ensure all possible alarms are known at design time.";
+  }
+
+  identity adjacency-failure {
+    if-feature "bbf-ancp-alt:adjacency-failure-alarm";
+    base ancp-alarm-type-id;
+    description
+      "An 'adjacency-failure' alarm is declared when the adjacency of
+       the ANCP session with its Network Access Server (NAS) cannot be
+       established or has been lost.
+
+       The alarm is cleared once the adjacency can be
+       (re-)established.
+
+       The alarm will also be cleared if the underlying TCP transport
+       connection is lost.";
+    reference
+      "TR-147 R-53, RFC 5851 R-48, RFC 6320 section 3.5.2.7";
+  }
+
+  identity capability-negotiation-failure {
+    if-feature "bbf-ancp-alt:capability-negotiation-failure-alarm";
+    base ancp-alarm-type-id;
+    description
+      "A 'capability-negotiation-failure' alarm is declared when an
+       ANCP session is unable to successfully negotiate a common set
+       of capabilities with its Network Access Server (NAS), in which
+       case the transport connection will be torn down and the session
+       halted.
+
+       The alarm can be cleared by restarting the session, either by
+       invoking the action 'reset' for the session, if supported, or
+       administratively disabling then enabling the session.";
+    reference
+      "RFC 5851 R-47, RFC 6320 sections 3.5.2.4.1 and 3.5.2.4.2.";
+  }
+
+  identity message-type-not-supported {
+    if-feature "bbf-ancp-alt:message-type-not-supported-alarm";
+    base ancp-alarm-type-id;
+    description
+      "A 'message-type-not-supported' alarm is declared when the
+       ANCP agent receives the result code value 0x51 in a response
+       message which indicates that message type of the original
+       request was not supported, in which case the transport
+       connection will be torn down and the session halted.
+
+       The alarm can be cleared by restarting the session, either by
+       invoking the action 'reset' for the session, if supported, or
+       administratively disabling then enabling the session.";
+    reference
+      "TR-147 R-53, RFC 5851 R-48, RFC 6320 section 3.6.1.4";
+  }
+
+  identity nas-not-reachable {
+    if-feature "bbf-ancp-alt:nas-not-reachable-alarm";
+    base ancp-alarm-type-id;
+    description
+      "A 'nas-not-reachable' alarm is declared when a transport
+       connection to the Network Access Server (NAS) cannot be
+       established within a chosen supervision window or has been lost
+       and a transport connection cannot be re-established within a
+       chosen supervision window.
+
+       An implementation may periodically attempt to re-establish a
+       transport connection, in which case the alarm will be cleared
+       if this is successful. The alarm may be cleared manually by
+       restarting the session, either by invoking the action 'reset'
+       for the session, if supported, or administratively disabling
+       then enabling the session.";
+  }
+}

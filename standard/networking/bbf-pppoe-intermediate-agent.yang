@@ -1,58 +1,49 @@
 module bbf-pppoe-intermediate-agent {
   yang-version 1.1;
   namespace "urn:bbf:yang:bbf-pppoe-intermediate-agent";
-
   prefix bbf-pppoe-ia;
 
   import ietf-interfaces {
     prefix if;
   }
-
   import ietf-yang-types {
     prefix yang;
   }
-
   import bbf-yang-types {
     prefix bbf-yang;
   }
-
   import bbf-if-type {
     prefix bbfift;
   }
-
   import bbf-subscriber-types {
     prefix bbf-subtype;
   }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Project Stream";
-
+     Common YANG Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-                  <mailto:joey.boyd@adtran.com>
+     Editor:      Nick Hancock, ADTRAN
 
      Editor:      Ludwig Pauwels, Nokia
-                  <mailto:ludwig.pauwels@nokia.com>
 
-     PS Leader:   Michael Shaffer, Nokia
-                  <mailto:michael.shaffer@nokia.com>
+     PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   William Lupton, Broadband Forum
-                  <mailto:wlupton@broadband-forum.org>";
+     WA Director: Joey Boyd, ADTRAN
 
+     WA Director: Sven Ooghe, Nokia";
   description
-    "This module contains a collection of YANG definitions for 
-     supporting the Broadband Forum requirements on subscriber 
-     management via the PPPoE protocol as applicable to access 
-     network equipment. As such, this module is specific to access 
-     network equipment (e.g., BBF-specified Access Nodes and FTTdp 
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on subscriber
+     management via the PPPoE protocol as applicable to access
+     network equipment. As such, this module is specific to access
+     network equipment (e.g., BBF-specified Access Nodes and FTTdp
      DPUs).
 
-     Copyright (c) 2017, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -92,9 +83,19 @@ module bbf-pppoe-intermediate-agent {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2017-05-08 {
     description
       "Initial revision.
@@ -106,32 +107,25 @@ module bbf-pppoe-intermediate-agent {
                         TR-383.pdf>";
   }
 
-  augment '/if:interfaces/if:interface' {
-    when
-      "derived-from-or-self (if:type,
-       'bbfift:vlan-sub-interface')" {
-
+  augment "/if:interfaces/if:interface" {
+    when "derived-from-or-self (if:type,
+          'bbfift:vlan-sub-interface')" {
       description
         "Applies only to VLAN sub-interfaces.";
     }
     description
-      "Additions for PPPoE Intermediate Agent on the VLAN 
+      "Additions for PPPoE Intermediate Agent on the VLAN
        sub-interface.";
-
     container pppoe {
-      presence
-        "Presence of this container indicates PPPoE is supported on 
-         this interface.";
+      presence "Indicates PPPoE is configured on this sub-interface.";
       description
         "PPPoE Intermediate Agent configuration parameters.";
-
       leaf enable {
         type boolean;
         default "false";
         description
           "Enable PPPoE Intermediate Agent functionality.";
       }
-
       leaf profile-ref {
         when "../enable = 'true'" {
           description
@@ -139,8 +133,8 @@ module bbf-pppoe-intermediate-agent {
              functionality is enabled.";
         }
         type leafref {
-          path '/bbf-pppoe-ia:pppoe-profiles/bbf-pppoe-ia:pppoe-'
-             + 'profile/bbf-pppoe-ia:name';
+          path "/bbf-pppoe-ia:pppoe-profiles/bbf-pppoe-ia:pppoe-"
+             + "profile/bbf-pppoe-ia:name";
         }
         mandatory true;
         description
@@ -152,63 +146,57 @@ module bbf-pppoe-intermediate-agent {
   container pppoe-profiles {
     description
       "PPPoE Intermediate Agent configuration profile.";
-
     list pppoe-profile {
       key "name";
       description
-        "List containing the parameters for PPPoE Intermediate Agent 
+        "List containing the parameters for PPPoE Intermediate Agent
          configuration.";
-
       leaf name {
         type bbf-yang:string-ascii64;
         description
           "Name of the profile.";
       }
-
       container pppoe-vendor-specific-tag {
         description
           "Contains information that needs to be filled in the
            vendor-specific tag - 0x0105.";
-
         leaf-list subtag {
           type enumeration {
-            enum "circuit-id" {
+            enum circuit-id {
               description
-                "Add the sub-option Agent Circuit ID in the 
-                 vendor-specific tag with sub-option number 0x01.
+                "Add the sub-option Agent Circuit ID in the vendor-
+                 specific tag with sub-option number 0x01.
 
-                 The value inserted is the value of the leaf 
-                 circuit-id defined in the instance in the list 
-                 subscriber-profiles/subscriber-profile that is 
-                 associated with the interface, if any. If this leaf 
-                 is unknown, then a sub-option 
-                 Agent Circuit ID will be generated according to the 
-                 syntax defined in the leaf 
-                 default-circuit-id-syntax.";
+                 The value inserted is the value of the leaf
+                 circuit-id defined in the instance in the list
+                 subscriber-profiles/subscriber-profile that is
+                 associated with the interface, if any. If this leaf
+                 is unknown, then a sub-option Agent Circuit ID will
+                 be generated according to the syntax defined in the
+                 leaf  default-circuit-id-syntax.";
               reference
                 "TR-101i2 - Section 8.3";
             }
-            enum "remote-id" {
+            enum remote-id {
               description
-                "Add the sub-option Agent Remote ID in the 
+                "Add the sub-option Agent Remote ID in the
                  vendor-specific tag with sub-option number 0x02.
 
-                 The value inserted is the value of the leaf 
-                 remote-id defined in the instance in the list 
-                 subscriber-profiles/subscriber-profile that is 
-                 associated with the interface, if any. If this leaf 
-                 is unknown, then a sub-option 
-                 Agent Remote ID will be generated according to the 
-                 syntax defined in the leaf 
+                 The value inserted is the value of the leaf
+                 remote-id defined in the instance in the list
+                 subscriber-profiles/subscriber-profile that is
+                 associated with the interface, if any. If this leaf
+                 is unknown, then a sub-option Agent Remote ID will be
+                 generated according to the syntax defined in the leaf
                  default-remote-id-syntax.";
               reference
                 "TR-101i2 - Section 8.3";
             }
-            enum "access-loop-characteristics" {
+            enum access-loop-characteristics {
               description
-                "Access loop characteristics to be added in the 
-                 vendor-specific tag with sub-tag-numbers 0x81-0x8E 
-                 and 0x90. 
+                "Access loop characteristics to be added in the
+                 vendor-specific tag with sub-tag-numbers 0x81-0x8E
+                 and 0x90.
 
                  The characteristics to be added to the sub-option are
                  controlled via the leaf access-loop-subtags";
@@ -221,7 +209,6 @@ module bbf-pppoe-intermediate-agent {
             "Identifies the sub-tags that should be part of the
              vendor-specific tag.";
         }
-
         leaf default-circuit-id-syntax {
           type bbf-yang:string-ascii63-or-empty;
           default "";
@@ -230,30 +217,28 @@ module bbf-pppoe-intermediate-agent {
              no circuit-id is provided for the VLAN sub-interface via
              a referenced subscriber-profiles/subscriber-profile.
 
-             The syntax is a string of ASCII characters that 
+             The syntax is a string of ASCII characters that
              determines the actual value inserted in the sub-option.
              Parts of the syntax that are recognized as predefined
              keywords will be replaced by an actual value.";
           reference
             "TR-178 - R117";
         }
-
         leaf default-remote-id-syntax {
           type bbf-yang:string-ascii63-or-empty;
           default "";
           description
-            "To be used to generate a sub-option Agent Remote ID when 
+            "To be used to generate a sub-option Agent Remote ID when
              no remote-id is provided for the VLAN sub-interface via a
              referenced subscriber-profiles/subscriber-profile.
 
-             The syntax is a string of ASCII characters that 
-             determines the actual value inserted in the sub-option. 
-             Parts of the syntax that are recognized as predefined 
+             The syntax is a string of ASCII characters that
+             determines the actual value inserted in the sub-option.
+             Parts of the syntax that are recognized as predefined
              keywords will be replaced by an actual value.";
           reference
             "TR-178 - R120";
         }
-
         leaf access-loop-subtags {
           type bbf-subtype:broadband-line-characteristics;
           default "";
@@ -263,75 +248,65 @@ module bbf-pppoe-intermediate-agent {
           reference
             "TR-178 - R123";
         }
-
         leaf start-numbering-from-zero {
           type boolean;
           default "false";
           description
-            "In case the default-circuit-id-syntax or 
-             default-remote-id-syntax indicates a Slot or a Port 
+            "In case the default-circuit-id-syntax or
+             default-remote-id-syntax indicates a Slot or a Port
              identification shall be added to the sub-tag value, then
-             this leaf determines if the slot/port numbering MUST 
+             this leaf determines if the slot/port numbering MUST
              start from 0 or 1.";
           reference
             "TR-178 - R118";
         }
-
         leaf use-leading-zeroes {
           type boolean;
           default "false";
           description
-            "In case the default-circuit-id-syntax or 
-             default-remote-id-syntax indicates a Slot or a Port 
+            "In case the default-circuit-id-syntax or
+             default-remote-id-syntax indicates a Slot or a Port
              identification shall be added to the sub-tag value, then
              this leaf determines if the slot/port numbering MUST use
-             leading 0's or not, i.e. generate a fixed length string
-              or a string with only meaningful digits.";
+             leading 0's or not, i.e., generate a fixed-length string
+             or a string with only meaningful digits.
+
+             Note that the number of digits used to form the fixed-
+             length string is device specific. A device may use the
+             number of digits as specified in TR-101 Table 2/
+             TR-156 Table 1 or a device may determine the number of
+             digits by the maximum value for the Slot or a Port
+             identification applicable to the device, i.e., if the
+             maximum value is less than or equal to 9, one digit may
+             be used; if the maximum value is less than or equal to
+             99, two digits may be used, etc.";
           reference
-            "TR-178 - R119 and TR-101i2 - R153";
+            "TR-178 - R119 and TR-101i2 - R153;
+             TR-101i2 - Table 2 Circuit ID Syntax;
+             TR-156 - Table 1 Port Identification String Elements.";
         }
       }
     }
   }
 
-  augment '/if:interfaces-state/if:interface/if:statistics' {
-    when
-      "derived-from-or-self(../if:type,
-       'bbfift:vlan-sub-interface')" {
+  augment "/if:interfaces-state/if:interface/if:statistics" {
+    when "derived-from-or-self(../if:type,
+          'bbfift:vlan-sub-interface')" {
       description
         "Applies to VLAN sub-interfaces.";
     }
-
     description
       "PPPoE Intermediate Agent statistics.";
-
     container pppoe {
-      presence
-        "This container is present if PPPoE Intermediate Agent 
-         functionality is enabled on this interface.";
-
+      presence "This container is present if PPPoE Intermediate Agent
+                functionality is enabled on this interface.";
       description
-        "Container presents the packet statistics related to the PPPoE
-         Intermediate Agent.";
-
+        "PPPoE Intermediate Agent message statistics.";
       leaf in-error-packets-from-client {
         type yang:counter32;
         description
-          "Invalid PPPoE discovery stage packets received on the 
-           interface. The packets are received from a PPPoE Client 
-           connected to it (directly or indirectly through a network).
-
-           Discontinuities in the counter can occur at 
-           re-initialization of the management system, and/or when the
-           PPPoE Intermediate Agent functionality is disabled/
-           enabled.";
-      }
-
-      leaf in-error-packets-from-server {
-        type yang:counter32;
-        description
-          "Invalid PPPoE discovery stage packets received on the 
-           interface. The packets are received from a PPPoE Server 
+          "Invalid PPPoE discovery stage messages received on the
+           interface. The messages are received from a PPPoE Client
            connected to it (directly or indirectly through a network).
 
            Discontinuities in the counter can occur at
@@ -339,96 +314,101 @@ module bbf-pppoe-intermediate-agent {
            PPPoE Intermediate Agent functionality is disabled/
            enabled.";
       }
+      leaf in-error-packets-from-server {
+        type yang:counter32;
+        description
+          "Invalid PPPoE discovery stage messages received on the
+           interface. The messages are received from a PPPoE Server
+           connected to it (directly or indirectly through a network).
 
+           Discontinuities in the counter can occur at
+           re-initialization of the management system, and/or when the
+           PPPoE Intermediate Agent functionality is disabled/
+           enabled.";
+      }
       leaf in-packets-from-client {
         type yang:counter32;
         description
-          "Valid PPPoE discovery stage packets received on the 
-           interface. The packets are received from a PPPoE Client 
+          "Valid PPPoE discovery stage messages received on the
+           interface. The messages are received from a PPPoE Client
            connected to it (directly or indirectly through a network).
 
-           Discontinuities in the counter can occur at 
+           Discontinuities in the counter can occur at
            re-initialization of the management system, and/or when the
            PPPoE Intermediate Agent functionality is disabled/
            enabled.";
       }
-
       leaf in-packets-from-server {
         type yang:counter32;
         description
-          "Valid PPPoE discovery stage packets received on the 
-           interface. The packets are received from a PPPoE Server 
+          "Valid PPPoE discovery stage messages received on the
+           interface. The messages are received from a PPPoE Server
            connected to it (directly or indirectly through a network).
 
-           Discontinuities in the counter can occur at 
+           Discontinuities in the counter can occur at
            re-initialization of the management system, and/or when the
            PPPoE Intermediate Agent functionality is disabled/
            enabled.";
       }
-
       leaf out-packets-to-server {
         type yang:counter32;
         description
-          "Valid PPPoE discovery stage packets sent to the 
-           interface. The packets are sent to a PPPoE Server 
-           connected to it (directly or indirectly through a network).
+          "Valid PPPoE discovery stage messages sent to the interface.
+           The messages are sent to a PPPoE Server connected to it
+           (directly or indirectly through a network).
 
-           Discontinuities in the counter can occur at 
+           Discontinuities in the counter can occur at
            re-initialization of the management system, and/or when the
            PPPoE Intermediate Agent functionality is disabled/
            enabled.";
       }
-
       leaf out-packets-to-client {
         type yang:counter32;
         description
-          "Valid PPPoE discovery stage packets sent to the 
-           interface. The packets are sent to a PPPoE Client 
-           connected to it (directly or indirectly through a network).
+          "Valid PPPoE discovery stage messages sent to the interface.
+           The messages are sent to a PPPoE Client connected to it
+           (directly or indirectly through a network).
 
-           Discontinuities in the counter can occur at 
+           Discontinuities in the counter can occur at
            re-initialization of the management system, and/or when the
            PPPoE Intermediate Agent functionality is disabled/
            enabled.";
       }
-
       leaf vendor-specific-tag-inserted-packets-to-server {
         type yang:counter32;
         description
-          "PPPoE discovery stage packets from a Client to a Server 
-           that pass this interface and into which the PPPoE 
-           Intermediate Agent functionality inserted the 
+          "PPPoE discovery stage messages from a Client to a Server
+           that pass this interface and into which the PPPoE
+           Intermediate Agent functionality inserted the
            vendor-specific tag.
 
-           Discontinuities in the counter can occur at 
+           Discontinuities in the counter can occur at
            re-initialization of the management system, and/or when the
            PPPoE Intermediate Agent functionality is disabled/
            enabled.";
       }
-
       leaf vendor-specific-tag-removed-packets-to-client {
         type yang:counter32;
         description
-          "PPPoE discovery stage packets from a Server to a Client 
-           that pass this interface and from which the PPPoE 
-           Intermediate Agent functionality removed the 
+          "PPPoE discovery stage messages from a Server to a Client
+           that pass this interface and from which the PPPoE
+           Intermediate Agent functionality removed the
            vendor-specific tag.
 
-           Discontinuities in the counter can occur at 
+           Discontinuities in the counter can occur at
            re-initialization of the management system, and/or when the
            PPPoE Intermediate Agent functionality is disabled/
            enabled.";
       }
-
       leaf outgoing-mtu-exceeded-packets-from-client {
         type yang:counter32;
         description
-          "PPPoE discovery stage packets from a Client that are 
-           dropped because the PPPoE Message size after
-           adding the vendor-specific tag would exceed the MTU 
-           of the outgoing interface.
+          "PPPoE discovery stage messages from a Client that are
+           dropped because the PPPoE Message size after adding the
+           vendor-specific tag would exceed the MTU of the outgoing
+           interface.
 
-           Discontinuities in the counter can occur at 
+           Discontinuities in the counter can occur at
            re-initialization of the management system, and/or when the
            PPPoE Intermediate Agent functionality is disabled/
            enabled.";

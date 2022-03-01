@@ -32,8 +32,6 @@ module bbf-sub-interface-tagging {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -48,7 +46,7 @@ module bbf-sub-interface-tagging {
      configuration of a (sub-)interface with additional criteria and
      adds VLAN-specific ingress and egress rewrite actions.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -88,9 +86,19 @@ module bbf-sub-interface-tagging {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -148,6 +156,12 @@ module bbf-sub-interface-tagging {
     description
       "This feature indicates whether the network element supports the
        exclude criteria for matching frames into a sub-interface.";
+  }
+
+  feature dscp-match-criteria {
+    description
+      "Indicates support for the use of DSCP values as match
+       criteria.";
   }
 
   grouping pbit-marking {
@@ -382,6 +396,9 @@ module bbf-sub-interface-tagging {
       uses bbf-classif:multiple-vlan-tag-match;
       uses bbf-classif:ethertype-match;
       uses bbf-classif:protocol-match;
+      uses bbf-classif:dscp-match {
+        if-feature "dscp-match-criteria";
+      }
     }
     container exclude-criteria {
       if-feature "exclude-criteria";
@@ -397,6 +414,9 @@ module bbf-sub-interface-tagging {
       uses bbf-classif:frame-destination-match-specific;
       uses bbf-classif:ethertype-match-no-default;
       uses bbf-classif:protocol-match-specific;
+      uses bbf-classif:dscp-match-specific {
+        if-feature "dscp-match-criteria";
+      }
     }
   }
 

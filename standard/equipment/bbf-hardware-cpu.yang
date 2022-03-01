@@ -29,8 +29,6 @@ module bbf-hardware-cpu {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -45,7 +43,7 @@ module bbf-hardware-cpu {
      the management of a CPU processor (with single or multiple
      cores).
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -85,9 +83,19 @@ module bbf-hardware-cpu {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -103,7 +111,7 @@ module bbf-hardware-cpu {
     when 'derived-from-or-self (hw:class,"ianahw:cpu")' {
       description
         "Augment hardware component of the class 'ianahw:cpu' or based
-         on a class value that is a specialisation of it.
+         on a class value that is a specialization of it.
 
          For example this applies to a single- and a multi-core CPU,
          being a component of the class 'ianahw:cpu', and also to
@@ -288,7 +296,7 @@ module bbf-hardware-cpu {
           type uint64;
           units "KiB";
           description
-            "The total amount of memory in KiB(kibibytes).";
+            "The total amount of memory in kibibytes (KiB).";
         }
         leaf total-memory {
           type uint64;
@@ -313,13 +321,13 @@ module bbf-hardware-cpu {
           type uint64;
           units "KiB";
           description
-            "Total Swap memory in kibibytes (KiB).";
+            "Total swap memory in kibibytes (KiB).";
         }
         leaf used-swap {
           type uint64;
           units "KiB";
           description
-            "Used Swap Memory in kibibytes (KiB).";
+            "Used swap Memory in kibibytes (KiB).";
         }
         leaf free-swap {
           type uint64;

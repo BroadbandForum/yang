@@ -1,7 +1,17 @@
-module bbf-network-types {
+module bbf-device-aggregation {
   yang-version 1.1;
-  namespace "urn:bbf:yang:bbf-network-types";
-  prefix bbf-ntwrkt;
+  namespace "urn:bbf:yang:bbf-device-aggregation";
+  prefix bbf-dev-agg;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import bbf-device-types {
+    prefix bbf-dvct;
+  }
+  import ietf-yang-schema-mount {
+    prefix yangmnt;
+  }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -21,14 +31,9 @@ module bbf-network-types {
      WA Director: Sven Ooghe, Nokia";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements on providing
-     network information associated with network functions.
-
-     Specifically, this module defines common types associated with
-     network information.
-
-     This module contains a collection of YANG definitions for
-     types associated with BBF network information.
+     supporting the Broadband Forum requirements on device
+     aggregation. As such, this module is specific to access network
+     equipment (e.g., BBF-specified Access Nodes and FTTdp DPUs).
 
      Copyright (c) 2017-2022, Broadband Forum
 
@@ -83,82 +88,67 @@ module bbf-network-types {
                  <https://www.broadband-forum.org/technical/download/
                           TR-383_Amendment-5.pdf>";
   }
-  revision 2021-06-02 {
-    description
-      "Amendment 4.
-       * Approval Date:    2021-06-02.
-       * Publication Date: 2021-06-02.";
-    reference
-      "TR-383a4: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-4.pdf>";
-  }
 
-  identity deployment-type {
+  container devices {
     description
-      "Base identity from which specific network deployment types are
-       derived.";
-  }
-
-  identity access-deployment-type {
-    base deployment-type;
-    description
-      "Derived identity for access network specific deployment
-       types.";
-  }
-
-  identity fttx-type {
-    base access-deployment-type;
-    description
-      "Derived identity from which specific access 'fiber to the x'
-       (FTTx) types are derived.";
-  }
-
-  identity ftth {
-    base fttx-type;
-    description
-      "Fiber to the home.";
-  }
-
-  identity fttdp {
-    base fttx-type;
-    description
-      "Fiber to the distribution point.";
-  }
-
-  identity fttb {
-    base fttx-type;
-    description
-      "Fiber to the building.";
-  }
-
-  identity fttcab {
-    base fttx-type;
-    description
-      "Fiber to the cabinet.";
-  }
-
-  identity ftte {
-    base fttx-type;
-    description
-      "Fiber to the equipment.";
-  }
-
-  identity distribution-frame-type {
-    description
-      "Base identity from which specific distribution frame types are
-       derived.";
-  }
-
-  identity copper-distribution-frame {
-    base distribution-frame-type;
-    description
-      "The copper distribution frame.";
-  }
-
-  identity optical-distribution-frame {
-    base distribution-frame-type;
-    description
-      "The optical distribution frame.";
+      "Aggregation and management of multiple devices.";
+    list device {
+      key "name";
+      description
+        "An aggregated device.";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "The unique name of the device.";
+      }
+      leaf type {
+        type identityref {
+          base bbf-dvct:device-type;
+        }
+        mandatory true;
+        description
+          "The type of device.";
+      }
+      container identification {
+        presence
+          "Presence of the container indicates that data nodes that
+           identify the device exist.";
+        description
+          "Data nodes identifying the device instance.";
+        choice identification {
+          mandatory true;
+          description
+            "A choice for different methods to uniquely identify a
+             device instance.";
+          case hardware-inventory-data {
+            leaf mfg-name {
+              type string;
+              description
+                "The name of the manufacturer of the device.";
+            }
+            leaf model-name {
+              type string;
+              description
+                "The vendor-specific model name associated with the
+                 device.";
+            }
+            leaf serial-num {
+              type string;
+              description
+                "The vendor-specific serial number string for the
+                 device.";
+            }
+          }
+        }
+      }
+      container data {
+        description
+          "The data nodes of the device's schema.";
+        yangmnt:mount-point "device-yang-library" {
+          description
+            "The YANG library associated with the device.";
+        }
+      }
+    }
   }
 }

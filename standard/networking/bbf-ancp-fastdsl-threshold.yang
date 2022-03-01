@@ -26,8 +26,6 @@ module bbf-ancp-fastdsl-threshold {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -45,7 +43,7 @@ module bbf-ancp-fastdsl-threshold {
      Architecture defined in RFC 6320. The line state reporting
      requirements are defined in BBF TR-147.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -85,11 +83,21 @@ module bbf-ancp-fastdsl-threshold {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
   reference
     "TR-147";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -132,9 +140,9 @@ module bbf-ancp-fastdsl-threshold {
 
   grouping threshold-setting {
     description
-      "The configuration data to be applied to control the
-       reporting of changes of the value of line attributes in
-       Port Up messages.";
+      "The configuration data to be applied to control the reporting
+       of changes of the value of line attributes in Port Up
+       messages.";
     leaf threshold {
       type bbf-yang:data-rate32 {
         range "1..max";
@@ -142,12 +150,11 @@ module bbf-ancp-fastdsl-threshold {
       units "kbits/second";
       mandatory true;
       description
-        "The threshold to be applied to evaluate the
-         difference in the line attribute of the interface,
-         compared to the previously reported value. A Port Up message
-         will be triggered, when the difference in the value of
-         the line attribute is equal to or has crossed the threshold
-         value.";
+        "The threshold to be applied to evaluate the difference in the
+         line attribute of the interface, compared to the previously
+         reported value. A Port Up message will be triggered, when the
+         difference in the value of the line attribute is equal to or
+         has crossed the threshold value.";
       reference
         "TR-147 - R61";
     }
@@ -188,11 +195,10 @@ module bbf-ancp-fastdsl-threshold {
         "Sets the delay to be applied for generating an ANCP Port Up
          message.
 
-         This delay is applied after the line comes in sync.
-         Meaning, when the line changes from state 'out of sync' to
-         'in sync', then the line must be continuously 'in sync' for
-         that time in order to send the first ANCP Port Up
-         message.";
+         This delay is applied after the line comes in sync. Meaning,
+         when the line changes from state 'out of sync' to 'in sync',
+         then the line must be continuously 'in sync' for that time
+         in order to send the first ANCP Port Up message.";
       reference
         "TR-147 - R60";
     }

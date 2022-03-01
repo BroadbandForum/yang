@@ -1,0 +1,234 @@
+module bbf-software-management-voice {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-software-management-voice";
+  prefix bbf-swm-vox;
+
+  import bbf-software-management {
+    prefix bbf-swm;
+  }
+  import ietf-hardware {
+    prefix hw;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, ADTRAN
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on software
+     management specific to voice applications as applicable to
+     access network equipment. As such, this module is specific to
+     access network equipment (e.g., BBF-specified Access Nodes and
+     FTTdp DPUs).
+
+     Copyright (c) 2017-2022, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a5; see
+     the TR itself for full legal notices.";
+
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
+
+  typedef activate-conditions {
+    type enumeration {
+      enum activate-unconditionally {
+        description
+          "Activate revision unconditionally.";
+      }
+      enum no-pots-or-voip-calls {
+        description
+          "Activate revision only if no plain old telephony service/
+           voice over Internet protocol (POTS/VoIP) calls are in
+           progress.";
+      }
+      enum no-emergency-call {
+        description
+          "Activate revision only if no emergency call is in
+           progress.";
+      }
+    }
+    description
+      "Specifies the conditions under which a request to activate
+       a software revision applicable to voice calls shall be
+       executed.";
+    reference
+      "ITU-T G.997.2 clause S.7.1.2.1";
+  }
+
+  identity conditional-activation {
+    base bbf-swm:capability;
+    description
+      "Indicates that the software supports the conditional
+       activation of software revisions applicable to voice calls.";
+  }
+
+  identity activate-conditions-not-fulfilled {
+    base bbf-swm:processing-error;
+    description
+      "The revision could not be activated because the conditions
+       under which an activation may be executed were not fulfilled.
+
+       Note that if a system is not able to explicitly determine that
+       an unsuccessful activation was specifically due to the
+       activate conditions not being fulfilled at the time of the
+       activation, the system should report an appropriate error
+       defined in bbf-software-management, such as
+       'bbf-swm:component-busy'.";
+  }
+
+  identity pots-or-voip-call-in-progress {
+    base activate-conditions-not-fulfilled;
+    description
+      "The revision could not be activated because a POTS or VoIP call
+       was in progress.
+
+       Note that if a system is not able to explicitly determine that
+       an unsuccessful activation was specifically due to a POTS or
+       VoIP call being in progress at the time of the activation, the
+       system should report 'activate-conditions-not-fulfilled' or, if
+       this is also not possible, an appropriate error defined in
+       bbf-software-management, such as 'bbf-swm:component-busy'.";
+  }
+
+  identity emergency-call-in-progress {
+    base activate-conditions-not-fulfilled;
+    description
+      "The revision could not be activated because an emergency call
+       was in progress.
+
+       Note that if a system is not able to explicitly determine that
+       an unsuccessful activation was specifically due to an emergency
+       call being in progress at the time of the activation, the
+       system should report 'activate-conditions-not-fulfilled' or, if
+       this is also not possible, an appropriate error defined in
+       bbf-software-management, such as 'bbf-swm:component-busy'.";
+  }
+
+  augment
+    "/hw:hardware/hw:component/bbf-swm:software/bbf-swm:software"
+  + "/bbf-swm:revisions/bbf-swm:revision/bbf-swm:activate"
+  + "/bbf-swm:activate/bbf-swm:input" {
+    when "../../../../bbf-swm:capability="
+       + "'bbf-swm-vox:conditional-activation'" {
+      description
+        "Only applicable if the software supports conditional
+         activation for voice calls.";
+    }
+    description
+      "Augment the input of the action 'activate' with a leaf
+       to manage the activate conditions for voice calls.";
+    leaf activate-conditions {
+      type activate-conditions;
+      default "activate-unconditionally";
+      description
+        "Specifies the conditions under which the activation request
+         for a software revision resulting from a successful
+         invocation of this action shall be executed.";
+    }
+  }
+
+  augment
+    "/hw:hardware/hw:component/bbf-swm:software/bbf-swm:software"
+  + "/bbf-swm:revisions/bbf-swm:revision/bbf-swm:activate"
+  + "/bbf-swm:revision-activated" {
+    when "../../../../bbf-swm:capability="
+       + "'bbf-swm-vox:conditional-activation'" {
+      description
+        "Only applicable if the software supports conditional
+         activation for voice calls.";
+    }
+    description
+      "Augment the notification 'revision-activated' with a leaf
+       'activate-conditions' when the software supports conditional
+       activation for voice calls.";
+    leaf activate-conditions {
+      type activate-conditions;
+      mandatory true;
+      description
+        "Specifies the conditions under which the activation request
+         for a software revision was to be executed.";
+    }
+  }
+
+  augment
+    "/hw:hardware/hw:component/bbf-swm:software/bbf-swm:software"
+  + "/bbf-swm:revisions/bbf-swm:revision/bbf-swm:activate"
+  + "/bbf-swm:activate-failed" {
+    when "../../../../bbf-swm:capability="
+       + "'bbf-swm-vox:conditional-activation'" {
+      description
+        "Only applicable if the software supports conditional
+         activation for voice calls.";
+    }
+    description
+      "Augment the notification 'revision-activated' with a leaf
+       'activate-conditions' when the software supports conditional
+       activation for voice calls.";
+    leaf activate-conditions {
+      type activate-conditions;
+      mandatory true;
+      description
+        "Specifies the conditions under which the activation request
+         for a software revision was to be executed.";
+    }
+  }
+}

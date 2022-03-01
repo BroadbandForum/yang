@@ -23,8 +23,6 @@ module bbf-l2-forwarding-shared-fdb {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -38,7 +36,7 @@ module bbf-l2-forwarding-shared-fdb {
      Specifically, this module contains a collection of YANG
      definitions for managing shared forwarding databases.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -78,9 +76,19 @@ module bbf-l2-forwarding-shared-fdb {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -115,11 +123,11 @@ module bbf-l2-forwarding-shared-fdb {
   grouping ethernet-interface {
     description
       "This grouping is use by data models that need to reference
-       configured interfaces that are transporting Ethernet packets.";
+       configured interfaces that are transporting Ethernet frames.";
     leaf interface {
       type if:interface-ref;
       description
-        "References an interface transporting Ethernet packets.";
+        "References an interface transporting Ethernet frames.";
     }
   }
 
@@ -127,11 +135,11 @@ module bbf-l2-forwarding-shared-fdb {
     description
       "This grouping is use by data models that need to reference the
        operationally present interfaces that are transporting Ethernet
-       packets.";
+       frames.";
     leaf interface {
       type if:interface-state-ref;
       description
-        "References an interface transporting Ethernet packets.";
+        "References an interface transporting Ethernet frames.";
     }
   }
 
@@ -152,12 +160,12 @@ module bbf-l2-forwarding-shared-fdb {
       container interface-references {
         description
           "The reference to a list of interfaces that are transporting
-           Ethernet packets, the MAC address can be learned on any of
+           Ethernet frames, the MAC address can be learned on any of
            these interfaces.";
         leaf-list interface {
           type if:interface-ref;
           description
-            "References an interface transporting Ethernet packets.";
+            "References an interface transporting Ethernet frames.";
         }
       }
     }
@@ -177,7 +185,7 @@ module bbf-l2-forwarding-shared-fdb {
       if-feature "bbf-l2-fwd:shared-forwarding-databases";
       container static-interface-reference {
         description
-          "The reference to an interface transporting Ethernet packets
+          "The reference to an interface transporting Ethernet frames
            on which the MAC address will be statically installed and
            as such affect the forwarding behavior immediately.";
         uses ethernet-interface;

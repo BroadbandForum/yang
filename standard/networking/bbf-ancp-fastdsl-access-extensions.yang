@@ -20,8 +20,6 @@ module bbf-ancp-fastdsl-access-extensions {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -36,7 +34,7 @@ module bbf-ancp-fastdsl-access-extensions {
      definitions for FastDSL access technologies, which are used in
      the management of the Access Node side of the protocol.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -76,11 +74,21 @@ module bbf-ancp-fastdsl-access-extensions {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
   reference
     "RFC 6320";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -154,8 +162,8 @@ module bbf-ancp-fastdsl-access-extensions {
     description
       "Actual upstream net data rate on a FastDSL access line.";
     reference
-      "RFC 6320 section 6.5.3, ITU-T G.997.1 section 7.5.2.8,
-       ITU-T G.997.2 section 7.11.1.1";
+      "RFC 6320 section 6.5.3, ITU-T G.997.1 clause 7.5.2.8,
+       ITU-T G.997.2 clause 7.11.1.1";
   }
 
   identity actual-net-data-rate-downstream {
@@ -164,8 +172,8 @@ module bbf-ancp-fastdsl-access-extensions {
     description
       "Actual downstream net data rate on a FastDSL access line.";
     reference
-      "RFC 6320 section 6.5.4, ITU-T G.997.1 section 7.5.2.8,
-       ITU-T G.997.2 section 7.11.1.1";
+      "RFC 6320 section 6.5.4, ITU-T G.997.1 clause 7.5.2.8,
+       ITU-T G.997.2 clause 7.11.1.1";
   }
 
   identity minimum-net-data-rate-upstream {
@@ -173,7 +181,7 @@ module bbf-ancp-fastdsl-access-extensions {
     description
       "Minimum upstream net data rate desired by the operator.";
     reference
-      "RFC 6320 section 6.5.5, ITU-T G.997.1 section 7.3.2.1.1";
+      "RFC 6320 section 6.5.5, ITU-T G.997.1 clause 7.3.2.1.1";
   }
 
   identity minimum-net-data-rate-downstream {
@@ -181,7 +189,7 @@ module bbf-ancp-fastdsl-access-extensions {
     description
       "Minimum downstream net data rate desired by the operator.";
     reference
-      "RFC 6320 section 6.5.6, ITU-T G.997.1 section 7.3.2.1.1";
+      "RFC 6320 section 6.5.6, ITU-T G.997.1 clause 7.3.2.1.1";
   }
 
   identity attainable-net-data-rate-upstream {
@@ -191,8 +199,8 @@ module bbf-ancp-fastdsl-access-extensions {
       "Maximum net upstream rate that can be attained on the FastDSL
        access line.";
     reference
-      "RFC 6320 section 6.5.7, ITU-T G.997.1 section 7.5.1.20,
-       ITU-T G.997.2 section 7.11.2.1";
+      "RFC 6320 section 6.5.7, ITU-T G.997.1 clause 7.5.1.20,
+       ITU-T G.997.2 clause 7.11.2.1";
   }
 
   identity attainable-net-data-rate-downstream {
@@ -202,8 +210,8 @@ module bbf-ancp-fastdsl-access-extensions {
       "Maximum net downstream rate that can be attained on the FastDSL
        access line.";
     reference
-      "RFC 6320 section 6.5.8, ITU-T G.997.1 section 7.5.1.19,
-       ITU-T G.997.2 section 7.11.2.1";
+      "RFC 6320 section 6.5.8, ITU-T G.997.1 clause 7.5.1.19,
+       ITU-T G.997.2 clause 7.11.2.1";
   }
 
   identity maximum-net-data-rate-upstream {
@@ -212,8 +220,8 @@ module bbf-ancp-fastdsl-access-extensions {
     description
       "Maximum net upstream data rate desired by the operator.";
     reference
-      "RFC 6320 section 6.5.9, ITU-T G.997.1 section 7.3.2.1.3,
-       ITU-T G.997.2 section 7.2.1.1";
+      "RFC 6320 section 6.5.9, ITU-T G.997.1 clause 7.3.2.1.3,
+       ITU-T G.997.2 clause 7.2.1.1";
   }
 
   identity maximum-net-data-rate-downstream {
@@ -222,8 +230,8 @@ module bbf-ancp-fastdsl-access-extensions {
     description
       "Maximum net downstream data rate desired by the operator.";
     reference
-      "RFC 6320 section 6.5.10, ITU-T G.997.1 section 7.3.2.1.3,
-       ITU-T G.997.2 section 7.2.1.1";
+      "RFC 6320 section 6.5.10, ITU-T G.997.1 clause 7.3.2.1.3,
+       ITU-T G.997.2 clause 7.2.1.1";
   }
 
   identity minimum-net-data-rate-low-power-upstream {
@@ -232,7 +240,7 @@ module bbf-ancp-fastdsl-access-extensions {
       "Minimum net upstream data rate desired by the operator in low
        power state.";
     reference
-      "RFC 6320 section 6.5.11, ITU-T G.997.1 section 7.3.2.1.5";
+      "RFC 6320 section 6.5.11, ITU-T G.997.1 clause 7.3.2.1.5";
   }
 
   identity minimum-net-data-rate-low-power-downstream {
@@ -241,7 +249,7 @@ module bbf-ancp-fastdsl-access-extensions {
       "Minimum net downstream data rate desired by the operator in
        low power state.";
     reference
-      "RFC 6320 section 6.5.12, ITU-T G.997.1 section 7.3.2.1.5";
+      "RFC 6320 section 6.5.12, ITU-T G.997.1 clause 7.3.2.1.5";
   }
 
   identity maximum-interleaving-delay-upstream {
@@ -249,7 +257,7 @@ module bbf-ancp-fastdsl-access-extensions {
     description
       "Maximum one-way interleaving delay in upstream direction.";
     reference
-      "RFC 6320 section 6.5.13, ITU-T G.997.1 section 7.3.2.2";
+      "RFC 6320 section 6.5.13, ITU-T G.997.1 clause 7.3.2.2";
   }
 
   identity actual-interleaving-delay-upstream {
@@ -257,7 +265,7 @@ module bbf-ancp-fastdsl-access-extensions {
     description
       "Actual one-way interleaving delay in upstream direction.";
     reference
-      "RFC 6320 section 6.5.14, ITU-T G.997.1 section 7.5.2.3";
+      "RFC 6320 section 6.5.14, ITU-T G.997.1 clause 7.5.2.3";
   }
 
   identity maximum-interleaving-delay-downstream {
@@ -265,7 +273,7 @@ module bbf-ancp-fastdsl-access-extensions {
     description
       "Maximum one-way interleaving delay in downstream direction.";
     reference
-      "RFC 6320 section 6.5.15, ITU-T G.997.1 section 7.3.2.2";
+      "RFC 6320 section 6.5.15, ITU-T G.997.1 clause 7.3.2.2";
   }
 
   identity actual-interleaving-delay-downstream {
@@ -273,7 +281,7 @@ module bbf-ancp-fastdsl-access-extensions {
     description
       "Actual one-way interleaving delay in downstream direction.";
     reference
-      "RFC 6320 section 6.5.16, ITU-T G.997.1 section 7.5.2.3";
+      "RFC 6320 section 6.5.16, ITU-T G.997.1 clause 7.5.2.3";
   }
 
   identity expected-throughput-upstream {
@@ -281,7 +289,7 @@ module bbf-ancp-fastdsl-access-extensions {
     description
       "Expected throughput (ETR) in upstream direction.";
     reference
-      "TR-301 table 14.1, ITU-T G.997.2 section 7.11.1.2";
+      "TR-301 table 14.1, ITU-T G.997.2 clause 7.11.1.2";
   }
 
   identity expected-throughput-downstream {
@@ -289,31 +297,33 @@ module bbf-ancp-fastdsl-access-extensions {
     description
       "Expected throughput (ETR) in downstream direction.";
     reference
-      "TR-301 table 14.1, ITU-T G.997.2 section 7.11.1.2";
+      "TR-301 table 14.1, ITU-T G.997.2 clause 7.11.1.2";
   }
 
   identity attainable-expected-throughput-upstream {
     base fast-access-line-attribute;
     description
-      "Attainable expected throughput (ETR) in upstream direction.";
+      "Attainable expected throughput (ATTETR) in upstream
+       direction.";
     reference
-      "TR-301 table 14.1, ITU-T G.997.2 section 7.11.2.2";
+      "TR-301 table 14.1, ITU-T G.997.2 clause 7.11.2.2";
   }
 
   identity attainable-expected-throughput-downstream {
     base fast-access-line-attribute;
     description
-      "Attainable expected throughput (ETR) in downstream direction.";
+      "Attainable expected throughput (ATTETR) in downstream
+       direction.";
     reference
-      "TR-301 table 14.1, ITU-T G.997.2 section 7.11.2.2";
+      "TR-301 table 14.1, ITU-T G.997.2 clause 7.11.2.2";
   }
 
   identity gamma-data-rate-upstream {
     base fast-access-line-attribute;
     description
-      "Attainable gamma data rate (GDR) in upstream direction.";
+      "Gamma data rate (GDR) in upstream direction.";
     reference
-      "TR-301 table 14.1, ITU-T G.997.2 section 7.11.1.3";
+      "TR-301 table 14.1, ITU-T G.997.2 clause 7.11.1.3";
   }
 
   identity gamma-data-rate-downstream {
@@ -321,23 +331,23 @@ module bbf-ancp-fastdsl-access-extensions {
     description
       "Gamma data rate (GDR) in downstream direction.";
     reference
-      "TR-301 table 14.1, ITU-T G.997.2 section 7.11.1.3";
+      "TR-301 table 14.1, ITU-T G.997.2 clause 7.11.1.3";
   }
 
   identity attainable-gamma-data-rate-upstream {
     base fast-access-line-attribute;
     description
-      "Gamma data rate (GDR) in upstream direction.";
+      "Attainable gamma data rate (ATTGDR) in upstream direction.";
     reference
-      "TR-301 table 14.1, ITU-T G.997.2 section 7.11.2.3";
+      "TR-301 table 14.1, ITU-T G.997.2 clause 7.11.2.3";
   }
 
   identity attainable-gamma-data-rate-downstream {
     base fast-access-line-attribute;
     description
-      "Attainable gamma data rate (GDR) in downstream direction.";
+      "Attainable gamma data rate (ATTGDR) in downstream direction.";
     reference
-      "TR-301 table 14.1, ITU-T G.997.2 section 7.11.2.3";
+      "TR-301 table 14.1, ITU-T G.997.2 clause 7.11.2.3";
   }
 
   grouping access-line-attribute-config-parameters {

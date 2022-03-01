@@ -29,8 +29,6 @@ module bbf-qos-traffic-mngt {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -44,7 +42,7 @@ module bbf-qos-traffic-mngt {
      Specifically, this module contains a collection of functions for
      QoS traffic management (TM).
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -84,9 +82,19 @@ module bbf-qos-traffic-mngt {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -699,11 +707,16 @@ module bbf-qos-traffic-mngt {
        The tm-root represents the scheduling stage directly attached
        to the bottleneck resource (typically an interface).";
     container tm-root {
+      presence
+        "Indicates the interface supports queues, either directly or
+         through a scheduling hierarchy. Interfaces that support
+         queues are typically the lowest layer of an interface stack
+         that is Ethernet frame aware.";
       description
         "The attributes of the root in the scheduling tree.";
       choice children-type {
         description
-          "Choice of chidren types of a scheduler node.";
+          "Choice of children types of a scheduler node.";
         case queues {
           description
             "In this mode the interface related to the tm-root can

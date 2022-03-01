@@ -1,7 +1,17 @@
-module bbf-network-types {
+module bbf-interfaces-remote-hardware-state {
   yang-version 1.1;
-  namespace "urn:bbf:yang:bbf-network-types";
-  prefix bbf-ntwrkt;
+  namespace "urn:bbf:yang:bbf-interfaces-remote-hardware-state";
+  prefix bbf-if-rhw-s;
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ietf-hardware {
+    prefix hw;
+  }
+  import bbf-hardware-types {
+    prefix bbf-hwt;
+  }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -21,14 +31,14 @@ module bbf-network-types {
      WA Director: Sven Ooghe, Nokia";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements on providing
-     network information associated with network functions.
+     supporting the Broadband Forum requirements on interface
+     management as applicable to access network equipment. As such,
+     this module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module defines common types associated with
-     network information.
-
-     This module contains a collection of YANG definitions for
-     types associated with BBF network information.
+     Specifically, this module augments the IETF interfaces data
+     model, ietf-interfaces (RFC 7223), with nodes for monitoring the
+     software of remote hardware.
 
      Copyright (c) 2017-2022, Broadband Forum
 
@@ -83,82 +93,41 @@ module bbf-network-types {
                  <https://www.broadband-forum.org/technical/download/
                           TR-383_Amendment-5.pdf>";
   }
-  revision 2021-06-02 {
-    description
-      "Amendment 4.
-       * Approval Date:    2021-06-02.
-       * Publication Date: 2021-06-02.";
-    reference
-      "TR-383a4: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-4.pdf>";
-  }
 
-  identity deployment-type {
+  augment "/if:interfaces-state/if:interface" {
     description
-      "Base identity from which specific network deployment types are
-       derived.";
-  }
+      "Operational state data nodes to manage remote hardware
+       connected via an interface.";
+    container remote-hardware {
+      presence
+        "Indicates that the remote hardware, reachable through this
+         interface, is represented as a component in the IETF Hardware
+         Management model (ietf-hardware).
 
-  identity access-deployment-type {
-    base deployment-type;
-    description
-      "Derived identity for access network specific deployment
-       types.";
-  }
-
-  identity fttx-type {
-    base access-deployment-type;
-    description
-      "Derived identity from which specific access 'fiber to the x'
-       (FTTx) types are derived.";
-  }
-
-  identity ftth {
-    base fttx-type;
-    description
-      "Fiber to the home.";
-  }
-
-  identity fttdp {
-    base fttx-type;
-    description
-      "Fiber to the distribution point.";
-  }
-
-  identity fttb {
-    base fttx-type;
-    description
-      "Fiber to the building.";
-  }
-
-  identity fttcab {
-    base fttx-type;
-    description
-      "Fiber to the cabinet.";
-  }
-
-  identity ftte {
-    base fttx-type;
-    description
-      "Fiber to the equipment.";
-  }
-
-  identity distribution-frame-type {
-    description
-      "Base identity from which specific distribution frame types are
-       derived.";
-  }
-
-  identity copper-distribution-frame {
-    base distribution-frame-type;
-    description
-      "The copper distribution frame.";
-  }
-
-  identity optical-distribution-frame {
-    base distribution-frame-type;
-    description
-      "The optical distribution frame.";
+         This hardware component provides the client of the local
+         Hardware Management YANG data model the ability to perform
+         some monitoring or management activities for it.";
+      description
+        "Data nodes that define the relationship between the interface
+         and the connected remote hardware when this remote hardware
+         is managed as a local hardware component within the local
+         Hardware Management YANG data model of the device.";
+      leaf-list component {
+        type leafref {
+          path "/hw:hardware/hw:component/hw:name";
+        }
+        must "derived-from (/hw:hardware/hw:component[hw:name="
+           + "current()]/hw:class, 'bbf-hwt:remote-hardware')" {
+          description
+            "The referenced hardware component must be of a class
+             that is derived from the class 'remote-hardware'.";
+        }
+        min-elements 1;
+        max-elements 1;
+        description
+          "A reference to a hardware component that represents remote
+           hardware that is managed locally on the device.";
+      }
+    }
   }
 }

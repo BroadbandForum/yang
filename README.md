@@ -1,5 +1,16 @@
 ## Broadband Forum YANG Modules
 
+### 2022-03-01: [TR-383 Amendment 5](https://www.broadband-forum.org/technical/download/TR-383_Amendment-5.pdf) Common YANG Modules for Access Networks
+*Tag: [TR-383-v1.5.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.5.0)*
+
+* Add new modules to support device aggregation and software management
+* Add new modules to bind the IEEE 802.1Qcx CFM YANG module to TR-383 alarms, interface and Layer 2 Forwarding models
+* Extend ANCP functionality
+* Clarify use of 'use-leading-zeroes' for ANCP, DHCP and PPPoE
+* Correct issues in the hardware models
+* Extend interface performance and statisics management
+* Enhancements to the QoS models
+
 ### 2022-02-15 [OD-360 Issue 1](https://yang.broadband-forum.org) BBF YANG Best Current Practices
 
 *Tag: [OD-360-v1.0.0](https://github.com/BroadbandForum/yang/tree/OD-360-v1.0.0)*

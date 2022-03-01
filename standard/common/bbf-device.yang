@@ -32,8 +32,6 @@ module bbf-device {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -42,7 +40,7 @@ module bbf-device {
      supporting the Broadband Forum requirements on managing physical
      devices.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -82,9 +80,19 @@ module bbf-device {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -135,7 +143,8 @@ module bbf-device {
          preferred value is the serial number string actually printed
          on the device itself (if present).";
       reference
-        "RFC 6933: Entity MIB (Version 4) - entPhysicalSerialNum";
+        "RFC 6933: Entity MIB (Version 4) - entPhysicalSerialNum;
+         RFC 8348: A YANG model for Hardware Management - serial-num";
     }
     leaf mfg-name {
       type bbf-yang:string-ascii64;
@@ -148,7 +157,8 @@ module bbf-device {
          and 'serial-num' nodes are only meaningful amongst devices
          with the same value of 'mfg-name'.";
       reference
-        "RFC 6933: Entity MIB (Version 4) - entPhysicalMfgName";
+        "RFC 6933: Entity MIB (Version 4) - entPhysicalMfgName;
+         RFC 8348: A YANG model for Hardware Management - mfg-name";
     }
     leaf model-name {
       type bbf-yang:string-ascii64;
@@ -158,7 +168,8 @@ module bbf-device {
          customer-visible part number, which may be printed on the
          component itself.";
       reference
-        "RFC 6933: Entity MIB (Version 4) - entPhysicalModelName";
+        "RFC 6933: Entity MIB (Version 4) - entPhysicalModelName;
+         RFC 8348: A YANG model for Hardware Management - model-name";
     }
   }
 
@@ -184,7 +195,7 @@ module bbf-device {
          that is currently executing within the device.";
     }
     leaf previous-revision {
-      type bbf-yang:string-ascii64;
+      type bbf-yang:string-ascii64-or-empty;
       config false;
       description
         "A name to be used to identify the revision of the software
@@ -210,7 +221,7 @@ module bbf-device {
     leaf ip-address {
       type inet:host;
       description
-        "The IP address of the device.";
+        "The IP address or DNS domain name of the device.";
     }
     leaf port {
       type inet:port-number;
@@ -275,9 +286,9 @@ module bbf-device {
         enum reachable {
           description
             "The device is considered to be reachable for management
-             purposes if at least 1 management entity can reach
-             the device. This typically means that device is reachable
-             via the IP layer.";
+             purposes if at least 1 management entity can reach the
+             device. This typically means that device is reachable via
+             the IP layer.";
         }
       }
       config false;

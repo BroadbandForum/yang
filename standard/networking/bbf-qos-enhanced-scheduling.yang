@@ -9,9 +9,6 @@ module bbf-qos-enhanced-scheduling {
   import ietf-interfaces {
     prefix if;
   }
-  import bbf-if-type {
-    prefix bbfift;
-  }
   import bbf-qos-traffic-mngt {
     prefix bbf-qos-tm;
   }
@@ -32,8 +29,6 @@ module bbf-qos-enhanced-scheduling {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -47,7 +42,7 @@ module bbf-qos-enhanced-scheduling {
      Specifically, this module augments interfaces to add additional
      configuration to manage enhanced traffic scheduling.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -87,9 +82,19 @@ module bbf-qos-enhanced-scheduling {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -175,7 +180,7 @@ module bbf-qos-enhanced-scheduling {
     choice scheduling-type {
       description
         "Defines the child node's type of a scheduling node in case of
-         hierachical scheduling.";
+         hierarchical scheduling.";
       case inline {
         uses bbf-qos-tm:scheduling-gen-attr;
       }
@@ -217,7 +222,7 @@ module bbf-qos-enhanced-scheduling {
 
            A scheduler will be at a position in a hierarchy as
            specified through references. A particular scheduler will
-           get its input from its childs from which it merges the
+           get its input from its children from which it merges the
            traffic into a single output stream. This output can be
            shaped if a reference to a shaper-profile is configured.";
         leaf name {
@@ -247,7 +252,7 @@ module bbf-qos-enhanced-scheduling {
         choice children-type {
           description
             "Defines the child's node type of a scheduling node in
-             case of hierachical scheduling.";
+             case of hierarchical scheduling.";
           case scheduler-node {
             description
               "The children are a list of scheduler-nodes.";
@@ -283,7 +288,7 @@ module bbf-qos-enhanced-scheduling {
               choice scheduling-type {
                 description
                   "Defines the child node's type of a scheduling node
-                   in case of hierachical scheduling.";
+                   in case of hierarchical scheduling.";
                 case inline {
                   uses bbf-qos-tm:scheduling-gen-attr;
                   leaf traffic-type {
@@ -354,12 +359,12 @@ module bbf-qos-enhanced-scheduling {
                     + 'two-token-bucket)' {
                       error-message
                         "The child's scheduler shaper type must be "
-                      + "of the two tocken bucket type when the "
+                      + "of the two token bucket type when the "
                       + "parent scheduler expects to receive CIR "
                       + "traffic.";
                       description
                         "The child's scheduler shaper type must be of
-                         the two tocken bucket type when the parent
+                         the two token bucket type when the parent
                          scheduler expects to receive CIR traffic.";
                     }
                     description
@@ -387,13 +392,13 @@ module bbf-qos-enhanced-scheduling {
                     + 'two-token-bucket)' {
                       error-message
                         "The child's scheduler shaper type must be "
-                      + "of the two tocken bucket type when the "
+                      + "of the two token bucket type when the "
                       + "parent scheduler expects to receive EIR "
                       + "traffic.";
                       description
                         "The child's scheduler shaper type must be of
-                         the two tocken bucket type when the parent
-                         scheduler expects to receive eir traffic.";
+                         the two token bucket type when the parent
+                         scheduler expects to receive EIR traffic.";
                     }
                     description
                       "Configuration which determines the type of
@@ -661,14 +666,14 @@ module bbf-qos-enhanced-scheduling {
   }
 
   augment "/if:interfaces/if:interface" {
-    when "derived-from-or-self(if:type,'bbfift:vlan-sub-interface')" {
-      description
-        "Augments a VLAN sub-interface.";
-    }
     description
       "Augments a VLAN sub-interface with configuration that links it
        to traffic management configuration.";
     container egress-tm-objects {
+      presence
+        "The presence of this container on its own does not mean
+         anything. Its presence provides the possibility to configure
+         egress traffic management related data.";
       description
         "Defines the traffic management node(s), to which the egress
          traffic of the interface shall be directed to.";

@@ -26,8 +26,6 @@ module bbf-interfaces-performance-management {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -42,7 +40,7 @@ module bbf-interfaces-performance-management {
      statistics defined by the IETF interfaces data model,
      ietf-interfaces (RFC7223).
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -82,9 +80,19 @@ module bbf-interfaces-performance-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -148,6 +156,12 @@ module bbf-interfaces-performance-management {
        received packets on an interface.";
   }
 
+  feature current-interval-time-stamp {
+    description
+      "Indicates support for reporting the start date and time of
+       the current interval.";
+  }
+
   typedef performance-15min-interval {
     type uint8 {
       range "0..96";
@@ -161,8 +175,8 @@ module bbf-interfaces-performance-management {
       range "1..96";
     }
     description
-      "Defines the range of 15 minutes intervals and defines
-       the position of the interval relative to the current interval
+      "Defines the range of 15 minutes intervals and defines the
+       position of the interval relative to the current interval
        where 1 is the most recent completed interval.";
   }
 
@@ -179,9 +193,21 @@ module bbf-interfaces-performance-management {
       range "1..7";
     }
     description
-      "Defines the range of 24 hour intervals and defines
-       the position of the interval relative to the current interval
+      "Defines the range of 24 hour intervals and defines the
+       position of the interval relative to the current interval
        where 1 is the most recent completed interval.";
+  }
+
+  grouping current-interval-time-stamp {
+    description
+      "Data node used to report the date and time of the start of
+       the current interval.";
+    leaf time-stamp {
+      if-feature "bbf-if-pm:current-interval-time-stamp";
+      type yang:date-and-time;
+      description
+        "Reports the start date/time for this interval.";
+    }
   }
 
   grouping performance-history-interval-parameters {
@@ -206,8 +232,8 @@ module bbf-interfaces-performance-management {
     leaf measured-time {
       type uint32;
       description
-        "Reports the amount of time, measured in seconds,
-         that statistics for this interval have been counted.";
+        "Reports the amount of time, measured in seconds, that
+         statistics for this interval have been counted.";
     }
   }
 
@@ -304,7 +330,7 @@ module bbf-interfaces-performance-management {
       description
         "The number of packets, delivered by this sub-layer to a
          higher (sub-)layer, that were addressed to a multicast
-         address at this sub-layer.  For a MAC-layer protocol,
+         address at this sub-layer. For a MAC-layer protocol,
          this includes both Group and Functional addresses.";
       reference
         "RFC 2863: The Interfaces Group MIB - ifHCInMulticastPkts";
@@ -315,7 +341,7 @@ module bbf-interfaces-performance-management {
         "The number of inbound packets that were chosen to be
          discarded even though no errors had been detected to
          prevent their being deliverable to a higher-layer
-         protocol.  One possible reason for discarding such a
+         protocol. One possible reason for discarding such a
          packet could be to free up buffer space.";
       reference
         "RFC 2863: The Interfaces Group MIB - ifInDiscards";
@@ -325,7 +351,7 @@ module bbf-interfaces-performance-management {
       description
         "For packet-oriented interfaces, the number of inbound
          packets that contained errors preventing them from being
-         deliverable to a higher-layer protocol.  For character-
+         deliverable to a higher-layer protocol. For character-
          oriented or fixed-length interfaces, the number of
          inbound transmission units that contained errors
          preventing them from being deliverable to a higher-layer
@@ -337,13 +363,12 @@ module bbf-interfaces-performance-management {
       type bbf-yang:performance-counter32;
       description
         "For packet-oriented interfaces, the number of packets
-         received via the interface that were discarded because
-         of an unknown or unsupported protocol.  For
-         character-oriented or fixed-length interfaces that
-         support protocol multiplexing, the number of
-         transmission units received via the interface that were
-         discarded because of an unknown or unsupported protocol.
-         For any interface that does not support protocol
+         received via the interface that were discarded because of an
+         unknown or unsupported protocol. For character-oriented or
+         fixed-length interfaces that support protocol multiplexing,
+         the number of transmission units received via the interface
+         that were discarded because of an unknown or unsupported
+         protocol. For any interface that does not support protocol
          multiplexing, this counter is not present.";
       reference
         "RFC 2863: The Interfaces Group MIB - ifInUnknownProtos";
@@ -367,9 +392,9 @@ module bbf-interfaces-performance-management {
       type bbf-yang:performance-counter64;
       description
         "The total number of packets that higher-level protocols
-         requested be transmitted, and that were not addressed
-         to a multicast or broadcast address at this sub-layer,
-         including those that were discarded or not sent.";
+         requested be transmitted, and that were not addressed to a
+         multicast or broadcast address at this sub-layer, including
+         those that were discarded or not sent.";
       reference
         "RFC 2863: The Interfaces Group MIB - ifHCOutUcastPkts";
     }
@@ -378,8 +403,8 @@ module bbf-interfaces-performance-management {
       description
         "The total number of packets that higher-level protocols
          requested be transmitted, and that were addressed to a
-         broadcast address at this sub-layer, including those
-         that were discarded or not sent.";
+         broadcast address at this sub-layer, including those that
+         were discarded or not sent.";
       reference
         "RFC 2863: The Interfaces Group MIB -
                    ifHCOutBroadcastPkts";
@@ -389,10 +414,9 @@ module bbf-interfaces-performance-management {
       description
         "The total number of packets that higher-level protocols
          requested be transmitted, and that were addressed to a
-         multicast address at this sub-layer, including those
-         that were discarded or not sent.  For a MAC-layer
-         protocol, this includes both Group and Functional
-         addresses.";
+         multicast address at this sub-layer, including those that
+         were discarded or not sent. For a MAC-layer protocol, this
+         includes both Group and Functional addresses.";
       reference
         "RFC 2863: The Interfaces Group MIB -
                    ifHCOutMulticastPkts";
@@ -402,7 +426,7 @@ module bbf-interfaces-performance-management {
       description
         "The number of outbound packets that were chosen to be
          discarded even though no errors had been detected to
-         prevent their being transmitted.  One possible reason
+         prevent their being transmitted. One possible reason
          for discarding such a packet could be to free up buffer
          space.";
       reference
@@ -456,6 +480,7 @@ module bbf-interfaces-performance-management {
         container current {
           description
             "Contains the counts that are currently accumulating.";
+          uses current-interval-time-stamp;
           uses interface-performance-counters;
         }
         uses performance-15min-history-parameters;
@@ -481,6 +506,7 @@ module bbf-interfaces-performance-management {
         container current {
           description
             "Contains the counts that are currently accumulating.";
+          uses current-interval-time-stamp;
           uses interface-performance-counters;
         }
         uses performance-24hr-history-parameters;

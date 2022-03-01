@@ -1,0 +1,157 @@
+module bbf-dot1q-cfm-l2-forwarding {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-dot1q-cfm-l2-forwarding";
+  prefix bbf-cfm-l2-fwd;
+
+  import ieee802-dot1q-cfm {
+    prefix dot1q-cfm;
+  }
+  import bbf-l2-forwarding {
+    prefix bbf-l2-fwd;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, ADTRAN
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module is part of a collection of YANG definitions for
+     supporting the Broadband Forum requirements on Connectivity Fault
+     Management (CFM) Operations, Administration, and Maintenance
+     (OAM) as applicable to access network equipment. As such, this
+     module is specific to access network equipment (e.g., BBF-
+     specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module augments the IEEE 802.1Qcx CFM YANG
+     data model to link a Maintenance Association (MA) to a forwarder.
+
+     Copyright (c) 2017-2022, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a5; see
+     the TR itself for full legal notices.";
+
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
+
+  augment "/dot1q-cfm:cfm/dot1q-cfm:maintenance-group" {
+    description
+      "Augmentation to link IEEE's Maintenance Group to the BBF frame
+       classification / forwarding model.";
+    leaf forwarder {
+      type bbf-l2-fwd:forwarder-ref;
+      must "not(current()/../"
+         + "dot1q-cfm:mep/dot1q-cfm:direction = 'down')" {
+        error-message
+          "A Maintenance Group with a forwarder associated cannot "
+        + "have Maintenance Association Endpoints (MEP) with "
+        + "direction down.";
+      }
+      must "not(/dot1q-cfm:cfm/dot1q-cfm:maintenance-domain"
+         + "[dot1q-cfm:md-id = current()/../dot1q-cfm:md-id]/"
+         + "dot1q-cfm:maintenance-association"
+         + "[dot1q-cfm:ma-id = current()/../dot1q-cfm:ma-id]/"
+         + "dot1q-cfm:mhf-creation = 'mhf-none' or "
+         + "(/dot1q-cfm:cfm/dot1q-cfm:maintenance-domain"
+         + "[dot1q-cfm:md-id = current()/../dot1q-cfm:md-id]/"
+         + "dot1q-cfm:mhf-creation = 'mhf-none' and "
+         + "/dot1q-cfm:cfm/dot1q-cfm:maintenance-domain"
+         + "[dot1q-cfm:md-id = current()/../dot1q-cfm:md-id]/"
+         + "dot1q-cfm:maintenance-association"
+         + "[dot1q-cfm:ma-id = current()/../dot1q-cfm:ma-id]/"
+         + "dot1q-cfm:mhf-creation = 'mhf-defer'))" {
+        error-message
+          "A reference to a forwarder is allowed only when the "
+        + "Maintenance Association is configured for auto-creating "
+        + "MIPs.";
+        description
+          "A reference to a forwarder is needed when the Maintenance
+           Association is configured for auto-creating of Maintenance
+           Domain Intermediate Point (MIP) Half Functions (MHF)s.";
+      }
+      must 'count(/dot1q-cfm:cfm/dot1q-cfm:maintenance-group'
+         + '[bbf-cfm-l2-fwd:forwarder = current()]'
+         + '[dot1q-cfm:md-id = current()/../dot1q-cfm:md-id]) <= 1' {
+        error-message
+          "Multiple Maintenance Groups within the same Maintenance "
+        + "Domain cannot reference the same forwarder.";
+        description
+          "Ensure that the configured forwarder is referenced in no
+           more than one Maintenance Group within the current
+           Maintenance Domain. Multiple Maintenance Groups for a
+           single forwarder are possible on condition that they have
+           different Maintenance Domain Levels, i.e., are defined
+           within different Maintenance Domains.";
+      }
+      description
+        "A reference to a forwarder.
+
+         The following is a constraint that could not be captured in
+         YANG: multiple Maintenance Groups referencing the same
+         forwarder are allowed, but only if they have a different
+         level.
+
+         Note that there is no BBF requirement for multiple levels
+         with up-MEPs. Within BBF context multiple levels on a
+         forwarder go together with one level using up-MEPs and a
+         higher level using MIPs.";
+    }
+  }
+}

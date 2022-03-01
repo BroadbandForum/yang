@@ -17,8 +17,6 @@ submodule bbf-mgmd-configuration-interface-to-host {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -30,7 +28,7 @@ submodule bbf-mgmd-configuration-interface-to-host {
      and the Multicast Listener Discovery (MLD) protocol on interfaces
      that connect the system to multicast hosts.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +68,19 @@ submodule bbf-mgmd-configuration-interface-to-host {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -119,9 +127,9 @@ submodule bbf-mgmd-configuration-interface-to-host {
         "The interval at which MGMD General Query messages (GMQs) are
          sent on interfaces.";
       reference
-        "RFC 3376 Section 8.2;
-         RFC 3810 Section 9.14.2;
-         RFC 5519 mgmdRouterInterfaceQueryInterval";
+        "RFC 3376 section 8.2;
+         RFC 3810 section 9.14.2;
+         RFC 5519 section 5, mgmdRouterInterfaceQueryInterval";
     }
     leaf query-max-response-time {
       type uint32 {
@@ -165,10 +173,10 @@ submodule bbf-mgmd-configuration-interface-to-host {
            exponent is a number from 3 to 10.";
       reference
         "RFC 2710 section 7.3;
-         RFC 2933 igmpInterfaceQueryMaxResponseTime;
-         RFC 3376 Section 8.3;
-         RFC 3810 Section 5.1.9;
-         RFC 5519 mgmdRouterInterfaceQueryMaxResponseTime";
+         RFC 2933 section 4, igmpInterfaceQueryMaxResponseTime;
+         RFC 3376 section 8.3;
+         RFC 3810 section 5.1.9;
+         RFC 5519 section 5, mgmdRouterInterfaceQueryMaxResponseTime";
     }
     leaf last-member-query-interval {
       when '../immediate-leave = "disabled"';
@@ -184,8 +192,8 @@ submodule bbf-mgmd-configuration-interface-to-host {
          MGMD Group-Specific Query messages.";
       reference
         "RFC 2710 section 7.8;
-         RFC3376 Section 8.8;
-         RFC5519 mgmdRouterInterfaceLastMemberQueryInterval";
+         RFC 3376 section 8.8;
+         RFC 5519 section 5, mgmdRouterLastMemberQueryInterval";
     }
     leaf last-member-query-count {
       when '../immediate-leave = "disabled"';
@@ -201,7 +209,7 @@ submodule bbf-mgmd-configuration-interface-to-host {
          This data node is applied to each interface on which the
          proxy generates MGMD Membership Query messages.";
       reference
-        "RFC3376 Section 8.9";
+        "RFC 3376 section 8.9";
     }
     leaf startup-query-interval {
       type uint32 {
@@ -213,7 +221,7 @@ submodule bbf-mgmd-configuration-interface-to-host {
         "This variable represents the interval between MGMD General
          Query messages sent by a Querier on startup.";
       reference
-        "RFC3376 Section 8.6";
+        "RFC 3376 section 8.6";
     }
     leaf startup-query-count {
       type uint32 {
@@ -225,7 +233,7 @@ submodule bbf-mgmd-configuration-interface-to-host {
          messages sent out on startup, separated by the startup query
          interval.";
       reference
-        "RFC3376 Section 8.7";
+        "RFC 3376 section 8.7";
     }
     leaf immediate-leave {
       type enumeration {
@@ -258,7 +266,7 @@ submodule bbf-mgmd-configuration-interface-to-host {
          set interval, it stops forwarding multicast traffic to the
          interface.";
       reference
-        "G.988 Section 9.3.27 Immediate Leave";
+        "ITU-T G.988 clause 9.3.27, Immediate Leave";
     }
     leaf robustness {
       type uint32 {
@@ -271,8 +279,8 @@ submodule bbf-mgmd-configuration-interface-to-host {
          robustness variable may be increased. IGMP and MLD are robust
          to (robustness variable - 1) packet losses.";
       reference
-        "RFC 3376 Section 8.1;
-         RFC 5519 mgmdRouterInterfaceRobustness";
+        "RFC 3376 section 8.1;
+         RFC 5519 section 5, mgmdRouterInterfaceRobustness";
     }
   }
 }

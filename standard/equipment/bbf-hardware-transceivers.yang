@@ -23,8 +23,6 @@ module bbf-hardware-transceivers {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -38,7 +36,7 @@ module bbf-hardware-transceivers {
      Specifically, this module augments the ietf-hardware model with
      management of compact transceivers.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -78,9 +76,19 @@ module bbf-hardware-transceivers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -527,8 +535,8 @@ module bbf-hardware-transceivers {
   identity vendor-specific {
     base physical-device;
     description
-      "Vendor specfic physical device. A vendor may derive specific
-       idenities from this one.";
+      "Vendor specific physical device. A vendor may derive specific
+       identities from this one.";
     reference
       "SFF-8024 Rev 4.8a, Table 4-1, Values 80h-FFh";
   }
@@ -537,7 +545,7 @@ module bbf-hardware-transceivers {
 
   identity connector-type {
     description
-      "Indentifies the external optical or electrical cable connector
+      "Identifies the external optical or electrical cable connector
        provided as the media interface.
 
        This identity is abstract and MUST NOT be used to represent a
@@ -806,10 +814,10 @@ module bbf-hardware-transceivers {
       config false;
       mandatory true;
       description
-        "Internally measured transceiver temperature Temperature
+        "Internally measured transceiver temperature. Temperature
          accuracy is vendor specific but must be better than +/- 3
          degrees Celsius over specified operating temperature and
-         voltage. ";
+         voltage.";
       reference
         "SFF-8472 Rev 12.4, Table 9-16, Address A2h, Bytes 96-97";
     }
@@ -844,9 +852,10 @@ module bbf-hardware-transceivers {
       config false;
       mandatory true;
       description
-        "Measured TX bias current in mA. Accuracy is vendor specific
-         but must be better than +/- 10% of the manufacturer's nominal
-         value over specified operating temperature and voltage.";
+        "Measured transmit (TX) bias current in uA. Accuracy is vendor
+         specific but must be better than +/- 10% of the
+         manufacturer's nominal value over specified operating
+         temperature and voltage.";
       reference
         "SFF-8472 Rev 12.4, Table 9-16, Address A2h, Bytes 100-101";
     }
@@ -861,13 +870,13 @@ module bbf-hardware-transceivers {
           units "0.1 mW";
           mandatory true;
           description
-            "Measured TX output power in mW. Data is assumed to be
-             based on measurement of laser monitor photodiode current.
-             It is factory calibrated to absolute units using the most
-             representative fiber output type. Accuracy is vendor
-             specific but must be better than +/- 3dB over specified
-             temperature and voltage. Data is not valid when the
-             transmitter is disabled.";
+            "Measured transmit (TX) output power in tenths of a mW.
+             Data is assumed to be based on measurement of laser
+             monitor photodiode current. It is factory calibrated to
+             absolute units using the most representative fiber output
+             type. Accuracy is vendor specific but must be better than
+             +/- 3dB over specified temperature and voltage. Data is
+             not valid when the transmitter is disabled.";
           reference
             "SFF-8472 Rev 12.4, Table 9-16, Address A2h, Bytes 102-
              103";
@@ -877,15 +886,15 @@ module bbf-hardware-transceivers {
           units "0.1 mW";
           mandatory true;
           description
-            "Measured received (RX) optical power in mW. Absolute
-             accuracy is dependent upon the exact optical wavelength.
-             For the vendor specified wavelength, accuracy shall be
-             better than +/- 3dB over specified temperature and
-             voltage. This accuracy shall be maintained for input
+            "Measured received (RX) optical power in tenths of a mW.
+             Absolute accuracy is dependent upon the exact optical
+             wavelength. For the vendor specified wavelength, accuracy
+             shall be better than +/- 3dB over specified temperature
+             and voltage. This accuracy shall be maintained for input
              power levels up to the lesser of maximum transmitted or
              maximum received optical power per the appropriate
              standard. It shall be maintained down to the minimum
-             transmitted power minus cable plant loss (insertion  loss
+             transmitted power minus cable plant loss (insertion loss
              or passive loss) per the appropriate standard. Absolute
              accuracy beyond this minimum required received input
              optical power range is vendor specific.";
@@ -976,11 +985,11 @@ module bbf-hardware-transceivers {
       }
       config false;
       description
-        "Alarm flags associated with transceiver TX bias current, TX
-         output power and received optical power as well as reserved
-         locations for future flags. Alarm flags indicate conditions
-         likely to be associated with an in-operational link and cause
-         for immediate action.";
+        "Alarm flags associated with the transceiver transmit bias
+         current, transmit output power and received optical power as
+         well as reserved locations for future flags. Alarm flags
+         indicate conditions likely to be associated with an
+         in-operational link and cause for immediate action.";
       reference
         "SFF-8472 Rev 12.4, Table 9-7, Address A2h, Bytes 112-117;
          SFF-8436 Rev 4.9, Table 25, Page A0, Address 100-106";
@@ -991,14 +1000,14 @@ module bbf-hardware-transceivers {
       }
       config false;
       description
-        "Warning flags associated with TX bias current, TX output
-         power and received optical power as well as reserved
-         locations for future flags. Warning flags indicate conditions
-         outside the normally guaranteed bounds but not necessarily
-         causes of immediate link failures. Certain warning flags may
-         also be defined by the manufacturer as end-of-life indicators
-         (such as for higher than expected bias currents in a constant
-         power control loop).";
+        "Warning flags associated with the transceiver transmit bias
+         current, transmit output power and received optical power as
+         well as reserved locations for future flags. Warning flags
+         indicate conditions outside the normally guaranteed bounds
+         but not necessarily causes of immediate link failures.
+         Certain warning flags may also be defined by the manufacturer
+         as end-of-life indicators (such as for higher than expected
+         bias currents in a constant power control loop).";
       reference
         "SFF-8472 Rev 12.4, Table 9-7, Address A2h, Bytes 112-117;
          SFF-8436 Rev 4.9, Table 25, Page A0, Address 100-106";
@@ -1493,8 +1502,12 @@ module bbf-hardware-transceivers {
                bit 6";
           }
           enum 1000-mbytes-sec {
+            status deprecated;
             description
-              "1600 MBytes/sec.";
+              "This enum was mistakenly defined to represent the value
+               1600 MBytes/sec and is now deprecated. A new enum,
+               '1600-mbytes-sec' has been defined and should be used
+               to represent 1600 MBytes/sec.";
             reference
               "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 10,
                bit 5";
@@ -1526,6 +1539,13 @@ module bbf-hardware-transceivers {
             reference
               "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 10,
                bit 0";
+          }
+          enum 1600-mbytes-sec {
+            description
+              "1600 MBytes/sec.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 10,
+               bit 5";
           }
         }
         config false;
@@ -1719,9 +1739,9 @@ module bbf-hardware-transceivers {
         config false;
         description
           "The nominal bit (signaling) rate (BR, nominal) is specified
-           in units of MBd. The bit rate includes those bits necessary
-           to encode and delimit the signal as well as those bits
-           carrying data information.
+           in units of megabaud (MBd). The bit rate includes those
+           bits necessary to encode and delimit the signal as well as
+           those bits carrying data information.
 
            For bit rates < 25.0 Gbps, the value will be reported in
            units of 100MBd to the nearest 100MBd.
@@ -2114,7 +2134,7 @@ module bbf-hardware-transceivers {
           "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 14-15";
       }
       leaf tx-bias-high-alarm {
-        type uint16;
+        type uint32;
         units "uA";
         config false;
         description
@@ -2124,7 +2144,7 @@ module bbf-hardware-transceivers {
           "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 16-17";
       }
       leaf tx-bias-low-alarm {
-        type uint16;
+        type uint32;
         units "uA";
         config false;
         description
@@ -2134,7 +2154,7 @@ module bbf-hardware-transceivers {
           "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 18-19";
       }
       leaf tx-bias-high-warning {
-        type uint16;
+        type uint32;
         units "uA";
         config false;
         description
@@ -2144,7 +2164,7 @@ module bbf-hardware-transceivers {
           "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 20-21";
       }
       leaf tx-bias-low-warning {
-        type uint16;
+        type uint32;
         units "uA";
         config false;
         description
@@ -2394,7 +2414,7 @@ module bbf-hardware-transceivers {
         type bits {
           bit legacy {
             description
-              "Legacy diagnositics implementation.";
+              "Legacy diagnostic implementation.";
             reference
               "SFF-8472 Rev 12.4, Table 8-5, Address A0h, Byte 92,
                bit 7";

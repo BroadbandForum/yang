@@ -38,8 +38,6 @@ module bbf-qos-policing {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -53,7 +51,7 @@ module bbf-qos-policing {
      Specifically, this module augments classifiers to manage the
      policing of flows.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -93,9 +91,19 @@ module bbf-qos-policing {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -152,12 +160,6 @@ module bbf-qos-policing {
     description
       "The system supports the two rate three color policer with
        color promotion.";
-  }
-
-  feature policing-profile-ref {
-    description
-      "The system supports the single rate two color policer, also
-       called single bucket policer.";
   }
 
   feature interface-policing-management {
@@ -222,7 +224,7 @@ module bbf-qos-policing {
       }
     }
     description
-      "Defines the frame color that match.";
+      "Defines a frame color for QoS.";
   }
 
   grouping single-rate-two-color-marker {
@@ -764,7 +766,7 @@ module bbf-qos-policing {
         + "action-cfg-params" {
     description
       "Choice of action types for frames matching a classification
-       criterium.";
+       criterion.";
     case flow-color {
       leaf flow-color {
         when '../bbf-qos-cls:action-type="bbf-qos-plc:flow-color"' {
@@ -819,9 +821,8 @@ module bbf-qos-policing {
        policing.";
     container policing {
       if-feature "interface-policing-management";
-      presence
-        "The presence of this container indicates policing is
-         managed on this interface.";
+      presence "The presence of this container indicates policing is
+                managed on this interface.";
       description
         "Policing management per interface.";
       container statistics {

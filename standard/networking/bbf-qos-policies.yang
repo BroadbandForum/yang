@@ -32,8 +32,6 @@ module bbf-qos-policies {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -47,7 +45,7 @@ module bbf-qos-policies {
      Specifically, this module contains a collection of policies that
      can be used to control the flow of frames.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -87,9 +85,19 @@ module bbf-qos-policies {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -239,10 +247,10 @@ module bbf-qos-policies {
     description
       "Interfaces that can have QoS policy profiles assigned.
 
-       If several interfaces linked by a parent-child
-       relationship in the interface stack are configured with
-       a QOS policy of the same type (e.g. ingress-qos-policy),
-       then all QOS policies must be applied sequentially.
+       If several interfaces linked by a parent-child relationship in
+       the interface stack are configured with a QOS policy of the
+       same type (e.g. ingress-qos-policy), then all QOS policies must
+       be applied sequentially.
 
        In the case of ingress, the QOS policy on the lower-level
        interface(s) (e.g. ethernetCsmacd) must first be applied before
@@ -284,8 +292,8 @@ module bbf-qos-policies {
     container qos-policies {
       if-feature "interface-policy-management";
       presence
-        "The presence of this container enables management of QoS
-         policies.";
+        "Indicates that the management of QoS policies is enabled on
+         this interface.";
       description
         "Management associated with QoS policies.";
     }

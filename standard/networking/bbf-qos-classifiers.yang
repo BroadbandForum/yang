@@ -32,8 +32,6 @@ module bbf-qos-classifiers {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -48,7 +46,7 @@ module bbf-qos-classifiers {
      that can be used to classify frames and assign actions to be
      applied to those frames.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -88,9 +86,19 @@ module bbf-qos-classifiers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -222,7 +230,7 @@ module bbf-qos-classifiers {
     base action-type;
     description
       "The action-type identity indicating the system shall generate
-       one or more values for the Drop Eligibility Inidicator (DEI)
+       one or more values for the Drop Eligibility Indicator (DEI)
        bit.";
   }
 
@@ -293,7 +301,7 @@ module bbf-qos-classifiers {
       }
     }
     description
-      "Defines the frame color that match.";
+      "Defines a frame color for QoS.";
   }
 
   grouping pbit-marking {
@@ -495,7 +503,7 @@ module bbf-qos-classifiers {
       choice protocols {
         status deprecated;
         description
-          "The choice allows to specify combintations of frame field
+          "The choice allows to specify combinations of frame field
            values that identify a particular protocol or allows to
            indicate any protocol.
 
@@ -588,14 +596,14 @@ module bbf-qos-classifiers {
             }
             type bbf-qos-t:traffic-class-id;
             description
-              "Define the traffic class for scheduling.";
+              "Defines the traffic class for scheduling.";
           }
         }
         case permit {
           if-feature "bbf-qos-cls:qos-action-permit";
           description
             "The action type for frames matching a classification
-             criterium is that they are permitted and will be subject
+             criterion is that they are permitted and will be subject
              to further processing.";
           leaf permit {
             when '../bbf-qos-cls:action-type="bbf-qos-cls:permit"' {
@@ -605,7 +613,7 @@ module bbf-qos-classifiers {
             type empty;
             description
               "The action type for frames matching a classification
-               criterium is 'permit'.";
+               criterion is 'permit'.";
           }
         }
       }
@@ -632,7 +640,7 @@ module bbf-qos-classifiers {
          An example is the assignment of a traffic class. This traffic
          class is used, after the forwarding decision has been made
          and all QOS polices are applied, to identify the queue on the
-         outgoing interface. If a traffic class is not explictly
+         outgoing interface. If a traffic class is not explicitly
          configured, a default must be used for each matched ingress
          frame. This value is reported in 'scheduling-traffic-class'.
 
@@ -716,7 +724,7 @@ module bbf-qos-classifiers {
          An example is the assignment of a traffic class. This traffic
          class is used, after the forwarding decision has been made
          and all QOS polices are applied, to identify the queue on the
-         outgoing interface. If a traffic class is not explictly
+         outgoing interface. If a traffic class is not explicitly
          configured, a default must be used for each matched ingress
          frame. This value is configured in
          'scheduling-traffic-class'.

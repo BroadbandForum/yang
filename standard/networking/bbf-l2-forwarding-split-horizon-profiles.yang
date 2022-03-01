@@ -26,8 +26,6 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -35,7 +33,7 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
     "This submodule contains a collection of YANG definitions for
      managing split horizon profiles.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -75,9 +73,19 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -152,7 +160,7 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
              that have an interface usage as specified in
              in-interface-usage to interfaces/ports that have an
              interface usage for which the value is in the leaf-list
-             out-interface-usages.";
+             'out-interface-usage'.";
           leaf in-interface-usage {
             type bbf-if-usg:interface-usage;
             description
@@ -183,7 +191,7 @@ submodule bbf-l2-forwarding-split-horizon-profiles {
         "A split-horizon-profile allows to restrict forwarding between
          its forwarder ports based on their interface usages.
 
-         Without split-horizon-profile, packets can be forwarded
+         Without split-horizon-profile, frames can be forwarded
          within a forwarder from any of its forwarder ports to any
          other of its forwarder ports.";
       leaf split-horizon-profile {

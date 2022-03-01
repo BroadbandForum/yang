@@ -29,8 +29,6 @@ submodule bbf-l2-forwarding-flooding-policies {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -38,7 +36,7 @@ submodule bbf-l2-forwarding-flooding-policies {
     "This submodule contains a collection of YANG definitions for
      managing flooding policies.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -78,9 +76,19 @@ submodule bbf-l2-forwarding-flooding-policies {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -147,11 +155,11 @@ submodule bbf-l2-forwarding-flooding-policies {
          MAC address is not available in the forwarding database.
 
          For multicast frames this applies when there is no
-         corresponding entry found in the (IGMP controled) multicast
+         corresponding entry found in the (IGMP controlled) multicast
          tree.
 
          For broadcast frames this applies when there is no other
-         protocol specific behaviour knowledge.";
+         protocol specific behavior knowledge.";
       list flooding-policies-profile {
         key "name";
         description
@@ -193,9 +201,9 @@ submodule bbf-l2-forwarding-flooding-policies {
                 "List of interface-usages to which the frame
                  classification applies.
 
-                 An empty list means that the classification is
-                 applied to none of the interface usages and hence
-                 does not make sense.";
+                 An empty list means that the classification is not
+                 applied to any interface usage resulting in a
+                 non-functional flooding policy.";
             }
           }
           container destination-address {
@@ -259,9 +267,9 @@ submodule bbf-l2-forwarding-flooding-policies {
          For example, when the destination unicast MAC address is not
          available in the forwarding database. For multicast frames
          this applies when there is no corresponding entry found in
-         the (IGMP controled) multicast tree. For broadcast frames
+         the (IGMP controlled) multicast tree. For broadcast frames
          this applies when there is no other protocol specific
-         behaviour knowledge.
+         behavior knowledge.
 
          The default behavior for when there is no flooding policy is
          that the frame is flooded to all ports of the forwarder,
@@ -309,9 +317,9 @@ submodule bbf-l2-forwarding-flooding-policies {
                   "Provides alternatives to provide a single or a set
                    of forwarder ports.
 
-                   The absence of a leaf of this choice means that the
-                   classification is applied to none of the ports and
-                   hence does not make sense.";
+                   If no case is configured, the classification is not
+                   applied to any forwarding ports resulting in a
+                   non-functional flooding policy.";
                 case forwarder-port {
                   leaf forwarder-port {
                     type leafref {
@@ -341,9 +349,10 @@ submodule bbf-l2-forwarding-flooding-policies {
               description
                 "The frame classification to be performed on the
                  destination MAC or IP address. Note that the MAC
-                 filter also allows specifation of unicast addresses.
-                 If used this will apply to frames for which there was
-                 no forwarding decision identified via other means.";
+                 filter also allows specification of unicast
+                 addresses. If used this will apply to frames for
+                 which there was no forwarding decision identified
+                 via other means.";
               uses bbf-classif:frame-destination-match;
             }
             choice frame-forwarding {

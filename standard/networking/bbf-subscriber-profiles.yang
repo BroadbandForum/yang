@@ -26,8 +26,6 @@ module bbf-subscriber-profiles {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -43,7 +41,7 @@ module bbf-subscriber-profiles {
      subscriber profile. It also augments ietf-system to add
      system-specific subscriber management.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -83,9 +81,19 @@ module bbf-subscriber-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -193,11 +201,24 @@ module bbf-subscriber-profiles {
 
   augment "/if:interfaces/if:interface" {
     description
-      "Additions for subscriber management on the VLAN
-       sub-interface.";
+      "Additions for subscriber management on an interface.";
     container subscriber-profile {
       description
-        "Subscriber configuration parameters.";
+        "Subscriber profile configuration data nodes.
+
+         Note that it is possible to configure the container on any
+         interface. The usage is: when a protocol at a particular
+         interface needs subscriber configuration for its protocol
+         processing, e.g., DHCPv4 option-82 generation being enabled
+         at a VLAN sub-interface, then the device first verifies
+         whether a reference is configured for this VLAN
+         sub-interface. If this is the case, then this configuration
+         is used. If this is not the case, then the device verifies
+         whether a profile is configured at the lower layer of this
+         VLAN sub-interface. And this walking down the interface stack
+         continues until a configured reference is identified, or
+         until the bottom of the interface stack is reached, possibly
+         without finding a reference.";
       leaf profile {
         type subscriber-profile-ref;
         description
@@ -219,7 +240,7 @@ module bbf-subscriber-profiles {
         type bbf-yang:string-ascii63-or-empty;
         default "access-node-not-configured";
         description
-          "An identifier representing the access node. This string
+          "An identifier representing the Access Node. This string
            will be inserted in case the keyword Access_Node_ID is part
            of the syntax according to which a subscriber
            identification string shall be generated.";

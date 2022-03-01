@@ -40,8 +40,6 @@ module bbf-mgmd {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -60,7 +58,7 @@ module bbf-mgmd {
      systems that act as a multicast proxy, snooper, or a snooper with
      proxy reporting.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -100,9 +98,19 @@ module bbf-mgmd {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -171,8 +179,8 @@ module bbf-mgmd {
 
   feature mgmd-group-ip-range {
     description
-      "Use group IP range feature to allow configuring a range of
-       group-addresses in once.";
+      "Indicates support for the configuration of a range of
+       multicast group IP addresses";
   }
 
   feature static-multicast-host-associations {
@@ -220,7 +228,7 @@ module bbf-mgmd {
        summarization and MGMD Membership Query suppression in order to
        reduce the load on the upstream multicast router.";
     reference
-      "RFC 4541 Section 2.1.1, bullet 2";
+      "RFC 4541 section 2.1.1, bullet 2";
   }
 
   identity unmatched-join-processing {
@@ -230,7 +238,7 @@ module bbf-mgmd {
        in the system, then there are various alternative ways on how
        to process the request.";
     reference
-      "TR-101 - R-238";
+      "TR-101 section 6.3.2.1.2, R-238";
   }
 
   identity unmatched-join-discard {
@@ -240,7 +248,7 @@ module bbf-mgmd {
        join a group address for which there is no configuration data
        in the system, then the system will discard the request.";
     reference
-      "TR-101 - R-238";
+      "TR-101 section 6.3.2.1.2, R-238";
   }
 
   identity unmatched-join-forward {
@@ -251,7 +259,7 @@ module bbf-mgmd {
        in the system, then the system will forward the MGMD message as
        regular data.";
     reference
-      "TR-101 - R-238";
+      "TR-101 section 6.3.2.1.2, R-238";
   }
 
   identity unmatched-join-snoop-or-proxy {
@@ -276,7 +284,7 @@ module bbf-mgmd {
         description
           "The action is to process MGMD Membership Reports even when
            granting them would result in requiring more bandwidth than
-           available on the interface. This can result in packet
+           available on the interface. This can result in frame
            loss.";
       }
     }
@@ -564,11 +572,9 @@ module bbf-mgmd {
         key "name";
         description
           "Multicast Virtual Private Network (VPN). A multicast VPN
-           defines the context of the multicast service.  A service
+           defines the context of the multicast service. A service
            operator may choose to configure a single multicast VPN or
            multiple multicast VPN (e.g., open access environment).";
-        reference
-          "TR-178";
         leaf name {
           type bbf-yang:string-ascii64;
           description
@@ -690,7 +696,8 @@ module bbf-mgmd {
                  there is no need to provide the possibility to
                  configure an address. Hence: deprecated.";
               reference
-                "RFC 3590, RFC 3810";
+                "RFC 3590;
+                 RFC 3810";
             }
           }
         }
@@ -728,7 +735,7 @@ module bbf-mgmd {
              joins; the other values specify how the multicast switch
              shall process the unauthorized joins.";
           reference
-            "TR-101 - R-238";
+            "TR-101 section 6.3.2.1.2, R-238";
         }
         leaf network-interface-for-unmatched-reports {
           when '../unmatched-join-processing = "bbf-mgmd:unmatched-'
@@ -749,7 +756,7 @@ module bbf-mgmd {
              configuration. It is the interface that is used to send
              MGMD Membership Reports, and inherent it is also the
              interface from which the system will receive the
-             related multicast packets.";
+             related multicast frames.";
         }
         list multicast-interface-to-host {
           key "name";
@@ -762,9 +769,8 @@ module bbf-mgmd {
              before granting requests to join a multicast address.";
           leaf name {
             type bbf-yang:string-ascii64;
-            must
-              "(count(../../bbf-mgmd:multicast-network-interface
-                                 [bbf-mgmd:name = current()]) = 0)" {
+            must "(count(../../bbf-mgmd:multicast-network-interface
+                              [bbf-mgmd:name = current()]) = 0)" {
               error-message
                 "The name of a multicast interface to host can not "
               + "be the name of a multicast network interface.";
@@ -804,7 +810,7 @@ module bbf-mgmd {
                  vlan-sub-interface. Configuring the current leaf
                  overrules this default and sets another VLAN
                  sub-interface to be used when further processing the
-                 MGMD message as data packet.";
+                 MGMD message as data frame.";
             }
             type if:interface-ref;
             must "derived-from-or-self(/if:interfaces/if:interface
@@ -822,7 +828,7 @@ module bbf-mgmd {
                function needs knowledge on a related datapath. For
                example for re-inserting MGMD Membership Reports for
                multicast group addresses for which there is no
-               configuration. Further packet processing, including
+               configuration. Further frame processing, including
                VLAN tag popping and or pushing, is subject to
                configuration of the referenced VLAN sub-interface.";
           }
@@ -895,7 +901,7 @@ module bbf-mgmd {
                concludes that accepting the MGMD request would result
                in a situation that more bandwith is needed than
                available on the host interface, then this request can
-               be accepted, possibly resulting in packet loss, or the
+               be accepted, possibly resulting in frame loss, or the
                request can be dropped.";
           }
           leaf-list multicast-package {
@@ -948,10 +954,9 @@ module bbf-mgmd {
                    single VLAN sub-interface as network interface.";
                 leaf vlan-sub-interface {
                   type if:interface-ref;
-                  must
-                    "derived-from-or-self(/if:interfaces
-                     /if:interface[if:name = current()]/if:type,
-                     'bbfift:vlan-sub-interface')" {
+                  must "derived-from-or-self(/if:interfaces
+                        /if:interface[if:name = current()]/if:type,
+                        'bbfift:vlan-sub-interface')" {
                     error-message
                       "The referenced interface must have the type "
                     + "vlan-sub-interface.";
@@ -998,7 +1003,8 @@ module bbf-mgmd {
                    Hence there is no need to provide the possibility
                    to configure an address. Hence: deprecated.";
                 reference
-                  "RFC 3590, RFC 3810";
+                  "RFC 3590;
+                   RFC 3810";
               }
             }
           }
@@ -1130,7 +1136,7 @@ module bbf-mgmd {
             description
               "The host interfaces that are associated to the
                multicast channel by configuration. I.e. hosts that
-               will receive the multicast packets (video traffic) of
+               will receive the multicast frames (video traffic) of
                this multicast channel.";
           }
         }
@@ -1288,7 +1294,7 @@ module bbf-mgmd {
               "Counts the total number of active multicast channels in
                the VPN.";
             reference
-              "TR-101 - R-217, multicast VLAN, item 1";
+              "TR-101 section 6.2.2.1, R-217, multicast VLAN, item 1";
           }
         }
         list active-channel {
@@ -1310,7 +1316,7 @@ module bbf-mgmd {
             description
               "The group IP Address of the active multicast channel.";
             reference
-              "RFC 5519 Section 5, mgmdHostCacheAddress";
+              "RFC 5519 section 5, mgmdHostCacheAddress";
           }
           leaf name {
             type bbf-yang:string-ascii64;
@@ -1366,7 +1372,7 @@ module bbf-mgmd {
                  multicast group, the exact number and identity (i.e.
                  IP address) of hosts receiving it.";
               reference
-                "TR-101 Section 6.2.1 RG Requirements, R-200";
+                "TR-101 section 6.2.1, RG Requirements, R-200";
             }
           }
           leaf uptime {
@@ -1376,7 +1382,7 @@ module bbf-mgmd {
               "The time elapsed since this multicast channel is
                active.";
             reference
-              "RFC 5519 Section 5, mgmdHostCacheUpTime";
+              "RFC 5519 section 5, mgmdHostCacheUpTime";
           }
         }
       }

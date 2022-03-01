@@ -29,8 +29,6 @@ module bbf-hardware {
 
      PS Leader:   Joey Boyd, ADTRAN
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
      WA Director: Joey Boyd, ADTRAN
 
      WA Director: Sven Ooghe, Nokia";
@@ -46,7 +44,7 @@ module bbf-hardware {
      components and augments the ietf-interfaces model to enable
      interfaces to reference hardware components.
 
-     Copyright (c) 2017-2020, Broadband Forum
+     Copyright (c) 2017-2022, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -86,9 +84,19 @@ module bbf-hardware {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a3; see
+     This version of this YANG module is part of TR-383a5; see
      the TR itself for full legal notices.";
 
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -143,9 +151,8 @@ module bbf-hardware {
   }
 
   augment "/hw:hardware/hw:component" {
-    when
-      "derived-from-or-self (hw:class, 'ianahw:chassis') or
-       derived-from-or-self (hw:class, 'ianahw:module')" {
+    when "derived-from-or-self (hw:class, 'ianahw:chassis') or
+          derived-from-or-self (hw:class, 'ianahw:module')" {
       description
         "Augment specific hardware components.";
     }
@@ -183,7 +190,7 @@ module bbf-hardware {
       description
         "Indicates that the component was reset. The reset can have
          been forced by the client using the action 'reset', or it can
-         be a autonomous reset trigered inside the managed device.";
+         be a autonomous reset triggered inside the managed device.";
       leaf reset-type {
         type identityref {
           base reset-type;
@@ -221,8 +228,13 @@ module bbf-hardware {
               /hw:component[hw:name=current()]/hw:class,
               'ianahw:port')" {
           error-message
-            "Referenced component is or is derived from class "
-          + "'port'.";
+            "The class of the referenced hardware component is "
+          + "neither derived from nor equal to 'port'.";
+          description
+            "An interface shall be associated to a hardware port
+             component, i.e., a component with the 'class' 'port' or
+             with the class an identity that is derived from a
+             'port'.";
         }
         min-elements 1;
         description

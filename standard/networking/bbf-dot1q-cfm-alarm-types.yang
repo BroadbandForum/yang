@@ -1,7 +1,11 @@
-module bbf-network-types {
+module bbf-dot1q-cfm-alarm-types {
   yang-version 1.1;
-  namespace "urn:bbf:yang:bbf-network-types";
-  prefix bbf-ntwrkt;
+  namespace "urn:bbf:yang:bbf-dot1q-cfm-alarm-types";
+  prefix bbf-cfm-alt;
+
+  import bbf-alarm-types {
+    prefix bbf-alt;
+  }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -21,14 +25,13 @@ module bbf-network-types {
      WA Director: Sven Ooghe, Nokia";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements on providing
-     network information associated with network functions.
+     supporting the Broadband Forum requirements on Connectivity Fault
+     Management (CFM) Operations, Administration, and Maintenance
+     (OAM) as applicable to access network equipment. As such, this
+     module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module defines common types associated with
-     network information.
-
-     This module contains a collection of YANG definitions for
-     types associated with BBF network information.
+     Specifically, this module contains a set of alarm definitions.
 
      Copyright (c) 2017-2022, Broadband Forum
 
@@ -83,82 +86,66 @@ module bbf-network-types {
                  <https://www.broadband-forum.org/technical/download/
                           TR-383_Amendment-5.pdf>";
   }
-  revision 2021-06-02 {
+
+  identity cfm-alarm-type-id {
+    base bbf-alt:bbf-alarm-type-id;
     description
-      "Amendment 4.
-       * Approval Date:    2021-06-02.
-       * Publication Date: 2021-06-02.";
+      "Base identity for Connectivity Fault Management (CFM) alarms.
+
+       This identity is abstract and SHOULD NOT generally be used for
+       alarms. If used to define an alarm that was not known at
+       design time, it MUST be qualified with an alarm type qualifier
+       string. This practice, however, should be generally avoided to
+       ensure all possible alarms are known at design time.";
+  }
+
+  identity cross-connect-ccm {
+    base bbf-cfm-alt:cfm-alarm-type-id;
+    description
+      "Indicates that the Maintenance Association Endpoint (MEP) has
+       received at least one Continuity Check Message (CCM) from
+       either another Maintenance Association Identifier (MAID) or a
+       lower Maintenance Domain (MD) level whose CCM Interval has not
+       yet timed out.";
     reference
-      "TR-383a4: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-4.pdf>";
+      "IEEE 802.1Q-2018 Section 20.23.3 and Table 20-1";
   }
 
-  identity deployment-type {
+  identity error-ccm {
+    base bbf-cfm-alt:cfm-alarm-type-id;
     description
-      "Base identity from which specific network deployment types are
-       derived.";
+      "Indicates that the MEP has received at least one invalid CCM
+       whose CCM Interval has not yet timed out.";
+    reference
+      "IEEE 802.1Q-2018 Section 20.21.3 and Table 20-1";
   }
 
-  identity access-deployment-type {
-    base deployment-type;
+  identity remote-ccm {
+    base bbf-cfm-alt:cfm-alarm-type-id;
     description
-      "Derived identity for access network specific deployment
-       types.";
+      "Indicates that the MEP is not receiving valid CCMs from at
+       least one of the remote MEPs.";
+    reference
+      "IEEE 802.1Q-2018 Section 20.35.5 and Table 20-1";
   }
 
-  identity fttx-type {
-    base access-deployment-type;
+  identity mac-status {
+    base bbf-cfm-alt:cfm-alarm-type-id;
     description
-      "Derived identity from which specific access 'fiber to the x'
-       (FTTx) types are derived.";
+      "Indicates that either some remote MEP is reporting its
+       Interface Status TLV as not isUp, or all remote MEPs are
+       reporting a Port Status TLV that contains some value other
+       than psUp.";
+    reference
+      "IEEE 802.1Q-2018 Section 20.35.6 and Table 20-1";
   }
 
-  identity ftth {
-    base fttx-type;
+  identity rdi-ccm {
+    base bbf-cfm-alt:cfm-alarm-type-id;
     description
-      "Fiber to the home.";
-  }
-
-  identity fttdp {
-    base fttx-type;
-    description
-      "Fiber to the distribution point.";
-  }
-
-  identity fttb {
-    base fttx-type;
-    description
-      "Fiber to the building.";
-  }
-
-  identity fttcab {
-    base fttx-type;
-    description
-      "Fiber to the cabinet.";
-  }
-
-  identity ftte {
-    base fttx-type;
-    description
-      "Fiber to the equipment.";
-  }
-
-  identity distribution-frame-type {
-    description
-      "Base identity from which specific distribution frame types are
-       derived.";
-  }
-
-  identity copper-distribution-frame {
-    base distribution-frame-type;
-    description
-      "The copper distribution frame.";
-  }
-
-  identity optical-distribution-frame {
-    base distribution-frame-type;
-    description
-      "The optical distribution frame.";
+      "Indicates that at least one remote MEP reported the Remote
+       Defect Indication (RDI) bit in its last CCM.";
+    reference
+      "IEEE 802.1Q-2018 Section 20.35.7 and Table 20-1";
   }
 }

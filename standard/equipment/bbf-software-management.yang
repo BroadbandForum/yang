@@ -1,0 +1,1668 @@
+module bbf-software-management {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-software-management";
+  prefix bbf-swm;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ietf-hardware {
+    prefix hw;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, ADTRAN
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, ADTRAN
+
+     WA Director: Joey Boyd, ADTRAN
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on software
+     management as applicable to access network equipment. As such,
+     this module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     This module augments ietf-hardware.
+
+     Copyright (c) 2017-2022, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a5; see
+     the TR itself for full legal notices.";
+
+  revision 2022-03-01 {
+    description
+      "Amendment 5.
+       * Approval Date:    2022-03-01.
+       * Publication Date: 2022-03-01.";
+    reference
+      "TR-383a5: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-5.pdf>";
+  }
+
+  feature software-management-actions {
+    description
+      "Indicates that a client may invoke actions on revisions of a
+       software to execute activities to manage those revisions.
+
+       Note that if a system does not support this feature, this YANG
+       data model would nevertheless allow a client to monitor
+       software that is managed via an alternative management
+       interface.";
+  }
+
+  feature download-target-selection-by-user {
+    description
+      "Indicates support for allowing the user to select a specific
+       entry in the revision list to use as a target when downloading
+       revisions.
+
+       If a system supports a capability derived from 'download' for
+       software, the system must support at least one of the features
+       'download-target-selection-by-user' or
+       'download-target-selection-by-system'.";
+  }
+
+  feature download-target-selection-by-system {
+    description
+      "Indicates support for allowing the system to select an entry in
+       the revision list to use as a target when downloading
+       revisions.
+
+       If a system supports a capability derived from 'download' for
+       software, the system must support at least one of the features
+       'download-target-selection-by-user' or
+       'download-target-selection-by-system'.";
+  }
+
+  identity error-tag {
+    description
+      "Base identity for all error tags defined in this module.
+
+       This identity is abstract and SHOULD NOT generally be used as a
+       value referenced by a leaf when reporting errors. If used to
+       define an error that was not known at design time, it SHOULD be
+       qualified with a corresponding description provided as
+       additional information suitable for human display.";
+  }
+
+  identity general-error {
+    base error-tag;
+    description
+      "Base identity for all error tags reporting general errors.
+
+       This identity is abstract and SHOULD NOT generally be used as a
+       value referenced by a leaf when reporting errors. If used to
+       define an error that was not known at design time, it SHOULD be
+       qualified with a corresponding description provided as
+       additional information suitable for human display.";
+  }
+
+  identity component-busy {
+    base general-error;
+    description
+      "The associated action could not be processed, because the
+       target component is busy.";
+  }
+
+  identity too-many-requests {
+    base general-error;
+    description
+      "The device has too many requests in progress and cannot
+       accept any more.";
+  }
+
+  identity request-not-supported {
+    base general-error;
+    description
+      "The request is not supported by the component.";
+  }
+
+  identity unexpected-error {
+    base general-error;
+    description
+      "An unexpected error has occurred that is not covered by the
+       other errors. ";
+  }
+
+  identity download-error {
+    base error-tag;
+    description
+      "Base identity for all error tags reporting errors that occur
+       during the downloading of a software revision from a file
+       server.
+
+       This identity is abstract and SHOULD NOT generally be used as a
+       value referenced by a leaf when reporting errors. If used to
+       define an error that was not known at design time, it SHOULD be
+       qualified with a corresponding description provided as
+       additional information suitable for human display.";
+  }
+
+  identity protocol-error {
+    base download-error;
+    description
+      "Base identity for all error tags reporting protocol-related
+       errors.
+
+       This identity is abstract and SHOULD NOT generally be used as a
+       value referenced by a leaf when reporting errors. If used to
+       define an error that was not known at design time, it SHOULD be
+       qualified with a corresponding description provided as
+       additional information suitable for human display.";
+  }
+
+  identity protocol-not-supported-by-peer {
+    base protocol-error;
+    description
+      "The protocol in the form requested by the device (possibly as
+       a result of configuration) is not supported by the peer.";
+  }
+
+  identity protocol-execution-error {
+    base protocol-error;
+    description
+      "An error was encountered in the execution of the protocol.";
+  }
+
+  identity connection-error {
+    base download-error;
+    description
+      "Base identity for all error tags reporting errors relating to
+       the connection to the remote peer.
+
+       This identity is abstract and SHOULD NOT generally be used as a
+       value referenced by a leaf when reporting errors. If used to
+       define an error that was not known at design time, it SHOULD be
+       qualified with a corresponding description provided as
+       additional information suitable for human display.";
+  }
+
+  identity service-unavailable {
+    base connection-error;
+    description
+      "A connection could not be established, because the peer could
+       not handle the request, for example, because it may be
+       overloaded or down for maintenance.";
+  }
+
+  identity bad-gateway {
+    base connection-error;
+    description
+      "The peer was acting as a gateway or proxy and received an
+       invalid response from the upstream peer.";
+  }
+
+  identity gateway-timeout {
+    base connection-error;
+    description
+      "The peer was acting as a gateway or proxy and did not receive a
+       timely response from the upstream peer.";
+  }
+
+  identity invalid-inet-address {
+    base connection-error;
+    description
+      "The specified Internet address of the peer is invalid.";
+  }
+
+  identity network-authentication-required {
+    base connection-error;
+    description
+      "The connection could not be completed, because authentication
+       is required to access the network.";
+  }
+
+  identity remote-peer-not-reachable {
+    base connection-error;
+    description
+      "No response was received from the remote peer.";
+  }
+
+  identity data-connection-cannot-be-opened {
+    base connection-error;
+    description
+      "Although the peer could be reached, it was not possible to open
+       a data connection.";
+  }
+
+  identity connection-refused-by-peer {
+    base connection-error;
+    description
+      "The remote peer refused the connection.";
+  }
+
+  identity connection-reset-by-peer {
+    base connection-error;
+    description
+      "The remote peer reset the connection.";
+  }
+
+  identity request-refused-by-peer {
+    base connection-error;
+    description
+      "The remote peer refused the request made by the local
+       device over an existing connection.";
+  }
+
+  identity request-aborted-by-peer {
+    base connection-error;
+    description
+      "The remote peer has aborted the ongoing request made by the
+       local device.";
+  }
+
+  identity connection-time-out {
+    base connection-error;
+    description
+      "A response from the peer has taken too long and the device
+       timed-out the connection.";
+  }
+
+  identity url-too-long {
+    base connection-error;
+    description
+      "The specified URL is too long.";
+  }
+
+  identity authentication-error {
+    base download-error;
+    description
+      "Base identity for all error tags reporting authentication
+       errors.
+
+       This identity is abstract and SHOULD NOT generally be used as a
+       value referenced by a leaf when reporting errors. If used to
+       define an error that was not known at design time, it SHOULD be
+       qualified with a corresponding description provided as
+       additional information suitable for human display.";
+  }
+
+  identity authentication-required {
+    base authentication-error;
+    description
+      "Authentication is required by the peer, but was not
+       configured.";
+  }
+
+  identity authentication-mode-not-supported {
+    base authentication-error;
+    description
+      "The specified authentication mode is not supported by the
+       peer.";
+  }
+
+  identity invalid-username-or-password {
+    base authentication-error;
+    description
+      "The specified user and/or password is not valid.";
+  }
+
+  identity remote-file-system-error {
+    base download-error;
+    description
+      "Base identity for all error tags reporting file system errors
+       at the remote peer.
+
+       This identity is abstract and SHOULD NOT generally be used as a
+       value referenced by a leaf when reporting errors. If used to
+       define an error that was not known at design time, it SHOULD be
+       qualified with a corresponding description provided as
+       additional information suitable for human display.";
+  }
+
+  identity access-denied {
+    base remote-file-system-error;
+    description
+      "Access to the file referenced in the request was denied by
+       the remote peer.";
+  }
+
+  identity file-not-found {
+    base remote-file-system-error;
+    description
+      "The file referenced in the request was not found on the
+       remote peer.";
+  }
+
+  identity invalid-file-name {
+    base remote-file-system-error;
+    description
+      "The file name referenced in the request is not valid.";
+  }
+
+  identity invalid-path {
+    base remote-file-system-error;
+    description
+      "The file path referenced in the request is not valid.";
+  }
+
+  identity file-locked {
+    base remote-file-system-error;
+    description
+      "The file referenced in the request is locked on the remote
+       peer.";
+  }
+
+  identity invalid-file-size {
+    base remote-file-system-error;
+    description
+      "The size of the file referenced in the request is not valid.";
+  }
+
+  identity local-file-system-error {
+    base download-error;
+    description
+      "Base identity for all error tags reporting file system errors
+       at the device.
+
+       This identity is abstract and SHOULD NOT generally be used as a
+       value referenced by a leaf when reporting errors. If used to
+       define an error that was not known at design time, it SHOULD be
+       qualified with a corresponding description provided as
+       additional information suitable for human display.";
+  }
+
+  identity insufficient-storage-space {
+    base local-file-system-error;
+    description
+      "The available local storage is insufficient to download a
+       revision.";
+  }
+
+  identity maximum-number-of-revisions-reached {
+    base local-file-system-error;
+    description
+      "A new revision cannot be downloaded, because the maximum
+       number of revisions supported by the device has been reached.";
+  }
+
+  identity processing-error {
+    base error-tag;
+    description
+      "Base identity for all error tags reporting processing errors
+       occurring at a component.
+
+       This identity is abstract and SHOULD NOT generally be used as a
+       value referenced by a leaf when reporting errors. If used to
+       define an error that was not known at design time, it SHOULD be
+       qualified with a corresponding description provided as
+       additional information suitable for human display.";
+  }
+
+  identity action-aborted {
+    base processing-error;
+    description
+      "The associated action was aborted by the client.";
+  }
+
+  identity cannot-overwrite-revision {
+    base processing-error;
+    description
+      "The target revision could not be overwritten.";
+  }
+
+  identity revision-not-valid {
+    base processing-error;
+    description
+      "Base identity for all error tags reporting that a revision is
+       invalid following its download.
+
+       This identity is abstract and SHOULD NOT generally be used as a
+       value referenced by a leaf when reporting errors. If used to
+       define an error that was not known at design time, it SHOULD be
+       qualified with a corresponding description provided as
+       additional information suitable for human display.";
+  }
+
+  identity incompatible-version {
+    base revision-not-valid;
+    description
+      "The version of the revision that was downloaded is not
+       compatible with the software.";
+  }
+
+  identity revision-corrupt {
+    base revision-not-valid;
+    description
+      "The downloaded revision is corrupted.";
+  }
+
+  identity unsupported-format {
+    base revision-not-valid;
+    description
+      "The downloaded revision is in a format the is not supported
+       by the device.";
+  }
+
+  identity revision-cannot-be-extracted-from-archive {
+    base revision-not-valid;
+    description
+      "The downloaded file was an archive, but a revision could not
+       be extracted from the archive.";
+  }
+
+  identity incorrect-hash {
+    base revision-not-valid;
+    description
+      "The hash associated with the revision is incorrect.";
+  }
+
+  identity unsupported-hash-algorithm {
+    base revision-not-valid;
+    description
+      "The algorithm used to calculate the hash associated with a
+       revision is not supported by the device.";
+  }
+
+  identity cannot-abort {
+    base processing-error;
+    description
+      "The associated ongoing activity cannot be aborted.";
+  }
+
+  identity already-completed {
+    base processing-error;
+    description
+      "The associated activity had already completed and cannot be
+       aborted.";
+  }
+
+  identity install-error {
+    base processing-error;
+    description
+      "Base identity for all error tags reporting errors during the
+       installation of a revision.
+
+       This identity is abstract and SHOULD NOT generally be used as a
+       value referenced by a leaf when reporting errors. If used to
+       define an error that was not known at design time, it SHOULD be
+       qualified with a corresponding description provided as
+       additional information suitable for human display.";
+  }
+
+  identity incompatible-upgrade-or-downgrade-path {
+    base install-error;
+    description
+      "The revision cannot be activated or committed, because an
+       upgrade or downgrade of the software from the currently
+       committed revision is not supported as part of the
+       upgrade/downgrade path for the software.";
+  }
+
+  identity invalid-product-license {
+    base install-error;
+    description
+      "The revision is licensed, but the device does not possess a
+       valid license for the revision to activate or commit it.
+
+       Note that how the device obtains and manages a license for a
+       revision is beyond the scope of this model.";
+  }
+
+  identity database-conversion-failed {
+    base install-error;
+    description
+      "At an upgrade or downgrade, an existing database required
+       conversion to be compatible with the newer or older software,
+       but this conversion failed.";
+  }
+
+  identity cannot-delete-revision {
+    base processing-error;
+    description
+      "The revision could not be deleted.";
+  }
+
+  identity metadata-mismatch {
+    base processing-error;
+    description
+      "The metadata of the revisions listed for the software in the
+       operational state datastore at the time the action was invoked
+       by the client is not identical to the metadata retrieved from
+       the component immediately prior to execution of the activity
+       resulting from the invocation of the action, i.e., the state
+       of the revisions on the component has changed.";
+  }
+
+  identity component-not-responding {
+    base processing-error;
+    description
+      "The component is not responding to requests.";
+  }
+
+  identity capability {
+    description
+      "Base identity for defining capabilities available to a client
+       to manage a given software.";
+  }
+
+  identity download {
+    base capability;
+    description
+      "Base identity for defining capabilities indicating support for
+       downloading revisions within this YANG data model.
+
+       This identity is abstract and MUST NOT be used to advertise
+       support for a capability. ";
+  }
+
+  identity download-target-selection-by-user {
+    if-feature "download-target-selection-by-user";
+    base download;
+    description
+      "Indicates that for the given software, the specific target
+       revision in the list of revisions for that software to be used
+       to store the downloaded revision can be selected by the user
+       when invoking the action 'download' for that software.";
+  }
+
+  identity download-target-selection-by-system {
+    if-feature "download-target-selection-by-system";
+    base download;
+    description
+      "Indicates that for the given software, the target revision in
+       the list of revisions for that software to be used to store the
+       downloaded revision can be selected automatically by the system
+       based on specific selection criteria when invoking the action
+       'download' for that software.";
+  }
+
+  identity validate {
+    base capability;
+    description
+      "Indicates that the software supports validating revisions.";
+  }
+
+  identity activate {
+    base capability;
+    description
+      "Indicates that the software supports activating revisions.
+
+       Note that a system may advertise the support for activating
+       revisions even if the feature 'software-management-actions' is
+       not supported by the system. In this case activation may only
+       be possible via an alternative management interface.";
+  }
+
+  identity commit {
+    base capability;
+    description
+      "Indicates that the software supports committing revisions.
+
+       Note that a system may advertise the support for committing
+       revisions even if the feature 'software-management-actions' is
+       not supported by the system. In this case committing a revision
+       may only be possible via an alternative management interface.";
+  }
+
+  identity delete {
+    base capability;
+    description
+      "Indicates that the software supports deleting revisions.";
+  }
+
+  identity alias {
+    base capability;
+    description
+      "Indicates that the software supports assigning an alias to a
+       revision.";
+  }
+
+  grouping error {
+    description
+      "Data nodes associated with an error.";
+    leaf tag {
+      type identityref {
+        base error-tag;
+      }
+      config false;
+      mandatory true;
+      description
+        "Identifies the error that occurred.";
+    }
+    leaf message {
+      type string;
+      config false;
+      description
+        "Identifies the error or provides additional information
+         on the given error as a string suitable for human display.";
+    }
+  }
+
+  grouping source-of-a-download {
+    description
+      "Data nodes defining the source of a download.";
+    choice source {
+      description
+        "Information pertaining to the original source of the
+         revision, including any information required to access that
+         revision.";
+      case url {
+        leaf url {
+          type inet:uri;
+          description
+            "URL containing the information required to download the
+             specified file including the protocol, IP address, file
+             path, file name, etc.";
+        }
+      }
+    }
+  }
+
+  grouping revision-metadata {
+    description
+      "Data nodes defining the metadata of a revision.";
+    leaf version {
+      type string;
+      description
+        "Reports the version of the software revision.";
+    }
+    leaf product-code {
+      type string;
+      description
+        "Reports the product code information of the software
+         revision, if applicable.
+
+         Note that this leaf is not to be instantiated, if no valid
+         product code for the revision is available.";
+    }
+    leaf hash {
+      type string;
+      description
+        "Reports the hash value calculated by the corresponding hash
+         function on completion of the download of the software
+         revision, if applicable.
+
+         Note that this leaf is not to be instantiated, if no valid
+         hash for the revision is available.";
+    }
+    container source {
+      description
+        "Information regarding the original source of
+         the revision, from which it was downloaded.";
+      uses source-of-a-download;
+    }
+  }
+
+  augment "/hw:hardware/hw:component" {
+    description
+      "An augmentation of a hardware component to add support for the
+       management of software. The usage of such software can be for
+       a variety of purposes and this model makes no assumptions
+       about what the 'software' actually is. Examples could be an
+       executable application software image, a firmware image for an
+       onboard chip, or even an executable script.";
+    container software {
+      presence
+        "The component supports management of at least one software.";
+      config false;
+      description
+        "Hardware component data nodes, actions and notifications
+         associated with software.";
+      list software {
+        key "name";
+        min-elements 1;
+        description
+          "A software that is manageable on this component.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "The name associated with this software. For a given
+             component, there may be more than one type of software
+             being managed, e.g. application software, firmware or
+             FPGA firmware. The name should represent this
+             association, e.g. 'firmware'.";
+        }
+        leaf-list capability {
+          type identityref {
+            base capability;
+          }
+          description
+            "A capability supported by the server for this software.";
+        }
+        container revisions {
+          must "count(bbf-swm:revision[bbf-swm:is-active = 'true'])"
+             + " <= 1" {
+            error-message "Only one active revision is allowed.";
+            description
+              "Ensure that there is only one active revision.";
+          }
+          must
+            "count(bbf-swm:revision[bbf-swm:is-committed = 'true'])"
+          + " <= 1" {
+            error-message "Only one committed revision is allowed.";
+            description
+              "Ensure that there is only one committed revision.";
+          }
+          description
+            "Information and actions applicable to all revisions of
+             the given software.";
+          leaf maximum-number-of-revisions {
+            type uint16 {
+              range "1..max";
+            }
+            description
+              "If the device supports a known limited number of
+               revisions, this node will report the maximum number of
+               revisions supported by the device.";
+          }
+          container download {
+            when "derived-from(../../bbf-swm:capability,"
+               + "'bbf-swm:download')"
+               + " and "
+               + "count(../bbf-swm:revision"
+               + "[bbf-swm:state='downloading'])=0" {
+              description
+                "Only applicable if downloading of revisions for this
+                 software is supported and no other download of a
+                 revision for this software is currently in
+                 progress.";
+            }
+            description
+              "Provides containment for the action 'download'.";
+            action download {
+              if-feature "software-management-actions";
+              description
+                "Download the specified software revision to this
+                 component.
+
+                 Successful invocation of this action results in the
+                 immediate creation or reuse of the entry in the list
+                 'revision' referenced by the leaf 'id' in the output
+                 element of this action.
+
+                 No entry is created or reused in the list 'revision',
+                 if the invocation of this action is unsuccessful.
+
+                 If an implementation of the model limits the maximum
+                 number of entries in the list 'revision', the maximum
+                 number of supported entries should be reported in the
+                 leaf 'maximum-number-of-revisions'.
+
+                 Note that a download of a revision for the software
+                 is only possible, if no download of any revision for
+                 that software is in progress.
+
+                 If errors occur during the processing of this action,
+                 'error-app-tag' and 'error-message' in the
+                 error information returned by the server are to be
+                 populated as follows:
+
+                   error-app-tag: A string in the form
+                                    <module-name>:<identity>
+                                  where <identity> is a string version
+                                  of an identity value based on the
+                                  identity 'bbf-swm:error-tag' that
+                                  describes the reason the error
+                                  occurred and <module-name> is the
+                                  name of the module in which the
+                                  identity is defined; equivalent to
+                                  the data nodes 'tag' defined within
+                                  this model.
+
+                   error-message: A text string describing the cause
+                                  of the error when either no defined
+                                  reason exists or additional
+                                  information is available beyond that
+                                  defined by the tag itself;
+                                  equivalent to the data nodes
+                                  'message' defined within this
+                                  model.";
+              input {
+                container source {
+                  description
+                    "The source of the download.";
+                  uses source-of-a-download {
+                    refine "source" {
+                      mandatory true;
+                    }
+                  }
+                }
+                container target {
+                  description
+                    "The target of the download.";
+                  choice target {
+                    mandatory true;
+                    description
+                      "The target entry in the list 'revision' for
+                       the download, including how the entry is to be
+                       selected.";
+                    case selected-by-user {
+                      when "../../../.."
+                         + "/bbf-swm:capability="
+                         + "'bbf-swm:"
+                         + "download-target-selection-by-user'" {
+                        description
+                          "Only applicable if the software
+                           supports the case 'selected-by-user'.";
+                      }
+                      if-feature "download-target-selection-by-user";
+                      container selected-by-user {
+                        description
+                          "Data nodes to allow the user to specify an
+                           entry in the list 'revision' to use as the
+                           target for the download.";
+                        leaf operation {
+                          type enumeration {
+                            enum create {
+                              description
+                                "Create a new entry in the list
+                                 'revision'.
+
+                                 If there are insufficient resources
+                                 to create a new entry, the action
+                                 will not download the revision, will
+                                 not modify the list 'revision' and
+                                 will report an error.";
+                            }
+                            enum replace {
+                              description
+                                "Replace an existing entry in the
+                                 list 'revision' as defined by the
+                                 selection criteria within the
+                                 container '../replace'.
+
+                                 If no entry satisfies the selection
+                                 criteria, the action will not
+                                 download the revision, will not
+                                 modify the list 'revision' and will
+                                 report an error.";
+                            }
+                          }
+                          mandatory true;
+                          description
+                            "The operation to be performed on the list
+                             'revision' to download the revision.";
+                        }
+                        container replace {
+                          when "../bbf-swm:operation='replace'" {
+                            description
+                              "This container is only applicable if
+                               the replace operation is selected.";
+                          }
+                          description
+                            "Defines criteria that are to apply when
+                             selecting an entry in the list 'revision'
+                             when replacing a revision.";
+                          choice selection-criteria {
+                            mandatory true;
+                            description
+                              "Selects the criteria to identify which
+                               entry in the list 'revision' should
+                               be replaced.";
+                            case id {
+                              description
+                                "This case specifies that the action
+                                 is to replace the entry within the
+                                 list 'revision' with the specified
+                                 'id'. The entry must be neither
+                                 active nor committed, if
+                                 applicable.";
+                              leaf id {
+                                type leafref {
+                                  path "../../../../../../.."
+                                     + "/bbf-swm:revisions"
+                                     + "/bbf-swm:revision"
+                                     + "/bbf-swm:id";
+                                }
+                                must "not(../../../../../../.."
+                                   + "/bbf-swm:capability="
+                                   + "'bbf-swm:activate')"
+                                   + " or "
+                                   + "((../../../../../../.."
+                                   + "/bbf-swm:capability="
+                                   + "'bbf-swm:activate')"
+                                   + " and "
+                                   + "(../../../../../../.."
+                                   + "/bbf-swm:revisions"
+                                   + "/bbf-swm:revision"
+                                   + "[bbf-swm:id=current()]"
+                                   + "/bbf-swm:is-active='false'))" {
+                                  error-message
+                                    "The revision specified to be "
+                                  + "replaced is active.";
+                                  description
+                                    "Ensure that the referenced
+                                     revision is not currently
+                                     active.";
+                                }
+                                must
+                                  "not(../../../../../../.."
+                                + "/bbf-swm:capability="
+                                + "'bbf-swm:commit')"
+                                + " or "
+                                + "((../../../../../../.."
+                                + "/bbf-swm:capability="
+                                + "'bbf-swm:commit')"
+                                + " and "
+                                + "(../../../../../../.."
+                                + "/bbf-swm:revisions"
+                                + "/bbf-swm:revision"
+                                + "[bbf-swm:id=current()]"
+                                + "/bbf-swm:is-committed='false'))" {
+                                  error-message
+                                    "The revision specified to be "
+                                  + "replaced is committed.";
+                                  description
+                                    "Ensure that the referenced
+                                     revision is not currently
+                                     committed.";
+                                }
+                                mandatory true;
+                                description
+                                  "The value of the leaf 'id' of an
+                                   existing entry in the list
+                                   'revision' that identifies the
+                                   entry which is to be replaced. ";
+                              }
+                            }
+                            case alias {
+                              when "boolean(../../../../../.."
+                                 + "/bbf-swm:capability="
+                                 + "'bbf-swm:alias')" {
+                                description
+                                  "Only applicable if the software
+                                   supports the assignment of an
+                                   alias to a revision.";
+                              }
+                              description
+                                "This case specifies that the action
+                                 is to replace the entry in the list
+                                 'revision' with the specified
+                                 'alias'. The entry must be neither
+                                 active nor committed, if
+                                 applicable.";
+                              leaf alias {
+                                type leafref {
+                                  path "../../../../../../.."
+                                     + "/bbf-swm:revisions"
+                                     + "/bbf-swm:revision"
+                                     + "/bbf-swm:alias";
+                                }
+                                must "not(../../../../../../.."
+                                   + "/bbf-swm:capability="
+                                   + "'bbf-swm:activate')"
+                                   + " or "
+                                   + "((../../../../../../.."
+                                   + "/bbf-swm:capability="
+                                   + "'bbf-swm:activate')"
+                                   + " and "
+                                   + "(../../../../../../.."
+                                   + "/bbf-swm:revisions"
+                                   + "/bbf-swm:revision"
+                                   + "[bbf-swm:alias=current()]"
+                                   + "/bbf-swm:is-active='false'))" {
+                                  error-message
+                                    "The revision specified to be "
+                                  + "replaced is active.";
+                                  description
+                                    "Ensure that the referenced
+                                     revision is not currently
+                                     active.";
+                                }
+                                must
+                                  "not(../../../../../../.."
+                                + "/bbf-swm:capability="
+                                + "'bbf-swm:commit')"
+                                + " or "
+                                + "((../../../../../../.."
+                                + "/bbf-swm:capability="
+                                + "'bbf-swm:commit')"
+                                + " and "
+                                + "(../../../../../../.."
+                                + "/bbf-swm:revisions"
+                                + "/bbf-swm:revision"
+                                + "[bbf-swm:alias=current()]"
+                                + "/bbf-swm:is-committed='false'))" {
+                                  error-message
+                                    "The revision specified to be "
+                                  + "replaced is committed.";
+                                  description
+                                    "Ensure that the referenced
+                                     revision is not currently
+                                     committed.";
+                                }
+                                mandatory true;
+                                description
+                                  "The value of the leaf 'alias' of
+                                   an existing entry in the list
+                                   'revision' that identifies the
+                                   entry which is to be replaced. ";
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                    case selected-by-system {
+                      when "../../../.."
+                         + "/bbf-swm:capability="
+                         + "'bbf-swm:"
+                         + "download-target-selection-by-system'" {
+                        description
+                          "Only applicable if the software
+                           supports the case 'selected-by-system'.";
+                      }
+                      if-feature
+                        "download-target-selection-by-system";
+                      container selected-by-system {
+                        description
+                          "Defines how the system is to select an
+                           entry in the list 'revision' to use as
+                           a target for the download.";
+                        leaf operation {
+                          type enumeration {
+                            enum create-or-replace {
+                              description
+                                "Preferably create a new entry in the
+                                 list 'revision'.
+
+                                 If there are insufficient resources
+                                 to create a new entry, replace an
+                                 existing entry, if and only if it
+                                 fulfills the selection criteria
+                                 defined within the container
+                                 '../replace'.
+
+                                 If no entry fulfills the selection
+                                 criteria, the action will not
+                                 download the revision, will not
+                                 modify the list 'revision' and will
+                                 report an error.";
+                            }
+                            enum replace-or-create {
+                              description
+                                "Preferably replace an existing entry
+                                 in the list 'revision', if and only
+                                 if it fulfills the selection criteria
+                                 defined within the container
+                                 '../replace'.
+
+                                 If no entry satisfies the selection
+                                 criteria, create a new entry.
+
+                                 If sufficient resources are not
+                                 available to create a new entry, the
+                                 action will not download the
+                                 revision, will not modify the list
+                                 'revision' and will report an
+                                 error.";
+                            }
+                            enum replace {
+                              description
+                                "Replace an existing entry in the list
+                                 'revision' and then if and only if
+                                 it fulfills the selection criteria
+                                 defined within the container
+                                 '../replace'.
+                                 If no entry fulfills the selection
+                                 criteria, the action will not
+                                 download the revision, will not
+                                 modify the list 'revision' and will
+                                 report an error.";
+                            }
+                          }
+                          mandatory true;
+                          description
+                            "The operation to be performed by the
+                             system on the list 'revision' to download
+                             the revision.";
+                        }
+                        container replace {
+                          description
+                            "Defines criteria that are to apply when
+                             the system selects an entry in the list
+                             'revision' when replacing a revision.";
+                          leaf not-available-only {
+                            type boolean;
+                            default "true";
+                            description
+                              "If 'true' this action may only replace
+                               an entry in the list 'revision' whose
+                               leaf 'state' is set to 'not-available'
+                               and which fulfills all other selection
+                               criteria.
+
+                               If 'false' this action may replace an
+                               entry in the list 'revision' whose
+                               leaf 'state' is set to 'not-available'
+                               or whose leaf 'state' is set to
+                               'available', but which is neither
+                               active nor committed, and which
+                               fulfills all other selection
+                               criteria.";
+                          }
+                          leaf oldest-only {
+                            type boolean;
+                            default "true";
+                            description
+                              "If 'true' this action may only replace
+                               the oldest entry in the list
+                               'revision', which is neither active
+                               nor committed, and which fulfills all
+                               other selection criteria.
+
+                               If 'false' this action may replace any
+                               entry in the revision list of any age,
+                               which is neither active nor committed,
+                               and which fulfills all other selection
+                               criteria. The selection algorithm in
+                               this case is implementation specific.";
+                          }
+                        }
+                      }
+                    }
+                  }
+                  leaf alias {
+                    when "boolean(../../../../.."
+                       + "/bbf-swm:capability='bbf-swm:alias')" {
+                      description
+                        "Only applicable if the software supports
+                         the assignment of an alias to a revision.";
+                    }
+                    type bbf-yang:string-ascii64;
+                    must '(../bbf-swm:selected-by-user'
+                       + '/bbf-swm:replace/bbf-swm:alias=.)'
+                       + ' or '
+                       + '(../../../../..'
+                       + '/bbf-swm:revisions'
+                       + '/bbf-swm:revision'
+                       + '[bbf-swm:id=current()/../selected-by-user'
+                       + '/replace/id]/bbf-swm:alias=.)'
+                       + ' or '
+                       + '(count(../../../../..'
+                       + '/bbf-swm:revisions'
+                       + '/bbf-swm:revision'
+                       + '[bbf-swm:alias=current()])=0)' {
+                      error-message
+                        "The specified alias to be assigned to the "
+                      + "revision is already in use.";
+                      description
+                        "Ensure that the alias is does not already
+                         exist unless replacing a revision with that
+                         alias.";
+                    }
+                    description
+                      "An optional 'alias' to be assigned to the
+                       revision.
+
+                       If the 'selected-by-user' option is selected,
+                       the value of this leaf may be identical to
+                       the value of the leaf 'alias' of the revision
+                       selected to be replaced, otherwise the value of
+                       this leaf must not be equal to the value of
+                       the leaf 'alias' of any existing revision.";
+                  }
+                }
+              }
+              output {
+                container target {
+                  presence
+                    "A target entry in the revision list for the
+                     download was successfully selected.";
+                  description
+                    "The selected target for the download.";
+                  leaf id {
+                    type uint8;
+                    mandatory true;
+                    description
+                      "The unique 'id' of the entry in the list
+                       'revision' which has been selected as the
+                       target for the download.";
+                  }
+                  container replaces {
+                    presence
+                      "Indicates that an existing entry referenced by
+                       '../id' in the list 'revision' has been
+                       replaced by this action.";
+                    description
+                      "Reports the metadata for the previous entry in
+                       the list 'revision' that is now being replaced
+                       by the revision being downloaded.";
+                    leaf alias {
+                      when "boolean(../../../../../.."
+                         + "/bbf-swm:capability='bbf-swm:alias')" {
+                        description
+                          "Only applicable if the 'alias' capability
+                           is supported.";
+                      }
+                      type bbf-yang:string-ascii64;
+                      description
+                        "An 'alias' name for the revision.";
+                    }
+                    uses revision-metadata;
+                  }
+                }
+              }
+            }
+          }
+          notification revision-deleted {
+            description
+              "Indicates that a particular software revision was
+               deleted from the list of available revisions.";
+            leaf id {
+              type uint8;
+              mandatory true;
+              description
+                "The unique identifier of the software revision that
+                 was deleted.";
+            }
+            leaf alias {
+              when "boolean(../../../bbf-swm:capability="
+                 + "'bbf-swm:alias')" {
+                description
+                  "Only applicable if the 'alias' capability is
+                   supported.";
+              }
+              type bbf-yang:string-ascii64;
+              description
+                "An 'alias' name for the revision.";
+            }
+            uses revision-metadata;
+          }
+          list revision {
+            key "id";
+            unique "alias";
+            description
+              "A revision available on the component for a given
+               software managed on that component.";
+            leaf id {
+              type uint8;
+              description
+                "A unique identifier for the software revision. ";
+            }
+            leaf alias {
+              when "boolean(../../../bbf-swm:capability="
+                 + "'bbf-swm:alias')" {
+                description
+                  "Only applicable if the 'alias' capability is
+                   supported.";
+              }
+              type bbf-yang:string-ascii64;
+              description
+                "An 'alias' name for the revision.";
+            }
+            leaf state {
+              type enumeration {
+                enum downloading {
+                  description
+                    "The revision is currently being downloaded.";
+                }
+                enum not-available {
+                  description
+                    "The revision could not be successfully downloaded
+                     or has been downloaded, but could not be verified
+                     as a valid revision. ";
+                }
+                enum available {
+                  description
+                    "The revision has been successfully downloaded,
+                     if applicable, has been verified as valid, but
+                     is neither active nor committed.";
+                }
+                enum in-use {
+                  description
+                    "The revision is currently reserved for use by the
+                     system, i.e., is either active or committed or
+                     both";
+                }
+              }
+              mandatory true;
+              description
+                "The current operational state of the revision.";
+            }
+            leaf last-changed {
+              type yang:date-and-time;
+              mandatory true;
+              description
+                "The time of the last change to the 'state' of the
+                 revision or when the revision was created.";
+            }
+            leaf download-completed {
+              when
+                "derived-from(../../../capability,'bbf-swm:download')"
+              + " and "
+              + "../bbf-swm:state != 'downloading'" {
+                description
+                  "Only applicable if downloading of revisions for
+                   this software is supported and the revision is not
+                   currently being downloaded.";
+              }
+              type yang:date-and-time;
+              description
+                "The date and time when the download activity
+                 completed, whether successful or not.
+
+                 Note that this leaf is not to be instantiated, if no
+                 date and time is available. However, where possible
+                 an implementation could persist such information,
+                 for example, across a restart of the component or
+                 system.";
+            }
+            uses revision-metadata;
+            leaf is-valid {
+              when "boolean(../../../bbf-swm:capability="
+                 + "'bbf-swm:validate')" {
+                description
+                  "Only applicable if the 'validate' capability is
+                   supported.";
+              }
+              type boolean;
+              mandatory true;
+              description
+                "Reports whether the software revision is valid
+                 ('true') or invalid ('false').";
+            }
+            leaf is-active {
+              when "boolean(../../../bbf-swm:capability="
+                 + "'bbf-swm:activate')" {
+                description
+                  "Only applicable if the 'activate' capability is
+                   supported.";
+              }
+              type boolean;
+              mandatory true;
+              description
+                "Reports whether the software revision is active
+                 ('true') or inactive ('false').";
+            }
+            leaf is-committed {
+              when "boolean(../../../bbf-swm:capability="
+                 + "'bbf-swm:commit')" {
+                description
+                  "Only applicable if the 'commit' capability is
+                   supported.";
+              }
+              type boolean;
+              mandatory true;
+              description
+                "Reports whether the software revision is committed
+                 ('true') or uncommitted ('false').";
+            }
+            container abort-download {
+              when
+                "derived-from(../../../capability,'bbf-swm:download')"
+              + " and "
+              + "../bbf-swm:state='downloading'" {
+                description
+                  "Action 'abort-revision' can only be invoked when a
+                   download is in progress.";
+              }
+              description
+                "Provides containment for the action 'abort-
+                 download'.";
+              action abort-download {
+                if-feature "software-management-actions";
+                description
+                  "Abort the download process.";
+              }
+              notification download-revision-aborted {
+                description
+                  "Indicates that the download of the specified
+                   software revision has been successfully aborted.";
+              }
+              notification abort-failed {
+                description
+                  "Indicates that the system failed to abort an
+                   ongoing download activity.";
+                container error {
+                  description
+                    "Data nodes describing the error that caused the
+                     abort activity to fail.";
+                  uses error;
+                }
+              }
+            }
+            container activate {
+              when "boolean(../../../bbf-swm:capability="
+                 + "'bbf-swm:activate')"
+                 + " and "
+                 + "(../bbf-swm:state='available'"
+                 + " or "
+                 + "../bbf-swm:state='in-use')" {
+                description
+                  "Only applicable if the 'activate' capability is
+                   supported and then only if the revision can be
+                   activated.";
+              }
+              description
+                "Actions and notifications associated with activating
+                 a software revision.";
+              leaf last-activated {
+                type yang:date-and-time;
+                description
+                  "The date and time when this revision last became
+                   the active revision, that is, the leaf 'is-active'
+                   transitioned from 'false' to 'true', i.e., only
+                   a successful activation of the revision affects
+                   this date and time.
+
+                   Note that this revision itself may no longer be
+                   active, if another revision has been activated in
+                   the meantime. This does not affect the date and
+                   time reported here.
+
+                   Note that this leaf is not to be instantiated, if
+                   no date and time is available. However, where
+                   possible an implementation could persist such
+                   information, for example, across a restart of the
+                   component or system.";
+              }
+              action activate {
+                if-feature "software-management-actions";
+                description
+                  "Activate this revision.
+
+                   The system performs whatever steps are required to
+                   activate the revision. For example, this may
+                   include restarting the component or device, if this
+                   is necessary to activate the revision and would be
+                   performed as part of the activity initiated by a
+                   successful invocation of this action.
+
+                   Successful activation of this revision, will
+                   automatically deactivate any other revision of the
+                   software that was previously active, i.e., set the
+                   value of the leaf 'is-active' of the other revision
+                   to 'false').
+
+                   The leaf 'is-active' and 'last-activated', if
+                   supported, will only be set on successful
+                   completion of the activation activity.";
+              }
+              notification revision-activated {
+                description
+                  "Indicates that the specified revision has
+                   successfully activated on the target component.";
+              }
+              notification activate-failed {
+                description
+                  "Indicates that the specified revision failed to
+                   activate on its target component.";
+                container error {
+                  description
+                    "Data nodes describing the error that caused the
+                     activation to fail.";
+                  uses error;
+                }
+              }
+            }
+            container commit {
+              when "boolean(../../../bbf-swm:capability="
+                 + "'bbf-swm:commit')"
+                 + " and "
+                 + "(../bbf-swm:state='available'"
+                 + " or "
+                 + "../bbf-swm:state='in-use')" {
+                description
+                  "Only applicable if the 'commit' capability is
+                   supported and then only if the revision can be
+                   committed.";
+              }
+              description
+                "Actions and notifications associated with committing
+                 a software revision.";
+              leaf last-committed {
+                type yang:date-and-time;
+                description
+                  "The date and time when this revision last became
+                   the committed revision, that is, the leaf
+                   'is-committed' transitioned from 'false' to 'true',
+                   i.e., only a successful commit of the revision
+                   affects this date and time.
+
+                   Note that this revision itself may no longer be
+                   committed, if another revision has been committed
+                   in the meantime. This does not affect the date and
+                   time reported here.
+
+                   Note that this leaf is not to be instantiated, if
+                   no date and time is available. However, where
+                   possible an implementation could persist such
+                   information, for example, across a restart of the
+                   component or system.";
+              }
+              action commit {
+                if-feature "software-management-actions";
+                description
+                  "Commit this revision.
+
+                   A successful commit of this revision, will
+                   automatically un-commit any other revision of the
+                   software that was previously committed, i.e., set
+                   the value of the leaf 'is-committed' of the other
+                   revision to 'false').
+
+                   The leaf 'is-committed' and 'last-committed', if
+                   supported, will only be set on successful
+                   completion of the commit activity.
+
+                   Note that committing a non-active revision does not
+                   activate that revision.";
+              }
+              notification revision-committed {
+                description
+                  "Indicates that the specified revision has
+                   successfully committed on the target component.";
+              }
+              notification commit-failed {
+                description
+                  "Indicates that the revision software failed to
+                   commit on its target component.";
+                container error {
+                  description
+                    "Data nodes describing the error that caused the
+                     commit to fail.";
+                  uses error;
+                }
+              }
+            }
+            container delete {
+              when "boolean(../../../bbf-swm:capability="
+                 + "'bbf-swm:delete')"
+                 + " and "
+                 + "(../bbf-swm:state != 'in-use')" {
+                description
+                  "Only applicable if the 'delete' capability is
+                   supported and then only if the revision is not
+                   in-use (active or committed).";
+              }
+              description
+                "Action associated with deleting a software
+                 revision.";
+              action delete {
+                if-feature "software-management-actions";
+                description
+                  "Delete this revision.";
+              }
+              notification delete-failed {
+                description
+                  "Indicates that the system failed to delete this
+                   revision.";
+                container error {
+                  description
+                    "Data nodes describing the error that caused the
+                     delete activity to fail.";
+                  uses error;
+                }
+              }
+            }
+            notification revision-downloaded {
+              description
+                "Indicates that the specified software revision has
+                 been successfully downloaded to the target
+                 component.";
+            }
+            notification download-revision-failed {
+              description
+                "Indicates that the specified software revision
+                 failed to download to its target component.";
+              container error {
+                description
+                  "Data nodes describing the error that caused the
+                   download to fail.";
+                uses error;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
