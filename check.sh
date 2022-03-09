@@ -4,16 +4,15 @@
 #
 # Invoke without arguments in a YangModels/yang checkout
 #
-# Or specifying the pyang version and enabling debug output
+# Example invocation in BBF publish/yang tree
 #
-# PYTHONPATH=$MYROOT/pyang/default standard/bbf/check.sh '' '' $MYROOT/pyang/default/bin/pyang true
+# PYTHONPATH=../../pyang ./check.sh . ../../yang-external ../../pyang/bin/pyang true
 
 cwd=`pwd`
 
 # default arguments
 bbf_dir="$cwd/standard/bbf"
 ietf_dir="$cwd/standard/ietf"
-ieee_dir="$cwd/standard/ieee"
 pyang=pyang
 
 # $1 overrides bbf_dir
@@ -31,10 +30,8 @@ if [ -n "$3" ]; then
   pyang="$3"
 fi
 
-# $4 if non-empty enables debug output
+# $4 if non-zero enables debug output
 debug="$4"
-
-# ieee_dir can't currently be overridden
 
 cd $bbf_dir
 to_check=`find standard draft -mindepth 1 -maxdepth 1 -type d`
@@ -45,7 +42,7 @@ ietf_dir=`pwd`
 
 cd $cwd
 
-pyang_flags="--max-line-length=70 --lint --lint-modulename-prefix=bbf --lint-namespace-prefix=urn:bbf:yang: --lint-ensure-hyphenated-name --verbose --path=$bbf_dir --path=$ietf_dir --path=$ieee_dir"
+pyang_flags="--max-line-length=70 --lint --lint-modulename-prefix=bbf --lint-namespace-prefix=urn:bbf:yang: --lint-ensure-hyphenated-name --verbose --path=$bbf_dir --path=$ietf_dir"
 
 checkDir () {
     local dir="$bbf_dir/$1"
