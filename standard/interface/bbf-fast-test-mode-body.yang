@@ -13,20 +13,18 @@ submodule bbf-fast-test-mode-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing test modes.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -66,9 +64,19 @@ submodule bbf-fast-test-mode-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -138,40 +146,39 @@ submodule bbf-fast-test-mode-body {
       type boolean;
       default "false";
       description
-        "Defines whether the retransmission test-mode defined in
-         clause 9.8.3.1.2/G.9701 is enabled or disabled. The
-         RTX_TESTMODE setting may be changed during showtime. When
-         changed, it shall take effect within 2 seconds without
-         re-initialization.";
+        "Defines whether the retransmission test-mode is enabled or
+         disabled. The RTX_TESTMODE setting may be changed during
+         showtime. When changed, it shall take effect within 2 seconds
+         without re-initialization.";
       reference
-        "ITU-T G.997.2 clause 7.2.2.7 (RTX_TESTMODE); ITU-T G.9701
-         clause 9.8.3.1.2.";
+        "ITU-T G.997.2 clause 7.2.2.7 (RTX_TESTMODE);
+         ITU-T G.9701 clause 9.8.3.1.2";
     }
     leaf tps-tc-test-mode {
       type boolean;
       default "false";
       description
         "Defines whether the Transport Protocol Specific Transmission
-         Convergence (TPS-TC) test-mode defined in clause 8.3.1/G.9701
-         is enabled or disabled. The TPS_TESTMODE setting may be
-         changed during showtime. When changed, it shall take effect
-         within 2 seconds without re-initialization.";
+         Convergence (TPS-TC) test-mode is enabled or disabled.
+         The TPS_TESTMODE setting may be changed during showtime.
+         When changed, it shall take effect within 2 seconds without
+         re-initialization.";
       reference
-        "ITU-T G.997.2 clause 7.3.1 (TPS_TESTMODE); ITU-T G.9701
-         clause 8.3.1.";
+        "ITU-T G.997.2 clause 7.3.1 (TPS_TESTMODE);
+         ITU-T G.9701 clause 8.3.1";
     }
     leaf dra-test-mode {
       type boolean;
       default "false";
       description
         "Defines whether the Dynamic Resource Allocation (DRA)
-         test-mode defined in clause 9.8.3.1.2/G.9701 is enabled or
-         disabled. The DRA_TESTMODE setting may be changed during
-         showtime. When changed, it shall take effect on the line
-         within 2 seconds without re-initialization.";
+         test-mode is enabled or disabled. The DRA_TESTMODE setting
+         may be changed during showtime. When changed, it shall take
+         effect on the line within 2 seconds without
+         re-initialization.";
       reference
-        "ITU-T G.997.2 clause 7.3.2 (DRA_TESTMODE); ITU-T G.9701
-         clause 9.8.3.1.2.";
+        "ITU-T G.997.2 clause 7.3.2 (DRA_TESTMODE);
+         ITU-T G.9701 clause 9.8.3.1.2";
     }
   }
 

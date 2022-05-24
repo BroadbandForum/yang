@@ -18,22 +18,20 @@ submodule bbf-vdsl-data-rate-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 5.5 Service related
      profiles; dowstream Data Rate Profile and upstream Data Rate
      Profile.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -73,9 +71,19 @@ submodule bbf-vdsl-data-rate-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -153,49 +161,49 @@ submodule bbf-vdsl-data-rate-profile-body {
     leaf minimum-net-data-rate {
       type bbf-yang:data-rate32;
       must '. <= ../maximum-net-data-rate' {
+        error-message "'minimum-net-data-rate' is greater than "
+                    + "'maximum-net-data-rate'.";
         description
           "The minimum net data rate must be less than or equal the
            maximum net data rate.";
       }
       default "0";
       description
-        "If retransmission is not used in a given transmit
-         direction, this parameter specifies the minimum net data
-         rate for the bearer channel as desired by the operator
-         of the system. The rate is coded in steps of 1,000
-         bit/s.";
+        "If retransmission is not used in a given transmit direction,
+         this parameter specifies the minimum net data rate for the
+         bearer channel as desired by the operator of the system. The
+         data rate is coded in steps of 1000 bits per second.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.1.1 Minimum data rate";
+        "ITU-T G.997.1 clause 7.3.2.1.1";
     }
     leaf maximum-net-data-rate {
       type bbf-yang:data-rate32;
       default "4294967295";
       description
-        "If retransmission is not used in a given transmit
-         direction, this parameter specifies the maximum net data
-         rate for the bearer channel as desired by the operator
-         of the system. The data rate is coded in steps of 1,000
-         bit/s.";
+        "If retransmission is not used in a given transmit direction,
+         this parameter specifies the maximum net data rate for the
+         bearer channel as desired by the operator of the system. The
+         data rate is coded in steps of 1000 bits bit per second.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.1.3 Maximum data rate";
+        "ITU-T G.997.1 clause 7.3.2.1.3";
     }
     leaf minimum-data-rate-in-low-power-state {
       type bbf-yang:data-rate32;
       default "0";
       description
-        "This parameter specifies the minimum net data rate for
-         the bearer channel as desired by the operator of the
-         system during the low power state (L1/L2). The power
-         management low power states L1 and L2 are defined in
-         [ITU-T G.992.2] and [ITU-T G.992.3], respectively. The
-         data rate is coded in steps of 1,000 bit/s.
-         This parameter is only applicable to the downstream
-         direction in case of operation according to G.992.2,
-         G.992.3, G.992.4 or G.992.5. If not applicable, its value
-         is ignored until its use is defined.";
+        "This parameter specifies the minimum net data rate for the
+         bearer channel as desired by the operator of the system
+         during the low power state (L1/L2). The power management low
+         power states L1 and L2 are defined in ITU-T G.992.2 and
+         ITU-T G.992.3, respectively. The data rate is coded in
+         steps of 1000 bits per second. This parameter is only
+         applicable to the downstream direction in case of operation
+         according to G.992.2, G.992.3, G.992.4 or G.992.5. If not
+         applicable, its value is ignored until its use is defined.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.1.5 Minimum data rate in low
-         power state";
+        "ITU-T G.997.1 clause 7.3.2.1.5;
+         ITU-T G.992.2;
+         ITU-T G.992.3";
     }
     leaf maximum-bit-error-ratio {
       type enumeration {
@@ -214,64 +222,64 @@ submodule bbf-vdsl-data-rate-profile-body {
       }
       default "1e-7";
       description
-        "If retransmission is not used in a given transmit
-         direction, this parameter specifies the maximum bit
-         error ratio for the bearer channel as desired by the
-         operator of the system. The bit error ratio can take the
-         values 10^-3, 10^-5 or 10^-7. The default is 1e-7.";
+        "If retransmission is not used in a given transmit direction,
+         this parameter specifies the maximum bit error ratio for the
+         bearer channel as desired by the operator of the system. The
+         bit error ratio can take the values 10^-3, 10^-5 or 10^-7.
+         The default is 1e-7.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.6 Maximum bit error ratio";
+        "ITU-T G.997.1 clause 7.3.2.6";
     }
     leaf data-rate-threshold-upshift {
       type bbf-yang:data-rate32;
       default "0";
       description
-        "If retransmission is not used in a given transmit
-         direction, this parameter is a threshold on the net data
-         rate upshift achieved over one or more bearer channel
-         data rate adaptations. An upshift rate change alarm
-         (event) is triggered when the actual data rate exceeds
-         the data rate at the last entry into showtime by more
-         than the threshold. The data rate threshold is coded in
-         1000 bits/s. The default of 0 corresponds to no event on a
-         threshold crossing.";
+        "If retransmission is not used in a given transmit direction,
+         this parameter is a threshold on the net data rate upshift
+         achieved over one or more bearer channel data rate
+         adaptations. An upshift rate change alarm (event) is
+         triggered when the actual data rate exceeds the data rate at
+         the last entry into showtime by more than the threshold. The
+         data rate threshold is coded in 1000 bits per second. The
+         default of 0 corresponds to no event on a threshold
+         crossing.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.8.1 Data rate threshold
-         upshift";
+        "ITU-T G.997.1 clause 7.3.2.8.1";
     }
     leaf data-rate-threshold-downshift {
       type bbf-yang:data-rate32;
       default "0";
       description
-        "If retransmission is not used in a given transmit
-         direction, this parameter is a threshold on the net data
-         rate downshift achieved over one or more bearer channel
-         data rate adaptations. A downshift rate change alarm
-         (event) is triggered when the actual data rate is below
-         the data rate at the last entry into showtime by more
-         than the threshold. The data rate threshold is coded in
-         1000 bits/s. The default of 0 corresponds to no event on a
-         threshold crossing.";
+        "If retransmission is not used in a given transmit direction,
+         this parameter is a threshold on the net data rate downshift
+         achieved over one or more bearer channel data rate
+         adaptations. A downshift rate change alarm (event) is
+         triggered when the actual data rate is below the data rate at
+         the last entry into showtime by more than the threshold. The
+         data rate threshold is coded in 1000 bits per second. The
+         default of 0 corresponds to no event on a threshold
+         crossing.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.8.2 Data rate threshold
-         downshift";
+        "ITU-T G.997.1 clause 7.3.2.8.2";
     }
     leaf minimum-sos-data-rate {
       type bbf-yang:data-rate32;
       default "0";
       description
-        "This parameter specifies the minimum net data rate for
-         the bearer channel required for a valid Save Our Showtime
-         (SOS) request in the direction of the bearer channel. The
-         value will be coded as an unsigned integer representing the
-         data rate is coded in steps of 1000 bits/s. ";
+        "This parameter specifies the minimum net data rate for the
+         bearer channel required for a valid Save Our Showtime (SOS)
+         request in the direction of the bearer channel. The value
+         will be coded as an unsigned integer representing the data
+         rate is coded in steps of 1000 bits per second.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.1.6 Minimum SOS Data rate
-         (MIN-SOS-DR)";
+        "ITU-T G.997.1 clause 7.3.2.1.6 (MIN-SOS-DR)";
     }
     leaf minimum-expected-throughput-rtx {
       type bbf-yang:data-rate32;
       must '. <= ../maximum-expected-throughput-rtx' {
+        error-message
+          "'minimum-expected-throughput-rtx' is greater than "
+        + "'maximum-expected-throughput-rtx'.";
         description
           "The minimum expected throughput must be less than or equal
            to the maximum expected throughput for retransmission.";
@@ -280,75 +288,76 @@ submodule bbf-vdsl-data-rate-profile-body {
       description
         "If retransmission is used in a given transmit direction,
          this parameter specifies the minimum expected throughput
-         for the bearer channel (as specified in clause 11.1.1 of
-         [ITU-T G.998.4]). The rate is coded in steps of 1,000
-         bit/s.";
+         for the bearer channel. The rate is coded in steps of 1000
+         bits per second.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.1.8 Minimum expected
-         throughput for retransmission (MINETR_RTX)";
+        "ITU-T G.997.1 clause 7.3.2.1.8 (MINETR_RTX);
+         ITU-T G.998.4 clause 11.1.1";
     }
     leaf maximum-expected-throughput-rtx {
       type bbf-yang:data-rate32;
       must '. <= ../maximum-net-data-rate-rtx' {
+        error-message
+          "'maximum-expected-throughput-rtx' is greater than "
+        + " 'maximum-net-data-rate-rtx'.";
         description
           "The maximum expected throughput must be less than or equal
            to the maximum net data rate for retransmission.";
       }
       default "4294967295";
       description
-        "If retransmission is used in a given transmit direction,
-         this parameter specifies the maximum expected throughput
-         for the bearer channel (as specified in clause 11.1.2 of
-         [ITU-T G.998.4]). The rate is coded in steps of 1,000
-         bit/s.";
+        "If retransmission is used in a given transmit direction, this
+         parameter specifies the maximum expected throughput for the
+         bearer channel. The rate is coded in steps of 1000 bits per
+         second.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.1.9 Maximum expected
-         throughput for retransmission (MAXETR_RTX)";
+        "ITU-T G.997.1 clause 7.3.2.1.9 (MAXETR_RTX);
+         ITU-T G.998.4 clause 11.1.2";
     }
     leaf maximum-net-data-rate-rtx {
       type bbf-yang:data-rate32;
       default "4294967295";
       description
-        "If retransmission is used in a given transmit direction,
-         this parameter specifies the maximum net data rate for
-         the bearer channel (as specified in clause 11.1.3 of
-         [ITU-T G.998.4]). The rate is coded in steps of 1,000
-         bit/s.";
+        "If retransmission is used in a given transmit direction, this
+         parameter specifies the maximum net data rate for the bearer
+         channel. The rate is coded in steps of 1000 bits per
+         second.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.1.10 Maximum net data rate
-         for retransmission (MAXNDR_RTX)";
+        "ITU-T G.997.1 clause 7.3.2.1.10 (MAXNDR_RTX);
+         ITU-T G.998.4 clause 11.1.3";
     }
     leaf target-net-data-rate {
       type bbf-yang:data-rate32;
       default "4294967295";
       description
-        "If retransmission is not used in a given transmit
-         direction, this parameter specifies the target net data
-         rate as defined in [ITU-T G.993.5] of the bearer
-         channel. The target expected throughput is coded in
-         steps of 1,000 bit/s.";
+        "If retransmission is not used in a given transmit direction,
+         this parameter specifies the target net data rate of the
+         bearer channel. The target expected throughput is coded in
+         steps of 1000 bits per second.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.19.1 Target net data rate
-         (TARGET_NDR) ";
+        "ITU-T G.997.1 clause 7.3.2.19.1 (TARGET_NDR);
+         ITU-T G.993.5";
     }
     leaf target-expected-throughput {
       type bbf-yang:data-rate32;
       default "4294967295";
       description
-        "If retransmission is used in a given transmit direction,
-         this parameter specifies the target expected throughput
-         as defined in [ITU-T G.993.5] for the bearer channel.
-         The target expected throughput is coded in steps of
-         1,000 bit/s.";
+        "If retransmission is used in a given transmit direction, this
+         parameter specifies the target expected throughput for the
+         bearer channel. The target expected throughput is coded in
+         steps of 1000 bits per second.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.19.2 Target expected
-         throughput for retransmission (TARGET_ETR)";
+        "ITU-T G.997.1 clause 7.3.2.19.2 (TARGET_ETR);
+         ITU-T G.993.5";
     }
     leaf leftr-defect-threshold {
-      if-feature "data-rate-profile-leftr";
+      if-feature "bbf-vdsl:data-rate-profile-leftr";
       type union {
         type uint8 {
-          range "0..99";
+          range "0..99" {
+            description
+              "Defines a range from 0.00 to 0.99.";
+          }
         }
         type enumeration {
           enum etr-default-threshold {
@@ -363,20 +372,17 @@ submodule bbf-vdsl-data-rate-profile-body {
       default "etr-default-threshold";
       description
         "If retransmission is used in a given transmit direction,
-         LEFTR_THRESH specifies the threshold for declaring a
-         leftr defect (see clause 11.1.12 of ITU-T G.998.4)
-         for the definition of this threshold).
-         The value is coded as a fraction of the NDR with valid
-         range from 0.00 to 0.99 in increments of 0.01.
-         The value 0.00 implies no leftr-defects are declared.
-         A special value of (enum etr-default-threshold) means the
-         Expected Throughput Rate (ETR) shall be used as the default
-         threshold for declaring a Low Error-Free Throughput Rate
-         (leftr) defect.";
+         LEFTR_THRESH specifies the threshold for declaring a leftr
+         defect. The value is coded as a fraction of the NDR with
+         valid range from 0.00 to 0.99 in increments of 0.01. The
+         value 0.00 implies no leftr-defects are declared. A special
+         value of (enum etr-default-threshold) means the Expected
+         Throughput Rate (ETR) shall be used as the default threshold
+         for declaring a Low Error-Free Throughput Rate (leftr)
+         defect.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.12.";
+        "ITU-T G.997.1 clause 7.3.1.12 (LEFTR_THRESH);
+         ITU-T G.998.4 clause 11.1.12";
     }
   }
-
-  // end grouping data-rate-profile
 }

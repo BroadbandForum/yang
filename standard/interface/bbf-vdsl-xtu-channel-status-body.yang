@@ -17,21 +17,19 @@ submodule bbf-vdsl-xtu-channel-status-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 6.1.2 xDSL Transceiver
      Unit (xTU) Channel Status.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -71,9 +69,19 @@ submodule bbf-vdsl-xtu-channel-status-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -127,72 +135,68 @@ submodule bbf-vdsl-xtu-channel-status-body {
 
   grouping xtu-channel-status {
     description
-      "The xDSL Transceiver Unit (xTU) Channel Status object
-       represents current channel status / measurements at a
-       particular xTU.";
+      "The xDSL Transceiver Unit (xTU) Channel Status parameters
+       represent current channel status/measurements at a particular
+       xTU.";
     leaf actual-data-rate {
       type bbf-yang:data-rate32-or-undetermined;
       description
-        "Actual data rate or expected throughput (ETR). See ITU-T
-         G.997.1 clause 7.5.2.1 for a detailed definition.";
+        "Actual data rate or expected throughput (ETR).";
       reference
-        "ITU-T G.997.1 clause 7.5.2.1 Actual data rate";
+        "ITU-T G.997.1 clause 7.5.2.1";
     }
     leaf previous-data-rate {
       type bbf-yang:data-rate32-or-undetermined;
       description
         "Previous data rate or expected throughput (ETR). This
          parameter reports the previous net data rate or ETR the
-         bearer channel was operating at just before the latest
-         net data rate or ETR change event occurred, excluding
-         all transitions between L0 state and L1 or L2 states.
-         See ITU-T G.997.1 clause 7.5.2.2 for a detailed
-         definition.";
+         bearer channel was operating at just before the latest net
+         data rate or ETR change event occurred, excluding all
+         transitions between L0 state and L1 or L2 states.";
       reference
-        "ITU-T G.997.1 clause 7.5.2.2 Previous data rate";
+        "ITU-T G.997.1 clause 7.5.2.2";
     }
     leaf actual-delay {
       type uint16;
       units "milliseconds";
       description
-        "Actual delay due to interleaving or retransmission. See
-         ITU-T G.997.1 clause 7.5.2.3 for a detailed definition.
-         The actual delay is coded in ms (rounded to the nearest
-         ms).";
+        "Actual delay due to interleaving or retransmission. The
+         actual delay is coded in milliseconds (rounded to the nearest
+         milliseconds).";
       reference
-        "ITU-T G.997.1 clause 7.5.2.3 Actual delay";
+        "ITU-T G.997.1 clause 7.5.2.3";
     }
     leaf actual-inp {
       type uint16 {
-        range "0..2047";
+        range "0..2047" {
+          description
+            "Defines a range from 0.0 to 204.7 symbols.";
+        }
       }
-      units "0.1 DMT symbols";
+      units "0.1 symbols";
       description
-        "Actual Impulse Noise Protection (ACTINP). See ITU-T
-         G.997.1 clause 7.5.2.4 for a detailed definition. The
-         value is coded in fractions of DMT symbols with a
-         granularity of 0.1 symbols.
+        "Actual Impulse Noise Protection (ACTINP). The value is coded
+         in fractions of DMT symbols with a granularity of 0.1
+         symbols.
          If retransmission is not used in a given transmit direction,
          this parameter reports the interleaved error correction
-         INP. For ITU-T G993.2, the special value 255
-         indicates an ACTINP of 25.5 or higher.
+         INP. For ITU-T G993.2, the special value 255 indicates an
+         ACTINP of 25.5 or higher.
          If retransmission is used in a given transmit direction,
          this parameter reports the actual impulse noise protection
          (INP) against SHINE (under specific conditions detailed in
-         [ITU T G.998.4]) on the bearer channel in the L0 state.
+         ITU T G.998.4) on the bearer channel in the L0 state.
          The special value 2047 indicates an ACTINP of 204.7
          or higher.";
       reference
-        "ITU-T G.997.1 clause 7.5.2.4 Actual impulse noise
-         protection (ACTINP)";
+        "ITU-T G.997.1 clause 7.5.2.4 (ACTINP)";
     }
     leaf inpreport {
       type enumeration {
         enum 0 {
           description
             "If set to 0, the Actual Impulse Noise Protection (ACTINP)
-             is computed according to the INP_no_erasure formula
-             (see clause 9.6 of [ITU-T G.993.2]).";
+             is computed according to the INP_no_erasure formula.";
         }
         enum 1 {
           description
@@ -204,13 +208,12 @@ submodule bbf-vdsl-xtu-channel-status-body {
       description
         "This parameter reports the method used to compute the
          Actual Impulse Noise Protection (ACTINP). If set to 0, the
-         ACTINP is computed according to the INP_no_erasure formula
-         (see clause 9.6 of [ITU-T G.993.2]). If set to 1, the ACTINP
-         is the value estimated by the xDSL Transceiver Unit (xTU)
-         receiver.";
+         ACTINP is computed according to the INP_no_erasure formula.
+         If set to 1, the ACTINP is the value estimated by the xDSL
+         Transceiver Unit (xTU) receiver.";
       reference
-        "ITU-T G.997.1 clause 7.5.2.5 Impulse noise protection
-         reporting mode (INPREPORT)";
+        "ITU-T G.997.1 clause 7.5.2.5 (INPREPORT);
+         ITU-T G.993.2 clause 6";
     }
     leaf nfec {
       type uint8 {
@@ -219,12 +222,11 @@ submodule bbf-vdsl-xtu-channel-status-body {
       units "bytes";
       description
         "This parameter reports the actual Reed-Solomon codeword
-         size used in the latency path in which the bearer
-         channel is transported. The value is coded in bytes. It
-         ranges from 0 to 255.";
+         size used in the latency path in which the bearer channel
+         is transported. The value is coded in bytes. It ranges from 0
+         to 255.";
       reference
-        "ITU-T G.997.1 clause 7.5.2.6.1 Actual size of
-         Reed-Solomon codeword (NFEC)";
+        "ITU-T G.997.1 clause 7.5.2.6.1 (NFEC)";
     }
     leaf rfec {
       type uint8 {
@@ -238,8 +240,7 @@ submodule bbf-vdsl-xtu-channel-status-body {
          coded in bytes. It ranges from 0 to 16. The value 0
          indicates no Reed-Solomon coding.";
       reference
-        "ITU-T G.997.1 clause 7.5.2.6.2 Actual number of
-         Reed-Solomon redundancy bytes (RFEC)";
+        "ITU-T G.997.1 clause 7.5.2.6.2 (RFEC)";
     }
     leaf actual-number-of-bits-per-symbol {
       type uint32 {
@@ -253,21 +254,19 @@ submodule bbf-vdsl-xtu-channel-status-body {
          trellis overhead. The value is coded in bits. It ranges
          from 0 to 131071.";
       reference
-        "ITU-T G.997.1 clause 7.5.2.6.3 Actual number of bits per
-         symbol (LSYMB)";
+        "ITU-T G.997.1 clause 7.5.2.6.3 (LSYMB)";
     }
     leaf actual-interleaving-depth {
       type uint16 {
         range "1..4096";
       }
       description
-        "This parameter reports the actual depth of the
-         interleaver used in the latency path in which the bearer
-         channel is transported. The value ranges from 1 to 4096
-         in steps of 1. The value 1 indicates no interleaving.";
+        "This parameter reports the actual depth of the interleaver
+         used in the latency path in which the bearer channel is
+         transported. The value ranges from 1 to 4096 in steps of 1.
+         The value 1 indicates no interleaving.";
       reference
-        "ITU-T G.997.1 clause 7.5.2.6.4 Actual interleaving depth
-         (INTLVDEPTH)";
+        "ITU-T G.997.1 clause 7.5.2.6.4 (INTLVDEPTH)";
     }
     leaf actual-interleaving-block-length {
       type uint8 {
@@ -279,38 +278,34 @@ submodule bbf-vdsl-xtu-channel-status-body {
          channel is transported. The value ranges from 4 to 255
          in steps of 1.";
       reference
-        "ITU-T G.997.1 clause 7.5.2.6.5 Actual interleaving block
-         length (INTLVBLOCK)";
+        "ITU-T G.997.1 clause 7.5.2.6.5 (INTLVBLOCK)";
     }
     leaf actual-latency-path {
       type uint8 {
         range "0..3";
       }
       description
-        "This parameter reports the index of the actual latency
-         path in which the bearer is transported. The valid
-         values are 0, 1, 2, 3.";
+        "This parameter reports the index of the actual latency path
+         in which the bearer is transported. The valid values are 0,
+         1, 2, 3.";
       reference
-        "ITU-T G.997.1 clause 7.5.2.7 Actual latency path
-         (LPATH)";
+        "ITU-T G.997.1 clause 7.5.2.7 (LPATH)";
     }
     leaf fec-codewords-per-dtu {
       type uint8 {
         range "1..64";
       }
       description
-        "This parameter reports the number of Reed-Solomon fec
-         codewords per Data Transfer Unit (DTU), used in the latency
-         path in which the bearer channel is transported, also known
-         as the Q parameter. This parameter only applies to systems
-         supporting ITU-T G.998.4.";
+        "This parameter reports the number of Reed-Solomon Forward
+         Error Correction (FEC) codewords per Data Transfer Unit
+         (DTU), used in the latency path in which the bearer channel
+         is transported, also known as the Q parameter. This parameter
+         only applies to systems supporting ITU-T G.998.4.";
       reference
-        "ITU-T G.997.1 clause 7.5.2.6.6 (RSPERDTU) and ITU-T
-         G.998.4 clause 9.4.3.";
+        "ITU-T G.997.1 clause 7.5.2.6.6 (RSPERDTU);
+         ITU-T G.998.4 clause 9.4.3.";
     }
   }
-
-  // end grouping xtu-channel-status
 
   grouping actual-ndr-inp-rein {
     description
@@ -320,42 +315,38 @@ submodule bbf-vdsl-xtu-channel-status-body {
     leaf actual-ndr {
       type bbf-yang:data-rate32-or-undetermined;
       description
-        "This parameter is independent of whether
-         retransmission is used or not in a given transmit
-         direction.
-         - In L0 state, this parameter reports the net data
-         rate (as specified in [ITU-T G.992.3], [ITU-T G.992.5]
-         or [ITU-T G.993.2]) at which the bearer channel is
-         operating.
-         - In L2 state, the parameter contains the net data
-         rate (as specified in [ITU-T G.992.3], [ITU-T G.992.5]
-         or [ITU-T G.993.2]) in the previous L0 state.
-         The data rate is coded in steps of 1,000 bit/s.";
+        "This parameter is independent of whether retransmission is
+         used or not in a given transmit direction.
+         - In L0 state, this parameter reports the net data rate (as
+           specified in ITU-T G.992.3, ITU-T G.992.5 or ITU-T
+           G.993.2) at which the bearer channel is operating.
+         - In L2 state, the parameter contains the net data rate (as
+           specified in ITU-T G.992.3, ITU-T G.992.5 or ITU-T
+           G.993.2) in the previous L0 state.
+         The data rate is coded in steps of 1000 bits per second.";
       reference
-        "ITU-T G.997.1 clause 7.5.2.8 Actual net data rate
-         (ACTNDR)";
+        "ITU-T G.997.1 clause 7.5.2.8 (ACTNDR)";
     }
     leaf actual-inp-against-rein {
       type uint8 {
-        range "0..255";
+        range "0..255" {
+          description
+            "Defines a range from 0.0 to 25.5 symbols.";
+        }
       }
-      units "0.1 DMT symbols";
+      units "0.1 symbols";
       description
-        "If retransmission is used in a given transmit
-         direction, this parameter reports the actual Impulse
-         Noise Protection (INP) against Repetitive Electrical Impulse
-         Noise (ACTINP-REIN) (under specific conditions detailed in
-         [ITU T G.998.4]) on the bearer channel in the L0 state. In
-         the L2 state, the parameter contains the INP in the previous
-         L0 state. The value is coded in fractions of DMT symbols with
-         a granularity of 0.1 symbols.
-         The range is from 0 to 25.4. A special value of 255
-         indicates an ACTINP_REIN of 25.5 or higher.";
+        "If retransmission is used in a given transmit direction, this
+         parameter reports the actual Impulse Noise Protection (INP)
+         against Repetitive Electrical Impulse Noise (ACTINP-REIN)
+         (under specific conditions detailed in ITU T G.998.4) on
+         the bearer channel in the L0 state. In the L2 state, the
+         parameter contains the INP in the previous L0 state. The
+         value is coded in fractions of DMT symbols with a granularity
+         of 0.1 symbols. The range is from 0 to 25.4. A special value
+         of 255 indicates an ACTINP_REIN of 25.5 or higher.";
       reference
-        "7.5.2.9 Actual impulse noise protection against REIN
-         (ACTINP_REIN)";
+        "ITU-T G.997.1 7.5.2.9 (ACTINP_REIN)";
     }
   }
-
-  // end grouping actual-ndr-inp-rein
 }

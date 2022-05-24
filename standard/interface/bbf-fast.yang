@@ -3,14 +3,9 @@ module bbf-fast {
   namespace "urn:bbf:yang:bbf-fast";
   prefix bbf-fast;
 
-  /* Common */
-
   include bbf-fast-base;
   include bbf-fast-pointers;
   include bbf-fast-perf-types;
-
-  /* Quality Profiles */
-
   include bbf-fast-quality-profiles;
   include bbf-fast-fast-rate-adaptation-profile-body;
   include bbf-fast-noise-margin-profile-body;
@@ -18,58 +13,31 @@ module bbf-fast {
   include bbf-fast-retransmission-profile-body;
   include bbf-fast-vectoring-profile-body;
   include bbf-fast-impulse-noise-monitoring-profile-body;
-
-  /* Service Profiles */
-
   include bbf-fast-service-profiles;
   include bbf-fast-data-rate-profile-body;
-
-  /* Spectrum Profiles */
-
   include bbf-fast-spectrum-profiles;
   include bbf-fast-line-spectrum-profile-body;
   include bbf-fast-upstream-power-back-off-profile-body;
   include bbf-fast-rfi-profile-body;
-
-  /* TDD Profiles */
-
   include bbf-fast-tdd-profiles;
   include bbf-fast-tdd-profile-body;
-
-  /* Test Diagnostics */
-
   include bbf-fast-test-diagnostics;
   include bbf-fast-test-mode-body;
   include bbf-fast-update-test-body;
   include bbf-fast-link-state-body;
   include bbf-fast-read-test-body;
-
-  /* Threshold Management */
-
   include bbf-fast-threshold-management;
   include bbf-fast-line-threshold-profile-body;
   include bbf-fast-channel-threshold-profile-body;
   include bbf-fast-threshold-crossing-alert-body;
-
-  /* Performance Management */
-
   include bbf-fast-performance-management;
   include bbf-fast-line-performance-body;
   include bbf-fast-channel-performance-body;
-
-  /* Status Monitoring */
-
   include bbf-fast-status-monitoring;
   include bbf-fast-line-status-body;
   include bbf-fast-channel-status-body;
-
-  /* Inventory */
-
   include bbf-fast-inventory;
   include bbf-fast-ftu-inventory-body;
-
-  /* Availability */
-
   include bbf-fast-availability;
 
   organization
@@ -81,15 +49,13 @@ module bbf-fast {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on management of
@@ -98,7 +64,7 @@ module bbf-fast {
      access network equipment (e.g., BBF-specified Access Nodes and
      FTTdp DPUs).
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -138,9 +104,19 @@ module bbf-fast {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.

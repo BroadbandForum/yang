@@ -19,21 +19,19 @@ submodule bbf-fast-line-performance-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of performance-related
      YANG data types and grouping definitions for the management
      of FAST lines.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -73,9 +71,19 @@ submodule bbf-fast-line-performance-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -145,69 +153,67 @@ submodule bbf-fast-line-performance-body {
     leaf successful-tiga {
       type bbf-yang:performance-counter32;
       description
-        "Reports a count of the successful TIGA primitives
-         (success_TIGA). The successful TIGA primitive
-         (success_TIGA) is defined in clause 11.3.1.6/G.9701.";
+        "Reports a count of the successful Time Initiated Gain
+         Adjustment (TIGA) primitives (success_TIGA).";
       reference
-        "ITU-T G.997.2 clause 7.7.25 (CURR/PREV_NE/FE_15/24_TIGA).";
+        "ITU-T G.997.2 clause 7.7.25 (CURR/PREV_NE/FE_15/24_TIGA);
+         ITU-T G.9701 clause 11.3.1.6";
     }
     leaf full-initializations {
       type bbf-yang:performance-counter32;
       description
         "Reports a count of the full initialization primitives
-         (full_init). The full initialization primitive (full_init)
-         is defined in clause 11.3.1.5/G.9701. ";
+         (full_init).";
       reference
-        "ITU-T G.997.2 clause 7.7.13 (CURR/PREV_15/24_FULL_INITS).";
+        "ITU-T G.997.2 clause 7.7.13 (CURR/PREV_15/24_FULL_INITS);
+         ITU-T G.9701 clause 11.3.1.5";
     }
     leaf failed-full-initializations {
       type bbf-yang:performance-counter32;
       description
         "Reports a count of the failed full initialization
-         primitives(failedfull_init). The failed full initialization
-         primitive(failedfull_init) is defined in clause
-         11.3.1.5/G.9701.";
+         primitives(failedfull_init).";
       reference
         "ITU-T G.997.2 clause 7.7.14
-         (CURR/PREV_15/24_FAILEDFULL_INITS).";
+         (CURR/PREV_15/24_FAILEDFULL_INITS);
+         ITU-T G.9701 clause 11.3.1.5";
     }
     leaf fast-initializations {
       type bbf-yang:performance-counter32;
       description
         "Reports a count of the fast initialization primitives
-         (fast_init). The fast initialization primitive (fast_init)
-         is defined in clause 11.3.1.5/G.9701.";
+         (fast_init).";
       reference
-        "ITU-T G.997.2 clause 7.7.15 (CURR/PREV_15/24_FAST_INITS).";
+        "ITU-T G.997.2 clause 7.7.15 (CURR/PREV_15/24_FAST_INITS);
+         ITU-T G.9701 clause 11.3.1.5";
     }
     leaf failed-fast-initializations {
       type bbf-yang:performance-counter32;
       description
         "Reports a count of the failed fast initialization
-         primitives(failedfast_init). The failed fast initialization
-         primitive(failedfast_init) is defined in clause
-         11.3.1.5/G.9701.";
+         primitives(failedfast_init).";
       reference
         "ITU-T G.997.2 clause 7.7.16
-         (CURR/PREV_15/24_FAILEDFAST_INITS).";
+         (CURR/PREV_15/24_FAILEDFAST_INITS);
+         ITU-T G.9701 clause 11.3.1.5";
     }
     leaf loss-of-power-interruptions {
       type bbf-yang:performance-counter32;
       description
         "Reports a count of the loss-of-power interruption anomalies
-         (lpr_intrpt). The loss-of-power interruption anomaly
-         (lpr_intrpt) is defined in clause 11.3.1.1/G.9701.";
+         (lpr_intrpt).";
       reference
-        "ITU-T G.997.2 clause 7.7.17 (CURR/PREV_15/24_LPR_INTRPT).";
+        "ITU-T G.997.2 clause 7.7.17 (CURR/PREV_15/24_LPR_INTRPT);
+         ITU-T G.9701 clause 11.3.1.1";
     }
     leaf host-reinit-interruptions {
       type bbf-yang:performance-counter32;
       description
         "Reports a count of the host-reinit interruption anomalies
-         (hri_intrpt). The host-reinit interruption anomaly
-         (hri_intrpt) is defined in clause 11.3.1.1/G.9701.";
+         (hri_intrpt).";
       reference
-        "ITU-T G.997.2 clause 7.7.18 (CURR/PREV_15/24_HRI_INTRPT).";
+        "ITU-T G.997.2 clause 7.7.18 (CURR/PREV_15/24_HRI_INTRPT);
+         ITU-T G.9701 clause 11.3.1.1";
     }
     leaf spontaneous-interruptions {
       type bbf-yang:performance-counter32;
@@ -216,30 +222,28 @@ submodule bbf-fast-line-performance-body {
          (spont_intrpt). The spontaneous interruption anomaly
          (spont_intrpt) is defined in clause 11.3.1.1/G.9701.";
       reference
-        "ITU-T G.997.2 clause 7.7.19
-         (CURR/PREV_15/24_SPONT_INTRPT).";
+        "ITU-T G.997.2 clause 7.7.19 (CURR/PREV_15/24_SPONT_INTRPT);
+         ITU-T G.9701 clause 11.3.1.1";
     }
     leaf successful-srec {
       if-feature "bbf-fast:srec";
       type bbf-yang:performance-counter32;
       description
-        "Reports a count of success_srec primitives.
-         The success_srec primitive is defined in
-         clause R.3 of [ITU-T G.9701].";
+        "Reports a count of successful Showtime Reconfiguration
+         (success_srec) primitives.";
       reference
-        "ITU-T G.997.2 clause 7.7.30
-         (CURR/PREV_15/24_SUCCESS_SREC).";
+        "ITU-T G.997.2 clause 7.7.30 (CURR/PREV_15/24_SUCCESS_SREC);
+         ITU-T G.9701 clause R.3";
     }
     leaf me-o-triggered-interruptions {
       if-feature "bbf-fast:srec";
       type bbf-yang:performance-counter32;
       description
-        "Reports a count of me_o_intrpt anomalies.
-         The me_o_intrpt anomaly is defined in
-         clause 11.3.1.1 of [ITU-T G.9701].";
+        "Reports a count of me_o_intrpt anomalies.";
       reference
         "ITU-T G.997.2 clause 7.7.29
-         (CURR/PREV_NE/FE_SUCCESS_ME_O_INTRPT).";
+         (CURR/PREV_NE/FE_SUCCESS_ME_O_INTRPT);
+         ITU-T G.9701 clause 11.3.1.1";
     }
   }
 
@@ -250,36 +254,36 @@ submodule bbf-fast-line-performance-body {
        lines.";
     leaf link-state-l2.1n-seconds {
       type seconds-counter-15min;
-      units "1 second";
+      units "seconds";
       description
         "Reports the time spent in LinkState L2.1N in seconds,
          accumulated over the relevant period, rounded up to the
          nearest second.";
       reference
-        "ITU-T G.997.2 clause 7.14.3.1
-         (CURR/PREV_15/24_L21N); ITU-T G.9701 Table Z-5";
+        "ITU-T G.997.2 clause 7.14.3.1 (CURR/PREV_15/24_L21N);
+         ITU-T G.9701 Table Z-5";
     }
     leaf link-state-l2.1b-seconds {
       type seconds-counter-15min;
-      units "1 second";
+      units "seconds";
       description
         "Reports the time spent in LinkState L2.1B in seconds,
          accumulated over the relevant period, rounded up to the
          nearest second.";
       reference
-        "ITU-T G.997.2 clause 7.14.3.2
-         (CURR/PREV_15/24_L21B); ITU-T G.9701 Table Z-5";
+        "ITU-T G.997.2 clause 7.14.3.2 (CURR/PREV_15/24_L21B);
+         ITU-T G.9701 Table Z-5";
     }
     leaf link-state-l2.2-seconds {
       type seconds-counter-15min;
-      units "1 second";
+      units "seconds";
       description
         "Reports the time spent in LinkState L2.2 in seconds,
          accumulated over the relevant period, rounded up to the
          nearest second.";
       reference
-        "ITU-T G.997.2 clause 7.14.3.3
-         (CURR/PREV_15/24_L22); ITU-T G.9701 Table Z-5";
+        "ITU-T G.997.2 clause 7.14.3.3 (CURR/PREV_15/24_L22);
+         ITU-T G.9701 Table Z-5";
     }
   }
 
@@ -290,36 +294,36 @@ submodule bbf-fast-line-performance-body {
        lines.";
     leaf link-state-l2.1n-seconds {
       type seconds-counter-24hr;
-      units "1 second";
+      units "seconds";
       description
         "Reports the time spent in LinkState L2.1N in seconds,
          accumulated over the relevant period, rounded up to the
          nearest second.";
       reference
-        "ITU-T G.997.2 clause 7.14.3.1
-         (CURR/PREV_15/24_L21N); ITU-T G.9701 Table Z-5";
+        "ITU-T G.997.2 clause 7.14.3.1 (CURR/PREV_15/24_L21N);
+         ITU-T G.9701 Table Z-5";
     }
     leaf link-state-l2.1b-seconds {
       type seconds-counter-24hr;
-      units "1 second";
+      units "seconds";
       description
         "Reports the time spent in LinkState L2.1B in seconds,
          accumulated over the relevant period, rounded up to the
          nearest second.";
       reference
-        "ITU-T G.997.2 clause 7.14.3.2
-         (CURR/PREV_15/24_L21B); ITU-T G.9701 Table Z-5";
+        "ITU-T G.997.2 clause 7.14.3.2 (CURR/PREV_15/24_L21B);
+         ITU-T G.9701 Table Z-5";
     }
     leaf link-state-l2.2-seconds {
       type seconds-counter-24hr;
-      units "1 second";
+      units "seconds";
       description
         "Reports the time spent in LinkState L2.2 in seconds,
          accumulated over the relevant period, rounded up to the
          nearest second.";
       reference
-        "ITU-T G.997.2 clause 7.14.3.3
-         (CURR/PREV_15/24_L22); ITU-T G.9701 Table Z-5";
+        "ITU-T G.997.2 clause 7.14.3.3 (CURR/PREV_15/24_L22);
+         ITU-T G.9701 Table Z-5";
     }
   }
 
@@ -329,66 +333,67 @@ submodule bbf-fast-line-performance-body {
     leaf loss-of-signal {
       type bbf-yang:performance-counter32;
       description
-        "Reports a count of the Loss-of-signal (LOS) failures.";
+        "Reports a count of the Loss of Signal (LOS) failures.";
       reference
-        "ITU-T G.997.2 clause 7.7.4 (CURR/PREV_NE/FE_15/24_LOS).";
+        "ITU-T G.997.2 clause 7.7.4 (CURR/PREV_NE/FE_15/24_LOS)";
     }
     leaf loss-of-margin {
       type bbf-yang:performance-counter32;
       description
-        "Reports a count of the Loss-of-margin (LOM) failures.";
+        "Reports a count of the Loss of Margin (LOM) failures.";
       reference
-        "ITU-T G.997.2 clause 7.7.6 (CURR/PREV_NE/FE_15/24_LOM).";
+        "ITU-T G.997.2 clause 7.7.6 (CURR/PREV_NE/FE_15/24_LOM)";
     }
     leaf loss-of-rmc {
       type bbf-yang:performance-counter32;
       description
-        "Reports a count of the Loss-of-RMC (LOR) failures.";
+        "Reports a count of the Loss of Robust Management Channel
+         (LOR) failures.";
       reference
-        "ITU-T G.997.2 clause 7.7.5 (CURR/PREV_NE/FE_15/24_LOR).";
+        "ITU-T G.997.2 clause 7.7.5 (CURR/PREV_NE/FE_15/24_LOR)";
     }
     leaf loss-of-power {
       type bbf-yang:performance-counter32;
       description
-        "reports a count of the Loss-of-power (LPR) failures.";
+        "Reports a count of the Loss of Power (LPR) failures.";
       reference
-        "ITU-T G.997.2 clause 7.7.7 (CURR/PREV_NE/FE_15/24_LPR).";
+        "ITU-T G.997.2 clause 7.7.7 (CURR/PREV_NE/FE_15/24_LPR)";
     }
     leaf successful-bit-swaps {
       type bbf-yang:performance-counter32;
       description
         "Reports a count of the successful bit swap primitives
-         (success_BSW). The successful bit swap primitive
-         (success_BSW) is defined in clause 11.3.1.6/G.9701.";
+         (success_BSW).";
       reference
-        "ITU-T G.997.2 clause 7.7.21 (CURR/PREV_NE/FE_15/24_BSW).";
+        "ITU-T G.997.2 clause 7.7.21 (CURR/PREV_NE/FE_15/24_BSW);
+         ITU-T G.9701 clause 11.3.1.6";
     }
     leaf successful-autonomous-sra {
       type bbf-yang:performance-counter32;
       description
-        "Reports a count of the successful autonomous SRA primitives
-         (success_SRA). The successful autonomous SRA primitive
-         (success_SRA) is defined in clause 11.3.1.6/G.9701.";
+        "Reports a count of the successful autonomous Seamless Rate
+         Adaptation (SRA) primitives (success_SRA).";
       reference
-        "ITU-T G.997.2 clause 7.7.22 (CURR/PREV_NE/FE_15/24_SRA).";
+        "ITU-T G.997.2 clause 7.7.22 (CURR/PREV_NE/FE_15/24_SRA);
+         ITU-T G.9701 clause 11.3.1.6";
     }
     leaf successful-fra {
       type bbf-yang:performance-counter32;
       description
-        "Reports a count of the successful FRA primitives
-         (success_FRA). The successful FRA primitive (success_FRA)
-         is defined in clause 11.3.1.6/G.9701.";
+        "Reports a count of the successful Fast Rate Adaptation (FRA)
+         primitives (success_FRA).";
       reference
-        "ITU-T G.997.2 clause 7.7.23 (CURR/PREV_NE/FE_15/24_FRA).";
+        "ITU-T G.997.2 clause 7.7.23 (CURR/PREV_NE/FE_15/24_FRA);
+         ITU-T G.9701 clause 11.3.1.6";
     }
     leaf successful-rpa {
       type bbf-yang:performance-counter32;
       description
-        "Reports a count of the successful RPA primitives
-         (success_RPA). The successful RPA primitive (success_RPA)
-         is defined in clause 11.3.1.6/G.9701.";
+        "Reports a count of the successful Robust Management Channel
+         (RMC) Parameter Adjustment (RPA) primitives (success_RPA).";
       reference
-        "ITU-T G.997.2 clause 7.7.24 (CURR/PREV_NE/FE_15/24_RPA).";
+        "ITU-T G.997.2 clause 7.7.24 (CURR/PREV_NE/FE_15/24_RPA);
+         ITU-T G.9701 clause 11.3.1.6";
     }
     list inminpeq {
       if-feature "bbf-fast:impulse-noise-monitoring";
@@ -410,8 +415,8 @@ submodule bbf-fast-line-performance-body {
          the line during the accumulation period.";
       reference
         "ITU-T G.997.2 clause 7.7.28.1
-         (CURR/PREV_NE/FE_15/24_INMINPEQ).
-         ITU-T G.9701 clause 11.4.4.7.3.1.";
+         (CURR/PREV_NE/FE_15/24_INMINPEQ);
+         ITU-T G.9701 clause 11.4.4.7.3.1";
     }
     leaf inmame {
       if-feature "bbf-fast:impulse-noise-monitoring";
@@ -420,9 +425,8 @@ submodule bbf-fast-line-performance-body {
         "Reports the count of the INMAME anomalies occurring on the
          line during the accumulation period.";
       reference
-        "ITU-T G.997.2 clause 7.7.28.2
-         (CURR/PREV_NE/FE_15/24_INMAME).
-         ITU-T G.9701 clause 11.4.4.7.3.2.";
+        "ITU-T G.997.2 clause 7.7.28.2 (CURR/PREV_NE/FE_15/24_INMAME);
+         ITU-T G.9701 clause 11.4.4.7.3.2";
     }
     list inmiat {
       if-feature "bbf-fast:impulse-noise-monitoring";
@@ -443,8 +447,8 @@ submodule bbf-fast-line-performance-body {
         "Reports the count of the INMAIATi anomalies occurring on the
          line during the accumulation period.";
       reference
-        "ITU-T G.997.2 clause 7.7.28.3 (CURR/PREV_NE/FE_15/24_INMIAT).
-         ITU-T G.9701 clause 11.4.4.7.3.3.";
+        "ITU-T G.997.2 clause 7.7.28.3 (CURR/PREV_NE/FE_15/24_INMIAT);
+         ITU-T G.9701 clause 11.4.4.7.3.3";
     }
     leaf inmblfc {
       if-feature "bbf-fast:impulse-noise-monitoring";
@@ -454,8 +458,18 @@ submodule bbf-fast-line-performance-body {
          line during the accumulation period.";
       reference
         "ITU-T G.997.2 clause 7.7.28.4
-         (CURR/PREV_NE/FE_15/24_INMBLFC).
-         ITU-T G.9701 clause 11.4.4.7.3.4.";
+         (CURR/PREV_NE/FE_15/24_INMBLFC);
+         ITU-T G.9701 clause 11.4.4.7.3.4";
+    }
+    leaf successful-rmcr {
+      if-feature "bbf-fast:rmcr";
+      type bbf-yang:performance-counter32;
+      description
+        "Reports a count of the successful Robust Management Channel
+         Recovery (RMCR) primitives (success_RMCR).";
+      reference
+        "ITU-T G.997.2 clause 7.7.31 (CURR/PREV_NE/FE_15/24_RMCR);
+         ITU-T G.9701 clause 11.3.1.6";
     }
   }
 
@@ -465,45 +479,43 @@ submodule bbf-fast-line-performance-body {
     leaf errored-seconds {
       type seconds-counter-15min;
       description
-        "Reports the count of errored seconds (ES). An errored
-         second (ES) is defined in clause 11.4.4.2/G.9701.";
+        "Reports the count of errored seconds (ES).";
       reference
-        "ITU-T G.997.2 clause 7.7.8 (CURR/PREV_NE/FE_15/24_ES).";
+        "ITU-T G.997.2 clause 7.7.8 (CURR/PREV_NE/FE_15/24_ES);
+         ITU-T G.9701 clause 11.4.4.2";
     }
     leaf severely-errored-seconds {
       type seconds-counter-15min;
       description
-        "Reports the count of severely errored seconds (SES).
-         A severely errored second (SES) is defined in clause
-         11.4.4.3/G.9701.";
+        "Reports the count of severely errored seconds (SES).";
       reference
-        "ITU-T G.997.2 clause 7.7.9 (CURR/PREV_NE/FE_15/24_SES).";
+        "ITU-T G.997.2 clause 7.7.9 (CURR/PREV_NE/FE_15/24_SES);
+         ITU-T G.9701 clause 11.4.4.3";
     }
     leaf loss-of-signal-seconds {
       type seconds-counter-15min;
       description
-        "Reports the count of loss of signal (los) seconds (LOSS).
-         A los second (LOSS) is defined in clause 11.4.4.4/G.9701.";
+        "Reports the count of loss of signal (los) seconds (LOSS).";
       reference
-        "ITU-T G.997.2 clause 7.7.10 (CURR/PREV_NE/FE_15/24_LOSS).";
+        "ITU-T G.997.2 clause 7.7.10 (CURR/PREV_NE/FE_15/24_LOSS);
+         ITU-T G.9701 clause 11.4.4.4";
     }
     leaf loss-of-rmc-seconds {
       type seconds-counter-15min;
       description
         "Reports the count of loss of Robust Managmenet Channel (RMC)
-         (lor) seconds (LORS). A lor second (LORS) is defined in
-         clause 11.4.4.5/G.9701.";
+         (lor) seconds (LORS).";
       reference
-        "ITU-T G.997.2 clause 7.7.11 (CURR/PREV_NE/FE_15/24_LORS).";
+        "ITU-T G.997.2 clause 7.7.11 (CURR/PREV_NE/FE_15/24_LORS);
+         ITU-T G.9701 clause 11.4.4.5";
     }
     leaf unavailable-seconds {
       type seconds-counter-15min;
       description
-        "Reports the count of unavailable seconds (UAS). An
-         unavailable second (UAS) is defined in clause
-         11.4.4.6/G.9701.";
+        "Reports the count of unavailable seconds (UAS).";
       reference
-        "ITU-T G.997.2 clause 7.7.12 (CURR/PREV_NE/FE_15/24_UAS).";
+        "ITU-T G.997.2 clause 7.7.12 (CURR/PREV_NE/FE_15/24_UAS);
+         ITU-T G.9701 clause 11.4.4.6";
     }
   }
 
@@ -513,45 +525,43 @@ submodule bbf-fast-line-performance-body {
     leaf errored-seconds {
       type seconds-counter-24hr;
       description
-        "Reports the count of errored seconds (ES). An errored
-         second (ES) is defined in clause 11.4.4.2/G.9701.";
+        "Reports the count of errored seconds (ES).";
       reference
-        "ITU-T G.997.2 clause 7.7.8 (CURR/PREV_NE/FE_15/24_ES).";
+        "ITU-T G.997.2 clause 7.7.8 (CURR/PREV_NE/FE_15/24_ES);
+         ITU-T G.9701 clause 11.4.4.2";
     }
     leaf severely-errored-seconds {
       type seconds-counter-24hr;
       description
-        "Reports the count of severely errored seconds (SES).
-         A severely errored second (SES) is defined in clause
-         11.4.4.3/G.9701.";
+        "Reports the count of severely errored seconds (SES).";
       reference
-        "ITU-T G.997.2 clause 7.7.9 (CURR/PREV_NE/FE_15/24_SES).";
+        "ITU-T G.997.2 clause 7.7.9 (CURR/PREV_NE/FE_15/24_SES);
+         ITU-T G.9701 clause 11.4.4.3";
     }
     leaf loss-of-signal-seconds {
       type seconds-counter-24hr;
       description
-        "Reports the count of loss of signal (los) seconds (LOSS).
-         A los second (LOSS) is defined in clause 11.4.4.4/G.9701.";
+        "Reports the count of Loss of Signal (LOS) seconds (LOSS).";
       reference
-        "ITU-T G.997.2 clause 7.7.10 (CURR/PREV_NE/FE_15/24_LOSS).";
+        "ITU-T G.997.2 clause 7.7.10 (CURR/PREV_NE/FE_15/24_LOSS);
+         ITU-T G.9701 clause 11.4.4.4";
     }
     leaf loss-of-rmc-seconds {
       type seconds-counter-24hr;
       description
-        "Reports the count of loss of Robust Management Channel (RMC)
-         (lor) seconds (LORS). A lor second (LORS) is defined in
-         clause 11.4.4.5/G.9701.";
+        "Reports the count of Loss of Robust Management Channel (RMC)
+         (LOS) seconds (LORS).";
       reference
-        "ITU-T G.997.2 clause 7.7.11 (CURR/PREV_NE/FE_15/24_LORS).";
+        "ITU-T G.997.2 clause 7.7.11 (CURR/PREV_NE/FE_15/24_LORS);
+         ITU-T G.9701 clause 11.4.4.5";
     }
     leaf unavailable-seconds {
       type seconds-counter-24hr;
       description
-        "Reports the count of unavailable seconds (UAS). An
-         unavailable second (UAS) is defined in clause
-         11.4.4.6/G.9701.";
+        "Reports the count of unavailable seconds (UAS).";
       reference
-        "ITU-T G.997.2 clause 7.7.12 (CURR/PREV_NE/FE_15/24_UAS).";
+        "ITU-T G.997.2 clause 7.7.12 (CURR/PREV_NE/FE_15/24_UAS);
+         ITU-T G.9701 clause 11.4.4.6";
     }
   }
 

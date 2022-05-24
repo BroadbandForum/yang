@@ -15,20 +15,18 @@ submodule bbf-fast-channel-threshold-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing channel threshold profiles.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-fast-channel-threshold-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -148,42 +156,42 @@ submodule bbf-fast-channel-threshold-profile-body {
        used to issue reports.";
     leaf code-violations-threshold {
       type uint32;
-      units "1 second";
+      units "seconds";
       default "0";
       description
         "Threshold for the count of the Cyclic Redundancy Check
          anomalies (CRC). A special value (0) indicates the
-         threshold is disabled. The Cyclic Redundancy Check anomaly
-         (CRC) is defined in clause 11.3.1.1/G.9701.";
+         threshold is disabled.";
       reference
-        "ITU-T G.997.2 clause 7.8.4 (CURR/PREV_NE/FE_15/24_CV);
-         ITU-T G.997.2 clause 8.2 (THRESHOLD_NE/FE_15/24_CV)";
+        "ITU-T G.997.2 clauses 7.8.4 (CURR/PREV_NE/FE_15/24_CV) and
+         8.2 (THRESHOLD_NE/FE_15/24_CV);
+         ITU-T G.9701 clause 11.3.1.1";
     }
     leaf uncorrectable-dtus-threshold {
       type uint32;
-      units "1 second";
+      units "seconds";
       default "0";
       description
         "Threshold for the count of the uncorrected Data Transfer Unit
          anomalies (RTX-UC). A special value (0) indicates the
-         threshold is disabled. The uncorrected DTU anomaly (RTX-UC)
-         is defined in clause 11.3.1.1/G.9701.";
+         threshold is disabled.";
       reference
-        "ITU-T G.997.2 clause 7.8.6 (CURR/PREV_NE/FE_15/24_RTXUC);
-         ITU-T G.997.2 clause 8.2 (THRESHOLD_NE/FE_15/24_RTXUC)";
+        "ITU-T G.997.2 clauses 7.8.6 (CURR/PREV_NE/FE_15/24_RTXUC)
+         and 8.2 (THRESHOLD_NE/FE_15/24_RTXUC);
+         ITU-T G.9701 clause 11.3.1.1";
     }
     leaf retransmitted-dtus-threshold {
       type uint32;
-      units "1 second";
+      units "seconds";
       default "0";
       description
         "Threshold for the count of the retransmitted Data Transfer
          Unit (DTU) anomalies (RTC-TX). A special value (0) indicates
-         the threshold is disabled. The retransmitted DTU anomaly
-         (RTX-TX) is defined in clause 11.3.1.1/G.9701.";
+         the threshold is disabled.";
       reference
-        "ITU-T G.997.2 clause 7.8.7 (CURR/PREV_NE/FE_15/24_RTXTX);
-         ITU-T G.997.2 clause 8.2 (THRESHOLD_NE/FE_15/24_RTXTX)";
+        "ITU-T G.997.2 clauses 7.8.7 (CURR/PREV_NE/FE_15/24_RTXTX) and
+         8.2 (THRESHOLD_NE/FE_15/24_RTXTX);
+         ITU-T G.9701 clause 11.3.1.1";
     }
   }
 }

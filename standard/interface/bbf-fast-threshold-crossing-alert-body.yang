@@ -13,20 +13,18 @@ submodule bbf-fast-threshold-crossing-alert-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of identities associated
      with the management of FAST threshold crossing alerts.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -66,9 +64,19 @@ submodule bbf-fast-threshold-crossing-alert-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -120,8 +128,6 @@ submodule bbf-fast-threshold-crossing-alert-body {
                         TR-355_Amendment-1.pdf>";
   }
 
-  /********************* ABSTRACT IDENTITIES *********/
-
   identity fast-threshold-crossing-alert {
     description
       "Base identity for FAST threshold crossing alerts (TCA).
@@ -154,8 +160,6 @@ submodule bbf-fast-threshold-crossing-alert-body {
        threshold crossing alert.";
   }
 
-  /********** FTU-O 15-MIN CHANNEL NOTIFICATIONS **********/
-
   identity ftu-o-15min-channel-code-violations-tca {
     base fast-15min-threshold-crossing-alert;
     description
@@ -182,8 +186,6 @@ submodule bbf-fast-threshold-crossing-alert-body {
        FAST Transceiver Unit - central Office (FTU-O) threshold. This
        threshold crossing alert is optional.";
   }
-
-  /********** FTU-O 15-MIN LINE NOTIFICATIONS **********/
 
   identity ftu-o-15min-line-errored-seconds-tca {
     base fast-15min-threshold-crossing-alert;
@@ -272,8 +274,6 @@ submodule bbf-fast-threshold-crossing-alert-body {
        crossing alert is optional.";
   }
 
-  /********** FTU-R 15-MIN CHANNEL NOTIFICATIONS **********/
-
   identity ftu-r-15min-channel-code-violations-tca {
     base fast-15min-threshold-crossing-alert;
     description
@@ -300,8 +300,6 @@ submodule bbf-fast-threshold-crossing-alert-body {
        FAST Transceiver Unit - Remote side (FTU-R) threshold. This
        threshold crossing alert is optional.";
   }
-
-  /********************* FTU-R 15-MIN LINE NOTIFICATIONS *********/
 
   identity ftu-r-15min-line-errored-seconds-tca {
     base fast-15min-threshold-crossing-alert;
@@ -345,8 +343,6 @@ submodule bbf-fast-threshold-crossing-alert-body {
        Transceiver Unit - Remote side (FTU-R) threshold.";
   }
 
-  /********** FTU-O 24-HR CHANNEL NOTIFICATIONS **********/
-
   identity ftu-o-24hr-channel-code-violations-tca {
     base fast-24hr-threshold-crossing-alert;
     description
@@ -373,8 +369,6 @@ submodule bbf-fast-threshold-crossing-alert-body {
        Transceiver Unit - central Office (FTU-O) threshold. This
        threshold crossing alert is optional.";
   }
-
-  /********** FTU-O 24-HR LINE NOTIFICATIONS **********/
 
   identity ftu-o-24hr-line-errored-seconds-tca {
     base fast-24hr-threshold-crossing-alert;
@@ -463,8 +457,6 @@ submodule bbf-fast-threshold-crossing-alert-body {
        crossing alert is optional.";
   }
 
-  /********** FTU-R 24-HR CHANNEL NOTIFICATIONS **********/
-
   identity ftu-r-24hr-channel-code-violations-tca {
     base fast-24hr-threshold-crossing-alert;
     description
@@ -491,8 +483,6 @@ submodule bbf-fast-threshold-crossing-alert-body {
        Transceiver Unit - Remote side (FTU-R) threshold. This
        threshold crossing alert is optional.";
   }
-
-  /********** FTU-R 24-HR LINE NOTIFICATIONS **********/
 
   identity ftu-r-24hr-line-errored-seconds-tca {
     base fast-24hr-threshold-crossing-alert;

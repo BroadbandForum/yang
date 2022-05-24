@@ -13,21 +13,19 @@ submodule bbf-selt-pmd-measurement-parameter-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      Single Ended Line Test Physical Medium Dependent (SELT-PMD)
      measurement parameters.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -67,9 +65,19 @@ submodule bbf-selt-pmd-measurement-parameter-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -134,7 +142,7 @@ submodule bbf-selt-pmd-measurement-parameter-body {
   feature extended-bandwidth-selt-uer {
     description
       "Indicates support for extended bandwidth Single Ended Line Test
-       (SELT) for reporting Uncalibrated Echo Response (UER).";
+       (SELT) for reporting the Uncalibrated Echo Response (UER).";
   }
 
   feature extended-bandwidth-selt-qln {
@@ -171,9 +179,9 @@ submodule bbf-selt-pmd-measurement-parameter-body {
        A tuple consists of two 4-octet groups and represents data
        belonging to a sub-carrier. The first tuple represents
        sub-carrier group 0 and the last tuple represents sub-carrier
-       group (length/8 - 1). In each 4-octet group in the
-       tuple, the most significant byte is loaded first. The order of
-       the tuples is determined by the node to which this type is
+       group (length/8 - 1). In each 4-octet group in the tuple,
+       the most significant byte is loaded first. The order of the
+       tuples is determined by the node to which this type is
        associated.";
   }
 
@@ -200,6 +208,8 @@ submodule bbf-selt-pmd-measurement-parameter-body {
            with Df = 4.3125 kHz. SELT-UER_G has three valid values:
            1, 2, and 12. Section A.2.2.1 refers to SELT-UER_G as the
            UER granularity parameter, UER_G.";
+        reference
+          "ITU-T G.996.2 clause A.2.2.2 (SELT-UER_G)";
       }
       leaf uer {
         type per-sub-carrier-int32-tuple;
@@ -249,13 +259,13 @@ submodule bbf-selt-pmd-measurement-parameter-body {
       type per-sub-carrier-uint8;
       description
         "The REL_VAR_UER(f) provides the relative variance of the
-         uncalibrated echo response by the Single Ended Line Test
+         Uncalibrated Echo Response by the Single Ended Line Test
          Physical Medium Dependent (SELT-PMD) function for each
          frequency i * UER_G * Df, where i ranges from 0 to NSC-1,
          Df = 4.3125 kHz, and (NSC-1) * UER_G * Df is the highest
          frequency supported by the SELT-PMD functionality.
 
-         The relative variance of the uncalibrated echo response
+         The relative variance of the Uncalibrated Echo Response
          REL_VAR_UER(i* UER_G *Df) shall be represented as an 8-bit
          unsigned integer v(i), where i is the subcarrier index
          i = 0 to NSC-1. The value of REL_VAR_UER(i* UER_G *Df) shall
@@ -282,6 +292,8 @@ submodule bbf-selt-pmd-measurement-parameter-body {
            SELTQLN frequency spacing, which is equal to SELTQLN_G x Df
            with Df = 4.3125 kHz. SELTQLN_G has three valid values:
            1, 2, and 12.";
+        reference
+          "ITU-T G.996.2 clause A.2.2.3 (SELTQLN_G)";
       }
       leaf qln {
         type per-sub-carrier-uint8;
@@ -300,7 +312,7 @@ submodule bbf-selt-pmd-measurement-parameter-body {
 
          SELTQLN_G has three valid values: 1, 2, and 12, indicating
          whether the measurements were performed using a subcarrier
-         spacing of 4.3125 kHz,  8.625 kHz, or of 51.75 kHz
+         spacing of 4.3125 kHz, 8.625 kHz, or of 51.75 kHz
          respectively.
 
          SELT quiet line noise SELTQLN(i x SELTQLN_G x Df) shall be

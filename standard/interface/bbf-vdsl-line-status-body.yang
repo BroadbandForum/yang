@@ -16,20 +16,18 @@ submodule bbf-vdsl-line-status-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 5.1 xDSL Line.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -69,9 +67,19 @@ submodule bbf-vdsl-line-status-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -135,15 +143,14 @@ submodule bbf-vdsl-line-status-body {
 
   grouping line-status {
     description
-      "The xDSL Line status object represents status/state objects
-       for an individual physical transmission line.";
+      "The xDSL Line status parameters represent status/state data
+       nodes for an individual physical transmission line.";
     leaf xdsl-transmission-system {
       type xts-descriptor;
       description
         "This indicates the current xDSL Transmission System.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.1.1 xTU transmission system
-         enabling (XTSE)";
+        "ITU-T G.997.1 clause 7.3.1.1.1 (XTSE)";
     }
     leaf line-power-management-state {
       type enumeration {
@@ -158,7 +165,7 @@ submodule bbf-vdsl-line-status-body {
              (L1) is when there is transmission on the line but the
              net data rate is reduced (e.g., only for OAM and higher
              layer connection and session control). This state
-             applies to [ITU-T G.992.2] only.";
+             applies to ITU-T G.992.2 only.";
         }
         enum L2 {
           description
@@ -166,7 +173,7 @@ submodule bbf-vdsl-line-status-body {
              (L2) is when there is transmission on the line but the
              net data rate is reduced (e.g., only for OAM and higher
              layer connection and session control). This state
-             applies to [ITU-T G.992.3] and [ITU-T G.992.4] only.";
+             applies to ITU-T G.992.3 and ITU-T G.992.4 only.";
         }
         enum L3 {
           description
@@ -178,8 +185,7 @@ submodule bbf-vdsl-line-status-body {
         "This parameter identifies the power management state of
          the line.";
       reference
-        "ITU-T G.997.1 clause 7.5.1.5 Line power management
-         state";
+        "ITU-T G.997.1 clause 7.5.1.5";
     }
     leaf initialization-success-failure-cause {
       type enumeration {
@@ -243,11 +249,10 @@ submodule bbf-vdsl-line-status-body {
          initialization procedure was not successful, this
          parameter provides the reason.";
       reference
-        "ITU-T G.997.1 clause 7.5.1.6 Initialization
-         success/failure cause";
+        "ITU-T G.997.1 clause 7.5.1.6";
     }
     leaf vdsl2-lr-actual-op-type {
-      if-feature "vdsl2-lr";
+      if-feature "bbf-vdsl:vdsl2-lr";
       type enumeration {
         enum disabled {
           description
@@ -274,10 +279,7 @@ submodule bbf-vdsl-line-status-body {
         "This parameter reports the actual operation type
          of the VDSL2 Long Reach (VDSL2-LR) mode.";
       reference
-        "ITU-T G.997.1 clause 7.5.1.44.1 VDSL2-LR actual
-         operation type (VDSL2-LR_ACTOPTYPE)";
+        "ITU-T G.997.1 clause 7.5.1.44.1 (VDSL2-LR_ACTOPTYPE)";
     }
   }
-
-  // end grouping line-status
 }

@@ -13,20 +13,18 @@ submodule bbf-fast-upstream-power-back-off-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing upstream power back off profiles.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -66,9 +64,19 @@ submodule bbf-fast-upstream-power-back-off-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -134,16 +142,16 @@ submodule bbf-fast-upstream-power-back-off-profile-body {
     description
       "Power-back-off-specific configuration parameters.";
     reference
-      "ITU-T G.997.2 clause 7.1.2.";
+      "ITU-T G.997.2 clause 7.1.2";
     leaf upbopsd-a {
       type uint16 {
         range "0..4095" {
           description
-            "Defines a range equal to 40.00..80.95 dBm/Hz. Uses an
-             offset of 40.00 dBm/Hz.";
+            "Defines a range from 40.00 to 80.95 dBm per Hz. The
+             value is calculated as ('upbopsd-a' * 0.01) + 40.";
         }
       }
-      units "0.01 dBm/Hz";
+      units "0.01 dBm per Hz";
       default "0";
       description
         "Defines the parameter a for the Upstream power back-off
@@ -151,17 +159,17 @@ submodule bbf-fast-upstream-power-back-off-profile-body {
          compute the upstream power back-off for the upstream
          frequency band.";
       reference
-        "ITU-T G.997.2 clause 7.1.2.9 (UPBOPSDA); ITU-T G.9701
-         clause 7.3.1.4.";
+        "ITU-T G.997.2 clause 7.1.2.9 (UPBOPSDA);
+         ITU-T G.9701 clause 7.3.1.4";
     }
     leaf upbopsd-b {
       type uint16 {
         range "0..4095" {
           description
-            "Defines a range equal to 0..40.95 dBm/Hz.";
+            "Defines a range from 0.00 to 40.95 dBm per Hz.";
         }
       }
-      units "0.01 dBm/Hz";
+      units "0.01 dBm per Hz";
       default "0";
       description
         "Defines the parameter b for the Upstream power back-off
@@ -169,14 +177,14 @@ submodule bbf-fast-upstream-power-back-off-profile-body {
          compute the upstream power back-off for the upstream
          frequency band.";
       reference
-        "ITU-T G.997.2 clause 7.1.2.10 (UPBOPSDB); ITU-T G.9701
-         clause 7.3.1.4.";
+        "ITU-T G.997.2 clause 7.1.2.10 (UPBOPSDB);
+         ITU-T G.9701 clause 7.3.1.4";
     }
     leaf upbo-upstream-electrical-length {
       type uint16 {
         range "0..1280" {
           description
-            "Defines a range equal to 0..128 dB.";
+            "Defines a range from 0.0 to 128.0 dB.";
         }
       }
       units "0.1 dB";
@@ -185,8 +193,8 @@ submodule bbf-fast-upstream-power-back-off-profile-body {
         "Defines the electrical length kl0 (expressed in dB at
          1 MHz).";
       reference
-        "ITU-T G.997.2 clause 7.1.2.11 (UPBOKL); ITU-T G.9701 clause
-         7.3.1.4.2.1.";
+        "ITU-T G.997.2 clause 7.1.2.11 (UPBOKL);
+         ITU-T G.9701 clause 7.3.1.4.2.1";
     }
     leaf upbo-force-electrical-length {
       type boolean;
@@ -198,14 +206,14 @@ submodule bbf-fast-upstream-power-back-off-profile-body {
          Transceiver Units (FTU) determine the electrical length
          kl0.";
       reference
-        "ITU-T G.997.2 clause 7.1.2.12 (UPBOKLF); ITU-T G.9701
-         clause 7.3.1.4.2.1.";
+        "ITU-T G.997.2 clause 7.1.2.12 (UPBOKLF);
+         ITU-T G.9701 clause 7.3.1.4.2.1";
     }
     leaf upbo-reference-electrical-length {
       type uint16 {
         range "0 | 18..255" {
           description
-            "Defines a range equal to 1.8..25.5 dB.
+            "Defines a range from 1.8 to 25.5 dB.
              Special value 0: Use the Equal Power Spectral Density
              (PSD) Upstream power back-off (UPBO) method.";
         }
@@ -220,8 +228,8 @@ submodule bbf-fast-upstream-power-back-off-profile-body {
          then the Equal Power Spectral Density (PSD) Upstream power
          back-off (UPBO) method is used.";
       reference
-        "ITU-T G.997.2 clause 7.1.2.13 (UPBOKLREF); ITU-T G.9701
-         clause 7.3.1.4.2.2.";
+        "ITU-T G.997.2 clause 7.1.2.13 (UPBOKLREF);
+         ITU-T G.9701 clause 7.3.1.4.2.2";
     }
   }
 

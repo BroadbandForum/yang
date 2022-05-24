@@ -18,20 +18,18 @@ submodule bbf-selt-processing-derived-parameter-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      Single Ended Line Test Processing (SELT-P) derived parameters.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -71,9 +69,19 @@ submodule bbf-selt-processing-derived-parameter-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -161,8 +169,8 @@ submodule bbf-selt-processing-derived-parameter-body {
       type bbf-yang:data-rate32;
       description
         "This parameter represents a best-effort estimate of the
-         achievable net data rate (in kbit/s) on the loop under test,
-         under the following assumptions:
+         achievable net data rate (in kilobits per second) on the loop
+         under test, under the following assumptions:
 
          - Fast mode (i.e., operation with interleaver depth D=1, and
            INP=0 (no impulse noise protection))
@@ -170,9 +178,8 @@ submodule bbf-selt-processing-derived-parameter-body {
          - target margin equal to CAP-TARSNRM (see clause B.2.1.4)
          - transmit signal PSD at the U-interface of the
            xTU-transmitter equal to CAP-SIGNALPSD
-           (see clause B.2.1.2)
          - noise PSD at the U-interface of the xTU-receiver equal to
-           CAP-NOISEPSD (see clause B.2.1.3)
+           CAP-NOISEPSD
          - support of bit loading from 1 to 15 bits included, in
            steps of 1 bit increments.
 
@@ -181,7 +188,8 @@ submodule bbf-selt-processing-derived-parameter-body {
          downstream direction is CAPACITYds, and the parameter in the
          upstream direction is CAPACITYus.";
       reference
-        "ITU-T G.996.2 clause B.2.2.7 (CAP-EST)";
+        "ITU-T G.996.2 clauses B.2.1.2, B.2.1.3 and B.2.2.7
+         (CAP-EST)";
     }
   }
 
@@ -223,12 +231,12 @@ submodule bbf-selt-processing-derived-parameter-body {
       type uint16 {
         range "0..16383";
       }
-      units "1 meter";
+      units "meters";
       description
         "This parameter is the physical length (in metres) of the
          loop between the U-C and the U-R interface. The loop length
-         shall be measured with a granularity of 1 m, with valid
-         range of 0 to 16383 m.";
+         shall be measured with a granularity of 1 meter, with valid
+         range of 0 to 16383 meters.";
       reference
         "ITU-T G.996.2 clause B.2.2.2 (LOOP-LEN)";
     }
@@ -244,22 +252,22 @@ submodule bbf-selt-processing-derived-parameter-body {
             "The segment number. The first loop segment in the list
              shall be the segment connected to the Single Ended Line
              Test Physical Medium Dependent (SELT-PMD) block measuring
-             the SELT-PMD measurement parameters (i.e., the
-             SELT-PMD block shall be the starting point of the
-             topology description). Subsequent loop segments in the
-             list shall describe the loop in the direction toward the
-             farend loop termination.";
+             the SELT-PMD measurement parameters (i.e., the SELT-PMD
+             block shall be the starting point of the topology
+             description). Subsequent loop segments in the list shall
+             shall describe the loop in the direction toward the
+             far-end loop termination.";
         }
         leaf len {
           type uint16 {
             range "0..16383";
           }
-          units "1 meter";
+          units "meters";
           description
             "This parameter specifies the physical length of the loop
              segment, in metres. The loop segment length shall be
-             measured with a granularity of 1 m, with a valid range
-             of 0 to 16383 m.";
+             measured with a granularity of 1 meter, with a valid
+             range of 0 to 16383 meters.";
           reference
             "ITU-T G.996.2 clause B.1.1.3.1 (LOOP_SEGM_LENGTH)";
         }
@@ -321,7 +329,7 @@ submodule bbf-selt-processing-derived-parameter-body {
 
          If this parameter is supported, reporting of up to three
          segments is a mandatory capability. Reporting of additional
-         segments is optional. ";
+         segments is optional.";
       reference
         "ITU-T G.996.2 clause B.2.2.3 (LOOP-TOPOLOGY)";
     }
@@ -384,7 +392,7 @@ submodule bbf-selt-processing-derived-parameter-body {
       description
         "This parameter is a binary indication of a missing or
          incorrectly installed splitter or micro-filter at the U-R
-         reference point. A value of 1 for this flag represents a
+         reference point. A value of 'true' for this flag represents a
          missing splitter. This parameter is only defined for the
          SELT-P-R functionality.";
       reference
@@ -392,12 +400,12 @@ submodule bbf-selt-processing-derived-parameter-body {
     }
     container downstream {
       description
-        "Managed objects applicable in the downstream direction.";
+        "Managed data nodes applicable in the downstream direction.";
       uses downstream-upstream-derived-parameters;
     }
     container upstream {
       description
-        "Managed objects applicable in the upstream direction.";
+        "Managed data nodes applicable in the upstream direction.";
       uses downstream-upstream-derived-parameters;
     }
   }

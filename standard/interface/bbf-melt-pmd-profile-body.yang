@@ -13,20 +13,18 @@ submodule bbf-melt-pmd-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Physical Medium Dependent (PMD) profiles.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -66,9 +64,19 @@ submodule bbf-melt-pmd-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -133,16 +141,16 @@ submodule bbf-melt-pmd-profile-body {
       type uint8 {
         range "0..150";
       }
-      units "1 V";
+      units "volts";
       description
         "This parameter defines the peak metallic voltage which must
          not be exceeded in any active measurement applying a
          metallic voltage between tip and ring in order not to
-         conduct current in anon-linear termination located at the
+         conduct current in a non-linear termination located at the
          far-end during the measurement. The range of valid values is
-         from 0 to 150 V with a granularity of 1 V. In the case of a
-         test performed with a sinewave signal, it applies to the
-         peak of the sinewave, not to its rms value.";
+         from 0 to 150 volts with a granularity of 1 volts. In the
+         case of a test performed with a sinewave signal, it applies
+         to the peak of the sinewave, not to its RMS value.";
       reference
         "ITU-T G.996.2 clause E.2.1.2 (MELT-PV)";
     }
@@ -150,7 +158,7 @@ submodule bbf-melt-pmd-profile-body {
       type uint16 {
         range "300..3400";
       }
-      units "1 Hz";
+      units "Hz";
       description
         "This parameter sets up frequency of the pair identification
          tone as defined in clause E.1.2.1. The range of frequencies
@@ -164,7 +172,7 @@ submodule bbf-melt-pmd-profile-body {
       type uint16 {
         range "1..65535";
       }
-      units "1 second";
+      units "seconds";
       description
         "This parameter specifies the duration of the pair
          identification tone. After timeout the pair identification
@@ -175,35 +183,41 @@ submodule bbf-melt-pmd-profile-body {
     }
     leaf maximum-far-end-signature-conductive-voltage {
       type uint16 {
-        range "0..500";
+        range "0..500" {
+          description
+            "Defines a range from 0.0 to 50.0 volts.";
+        }
       }
-      units "0.1 V";
+      units "0.1 volts";
       description
         "This parameter specifies the maximum conduction voltage
          level of an expected far-end signature. It defines the
          minimum metallic voltage required for all measurements with
          a high metallic voltage between tip and ring in order to
          conduct current in a far-end signature during the
-         measurement. The range of valid values is from 0 to 50 V
-         with a granularity of 0.1 V.";
+         measurement. The range of valid values is from 0 to 50 volts
+         with a granularity of 0.1 volts.";
       reference
         "ITU-T G.996.2 clause E.2.1.5 (MELT-MAXFE-SCV)";
     }
     leaf minimum-far-end-signature-conductive-voltage {
       type uint16 {
-        range "0..500";
+        range "0..500" {
+          description
+            "Defines a range from 0.0 to 50.0 volts.";
+        }
       }
-      units "0.1 V";
+      units "0.1 volts";
       description
         "This parameter specifies the minimum conduction voltage
          level of an expected far-end signature. It defines the
          maximum metallic voltage allowed for all measurements with a
          controlled metallic voltage between tip and ring in order
          not to conduct current in a far-end signature during the
-         measurement. The range of valid values is from 0 to 50 V
-         with a granularity of 0.1 V. In the case of a measurement
+         measurement. The range of valid values is from 0 to 50 volts
+         with a granularity of 0.1 volts. In the case of a measurement
          performed with a sinewave signal, it applies to the peak of
-         the sinewave, not to its rms value.";
+         the sinewave, not to its RMS value.";
       reference
         "ITU-T G.996.2 clause E.2.1.6 (MELT-MINFE-SCV)";
     }
@@ -216,9 +230,8 @@ submodule bbf-melt-pmd-profile-body {
         "This parameter defines the list of measurements to be
          executed. It shall support a single measurement or a set of
          MELT measurements in a consecutive manner. The measurements
-         of interest are selected via a flag register, or
-         equivalent. If no elements exist, no measurements will be
-         executed.";
+         of interest are selected via a flag register, or equivalent.
+         If no elements exist, no measurements will be executed.";
       reference
         "ITU-T G.996.2 clause E.2.1.1 (MELT-MCLASS)";
     }
@@ -226,7 +239,7 @@ submodule bbf-melt-pmd-profile-body {
       type uint16 {
         range "10..1000";
       }
-      units "1 Hz";
+      units "Hz";
       description
         "This parameter controls the frequency used during the
          3-element capacitance test, if performed with a sinewave

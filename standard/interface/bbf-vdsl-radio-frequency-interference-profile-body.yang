@@ -16,21 +16,19 @@ submodule bbf-vdsl-radio-frequency-interference-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 5.6 Spectrum related
      profiles; Radio Frequency Interference (RFI) Profile.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +68,19 @@ submodule bbf-vdsl-radio-frequency-interference-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -144,30 +152,29 @@ submodule bbf-vdsl-radio-frequency-interference-profile-body {
       max-elements 16;
       uses sub-carrier-range;
       description
-        "For [ITU-T G.992.5], this configuration parameter
-         defines the subset of downstream Power Spectral Density (PSD)
-         mask breakpoints, as specified in PSDMASK, that will be used
-         to notch an Radio Frequency Interference (RFI) band. This
-         subset consists of couples of consecutive subcarrier indices
+        "For ITU-T G.992.5, this configuration parameter defines
+         the subset of downstream Power Spectral Density (PSD) mask
+         breakpoints, as specified in PSDMASK, that will be used to
+         notch an Radio Frequency Interference (RFI) band. This subset
+         consists of couples of consecutive subcarrier indices
          belonging to breakpoints: [ti; ti + 1], corresponding to the
          low level of the notch. The specific interpolation around
          these points is defined in the relevant Recommendations
-         (e.g., [ITU-T G.992.5]).
-         The CO-MIB will define the RFI notches using breakpoints
-         in PSDMASKds as specified in the relevant
-         Recommendations (e.g., [ITU-T G.992.5]).
-         For [ITU-T G.993.2], this configuration parameter
-         defines the bands where the PSD will be reduced as
-         specified in clause 7.2.1.2 of [ITU-T G.993.2]. Each
-         band will be represented by a start and stop subcarrier
-         indices with a subcarrier spacing of 4.3125 kHz. Up to
-         16 bands may be specified. This parameter defines the
-         RFI bands for both upstream and downstream directions.
-         The default is an empty list indicating no RFI bands.";
+         (e.g., ITU-T G.992.5). The CO-MIB will define the RFI
+         notches using breakpoints in PSDMASKds as specified in the
+         relevant Recommendations (e.g., ITU-T G.992.5).
+         For ITU-T G.993.2, this configuration parameter defines
+         the bands where the PSD will be reduced as specified in
+         clause 7.2.1.2 of ITU-T G.993.2. Each band will be
+         represented by a start and stop subcarrier indices with a
+         subcarrier spacing of 4.3125 kHz. Up to 16 bands may be
+         specified. This parameter defines the RFI bands for both
+         upstream and downstream directions. The default is an empty
+         list indicating no RFI bands.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.2.10 RFI bands (RFIBANDS)";
+        "ITU-T G.997.1 clause 7.3.1.2.10 (RFIBANDS);
+         ITU-T G.993.2 clause 7.2.1.2;
+         ITU-T G.992.5";
     }
   }
-
-  // end grouping radio-frequency-interference-profile
 }

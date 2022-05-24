@@ -13,21 +13,19 @@ submodule bbf-vdsl-xtu-channel-threshold-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 8.4 xTU Channel
      Thresholds.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -67,9 +65,19 @@ submodule bbf-vdsl-xtu-channel-threshold-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -133,9 +141,9 @@ submodule bbf-vdsl-xtu-channel-threshold-profile-body {
 
   grouping channel-threshold-profile {
     description
-      "The Channel Thresholds object represents a set of
-       performance monitoring thresholds for a particular channel
-       associated with an xDSL Line at a particular xTU.";
+      "The Channel Threshold parameters represent a set of performance
+       monitoring thresholds for a particular channel associated with
+       an xDSL Line at a particular xTU.";
     leaf code-violations-threshold {
       type uint32;
       default "0";
@@ -144,7 +152,7 @@ submodule bbf-vdsl-xtu-channel-threshold-profile-body {
          for threshold reports of Code Violations (CV).
          A special value (0) indicates the threshold is disabled.";
       reference
-        "ITU-T G.997.1 clause 7.2.7.";
+        "ITU-T G.997.1 clause 7.2.7";
     }
     leaf forward-error-corrections-threshold {
       type uint32;
@@ -154,7 +162,7 @@ submodule bbf-vdsl-xtu-channel-threshold-profile-body {
          for threshold reports of Forward Error Corrections (FEC).
          A special value (0) indicates the threshold is disabled.";
       reference
-        "ITU-T G.997.1 clause 7.2.7.";
+        "ITU-T G.997.1 clause 7.2.7";
     }
     leaf uncorrected-dtus-threshold {
       type uint32;
@@ -166,9 +174,21 @@ submodule bbf-vdsl-xtu-channel-threshold-profile-body {
          ITU-T G.998.4.
          A special value (0) indicates the threshold is disabled.";
       reference
-        "ITU-T G.998.4.";
+        "ITU-T G.997.1 clauses 7.2.2.1.3 and 7.2.2.2.3;
+         ITU-T G.998.4 clause 12";
+    }
+    leaf retransmitted-dtus-threshold {
+      type uint32;
+      default "0";
+      description
+        "This parameter is the performance monitoring threshold
+         for threshold reports of retransmitted Data Transfer Units
+         (DTUs). This parameter only applies to systems supporting
+         ITU-T G.998.4.
+         A special value (0) indicates the threshold is disabled.";
+      reference
+        "ITU-T G.997.1 clauses 7.2.2.1.4 and 7.2.2.2.4;
+         ITU-T G.998.4 clause 12";
     }
   }
-
-  // end grouping channel-threshold-profile
 }

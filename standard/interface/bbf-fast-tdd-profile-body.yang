@@ -15,20 +15,18 @@ submodule bbf-fast-tdd-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Time Division Duplexing (TDD) profiles.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-fast-tdd-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -146,7 +154,7 @@ submodule bbf-fast-tdd-profile-body {
     description
       "Time Division Duplexing (TDD) configuration parameters.";
     reference
-      "ITU-T G.997.2 clause 7.1.1.";
+      "ITU-T G.997.2 clause 7.1.1";
     leaf total-symbol-periods {
       type uint8 {
         range "23 | 36";
@@ -157,15 +165,20 @@ submodule bbf-fast-tdd-profile-body {
          Duplexing (TDD) frame.";
       reference
         "ITU-T G.997.2 clause 7.1.1.1 (MF);
-         ITU-T G.9701 clause 10.5.";
+         ITU-T G.9701 clause 10.5";
     }
     leaf downstream-symbol-periods {
       type uint8 {
         range "6..32";
       }
-      must
-        "(../total-symbol-periods = 23 and .>= 6 and .<= 19) or
-         (../total-symbol-periods = 36 and .>= 10 and .<= 32)" {
+      must "(../total-symbol-periods = 23 and .>= 6 and .<= 19) or
+            (../total-symbol-periods = 36 and .>= 10 and .<= 32)" {
+        error-message
+          "Either the 'total-symbole-periods' is 23 and "
+        + "'downstream-symbol-periods' is not in the range of 6 to "
+        + "19 or 'total-symbol-periods' is 36 and "
+        + "'downstream-symbol-periods' is not in the range of 10 to "
+        + "32.";
         description
           "If the total symbol periods is 23, the number of downstream
            symbol periods must be between 6 to 19 inclusive. If the
@@ -187,16 +200,16 @@ submodule bbf-fast-tdd-profile-body {
       type uint8 {
         range "4 | 8 | 10 | 12 | 14 | 16 | 20 | 24 | 30 | 33";
       }
-      units "N/64 samples";
+      units "n samples";
       default "10";
       description
         "Defines the cyclic extension(Lcp) to be used. The units
          are in N/64 samples, where N = index of the highest
          supported downstream data-bearing sub-carrier as defined
-         for the enabled profile (see Table 6-1/G.9701) plus one.";
+         for the enabled profile plus one.";
       reference
         "ITU-T G.997.2 clause 7.1.1.3 (CE);
-         ITU-T G.9701 clause 10.4.4";
+         ITU-T G.9701 clause 10.4.4 and Table 6-1";
     }
     container dynamic-time-assignment {
       if-feature "bbf-fast:dta";
@@ -229,10 +242,9 @@ submodule bbf-fast-tdd-profile-body {
         description
           "The type of Dynamic Time Assignment (DTA) allowed.";
         reference
-          "ITU-T G.997.2 clause T.2.1.2 (IDTA_ALLOWED);
-           ITU-T G.997.2 clause T.2.1.4 (CDTA_ALLOWED);
-           ITU-T G.9701 clauses X.6.7.2 and T.2.2;
-           ITU-T G.9701 clauses D.5.7.2 and T.2.2.1";
+          "ITU-T G.997.2 clauses T.2.1.2 (IDTA_ALLOWED) and T.2.1.4
+           (CDTA_ALLOWED);
+           ITU-T G.9701 clauses X.6.7.2, T.2.2, D.5.7.2 and T.2.2.1";
       }
       leaf preferred-mds {
         type uint8 {
@@ -247,6 +259,10 @@ submodule bbf-fast-tdd-profile-body {
            ../../total-symbol-periods = 36 and .>= 10 and .<= 31))
            and (. >= ../minimum-mds) and (. <= ../maximum-mds))
            or ../dta-allowed='none'" {
+          error-message
+            "'preferred-mds' is either less than 'minimum-mds' or is "
+          + "greater than 'maximum-mds' depending on the configured "
+          + "values of 'dta-allowed' and 'total-symbol-periods'.";
           description
             "The preferred Mds for Dynamic Time Assignment (DTA)
              must be equal to or higher than the minimum Mds for DTA
@@ -256,13 +272,12 @@ submodule bbf-fast-tdd-profile-body {
         }
         default "28";
         description
-          "Provides the number of downstream symbol
-           positions in a Time Division Duplexing (TDD) frame
-           requested by the Dynamic Resource Allocation (DRA) at the
-           first opportunity upon entering showtime of a line on which
-           Dynamic Time Assignment (DTA) operation is enabled.
-           If MF=23, a value different from the default
-           value needs to be configured.";
+          "Provides the number of downstream symbol positions in a
+           Time Division Duplexing (TDD) frame requested by the
+           Dynamic Resource Allocation (DRA) at the first opportunity
+           upon entering showtime of a line on which Dynamic Time
+           Assignment (DTA) operation is enabled. If MF=23, a value
+           different from the default value needs to be configured.";
         reference
           "ITU-T G.997.2 clause T.2.2.1 (DTA_PREF_Mds);
            ITU-T G.9701 clause T.2.3";
@@ -271,14 +286,17 @@ submodule bbf-fast-tdd-profile-body {
         type uint8 {
           range "1..25";
         }
-        must
-          "(../dta-allowed='idta' and ../../total-symbol-periods =
-           23 and .>= 1 and .<= 12) or (../dta-allowed='idta' and
-           ../../total-symbol-periods = 36 and .>= 1 and .<= 25) or
-           (../dta-allowed='cdta' and ../../total-symbol-periods =
-           23 and .>= 1 and .<= 13) or (../dta-allowed='cdta' and
-           ../../total-symbol-periods = 36 and .>= 1 and .<= 21) or
-           ../dta-allowed='none'" {
+        must "(../dta-allowed='idta' and ../../total-symbol-periods =
+              23 and .>= 1 and .<= 12) or (../dta-allowed='idta' and
+              ../../total-symbol-periods = 36 and .>= 1 and .<= 25) or
+              (../dta-allowed='cdta' and ../../total-symbol-periods =
+              23 and .>= 1 and .<= 13) or (../dta-allowed='cdta' and
+              ../../total-symbol-periods = 36 and .>= 1 and .<= 21) or
+              ../dta-allowed='none'" {
+          error-message
+            "'maximum-step-size' is not valid based on the "
+          + "configured values of 'dta-allowed' and "
+          + "'total-symbol-periods'.";
           description
             "The maximum step size must be restricted to the valid
              range depending on total symbol periods (MF) and
@@ -297,9 +315,12 @@ submodule bbf-fast-tdd-profile-body {
       }
       leaf minimum-time-between-updates {
         type uint16 {
-          range "0..16383";
+          range "0..16383" {
+            description
+              "Defines a range from 0.00 to 163.83 seconds.";
+          }
         }
-        units "0.01 second";
+        units "0.01 seconds";
         default "0";
         description
           "Provides the minimum time between any two successive
@@ -321,6 +342,9 @@ submodule bbf-fast-tdd-profile-body {
            ../../total-symbol-periods = 36 and .>= 5 and .<= 31))
            and . <= ../../downstream-symbol-periods) or
            ../dta-allowed='none'" {
+          error-message
+            "'minimum-mds' is not valid based on the configured "
+          + "values of 'dta-allowed' and 'total-symbol-periods'.";
           description
             "The minimum Mds must be restricted to the valid
              range depending on total symbol periods (MF), Dynamic
@@ -329,11 +353,11 @@ submodule bbf-fast-tdd-profile-body {
         }
         default "5";
         description
-          "Provides the minimum number of downstream symbol
-           positions Mds in a Time Division Duplexing (TDD) frame that
-           shall be requested by the Dynamic Time Assignment (DTA).
-           For configurations with cDTA allowed, a value different
-           from the default value needs to be configured.";
+          "Provides the minimum number of downstream symbol positions
+           Mds in a Time Division Duplexing (TDD) frame that shall be
+           requested by the Dynamic Time Assignment (DTA). For
+           configurations with cDTA allowed, a value different from
+           the default value needs to be configured.";
         reference
           "ITU-T G.997.2 clause T.2.2.3 (DTA_MIN_Mds);
            ITU-T G.9701 clause T.2.5";
@@ -351,6 +375,9 @@ submodule bbf-fast-tdd-profile-body {
            ../../total-symbol-periods = 36 and .>= 10 and .<= 31))
            and . >= ../../downstream-symbol-periods) or
            ../dta-allowed='none'" {
+          error-message
+            "'maximum-mds' is not valid based on the configured "
+          + "values of 'dta-allowed' and 'total-symbol-periods'.";
           description
             "The maximum Mds must be restricted to the valid
              range depending on total symbol periods (MF), Dynamic
@@ -359,14 +386,14 @@ submodule bbf-fast-tdd-profile-body {
         }
         default "30";
         description
-          "Provides the maximum number of downstream symbol
-           positions Mds in a Time Division Duplexing (TDD) frame that
-           shall be requested by the Dynamic Resource Allocation
-           (DRA). For configurations with MF=23, a value different
-           from the default value needs to be configured.";
+          "Provides the maximum number of downstream symbol positions
+           Mds in a Time Division Duplexing (TDD) frame that shall be
+           requested by the Dynamic Resource Allocation (DRA). For
+           configurations with MF=23, a value different from the
+           default value needs to be configured.";
         reference
           "ITU-T G.997.2 clause T.2.2.4 (DTA_MAX_Mds);
-           ITU-T G.9701 clause X.6.7.4 and T.2.6.";
+           ITU-T G.9701 clauses X.6.7.4 and T.2.6";
       }
       leaf cdta-procedure-control {
         when "../dta-allowed='cdta'" {
@@ -381,21 +408,21 @@ submodule bbf-fast-tdd-profile-body {
             description
               "Dynamic Resource Allocation (DRA) is allowed to use the
                one-step or two-step Coordinated Dynamic Time
-               Assignment (cDTA) procedure (see clause Y.5.6).";
+               Assignment (cDTA) procedure.";
           }
           enum one-step-only {
             value 1;
             description
               "Dynamic Resource Allocation (DRA) shall use the
                one-step Coordinated Dynamic Time Assignment (cDTA)
-               procedure only (see clause Y.5.6).";
+               procedure only.";
           }
           enum two-step-only {
             value 2;
             description
               "Dynamic Resource Allocation (DRA) shall use the
-               two-step procedure only (see clause Y.5.6). This value
-               is intended to be used for test purposes.";
+               two-step procedure only. This value is intended to be
+               used for test purposes.";
           }
         }
         default "one-or-two-step";
@@ -408,7 +435,7 @@ submodule bbf-fast-tdd-profile-body {
            triggered by the DRA.";
         reference
           "ITU-T G.997.2 clause T.2.7 (CDTA_PROC_CTRL);
-           ITU-T G.9701 clause T.2.9.";
+           ITU-T G.9701 clauses T.2.9 and Y.5.6";
       }
     }
   }

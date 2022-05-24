@@ -15,21 +15,19 @@ submodule bbf-vdsl-downstream-power-back-off-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 5.6 Spectrum related
      profiles; Downstream Power Back Off Profile.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -69,9 +67,19 @@ submodule bbf-vdsl-downstream-power-back-off-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -153,40 +161,40 @@ submodule bbf-vdsl-downstream-power-back-off-profile-body {
          The default is an empty list indicating no Downstream Power
          Back-Off (DPBO).";
       reference
-        "ITU-T G.997.1 clause 7.3.1.2.13 a.1) Assumed exchange
-         PSD mask (DPBOEPSD)";
+        "ITU-T G.997.1 clause 7.3.1.2.13 (DPBOEPSD)";
     }
     leaf dpboesel {
       type uint16 {
-        range "0..511";
+        range "0..511" {
+          description
+            "Defines a range from 0.0 to 255.5 dB.";
+        }
       }
       units "0.5 dB";
       default "0";
       description
-        "E-side electrical length (DPBOESEL). This configuration
-         parameter defines the assumed electrical length of
-         cables (E-side cables) connecting exchange based DSL
-         services to a remote flexibility point (cabinet), that
-         hosts the xTU-C that is subject to spectrally shaped
-         downstream power back-off depending on this length. For
-         this parameter the electrical length is defined as the
-         loss (in dB) of an equivalent length of hypothetical
-         cable at a reference frequency defined by the network
-         operator or in spectrum management regulations. DPBOESEL
-         will be coded as an unsigned integer representing an
-         electrical length from 0 dB to 255.5 dB in steps of 0.5
-         dB. All values in the range are valid.
+        "Exchange side (E-side) electrical length (DPBOESEL). This
+         configuration parameter defines the assumed electrical length
+         of cables (E-side cables) connecting exchange based DSL
+         services to a remote flexibility point (cabinet), that hosts
+         the xTU-C that is subject to spectrally shaped downstream
+         power back-off depending on this length. For this parameter
+         the electrical length is defined as the loss (in dB) of an
+         equivalent length of hypothetical cable at a reference
+         frequency defined by the network operator or in spectrum
+         management regulations. DPBOESEL will be coded as an unsigned
+         integer representing an electrical length from 0 dB to 255.5
+         dB in steps of 0.5 dB. All values in the range are valid.
          If DPBOESEL is set to zero, the Downstream Power Back-Off
          (DPBO) in this clause will be disabled.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.2.13 a.2) E-side electrical
-         length (DPBOESEL)";
+        "ITU-T G.997.1 clause 7.3.1.2.13 (DPBOESEL)";
     }
     container dpboescm {
       description
-        "E-side cable model (DPBOESCM). This configuration
-         parameter defines a cable model in terms of three
-         scalars DPBOESCMA, DPBOESCMB and DPBOESCMC that will be
+        "Exchange side (E-side) cable model (DPBOESCM). This
+         configuration parameter defines a cable model in terms of
+         three scalars DPBOESCMA, DPBOESCMB and DPBOESCMC that will be
          used to describe the frequency dependent loss of E-side
          cables.
          where ESCM is expressed in dB and f is expressed in MHz.
@@ -198,14 +206,11 @@ submodule bbf-vdsl-downstream-power-back-off-profile-body {
          dpboescma/256 - 1.0, DPBOESCMB = dpboescmb/256 - 1.0,
          and DPBOESCMC = dpboescmc/256 - 1.0.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.2.13 a.3) E-side cable model
-         (DPBOESCM)";
+        "ITU-T G.997.1 clause 7.3.1.2.13 (DPBOESCM)";
       leaf dpboescma {
         type uint16 {
           range "0..640";
         }
-        units "(1/256)";
-        // offset 1.0
         default "0";
         description
           "DPBOESCMA = dpboescma/256 - 1.0.";
@@ -214,8 +219,6 @@ submodule bbf-vdsl-downstream-power-back-off-profile-body {
         type uint16 {
           range "0..640";
         }
-        units "(1/256)";
-        // offset 1.0
         default "0";
         description
           "DPBOESCMB = dpboescmb/256 - 1.0.";
@@ -224,8 +227,6 @@ submodule bbf-vdsl-downstream-power-back-off-profile-body {
         type uint16 {
           range "0..640";
         }
-        units "(1/256)";
-        // offset 1.0
         default "0";
         description
           "DPBOESCMC = dpboescmc/256 - 1.0.";
@@ -233,24 +234,30 @@ submodule bbf-vdsl-downstream-power-back-off-profile-body {
     }
     leaf dpbomus {
       type uint8 {
-        range "0..255";
+        range "0..255" {
+          description
+            "Defines a range from 0.0 to -127.5 dBm per Hz.";
+        }
       }
-      units "-0.5 dBm/Hz";
+      units "-0.5 dBm per Hz";
       default "0";
       description
         "Minimum usable signal (DPBOMUS). DPBOMUS defines the
-         assumed minimum usable receive PSD mask (in dBm/Hz) for
+         assumed minimum usable receive PSD mask (in dBm per Hz) for
          exchange based services, used to modify parameter
          DPBOFMAX defined below. It will be coded as an unsigned
          integer representing a Power Spectral Density (PSD) mask
-         level from 0 dBm/Hz to -127.5 dBm/Hz in steps of 0.5 dB.";
+         level from 0 dBm per Hz to -127.5 dBm per Hz in steps of
+         0.5 dB.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.2.13 a.4) Minimum usable
-         signal (DPBOMUS)";
+        "ITU-T G.997.1 clause 7.3.1.2.13 (DPBOMUS)";
     }
     leaf dpbofmin {
       type uint16 {
-        range "0..2048";
+        range "0..2048" {
+          description
+            "Defines a range from 0 to 8832 kHz.";
+        }
       }
       units "4.3125 kHz";
       default "0";
@@ -260,15 +267,18 @@ submodule bbf-vdsl-downstream-power-back-off-profile-body {
          the DPBO will be applied. It ranges from 0 kHz to 8832 kHz in
          steps of 4.3125 kHz.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.2.13 a.5) DPBO span minimum
-         frequency (DPBOFMIN)";
+        "ITU-T G.997.1 clause 7.3.1.2.13 (DPBOFMIN)";
     }
     leaf dpbofmax {
       type uint16 {
-        range "32..8191";
+        range "32..8191" {
+          description
+            "Defines a range from 138 to 35323.6875 kHz.";
+        }
       }
       units "4.3125 kHz";
       must '. >= ../dpbofmin' {
+        error-message "'dpbofmax' is less than 'dpbofmin'.";
         description
           "The Downstream Power Back-Off (DPBO) span maximum frequency
            must be greater than or equal to the DPBO span minimum
@@ -281,10 +291,7 @@ submodule bbf-vdsl-downstream-power-back-off-profile-body {
          DPBO may be applied. It ranges from 138 kHz to 35323.6875 kHz
          in steps of 4.3125 kHz.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.2.13 a.6) DPBO span maximum
-         frequency (DPBOFMAX)";
+        "ITU-T G.997.1 clause 7.3.1.2.13 (DPBOFMAX)";
     }
   }
-
-  // end grouping downstream-power-back-off-profile
 }

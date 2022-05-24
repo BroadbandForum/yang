@@ -24,20 +24,18 @@ submodule bbf-vdsl-test-diagnostics {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG data types and
      grouping definitions for the management of VDSL test modes.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -77,9 +75,19 @@ submodule bbf-vdsl-test-diagnostics {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -165,7 +173,7 @@ submodule bbf-vdsl-test-diagnostics {
     description
       "The overall results of the Loop Diagnostics mode.";
     reference
-      "ITU-T G.997.1 Clause 7.5.1.45 (LDR)";
+      "ITU-T G.997.1 clause 7.5.1.45 (LDR)";
   }
 
   augment "/if:interfaces-state/if:interface/bbf-fastdsl:line/bbf-"
@@ -200,14 +208,14 @@ submodule bbf-vdsl-test-diagnostics {
            (AN)/Distribution Point Unit (DPU) Maintenance Entity (ME)
            shall send a notification to the NMS.";
         reference
-          "ITU-T G.997.1 Clause 7.5.1.44 (LDS)";
+          "ITU-T G.997.1 clause 7.5.1.44 (LDS)";
       }
       leaf loop-diagnostics-mode-results {
         type loop-diagnostics-result;
         description
           "The overall results of the Loop Diagnostics mode.";
         reference
-          "ITU-T G.997.1 Clause 7.5.1.45 (LDR)";
+          "ITU-T G.997.1 clause 7.5.1.45 (LDR)";
       }
       notification loop-diagnostics-completed {
         description
@@ -218,12 +226,12 @@ submodule bbf-vdsl-test-diagnostics {
           description
             "The overall results of the Loop Diagnostics mode.";
           reference
-            "ITU-T G.997.1 Clause 7.5.1.45 (LDR)";
+            "ITU-T G.997.1 clause 7.5.1.45 (LDR)";
         }
       }
       container xtu-c {
         description
-          "Diagnostics objects for the xDSL Transceiver Unit -
+          "Diagnostics data nodes for the xDSL Transceiver Unit -
            Central office (xTU-C).";
         container downstream {
           description
@@ -247,7 +255,7 @@ submodule bbf-vdsl-test-diagnostics {
       }
       container xtu-r {
         description
-          "Diagnostics objects for the xDSL Transceiver Unit -
+          "Diagnostics data nodes for the xDSL Transceiver Unit -
            Remote side (xTU-R).";
         container downstream {
           description

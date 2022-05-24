@@ -13,20 +13,18 @@ submodule bbf-fast-noise-margin-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing noise margin profiles.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -66,9 +64,19 @@ submodule bbf-fast-noise-margin-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -145,12 +153,12 @@ submodule bbf-fast-noise-margin-profile-body {
       "Seamless Rate Adaptation (SRA) configuration parameters
        applicable to both upstream and downstream.";
     reference
-      "ITU-T G.997.2 clause 7.1.4.";
+      "ITU-T G.997.2 clause 7.1.4";
     leaf upshift-noise-margin {
       type uint16 {
         range "0..310" {
           description
-            "Defines a range equivalent to 0 to 31 dB.";
+            "Defines a range from 0.0 to 31.0 dB.";
         }
       }
       units "0.1 dB";
@@ -162,14 +170,15 @@ submodule bbf-fast-noise-margin-profile-body {
          the transmitting FAST Transceiver Unit (FTU) autonomously
          attempts to increase the net data rate (NDR).";
       reference
-        "ITU-T G.997.2 clause 7.1.4.1 (SRA-USNRMds) and clause
-         7.1.4.2 (SRA-USNRMus); ITU-T G.9701 clause 12.3.4.2.1.";
+        "ITU-T G.997.2 clauses 7.1.4.1 (SRA-USNRMds) and 7.1.4.2
+         (SRA-USNRMus);
+         ITU-T G.9701 clause 12.3.4.2.1";
     }
     leaf upshift-noise-margin-in-l2.1 {
       type uint16 {
         range "0..310" {
           description
-            "Defines a range equivalent to 0 to 31 dB.";
+            "Defines a range from 0.0 to 31.0 dB.";
         }
       }
       units "0.1 dB";
@@ -182,15 +191,15 @@ submodule bbf-fast-noise-margin-profile-body {
          Transceiver Unit - Remote side (FTU-R) autonomously attempts
          to increase the net data rate in the L2.1 link state.";
       reference
-        "ITU-T G.997.2 clause 7.1.10.4 (L2.1-SRA-USNRMds) and clause
-         7.1.10.5 (L2.1-SRA-USNRMus); ITU-T G.9701 clause
-         13.4.1.4.7.";
+        "ITU-T G.997.2 clauses 7.1.10.4 (L2.1-SRA-USNRMds) and
+         7.1.10.5 (L2.1-SRA-USNRMus);
+         ITU-T G.9701 clause 13.4.1.4.7";
     }
     leaf minimum-time-interval-upshift-sra {
       type uint16 {
         range "0..16383";
       }
-      units "1 second";
+      units "seconds";
       default "8";
       description
         "Defines the interval of time the noise margin (SNRM) should
@@ -198,14 +207,15 @@ submodule bbf-fast-noise-margin-profile-body {
          transmitting FAST Transceiver Unit (FTU) autonomously
          attempts to increase the net data rate (NDR).";
       reference
-        "ITU-T G.997.2 clause 7.1.4.3 (SRA-UTIMEds) and clause
-         7.1.4.4 (SRA-UTIMEus); ITU-T G.9701 clause 12.3.4.2.1.";
+        "ITU-T G.997.2 clauses 7.1.4.3 (SRA-UTIMEds) and 7.1.4.4
+         (SRA-UTIMEus);
+         ITU-T G.9701 clause 12.3.4.2.1";
     }
     leaf downshift-noise-margin-in-l2.1 {
       type uint16 {
         range "0..310" {
           description
-            "Defines a range equivalent to 0 to 31 dB.";
+            "Defines a range from 0.0 to 31.0 dB.";
         }
       }
       units "0.1 dB";
@@ -218,15 +228,15 @@ submodule bbf-fast-noise-margin-profile-body {
          Transceiver Unit - Remote side (FTU-R) autonomously attempts
          to decrease the net data rate in the L2.1 link state.";
       reference
-        "ITU-T G.997.2 clause 7.1.10.6 (L2.1-SRA-DSNRMds) and clause
-         7.1.10.7 (L2.1-SRA-DSNRMus); ITU-T G.9701 clause
-         13.4.1.4.7.";
+        "ITU-T G.997.2 clauses 7.1.10.6 (L2.1-SRA-DSNRMds) and
+         7.1.10.7 (L2.1-SRA-DSNRMus);
+         ITU-T G.9701 clause 13.4.1.4.7";
     }
     leaf minimum-time-interval-downshift-sra {
       type uint16 {
         range "0..16383";
       }
-      units "1 second";
+      units "seconds";
       default "2";
       description
         "Defines the interval of time the noise margin (SNRM) should
@@ -234,8 +244,9 @@ submodule bbf-fast-noise-margin-profile-body {
          transmitting FAST Transceiver Unit (FTU) autonomously
          attempts to decrease the net data rate (NDR).";
       reference
-        "ITU-T G.997.2 clause 7.1.4.7 (SRA-DTIMEds) and clause
-         7.1.4.8 (SRA-DTIMEus); ITU-T G.9701 clause 12.3.4.2.1.";
+        "ITU-T G.997.2 clauses 7.1.4.7 (SRA-DTIMEds) and 7.1.4.8
+         (SRA-DTIMEus);
+         ITU-T G.9701 clause 12.3.4.2.1";
     }
   }
 
@@ -244,12 +255,12 @@ submodule bbf-fast-noise-margin-profile-body {
       "Robust Management Channel (RMC) configuration parameters
        applicable to both upstream and downstream.";
     reference
-      "ITU-T G.997.2 clause 7.1.6.";
+      "ITU-T G.997.2 clause 7.1.6";
     leaf target-noise-margin {
       type uint16 {
         range "0..310" {
           description
-            "Defines a range equivalent to 0 to 31 dB.";
+            "Defines a range from 0.0 to 31.0 dB.";
         }
       }
       units "0.1 dB";
@@ -261,18 +272,21 @@ submodule bbf-fast-noise-margin-profile-body {
          requirement, or better, to successfully complete
          initialization.";
       reference
-        "ITU-T G.997.2 clause 7.1.6.1 (TARSNRM-RMCds) and clause
-         7.1.6.2 (TARSNRM-RMCus); ITU-T G.9701 clause 12.3.3.2.1.";
+        "ITU-T G.997.2 clauses 7.1.6.1 (TARSNRM-RMCds) and 7.1.6.2
+         (TARSNRM-RMCus);
+         ITU-T G.9701 clause 12.3.3.2.1";
     }
     leaf minimum-noise-margin {
       type uint16 {
         range "0..310" {
           description
-            "Defines a range equivalent to 0 to 31 dB.";
+            "Defines a range from 0.0 to 31.0 dB.";
         }
       }
       units "0.1 dB";
       must '. <= ../target-noise-margin' {
+        error-message "'minimum-noise-margin' is greater than the "
+                    + "'target-noise-margin'.";
         description
           "The minimum noise margin must be less than or equal to
            the target noise margin.";
@@ -285,23 +299,22 @@ submodule bbf-fast-noise-margin-profile-body {
          this level, the FTU receiver initiates the RMC Parameter
          Adjustment (RPA) procedure.";
       reference
-        "ITU-T G.997.2 clause 7.1.6.3 (MINSNRM-RMCds) and clause
-         7.1.6.4 (MINSNRM-RMCus); ITU-T G.9701 clause 13.2.1.3.";
+        "ITU-T G.997.2 clauses 7.1.6.3 (MINSNRM-RMCds) and 7.1.6.4
+         (MINSNRM-RMCus);
+         ITU-T G.9701 clause 13.2.1.3";
     }
     leaf maximum-bit-loading {
       type uint8 {
-        range "2..6" {
-          description
-            "Defines a range equivalent to 2 to 6 bits.";
-        }
+        range "2..6";
       }
       default "6";
       description
         "Defines the maximum allowed bit-loading for the Robust
          Management Channel (RMC) sub-carriers.";
       reference
-        "ITU-T G.997.2 clause 7.1.6.5 (MAXBL-RMCds) and clause
-         7.1.6.6 (MAXBL-RMCus); ITU-T G.9701 clause 12.3.3.2.1.";
+        "ITU-T G.997.2 clauses 7.1.6.5 (MAXBL-RMCds) and 7.1.6.6
+         (MAXBL-RMCus);
+         ITU-T G.9701 clause 12.3.3.2.1";
     }
   }
 
@@ -318,12 +331,15 @@ submodule bbf-fast-noise-margin-profile-body {
           type uint16 {
             range "0..310" {
               description
-                "Defines a range equivalent to 0 to 31 dB.";
+                "Defines a range from 0.0 to 31.0 dB.";
             }
           }
           units "0.1 dB";
           must ". <= ../../seamless-rate-adaptation/
                                          upshift-noise-margin" {
+            error-message
+              "The downstream 'target-noise-margin' is greater than "
+            + "the 'upshift-noise-margin'.";
             description
               "The target noise margin must be less than or equal to
                the upshift noise margin.";
@@ -334,18 +350,21 @@ submodule bbf-fast-noise-margin-profile-body {
              Initialization Policy.";
           reference
             "ITU-T G.997.2 clause 7.1.3.1 (TARSNRMds);
-             ITU-T G.9701 clause 12.3.7.";
+             ITU-T G.9701 clause 12.3.7";
         }
         leaf minimum-noise-margin {
           type uint16 {
             range "0..310" {
               description
-                "Defines a range equivalent to 0 to 31 dB.";
+                "Defines a range from 0.0 to 31.0 dB.";
             }
           }
           units "0.1 dB";
           must ". <= ../../seamless-rate-adaptation/
                                          downshift-noise-margin" {
+            error-message
+              "The downstream 'minimum-noise-margin' is greater than "
+            + "the 'downshift-noise-margin'.";
             description
               "The minimum noise margin must be less than or equal to
                the downshift noise margin.";
@@ -359,20 +378,23 @@ submodule bbf-fast-noise-margin-profile-body {
              If an increase to FTU transmit power is not possible, a
              loss-of-margin(lom) defect occurs. Upon persistency of
              the lom defect, the FTU receiver triggers a
-             re-initialization (see clause 12.1.4.2/G.9701).";
+             re-initialization.";
           reference
             "ITU-T G.997.2 clause 7.1.3.4 (MINSNRMds);
-             ITU-T G.9701 clause 12.3.4.2.1.";
+             ITU-T G.9701 clauses 12.1.4.2 and 12.3.4.2.1";
         }
         leaf target-noise-margin-in-l2 {
           type uint16 {
             range "0..310" {
               description
-                "Defines a range equivalent to 0 to 31 dB.";
+                "Defines a range from 0.0 to 31.0 dB.";
             }
           }
           units "0.1 dB";
           must '. >= ../minimum-noise-margin' {
+            error-message
+              "The downstream 'target-noise-margin-in-l2' is less "
+            + "than the 'minimum-noise-margin'.";
             description
               "The target low power noise margin must be greater than
                or equal to the minimum noise margin.";
@@ -383,18 +405,22 @@ submodule bbf-fast-noise-margin-profile-body {
              L2.2 link state for both the upstream and downstream
              direction.";
           reference
-            "ITU-T G.997.2 clause 7.1.10.1 (L2-TARSNRM); ITU-T G.9701
-             clause 13.4.1.4 and 13.4.2.4.";
+            "ITU-T G.997.2 clause 7.1.10.1 (L2-TARSNRM);
+             ITU-T G.9701 clauses 13.4.1.4 and 13.4.2.4";
         }
         leaf maximum-noise-margin-in-l2.1 {
           type uint16 {
             range "0..310 | 511" {
               description
-                "Defines a range equivalent to 0 to 31 dB.";
+                "Defines a range from 0.0 to 31.0 dB.
+                 Special value 511: No maximum bound.";
             }
           }
           units "0.1 dB";
           must '. >= ../target-noise-margin-in-l2' {
+            error-message
+              "The downstream 'maximum-noise-margin-in-l2.1' is less "
+            + "than the 'target-noise-margin-in-l2'.";
             description
               "The maximum low power noise margin must be greater than
                or equal to the target low power noise margin.";
@@ -407,8 +433,8 @@ submodule bbf-fast-noise-margin-profile-body {
              maximum bound for the noise margin (i.e., the maximum
              noise margin is infinite).";
           reference
-            "ITU-T G.997.2 clause 7.1.10.2 (L2-MAXSNRM); ITU-T G.9701
-             clause 13.4.1.4 and 13.4.2.4.";
+            "ITU-T G.997.2 clause 7.1.10.2 (L2-MAXSNRM);
+             ITU-T G.9701 clauses 13.4.1.4 and 13.4.2.4";
         }
       }
       container seamless-rate-adaptation {
@@ -418,11 +444,14 @@ submodule bbf-fast-noise-margin-profile-body {
           type uint16 {
             range "0..310" {
               description
-                "Defines a range equivalent to 0 to 31 dB.";
+                "Defines a range from 0.0 to 31.0 dB.";
             }
           }
           units "0.1 dB";
           must '. <= ../../noise-margin/target-noise-margin' {
+            error-message
+              "The downstream 'downshift-noise-margin' is greater "
+            + "than the 'target-noise-margin'.";
             description
               "The downshift noise margin must be less than or equal
                to the target noise margin.";
@@ -437,7 +466,7 @@ submodule bbf-fast-noise-margin-profile-body {
              rate (NDR).";
           reference
             "ITU-T G.997.2 clause 7.1.4.5 (SRA-DSNRMds);
-             ITU-T G.9701 clause 12.3.4.2.1.";
+             ITU-T G.9701 clause 12.3.4.2.1";
         }
         uses seamless-rate-adaptation-parameters;
       }
@@ -457,12 +486,15 @@ submodule bbf-fast-noise-margin-profile-body {
           type uint16 {
             range "0..310" {
               description
-                "Defines a range equivalent to 0 to 31 dB.";
+                "Defines a range from 0.0 to 31.0 dB.";
             }
           }
           units "0.1 dB";
           must ". <= ../../seamless-rate-adaptation/
                                          upshift-noise-margin" {
+            error-message
+              "The upstream 'target-noise-margin' is greater than "
+            + "the 'upshift-noise-margin'.";
             description
               "The target noise margin must be less than or equal to
                the upshift noise margin.";
@@ -473,18 +505,21 @@ submodule bbf-fast-noise-margin-profile-body {
              Initialization Policy.";
           reference
             "ITU-T G.997.2 clause 7.1.3.2 (TARSNRMus);
-             ITU-T G.9701 clause 12.3.7.";
+             ITU-T G.9701 clause 12.3.7";
         }
         leaf minimum-noise-margin {
           type uint16 {
             range "0..310" {
               description
-                "Defines a range equivalent to 0 to 31 dB.";
+                "Defines a range from 0.0 to 31.0 dB.";
             }
           }
           units "0.1 dB";
           must ". <= ../../seamless-rate-adaptation/
                                          downshift-noise-margin" {
+            error-message
+              "The upstream 'minimum-noise-margin' is greater than "
+            + "the 'downshift-noise-margin'.";
             description
               "The minimum noise margin must be less than or equal to
                the downshift noise margin.";
@@ -498,22 +533,25 @@ submodule bbf-fast-noise-margin-profile-body {
              If an increase to FTU transmit power is not possible, a
              loss-of-margin(lom) defect occurs. Upon persistency of
              the lom defect, the FTU receiver triggers a
-             re-initialization (see clause 12.1.4.2/G.9701).";
+             re-initialization.";
           reference
             "ITU-T G.997.2 clause 7.1.3.5 (MINSNRMus);
-             ITU-T G.9701 clause 12.3.4.2.1.";
+             ITU-T G.9701 clauses 12.1.4.2 and 12.3.4.2.1";
         }
         leaf maximum-noise-margin {
           type uint16 {
             range "0..310 | 511" {
               description
-                "Defines a range equivalent to 0 to 31 dB.
+                "Defines a range from 0.0 to 31.0 dB.
                  Special value 511: No maximum bound.";
             }
           }
           units "0.1 dB";
           must ". >= ../../seamless-rate-adaptation/
                                          upshift-noise-margin" {
+            error-message
+              "The upstream 'maximum-noise-margin' is less than the "
+            + "'upshift-noise-margin'.";
             description
               "The maximum noise margin must be greater than or equal
                to the upshift noise margin.";
@@ -526,18 +564,21 @@ submodule bbf-fast-noise-margin-profile-body {
              for the noise margin (i.e., the maximum noise margin is
              infinite).";
           reference
-            "ITU-T G.997.2 clause 7.1.3.3 MAXSNRMus); ITU-T G.9701
-             clause 12.3.7.";
+            "ITU-T G.997.2 clause 7.1.3.3 (MAXSNRMus);
+             ITU-T G.9701 clause 12.3.7";
         }
         leaf target-noise-margin-in-l2 {
           type uint16 {
             range "0..310" {
               description
-                "Defines a range equivalent to 0 to 31 dB.";
+                "Defines a range from 0.0 to 31.0 dB.";
             }
           }
           units "0.1 dB";
           must '. >= ../minimum-noise-margin' {
+            error-message
+              "The upstream 'target-noise-margin-in-l2' is less than "
+            + "the 'minimum-noise-margin'.";
             description
               "The target low power noise margin must be greater than
                or equal to the minimum noise margin.";
@@ -548,18 +589,21 @@ submodule bbf-fast-noise-margin-profile-body {
              L2.2 link state for both the upstream and downstream
              direction.";
           reference
-            "ITU-T G.997.2 clause 7.1.10.1 (L2-TARSNRM); ITU-T G.9701
-             clause 13.4.1.4 and 13.4.2.4.";
+            "ITU-T G.997.2 clause 7.1.10.1 (L2-TARSNRM);
+             ITU-T G.9701 clauses 13.4.1.4 and 13.4.2.4";
         }
         leaf maximum-noise-margin-in-l2.1 {
           type uint16 {
             range "0..310 | 511" {
               description
-                "Defines a range equivalent to 0 to 31 dB.";
+                "Defines a range from 0.0 to 31.0 dB.";
             }
           }
           units "0.1 dB";
           must '. >= ../target-noise-margin-in-l2' {
+            error-message
+              "The upstream 'maximum-noise-margin-in-l2.1' is less "
+            + "than the 'target-noise-margin-in-l2'.";
             description
               "The maximum low power noise margin must be greater than
                or equal to the target low power noise margin.";
@@ -572,8 +616,8 @@ submodule bbf-fast-noise-margin-profile-body {
              maximum bound for the noise margin (i.e., the maximum
              noise margin is infinite).";
           reference
-            "ITU-T G.997.2 clause 7.1.10.2 (L2-MAXSNRM); ITU-T G.9701
-             clause 13.4.1.4 and 13.4.2.4.";
+            "ITU-T G.997.2 clause 7.1.10.2 (L2-MAXSNRM);
+             ITU-T G.9701 clauses 13.4.1.4 and 13.4.2.4";
         }
       }
       container seamless-rate-adaptation {
@@ -583,11 +627,14 @@ submodule bbf-fast-noise-margin-profile-body {
           type uint16 {
             range "0..310" {
               description
-                "Defines a range equivalent to 0 to 31 dB.";
+                "Defines a range from 0.0 to 31.0 dB.";
             }
           }
           units "0.1 dB";
           must '. <= ../../noise-margin/target-noise-margin' {
+            error-message
+              "The upstream 'downshift-noise-margin' is greater than "
+            + "the 'target-noise-margin'.";
             description
               "The downshift noise margin must be less than or equal
                to the target noise margin.";
@@ -598,11 +645,11 @@ submodule bbf-fast-noise-margin-profile-body {
              margin and stays below that for more than the time
              specified by the minimum downshift rate adaptation
              interval (SRA-DTIME), the transmitting FAST Transceiver
-             Unit (FTU) autonomously
-             attempts to decrease the net data rate (NDR).";
+             Unit (FTU) autonomously attempts to decrease the net data
+             rate (NDR).";
           reference
             "ITU-T G.997.2 clause 7.1.4.6 (SRA-DSNRMus);
-             ITU-T G.9701 clause 12.3.4.2.1.";
+             ITU-T G.9701 clause 12.3.4.2.1";
         }
         uses seamless-rate-adaptation-parameters;
       }

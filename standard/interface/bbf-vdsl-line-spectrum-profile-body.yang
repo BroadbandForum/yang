@@ -16,21 +16,19 @@ submodule bbf-vdsl-line-spectrum-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 5.6 Spectrum related
      profiles; Line Spectrum Profile.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +68,19 @@ submodule bbf-vdsl-line-spectrum-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -150,11 +158,6 @@ submodule bbf-vdsl-line-spectrum-profile-body {
        sub-carriers.";
     leaf start-index {
       type sub-carrier-index;
-      must '. <= ../stop-index' {
-        description
-          "The start index must be less than or equal to the stop
-           index.";
-      }
       description
         "The sub-carrier index identifying the start of a range of
          sub-carriers (inclusive).";
@@ -162,6 +165,7 @@ submodule bbf-vdsl-line-spectrum-profile-body {
     leaf stop-index {
       type sub-carrier-index;
       must '. >= ../start-index' {
+        error-message "'stop-index' is less than 'start-index'.";
         description
           "The stop index must be greater than or equal to the
            start index.";
@@ -206,8 +210,7 @@ submodule bbf-vdsl-line-spectrum-profile-body {
          transition to on this line. The default is 'all',
          corresponding to all power management states allowed.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.1.4 Power management state
-         enabling (PMMode).";
+        "ITU-T G.997.1 clause 7.3.1.1.4 (PMMode)";
     }
     leaf l0-minimum-time {
       type uint8 {
@@ -220,8 +223,7 @@ submodule bbf-vdsl-line-spectrum-profile-body {
          between an exit from the L2 state and the next entry
          into the L2 state. It ranges from 0 to 255 seconds.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.1.5 Minimum L0 time interval
-         between L2 exit and next L2 entry (L0-TIME)";
+        "ITU-T G.997.1 clause 7.3.1.1.5 (L0-TIME)";
     }
     leaf l2-minimum-time {
       type uint8 {
@@ -231,20 +233,21 @@ submodule bbf-vdsl-line-spectrum-profile-body {
       default "127";
       description
         "This parameter represents the minimum time (in seconds)
-         between an entry into the L2 state and the first power
-         trim in the L2 state and between two consecutive power
-         trims in the L2 state. It ranges from 0 to 255
-         seconds.";
+         between an entry into the L2 state and the first power trim
+         in the L2 state and between two consecutive power trims in
+         the L2 state. It ranges from 0 to 255 seconds.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.1.6 Minimum L2 time interval
-         between L2 entry and first L2 trim (L2-TIME)";
+        "ITU-T G.997.1 clause 7.3.1.1.6 (L2-TIME)";
     }
     leaf l2-maximum-aggregate-power-reduction-per {
       type uint8 {
         range "0..31";
       }
-      units "1 dB";
+      units "dB";
       must '. <= ../l2-maximum-aggregate-power-reduction-total' {
+        error-message
+          "'l2-maximum-aggregate-power-reduction-per' is greater than"
+        + " 'l2-maximum-aggregate-power-reduction-total'.";
         description
           "The maximum aggregate transmit power reduction per L2
            request or power trim must be less than or equal to the
@@ -255,30 +258,26 @@ submodule bbf-vdsl-line-spectrum-profile-body {
       description
         "This parameter represents the maximum aggregate transmit
          power reduction (in dB) that can be performed in the L2
-         request (i.e., at transition of L0 to L2 state) or
-         through a single power trim in the L2 state. It ranges
-         from 0 dB to 31 dB in steps of 1 dB.";
+         request (i.e., at transition of L0 to L2 state) or through a
+         single power trim in the L2 state. It ranges from 0 dB to 31
+         dB in steps of 1 dB.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.1.7 Maximum aggregate
-         transmit power reduction per L2 request or L2 power trim
-         (L2-ATPR)";
+        "ITU-T G.997.1 clause 7.3.1.1.7 (L2-ATPR)";
     }
     leaf l2-maximum-aggregate-power-reduction-total {
       type uint8 {
         range "0..31";
       }
-      units "1 dB";
+      units "dB";
       default "10";
       description
         "This parameter represents the total maximum aggregate
-         transmit power reduction (in dB) that can be performed
-         in an L2 state. This is the sum of all reductions of L2
-         Request (i.e., at transition of L0 to L2 state) and
-         power trims. It ranges from 0 dB to 31 dB in steps of 1
-         dB.";
+         transmit power reduction (in dB) that can be performed in an
+         L2 state. This is the sum of all reductions of L2 Request
+         (i.e., at transition of L0 to L2 state) and power trims. It
+         ranges from 0 dB to 31 dB in steps of 1 dB.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.1.9 Total maximum aggregate
-         transmit power reduction in L2 (L2-ATPRT)";
+        "ITU-T G.997.1 clause 7.3.1.1.9 (L2-ATPRT)";
     }
     leaf-list carmaskds {
       type uint16 {
@@ -288,15 +287,14 @@ submodule bbf-vdsl-line-spectrum-profile-body {
         "This configuration parameter is a list of sub-carriers which
          are masked on this line in the downstream direction ranging
          from 0 to the highest supported sub-carrier index-1.
-         For [ITU-T G.992.3], [ITU-T G.992.4], and [ITU-T G.992.5],
-         the highest sub-carrier index is defined in the
-         corresponding Recommendations.
-         For [ITU-T G.992.1], the highest sub-carrier index = 256 and
-         for [ITU-T G.992.2], the highest sub-carrier index = 128.
+         For ITU-T G.992.3, ITU-T G.992.4, and ITU-T G.992.5,
+         the highest sub-carrier index is defined in the corresponding
+         Recommendations.
+         For ITU-T G.992.1, the highest sub-carrier index = 256 and
+         for ITU-T G.992.2, the highest sub-carrier index = 128.
          If no elements exist, there are no masked sub-carriers.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.2.6 Downstream subcarrier
-         masking (CARMASKds)";
+        "ITU-T G.997.1 clause 7.3.1.2.6 (CARMASKds)";
     }
     leaf-list carmaskus {
       type uint16 {
@@ -306,17 +304,16 @@ submodule bbf-vdsl-line-spectrum-profile-body {
         "This configuration parameter is a list of sub-carriers which
          are masked on this line in the upstream direction ranging
          from 0 to the highest supported sub-carrier index-1.
-         For [ITU-T G.992.3], [ITU-T G.992.4], and [ITU-T G.992.5],
-         the highest sub-carrier index is defined in the
-         corresponding Recommendations.
-         For Annex A of [ITU-T G.992.1] and [ITU-T G.992.2],
+         For ITU-T G.992.3] ITU-T G.992.4, and ITU-T G.992.5,
+         the highest sub-carrier index is defined in the corresponding
+         Recommendations.
+         For Annex A of ITU-T G.992.1 and ITU-T G.992.2,
          the highest sub-carrier index = 32 and
-         for Annex B of [ITU-T G.992.1], the highest sub-carrier
+         for Annex B of ITU-T G.992.1, the highest sub-carrier
          index = 64. If no elements exist, there are no masked
          sub-carriers.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.2.7 Upstream subcarrier
-         masking (CARMASKus)";
+        "ITU-T G.997.1 clause 7.3.1.2.7 (CARMASKus)";
     }
     list vdsl2-carmask {
       key "start-index";
@@ -325,18 +322,17 @@ submodule bbf-vdsl-line-spectrum-profile-body {
       description
         "This configuration parameter defines the restrictions,
          additional to the band plan, to determine the set of
-         subcarriers allowed for transmission in both upstream
-         and downstream directions.
+         subcarriers allowed for transmission in both upstream and
+         downstream directions.
 
-         The VDSL2-CARMASK will describe the not masked
-         subcarriers as one or more frequency bands. Each band is
-         represented by start and stop subcarrier indices with a
-         subcarrier spacing of 4.3125 kHz. The valid range of
-         subcarrier indices specifying the VDSL2-CARMASK is from
-         to at least the index of the highest allowed
-         subcarrier in both transmission directions among all
-         profiles enabled by the parameter PROFILES (see clause
-         7.3.1.1.11 of ITU-T G.997.1).
+         The VDSL2-CARMASK will describe the not masked subcarriers
+         as one or more frequency bands. Each band is represented by
+         start and stop subcarrier indices with a subcarrier spacing
+         of 4.3125 kHz. The valid range of subcarrier indices
+         specifying the VDSL2-CARMASK is from to at least the index of
+         the highest allowed subcarrier in both transmission
+         directions among all profiles enabled by the parameter
+         PROFILES.
 
          Up to 16 bands may be specified. Other subcarriers will be
          masked.
@@ -353,44 +349,42 @@ submodule bbf-vdsl-line-spectrum-profile-body {
          The default is an empty list indicating no masked
          sub-carriers.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.2.8 VDSL2 subcarrier masking
+        "ITU-T G.997.1 clauses 7.3.1.1.11 and 7.3.1.2.8
          (VDSL2-CARMASK)";
     }
     leaf msgminds {
       type uint8 {
         range "4..248";
       }
-      units "1000 bit/s";
+      units "kilobits per second";
       default "16";
       description
-        "This parameter defines the minimum rate of the message
-         based overhead that will be maintained by the xDSL
-         Transceiver Unit (xTU) in the downstream direction
-         (MSGMINds). MSGMINds is expressed in bits per second and
-         ranges from 4,000 to 248,000 bit/s with 1,000 bit/s steps.
-         Valid values are specified in the relevant ITU-T
-         Recommendation, e.g., [ITU-T G.992.3] and [ITU-T G.993.2].";
+        "This parameter defines the minimum rate of the message based
+         overhead that will be maintained by the xDSL Transceiver Unit
+         (xTU) in the downstream direction (MSGMINds). MSGMINds is
+         expressed in bits per second and ranges from 4000 to 248000
+         bits per second with 1000 bits per second steps. Valid values
+         are specified in the relevant ITU-T Recommendation, e.g.,
+         ITU-T G.992.3 and ITU-T G.993.2.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.5.2 Minimum overhead rate
-         downstream (MSGMINds)";
+        "ITU-T G.997.1 clause 7.3.1.5.2 (MSGMINds)";
     }
     leaf msgminus {
       type uint8 {
         range "4..248";
       }
-      units "1000 bit/s";
+      units "kilobits per second";
       default "16";
       description
-        "This parameter defines the minimum rate of the message
-         based overhead that will be maintained by the xDSL
-         Transceiver Unit (xTU) in the upstream direction (MSGMINus).
-         MSGMINus is expressed in bits per second and ranges from
-         4,000 to 248,000 bit/s with 1,000 bit/s steps. Valid values
+        "This parameter defines the minimum rate of the message based
+         overhead that will be maintained by the xDSL Transceiver Unit
+         (xTU) in the upstream direction (MSGMINus). MSGMINus is
+         expressed in bits per second and ranges from 4000 to 248000
+         bits per second with 1000 bits per second steps. Valid values
          are specified in the relevant ITU-T Recommendation, e.g.,
-         [ITU-T G.992.3] and [ITU-T G.993.2].";
+         ITU-T G.992.3 and ITU-T G.993.2.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.5.1 Minimum overhead rate
-         upstream (MSGMINus)";
+        "ITU-T G.997.1 clause 7.3.1.5.1 (MSGMINus)";
     }
     leaf profiles {
       type union {
@@ -410,8 +404,7 @@ submodule bbf-vdsl-line-spectrum-profile-body {
          special value 'all'. The default is 'all', corresponding to
          all profiles allowed.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.1.11 VDSL2 profiles enabling
-         (PROFILES)";
+        "ITU-T G.997.1 clause 7.3.1.1.11 (PROFILES)";
     }
     leaf us0mask {
       type us0mask-descriptor;
@@ -422,7 +415,7 @@ submodule bbf-vdsl-line-spectrum-profile-body {
          (xTU) on the line. The default is 'all', corresponding to all
          US0 PSD masks allowed.
 
-         This parameter only applies to [ITU-T G.993.2 Annex A].";
+         This parameter only applies to ITU-T G.993.2 Annex A.";
     }
     leaf cyclic-extension-flag {
       type boolean;
@@ -434,8 +427,7 @@ submodule bbf-vdsl-line-spectrum-profile-body {
          used. Otherwise, the cyclic extension will be forced to
          the mandatory length (5N/32).";
       reference
-        "ITU-T G.997.1 clause 7.3.1.6.1 Optional cyclic extension
-         flag (CEFLAG)";
+        "ITU-T G.997.1 clause 7.3.1.6.1 (CEFLAG)";
     }
     leaf rtx-mode-ds {
       type enumeration {
@@ -446,19 +438,18 @@ submodule bbf-vdsl-line-spectrum-profile-body {
         }
         enum 1 {
           description
-            "RTX_PREFERRED: ITU-T G.998.4 retransmission is
-             preferred by the operator (i.e., if ITU-T G.998.4
-             Retransmission (RTX) capability is supported by both
-             xTUs, the xTUs will select ITU-T G.998.4 operation for
-             this direction).";
+            "RTX_PREFERRED: ITU-T G.998.4 retransmission is preferred
+             by the operator (i.e., if ITU-T G.998.4 Retransmission
+             (RTX) capability is supported by both xTUs, the xTUs will
+             select ITU-T G.998.4 operation for this direction).";
         }
         enum 2 {
           description
             "RTX_FORCED: Force the use of the ITU-T G.998.4
              retransmission (RTX) (i.e., if ITU-T G.998.4 RTX
-             capability in this direction is not supported by
-             both xTUs or not selected by the xTUs, an
-             initialization failure will result).";
+             capability in this direction is not supported by both
+             xTUs or not selected by the xTUs, an initialization
+             failure will result).";
         }
         enum 3 {
           description
@@ -471,17 +462,16 @@ submodule bbf-vdsl-line-spectrum-profile-body {
       }
       default "1";
       description
-        "This parameter controls the mode of operation of [ITU-T
-         G.998.4] retransmission in the downstream direction. In
-         [ITU-T G.992.3] and [ITU-T G.992.5] only the downstream
+        "This parameter controls the mode of operation of ITU-T
+         G.998.4 retransmission in the downstream direction. In
+         ITU-T G.992.3 and ITU-T G.992.5 only the downstream
          parameter RTX_MODE_ds is relevant, the value in the
-         upstream direction will be ignored. In [ITU-T G.993.2],
+         upstream direction will be ignored. In ITU-T G.993.2,
          both parameters are relevant. This parameter has 4 valid
          values. The default value is enum 1, corresponding to
          RTX_PREFERRED.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.11 Retransmission mode
-         (RTX_MODE_ds)";
+        "ITU-T G.997.1 clause 7.3.1.11 (RTX_MODE_ds)";
     }
     leaf rtx-mode-us {
       type enumeration {
@@ -493,18 +483,17 @@ submodule bbf-vdsl-line-spectrum-profile-body {
         enum 1 {
           description
             "RTX_PREFERRED: ITU-T G.998.4 retransmission (RTX) is
-             preferred by the operator (i.e., if ITU-T G.998.4
-             RTX capability is supported by both xTUs, the xTUs
-             will select ITU-T G.998.4 operation for this
-             direction).";
+             preferred by the operator (i.e., if ITU-T G.998.4 RTX
+             capability is supported by both xTUs, the xTUs will
+             select ITU-T G.998.4 operation for this direction).";
         }
         enum 2 {
           description
             "RTX_FORCED: Force the use of the ITU-T G.998.4
              retransmission (RTX) (i.e., if ITU-T G.998.4 RTX
-             capability in this direction is not supported by
-             both xTUs or not selected by the xTUs, an
-             initialization failure will result).";
+             capability in this direction is not supported by both
+             xTUs or not selected by the xTUs, an initialization
+             failure will result).";
         }
         enum 3 {
           description
@@ -517,23 +506,19 @@ submodule bbf-vdsl-line-spectrum-profile-body {
       }
       default "1";
       description
-        "This parameter controls the mode of operation of [ITU-T
-         G.998.4] retransmission in the upstream direction. In
-         [ITU-T G.992.3] and [ITU-T G.992.5] only the downstream
-         parameter RTX_MODE_ds is relevant, the value in the
-         upstream direction will be ignored. In [ITU-T G.993.2],
-         both parameters are relevant. This parameter has 4 valid
-         values. The default value is enum 1, corresponding to
-         RTX_PREFERRED.
+        "This parameter controls the mode of operation of ITU-T
+         G.998.4 retransmission in the upstream direction. In ITU-T
+         G.992.3 and ITU-T G.992.5 only the downstream parameter
+         RTX_MODE_ds is relevant, the value in the upstream direction
+         will be ignored. In ITU-T G.993.2, both parameters are
+         relevant. This parameter has 4 valid values. The default
+         value is enum 1, corresponding to RTX_PREFERRED.
          NOTE - Due to the optionality of ITU-T G.998.4 retransmission
          in upstream direction, the use of RTX_FORCED in upstream may
          lead to initialization failure, even if the xDSL Transceiver
          Unit (xTU) is supporting ITU-T G.998.4 (in downstream).";
       reference
-        "ITU-T G.997.1 clause 7.3.1.11 Retransmission mode
-         (RTX_MODE_us)";
+        "ITU-T G.997.1 clause 7.3.1.11 (RTX_MODE_us)";
     }
   }
-
-  // end grouping line-spectrum-profile
 }

@@ -15,20 +15,18 @@ submodule bbf-fast-line-spectrum-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing line spectrum profiles.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-fast-line-spectrum-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -168,14 +176,17 @@ submodule bbf-fast-line-spectrum-profile-body {
     description
       "Identifies supported FAST profiles.";
     reference
-      "ITU-T G.9701 clause 6.";
+      "ITU-T G.9701 clause 6";
   }
 
   typedef psd-level {
     type uint8 {
-      range "0..255";
+      range "0..255" {
+        description
+          "Defines a range from 0.0 to -127.5 dBm per Hz.";
+      }
     }
-    units "-0.5 dBm/Hz";
+    units "-0.5 dBm per Hz";
     description
       "Defines a Power Spectral Density (PSD) level in the range 0 to
        -127.5 dBm/Hz.";
@@ -204,11 +215,6 @@ submodule bbf-fast-line-spectrum-profile-body {
        sub-carriers.";
     leaf start-index {
       type sub-carrier-index;
-      must '. <= ../stop-index' {
-        description
-          "The start index must be less than or equal to the stop
-           index.";
-      }
       description
         "The sub-carrier index identifying the start of a range of
          sub-carriers (inclusive).";
@@ -216,6 +222,7 @@ submodule bbf-fast-line-spectrum-profile-body {
     leaf stop-index {
       type sub-carrier-index;
       must '. >= ../start-index' {
+        error-message "'stop-index' is less than the 'start-index'.";
         description
           "The stop index must be greater than or equal to the
            start index.";
@@ -231,22 +238,24 @@ submodule bbf-fast-line-spectrum-profile-body {
     description
       "Power and spectrum usage configuration parameters.";
     reference
-      "ITU-T G.997.2 clause 7.1.2.";
-    /* G.997.2 Clause 7.1.2 Power and Spectrum Usage */
+      "ITU-T G.997.2 clause 7.1.2";
     leaf maximum-aggregate-transmit-power {
       type int16 {
-        range "-310..310";
-        /* -31.0 to 31.0dBm */
+        range "-310..310" {
+          description
+            "Defines a range from -31.0 to 31.0 dBm.";
+        }
       }
-      units "0.1dBm";
+      units "0.1 dBm";
       default "40";
       description
         "Defines the maximum aggregate transmit power at the U-O2
          reference point during initialization and showtime
          (in dBm).";
       reference
-        "ITU-T G.997.2 clause 7.1.2.1 (MAXATPds) and clause 7.1.2.2
-         (MAXATPus); ITU-T G.9701 Clause 7.3.2";
+        "ITU-T G.997.2 clauses 7.1.2.1 (MAXATPds) and 7.1.2.2
+         (MAXATPus);
+         ITU-T G.9701 clause 7.3.2";
     }
     list carmask {
       key "start-index";
@@ -258,27 +267,30 @@ submodule bbf-fast-line-spectrum-profile-body {
          equal to the stop sub-carrier index, are masked, i.e., have
          a transmit power set to zero (linear scale).";
       reference
-        "ITU-T G.997.2 clause 7.1.2.3 (CARMASKds) and clause 7.1.2.4
-         (CARMASKus); ITU-T G.9701 Clause 7.3.1.3.";
+        "ITU-T G.997.2 clauses 7.1.2.3 (CARMASKds) and 7.1.2.4
+         (CARMASKus);
+         ITU-T G.9701 clause 7.3.1.3.";
       uses sub-carrier-range;
     }
     list rmccarmask {
-      if-feature "rmccarmask";
+      if-feature "bbf-fast:rmccarmask";
       key "start-index";
       max-elements 2;
       description
-        "Defines the RMC-masked sub-carrier bands. All sub-carriers
-         within the band, i.e., with indices greater than or equal to
-         the start sub-carrier index and less than or equal to the
-         stop sub-carrier index, are masked.
+        "Defines the Robust Management Channel (RMC) masked
+         sub-carrier bands. All sub-carriers within the band, i.e.,
+         with indices greater than or equal to the start sub-carrier
+         index and less than or equal to the stop sub-carrier index,
+         are masked.
 
          Masked sub-carriers for the Robust Management Channel (RMC)
          are not included in the sub-carrier set for the RMC (RTSds)
          nor in the backup sub-carrier set for the RMC (RTS-bds).";
       reference
-        "ITU-T G.997.2 clause 7.1.2.16 (RMCCARMASKds) and clause
-         7.1.2.17 (RMCCARMASKus); ITU-T G.9701 clauses 12.3.3.2.1,
-         12.3.4.2.7,  13.2.1.3.1 and 13.3.1.2.3";
+        "ITU-T G.997.2 clauses 7.1.2.16 (RMCCARMASKds) and 7.1.2.17
+         (RMCCARMASKus);
+         ITU-T G.9701 clauses 12.3.3.2.1, 12.3.4.2.7, 13.2.1.3.1 and
+         13.3.1.2.3";
       uses sub-carrier-range;
     }
   }
@@ -302,8 +314,8 @@ submodule bbf-fast-line-spectrum-profile-body {
         "Defines for each profile whether operation according to
          that profile is allowed or disallowed.";
       reference
-        "ITU-T G.997.2 clause 7.1.0.1 (PROFILES); ITU-T G.9701
-         clause 6.";
+        "ITU-T G.997.2 clause 7.1.0.1 (PROFILES);
+         ITU-T G.9701 clause 6.";
     }
     leaf link-state-enabling {
       type enumeration {
@@ -328,15 +340,12 @@ submodule bbf-fast-line-spectrum-profile-body {
       description
         "Selects the set of allowed low power mode states.";
       reference
-        "ITU-T G.997.2 clause 7.14.1.2(LS-ENABLE); ITU-T G.9701
-         clause 12.1.1.7.2";
+        "ITU-T G.997.2 clause 7.14.1.2 (LS-ENABLE);
+         ITU-T G.9701 clause 12.1.1.7.2";
     }
     leaf maximum-psd-reduction-in-l2 {
       type uint8 {
-        range "0..10 | 255" {
-          description
-            "Defines a range equivalent to 0 to 10 dB.";
-        }
+        range "0..10 | 255";
       }
       units "dB";
       default "0";
@@ -347,8 +356,8 @@ submodule bbf-fast-line-spectrum-profile-body {
          255, indicates there is no maximum bound for the PSD
          reduction (i.e., the maximum PSD reduction is infinite).";
       reference
-        "ITU-T G.997.2 clause 7.1.10.3 (L2.1-MAXPSDR); ITU-T G.9701
-         clause 13.4.1.4.";
+        "ITU-T G.997.2 clause 7.1.10.3 (L2.1-MAXPSDR);
+         ITU-T G.9701 clause 13.4.1.4.";
     }
     container downstream {
       description
@@ -356,22 +365,25 @@ submodule bbf-fast-line-spectrum-profile-body {
          parameters.";
       uses power-and-spectrum-usage-parameters;
       list mibpsdmask {
-        must
-          "count(../mibpsdmask)=0 or
-           (count(../mibpsdmask[sub-carrier-index=39])=1 and not (
-           (contains(../../profiles,'g.9701-profile-106a') and
-           not(../mibpsdmask[sub-carrier-index=2048])) or
-           (contains(../../profiles,'g.9701-profile-106b') and
-           not(../mibpsdmask[sub-carrier-index=2048])) or
-           (contains(../../profiles,'g.9701-profile-212a') and
-           not(../mibpsdmask[sub-carrier-index=4096])) or
-           (contains(../../profiles,'g.9701-profile-106c') and
-           not(../mibpsdmask[sub-carrier-index=2048])) or
-           (contains(../../profiles,'g.9701-profile-212c') and
-           not(../mibpsdmask[sub-carrier-index=4096])) or
-           (../../profiles='all' and
-           (not(../mibpsdmask[sub-carrier-index=2048]) or
-           not(../mibpsdmask[sub-carrier-index=4096])))))" {
+        must "count(../mibpsdmask)=0 or
+              (count(../mibpsdmask[sub-carrier-index=39])=1 and not (
+              (contains(../../profiles,'g.9701-profile-106a') and
+              not(../mibpsdmask[sub-carrier-index=2048])) or
+              (contains(../../profiles,'g.9701-profile-106b') and
+              not(../mibpsdmask[sub-carrier-index=2048])) or
+              (contains(../../profiles,'g.9701-profile-212a') and
+              not(../mibpsdmask[sub-carrier-index=4096])) or
+              (contains(../../profiles,'g.9701-profile-106c') and
+              not(../mibpsdmask[sub-carrier-index=2048])) or
+              (contains(../../profiles,'g.9701-profile-212c') and
+              not(../mibpsdmask[sub-carrier-index=4096])) or
+              (../../profiles='all' and
+              (not(../mibpsdmask[sub-carrier-index=2048]) or
+              not(../mibpsdmask[sub-carrier-index=4096])))))" {
+          error-message
+            "The 'mibpsdmask' does not include sub-carrier 39 and/or"
+          + " the highest sub-carrier for the currently configured"
+          + " profile.";
           description
             "If the MIBPSDMASK is configured, then the mask must
              include sub-carrier 39 as well as the highest
@@ -386,9 +398,9 @@ submodule bbf-fast-line-spectrum-profile-body {
            a valid Management Information Base (MIB) PSD mask are
            defined in G.9701 clauses 7.3.1.1.2.1 and 7.3.1.1.2.2.";
         reference
-          "ITU-T G.997.2 clause 7.1.2.5 (MIBPSDMASKds) and clause
-           7.1.2.6 (MIBPSDMASKus); ITU-T G.9701 clauses 7.3.1.1.2.1
-           and 7.3.1.1.2.2.";
+          "ITU-T G.997.2 clauses 7.1.2.5 (MIBPSDMASKds) and 7.1.2.6
+           (MIBPSDMASKus);
+           ITU-T G.9701 clauses 7.3.1.1.2.1 and 7.3.1.1.2.2.";
         leaf sub-carrier-index {
           type psd-level-sub-carrier-index;
           description
@@ -403,7 +415,7 @@ submodule bbf-fast-line-spectrum-profile-body {
         }
       }
       leaf classmask {
-        if-feature "classmask";
+        if-feature "bbf-fast:classmask";
         type enumeration {
           enum classmask1 {
             description
@@ -423,7 +435,7 @@ submodule bbf-fast-line-spectrum-profile-body {
            direction. The classmasks are defined in ITU-T G.9701.";
         reference
           "ITU-T G.997.2 clause 7.1.2.14 (CLASSMASKds);
-           ITU-T G.9701 clause 7.3.1.5.";
+           ITU-T G.9701 clause 7.3.1.5";
       }
     }
     container upstream {
@@ -431,22 +443,25 @@ submodule bbf-fast-line-spectrum-profile-body {
         "Upstream specific line spectrum configuration parameters.";
       uses power-and-spectrum-usage-parameters;
       list mibpsdmask {
-        must
-          "count(../mibpsdmask)=0 or
-           (count(../mibpsdmask[sub-carrier-index=39])=1 and not (
-           (contains(../../profiles,'g.9701-profile-106a') and
-           not(../mibpsdmask[sub-carrier-index=2048])) or
-           (contains(../../profiles,'g.9701-profile-106b') and
-           not(../mibpsdmask[sub-carrier-index=2048])) or
-           (contains(../../profiles,'g.9701-profile-212a') and
-           not(../mibpsdmask[sub-carrier-index=4096])) or
-           (contains(../../profiles,'g.9701-profile-106c') and
-           not(../mibpsdmask[sub-carrier-index=2048])) or
-           (contains(../../profiles,'g.9701-profile-212c') and
-           not(../mibpsdmask[sub-carrier-index=4096])) or
-           (../../profiles='all' and
-           (not(../mibpsdmask[sub-carrier-index=2048]) or
-           not(../mibpsdmask[sub-carrier-index=4096])))))" {
+        must "count(../mibpsdmask)=0 or
+              (count(../mibpsdmask[sub-carrier-index=39])=1 and not (
+              (contains(../../profiles,'g.9701-profile-106a') and
+              not(../mibpsdmask[sub-carrier-index=2048])) or
+              (contains(../../profiles,'g.9701-profile-106b') and
+              not(../mibpsdmask[sub-carrier-index=2048])) or
+              (contains(../../profiles,'g.9701-profile-212a') and
+              not(../mibpsdmask[sub-carrier-index=4096])) or
+              (contains(../../profiles,'g.9701-profile-106c') and
+              not(../mibpsdmask[sub-carrier-index=2048])) or
+              (contains(../../profiles,'g.9701-profile-212c') and
+              not(../mibpsdmask[sub-carrier-index=4096])) or
+              (../../profiles='all' and
+              (not(../mibpsdmask[sub-carrier-index=2048]) or
+              not(../mibpsdmask[sub-carrier-index=4096])))))" {
+          error-message
+            "The 'mibpsdmask' does not include sub-carrier 39 and/or"
+          + " the highest sub-carrier for the currently configured"
+          + " profile.";
           description
             "If the MIBPSDMASK is configured, then the mask must
              include sub-carrier 39 as well as the highest
@@ -457,13 +472,11 @@ submodule bbf-fast-line-spectrum-profile-body {
         description
           "This list defines the Power Spectral Density (PSD) mask
            applicable at the U-O2 reference point. Each entry in the
-           list defines a breakpoint of the PSD mask. Requirements for
-           a valid Management Information Base (MIB) PSD mask are
-           defined in G.9701 clauses 7.3.1.1.2.1 and 7.3.1.1.2.2.";
+           list defines a breakpoint of the PSD mask.";
         reference
-          "ITU-T G.997.2 clause 7.1.2.5 (MIBPSDMASKds) and clause
-           7.1.2.6 (MIBPSDMASKus); ITU-T G.9701 clauses 7.3.1.1.2.1
-           and 7.3.1.1.2.2.";
+          "ITU-T G.997.2 clauses 7.1.2.5 (MIBPSDMASKds) and 7.1.2.6
+           (MIBPSDMASKus);
+           ITU-T G.9701 clauses 7.3.1.1.2.1 and 7.3.1.1.2.2.";
         leaf sub-carrier-index {
           type psd-level-sub-carrier-index;
           description
@@ -478,11 +491,12 @@ submodule bbf-fast-line-spectrum-profile-body {
         }
       }
       leaf classmask {
-        if-feature "classmask";
+        if-feature "bbf-fast:classmask";
         type enumeration {
           enum classmask1 {
             description
-              "Selects limit mask per classmask1.";
+              "The limit mask for each profile is as defined in G.9701
+               classmask1.";
           }
         }
         default "classmask1";
@@ -492,7 +506,7 @@ submodule bbf-fast-line-spectrum-profile-body {
            The classmasks are defined in ITU-T G.9701.";
         reference
           "ITU-T G.997.2 clause 7.1.2.15 (CLASSMASKus);
-           ITU-T G.9701 clause 7.3.1.5.";
+           ITU-T G.9701 clause 7.3.1.5";
       }
     }
   }

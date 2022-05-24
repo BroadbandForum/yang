@@ -15,20 +15,18 @@ submodule bbf-fast-impulse-noise-monitoring-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Impulse Noise Monitoring (INM) profiles.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-fast-impulse-noise-monitoring-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -123,37 +131,41 @@ submodule bbf-fast-impulse-noise-monitoring-profile-body {
       type uint16 {
         range "3..511";
       }
-      units "one IAT time unit";
+      units "IAT periods";
       default "3";
       description
         "Defines the Inter Arrival Time (IAT) offset per direction
          that the FAST Transceiver Unit (FTU) receiver shall use to
          determine in which bin of the inter arrival time histogram
-         the IAT is reported.";
+         the IAT is reported. One IAT period is defined as
+         'iat-scaling-factor' Discrete MultiTone (DMT) symbol
+         periods.";
       reference
         "ITU-T G.997.2 clause 7.1.11.1 (INMIATO).
-         ITU-T G.9701 clause 11.4.4.7.2.1.";
+         ITU-T G.9701 clause 11.4.4.7.2.1";
     }
     leaf inmiats {
       type uint8 {
         range "0..7";
       }
-      units "one IAT time unit";
+      units "IAT periods";
       default "1";
       description
         "Defines the Inter Arrival Time (IAT) step per direction that
          the FAST Transceiver Unit (FTU) receiver shall use to
          determine in which bin of the inter arrival time histogram
-         the IAT is reported.";
+         the IAT is reported. One IAT period is defined as
+         'iat-scaling-factor' Discrete MultiTone (DMT) symbol
+         periods.";
       reference
         "ITU-T G.997.2 clause 7.1.11.2 (INMIATS).
-         ITU-T G.9701 clause 11.4.4.7.2.2.";
+         ITU-T G.9701 clause 11.4.4.7.2.2";
     }
     leaf inmcc {
       type uint8 {
         range "0..255";
       }
-      units "One DMT symbol";
+      units "symbols";
       default "1";
       description
         "Defines the cluster continuation value per direction that
@@ -161,7 +173,7 @@ submodule bbf-fast-impulse-noise-monitoring-profile-body {
          cluster indication process.";
       reference
         "ITU-T G.997.2 clause 7.1.11.3 (INMCC).
-         ITU-T G.9701 clause 11.4.4.7.2.3.";
+         ITU-T G.9701 clause 11.4.4.7.2.3";
     }
     leaf inm-inpeq-format {
       type enumeration {
@@ -180,7 +192,7 @@ submodule bbf-fast-impulse-noise-monitoring-profile-body {
          histogram.";
       reference
         "ITU-T G.997.2 clause 7.1.11.4 (INM_INPEQ_FORMAT).
-         ITU-T G.9701 clause 11.4.4.7.2.4.";
+         ITU-T G.9701 clause 11.4.4.7.2.4";
     }
     leaf dtu-cluster-bridging {
       type boolean;
@@ -192,7 +204,7 @@ submodule bbf-fast-impulse-noise-monitoring-profile-body {
          enabled. If 'false', bridging is disabled.";
       reference
         "ITU-T G.997.2 clause 7.1.11.5 (BRGN).
-         ITU-T G.9701 clause 11.4.4.7.2.5.";
+         ITU-T G.9701 clause 11.4.4.7.2.5";
     }
   }
 

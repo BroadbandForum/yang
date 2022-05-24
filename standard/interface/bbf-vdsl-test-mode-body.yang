@@ -15,20 +15,18 @@ submodule bbf-vdsl-test-mode-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 5.1 xDSL Line.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-vdsl-test-mode-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -144,8 +152,8 @@ submodule bbf-vdsl-test-mode-body {
 
   grouping test-mode {
     description
-      "The object contains parameters that invoke test modes and
-       update test parameters.";
+      "Data nodes used to invoke test modes and update test
+       parameters.";
     container test-mode {
       description
         "Update test parameters.";
@@ -155,29 +163,28 @@ submodule bbf-vdsl-test-mode-body {
             description
               "Force the line to transition from the L3 idle state
                to the L0 full-on state (i.e., both xTUs are in
-               showtime). This transition requires the (short or
-               full) initialization procedures. After reaching the
-               L0 state, the line may transition into or exit from
-               the L2 low power state (if L2 state is defined and
-               enabled). If the L0 state is not reached (after a
-               vendor discretionary number of retries and/or within
-               a vendor discretionary timeout), then an
-               Initialization failure occurs. Whenever the line is
-               in the L3 state, attempts will be made to transition
-               to the L0 state until it is forced into another state
-               through this configuration parameter.";
+               showtime). This transition requires the (short or full)
+               initialization procedures. After reaching the L0 state,
+               the line may transition into or exit from the L2 low
+               power state (if L2 state is defined and enabled). If
+               the L0 state is not reached (after a vendor
+               discretionary number of retries and/or within a vendor
+               discretionary timeout), then an Initialization failure
+               occurs. Whenever the line is in the L3 state, attempts
+               will be made to transition to the L0 state until it is
+               forced into another state through this configuration
+               parameter.";
           }
           enum 2 {
             description
-              "Force the line to transition from L0 full on to L2
-               low power state. This transition requires the entry
-               into L2 mode. This is an out-of-service test value
-               for triggering the L2 mode and is valid only for
-               Recommendations supporting L2 mode.
-               This parameter value is only applicable for operation
-               according to G.992.3, G.992.4 or G.992.5. If not
-               applicable, this value is ignored until its use is
-               defined.";
+              "Force the line to transition from L0 full on to L2 low
+               power state. This transition requires the entry into L2
+               mode. This is an out-of-service test value for
+               triggering the L2 mode and is valid only for
+               Recommendations supporting L2 mode. This parameter
+               value is only applicable for operation according to
+               G.992.3, G.992.4 or G.992.5. If not applicable, this
+               value is ignored until its use is defined.";
           }
           enum 3 {
             description
@@ -200,8 +207,7 @@ submodule bbf-vdsl-test-mode-body {
            this line. The default is enum 4, no power management state
            forced.";
         reference
-          "ITU-T G.997.1 7.3.1.1.3 Power management state forced
-           (PMSF)";
+          "ITU-T G.997.1 7.3.1.1.3 (PMSF)";
       }
       leaf loop-diagnostics-mode-forced {
         type enumeration {
@@ -241,8 +247,7 @@ submodule bbf-vdsl-test-mode-body {
            loop diagnostics mode no longer forced) is required before
            forcing the line again into loop diagnostics mode.";
         reference
-          "ITU-T G.997.1 clause 7.3.1.1.8 Loop diagnostic mode
-           forced (LDSF)";
+          "ITU-T G.997.1 clause 7.3.1.1.8 (LDSF)";
       }
       leaf auto-mode-cold-start-forced {
         type uint8 {
@@ -252,20 +257,17 @@ submodule bbf-vdsl-test-mode-body {
           "This parameter is defined in order to improve testing of
            the performance of xTUs supporting automode when it is
            enabled in the Management Information Base (MIB). The valid
-           values are 0 and 1. A change in value of this parameter i
-           ndicates a change in loop conditions applied to the devices
-           under test. The xTUs will reset any historical information
-           used for automode, for shortening G.994.1 handshake, or for
-           shortening the initialization procedure.
+           values are 0 and 1. A change in value of this parameter
+           indicates a change in loop conditions applied to the
+           devices under test. The xTUs will reset any historical
+           information used for automode, for shortening G.994.1
+           handshake, or for shortening the initialization procedure.
            The default is no automode cold start forced.";
         reference
-          "ITU-T G.997.1 clause 7.3.1.1.10 Automode cold start
-           forced";
+          "ITU-T G.997.1 clause 7.3.1.1.10";
       }
     }
   }
-
-  // end grouping test-mode
 
   grouping update-test {
     description
@@ -294,7 +296,7 @@ submodule bbf-vdsl-test-mode-body {
            update process in the system. The parameter will be reset
            (its value changed back to 0) by the AN after a period
            shorter than 3 minutes to allow reception of another update
-           request. The 3-minute period starts since the last time the
+           request. The 3 minute period starts since the last time the
            flag was set (externally or by an autonomous process in the
            system). This applies only to the elements maintained in
            the AN.
@@ -302,16 +304,14 @@ submodule bbf-vdsl-test-mode-body {
            A configuration change back to 0 is required before
            initiating another update.";
         reference
-          "ITU-T G.997.1 clause 7.5.1.36.1 Update request flag for
-           near-end test parameters (UPDATE-TEST-NE)";
+          "ITU-T G.997.1 clause 7.5.1.36.1 (UPDATE-TEST-NE)";
       }
       action update-near-end-test {
         description
           "Forces an update of the test parameters that can be
            updated during showtime.";
         reference
-          "ITU-T G.997.1 clause 7.5.1.36.1 Update request flag for
-           near-end test parameters (UPDATE-TEST-NE)";
+          "ITU-T G.997.1 clause 7.5.1.36.1 (UPDATE-TEST-NE)";
       }
       leaf xlin-disturber-vce-port-index-ds {
         type vce-port-index;
@@ -351,7 +351,7 @@ submodule bbf-vdsl-test-mode-body {
            update process in the system. The parameter will be reset
            (its value changed back to 0) by the AN after a period
            shorter than 3 minutes to allow reception of another update
-           request. The 3-minute period starts since the last time the
+           request. The 3 minute period starts since the last time the
            flag was set (externally or by an autonomous process in the
            system). This applies only to the elements maintained in
            the AN.
@@ -359,19 +359,15 @@ submodule bbf-vdsl-test-mode-body {
            A configuration change back to 0 is required before
            initiating another update.";
         reference
-          "ITU-T G.997.1 clause 7.5.1.36.2 Update request flag for
-           far-end test parameters (UPDATE-TEST-FE)";
+          "ITU-T G.997.1 clause 7.5.1.36.2 (UPDATE-TEST-FE)";
       }
       action update-far-end-test {
         description
           "Forces an update of the test parameters that can be
            updated during showtime.";
         reference
-          "ITU-T G.997.1 clause 7.5.1.36.2 Update request flag for
-           far-end test parameters (UPDATE-TEST-FE)";
+          "ITU-T G.997.1 clause 7.5.1.36.2 (UPDATE-TEST-FE)";
       }
     }
   }
-
-  // end grouping update-test
 }

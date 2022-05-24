@@ -13,20 +13,18 @@ submodule bbf-selt-processing-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing processing profiles.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -66,9 +64,19 @@ submodule bbf-selt-processing-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -150,9 +158,12 @@ submodule bbf-selt-processing-profile-body {
         }
         leaf psd {
           type int16 {
-            range "-2000..-300";
+            range "-2000..-300" {
+              description
+                "Defines a range from -200.0 to 30.0 dBm per Hz.";
+            }
           }
-          units "0.1 dBm/Hz";
+          units "0.1 dBm per Hz";
           mandatory true;
           description
             "The Power Spectral Density (PSD) value.";
@@ -186,10 +197,7 @@ submodule bbf-selt-processing-profile-body {
 
          The range of valid values for index tn is 0 to 8191 in steps
          of 1. The range of valid values for PSD is -30 to -200
-         dBm/Hz in steps of 0.1 dBm/Hz.
-
-         The maximum number of breakpoints in downstream is 48,
-         and in upstream 48.";
+         dBm per Hz in steps of 0.1 dBm per Hz.";
       reference
         "ITU-T G.996.2 clause B.2.1.2 (CAP-SIGNALPSD)";
     }
@@ -209,9 +217,12 @@ submodule bbf-selt-processing-profile-body {
         }
         leaf psd {
           type int16 {
-            range "-2000..-30";
+            range "-2000..-30" {
+              description
+                "Defines a range from -200.0 to 30.0 dBm per Hz.";
+            }
           }
-          units "0.1 dBm/Hz";
+          units "0.1 dBm per Hz";
           mandatory true;
           description
             "The Power Spectral Density (PSD) value.";
@@ -247,16 +258,16 @@ submodule bbf-selt-processing-profile-body {
 
          The range of valid values for index tn is 0 to 8191, in
          steps of 1. The range of valid values for PSD is -30 to -200
-         dBm/Hz, in steps of 0.1 dBm/Hz
-
-         The maximum number of breakpoints in downstream is 128, and
-         in upstream 128.";
+         dBm per Hz, in steps of 0.1 dBm per Hz.";
       reference
         "ITU-T G.996.2 clause B.2.1.3 (CAP-NOISEPSD)";
     }
     leaf capacity-estimate-target-noise-margin {
       type uint16 {
-        range "0..310";
+        range "0..310" {
+          description
+            "Defines a range from 0.0 to 31.0 dB.";
+        }
       }
       units "0.1 dB";
       description

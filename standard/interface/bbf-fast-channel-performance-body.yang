@@ -19,21 +19,19 @@ submodule bbf-fast-channel-performance-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of performance-related
      YANG data types and grouping definitions for the management
      of FAST bearer channels.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -73,9 +71,19 @@ submodule bbf-fast-channel-performance-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -147,7 +155,7 @@ submodule bbf-fast-channel-performance-body {
 
   typedef error-free-throughput {
     type uint32;
-    units "1000 bits per second";
+    units "kilobits per second";
     description
       "Defines the typedef to be used for error-free throughput
        parameters.";
@@ -159,23 +167,21 @@ submodule bbf-fast-channel-performance-body {
     leaf error-free-bits {
       type error-free-bits-count;
       description
-        "Reports the number of error-free bits (see clause
-         11.4.1.1.6/G.9701) passed over the alpha reference
-         point at the receiver, divided by 65536.";
+        "Reports the number of error-free bits passed over the alpha
+         reference point at the receiver, divided by 65536.";
       reference
         "ITU-T G.997.2 clause 7.11.5.1-7.11.5.4 (EFB-C15M,
-         EFB-P15M,EFB-C24H,EFB-P24H); ITU-T G.9701 Clause
-         11.4.1.1.6.";
+         EFB-P15M,EFB-C24H,EFB-P24H);
+         ITU-T G.9701 clause 11.4.1.1.6";
     }
     leaf minimum-error-free-throughput {
       type error-free-throughput;
       description
-        "Reports the minimum error-free throughput (see
-         clause 11.4.1.1.3/G.9701).";
+        "Reports the minimum error-free throughput.";
       reference
         "ITU-T G.997.2 clause 7.11.5.5-7.11.5.8 (MINEFTR-C15M,
-         MINEFTR-P15M,MINEFTR-C24H,MINEFTR-P24H); ITU-T G.9701
-         Clause 11.4.1.1.3.";
+         MINEFTR-P15M,MINEFTR-C24H,MINEFTR-P24H);
+         ITU-T G.9701 clause 11.4.1.1.3";
     }
   }
 
@@ -188,28 +194,28 @@ submodule bbf-fast-channel-performance-body {
       type bbf-yang:performance-counter32;
       description
         "Reports a count of the cyclic redundancy check anomalies
-         (crc). The cyclic redundancy check anomaly (CRC) is defined
-         in clause 11.3.1.1/G.9701.";
+         (CRC).";
       reference
-        "ITU-T G.997.2 clause 7.8.4 (CURR/PREV_NE/FE_15/24_CV).";
+        "ITU-T G.997.2 clause 7.8.4 (CURR/PREV_NE/FE_15/24_CV);
+         ITU-T G.9701 clause 11.3.1.1";
     }
     leaf uncorrected-dtus {
       type bbf-yang:performance-counter32;
       description
         "Reports a count of the uncorrected Data Transfer Unit (DTU)
-         anomalies (rtx-uc). The uncorrected DTU anomaly (rtx-uc) is
-         defined in clause 11.3.1.1/G.9701.";
+         anomalies (rtx-uc).";
       reference
-        "ITU-T G.997.2 clause 7.8.5 (CURR/PREV_NE/FE_15/24_RTXUC).";
+        "ITU-T G.997.2 clause 7.8.5 (CURR/PREV_NE/FE_15/24_RTXUC);
+         ITU-T G.9701 clause 11.3.1.1";
     }
     leaf retransmitted-dtus {
       type bbf-yang:performance-counter32;
       description
         "Reports a count of the retransmitted Data Transfer Unit (DTU)
-         anomalies (rtx-tx). The retransmitted DTU anomaly (rtx-tx) is
-         defined in clause 11.3.1.1/G.9701.";
+         anomalies (rtx-tx).";
       reference
-        "ITU-T G.997.2 clause 7.8.6 (CURR/PREV_NE/FE_15/24_RTXTX).";
+        "ITU-T G.997.2 clause 7.8.6 (CURR/PREV_NE/FE_15/24_RTXTX);
+         ITU-T G.9701 clause 11.3.1.1";
     }
     leaf minimum-andeftr {
       if-feature "bbf-fast:andeftr";
@@ -272,6 +278,15 @@ submodule bbf-fast-channel-performance-body {
       reference
         "ITU-T G.997.2 clause 7.8.8 (CURR/PREV_NE/FE_15_ANDEFTRDS)";
     }
+    leaf high-utilization-seconds {
+      if-feature "bbf-fast:high-utilization-seconds";
+      type seconds-counter-15min;
+      description
+        "Reports the count of High Utilization Seconds (HUS).";
+      reference
+        "ITU-T G.997.2 clause T.5.1.1 (CURR/PREV_NE/FE_15_DTA_HUS);
+         ITU-T G.9701 clauses T.4.2 and T.4.3";
+    }
   }
 
   grouping channel-performance-parameters-24hr {
@@ -295,6 +310,15 @@ submodule bbf-fast-channel-performance-body {
          Throughput Rate (ANDEFTR) defined seconds.";
       reference
         "ITU-T G.997.2 clause 7.8.8 (CURR/PREV_NE/FE_24_ANDEFTRDS)";
+    }
+    leaf high-utilization-seconds {
+      if-feature "bbf-fast:high-utilization-seconds";
+      type seconds-counter-24hr;
+      description
+        "Reports the count of High Utilization Seconds (HUS).";
+      reference
+        "ITU-T G.997.2 clause T.5.1.1 (CURR/PREV_NE/FE_24_DTA_HUS);
+         ITU-T G.9701 clauses T.4.2 and T.4.3";
     }
   }
 
@@ -380,7 +404,7 @@ submodule bbf-fast-channel-performance-body {
         uses performance-24hr-history-parameters;
         list history {
           key "interval-number";
-          max-elements 96;
+          max-elements 7;
           ordered-by system;
           description
             "A history of 24 hour intervals.";

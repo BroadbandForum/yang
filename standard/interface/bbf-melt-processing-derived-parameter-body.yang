@@ -15,20 +15,18 @@ submodule bbf-melt-processing-derived-parameter-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      Metallic Line Test Processing (MELT-P) derived parameters.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-melt-processing-derived-parameter-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -80,12 +88,6 @@ submodule bbf-melt-processing-derived-parameter-body {
       "TR-355a3: YANG Modules for FTTdp Management
                    <https://www.broadband-forum.org/download/
                           TR-355_Amendment-3.pdf>";
-  }
-  revision 2019-06-17 {
-    description
-      "Changes for amendment 3.";
-    reference
-      "TBD";
   }
   revision 2019-06-11 {
     description
@@ -133,9 +135,9 @@ submodule bbf-melt-processing-derived-parameter-body {
 
            NOTE - An error-free loop will be classified as failure
            state 2) in case that the remote end of the loop was left
-           open during the measurement, or the connected CPE
-           equipment could not be detected (too low parallel CPE
-           system capacitance).";
+           open during the measurement, or the connected Customer
+           Premises Equipment (CPE) could not be detected (too low
+           parallel CPE system capacitance).";
         reference
           "ITU-T G.996.2 clause F.2.2.1.1 (MELT-O-WIRE-type)";
       }
@@ -146,11 +148,12 @@ submodule bbf-melt-processing-derived-parameter-body {
            measurement point, i.e., from the central office or of
            the total loop length if no failure is detected. A priori
            knowledge of the loop characteristics is required for
-           reliable estimation of the distance (see clause F.2.1.2).
-           The range of valid values is from 0 to 10000 m with a
-           granularity of 1 m.";
+           reliable estimation of the distance. The range of valid
+           values is from 0 to 10000 meters with a granularity of 1
+           meter.";
         reference
-          "ITU-T G.996.2 clause F.2.2.1.2 (MELT-O-WIRE-DIST)";
+          "ITU-T G.996.2 clauses F.2.1.2 and F.2.2.1.2
+           (MELT-O-WIRE-DIST)";
       }
       enum short-circuit-failure-type {
         description
@@ -200,12 +203,12 @@ submodule bbf-melt-processing-derived-parameter-body {
            3) 25 Hz AC voltage
            4) 50 Hz AC voltage
            5) 60 Hz AC voltage
-           6) POTS equipment (-48 V DC)
-           7) ISDN equipment (-96 V DC)
+           6) POTS equipment (-48 volts DC)
+           7) ISDN equipment (-96 volts DC)
            8) Undefined foreign voltage detected.
 
            This classification shall be done separately for both,
-           the tip and the ring wire. ";
+           the tip and the ring wire.";
         reference
           "ITU-T G.996.2 clause F.2.2.5.1 (MELT-FV-TYPE)";
       }
@@ -236,14 +239,14 @@ submodule bbf-melt-processing-derived-parameter-body {
       }
       enum cpe-identification-capacitive {
         description
-          "CPE detected shall be reported if the measured
-           capacitance value CTR-Term is >= MELT-SYSC-CPE. CTR-Term
-           shall represent the termination capacitance only.
-           Therefore, the line capacitance shall be subtracted from
-           the measured CTR value. For this equation to hold, the
-           MELT-SYSC-CPE value should be derived from the nominal
-           CPE capacitance by accounting for all tolerances and be
-           set to the minimum possible measurement result.";
+          "Customer Premises Equipment (CPE) detected shall be
+           reported if the measured capacitance value CTR-Term is
+           >= MELT-SYSC-CPE. CTR-Term shall represent the termination
+           capacitance only. Therefore, the line capacitance shall be
+           subtracted from the measured CTR value. For this equation
+           to hold, the MELT-SYSC-CPE value should be derived from the
+           nominal CPE capacitance by accounting for all tolerances
+           and be set to the minimum possible measurement result.";
         reference
           "ITU-T G.996.2 clause F.2.2.7 (MELT-CPE-ID)";
       }
@@ -301,18 +304,19 @@ submodule bbf-melt-processing-derived-parameter-body {
       type uint16 {
         range "0..10000";
       }
-      units "1 m";
+      units "meters";
       description
         "This parameter represents a best-effort estimate of the
          distance of the detected open wire failure from the
          measurement point, i.e., from the central office or of the
          total loop length if no failure is detected. A priori
          knowledge of the loop characteristics is required for
-         reliable estimation of the distance (see clause F.2.1.2).
-         The range of valid values is from 0 to 10000 m with a
-         granularity of 1 m.";
+         reliable estimation of the distance. The range of valid
+         values is from 0 to 10000 meters with a granularity of 1
+         meter.";
       reference
-        "ITU-T G.996.2 clause F.2.2.1.2 (MELT-O-WIRE-DIST)";
+        "ITU-T G.996.2 clauses F.2.1.2 and F.2.2.1.2
+         (MELT-O-WIRE-DIST)";
     }
     leaf short-circuit-failure-type {
       type enumeration {
@@ -438,11 +442,13 @@ submodule bbf-melt-processing-derived-parameter-body {
         }
         enum pots-equipment {
           description
-            "POTS equipment (-48 V DC) on both tip and ring wires.";
+            "POTS equipment (-48 volts DC) on both tip and ring
+             wires.";
         }
         enum isdn-equipment {
           description
-            "ISDN equipment (-96 V DC) on both tip and ring wires.";
+            "ISDN equipment (-96 volts DC) on both tip and ring
+             wires.";
         }
         enum undefined-foreign-voltage-detected {
           description
@@ -483,19 +489,19 @@ submodule bbf-melt-processing-derived-parameter-body {
         }
         enum pots-equipment-tip {
           description
-            "POTS equipment (-48 V DC) on the tip wire.";
+            "POTS equipment (-48 volts DC) on the tip wire.";
         }
         enum pots-equipment-ring {
           description
-            "POTS equipment (-48 V DC) on the ring wire.";
+            "POTS equipment (-48 volts DC) on the ring wire.";
         }
         enum isdn-equipment-tip {
           description
-            "ISDN equipment (-96 V DC) on the tip wire.";
+            "ISDN equipment (-96 volts DC) on the tip wire.";
         }
         enum isdn-equipment-ring {
           description
-            "ISDN equipment (-96 V DC) on the ring wire.";
+            "ISDN equipment (-96 volts DC) on the ring wire.";
         }
         enum undefined-foreign-voltage-detected-tip {
           description
@@ -515,8 +521,8 @@ submodule bbf-melt-processing-derived-parameter-body {
          3) 25 Hz AC voltage
          4) 50 Hz AC voltage
          5) 60 Hz AC voltage
-         6) POTS equipment (-48 V DC)
-         7) ISDN equipment (-96 V DC)
+         6) POTS equipment (-48 volts DC)
+         7) ISDN equipment (-96 volts DC)
          8) Undefined foreign voltage detected.
 
          This classification shall be done separately for both, the
@@ -605,19 +611,20 @@ submodule bbf-melt-processing-derived-parameter-body {
         }
       }
       description
-        "CPE detected shall be reported if the measured capacitance
-         value CTR-Term is >= MELT-SYSC-CPE. CTR-Term shall represent
-         the termination capacitance only. Therefore, the line
-         capacitance shall be subtracted from the measured CTR value.
-         For this equation to hold, the MELT-SYSC-CPE value should be
-         derived from the nominal CPE capacitance by accounting for
-         all tolerances and be set to the minimum possible measurement
-         result.";
+        "Customer Premises Equipment (CPE) detected shall be reported
+         if the measured capacitance value CTR-Term is
+         >= MELT-SYSC-CPE. CTR-Term shall represent the termination
+         capacitance only. Therefore, the line capacitance shall be
+         subtracted from the measured CTR value. For this equation to
+         hold, the MELT-SYSC-CPE value should be derived from the
+         nominal CPE capacitance by accounting for all tolerances and
+         be set to the minimum possible measurement result.";
       reference
         "ITU-T G.996.2 clause F.2.2.7 (MELT-CPE-ID)";
     }
     leaf unreliability-indicator {
-      if-feature "melt-processing-derived-parameter-reliability";
+      if-feature
+        "bbf-melt:melt-processing-derived-parameter-reliability";
       type bits {
         bit open-wire-failure-type {
           description
@@ -646,8 +653,8 @@ submodule bbf-melt-processing-derived-parameter-body {
              the total loop length if no failure is detected. A priori
              knowledge of the loop characteristics is required for
              reliable estimation of the distance (see clause F.2.1.2).
-             The range of valid values is from 0 to 10000 m with a
-             granularity of 1 m.";
+             The range of valid values is from 0 to 10000 meters with
+             a granularity of 1 meter.";
           reference
             "ITU-T G.996.2 clause F.2.2.1.2 (MELT-O-WIRE-DIST)";
         }
@@ -699,8 +706,8 @@ submodule bbf-melt-processing-derived-parameter-body {
              3) 25 Hz AC voltage
              4) 50 Hz AC voltage
              5) 60 Hz AC voltage
-             6) POTS equipment (-48 V DC)
-             7) ISDN equipment (-96 V DC)
+             6) POTS equipment (-48 volts DC)
+             7) ISDN equipment (-96 volts DC)
              8) Undefined foreign voltage detected.
 
              This classification shall be done separately for both,
@@ -760,7 +767,8 @@ submodule bbf-melt-processing-derived-parameter-body {
         "ITU-T G.996.2 clause F.2.2.8 (Reliability indicator)";
     }
     container melt-processing-derived-vendor-specific-status {
-      if-feature "melt-processing-derived-parameter-reliability";
+      if-feature
+        "bbf-melt:melt-processing-derived-parameter-reliability";
       description
         "Vendor specific status associated with each MELT
          processing derived test.";

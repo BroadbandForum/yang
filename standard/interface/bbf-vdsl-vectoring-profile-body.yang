@@ -17,21 +17,19 @@ submodule bbf-vdsl-vectoring-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 5.7 DSL Quality
      Management related profiles; Vectoring Profile.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -71,9 +69,19 @@ submodule bbf-vdsl-vectoring-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -149,18 +157,16 @@ submodule bbf-vdsl-vectoring-profile-body {
         "This configuration parameter is an array of pairs of
          sub-carrier indices (a(i), b(i)). Each pair specifies a
          frequency band starting from sub-carrier index a(i) and
-         ending at sub-carrier index b(i) (including both start
-         and end points) in which Far-End Crosstalk (FEXT)
-         cancellation for the line is not required. Up to 8 frequency
-         bands may be configured. The same value of this parameter
-         will be set for all lines of the same vector group.
-         The default is an empty list, corresponding to no
-         vectoring frequency-band control.";
+         ending at sub-carrier index b(i) (including both start and
+         end points) in which Far-End Crosstalk (FEXT) cancellation
+         for the line is not required. Up to 8 frequency bands may be
+         configured. The same value of this parameter will be set for
+         all lines of the same vector group.
+         The default is an empty list, corresponding to no vectoring
+         frequency-band control.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.13.1 Vectoring frequency-band
-         control upstream (VECTOR_BAND_CONTROLus) and clause
-         7.3.1.13.2 Vectoring frequency-band control downstream
-         (VECTOR_BAND_CONTROLds)";
+        "ITU-T G.997.1 clauses 7.3.1.13.1 (VECTOR_BAND_CONTROLus) and
+         7.3.1.13.2 (VECTOR_BAND_CONTROLds)";
     }
     leaf fext-cancel-priority {
       type enumeration {
@@ -176,15 +182,14 @@ submodule bbf-vdsl-vectoring-profile-body {
       }
       default "HIGH";
       description
-        "This parameter specifies line priority for the line in
-         the vectored group in the direction of transmission, as
-         defined in [ITU-T G.993.5]. Two line priorities are
-         defined as LOW and HIGH. The default is HIGH.";
+        "This parameter specifies line priority for the line in the
+         vectored group in the direction of transmission. Two line
+         priorities are defined as LOW and HIGH. The default is
+         HIGH.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.13.3 FEXT cancellation line
-         priorities upstream (FEXT_CANCEL_PRIORITYus) and clause
-         7.3.1.13.4 FEXT cancellation line priorities downstream
-         (FEXT_CANCEL_PRIORITYds)";
+        "ITU-T G.997.1 clauses 7.3.1.13.3 (FEXT_CANCEL_PRIORITYus) and
+         7.3.1.13.4 (FEXT_CANCEL_PRIORITYds);
+         ITU-T G.993.5";
     }
     leaf fext-cancel-enable {
       type enumeration {
@@ -205,10 +210,8 @@ submodule bbf-vdsl-vectoring-profile-body {
          in the vectored group. The default is enum 1, corresponding
          to FEXT cancellation enabled.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.13.5 FEXT cancellation
-         enabling/disabling upstream (FEXT_CANCEL_ENABLEus) and
-         clause 7.3.1.13.6 FEXT cancellation enabling/disabling
-         downstream (FEXT_CANCEL_ENABLEds)";
+        "ITU-T G.997.1 clauses 7.3.1.13.5 (FEXT_CANCEL_ENABLEus) and
+         7.3.1.13.6 (FEXT_CANCEL_ENABLEds)";
     }
     leaf xlin-group-size-req {
       type uint8 {
@@ -220,14 +223,10 @@ submodule bbf-vdsl-vectoring-profile-body {
          (XLING) in the direction of transmission. The valid values
          are 1, 2, 4, 8, 16, 32, and 64.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.13.7 Downstream requested
-         XLIN subcarrier group size (XLINGREQds) and clause
-         7.3.1.13.8 Upstream requested XLIN subcarrier group size
-         (XLINGREQus)";
+        "ITU-T G.997.1 clauses 7.3.1.13.7 (XLINGREQds) and clause
+         7.3.1.13.8 (XLINGREQus)";
     }
   }
-
-  // end grouping vectoring-profile
 
   grouping vectoring-profile-non-directional {
     description
@@ -245,39 +244,34 @@ submodule bbf-vdsl-vectoring-profile-body {
           bit bit0 {
             position 0;
             description
-              "initialization in ITU-T G.993.2 mode with neither
+              "Initialization in ITU-T G.993.2 mode with neither
                Annex X nor Annex Y enabled.";
           }
           bit bit1 {
             position 1;
             description
-              "initialization in ITU-T G.993.2 Annex X.";
+              "Initialization in ITU-T G.993.2 Annex X.";
           }
           bit bit2 {
             position 2;
             description
-              "initialization in ITU-T G.993.2 Annex Y.";
+              "Initialization in ITU-T G.993.2 Annex Y.";
           }
           bit bit3 {
             position 3;
             description
-              "initialization in ITU-T G.993.5.";
+              "Initialization in ITU-T G.993.5.";
           }
-          // bit bit4; // reserved by ITU-T
-          // bit bit5; // reserved by ITU-T
-          // bit bit6; // reserved by ITU-T
-          // bit bit7; // reserved by ITU-T
         }
       }
       default "all";
       description
         "This configuration parameter defines the vectoring
-         initialization type to be allowed by the VTU O on the
-         line. The default is 'all', corresponding to all vectoring
-         modes allowed.";
+         initialization type to be allowed by the VDSL Transceiver
+         Unit - Central office (VTU-O) on the line. The default is
+         'all', corresponding to all vectoring modes allowed.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.13.9 Vectoring mode enable
-         (VECTORMODE_ENABLE)";
+        "ITU-T G.997.1 clause 7.3.1.13.9 (VECTORMODE_ENABLE)";
     }
     leaf strongfext-mode {
       if-feature "bbf-vdsl:strongfext";
@@ -302,11 +296,12 @@ submodule bbf-vdsl-vectoring-profile-body {
       }
       default "disabled";
       description
-        "This configuration parameter specifies if operation
-         according to G.993.5 Annex A is disabled, preferred, forced,
-         or forced above 17MHz.";
+        "This configuration parameter specifies if operation according
+         to G.993.5 Annex A is disabled, preferred, forced, or forced
+         above 17MHz.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.17.1 STRONGFEXT mode";
+        "ITU-T G.997.1 clause 7.3.1.17.1;
+         ITU-T G.993.5 Annex A";
     }
   }
 }

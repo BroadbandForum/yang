@@ -16,21 +16,19 @@ submodule bbf-melt-pmd-reporting-parameter-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      Metallic Line Test Physical Medium Dependent (MELT-PMD) reporting
      parameters.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +68,19 @@ submodule bbf-melt-pmd-reporting-parameter-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -82,12 +90,6 @@ submodule bbf-melt-pmd-reporting-parameter-body {
       "TR-355a3: YANG Modules for FTTdp Management
                    <https://www.broadband-forum.org/download/
                           TR-355_Amendment-3.pdf>";
-  }
-  revision 2019-06-17 {
-    description
-      "Changes for amendment 3.";
-    reference
-      "TBD";
   }
   revision 2019-06-11 {
     description
@@ -136,7 +138,7 @@ submodule bbf-melt-pmd-reporting-parameter-body {
         description
           "This parameter reports the nominal input impedance of the
            measuring instrument during foreign voltage tests. The
-           range of valid values is from 0 to 10 Mohm with a
+           range of valid values is from 0 to 10 megaohms with a
            granularity of 1 ohm.";
         reference
           "ITU-T G.996.2 clause E.2.2.2 (MELT-IMP-V)";
@@ -145,12 +147,12 @@ submodule bbf-melt-pmd-reporting-parameter-body {
         description
           "This parameter is the peak amplitude of the differential
            sinewave used by the measurement of the loop complex
-           admittance with a high voltage metallic test (see
-           clause E.1.1.7). The range of valid values is from 0 to
-           150 V and it shall be represented in linear format with a
-           granularity of 0.1 V.";
+           admittance with a high voltage metallic test. The range of
+           valid values is from 0 to 150 volts and it shall be
+           represented in linear format with a granularity of 0.1
+           volts.";
         reference
-          "ITU-T G.996.2 clause E.2.2.3 (MELT-HCA-V)";
+          "ITU-T G.996.2 clauses E.1.1.7 and E.2.2.3 (MELT-HCA-V)";
       }
     }
     description
@@ -165,7 +167,7 @@ submodule bbf-melt-pmd-reporting-parameter-body {
       type uint16 {
         range "10..1000";
       }
-      units "1 Hz";
+      units "Hz";
       description
         "This parameter is the measurement frequency for a 3-element
          capacitance measurement, if performed with a sinewave
@@ -179,12 +181,12 @@ submodule bbf-melt-pmd-reporting-parameter-body {
       type uint32 {
         range "0..10000000";
       }
-      units "1 ohm";
+      units "ohms";
       description
         "This parameter reports the nominal input impedance of the
          measuring instrument during foreign voltage tests. The range
-         of valid values is from 0 to 10 Mohm with a granularity of
-         1 ohm.";
+         of valid values is from 0 to 10 megaohms with a granularity
+         of 1 ohm.";
       reference
         "ITU-T G.996.2 clause E.2.2.2 (MELT-IMP-V)";
     }
@@ -193,12 +195,12 @@ submodule bbf-melt-pmd-reporting-parameter-body {
       description
         "This parameter is the peak amplitude of the differential
          sinewave used by the measurement of the loop complex
-         admittance with a high voltage metallic test (see
-         clause E.1.1.7). The range of valid values is from 0 to
-         150 V and it shall be represented in linear format with a
-         granularity of 0.1 V.";
+         admittance with a high voltage metallic test. The range of
+         valid values is from 0 to 150 volts and it shall be
+         represented in linear format with a granularity of 0.1
+         volts.";
       reference
-        "ITU-T G.996.2 clause E.2.2.3 (MELT-HCA-V)";
+        "ITU-T G.996.2 clauses E.1.1.7 and E.2.2.3 (MELT-HCA-V)";
     }
     leaf unreliability-indicator {
       if-feature "bbf-melt:melt-pmd-reporting-parameter-reliability";
@@ -217,7 +219,7 @@ submodule bbf-melt-pmd-reporting-parameter-body {
           description
             "This parameter reports the nominal input impedance of the
              measuring instrument during foreign voltage tests. The
-             range of valid values is from 0 to 10 Mohm with a
+             range of valid values is from 0 to 10 megaohms with a
              granularity of 1 ohm.";
           reference
             "ITU-T G.996.2 clause E.2.2.2 (MELT-IMP-V)";
@@ -226,12 +228,12 @@ submodule bbf-melt-pmd-reporting-parameter-body {
           description
             "This parameter is the peak amplitude of the differential
              sinewave used by the measurement of the loop complex
-             admittance with a high voltage metallic test (see
-             clause E.1.1.7). The range of valid values is from 0 to
-             150 V and it shall be represented in linear format with a
-             granularity of 0.1 V.";
+             admittance with a high voltage metallic test. The range
+             of valid values is from 0 to 150 volts and it shall be
+             represented in linear format with a granularity of 0.1
+             volts.";
           reference
-            "ITU-T G.996.2 clause E.2.2.3 (MELT-HCA-V)";
+            "ITU-T G.996.2 clauses E.1.1.7 and E.2.2.3 (MELT-HCA-V)";
         }
       }
       description

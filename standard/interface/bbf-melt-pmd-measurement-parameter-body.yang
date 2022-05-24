@@ -16,21 +16,19 @@ submodule bbf-melt-pmd-measurement-parameter-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      Metallic Line Test Physical Medium Dependent (MELT-PMD)
      measurement parameters.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +68,19 @@ submodule bbf-melt-pmd-measurement-parameter-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -82,12 +90,6 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       "TR-355a3: YANG Modules for FTTdp Management
                    <https://www.broadband-forum.org/download/
                           TR-355_Amendment-3.pdf>";
-  }
-  revision 2019-06-17 {
-    description
-      "Changes for amendment 3.";
-    reference
-      "TBD";
   }
   revision 2019-06-11 {
     description
@@ -182,8 +184,8 @@ submodule bbf-melt-pmd-measurement-parameter-body {
   identity melt-ca {
     base measurement-class;
     description
-      "The 3-element complex admittance with controlled
-       metallic voltage.";
+      "The 3-element complex admittance with controlled metallic
+       voltage.";
     reference
       "ITU-T G.996.2 clause E.2.3.9 (MELT-CAx-xx)";
   }
@@ -191,8 +193,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
   identity melt-ha {
     base measurement-class;
     description
-      "The loop complex admittance with high
-       metallic voltage.";
+      "The loop complex admittance with high metallic voltage.";
     reference
       "ITU-T G.996.2 clause E.2.3.10 (MELT-HAx-xx)";
   }
@@ -201,12 +202,12 @@ submodule bbf-melt-pmd-measurement-parameter-body {
     type uint32 {
       range "0..10000000";
     }
-    units "1 ohm";
+    units "ohms";
     description
       "The 4-element DC resistances, RTR (Tip-to-Ring), RRT
        (Ring-to-Tip), RTG (Tip-to-Ground), and RRG (Ring-to-Ground),
        shall be represented in linear format. The range of valid
-       values is from 0 to 10 Mohms with a granularity of 1 ohm.";
+       values is from 0 to 10 megaohms with a granularity of 1 ohm.";
     reference
       "ITU-T G.996.2 clause E.2.3.1 (MELT-CDCR-TR, MELT-CDCR-RT,
        MELT-CDCR-TG, MELT-CDCR-RG)";
@@ -214,14 +215,17 @@ submodule bbf-melt-pmd-measurement-parameter-body {
 
   typedef three-element-capacitance {
     type int32 {
-      range "-20000..50000";
+      range "-20000..50000" {
+        description
+          "Defines a range from 2000.0 to 5000.0 nanofarads.";
+      }
     }
-    units "0.1 nF";
+    units "0.1 nanofarads";
     description
       "The 3-element capacitances, CTR (Tip-to-Ring), CTG
        (Tip-to-Ground), and CRG (Ring-to-Ground), shall be represented
-       in linear format. The range of valid values is from -2 to 5 uF
-       with a granularity of 0.1 nF.";
+       in linear format. The range of valid values is from -2 to 5
+       microfarads with a granularity of 0.1 nanofarads.";
     reference
       "ITU-T G.996.2 clause E.2.3.4 (MELT-CC-TR, MELT-CC-TG,
        MELT-CC-RG)";
@@ -229,15 +233,18 @@ submodule bbf-melt-pmd-measurement-parameter-body {
 
   typedef foreign-dc-voltage {
     type int16 {
-      range "-3500..3500";
+      range "-3500..3500" {
+        description
+          "Defines a range from -350.0 to 350.0 volts.";
+      }
     }
-    units "100 mV";
+    units "0.1 volts";
     description
       "The range of valid values for the foreign DC voltages,
        VTR-DC (Tip-to-Ring), VTG-DC (Tip-to-Ground), and VRG-DC
-       (Ring-to-Ground) is from -350 to 350V. The foreign DC voltage
-       shall be represented in linear format with a granularity of
-       100 mV.
+       (Ring-to-Ground) is from -350 to 350 volts. The foreign DC
+       voltage shall be represented in linear format with a
+       granularity of 100 millivolts.
 
        The reported DC voltage polarity is defined with respect to
        ground for the VTG-DC and VRG-DC measurements and returns a
@@ -250,15 +257,18 @@ submodule bbf-melt-pmd-measurement-parameter-body {
 
   typedef foreign-ac-voltage {
     type uint16 {
-      range "0..2500";
+      range "0..2500" {
+        description
+          "Defines a range from 0.0 to 250.0 volts RMS.";
+      }
     }
-    units "100 mVrms";
+    units "0.1 volts RMS";
     description
       "The range of valid values for the foreign AC voltages
        VTR-AC (Tip-to-Ring), VTG-AC (Tip-to-Ground), and VRG-AC
-       (Ring-To-Ground) is from 0 to 250Vrms. The foreign AC voltage
-       shall be represented in linear format with a granularity of
-       100 mV.";
+       (Ring-To-Ground) is from 0 to 250 volts RMS. The foreign AC
+       voltage shall be represented in linear format with a
+       granularity of 100 millivolts.";
     reference
       "ITU-T G.996.2 clause E.2.3.5 (MELT-FVAC-TR, MELT-FVAC-TG,
        MELT-FVAC-RG)";
@@ -266,7 +276,10 @@ submodule bbf-melt-pmd-measurement-parameter-body {
 
   typedef foreign-ac-voltage-frequency {
     type uint16 {
-      range "100..900";
+      range "100..900" {
+        description
+          "Defines a range from 10.0 to 90.0 Hz.";
+      }
     }
     units "0.1 Hz";
     description
@@ -283,12 +296,12 @@ submodule bbf-melt-pmd-measurement-parameter-body {
     type uint32 {
       range "0..10000000";
     }
-    units "1 ohm";
+    units "ohms";
     description
       "The loop resistances RTF-HV (Tip-to-Ring) and RRT-HV
        (Ring-to-Tip) shall be represented in linear format. The range
-       of valid values is from 0 to 10 Mohms with a granularity of 1
-       ohm. The RTR-HV and RRT-HV values of the loop resistance with
+       of valid values is from 0 to 10 megaohms with a granularity of
+       1 ohm. The RTR-HV and RRT-HV values of the loop resistance with
        high metallic voltage test are the total resistances measured.
        The RTR and RRT values obtained from the 3-element resistance
        with controlled metallic voltage test are not subtracted from
@@ -299,15 +312,18 @@ submodule bbf-melt-pmd-measurement-parameter-body {
 
   typedef dc-test-voltage {
     type int16 {
-      range "-1500..1500";
+      range "-1500..1500" {
+        description
+          "Defines a range from -150.0 to 150.0 volts.";
+      }
     }
-    units "0.1 V";
+    units "0.1 volts";
     description
       "The test voltages for the measurement of the 4-element DC
        resistance, VDCTR (Tip-to-Ring), VDCRT (Ring-to-Tip), VDCTG
        (Tip-to-Ground), and VDCRG (Ring-to-Ground), shall be
        represented in linear format. The range of valid values is from
-       -150 V to +150 V with a granularity of 0.1 V.";
+       -150 V to +150 volts with a granularity of 0.1 volts.";
     reference
       "ITU-T G.996.2 clause E.2.3.2 (MELT-CDCV-TR, MELT-CDCV-RT,
        MELT-CDCV-TG, MELT-CDCV-RG)";
@@ -317,13 +333,13 @@ submodule bbf-melt-pmd-measurement-parameter-body {
     type int32 {
       range "-1000000..1000000";
     }
-    units "1 uA";
+    units "microamperes";
     description
       "The test currents for the measurement of the 4-element DC
        resistance, IDCTR (Tip-to-Ring), IDCRT (Ring-to-Tip),
        IDCTG (Tip-to-Ground), and IDCRG (Ring-to-Ground), shall be
        represented in linear format. The range of valid values is from
-       -1 A to +1 A with a granularity of 1 uA.";
+       -1 A to +1 ampere with a granularity of 1 microampere.";
     reference
       "ITU-T G.996.2 clause E.2.3.3 (MELT-CDCI-TR, MELT-CDCI-RT,
        MELT-CDCI-TG, MELT-CDCI-RG)";
@@ -331,47 +347,53 @@ submodule bbf-melt-pmd-measurement-parameter-body {
 
   typedef loop-resistance-test-voltage {
     type int16 {
-      range "-1500..1500";
+      range "-1500..1500" {
+        description
+          "Defines a range from -150.0 to 150.0 volts.";
+      }
     }
-    units "0.1 V";
+    units "0.1 volts";
     description
       "The test voltages for the measurement of the loop resistance
        with a high metallic voltage, VDCHTR (Tip-to-Ring) and
        VDCHRT (Ring-to-Tip) shall be represented in linear format.
-       The range of valid values is from -150 V to +150 V with a
-       granularity of 0.1 V.";
+       The range of valid values is from -150 volts to +150 volts with
+       a granularity of 0.1 volts.";
     reference
       "ITU-T G.996.2 clause E.2.3.8 (MELT-HDCV-TR, MELT-HDCV-RT)";
   }
 
   typedef measurement-voltage {
     type uint16 {
-      range "0..1500";
+      range "0..1500" {
+        description
+          "Defines a range from -150.0 to 150.0 volts.";
+      }
     }
-    units "0.1 V";
+    units "0.1 volts";
     description
       "The range of valid values for the AC voltages VACTR-CC
        (Tip-to-Ring), VACTG-CC (Tip-to-Ground), and VACRG-CC
        (Ring-to-Ground) for the 3-element capacitance test with
-       a controlled metallic voltage is from 0 V rms to 150 V rms.
-       The values shall be represented in linear format with a
-       granularity of 0.1 V.
+       a controlled metallic voltage is from 0 volts RMS to 150 volts
+       RMS. The values shall be represented in linear format with a
+       granularity of 0.1 volts.
 
        The range of valid values for the AC voltage VACTR-HC for the
        loop capacitance test with a high metallic voltage is from 0
-       Vrms to 150 Vrms. The values shall be represented in linear
-       format with a granularity of 0.1 V.
+       volts RMS to 150 volts RMS. The values shall be represented in
+       linear format with a granularity of 0.1 volts.
 
        The range of valid values for the AC voltages VACTR-CA,
        VACTG-CA, and VACRG-CA for the 3-element complex admittance
-       test with a controlled metallic voltage is from 0 Vrms to 150
-       Vrms. The values shall be represented in linear format with a
-       granularity of 0.1 V.
+       test with a controlled metallic voltage is from 0 volts RMS to
+       150 volts RMS. The values shall be represented in linear format
+       with a granularity of 0.1 volts.
 
        The range of valid values for the AC voltage VACTR-HA for the
        loop complex admittance test with a high metallic voltage is
-       from 0 V rms to 150 V rms. The values shall be represented in
-       linear format with a granularity of 0.1 V.";
+       from 0 volts RMS to 150 volts RMS. The values shall be
+       represented in linear format with a granularity of 0.1 volts.";
     reference
       "ITU-T G.996.2 clauses E.2.3.11 (MELT-ACV-CC-TR,
        MELT-ACV-CC-TG, MELT-ACV-CC-RG); E.2.3.12 (MELT-ACV-HC-TR);
@@ -381,16 +403,19 @@ submodule bbf-melt-pmd-measurement-parameter-body {
 
   typedef complex-admittance {
     type uint32 {
-      range "1..1000000";
+      range "1..1000000" {
+        description
+          "Defines a range from 0.1 to 100000.0 microsiemens.";
+      }
     }
-    units "0.1 uSiemens";
+    units "0.1 microsiemens";
     description
       "The range of valid values for the 3-element complex
        conductances and susceptances, GTR and BTR (Tip-to-Ring);
        GTG and BTG (Tip-to-Ground); and GRG and BRG (Ring-to-Ground)
-       is from 0.1 uSiemens to 0.1 Siemens. The values shall be
+       is from 0.1 microsiemens to 0.1 siemens. The values shall be
        represented in linear format with a granularity of 0.1
-       uSiemens.
+       microsiemens.
 
        NOTE - The linear format is chosen for simplicity reason and
        does not imply any future accuracy requirements.";
@@ -401,15 +426,18 @@ submodule bbf-melt-pmd-measurement-parameter-body {
 
   typedef loop-complex-admittance {
     type uint32 {
-      range "1..1000000";
+      range "1..1000000" {
+        description
+          "Defines a range from 0.1 to 100000.0 microsiemens.";
+      }
     }
-    units "0.1 uSiemens";
+    units "0.1 microsiemens";
     description
       "The range of valid values for the 3-element complex
        conductance and susceptance GTR,HV and BTR,HV (Tip-to-Ring) is
-       from 0.1 uSiemens to 0.1 Siemens. The values shall be
+       from 0.1 microsiemens to 0.1 siemens. The values shall be
        represented in linear format with a granularity of 0.1
-       uSiemens. The GTR,HV and BTR,HV values of the loop complex
+       microsiemens. The GTR,HV and BTR,HV values of the loop complex
        admittance with high metallic voltage test are the total
        conductance and susceptance measured. The GTR and BTR values
        obtained from the 3-element complex admittance with controlled
@@ -533,12 +561,12 @@ submodule bbf-melt-pmd-measurement-parameter-body {
         description
           "The loop capacitance CTR-HV (Tip-to-Ring) shall be
            represented in linear format. The range of valid values
-           is from 0 to 5 uF with a granularity of 0.1 nF. The
-           CTR-HV value of the loop capacitance with high metallic
-           voltage test is the total capacitance measured. The CTR
-           value obtained from the 3-element capacitance with
-           controlled metallic voltage test is not subtracted from
-           the results.";
+           is from 0 to 5 microfarads with a granularity of 0.1
+           nanofarads. The CTR-HV value of the loop capacitance with
+           high metallic voltage test is the total capacitance
+           measured. The CTR value obtained from the 3-element
+           capacitance with controlled metallic voltage test is not
+           subtracted from the results.";
         reference
           "ITU-T G.996.2 clause E.2.3.6 (MELT-HV-TR)";
       }
@@ -547,7 +575,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
           "The loop resistance with high metallic voltage, RTR-HV
            (Tip-to-Ring).";
         reference
-          "ITU-T G.996.2 clause E.2.3.7 (MELT-HDCR-TR.";
+          "ITU-T G.996.2 clause E.2.3.7 (MELT-HDCR-TR)";
       }
       enum loop-resistance-hv-rt {
         description
@@ -885,17 +913,21 @@ submodule bbf-melt-pmd-measurement-parameter-body {
     }
     leaf loop-capacitance-hv-tr {
       type int32 {
-        range "-20000..50000";
+        range "-20000..50000" {
+          description
+            "Defines a range from -2000.0 to 5000.0 nanofarads.";
+        }
       }
-      units "0.1 nF";
+      units "0.1 nanofarads";
       description
         "The loop capacitance CTR-HV (Tip-to-Ring) shall be
          represented in linear format. The range of valid values is
-         from -2 to 5 uF with a granularity of 0.1 nF. The CTR-HV
-         value of the loop capacitance with high metallic voltage test
-         is the total capacitance measured. The CTR value obtained
-         from the 3-element capacitance with controlled metallic
-         voltage test is not subtracted from the results.";
+         from -2 to 5 microfarads with a granularity of 0.1
+         nanofarads. The CTR-HV value of the loop capacitance with
+         high metallic voltage test is the total capacitance measured.
+         The CTR value obtained from the 3-element capacitance with
+         controlled metallic voltage test is not subtracted from the
+         results.";
       reference
         "ITU-T G.996.2 clause E.2.3.6 (MELT-HV-TR)";
     }
@@ -1072,8 +1104,9 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       description
         "The range of valid values for the AC voltage VACTR-CC
          for the 3-element capacitance test with a controlled metallic
-         voltage is from 0 V rms to 150 V rms. The values shall be
-         represented in linear format with a granularity of 0.1 V.";
+         voltage is from 0 volts RMS to 150 volts RMS. The values
+         shall be represented in linear format with a granularity of
+         0.1 volts.";
       reference
         "ITU-T G.996.2 clause E.2.3.11 (MELT-ACV-CC-TR)";
     }
@@ -1082,8 +1115,9 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       description
         "The range of valid values for the AC voltage VACTG-CC
          for the 3-element capacitance test with a controlled metallic
-         voltage is from 0 V rms to 150 V rms. The values shall be
-         represented in linear format with a granularity of 0.1 V.";
+         voltage is from 0 volts RMS to 150 volts RMS. The values
+         shall be represented in linear format with a granularity of
+         0.1 volts.";
       reference
         "ITU-T G.996.2 clause E.2.3.11 (MELT-ACV-CC-TG)";
     }
@@ -1092,8 +1126,9 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       description
         "The range of valid values for the AC voltage VACRG-CC
          for the 3-element capacitance test with a controlled metallic
-         voltage is from 0 V rms to 150 V rms. The values shall be
-         represented in linear format with a granularity of 0.1 V.";
+         voltage is from 0 volts RMS to 150 volts RMS. The values
+         shall be represented in linear format with a granularity of
+         0.1 volts.";
       reference
         "ITU-T G.996.2 clause E.2.3.11 (MELT-ACV-CC-RG)";
     }
@@ -1102,8 +1137,8 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       description
         "The range of valid values for the AC voltage VACTR-HC for the
          loop capacitance test with a high metallic voltage is from 0
-         V rms to 150 V rms. The values shall be represented in linear
-         format with a granularity of 0.1 V.";
+         volts RMS to 150 volts RMS. The values shall be represented
+         in linear format with a granularity of 0.1 volts.";
       reference
         "ITU-T G.996.2 clause E.2.3.12 (MELT-ACV-HC-TR)";
     }
@@ -1112,8 +1147,9 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       description
         "The range of valid values for the AC voltage VACTR-CA for the
          3-element complex admittance test with a controlled metallic
-         voltage is from 0 V rms to 150 V rms. The values shall be
-         represented in linear format with a granularity of 0.1 V.";
+         voltage is from 0 volts RMS to 150 volts RMS. The values
+         shall be represented in linear format with a granularity of
+         0.1 volts.";
       reference
         "ITU-T G.996.2 clause E.2.3.13 (MELT-ACV-CA-TR)";
     }
@@ -1122,7 +1158,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       description
         "The range of valid values for the AC voltage VACTG-CA for the
          3-element complex admittance test with a controlled metallic
-         voltage is from 0 V rms to 150 V rms. The values shall be
+         voltage is from 0 V RMS to 150 V RMS. The values shall be
          represented in linear format with a granularity of 0.1 V.";
       reference
         "ITU-T G.996.2 clause E.2.3.13 (MELT-ACV-CA-TG)";
@@ -1132,8 +1168,9 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       description
         "The range of valid values for the AC voltage VACRG-CA for the
          3-element complex admittance test with a controlled metallic
-         voltage is from 0 V rms to 150 V rms. The values shall be
-         represented in linear format with a granularity of 0.1 V.";
+         voltage is from 0 volts RMS to 150 volts RMS. The values
+         shall be represented in linear format with a granularity of
+         0.1 volts.";
       reference
         "ITU-T G.996.2 clause E.2.3.13 (MELT-ACV-CA-RG)";
     }
@@ -1142,13 +1179,15 @@ submodule bbf-melt-pmd-measurement-parameter-body {
       description
         "The range of valid values for the AC voltage VACTR-HA for the
          loop complex admittance test with a high metallic voltage is
-         from 0 V rms to 150 V rms. The values shall be represented in
-         linear format with a granularity of 0.1 V.";
+         from 0 volts RMS to 150 volts RMS. The values shall be
+         represented in linear format with a granularity of 0.1
+         volts.";
       reference
         "ITU-T G.996.2 clause E.2.3.14 (MELT-ACV-HA-TR)";
     }
     leaf unreliability-indicator {
-      if-feature "melt-pmd-measurement-parameter-reliability";
+      if-feature
+        "bbf-melt:melt-pmd-measurement-parameter-reliability";
       type bits {
         bit four-element-dc-resistance-tr {
           description
@@ -1260,12 +1299,12 @@ submodule bbf-melt-pmd-measurement-parameter-body {
           description
             "The loop capacitance CTR-HV (Tip-to-Ring) shall be
              represented in linear format. The range of valid values
-             is from 0 to 5 uF with a granularity of 0.1 nF. The
-             CTR-HV value of the loop capacitance with high metallic
-             voltage test is the total capacitance measured. The CTR
-             value obtained from the 3-element capacitance with
-             controlled metallic voltage test is not subtracted from
-             the results.";
+             is from 0 to 5 microfarads with a granularity of 0.1
+             nanofarads. The CTR-HV value of the loop capacitance with
+             high metallic voltage test is the total capacitance
+             measured. The CTR value obtained from the 3-element
+             capacitance with controlled metallic voltage test is not
+             subtracted from the results.";
           reference
             "ITU-T G.996.2 clause E.2.3.6 (MELT-HV-TR)";
         }
@@ -1274,7 +1313,7 @@ submodule bbf-melt-pmd-measurement-parameter-body {
             "The loop resistance with high metallic voltage, RTR-HV
              (Tip-to-Ring).";
           reference
-            "ITU-T G.996.2 clause E.2.3.7 (MELT-HDCR-TR.";
+            "ITU-T G.996.2 clause E.2.3.7 (MELT-HDCR-TR)";
         }
         bit loop-resistance-hv-rt {
           description
@@ -1494,7 +1533,8 @@ submodule bbf-melt-pmd-measurement-parameter-body {
         "ITU-T G.996.2 clause E.2.2.15 (Reliability indicator)";
     }
     container melt-pmd-measurement-vendor-specific-status {
-      if-feature "melt-pmd-measurement-parameter-reliability";
+      if-feature
+        "bbf-melt:melt-pmd-measurement-parameter-reliability";
       description
         "Vendor specific status associated with each MELT
          measurement test.";

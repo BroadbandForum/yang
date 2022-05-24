@@ -1,5 +1,15 @@
 ## Broadband Forum YANG Modules
 
+### 2022-05-23: [TR-355 Amendment 4](https://www.broadband-forum.org/technical/download/TR-355_Amendment-4.pdf) YANG Modules for FTTdp Management
+*Tag: [TR-355-v1.4.0](https://github.com/BroadbandForum/yang/tree/TR-355-v1.4.0)*
+
+* Align the FAST YANG model, bbf-fast, to ITU-T G.997.2 Amendment 3
+* Align models with latest OD-360 BBF YANG Best Current Practices
+* Correct backward compatiblity issue in the SELT YANG model, bbf-selt
+* Correct 24-hour channel performance error in the FAST YANG data model, bbf-fast
+* Extend the VDSL YANG model, bbf-vdsl, with support for retransmitted Data Transfer Units (DTU)
+
+
 ### 2022-03-01: [TR-383 Amendment 5](https://www.broadband-forum.org/technical/download/TR-383_Amendment-5.pdf) Common YANG Modules for Access Networks
 *Tag: [TR-383-v1.5.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.5.0)*
 

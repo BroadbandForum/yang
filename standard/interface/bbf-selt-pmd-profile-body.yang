@@ -13,20 +13,18 @@ submodule bbf-selt-pmd-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Physical Medium Dependent (PMD) profiles.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -66,9 +64,19 @@ submodule bbf-selt-pmd-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -124,14 +132,14 @@ submodule bbf-selt-pmd-profile-body {
     type uint8 {
       range "5..240";
     }
-    units "1 second";
+    units "seconds";
     description
       "This parameter is the maximum allowed time for Singe Ended
        Line Test (SELT) Uncalibrated Echo Response (UER) measurement,
-       between the time of the start command written by the
-       Single Ended Line Test Physical Medium Dependent Management
-       Entity (SELT-PMD-ME), and the time the result is available for
-       read operation by SELT-PMD-ME.
+       between the time of the start command written by the Single
+       Ended Line Test Physical Medium Dependent Management Entity
+       (SELT-PMD-ME), and the time the result is available for read
+       operation by SELT-PMD-ME.
 
        NOTE - The above duration includes internal pre-processing and
               post-processing.
@@ -139,15 +147,14 @@ submodule bbf-selt-pmd-profile-body {
        It is configurable between 5 seconds and 240 seconds, in steps
        of 1 second.";
     reference
-      "ITU-T G.996.2 clause A.2.1.1 (SELT-UER-MMD-C,
-       SELT-UER-MMD-R)";
+      "ITU-T G.996.2 clause A.2.1.1 (SELT-UER-MMD-C, SELT-UER-MMD-R)";
   }
 
   typedef qln-measurement-duration {
     type uint8 {
       range "1..240";
     }
-    units "1 second";
+    units "seconds";
     description
       "This parameter is the maximum allowed time for Singe Ended
        Line Test (SELT) Quiet Line Noise (QLN) measurement, between
@@ -162,8 +169,7 @@ submodule bbf-selt-pmd-profile-body {
        It is configurable between 1 second and 240 seconds, in steps
        of 1 second.";
     reference
-      "ITU-T G.996.2 clause A.2.1.2 (SELT-QLN-MMD-C,
-       SELT-QLN-MMD-R)";
+      "ITU-T G.996.2 clause A.2.1.2 (SELT-QLN-MMD-C, SELT-QLN-MMD-R)";
   }
 
   grouping co-cpe-parameters {
@@ -199,13 +205,14 @@ submodule bbf-selt-pmd-profile-body {
        (PMD) profile.";
     container c {
       description
-        "Managed objects applicable to the Central Office (CO) Single
-         Ended Line Test Physical Medium Dependent (SELT-PMD).";
+        "Managed data nodes applicable to the Central Office (CO)
+         Single Ended Line Test Physical Medium Dependent
+         (SELT-PMD).";
       uses co-cpe-parameters;
     }
     container r {
       description
-        "Managed objects applicable to the Customer Premises
+        "Managed data nodes applicable to the Customer Premises
          Equipment (CPE) Single Ended Line Test Physical Medium
          Dependent (SELT-PMD).";
       uses co-cpe-parameters;

@@ -13,22 +13,20 @@ submodule bbf-vdsl-impulse-noise-monitoring-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing common Broadband Forum TR-252i3 clause 5.7 DSL Quality
      Management related profiles; Impulse Noise Monitoring (INM)
      Profile.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-vdsl-impulse-noise-monitoring-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -152,8 +160,7 @@ submodule bbf-vdsl-impulse-noise-monitoring-profile-body {
          reported. The valid values for INMIATO ranges from 3 to 511
          Discrete Multi-Tone (DMT) symbols in steps of 1 DMT symbol.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.9.1 INM inter arrival time
-         offset (INMIATO)";
+        "ITU-T G.997.1 clause 7.3.1.9.1 (INMIATO)";
     }
     leaf inmiats {
       type uint8 {
@@ -168,8 +175,7 @@ submodule bbf-vdsl-impulse-noise-monitoring-profile-body {
          reported. The valid values for INMIATS range from 0 to 7 in
          steps of 1.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.9.2 INM inter arrival time
-         step (INMIATS)";
+        "ITU-T G.997.1 clause 7.3.1.9.2 (INMIATS)";
     }
     leaf inmcc {
       type uint8 {
@@ -185,35 +191,29 @@ submodule bbf-vdsl-impulse-noise-monitoring-profile-body {
          range from 0 to 64 Discrete Multi-Tone (DMT) symbols in steps
          of one DMT symbol.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.9.3 INM cluster continuation
-         value (INMCC)";
+        "ITU-T G.997.1 clause 7.3.1.9.3 (INMCC)";
     }
     leaf inm-inpeq-mode {
       type enumeration {
         enum 0 {
           description
-            "INM_INPEQ_MODE = 0 as defined in ITU-T G.993.2
-             clause 11.4.2.2.1.";
+            "INM_INPEQ_MODE = 0.";
         }
         enum 1 {
           description
-            "INM_INPEQ_MODE = 1 as defined in ITU-T G.993.2
-             clause 11.4.2.2.1.";
+            "INM_INPEQ_MODE = 1.";
         }
         enum 2 {
           description
-            "INM_INPEQ_MODE = 2 as defined in ITU-T G.993.2
-             clause 11.4.2.2.1.";
+            "INM_INPEQ_MODE = 2.";
         }
         enum 3 {
           description
-            "INM_INPEQ_MODE = 3 as defined in ITU-T G.993.2
-             clause 11.4.2.2.1.";
+            "INM_INPEQ_MODE = 3.";
         }
         enum 4 {
           description
-            "INM_INPEQ_MODE = 4 as defined in ITU-T G.993.2
-             clause 11.4.2.2.1.";
+            "INM_INPEQ_MODE = 4.";
         }
       }
       default "0";
@@ -224,22 +224,20 @@ submodule bbf-vdsl-impulse-noise-monitoring-profile-body {
          INP, as defined in the relevant ITU-T Recommendation. The
          valid values for INM_INPEQ_MODE are 0, 1, 2, 3, and 4.
          The default value is enum 0, corresponding to
-         NM_INPEQ_MODE = 0.";
+         INM_INPEQ_MODE = 0.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.9.4 INM equivalent INP mode
-         (INM_INPEQ_MODE)";
+        "ITU-T G.997.1 clause 7.3.1.9.4 (INM_INPEQ_MODE);
+         ITU-T G.993.2 clause 11.4.2.2.1";
     }
     leaf inm-inpeq-format {
       type enumeration {
         enum 0 {
           description
-            "Linear scale as defined in ITU-T G.997.1 clause
-             7.3.1.9.5.";
+            "Linear scale.";
         }
         enum 1 {
           description
-            "Logarithmic scale as defined in ITU-T G.997.1 clause
-             7.3.1.9.5.";
+            "Logarithmic scale.";
         }
       }
       default "0";
@@ -247,7 +245,8 @@ submodule bbf-vdsl-impulse-noise-monitoring-profile-body {
         "Defines the way the scale is configured for the INM_INPEQ
          histogram.";
       reference
-        "ITU-T G.993.2 clause 11.4.2.2.6";
+        "ITU-T G.997.1 clause 7.3.1.9.5;
+         ITU-T G.993.2 clause 11.4.2.2.6";
     }
     leaf inm-enable {
       type boolean;
@@ -257,6 +256,4 @@ submodule bbf-vdsl-impulse-noise-monitoring-profile-body {
         "If true, enables Impulse Noise Monitoring (INM).";
     }
   }
-
-  // end grouping impulse-noise-monitoring-profile
 }

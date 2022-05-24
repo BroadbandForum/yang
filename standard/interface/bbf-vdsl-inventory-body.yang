@@ -16,21 +16,19 @@ submodule bbf-vdsl-inventory-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 5.3 xDSL Transceiver
      Unit (xTU).
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +68,19 @@ submodule bbf-vdsl-inventory-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -136,14 +144,13 @@ submodule bbf-vdsl-inventory-body {
 
   grouping inventory {
     description
-      "An xDSL Transceiver Unit (xTU) object represents an xDSL
+      "The xDSL Transceiver Unit (xTU) parameters represent an xDSL
        transceiver at either end of the xDSL Line. This has two
        instantiations: an xDSL Transceiver Unit - Central office
        (xTU-C), and an xDSL Transceiver Unit - Remote side (xTU-R).";
     leaf g.994.1-vendor-id {
       type binary {
         length "8";
-        // octets
       }
       description
         "The xDSL Transceiver Unit - Central office (xTU-C) G.994.1
@@ -158,16 +165,14 @@ submodule bbf-vdsl-inventory-body {
          The G.994.1 vendor ID should typically identify the vendor of
          the xTU-C G.994.1 functionality, whether implemented in
          hardware or software. It is not intended to indicate the
-         system integrator. Further details are defined in
-         [ITU-T G.994.1].";
+         system integrator.";
       reference
-        "ITU-T G.997.1 clause 7.4.1 xTU-C G.994.1 vendor ID, and
-         clause 7.4.2 xTU-R G.994.1 vendor ID";
+        "ITU-T G.997.1 clauses 7.4.1 and 7.4.2;
+         ITU-T G.994.1";
     }
     leaf system-vendor-id {
       type binary {
         length "8";
-        // octets
       }
       description
         "The xDSL Transceiver Unit system vendor ID is the vendor ID
@@ -178,13 +183,12 @@ submodule bbf-vdsl-inventory-body {
          format as the xTU-C G.994.1 vendor ID
          (xtu-g.994.1-vendor-id).";
       reference
-        "ITU-T G.997.1 clause 7.4.3 xTU-C system vendor ID, and
-         clause 7.4.4 xTU-R system vendor ID";
+        "ITU-T G.997.1 clauses 7.4.3 and 7.4.4;
+         ITU-T G.994.1";
     }
     leaf version-number {
       type binary {
         length "0..16";
-        // octets
       }
       description
         "The xDSL Transceiver Unit version number is the version
@@ -199,13 +203,11 @@ submodule bbf-vdsl-inventory-body {
          separated by a space character, i.e., <xTU-R firmware
          version> <xTU-R model>.";
       reference
-        "ITU-T G.997.1 clause 7.4.5 xTU-C version number, and
-         clause 7.4.6 xTU-R version number";
+        "ITU-T G.997.1 clauses 7.4.5 and 7.4.6";
     }
     leaf serial-number {
       type binary {
         length "0..32";
-        // octets
       }
       description
         "The xDSL Transceiver Unit serial number is the serial number
@@ -220,8 +222,7 @@ submodule bbf-vdsl-inventory-body {
          <equipment serial number> <equipment model> <equipment
          firmware version>.";
       reference
-        "ITU-T G.997.1 clause 7.4.7 xTU-C serial number, and
-         clause 7.4.8 xTU-R serial number";
+        "ITU-T G.997.1 clauses 7.4.7 and 7.4.8";
     }
     leaf self-test-result {
       type uint32;
@@ -234,8 +235,8 @@ submodule bbf-vdsl-inventory-body {
          interpreted in combination with G.994.1 and system vendor
          IDs.";
       reference
-        "ITU-T G.997.1 clause 7.4.9 xTU-C self-test result, and
-         clause 7.4.8 xTU-R serial number";
+        "ITU-T G.997.1 clauses 7.4.9 and 7.4.10;
+         ITU-T G.994.1";
     }
     leaf-list transmission-system-capabilities {
       type xts-descriptor;
@@ -244,14 +245,13 @@ submodule bbf-vdsl-inventory-body {
          list of the different transmission system types. It is coded
          in a bit-map representation with the bits defined in the
          reference. This parameter may be derived from the handshaking
-         procedures defined in [ITU-T G.994.1].";
+         procedures defined in ITU-T G.994.1.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.1.1, clause 7.4.11 xTU-C
-         transmission system capabilities, and clause 7.4.12
-         xTU-R transmission system capabilities";
+        "ITU-T G.997.1 clauses 7.3.1.1.1, 7.4.11 and 7.4.12;
+         ITU-T G.994.1";
     }
     leaf vdsl2-lr-support {
-      if-feature "vdsl2-lr";
+      if-feature "bbf-vdsl:vdsl2-lr";
       type boolean;
       description
         "This parameter indicates the support of VDSL2 Long Reach
@@ -259,25 +259,22 @@ submodule bbf-vdsl-inventory-body {
          mode is not supported and set to 'true' if VDSL2-LR mode is
          supported.";
       reference
-        "ITU-T G.997.1 clause 7.4.14 VDSL2-LR support
-         (VDSL2-LR_SUPPORT_O/R)";
+        "ITU-T G.997.1 clause 7.4.14 (VDSL2-LR_SUPPORT_O/R)";
     }
     leaf strongfext-support {
-      if-feature "strongfext";
+      if-feature "bbf-vdsl:strongfext";
       type boolean;
       description
         "This parameter indicates the support of operation
-         according to [ITU-T G.993.5] Annex A.
+         according to ITU-T G.993.5 Annex A.
          The parameter is set to 'false' if Strong Far-End Crosstalk
          (STRONGFEXT) mode is not supported and set to 'true' if
          STRONGFEXT mode is supported.";
       reference
-        "ITU-T G.997.1 clause 7.4.15 STRONGFEXT mode support
-         (STRONGFEXT_MODE_SUPPORT_O/R)";
+        "ITU-T G.997.1 clause 7.4.15 (STRONGFEXT_MODE_SUPPORT_O/R);
+         ITU-T G.993.5 Annex A";
     }
   }
-
-  // end grouping inventory
 
   grouping vce {
     description
@@ -302,7 +299,7 @@ submodule bbf-vdsl-inventory-body {
          special value (enum not-in-vectored-group) means the line is
          not in a vectored group.";
       reference
-        "ITU-T G.997.1 clause 7.4.13.1 VCE ID (VCE_ID)";
+        "ITU-T G.997.1 clause 7.4.13.1 (VCE_ID)";
     }
     leaf vce-port-index {
       type uint16;
@@ -314,10 +311,7 @@ submodule bbf-vdsl-inventory-body {
          the VCE. The value 0 indicates the line is not in a vectored
          group.";
       reference
-        "ITU-T G.997.1 clause 7.4.13.2 VCE port index
-         (VCE_port_index)";
+        "ITU-T G.997.1 clause 7.4.13.2 (VCE_port_index)";
     }
   }
-
-  // end grouping vce
 }

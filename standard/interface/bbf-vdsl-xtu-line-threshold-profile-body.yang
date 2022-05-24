@@ -13,21 +13,19 @@ submodule bbf-vdsl-xtu-line-threshold-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 8.1 xDSL Line Threshold
      Template.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -67,9 +65,19 @@ submodule bbf-vdsl-xtu-line-threshold-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -143,83 +151,84 @@ submodule bbf-vdsl-xtu-line-threshold-profile-body {
 
   grouping line-threshold-profile {
     description
-      "The xDSL Line Threshold Template object represents a complete
-       set of performance monitoring thresholds for an xDSL line.";
+      "The xDSL Line Threshold Template parameters represent a
+       complete set of performance monitoring thresholds for an xDSL
+       line.";
     leaf forward-error-correction-seconds-threshold {
       type uint32;
-      units "1 second";
+      units "seconds";
       default "0";
       description
-        "This parameter is the performance monitoring threshold
-         for threshold reports of Forward Error Correction
-         Seconds (FECS). A special value (0) indicates the
-         threshold is disabled.";
+        "This parameter is the performance monitoring threshold for
+         threshold reports of Forward Error Correction Seconds (FECS).
+         A special value (0) indicates the threshold is disabled.";
       reference
         "ITU-T G.997.1 clause 7.2.7";
     }
     leaf errored-seconds-threshold {
       type uint32;
-      units "1 second";
+      units "seconds";
       default "0";
       description
-        "This parameter is the performance monitoring
-         threshold for threshold reports of Errored Seconds (ES).
-         A special value (0) indicates the threshold is disabled.";
+        "This parameter is the performance monitoring threshold for
+         threshold reports of Errored Seconds (ES). A special value
+         (0) indicates the threshold is disabled.";
       reference
-        "ITU-T G.997.1 clause 7.2.7.";
+        "ITU-T G.997.1 clause 7.2.7";
     }
     leaf severely-errored-seconds-threshold {
       type uint32;
-      units "1 second";
+      units "seconds";
       default "0";
       description
-        "This parameter is the performance monitoring threshold
+        "This parameter is the performance monitoring threshold for
          for threshold reports of Severely Errored Seconds (SES).
          A special value (0) indicates the threshold is disabled.";
       reference
-        "ITU-T G.997.1 clause 7.2.7.";
+        "ITU-T G.997.1 clause 7.2.7";
     }
     leaf loss-of-signal-seconds-threshold {
       type uint32;
-      units "1 second";
+      units "seconds";
       default "0";
       description
-        "This parameter is the performance monitoring threshold
-         for threshold reports of Loss of Signal Seconds Line
-         (LOSS). A special value (0) indicates the threshold is
-         disabled.";
+        "This parameter is the performance monitoring threshold for
+         threshold reports of Loss of Signal Seconds Line (LOSS). A
+         special value (0) indicates the threshold is disabled.";
       reference
-        "ITU-T G.997.1 clause 7.2.7.";
+        "ITU-T G.997.1 clause 7.2.7";
     }
     leaf unavailable-seconds-threshold {
       type uint32;
-      units "1 second";
+      units "seconds";
       default "0";
       description
-        "This parameter is the performance monitoring threshold
-         for threshold reports of Unavailable Seconds (UAS).
-         A special value (0) indicates the threshold is disabled.";
+        "This parameter is the performance monitoring threshold for
+         threshold reports of Unavailable Seconds (UAS). A special
+         value (0) indicates the threshold is disabled.";
       reference
-        "ITU-T G.997.1 clause 7.2.7.";
+        "ITU-T G.997.1 clause 7.2.7";
     }
     leaf leftr-defects-seconds-threshold {
-      // only defined in upstream
       type uint32;
-      units "1 second";
+      units "seconds";
       default "0";
       description
-        "This parameter is the performance monitoring threshold
+        "This parameter is the performance monitoring threshold for
          for threshold reports of near-end line Low Error-Free
          Throughput (LEFTR) defects seconds. The near-end line leftr
-         defects seconds counter is only defined in upstream.
-         A special value (0) indicates the threshold is disabled.";
+         defects seconds counter is only defined in upstream. A
+         special value (0) indicates the threshold is disabled.";
       reference
-        "ITU-T G.997.1 clause 7.2.7.";
+        "ITU-T G.997.1 clause 7.2.7";
     }
     leaf leftr-defect-threshold {
       type union {
         type uint8 {
-          range "0..99";
+          range "0..99" {
+            description
+              "Defines a range from 0.00 to 0.99.";
+          }
         }
         type enumeration {
           enum etr-default-threshold {
@@ -235,12 +244,10 @@ submodule bbf-vdsl-xtu-line-threshold-profile-body {
       status deprecated;
       description
         "If retransmission is used in a given transmit direction,
-         LEFTR_THRESH specifies the threshold for declaring a
-         leftr defect (see clause 11.1.12 of ITU-T G.998.4)
-         for the definition of this threshold).
-         The value is coded as a fraction of the Net Data Rate (NDR)
-         with valid range from 0.00 to 0.99 in increments of 0.01.
-         The value 0.00 implies no leftr-defects are declared.
+         LEFTR_THRESH specifies the threshold for declaring a leftr
+         defect. The value is coded as a fraction of the Net Data Rate
+         (NDR) with valid range from 0.00 to 0.99 in increments of
+         0.01. The value 0.00 implies no leftr-defects are declared.
          A special value of (enum etr-default-threshold) means the
          Expected Throughput Rate (ETR) shall be used as the default
          threshold for declaring a leftr defect.
@@ -248,21 +255,20 @@ submodule bbf-vdsl-xtu-line-threshold-profile-body {
          This configuration has been deprecated as it is not intended
          to be a performance threshold.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.12.";
+        "ITU-T G.997.1 clause 7.3.1.12;
+         ITU-T G.998.4 clause 11.1.12";
     }
-    // The below four objects were in 
-    // bbf-vdsl-xtu-c-line-threshold-profile.yang
     leaf full-initializations-threshold {
       type uint32;
       default "0";
       description
-        "This parameter is the performance monitoring threshold
-         for threshold reports of the full initializations
-         attempted on the line (successful and failed) during the
-         accumulation period.
-         A special value (0) indicates the threshold is disabled.";
+        "This parameter is the performance monitoring threshold for
+         threshold reports of the full initializations attempted on
+         the line (successful and failed) during the accumulation
+         period. A special value (0) indicates the threshold is
+         disabled.";
       reference
-        "ITU-T G.997.1 clause 7.2.7.";
+        "ITU-T G.997.1 clause 7.2.7";
     }
     leaf failed-full-initializations-threshold {
       type uint32;
@@ -270,24 +276,22 @@ submodule bbf-vdsl-xtu-line-threshold-profile-body {
       description
         "This performance parameter is the performance monitoring
          threshold for threshold reports of the total number of
-         failed full initializations during the accumulation
-         period. A special value (0) indicates the threshold is
-         disabled.";
+         failed full initializations during the accumulation period.
+         A special value (0) indicates the threshold is disabled.";
       reference
-        "ITU-T G.997.1 clause 7.2.7.";
+        "ITU-T G.997.1 clause 7.2.7";
     }
     leaf short-initializations-threshold {
       type uint32;
       default "0";
       description
-        "This parameter is is the performance monitoring
-         threshold for threshold reports of the total number of
-         fast retrains or short initializations attempted on the
-         line (successful and failed) during the accumulation
-         period. A special value (0) indicates the threshold is
-         disabled.";
+        "This parameter is is the performance monitoring threshold for
+         threshold reports of the total number of fast retrains or
+         short initializations attempted on the line (successful and
+         failed) during the accumulation period. A special value (0)
+         indicates the threshold is disabled.";
       reference
-        "ITU-T G.997.1 clause 7.2.7.";
+        "ITU-T G.997.1 clause 7.2.7";
     }
     leaf failed-short-initializations-threshold {
       type uint32;
@@ -299,7 +303,7 @@ submodule bbf-vdsl-xtu-line-threshold-profile-body {
          accumulation period. A special value (0) indicates the
          threshold is disabled.";
       reference
-        "ITU-T G.997.1 clause 7.2.7.";
+        "ITU-T G.997.1 clause 7.2.7";
     }
     leaf spontaneous-interruptions-threshold {
       type uint32;
@@ -308,14 +312,12 @@ submodule bbf-vdsl-xtu-line-threshold-profile-body {
         "This parameter is a count is the performance monitoring
          threshold for threshold reports of the spont_intrpt
          anomalies occurring during the accumulation period. Only
-         the counters on the current and previous 24-hours
-         intervals are supported. Threshold reports are specified
-         for the 24-hour interval counter only. A special value (0)
-         indicates the threshold is disabled.";
+         the counters on the current and previous 24 hour intervals
+         are supported. Threshold reports are specified for the 24
+         hour interval counter only. A special value (0) indicates the
+         threshold is disabled.";
       reference
-        "ITU-T G.997.1 clause 7.2.7.";
+        "ITU-T G.997.1 clause 7.2.7";
     }
   }
-
-  // end grouping line-threshold-profile
 }

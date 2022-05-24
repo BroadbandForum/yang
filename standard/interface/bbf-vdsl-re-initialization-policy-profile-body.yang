@@ -13,21 +13,19 @@ submodule bbf-vdsl-re-initialization-policy-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 5.7 DSL Quality
      Management related profiles; Re-initialization Policy Profile.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -67,9 +65,19 @@ submodule bbf-vdsl-re-initialization-policy-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -144,20 +152,17 @@ submodule bbf-vdsl-re-initialization-policy-profile-body {
       description
         "The re-initialization policy (RIPOLICY) parameter indicates w
          which policy will be applied to determine the triggers for
-         re-initialization in the direction of transmisson (see clause
-         12.1.4 of [ITU-T G.993.2] and clauses 7.3.1.1.13 and
-         7.2.1.1.5 of [ITU-T G.997.1]).
-         If RIPOLICY=1 is configured and it is detected during
-         ITU-T G.993.2 initialization that RIPOLICY=1 is not
-         supported in the direction of transmission by either of
-         the xDSL Transceiver Units (xTU), the xTUs will fallback to
-         RIPOLICY=0. The valid values for RIPOLICY are 0 and 1.
-         The default is RIPOLICY=0.";
+         re-initialization in the direction of transmisson.
+         If RIPOLICY=1 is configured and it is detected during ITU-T
+         G.993.2 initialization that RIPOLICY=1 is not supported in
+         the direction of transmission by either of the xDSL
+         Transceiver Units (xTU), the xTUs will fallback to
+         RIPOLICY=0. The valid values for RIPOLICY are 0 and 1. The
+         default is RIPOLICY=0.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.1.12.1 Downstream
-         re-initialization policy selection (RIPOLICYds) and
-         clause 7.3.1.1.12.2 Upstream re-initialization policy
-         selection (RIPOLICYus)";
+        "ITU-T G.997.1 clauses 7.3.1.1.12.1 (RIPOLICYds),
+         7.3.1.1.12.2 (RIPOLICYus), 7.3.1.1.13 and 7.2.1.1.5;
+         ITU-T G.993.2 clause 12.1.4";
     }
     leaf reinit-time-threshold {
       type uint8 {
@@ -165,18 +170,14 @@ submodule bbf-vdsl-re-initialization-policy-profile-body {
       }
       default "10";
       description
-        "The parameter REINIT_TIME_THRESHOLD defines the
-         threshold for re-initialization based on Severely Errored
-         Seconds (SES), to be used by the xDSL Transceiver Unit (xTU)
-         receiver when re-initialization policy 1 is used in the
-         direction of transmission (see clause 12.1.4 of
-         [ITU-T G.993.2]). The valid range is from 5 to 31.";
+        "The parameter REINIT_TIME_THRESHOLD defines the threshold
+         for re-initialization based on Severely Errored Seconds
+         (SES), to be used by the xDSL Transceiver Unit (xTU) receiver
+         when re-initialization policy 1 is used in the direction of
+         transmission. The valid range is from 5 to 31.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.1.13.1 Downstream
-         REINIT_TIME_THRESHOLDds and clause 7.3.1.1.13.2 Upstream
-         REINIT_TIME_THRESHOLDus";
+        "ITU-T G.997.1 clauses 7.3.1.1.13.1 and 7.3.1.1.13.2;
+         ITU-T G.993.2 clause 12.1.4";
     }
   }
-
-  // end grouping re-initialization-policy-profile
 }

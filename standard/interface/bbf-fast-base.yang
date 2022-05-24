@@ -20,21 +20,19 @@ submodule bbf-fast-base {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing top level FAST configuration and augmenations to
      ietf-interfaces.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -74,9 +72,19 @@ submodule bbf-fast-base {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -140,14 +148,14 @@ submodule bbf-fast-base {
 
   feature annex-x {
     description
-      "Indicates support for annex X as defined in ITU-T G.9701.";
+      "Indicates support for Annex X as defined in ITU-T G.9701.";
     reference
-      "ITU-T G.9701 clause X.6.7.1 and T.2.1.";
+      "ITU-T G.9701 clause X.6.7.1 and T.2.1";
   }
 
   feature annex-d {
     description
-      "Indicates support for annex D as defined in ITU-T G.9701.";
+      "Indicates support for Annex D as defined in ITU-T G.9701.";
     reference
       "ITU-T G.9701 clause D.5.7.2 and T.2.2.1";
   }
@@ -157,7 +165,7 @@ submodule bbf-fast-base {
       "Indicates support for Showtime Reconfiguration (SREC) as
        defined in ITU-T G.9701 Annex R.";
     reference
-      "ITU-T G.9701 annex R";
+      "ITU-T G.9701 Annex R";
   }
 
   feature dta {
@@ -165,7 +173,16 @@ submodule bbf-fast-base {
       "Indicates support for Dynamic Time Assignment (DTA) as defined
        in ITU-T G.9701.";
     reference
-      "ITU-T G.9701 annex X and T.";
+      "ITU-T G.9701 Annex X and T";
+  }
+
+  feature high-utilization-seconds {
+    if-feature "dta";
+    description
+      "Indicates support for reporting High Utilization Seconds as
+       defined in ITU-T G.9701.";
+    reference
+      "ITU-T G.9701 clauses T.4.2 and T.4.3";
   }
 
   feature andeftr {
@@ -203,7 +220,7 @@ submodule bbf-fast-base {
        sub-carrier mask.";
     reference
       "ITU-T G.997.2 clause 7.1.2.16 and clause 7.1.2.17;
-       ITU-T G.9701 Clause 7.3.1.3.";
+       ITU-T G.9701 clause 7.3.1.3.";
   }
 
   feature tgvn {

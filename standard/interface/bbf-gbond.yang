@@ -25,15 +25,13 @@ module bbf-gbond {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on bonding of
@@ -42,7 +40,7 @@ module bbf-gbond {
      access network equipment (e.g., BBF-specified Access Nodes and
      FTTdp DPUs).
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -82,9 +80,19 @@ module bbf-gbond {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -99,7 +107,7 @@ module bbf-gbond {
   feature bonding-primary-interface {
     description
       "Indicates support for assigning one of the interfaces of the
-       bonding group as primary interface.";
+       bonding group as the primary interface.";
   }
 
   feature bonding-group-statistics {
@@ -201,7 +209,7 @@ module bbf-gbond {
 
   container gbond {
     description
-      "G.bond configuration";
+      "G.bond configuration.";
     container profiles {
       description
         "Profile configuration.";
@@ -223,7 +231,7 @@ module bbf-gbond {
             description
               "A desired maximum operating data rate of the Generic
                Bonded Sub-layer (GBS) in the upstream direction, in
-               kbits per second.";
+               kilobits per second.";
             reference
               "TR-159 section 5.5.1.17, aGroupTargetUpRate.";
           }
@@ -233,7 +241,7 @@ module bbf-gbond {
             description
               "A desired maximum operating data rate of the Generic
                Bonded Sub-layer (GBS) in the downstream direction, in
-               kbits per second.";
+               kilobits per second.";
             reference
               "TR-159 section 5.5.1.18, aGroupTargetDownRate.";
           }
@@ -242,7 +250,7 @@ module bbf-gbond {
             default "0";
             description
               "A desired G.998.x port low upstream rate crossing alarm
-               threshold, in kbits per second.
+               threshold, in kilobits per second.
 
                When the current value of upstream-data-rate for this
                port reaches/drops below or exceeds this threshold, a
@@ -257,7 +265,7 @@ module bbf-gbond {
             default "0";
             description
               "A desired G.998.x port low downstream rate crossing
-               alarm threshold, in kbits per second.
+               alarm threshold, in kilobits per second.
 
                When the current value of downstream-data-rate for this
                port reaches/drops below or exceeds this threshold, a
@@ -290,7 +298,7 @@ module bbf-gbond {
           }
           leaf errored-seconds-threshold {
             type uint32;
-            units "1 second";
+            units "seconds";
             default "0";
             description
               "Threshold for the count of errored seconds (ES). A
@@ -299,16 +307,16 @@ module bbf-gbond {
           }
           leaf severely-errored-seconds-threshold {
             type uint32;
-            units "1 second";
+            units "seconds";
             default "0";
             description
               "Threshold for the count of severely errored seconds
                (SES). A special value (0) indicates the threshold is
-               disabled. ";
+               disabled.";
           }
           leaf unavailable-seconds-threshold {
             type uint32;
-            units "1 second";
+            units "seconds";
             default "0";
             description
               "Threshold for the count of unavailable seconds (UAS). A
@@ -395,6 +403,11 @@ module bbf-gbond {
               /if:interfaces/if:interface[if:name=current()]
               /bbf-fastdsl:line/bbf-fastdsl:configured-mode=
               ../bonded-interface-mode" {
+          error-message
+            "Either the type of interface is not derived from or "
+          + "equal to 'ianaift:fastdsl' or the interface is not of "
+          + "the same configured mode as the bonded interface mode "
+          + "for this group.";
           description
             "Each lower layer interface must be either a 'fastdsl'
              interface or an interface type derived from 'fastdsl'
@@ -455,7 +468,7 @@ module bbf-gbond {
             enum normal-to-low {
               description
                 "G.998.x port upstream data rate has reached/dropped
-                 below the low upstream rate threshold ";
+                 below the low upstream rate threshold.";
             }
             enum low-to-normal {
               description
@@ -492,7 +505,7 @@ module bbf-gbond {
             enum normal-to-low {
               description
                 "G.998.x port downstream data rate has reached/dropped
-                 below the low downstream rate threshold ";
+                 below the low downstream rate threshold.";
             }
             enum low-to-normal {
               description

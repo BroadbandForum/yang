@@ -13,21 +13,19 @@ submodule bbf-vdsl-noise-margin-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 5.7 DSL Quality
      Management related profiles; SNR Margin Profile.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -67,9 +65,19 @@ submodule bbf-vdsl-noise-margin-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -148,10 +156,15 @@ submodule bbf-vdsl-noise-margin-profile-body {
        parameters to reduce the amount of combinations.";
     leaf minimum-noise-margin {
       type uint16 {
-        range "0..310";
+        range "0..310" {
+          description
+            "Defines a range from 0.0 to 31.0 dB.";
+        }
       }
       units "0.1 dB";
       must '. <= ../target-noise-margin' {
+        error-message "'minimum-noise-margine' is greater than "
+                    + "'target-noise-margin'.";
         description
           "The minimum noise margin must be less than or equal to
            the target noise margin.";
@@ -162,22 +175,26 @@ submodule bbf-vdsl-noise-margin-profile-body {
          tolerate. If the noise margin falls below this level,
          the receiver requests the transmitter to increase the
          transmit power. If an increase to transmit power is not
-         possible, a loss-of-margin (LOM) defect occurs, the
+         possible, a Loss of Margin (LOM) defect occurs, the
          receiver will fail and attempt to re-initialize and the
          NMS will be notified. The minimum noise margin ranges
          from 0 to 31 dB, with 0.1 dB steps.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.3.5 Downstream minimum noise
-         margin (MINSNRMds) and clause 7.3.1.3.6 Upstream minimum
-         noise margin (MINSNRMus)";
+        "ITU-T G.997.1 clauses 7.3.1.3.5 (MINSNRMds) and 7.3.1.3.6
+         (MINSNRMus)";
     }
     leaf target-noise-margin {
       type uint16 {
-        range "0..310";
+        range "0..310" {
+          description
+            "Defines a range from 0.0 to 31.0 dB.";
+        }
       }
       units "0.1 dB";
       must "../maximum-noise-margin = 'unbounded' or
             . <= ../maximum-noise-margin" {
+        error-message "'target-noise-margin' is greater than "
+                    + "'maximum-noise-margin'.";
         description
           "If the maximum noise margin is not unbounded, the target
            noise margin must be less than or equal to the maximum
@@ -191,14 +208,16 @@ submodule bbf-vdsl-noise-margin-profile-body {
          initialization. The target noise margin ranges from 0 to
          31 dB, with 0.1 dB steps.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.3.1 Downstream target noise
-         margin (TARSNRMds) and clause 7.3.1.3.2 Upstream target
-         noise margin (TARSNRMus)";
+        "ITU-T G.997.1 clauses 7.3.1.3.1 (TARSNRMds) and 7.3.1.3.2
+         (TARSNRMus)";
     }
     leaf maximum-noise-margin {
       type union {
         type uint16 {
-          range "0..310";
+          range "0..310" {
+            description
+              "Defines a range from 0.0 to 31.0 dB.";
+          }
         }
         type enumeration {
           enum unbounded {
@@ -223,9 +242,8 @@ submodule bbf-vdsl-noise-margin-profile-body {
          noise margin limit (i.e., the maximum noise margin value
          is unbounded).";
       reference
-        "ITU-T G.997.1 clause 7.3.1.3.3 Downstream maximum noise
-         margin (MAXSNRMds) and clause 7.3.1.3.4 Upstream maximum
-         noise margin (MAXSNRMus";
+        "ITU-T G.997.1 clauses 7.3.1.3.3 (MAXSNRMds) and 7.3.1.3.4
+         (MAXSNRMus)";
     }
     leaf ra-mode {
       type enumeration {
@@ -255,19 +273,24 @@ submodule bbf-vdsl-noise-margin-profile-body {
          The default is enum 4, corresponding to Mode 4
          = DYNAMIC with SOS.";
       reference
-        "ITU-T G.997.1 ITU-T G.997.1 clause 7.3.1.4.1 Downstream
-         rate adaptation mode (RA-MODEds) and clause 7.3.1.4.2
-         Upstream rate adaptation mode (RA-MODEus)";
+        "ITU-T G.997.1 clauses 7.3.1.4.1 (RA-MODEds) and 7.3.1.4.2
+         (RA-MODEus)";
     }
     leaf upshift-noise-margin {
       type uint16 {
-        range "0..310";
+        range "0..310" {
+          description
+            "Defines a range from 0.0 to 31.0 dB.";
+        }
       }
       units "0.1 dB";
       must "(../ra-mode != '3' and ../ra-mode != '4') or
             (. >= ../target-noise-margin and
             (../maximum-noise-margin = 'unbounded' or
             . <= ../maximum-noise-margin))" {
+        error-message
+          "'upshift-noise-margin' is less than 'target-noise-margin' "
+        + "and/or is greater than 'maximum-noise-margin'.";
         description
           "If the RA-MODE is equal to 3 or 4, the upshift target
            noise margin must be greater than or equal to the
@@ -283,36 +306,40 @@ submodule bbf-vdsl-noise-margin-profile-body {
          data rate. The upshift noise margin ranges from 0 to 31
          dB, with 0.1 dB steps.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.4.3 Downstream upshift noise
-         margin (RA-USNRMds) and clause 7.3.1.4.4 Upstream
-         upshift noise margin (RA-USNRMus)";
+        "ITU-T G.997.1 clauses 7.3.1.4.3 (RA-USNRMds) and 7.3.1.4.4
+         (RA-USNRMus)";
     }
     leaf minimum-time-interval-upshift-sra {
       type uint16 {
         range "0..16383";
       }
-      units "second";
+      units "seconds";
       default "8";
       description
         "This parameter defines the interval of time the noise
          margin should stay above the upshift noise margin before
          the receiver will attempt to increase the net data rate.
-         The time interval ranges from 0 to 16,383 s with steps
+         The time interval ranges from 0 to 16383 seconds with steps
          of one second.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.4.5 Downstream minimum time
-         interval for upshift rate adaptation (RA-UTIMEds) and
-         clause 7.3.1.4.6 Upstream minimum time interval for
-         upshift rate adaptation (RA-UTIMEus)";
+        "ITU-T G.997.1 clauses 7.3.1.4.5 (RA-UTIMEds) and 7.3.1.4.6
+         (RA-UTIMEus)";
     }
     leaf downshift-noise-margin {
       type uint16 {
-        range "0..310";
+        range "0..310" {
+          description
+            "Defines a range from 0.0 to 31.0 dB.";
+        }
       }
       units "0.1 dB";
       must "(../ra-mode != '3' and ../ra-mode != '4') or
             (. >= ../minimum-noise-margin and
             . <= ../target-noise-margin)" {
+        error-message
+          "'ra-mode' is either 3 or 4 and 'downshift-noise-margin' "
+        + "is less than 'minimum-noise-margin' and/or greater than "
+        + "'target-noise-margin'.";
         description
           "If the RA-MODE is equal to 3 or 4, the downshift target
            noise margin must be greater than or equal to the minimum
@@ -328,9 +355,8 @@ submodule bbf-vdsl-noise-margin-profile-body {
          net data rate. The downshift noise margin ranges from 0
          to 31 dB, with 0.1 dB steps.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.4.7 Downstream downshift
-         noise margin (RA-DSNRMds) and clause 7.3.1.4.8 Upstream
-         downshift noise margin (RA-DSNRMus)";
+        "ITU-T G.997.1 clauses 7.3.1.4.7 (RA-DSNRMds) and 7.3.1.4.8
+         (RA-DSNRMus)";
     }
     leaf minimum-time-interval-downshift-sra {
       type uint16 {
@@ -343,12 +369,10 @@ submodule bbf-vdsl-noise-margin-profile-body {
          margin should stay below the downshift noise margin in
          the direction of transmission before the receiver will
          attempt to decrease the net data rate. The time interval
-         ranges from 0 to 16,383 s with steps of one second.";
+         ranges from 0 to 16383 seconds with steps of one second.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.4.9 Downstream minimum time
-         interval for downshift rate adaptation (RA-DTIMEds) and
-         clause 7.3.1.4.10 Upstream minimum time interval for
-         downshift rate adaptation (RA-DTIMEus)";
+        "ITU-T G.997.1 clauses 7.3.1.4.9 (RA-DTIMEds) and 7.3.1.4.10
+         (RA-DTIMEus)";
     }
   }
 
@@ -385,8 +409,7 @@ submodule bbf-vdsl-noise-margin-profile-body {
       description
         "This parameter enables the virtual noise.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.7.2 Upstream signal-to-noise
-         ratio mode (SNRMODEus).";
+        "ITU-T G.997.1 clause 7.3.1.7.2 (SNRMODEus)";
     }
   }
 
@@ -418,8 +441,7 @@ submodule bbf-vdsl-noise-margin-profile-body {
       description
         "This parameter enables the virtual noise.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.7.1 Downstream
-         signal-to-noise ratio mode (SNRMODEds)";
+        "ITU-T G.997.1 clause 7.3.1.7.1 (SNRMODEds)";
     }
   }
 }

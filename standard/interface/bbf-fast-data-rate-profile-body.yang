@@ -18,20 +18,18 @@ submodule bbf-fast-data-rate-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing data rate profiles.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -71,9 +69,19 @@ submodule bbf-fast-data-rate-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -139,49 +147,49 @@ submodule bbf-fast-data-rate-profile-body {
     description
       "Data rate configuration parameters.";
     reference
-      "ITU-T G.997.2 clause 7.2.1.";
+      "ITU-T G.997.2 clause 7.2.1";
     leaf maximum-net-data-rate {
       type bbf-yang:data-rate32;
       default "4294967295";
       description
-        "Defines the value of the maximum net data rate (see clause
-         11.4.2.2/G.9701).";
+        "Defines the value of the maximum net data rate.";
       reference
-        "ITU-T G.997.2 clause 7.2.1.1 (MAXNDR).";
+        "ITU-T G.997.2 clause 7.2.1.1 (MAXNDR);
+         ITU-T G.9701 clause 11.4.2.2";
     }
     leaf minimum-expected-throughput {
       type bbf-yang:data-rate32;
       must '. < ../maximum-net-data-rate' {
+        error-message
+          "'minimum-expected-throughput' is greater than or equal to "
+        + "the 'maximum-net-data-rate'.";
         description
           "The minimum expected throughput must be less than the
            maximum net data rate.";
       }
       default "0";
       description
-        "Defines the value of the minimum expected throughput (see
-         clause 11.4.2.1/G.9701).";
+        "Defines the value of the minimum expected throughput.";
       reference
-        "ITU-T G.997.2 clause 7.2.1.2 (MINETR).";
+        "ITU-T G.997.2 clause 7.2.1.2 (MINETR);
+         ITU-T G.9701 clause 11.4.2.1";
     }
     leaf maximum-gamma-data-rate {
       type bbf-yang:data-rate32;
-      must '. >= ../minimum-gamma-data-rate' {
-        description
-          "The maximum gamma data rate must be greater than or equal
-           to the mimimum gamma data rate.";
-      }
       default "4294967295";
       description
         "Defines the maximum value of the Gamma Data Rate (GDR)
          (see clause 7.11.1.3/G.997.2). The GDR shall not exceed
          maximum Gamma Data Rate (MAXGDR) at the start of showtime
-         and during showtime. ";
+         and during showtime.";
       reference
-        "ITU-T G.997.2 clause 7.2.1.3 (MAXGDR).";
+        "ITU-T G.997.2 clause 7.2.1.3 (MAXGDR)";
     }
     leaf minimum-gamma-data-rate {
       type bbf-yang:data-rate32;
       must '. <= ../maximum-gamma-data-rate' {
+        error-message "'minimum-gamma-data-rate' is greater than "
+                    + "'maximum-gamma-data-rate'.";
         description
           "The minimum gamma data rate must be less than or equal to
            the maximum gamma data rate.";
@@ -189,15 +197,15 @@ submodule bbf-fast-data-rate-profile-body {
       default "0";
       description
         "Defines the minimum value of the Gamma Data Rate (GDR)
-         (see clause 7.11.1.3/G.997.2). The GDR may be lower than
-         minimum Gamma Data Rate (MINGDR). If the GDR is lower than
-         MINGDR at initialization or when GDR becomes lower than
-         MINGDR during showtime, a threshold crossing alert occurs.";
+         The GDR may be lower than minimum Gamma Data Rate (MINGDR).
+         If the GDR is lower than MINGDR at initialization or when GDR
+         becomes lower than MINGDR during showtime, a threshold
+         crossing alert occurs.";
       reference
-        "ITU-T G.997.2 clause 7.2.1.4 (MINGDR).";
+        "ITU-T G.997.2 clauses 7.2.1.4 (MINGDR) and 7.11.1.3 (GDR)";
     }
     container preferred-ndr {
-      if-feature "preferred-ndr";
+      if-feature "bbf-fast:preferred-ndr";
       description
         "Preferred Net Data Rate (NDR) configuration.";
       leaf preferred-net-data-rate {
@@ -209,7 +217,7 @@ submodule bbf-fast-data-rate-profile-body {
            services enabled on a line. There is no normative expected
            behavior related to this parameter.";
         reference
-          "ITU-T G.997.2 clause 7.2.1.5 (PREFNDR).";
+          "ITU-T G.997.2 clause 7.2.1.5 (PREFNDR)";
       }
       leaf preferred-net-data-rate-type {
         type enumeration {
@@ -246,7 +254,7 @@ submodule bbf-fast-data-rate-profile-body {
            PREFNDR_TYPEds. There is no normative expected behavior
            related to this parameter.";
         reference
-          "ITU-T G.9701 clause 7.2.1.6 (PREFNDR_TYPE).";
+          "ITU-T G.997.2 clause 7.2.1.6 (PREFNDR_TYPE)";
       }
     }
     container dynamic-time-assignment {
@@ -256,6 +264,9 @@ submodule bbf-fast-data-rate-profile-body {
       leaf minimum-expected-throughput {
         type bbf-yang:data-rate32;
         must '. < ../maximum-net-data-rate' {
+          error-message
+            "'minimum-expected-throughput' is greater than or equal "
+          + "to the 'maximum-net-data-rate'.";
           description
             "The minimum expected throughput for Dynamic Time
              Assignment (DTA) must be less than the maximum net data
@@ -263,26 +274,45 @@ submodule bbf-fast-data-rate-profile-body {
         }
         default "0";
         description
-          "Defines the value of the minimum expected
-           throughput for Dynamic Time Assignment (DTA) operation to
-           constrain the dynamic range of Mds requested by the
-           Dynamic Resource Allocation (DRA).
+          "Defines the value of the minimum expected throughput for
+           Dynamic Time Assignment (DTA) operation to constrain the
+           dynamic range of Mds requested by the Dynamic Resource
+           Allocation (DRA).
 
            If 'dta-allowed' in the Time Division Duplexing (TDD)
            profile is equal to 'cdta', then a value less than or equal
            to the minimum expected throughput without DTA operation
            must be configured.";
         reference
-          "ITU-T G.9701 clause T.2.7.";
+          "ITU-T G.997.2 clause T.2.2.5 (DTA_MINETR);
+           ITU-T G.9701 clause T.2.10";
       }
       leaf maximum-net-data-rate {
         type bbf-yang:data-rate32;
         default "4294967295";
         description
-          "Defines the value of the maximum Net Datat Rate (NDR) for
+          "Defines the value of the maximum Net Data Rate (NDR) for
            Dynamic Time Assignment (DTA) operation.";
         reference
-          "ITU-T G.9701 clause D.5.7.5, X.6.7.5 and T.2.8";
+          "ITU-T G.997.2 clause T.2.2.6 (DTA_MAXNDR);
+           ITU-T G.9701 clause D.5.7.5, X.6.7.5 and T.2.11";
+      }
+      leaf high-utilization-second-threshold {
+        if-feature "bbf-fast:high-utilization-seconds";
+        type uint8 {
+          range "0 | 1..100";
+        }
+        units "percent";
+        default "90";
+        description
+          "Defines the threshold, in percent, for declaring a High
+           Utilization Second. The special value 0 indicates that
+           declaring and counting of High Utilization Seconds is
+           disabled.";
+        reference
+          "ITU-T G.997.2 clauses T.2.1.5 (DTA_HUS_THRESHOLDds) and
+           T.2.1.6 (DTA_HUS_THRESHOLDus);
+           ITU-T G.9701 clauses T.4.2 and T.4.3";
       }
     }
     leaf low-andeftr-threshold {

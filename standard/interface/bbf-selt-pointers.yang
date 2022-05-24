@@ -8,13 +8,7 @@ submodule bbf-selt-pointers {
     prefix if;
   }
   include bbf-selt-base;
-
-  /* PMD Control Definitions */
-
   include bbf-selt-pmd-control-body;
-
-  /* Profile Definitions */
-
   include bbf-selt-pmd-profiles;
   include bbf-selt-processing-profiles;
 
@@ -27,21 +21,19 @@ submodule bbf-selt-pointers {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing profiles for Single Ended Line Test (SELT) on supported
      interfaces.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +73,19 @@ submodule bbf-selt-pointers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -150,6 +152,20 @@ submodule bbf-selt-pointers {
          profile. This method of configuration has been deprecated.
          The 'profile-config' method should instead be used.";
     }
+    container selt-pmd-control {
+      status deprecated;
+      description
+        "Data nodes to support the Single Ended Line Test Physical
+         Medium Dependent (SELT-PMD) control object.
+
+         This container was mistakenly renamed to 'pmd-control'
+         starting in Amendment 1 and is now added back to allow a
+         backward compatible transition from Issue 1 to Amendment 4 or
+         later.";
+      uses selt-pmd-control {
+        status deprecated;
+      }
+    }
     container pmd-control {
       status deprecated;
       description
@@ -160,9 +176,11 @@ submodule bbf-selt-pointers {
       }
     }
     choice profile-config {
-      default "no-profiles-attached";
       description
-        "Provides methods attachment of profiles.";
+        "The method for configuring profiles used for a Single Ended
+         Line Test (SELT) on this interface. If no method is
+         configured, the default behavior is equivalent to the
+         presence of 'no-profiles-attached'.";
       case no-profiles-attached {
         leaf no-profiles-attached {
           type empty;

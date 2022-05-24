@@ -14,9 +14,6 @@ submodule bbf-fast-pointers {
     prefix bbf-yang;
   }
   include bbf-fast-base;
-
-  /* Profile Definitions */
-
   include bbf-fast-service-profiles;
   include bbf-fast-spectrum-profiles;
   include bbf-fast-quality-profiles;
@@ -33,20 +30,18 @@ submodule bbf-fast-pointers {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Vector of Profiles (VoP) on FAST interfaces.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -86,9 +81,19 @@ submodule bbf-fast-pointers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -271,7 +276,6 @@ submodule bbf-fast-pointers {
         path "/bbf-fast:fast/bbf-fast:quality/bbf-fast:impulse-"
            + "noise-monitoring-profile/bbf-fast:name";
       }
-      mandatory true;
       description
         "References an impulse noise monitoring profile to be used to
          configure the line.";
@@ -320,7 +324,6 @@ submodule bbf-fast-pointers {
       leaf ftu-o-24hr-line-threshold-profile {
         if-feature "performance-24hr";
         type line-threshold-profile-ref;
-        mandatory true;
         description
           "Reference to a line threshold profile for FAST Transceiver
            Unit - central Office (FTU-O) thresholds related to 24 hour
@@ -331,14 +334,12 @@ submodule bbf-fast-pointers {
         mandatory true;
         description
           "Reference to a line threshold profile for FAST Transceiver
-           Unit - Remote side (FTU-R)
-           thresholds related to 15 minute performance
-           counters.";
+           Unit - Remote side (FTU-R) thresholds related to 15 minute
+           performance counters.";
       }
       leaf ftu-r-24hr-line-threshold-profile {
         if-feature "performance-24hr";
         type line-threshold-profile-ref;
-        mandatory true;
         description
           "Reference to a line threshold profile for FAST Transceiver
            Unit - Remote side (FTU-R) thresholds related to 24 hour
@@ -355,7 +356,6 @@ submodule bbf-fast-pointers {
       leaf ftu-o-24hr-channel-threshold-profile {
         if-feature "performance-24hr";
         type channel-threshold-profile-ref;
-        mandatory true;
         description
           "Reference to a channel threshold profile for FAST
            Transceiver Unit - central Office (FTU-O) thresholds
@@ -372,7 +372,6 @@ submodule bbf-fast-pointers {
       leaf ftu-r-24hr-channel-threshold-profile {
         if-feature "performance-24hr";
         type channel-threshold-profile-ref;
-        mandatory true;
         description
           "Reference to a channel threshold profile for FAST
            Transceiver Unit - Remote side (FTU-R) thresholds related
@@ -386,10 +385,10 @@ submodule bbf-fast-pointers {
     description
       "Data nodes to support the assignment of a profile vector.";
     choice profile-config {
-      default "no-profiles-attached";
       description
-        "Provides methods for direct or indirect attachment of
-         the profile vector.";
+        "The method for configuring profiles used on this FAST line.
+         If no method is configured, the default behavior is
+         equivalent to the presence of 'no-profiles-attached'.";
       case no-profiles-attached {
         leaf no-profiles-attached {
           type empty;
@@ -429,7 +428,7 @@ submodule bbf-fast-pointers {
          SREC procedures are specified in Annex R of [ITU-T G.9701].";
       reference
         "ITU-T G.997.2 clause 7.1.13.1 (SREC_ALLOWED),
-         ITU-T G.9701 annex R.";
+         ITU-T G.9701 Annex R.";
     }
   }
 }

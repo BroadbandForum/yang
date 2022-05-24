@@ -25,15 +25,13 @@ module bbf-hardware-rpf-dpu-state {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on management of
@@ -45,7 +43,7 @@ module bbf-hardware-rpf-dpu-state {
      support Network Management Datastore Architecture (NMDA) as
      defined in RFC 8342.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -85,9 +83,19 @@ module bbf-hardware-rpf-dpu-state {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -175,9 +183,9 @@ module bbf-hardware-rpf-dpu-state {
     description
       "Reports the ReConfiguration State for the line. A state
        change alarm shall be raised indicating a change of the
-       line's Reconfiguration State (see clause A.7.2.1.2).";
+       line's Reconfiguration State.";
     reference
-      "ITU-T G.997.2 clause A.7.4.1.3 (DPU-RCS)";
+      "ITU-T G.997.2 clauses A.7.2.1.1 and A.7.4.1.3 (DPU-RCS)";
   }
 
   typedef pse-rpf-state {
@@ -188,24 +196,23 @@ module bbf-hardware-rpf-dpu-state {
             - when for the line the Power Extractor (PE) transitions
               to 'start-up' after the PE detects loss of voltage,
               and has not received a PSE-DGL or PSE-OHP
-              indication ( see clause A.6.2.2) from the Power Source
-              Equipment (PSE).";
+              indication from the Power Source Equipment (PSE).";
       }
       enum pse-dgl {
         description
           "Shutdown with dying gasp (normal shutdown).
             - when for the line the Power Extractor (PE) transitions
               to 'start-up' after the PE detects loss of voltage
-              and has received a PSE-DGL indication (see
-              clause A.6.2.2) from the Power Source Equipment (PSE).";
+              and has received a PSE-DGL indication from the Power
+              Source Equipment (PSE).";
       }
       enum pse-ohp {
         description
           "Shutdown with dying gasp with off-hook phone.
             - when for the line the Power Extractor (PE) transitions
               to 'start-up' after the PE detects loss of voltage
-              and has received a PSE-OHP indication (see
-              clause A.6.2.2) from the Power Source Equipment (PSE).";
+              and has received a PSE-OHP indication from the Power
+              Source Equipment (PSE).";
       }
       enum pse-pwr {
         description
@@ -220,32 +227,30 @@ module bbf-hardware-rpf-dpu-state {
           "Battery powered.
             - when for the line the Power Extractor (PE) transitions
               to 'normal-operations' and the PE received an indication
-              that the Power Source Equipment (PSE) is trying to start
-              up the DPU while powered on battery (PRP PS field,
-              see section 6.2.5.1 of [ETSI TS 101 548]);
+              (PRP PS field) that the Power Source Equipment (PSE) is
+              trying to start up the DPU while powered on battery;
             - when for the line the PE is in 'normal-operations' and
-              the PE receives a PSE-BAT indication (see clause 6.2.2)
-              from the PSE.";
+              the PE receives a PSE-BAT indication from the PSE.";
       }
       enum pse-acm {
         description
           "Mains powered.
             - when for the line the Power Extractor (PE) transitions
               to 'normal-operations' and the PE received an indication
-              that the Power Source Equipment (PSE) was trying to
-              start up the Distribution Point Unit (DPU) while powered
-              on mains (PRP PS field, see section 6.2.5.1 of [ETSI TS
-              101 548]);
+              (PRP PS field) that the Power Source Equipment (PSE) was
+              trying to start up the Distribution Point Unit (DPU)
+              while powered on mains;
             - when for the line the PE is in 'normal-operations' and
-              the PE receives a PSE-ACM or PSE-BBA indication (see
-              clause A.6.2.2) from the PSE.";
+              the PE receives a PSE-ACM or PSE-BBA indication from the
+              PSE.";
       }
     }
     description
       "Reports the reverse power feeding state of the Power Source
        Equipment (PSE).";
     reference
-      "ITU-T G.997.2 clause A.7.4.2.2 (PSE-RPF)";
+      "ITU-T G.997.2 clauses A.6.2.2 and A.7.4.2.2 (PSE-RPF);
+       ETSI TS 101 548 section 6.2.5.1";
   }
 
   grouping rpf-far-end-line-diagnostics {
@@ -333,7 +338,8 @@ module bbf-hardware-rpf-dpu-state {
         "Reports the latest Power Source Equipment (PSE) ShutDown
          cause, detected during 'Normal Operation'.";
       reference
-        "ITU-T G.997.2 clause A.7.5.2.2 (PSE-SDC)";
+        "ITU-T G.997.2 clause A.7.5.2.2 (PSE-SDC);
+         ETSI TS 101 548 Tables 35 and 37";
     }
   }
 
@@ -389,12 +395,12 @@ module bbf-hardware-rpf-dpu-state {
       description
         "Reports whether the Power Source Equipment (PSE) is
          integrated in the Network Termination (NT), based on the
-         Reverse Power Feeding (RPF) OAM parameter NTE-CPF (see clause
-         A.6.2.7). Until the Distribution Point Unit (DPU) ME receives
+         Reverse Power Feeding (RPF) OAM parameter NTE-CPF. Until the
+         Distribution Point Unit (DPU) Management Entity (ME) receives
          an NTE-CPF Indication for the first time, it is unknown
          whether or not the PSE is integrated in the NT.";
       reference
-        "ITU-T G.997.2 clause A.7.6.2.1 (NTE-CPF)";
+        "ITU-T G.997.2 clauses A.6.2.7 and A.7.6.2.1 (NTE-CPF)";
     }
     leaf battery-backup-available {
       type enumeration {
@@ -415,17 +421,15 @@ module bbf-hardware-rpf-dpu-state {
       description
         "Reports whether battery backup is available at the Power
          Source Equipment (PSE), based on the PSE trying to start up
-         the Power Extractor (PE) while powered on battery
-         (PRP PS field, see section 6.2.5.1 of [ETSI TS 101 548]) and
-         on the PSE-BAT, PSE-ACM, and PSE-BBA indications (see section
-         6.3 of [ETSI TS 101 548] and clause A.6.2.2). Until the Power
-         Extractor (PE) receives the PRP PS field for the first time
-         and until the PE or Distribution Point Unit (DPU) ME receive
-         a BAT, ACM, or BBA Indication for the first time (whichever
-         occurs first), it is unknown whether or not battery backup
-         is available in the PSE.";
+         the Power Extractor (PE) while powered on battery. Until the
+         Power Extractor (PE) receives the PRP PS field for the first
+         time and until the PE or Distribution Point Unit (DPU)
+         Management Entity (ME) receive a BAT, ACM, or BBA Indication
+         for the first time (whichever occurs first), it is unknown
+         whether or not battery backup is available in the PSE.";
       reference
-        "ITU-T G.997.2 clause A.7.6.2.2 (PSE-BBA)";
+        "ITU-T G.997.2 clauses A.6.2.2 and A.7.6.2.2 (PSE-BBA);
+         ETSI TS 101 548 sections 6.2.5.1 and 6.3";
     }
     leaf prp-capability {
       type enumeration {
@@ -451,17 +455,16 @@ module bbf-hardware-rpf-dpu-state {
          Configuration Protocol (PRP) capability. In case the PSE is
          integrated in the NT (i.e., NT-CPF equals 2), the PSE-PRP
          capability is communicated through Reverse Power Feeding
-         (RPF) OAM from PSE to Distribution Point Unit (DPU) (see
-         clause A.6.2.7). In case the PSE is not integrated in the NT
-         (i.e., NT-CPF equals 2), it is deduced by the DPU from
-         successful PRP start-up, whereby the DPU shall assume that
-         the PRP disconnect trigger is sent by the PSE that is
-         currently providing reverse power to the DPU. Until the Power
-         Extractor (PE) receives the PRP PS field (see clause A.6.2.7)
-         for the first time, or until first successful PRP start-up,
-         the PSE PRP capability is unknown.";
+         (RPF) OAM from PSE to Distribution Point Unit (DPU). In case
+         the PSE is not integrated in the NT (i.e., NT-CPF equals 2),
+         it is deduced by the DPU from successful PRP start-up,
+         whereby the DPU shall assume that the PRP disconnect trigger
+         is sent by the PSE that is currently providing reverse power
+         to the DPU. Until the Power Extractor (PE) receives the PRP
+         PS field for the first time, or until first successful PRP
+         start-up, the PSE PRP capability is unknown.";
       reference
-        "ITU-T G.997.2 clause A.7.6.2.3 (PSE-PRP)";
+        "ITU-T G.997.2 clauses A.6.2.7 and A.7.6.2.3 (PSE-PRP)";
     }
   }
 
@@ -528,7 +531,7 @@ module bbf-hardware-rpf-dpu-state {
       status deprecated;
       description
         "The total number of 15-minute PM intervals for which data
-         was collected. ";
+         was collected.";
     }
     leaf non-valid-intervals {
       type performance-15min-interval;
@@ -548,7 +551,7 @@ module bbf-hardware-rpf-dpu-state {
       status deprecated;
       description
         "The total number of 24 hour PM intervals for which data
-         was collected. ";
+         was collected.";
     }
     leaf non-valid-intervals {
       type performance-24hr-interval;
@@ -564,16 +567,17 @@ module bbf-hardware-rpf-dpu-state {
       "Performance counters associated with the near-end.";
     leaf dpu-extracted-energy {
       type bbf-yang:performance-counter32;
-      units "mWh";
+      units "milliwatthours";
       status deprecated;
       description
         "Reports a count of the Distribution Point Unit (DPU)
          extracted energy per line at U-O interface or at Power Supply
          Unit (PSU) input in current/previous interval, expressed in
-         units of mWh. This PM object is optional. The accuracy is
+         units of mWh. This PM data node is optional. The accuracy is
          defined in [ETSI TS 101 548].";
       reference
-        "ITU-T G.997.2 clause A.7.3.4 (CURR/PREV_NE_15/24_EE)";
+        "ITU-T G.997.2 clause A.7.3.4 (CURR/PREV_NE_15/24_EE);
+         ETSI TS 101 548";
     }
   }
 
@@ -582,16 +586,17 @@ module bbf-hardware-rpf-dpu-state {
       "Performance counters associated with the far-end.";
     leaf pse-injected-energy {
       type bbf-yang:performance-counter32;
-      units "mWh";
+      units "milliwatthours";
       status deprecated;
       description
         "Reports a count of the Distribution Point Unit (DPU)
          extracted energy per line at U-O interface or at Power Supply
          Unit (PSU) input in current/previous interval, expressed in
-         units of mWh. This PM object is optional. The accuracy is
+         units of mWh. This PM data node is optional. The accuracy is
          defined in [ETSI TS 101 548].";
       reference
-        "ITU-T G.997.2 clause A.7.3.5 (CURR/PREV_NE_15/24_IE)";
+        "ITU-T G.997.2 clause A.7.3.5 (CURR/PREV_NE_15/24_IE);
+         ETSI TS 101 548";
     }
   }
 
@@ -752,14 +757,13 @@ module bbf-hardware-rpf-dpu-state {
           description
             "Reverse Power Feeding (RPF) Class SR1 is defined to
              support (very) low power Distribution Point Unit (DPU)
-             designs, when they become available; the
-             applicability of Class SR1 for a considered
-             deployment type (amount of ports per DPU, cable
-             losses, DPU uplink types, DPU feature scope at and
-             beyond the physical layer, amount of additional
-             devices (POTSAdapters) to be fed from the same Power
-             Source Equipment (PSE), etc.) depends on the availability
-             of low-power solutions.";
+             designs, when they become available; the applicability
+             of Class SR1 for a considered deployment type (amount of
+             ports per DPU, cable losses, DPU uplink types, DPU
+             feature scope at and beyond the physical layer, amount of
+             additional devices (POTSAdapters) to be fed from the same
+             Power Source Equipment (PSE), etc.) depends on the
+             availability of low-power solutions.";
         }
         enum sr2 {
           description
@@ -789,7 +793,8 @@ module bbf-hardware-rpf-dpu-state {
         "Reports the actual power class of the Power Extractor (PE)
          for the line.";
       reference
-        "ITU-T G.997.2 clause A.7.4.1.1 (PE-PC)";
+        "ITU-T G.997.2 clause A.7.4.1.1 (PE-PC) and Table 10;
+         EN 60950-1";
     }
     leaf rpf-state {
       type enumeration {
@@ -820,9 +825,9 @@ module bbf-hardware-rpf-dpu-state {
       description
         "Reports the ReConfiguration State for the line. A state
          change alarm shall be raised indicating a change of the
-         line's Reconfiguration State (see clause A.7.2.1.2).";
+         line's Reconfiguration State.";
       reference
-        "ITU-T G.997.2 clause A.7.4.1.3 (DPU-RCS)";
+        "ITU-T G.997.2 clauses A.7.2.1.2 and A.7.4.1.3 (DPU-RCS)";
     }
     leaf prp-error-status {
       type enumeration {
@@ -849,9 +854,9 @@ module bbf-hardware-rpf-dpu-state {
       description
         "Reports that the Distribution Point Unit (DPU) has deduced a
          POTS Remote Copper Configuration Protocol (PRP) related ERROR
-         while the is DPU powered on. An alarm shall be raised
-         upon the PRP Error Status indicating an error condition
-         on the line.";
+         while the is DPU powered on. An alarm shall be raised upon
+         the PRP Error Status indicating an error condition on the
+         line.";
       reference
         "ITU-T G.997.2 clause A.7.4.1.4 (DPU-PRP-ERROR)";
     }
@@ -870,7 +875,7 @@ module bbf-hardware-rpf-dpu-state {
       description
         "Reports an error condition for the line whereby the
          Distribution Point Unit (DPU) is unable to draw continuous
-         and sufficient power from the line. This status object is
+         and sufficient power from the line. This status data node is
          optional. If supported, an alarm shall be raised upon the
          Line Error Status indicating an error condition on the
          line.";
@@ -907,9 +912,9 @@ module bbf-hardware-rpf-dpu-state {
              maximum power to be transmitted than Class SR1. When
              compared to Class SR1, a solution that complies with
              Class SR2 can extend the type of deployments that can be
-             supported, while still avoiding any additional
-             safety measures in the home environment (below 15 W
-             as per EN 60950-1 [2]).";
+             supported, while still avoiding any additional safety
+             measures in the home environment (below 15 watts as per
+             EN 60950-1 [2]).";
         }
         enum sr3 {
           description
@@ -930,7 +935,8 @@ module bbf-hardware-rpf-dpu-state {
          (PSE). Before the start-up protocol is successfully completed
          for the first time, the power class is undetermined.";
       reference
-        "ITU-T G.997.2 clause A.7.4.2.1 (PSE-PC)";
+        "ITU-T G.997.2 clause A.7.4.2.1 (PSE-PC) and Table 10;
+         EN 60950-1";
     }
     leaf rpf-state {
       type pse-rpf-state;

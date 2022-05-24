@@ -20,21 +20,19 @@ submodule bbf-fast-perf-types {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of general performance
      related YANG data types and grouping definitions for the
      management of FAST interfaces.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -74,9 +72,19 @@ submodule bbf-fast-perf-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -208,14 +216,14 @@ submodule bbf-fast-perf-types {
         "Reports the validity of the corresponding Performance
          Monitoring (PM) data.";
       reference
-        "ITU-T G.997.2 clause 7.7.2 and 7.8.2.";
+        "ITU-T G.997.2 clause 7.7.2 and 7.8.2";
     }
     leaf time-stamp {
       type yang:date-and-time;
       description
         "Reports the start date/time for this interval.";
       reference
-        "ITU-T G.997.2 clause 7.7.3 and 7.8.3.";
+        "ITU-T G.997.2 clause 7.7.3 and 7.8.3";
     }
   }
 
@@ -224,11 +232,12 @@ submodule bbf-fast-perf-types {
       "Reports the measured time for a given interval.";
     leaf measured-time {
       type uint32;
+      units "seconds";
       description
         "Reports the amount of time, measured in seconds,
          that statistics for this interval have been counted.";
       reference
-        "ITU-T G.997.2 clause 7.7.1 and 7.8.1.";
+        "ITU-T G.997.2 clause 7.7.1 and 7.8.1";
     }
   }
 
@@ -256,7 +265,7 @@ submodule bbf-fast-perf-types {
       type performance-15min-interval;
       description
         "The total number of 15 minute Performance Monitoring (PM)
-         intervals for which data was collected. ";
+         intervals for which data was collected.";
     }
     leaf non-valid-intervals {
       type performance-15min-interval;
@@ -275,7 +284,7 @@ submodule bbf-fast-perf-types {
       type performance-24hr-interval;
       description
         "The total number of 24 hour Performance Monitoring (PM)
-         intervals for which data was collected. ";
+         intervals for which data was collected.";
     }
     leaf non-valid-intervals {
       type performance-24hr-interval;

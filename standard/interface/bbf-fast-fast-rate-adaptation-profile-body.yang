@@ -13,20 +13,18 @@ submodule bbf-fast-fast-rate-adaptation-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Fast Rate Adaptation (FRA) profiles.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -66,9 +64,19 @@ submodule bbf-fast-fast-rate-adaptation-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -145,40 +153,40 @@ submodule bbf-fast-fast-rate-adaptation-profile-body {
       "Fast Rate Adaptation (FRA) configuration parameters
        applicable to both upstream and downstream.";
     reference
-      "ITU-T G.997.2 clause 7.1.5.";
+      "ITU-T G.997.2 clause 7.1.5";
     leaf time-window {
       type uint8 {
         range "0 | 1..36";
       }
-      units "1 logical frame length";
+      units "logical frame periods";
       default "8";
       description
-        "Defines the duration of the time window used in the
-         standard Fast Rate Adaptation (FRA) triggering criteria. The
-         special value, 0, indicates that the vendor discretionary
-         values for fra-ntones, fra-rtx-uc, and fra-time may be used.
-         (see clause 13.4.3.2/G.997.2).";
+        "Defines the duration of the time window used in the standard
+         Fast Rate Adaptation (FRA) triggering criteria. The special
+         value, 0, indicates that the vendor discretionary values
+         for fra-ntones, fra-rtx-uc, and fra-time may be used.";
       reference
         "ITU-T G.997.2 clause 7.1.5.1 (FRA-TIMEds) and clause
-         7.1.5.2 (FRA-TIMEus); ITU-T G.9701 clause 13.3.1.1.1.1.";
+         7.1.5.2 (FRA-TIMEus);
+         ITU-T G.9701 clause 13.3.1.1.1.1";
     }
     leaf minimum-degraded-tones {
       type uint8 {
         range "0 | 1..100";
       }
-      units "percentage";
+      units "percent";
       default "50";
       description
         "Defines the minimum percentage of loaded sub-carriers (i.e.
          sub-carriers with bi>0) that are detected as degraded
          throughout a time window equal to FRA-TIME in order to arm
-         the first Fast Rate Adaptation (FRA) triggering criteria
-         (see clause 13.3.1.1.1.5).
+         the first Fast Rate Adaptation (FRA) triggering criteria.
          The special value, 0, indicates that monitoring of the
          percentage of degraded sub-carriers is disabled.";
       reference
         "ITU-T G.997.2 clause 7.1.5.3 (FRA-NTONESds) and clause
-         7.1.5.4 (FRA-NTONESus); ITU-T G.9701 clause 13.3.1.1.1.2.";
+         7.1.5.4 (FRA-NTONESus);
+         ITU-T G.9701 clause 13.3.1.1.1.2";
     }
     leaf uncorrectable-dtu {
       type uint16 {
@@ -188,13 +196,13 @@ submodule bbf-fast-fast-rate-adaptation-profile-body {
       description
         "Defines the minimum number of rtx-uc anomalies received
          throughout a time window equal to FRA-TIME in order to arm
-         the second Fast Rate Adaptation (FRA) triggering criteria
-         (see clause 13.3.1.1.1.5).
+         the second Fast Rate Adaptation (FRA) triggering criteria.
          The special value, 0, indicates that monitoring of the
          number of rtx-uc anomalies is disabled.";
       reference
         "ITU-T G.997.2 clause 7.1.5.5 (FRA-RTXUCds) and clause
-         7.1.5.6 (FRA-RTXUCus); ITU-T G.9701 clause 13.3.1.1.1.3.";
+         7.1.5.6 (FRA-RTXUCus);
+         ITU-T G.9701 clause 13.3.1.1.1.3";
     }
     leaf vendor-discretionary-fra-triggering-criteria {
       type boolean;
@@ -205,7 +213,8 @@ submodule bbf-fast-fast-rate-adaptation-profile-body {
          (disabled).";
       reference
         "ITU-T G.997.2 clause 7.1.5.7 (FRA-VENDISds) and clause
-         7.1.5.8 (FRA-VENDISus); ITU-T G.9701 clause 13.3.1.1.1.4.";
+         7.1.5.8 (FRA-VENDISus);
+         ITU-T G.9701 clause 13.3.1.1.1.4";
     }
   }
 

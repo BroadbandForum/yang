@@ -15,21 +15,19 @@ submodule bbf-vdsl-data-gathering-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 5.7 DSL Quality
      Management related profiles; Data Gathering Profile.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -69,9 +67,19 @@ submodule bbf-vdsl-data-gathering-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -133,12 +141,16 @@ submodule bbf-vdsl-data-gathering-profile-body {
         type uint8;
         description
           "Identifies the event type at the VDSL Transceiver Unit -
-           central Office (VTU-O) as defined in ITU-T G.993.2 Table
-           11-43.";
+           central Office (VTU-O).";
+        reference
+          "ITU-T G.993.2 Table 11-43";
       }
       leaf percentage {
         type uint8 {
-          range "0..200";
+          range "0..200" {
+            description
+              "Defines a range from 0.0 to 100.0 percent.";
+          }
         }
         units "0.5 percent";
         default "0";
@@ -150,16 +162,16 @@ submodule bbf-vdsl-data-gathering-profile-body {
         "This parameter is the percentage of the data gathering
          event buffer assigned to event type i at the VDSL Transceiver
          Unit - central Office (VTU-O). The ID, i, of the event type
-         is defined in Table 11-43 of [ITU-T G.993.2]. Values are
+         is defined in Table 11-43 of ITU-T G.993.2. Values are
          expressed in increments of 0.5% from 0 to 100%.";
       reference
-        "ITU-T G.997.1 clause 7.3.6.1 Logging depth event
-         percentage per event VTU-O
-         (LOGGING_DEPTH_EVENT_PERCENTAGE_Oi)";
+        "ITU-T G.997.1 clause 7.3.6.1
+         (LOGGING_DEPTH_EVENT_PERCENTAGE_Oi);
+         ITU-T G.993.2 Table 11-43";
     }
     leaf logging-depth-reporting-o {
       type uint32;
-      units "6-byte data gathering records";
+      units "6 bytes";
       default "0";
       description
         "This parameter is the logging depth that is requested for
@@ -168,20 +180,23 @@ submodule bbf-vdsl-data-gathering-profile-body {
          Information Base (CO-MIB), in number of 6-byte data gathering
          records.";
       reference
-        "ITU-T G.997.1 clause 7.3.6.3 Logging depth for VTU-O
-         reporting (LOGGING_DEPTH_REPORTING_O)";
+        "ITU-T G.997.1 clause 7.3.6.3 (LOGGING_DEPTH_REPORTING_O)";
     }
     list logging-depth-event-percentage-r {
       key "event-number";
       leaf event-number {
         type uint8;
         description
-          "Identifies the event type as defined in
-           ITU-T G.993.2 Table 11-43.";
+          "Identifies the event type.";
+        reference
+          "ITU-T G.993.2 Table 11-43";
       }
       leaf percentage {
         type uint8 {
-          range "0..200";
+          range "0..200" {
+            description
+              "Defines a range from 0.0 to 100.0 percent.";
+          }
         }
         units "0.5 percent";
         default "0";
@@ -194,16 +209,16 @@ submodule bbf-vdsl-data-gathering-profile-body {
         "This parameter is the percentage of the data gathering
          event buffer assigned to event type i at the VDSL Transceiver
          Unit - remote Side (VTU-R). The ID, i, of the event type is
-         defined in Table 11-43 of [ITU-T G.993.2]. Values are
+         defined in Table 11-43 of ITU-T G.993.2. Values are
          expressed in increments of 0.5% from 0 to 100%.";
       reference
         "ITU-T G.997.1 clause 7.3.6.2
-         Logging depth event percentage per event VTU-R
-         (LOGGING_DEPTH_EVENT_PERCENTAGE_Ri)";
+         (LOGGING_DEPTH_EVENT_PERCENTAGE_Ri);
+         ITU-T G.993.2 Table 11-43";
     }
     leaf logging-depth-reporting-r {
       type uint32;
-      units "6-byte data gathering records";
+      units "6 bytes";
       default "0";
       description
         "This parameter is the logging depth that is requested for
@@ -212,8 +227,7 @@ submodule bbf-vdsl-data-gathering-profile-body {
          Information Base (CO-MIB), in number of 6-byte data gathering
          records.";
       reference
-        "ITU-T G.997.1 clause 7.3.6.4 Logging depth for VTU-R
-         reporting";
+        "ITU-T G.997.1 clause 7.3.6.4";
     }
     leaf logging-report-newer-first {
       type boolean;
@@ -226,10 +240,7 @@ submodule bbf-vdsl-data-gathering-profile-body {
          end of the event trace buffer. This parameter only applies to
          the VTU-R.";
       reference
-        "ITU-T G.997.1 clause 7.3.6.5 Logging data report newer
-         events first VTU-R (LOGGING_REPORT_NEWER_FIRST)";
+        "ITU-T G.997.1 clause 7.3.6.5 (LOGGING_REPORT_NEWER_FIRST)";
     }
   }
-
-  // end grouping data-gathering-profile
 }

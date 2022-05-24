@@ -34,15 +34,13 @@ module bbf-gbond-state {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on bonding of
@@ -55,7 +53,7 @@ module bbf-gbond-state {
      support Network Management Datastore Architecture (NMDA) as
      defined in RFC 8342.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -95,9 +93,19 @@ module bbf-gbond-state {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -168,15 +176,15 @@ module bbf-gbond-state {
         "State parameters associated with a G.bond bonding group.";
       container status {
         description
-          "Status objects associated with a bonding group.";
+          "Status data nodes associated with a bonding group.";
         leaf upstream-data-rate {
           type bbf-yang:data-rate32-or-undetermined;
           mandatory true;
           description
             "The current operating data rate of the Generic Bonded
-             Sub-layer (GBS) in the upstream direction, in kbits per
-             second. A special value, 'undetermined', is used when the
-             bonding group is not operational.
+             Sub-layer (GBS) in the upstream direction, in kilobits
+             per second. A special value, 'undetermined', is used when
+             the bonding group is not operational.
 
              For G.fast, the upstream data rate represents the sum of
              the Gamma Data Rates (GDR) of the G.fast lines associated
@@ -193,9 +201,9 @@ module bbf-gbond-state {
           mandatory true;
           description
             "The current operating data rate of the Generic Bonded
-             Sub-layer (GBS) in the downstream direction, in kbits per
-             second. A special value, 'undetermined', is used when the
-             bonding group is not operational.
+             Sub-layer (GBS) in the downstream direction, in kilobits
+             per second. A special value, 'undetermined', is used when
+             the bonding group is not operational.
 
              For G.fast, the downstream data rate represents the sum
              of the Gamma Data Rates (GDR) of the G.fast lines
@@ -270,7 +278,7 @@ module bbf-gbond-state {
                G.998.2.";
           }
           description
-            "Status specific to ITU-T G.998.2";
+            "Status specific to ITU-T G.998.2.";
           leaf operational-control-protocol {
             type identityref {
               base bbf-gbond:control-protocol;
@@ -321,7 +329,7 @@ module bbf-gbond-state {
                G.998.2.";
           }
           description
-            "Statistics specific to ITU-T G.998.2";
+            "Statistics specific to ITU-T G.998.2.";
           container gbs-c {
             description
               "Statistics associated with the Generic Bonded
@@ -402,7 +410,7 @@ module bbf-gbond-state {
               description
                 "A numbers of fragments, received across the gamma
                  interface and discarded, which would have caused the
-                 frame assembly buffer to overflow";
+                 frame assembly buffer to overflow.";
               reference
                 "TR-159 section 5.5.3.14, aEthRxOverflows.";
             }
@@ -437,10 +445,10 @@ module bbf-gbond-state {
              Channel Entity (BCE) in a Generic Bonded Sub-layer (GBS),
              if such a logical number is defined for the BCE.
 
-             This object maps to the Physical Medium Entity Identifier
-             (PME ID) variable of G.998.2 Amendment 2 or to the
-             aPairID attribute of G.998.3 or to the Tx link number of
-             G.998.1.";
+             This data node maps to the Physical Medium Entity
+             Identifier (PME ID) variable of G.998.2 Amendment 2 or to
+             the aPairID attribute of G.998.3 or to the Tx link number
+             of G.998.1.";
           reference
             "TR-159 section 5.5.7.2, aChannelGroupID.";
         }
@@ -473,7 +481,7 @@ module bbf-gbond-state {
                is capable of bonding using the G.998.2 bonding
                scheme.";
             description
-              "Capabilities specific to ITU-T G.998.2";
+              "Capabilities specific to ITU-T G.998.2.";
             leaf bacp-supported {
               type bbf-gbond:boolean-or-undefined;
               description
@@ -507,7 +515,7 @@ module bbf-gbond-state {
                is capable of bonding using the G.998.2 bonding
                scheme.";
             description
-              "Capabilities specific to ITU-T G.998.2";
+              "Capabilities specific to ITU-T G.998.2.";
             leaf bacp-supported {
               type bbf-gbond:boolean-or-undefined;
               description

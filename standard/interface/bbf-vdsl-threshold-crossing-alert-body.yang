@@ -13,22 +13,20 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of identities associated
      with the management of VDSL threshold crossing alerts.
      YANG data types and grouping definitions for the management
      of VDSL bearer channels.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -112,8 +120,6 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
                         TR-355_Amendment-1.pdf>";
   }
 
-  /********************* ABSTRACT IDENTITIES *********/
-
   identity vdsl-threshold-crossing-alert {
     description
       "Base identity for VDSL threshold crossing alerts (TCA).
@@ -146,15 +152,13 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
        threshold crossing alert.";
   }
 
-  /********** xTU-C 15-MIN CHANNEL NOTIFICATIONS **********/
-
   identity xtu-c-15min-channel-code-violations-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
-      "The number of channel code violations during the
-       current 15 minute interval has exceeded the configured xDSL
-       Transceiver Unit - Central office (xTU-C) threshold. This TCA
-       is optional.";
+      "The number of channel code violations during the current 15
+       minute interval has exceeded the configured xDSL Transceiver
+       Unit - Central office (xTU-C) threshold. This threshold
+       crossing alert is optional.";
   }
 
   identity xtu-c-15min-channel-forward-error-corrections-tca {
@@ -174,8 +178,6 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
        configured xDSL Transceiver Unit - Central office (xTU-C)
        threshold. This threshold crossing alert is optional.";
   }
-
-  /********** xTU-C 15-MIN LINE NOTIFICATIONS **********/
 
   identity xtu-c-15min-line-forward-error-correction-seconds-tca {
     base vdsl-15min-threshold-crossing-alert;
@@ -271,15 +273,13 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
        crossing alert is optional.";
   }
 
-  /********** xTU-R 15-MIN CHANNEL NOTIFICATIONS **********/
-
   identity xtu-r-15min-channel-code-violations-tca {
     base vdsl-15min-threshold-crossing-alert;
     description
       "The number of channel code violations during the
        current 15 minute interval has exceeded the configured xDSL
-       Transceiver Unit - Remote side (xTU-R) threshold. This TCA is
-       optional.";
+       Transceiver Unit - Remote side (xTU-R) threshold. This
+       threshold crossing alert is optional.";
   }
 
   identity xtu-r-15min-channel-forward-error-corrections-tca {
@@ -287,7 +287,8 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
     description
       "The number of forward-error-corrections during the current 15
        minute interval has exceeded the configured xDSL Transceiver
-       Unit - Remote side (xTU-R) threshold. This TCA is optional.";
+       Unit - Remote side (xTU-R) threshold. This threshold crossing
+       alert is optional.";
   }
 
   identity xtu-r-15min-channel-uncorrected-dtus-tca {
@@ -298,8 +299,6 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
        configured xDSL Transceiver Unit - Remote side (xTU-R)
        threshold. This threshold crossing alert is optional.";
   }
-
-  /********************* xTU-R 15-MIN LINE NOTIFICATIONS *********/
 
   identity xtu-r-15min-line-forward-error-correction-seconds-tca {
     base vdsl-15min-threshold-crossing-alert;
@@ -352,8 +351,6 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
        (xTU-R) threshold.";
   }
 
-  /********** xTU-C 24-HR CHANNEL NOTIFICATIONS **********/
-
   identity xtu-c-24hr-channel-code-violations-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
@@ -380,8 +377,6 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
        Unit - Central office (xTU-C) threshold. This threshold
        crossing alert is optional.";
   }
-
-  /********** xTU-C 24-HR LINE NOTIFICATIONS **********/
 
   identity xtu-c-24hr-line-forward-error-correction-seconds-tca {
     base vdsl-24hr-threshold-crossing-alert;
@@ -477,8 +472,6 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
        crossing alert is optional.";
   }
 
-  /********** xTU-R 24-HR CHANNEL NOTIFICATIONS **********/
-
   identity xtu-r-24hr-channel-code-violations-tca {
     base vdsl-24hr-threshold-crossing-alert;
     description
@@ -505,8 +498,6 @@ submodule bbf-vdsl-threshold-crossing-alert-body {
        xDSL Transceiver Unit - Remote side (xTU-R) threshold. This
        threshold crossing alert is optional.";
   }
-
-  /********** xTU-R 24-HR LINE NOTIFICATIONS **********/
 
   identity xtu-r-24hr-line-forward-error-correction-seconds-tca {
     base vdsl-24hr-threshold-crossing-alert;

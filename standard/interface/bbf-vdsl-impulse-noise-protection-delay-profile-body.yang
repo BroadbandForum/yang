@@ -13,21 +13,19 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 5.7 DSL Quality
      Management related profiles; INP-Delay Profile.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -67,9 +65,19 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -150,61 +158,57 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
       type boolean;
       default "false";
       description
-        "If retransmission is not used in a given transmit
-         direction, this parameter indicates that the framer
-         settings of the bearer will be selected such that the
-         impulse noise protection computed according to the
-         formula specified in the relevant Recommendation is
-         greater than or equal to the minimal impulse noise
-         protection requirement.
+        "If retransmission is not used in a given transmit direction,
+         this parameter indicates that the framer settings of the
+         bearer will be selected such that the Impulse Noise
+         Protection (INP) computed according to the formula specified
+         in the relevant Recommendation is greater than or equal to
+         the minimal impulse noise protection requirement.
          This flag will have the same value for all the bearers
          of one line in the same direction.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.5 Force framer setting for
-         impulse noise protection (FORCEINP)";
+        "ITU-T G.997.1 clause 7.3.2.5 (FORCEINP)";
     }
     leaf minimum-inp {
       type uint8 {
         range "0..2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 | 18
-               | 20 | 22 | 24 | 26 | 28 | 30 | 32";
+               | 20 | 22 | 24 | 26 | 28 | 30 | 32" {
+          description
+            "Defines a range of 0, 0.5 and 1 to 16 symbols.";
+        }
       }
-      units "0.5 DMT symbols";
+      units "0.5 symbols";
       default "0";
       description
-        "If retransmission is not used in a given transmit
-         direction, this parameter specifies the minimum impulse
-         noise protection (INPMIN) for the bearer channel if it is
-         transported over DMT symbols with a subcarrier spacing
-         of 4.3125 kHz. The impulse noise protection is expressed
-         in Discrete Multi-Tone (DMT) symbols with a subcarrier
-         spacing of 4.3125 kHz and can take the values and any integer
-         from 0 to 16, inclusive.
+        "If retransmission is not used in a given transmit direction,
+         this parameter specifies the minimum Impulse Noise Protection
+         (INPMIN) for the bearer channel if it is transported over DMT
+         symbols with a subcarrier spacing of 4.3125 kHz. The impulse
+         noise protection is expressed in Discrete Multi-Tone (DMT)
+         symbols with a subcarrier spacing of 4.3125 kHz and can take
+         the values and any integer from 0 to 16, inclusive.
          If the xDSL Transceiver Unit (xTU) does not support the
          configured INPMIN value, it will use the nearest supported
          impulse noise protection greater than INPMIN.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.3 Minimum impulse noise
-         protection (INPMIN)";
+        "ITU-T G.997.1 clause 7.3.2.3 (INPMIN)";
     }
     leaf minimum-inp-8 {
       type uint8 {
         range "0..16";
       }
-      units "DMT symbols";
+      units "symbols";
       default "0";
       description
-        "If retransmission is not used in a given transmit
-         direction, this parameter specifies the minimum impulse
-         noise protection for the bearer channel if it is
-         transported over Discrete Multi-Tone (DMT) symbols with a
-         subcarrier spacing of 8.625 kHz. The impulse noise protection
-         is expressed in DMT symbols with a subcarrier spacing of
-         8.625 kHz and can take any integer value from 0 to 16,
-         inclusive.";
+        "If retransmission is not used in a given transmit direction,
+         this parameter specifies the minimum Impulse Noise Protection
+         (INP) for the bearer channel if it is transported over
+         Discrete Multi-Tone (DMT) symbols with a subcarrier spacing
+         of 8.625 kHz. The impulse noise protection is expressed in
+         DMT symbols with a subcarrier spacing of 8.625 kHz and can
+         take any integer value from 0 to 16, inclusive.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.4 Minimum impulse noise
-         protection for system using 8.625 kHz subcarrier spacing
-         (INPMIN8)";
+        "ITU-T G.997.1 clause 7.3.2.4 (INPMIN8)";
     }
     leaf maximum-interleaving-delay {
       type union {
@@ -228,54 +232,53 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
           }
           enum S2 {
             description
-              "The value S2 indicates a delay bound of 1 ms in
-               [ITU-T G.993.2].";
+              "The value S2 indicates a delay bound of 1 millisecond
+               in [ITU-T G.993.2].";
           }
         }
       }
-      units "millisecond";
+      units "milliseconds";
       default "16";
       description
-        "If retransmission is not used in a given transmit
-         direction, this parameter is the maximum one-way
-         interleaving delay introduced by the Physical Media Specific
-         Transmission Convergence (PMS-TC) between the alpha and the
-         beta reference points, in the direction of the bearer
-         channel. The one-way interleaving delay is defined in
-         individual ADSL Recommendations as Roundup(S*D) /4 ms, where
-         S is the S-factor and D is the Interleaving Depth and
-         Roundup(x) denotes rounding to the higher integer.
-         The xDSL Transceiver Units (xTU) will choose the S and D
-         values such that the actual one-way interleaving delay (see
-         actual interleaving delay status parameter in clause 7.5.2.3)
-         is less than or equal to the configured maximum
-         interleaving delay.";
+        "If retransmission is not used in a given transmit direction,
+         this parameter is the maximum one-way interleaving delay
+         introduced by the Physical Media Specific Transmission
+         Convergence (PMS-TC) between the alpha and the beta reference
+         points, in the direction of the bearer channel. The one-way
+         interleaving delay is defined in individual ADSL
+         Recommendations as Roundup(S*D) /4 milliseconds, where S is
+         the S-factor and D is the Interleaving Depth and Roundup(x)
+         denotes rounding to the higher integer. The xDSL Transceiver
+         Units (xTU) will choose the S and D values such that the
+         actual one-way interleaving delay is less than or equal to
+         the configured maximum interleaving delay.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.2 Maximum interleaving
-         delay";
+        "ITU-T G.997.1 clauses 7.3.2.2 and 7.5.2.3";
     }
     leaf maximum-delay-rtx {
       type uint8 {
         range "1..63";
       }
-      units "millisecond";
+      units "milliseconds";
       default "16";
       description
         "If retransmission is used in a given transmit direction,
-         this parameter specifies the maximum for the
-         instantaneous delay due to the effect of retransmission
-         only (see [ITU-T G.998.4] for detailed specification).
-         The delay ranges from 1 to 63 ms by steps of 1 ms.";
+         this parameter specifies the maximum for the instantaneous
+         delay due to the effect of retransmission only. The delay
+         ranges from 1 to 63 milliseconds by steps of 1 milisecond.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.11 Maximum delay for
-         retransmission (DELAYMAX_RTX)";
+        "ITU-T G.997.1 clause 7.3.2.11 (DELAYMAX_RTX);
+         ITU-T G.998.4";
     }
     leaf minimum-delay-rtx {
       type uint8 {
         range "0..62";
       }
-      units "millisecond";
+      units "milliseconds";
       must '. < ../maximum-delay-rtx' {
+        error-message
+          "'minimum-delay-rtx' is greater than or equal to "
+        + "'maximum-delay-rtx'.";
         description
           "The minimum delay must be less than the maximum delay for
            retransmission.";
@@ -283,40 +286,36 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
       default "0";
       description
         "If retransmission is used in a given transmit direction,
-         this parameter specifies the minimum for the
-         instantaneous delay due to the effect of retransmission
-         only (see [ITU-T G.998.4] for detailed specification).
-         The delay ranges from 0 to 62 ms by steps of 1 ms.";
+         this parameter specifies the minimum for the instantaneous
+         delay due to the effect of retransmission only. The delay
+         ranges from 0 to 62 milliseconds by steps of 1 millisecond.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.12 Minimum delay for
-         retransmission (DELAYMIN_RTX)";
+        "ITU-T G.997.1 clause 7.3.2.12 (DELAYMIN_RTX);
+         ITU-T G.998.4";
     }
     leaf minimum-inp-against-shine-rtx {
       type uint8 {
         range "0..63";
       }
-      units "DMT symbols";
+      units "symbols";
       default "0";
       description
         "If retransmission is used in a given transmit direction,
-         this parameter specifies the minimum impulse noise
-         protection against Single High Impulse Noise Event (SHINE)
-         for the bearer channel if it is transported over Discrete
-         Multi-Tone (DMT) symbols with a subcarrier spacing of
-         4.3125 kHz. The impulse noise protection is expressed
-         in DMT symbols with a subcarrier spacing of 4.3125 kHz
-         and can take any integer value from 0 to 63,
-         inclusive.";
+         this parameter specifies the minimum Impulse Noise
+         Protection (INP) against Single High Impulse Noise Event
+         (SHINE) for the bearer channel if it is transported over
+         Discrete Multi-Tone (DMT) symbols with a subcarrier spacing
+         of 4.3125 kHz. The impulse noise protection is expressed in
+         DMT symbols with a subcarrier spacing of 4.3125 kHz and can
+         take any integer value from 0 to 63, inclusive.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.13 Minimum impulse noise
-         protection against SHINE for retransmission
-         (INPMIN_SHINE_RTX)";
+        "ITU-T G.997.1 clause 7.3.2.13 (INPMIN_SHINE_RTX)";
     }
     leaf minimum-inp-against-shine-8-rtx {
       type uint8 {
         range "0..127";
       }
-      units "DMT symbols";
+      units "symbols";
       default "0";
       description
         "If retransmission is used in a given transmit direction,
@@ -329,97 +328,94 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
          and can take any integer value from 0 to 127,
          inclusive.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.14 Minimum impulse noise
-         protection against SHINE for retransmission for systems
-         using 8.625 kHz subcarrier spacing (INPMIN8_SHINE_RTX)";
+        "ITU-T G.997.1 clause 7.3.2.14 (INPMIN8_SHINE_RTX)";
     }
     leaf shine-ratio-rtx {
       type uint8 {
-        range "0..100";
+        range "0..100" {
+          description
+            "Defines a range from 0.000 to 0.100.";
+        }
       }
       units "0.001";
       default "0";
       description
         "If retransmission is used in a given transmit direction,
          this parameter specifies the Single High Impulse Noise Event
-         (SHINE) ratio (see [ITU-T G.998.4] for detailed definition).
-         The values range from 0 to 0.100 in increments of 0.001.";
+         (SHINE) ratio. The values range from 0 to 0.100 in increments
+         of 0.001.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.15 SHINERATIO_RTX";
+        "ITU-T G.997.1 clause 7.3.2.15 (SHINERATIO_RTX);
+         ITU-T G.998.4";
     }
     leaf minimum-inp-against-rein-rtx {
       type uint8 {
         range "0..7";
       }
-      units "DMT symbols";
+      units "symbols";
       default "0";
       description
         "If retransmission is used in a given transmit direction,
          this parameter specifies the minimum impulse noise
          protection against Repetitive Electrical Impulse Noise (REIN)
          for the bearer channel if it is transported over Discrete
-         Multi-Tone (DMT) symbols with a subcarrier spacing
-         of 4.3125 kHz. The impulse noise protection is expressed
-         in DMT symbols with a subcarrier spacing of 4.3125 kHz
-         and can take any integer value from 0 to 7, inclusive.";
+         Multi-Tone (DMT) symbols with a subcarrier spacing of 4.3125
+         kHz. The impulse noise protection is expressed in DMT symbols
+         with a subcarrier spacing of 4.3125 kHz and can take any
+         integer value from 0 to 7, inclusive.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.16 Minimum impulse noise
-         protection against REIN for retransmission
-         (INPMIN_REIN_RTX)";
+        "ITU-T G.997.1 clause 7.3.2.16 (INPMIN_REIN_RTX)";
     }
     leaf minimum-inp-against-rein-8-rtx {
       type uint8 {
         range "0..13";
       }
-      units "DMT symbols";
+      units "symbols";
       default "0";
       description
         "If retransmission is used in a given transmit direction,
          this parameter specifies the minimum impulse noise
          protection against Repetitive Electrical Impulse Noise (REIN)
          for the bearer channel if it is transported over Discrete
-         Multi-Tone (DMT) symbols with a subcarrier spacing
-         of 8.625 kHz. The impulse noise protection is expressed
-         in DMT symbols with a subcarrier spacing of 8.625 kHz
-         and can take any integer value from 0 to 13,
-         inclusive.";
+         Multi-Tone (DMT) symbols with a subcarrier spacing of 8.625
+         kHz. The impulse noise protection is expressed in DMT symbols
+         with a subcarrier spacing of 8.625 kHz and can take any
+         integer value from 0 to 13, inclusive.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.17 Minimum impulse noise
-         protection against REIN for retransmission for systems
-         using 8.625 kHz subcarrier spacing (INPMIN8_REIN_RTX)";
+        "ITU-T G.997.1 clause 7.3.2.17 (INPMIN8_REIN_RTX)";
     }
     leaf rein-inter-arrival-time-rtx {
       type enumeration {
         enum 0 {
           description
-            "The value 0 indicates an inter-arrival time derived
-             from Repetitive Electrical Impulse Noise (REIN) at
-             100 Hz.";
+            "The value 0 indicates an inter-arrival time derived from
+             Repetitive Electrical Impulse Noise (REIN) at 100 Hz.";
         }
         enum 1 {
           description
-            "The value 1 indicates an inter-arrival time derived
-             from Repetitive Electrical Impulse Noise (REIN) at
-             120 Hz.";
+            "The value 1 indicates an inter-arrival time derived from
+             Repetitive Electrical Impulse Noise (REIN) at 120 Hz.";
         }
       }
       default "0";
       description
-        "If retransmission is used in a given transmit direction,
-         this parameter specifies the inter-arrival time that is
-         assumed for Repetitive Electrical Impulse Noise (REIN)
-         protection. The value 0 indicates an inter-arrival time
-         derived from a REIN at 100 Hz. The value 1 indicates an
-         inter-arrival time derived from a REIN at 120 Hz. The default
-         is enum 0, corresponding to 100 Hz.";
+        "If retransmission is used in a given transmit direction, this
+         parameter specifies the inter-arrival time that is assumed
+         for Repetitive Electrical Impulse Noise (REIN) protection.
+         The value 0 indicates an inter-arrival time derived from a
+         REIN at 100 Hz. The value 1 indicates an inter-arrival time
+         derived from a REIN at 120 Hz. The default is enum 0,
+         corresponding to 100 Hz.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.18 REIN inter-arrival time
-         for retransmission (IAT_REIN_RTX)";
+        "ITU-T G.997.1 clause 7.3.2.18 (IAT_REIN_RTX)";
     }
     leaf maximum-delay-variation {
       type union {
         type uint8 {
-          range "1..254";
+          range "1..254" {
+            description
+              "Defines a range from 0.1 to 25.4 milliseconds.";
+          }
         }
         type enumeration {
           enum unbounded {
@@ -428,17 +424,16 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
           }
         }
       }
-      units "0.1 millisecond";
+      units "0.1 milliseconds";
       default "unbounded";
       description
         "This parameter specifies the maximum value for the delay
          variation allowed in an On-Line Reconfiguration (OLR)
-         procedure. It ranges from 0.1 to 25.4 in steps of 0.1 ms. A
-         special value (enum unbounded) indicates that no delay
-         variation bound is imposed.";
+         procedure. It ranges from 0.1 to 25.4 in steps of 0.1
+         milliseconds. A special value (enum unbounded) indicates that
+         no delay variation bound is imposed.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.9 Maximum delay variation
-         (DVMAX)";
+        "ITU-T G.997.1 clause 7.3.2.9 (DVMAX)";
     }
     leaf channel-initialization-policy {
       type enumeration {
@@ -457,21 +452,18 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
       }
       default "0";
       description
-        "If retransmission is not used in a given transmit
-         direction, this parameter indicates which policy will be
-         applied to determine the transceiver configuration
-         parameters at initialization. The valid values for
-         Channel Initialization Policy (CIPOLICY) are 0, 1 and 2.
-         They are defined in the respective Recommendations. The
-         default is enum 0, corresponding to CIpolicy=0.";
+        "If retransmission is not used in a given transmit direction,
+         this parameter indicates which policy will be applied to
+         determine the transceiver configuration parameters at
+         initialization. The valid values for Channel Initialization
+         Policy (CIPOLICY) are 0, 1 and 2. They are defined in the
+         respective Recommendations. The default is enum 0,
+         corresponding to CIpolicy=0.";
       reference
-        "ITU-T G.997.1 clause 7.3.2.10 Channel initialization
-         policy selection (CIPOLICY) and ITU-T G.993.2
-         clause 12.3.7 Channel initialization policies.";
+        "ITU-T G.997.1 clause 7.3.2.10 (CIPOLICY); ITU-T G.993.2
+         clause 12.3.7";
     }
   }
-
-  // end grouping impulse-noise-protection-delay-profile
 
   grouping impulse-noise-protection-delay-profile-downstream {
     description
@@ -495,29 +487,27 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
       default "vendor-discretionary";
       description
         "The line configuration parameter MAXDELAYOCTET-split
-         (MDOSPLIT) defines the percentage of the
-         MAXDELAYOCTET_ext if operating in G.998.4 or
-         MAXDELAYOCTET in other cases allocated to the downstream
-         direction. All of the remaining MAXDELAYOCTET or
-         MAXDELAYOCTET_ext will be allocated for use in the
-         upstream direction. The detailed specification is in
-         ITU-T G.993.2 and G.998.4.
-         MDOSPLIT will be expressed as a percentage, with valid
-         range from 5 percent to 95 percent inclusive, in steps
-         of 1 percent. The value 0% is valid only if the maximum
-         downstream interleaving delay is configured with the
-         special value S1 (see clause 7.3.2.2/G.997.1) and
-         retransmission is disabled in the downstream direction.
-         The value 100% is valid only if the maximum upstream
-         interleaving delay is configured with the special value
-         S1 (see clause 7.3.2.2 of ITU-T G.997.1) and
-         retransmission is disabled in the upstream direction.
-         A special value (enum vendor-discretionary) indicates
-         that the VDSL Transceiver Unit - central Office (VTU-O) is
-         allowed to use a vendor discretionary algorithm.";
+         (MDOSPLIT) defines the percentage of the MAXDELAYOCTET_ext if
+         operating in G.998.4 or MAXDELAYOCTET in other cases
+         allocated to the downstream direction. All of the remaining
+         MAXDELAYOCTET or MAXDELAYOCTET_ext will be allocated for use
+         in the upstream direction. The detailed specification is in
+         ITU-T G.993.2 and G.998.4. MDOSPLIT will be expressed as a
+         percentage, with valid range from 5 percent to 95 percent
+         inclusive, in steps of 1 percent. The value 0% is valid only
+         if the maximum downstream interleaving delay is configured
+         with the special value S1 and retransmission is disabled in
+         the downstream direction. The value 100% is valid only if the
+         maximum upstream interleaving delay is configured with the
+         special value S1 and retransmission is disabled in the
+         upstream direction. A special value (enum
+         vendor-discretionary) indicates that the VDSL Transceiver
+         Unit - central Office (VTU-O) is allowed to use a vendor
+         discretionary algorithm.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.14 MAXDELAYOCTET-split
-         parameter (MDOSPLIT)";
+        "ITU-T G.997.1 clauses 7.3.2.2 and 7.3.1.14 (MDOSPLIT);
+         ITU-T G.993.2;
+         ITU-T G.998.4";
     }
     leaf attndr-method {
       type enumeration {
@@ -539,12 +529,11 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
         "This downstream parameter specifies the method to be used for
          the calculation of the Attainable Net Data Rate (ATTNDR) in
          the downstream and upstream direction. The parameter can take
-         three values 0, 1 and 2. For detailed definition see ITU-T
-         G.993.2 clause 11.4.1.1.7. The default is enum 0,
-         corresponding to the basic method.";
+         three values 0, 1 and 2. The default is enum 0, corresponding
+         to the basic method.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.15.1 ATTNDR Method
-         (ATTNDR_METHOD)";
+        "ITU-T G.997.1 clause 7.3.1.15.1 (ATTNDR_METHOD);
+         ITU-T G.993.2 clause 11.4.1.1.7";
     }
     leaf attndr-mdosplit {
       type union {
@@ -578,8 +567,9 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
          Transceiver Unit - central Office (VTU-O) is allowed to use a
          vendor discretionary algorithm.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.15.2 ATTNDR
-         MAXDELAYOCTET-split parameter (ATTNDR_MDOSPLIT)";
+        "ITU-T G.997.1 clause 7.3.1.15.2 (ATTNDR_MDOSPLIT);
+         ITU-T G.993.2;
+         ITU-T G.998.4";
     }
   }
 
@@ -612,29 +602,27 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
          node has been deprecated.
 
          The line configuration parameter MAXDELAYOCTET-split
-         (MDOSPLIT) defines the percentage of the
-         MAXDELAYOCTET_ext if operating in G.998.4 or
-         MAXDELAYOCTET in other cases allocated to the downstream
-         direction. All of the remaining MAXDELAYOCTET or
-         MAXDELAYOCTET_ext will be allocated for use in the
-         upstream direction. The detailed specification is in
-         ITU-T G.993.2 and G.998.4.
-         MDOSPLIT will be expressed as a percentage, with valid
-         range from 5 percent to 95 percent inclusive, in steps
-         of 1 percent. The value 0% is valid only if the maximum
-         downstream interleaving delay is configured with the
-         special value S1 (see clause 7.3.2.2/G.997.1) and
-         retransmission is disabled in the downstream direction.
-         The value 100% is valid only if the maximum upstream
-         interleaving delay is configured with the special value
-         S1 (see clause 7.3.2.2 of ITU-T G.997.1) and
-         retransmission is disabled in the upstream direction.
-         A special value (enum vendor-discretionary) indicates
-         that the VDSL Transceiver Unit - central Office (VTU-O) is
-         allowed to use a vendor discretionary algorithm.";
+         (MDOSPLIT) defines the percentage of the MAXDELAYOCTET_ext
+         if operating in G.998.4 or MAXDELAYOCTET in other cases
+         allocated to the downstream direction. All of the remaining
+         MAXDELAYOCTET or MAXDELAYOCTET_ext will be allocated for use
+         in the upstream direction. The detailed specification is in
+         ITU-T G.993.2 and G.998.4. MDOSPLIT will be expressed as a
+         percentage, with valid range from 5 percent to 95 percent
+         inclusive, in steps of 1 percent. The value 0% is valid only
+         if the maximum downstream interleaving delay is configured
+         with the special value S1 and retransmission is disabled in
+         the downstream direction. The value 100% is valid only if the
+         maximum upstream interleaving delay is configured with the
+         special value S1 and retransmission is disabled in the
+         upstream direction. A special value (enum
+         vendor-discretionary) indicates that the VDSL Transceiver
+         Unit - central Office (VTU-O) is allowed to use a vendor
+         discretionary algorithm.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.14 MAXDELAYOCTET-split
-         parameter (MDOSPLIT)";
+        "ITU-T G.997.1 clauses 7.3.2.2 and 7.3.1.14 (MDOSPLIT);
+         ITU-T G.993.2;
+         ITU-T G.998.4";
     }
     leaf attndr-method {
       type enumeration {
@@ -662,12 +650,11 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
          This downstream parameter specifies the method to be used for
          the calculation of the Attainable Net Data Rate (ATTNDR) in
          the downstream and upstream direction. The parameter can take
-         three values 0, 1 and 2. For detailed definition see ITU-T
-         G.993.2 clause 11.4.1.1.7. The default is enum 0,
-         corresponding to the basic method.";
+         three values 0, 1 and 2. The default is enum 0, corresponding
+         to the basic method.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.15.1 ATTNDR Method
-         (ATTNDR_METHOD)";
+        "ITU-T G.997.1 clause 7.3.1.15.1 (ATTNDR_METHOD);
+         ITU-T G.993.2 clause 11.4.1.1.7";
     }
     leaf attndr-mdosplit {
       type union {
@@ -705,8 +692,9 @@ submodule bbf-vdsl-impulse-noise-protection-delay-profile-body {
          the VDSL Transceiver Unit - central Office (VTU-O) is allowed
          to use a vendor discretionary algorithm.";
       reference
-        "ITU-T G.997.1 clause 7.3.1.15.2 ATTNDR
-         MAXDELAYOCTET-split parameter (ATTNDR_MDOSPLIT)";
+        "ITU-T G.997.1 clause 7.3.1.15.2 (ATTNDR_MDOSPLIT);
+         ITU-T G.993.2;
+         ITU-T G.998.4";
     }
   }
 }

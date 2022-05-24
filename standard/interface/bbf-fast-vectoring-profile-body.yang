@@ -15,20 +15,18 @@ submodule bbf-fast-vectoring-profile-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing vectoring profiles.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ submodule bbf-fast-vectoring-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -137,7 +145,7 @@ submodule bbf-fast-vectoring-profile-body {
       "Vectoring configuration parameters applicable to both
        upstream and downstream.";
     reference
-      "ITU-T G.997.2 clause 7.1.7.";
+      "ITU-T G.997.2 clause 7.1.7";
     leaf fext-to-cancel-enable {
       type boolean;
       default "true";
@@ -146,12 +154,12 @@ submodule bbf-fast-vectoring-profile-body {
          given direction from all the other vectored lines into the
          line in the vectored group is enabled or disabled.";
       reference
-        "ITU-T G.997.2 clause 7.1.7.1 (FEXT_TO_CANCEL_ENABLEds) and
-         clause 7.1.7.2 (FEXT_TO_CANCEL_ENABLEus); ITU-T G.9701
-         clause 11.4.3.1.";
+        "ITU-T G.997.2 clauses 7.1.7.1 (FEXT_TO_CANCEL_ENABLEds) and
+         7.1.7.2 (FEXT_TO_CANCEL_ENABLEus);
+         ITU-T G.9701 clause 11.4.3.1";
     }
     leaf tgvn-allowed {
-      if-feature "tgvn";
+      if-feature "bbf-fast:tgvn";
       type boolean;
       default "false";
       description
@@ -168,19 +176,19 @@ submodule bbf-fast-vectoring-profile-body {
       "Vectoring configuration parameters applicable in the
        downstream direction.";
     reference
-      "ITU-T G.997.2 clause 7.1.7.";
+      "ITU-T G.997.2 clause 7.1.7";
     leaf xlog-group-size-req {
       type uint8 {
         range "1 | 2 | 4 | 8 | 16 | 32 | 64";
       }
-      units "1 sub-carrier";
+      units "sub-carriers";
       default "1";
       description
         "This parameter is the requested lower bound on the value of
          XLOGGds in the reporting of Xlogpsds.";
       reference
-        "ITU-T G.997.2 clause 7.1.7.3 (XLOGGREQds); ITU-T G.9701
-         clause 11.4.3.2";
+        "ITU-T G.997.2 clause 7.1.7.3 (XLOGGREQds);
+         ITU-T G.9701 clause 11.4.3.2";
     }
   }
 
@@ -219,14 +227,15 @@ submodule bbf-fast-vectoring-profile-body {
       }
       default "forbidden";
       description
-        " Determines whether Annex X operation of
-          [ITU-T G.9701] is enabled.
+        "Determines whether Annex X operation of ITU-T G.9701 is
+         enabled.
 
-          If 'annex-x-mode' is configured to 'preferred' or 'forced',
-          then 'annex-d-mode', if supported, must be configured to
-          'forbidden'.";
+         If 'annex-x-mode' is configured to 'preferred' or 'forced',
+         then 'annex-d-mode', if supported, must be configured to
+         'forbidden'.";
       reference
-        "ITU-T G.9701 clause X.6.7.1 and T.2.1.";
+        "ITU-T G.997.2 clause T.2.1.1 (ANNEX_X_MODE);
+         ITU-T G.9701 clauses X.6.7.1 and T.2.1";
     }
     leaf annex-d-mode {
       if-feature "bbf-fast:annex-d";
@@ -249,20 +258,24 @@ submodule bbf-fast-vectoring-profile-body {
       }
       must "(not(boolean(../annex-x-mode))) or "
          + "(../annex-x-mode = 'forbidden' or . = 'forbidden')" {
+        error-message
+          "Neither 'annex-x-mode' nor 'annex-d-mode' is configured "
+        + "to 'forbidden'.";
         description
-          "At least one of annex X mode or annex D mode must be
+          "At least one of Annex X mode or Annex D mode must be
            configured to 'forbidden'.";
       }
       default "forbidden";
       description
-        "Determines whether Annex D operation of
-         [ITU-T G.9701] is enabled.
+        "Determines whether Annex D operation of ITU-T G.9701 is
+         enabled.
 
          If 'annex-d-mode' is configured to 'preferred' or 'forced',
          then 'annex-x-mode', if supported, must be configured to
          'forbidden'.";
       reference
-        "ITU-T G.9701 clause D.5.7.1 and T.2.1.1.";
+        "ITU-T G.997.2 clause T.2.1.2 (ANNEX_D_MODE);
+         ITU-T G.9701 clauses D.5.7.1 and T.2.1.1";
     }
   }
 }

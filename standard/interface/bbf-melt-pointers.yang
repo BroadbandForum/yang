@@ -8,13 +8,7 @@ submodule bbf-melt-pointers {
     prefix if;
   }
   include bbf-melt-base;
-
-  /* PMD Control Definitions */
-
   include bbf-melt-pmd-control-body;
-
-  /* Profile Definitions */
-
   include bbf-melt-pmd-profiles;
   include bbf-melt-processing-profiles;
 
@@ -27,21 +21,19 @@ submodule bbf-melt-pointers {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing profiles for Metaliic Line Test (MELT) on supported
      interfaces.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +73,19 @@ submodule bbf-melt-pointers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -160,9 +162,11 @@ submodule bbf-melt-pointers {
       }
     }
     choice profile-config {
-      default "no-profiles-attached";
       description
-        "Provides methods attachment of profiles.";
+        "The method for configuring profiles used for a Metallic Line
+         Test (MELT) on this interface. If no method is configured,
+         the default behavior is equivalent to the presence of
+         'no-profiles-attached'.";
       case no-profiles-attached {
         leaf no-profiles-attached {
           type empty;

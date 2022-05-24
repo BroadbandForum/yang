@@ -21,21 +21,19 @@ submodule bbf-vdsl-xtu-channel-performance-body {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing Broadband Forum TR-252i3 clause 7.2 xDSL Transceiver
      Unit (xTU) Channel Performance.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -75,9 +73,19 @@ submodule bbf-vdsl-xtu-channel-performance-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -132,24 +140,25 @@ submodule bbf-vdsl-xtu-channel-performance-body {
   grouping xtu-channel-performance-c {
     description
       "The xDSL Transceiver Unit (xTU) Channel (near-end) performance
-       object represents channel performance related data for a
+       parameters represent channel performance related data for a
        particular channel associated with a particular xDSL
        Transceiver Unit - Central office (xTU-C).";
     leaf measured-time {
       type uint32;
+      units "seconds";
       description
-        "Reports the amount of time, measured in seconds,
-         that statistics for this interval have been counted.";
+        "Reports the amount of time, measured in seconds, that
+         statistics for this interval have been counted.";
       reference
-        "ITU-T G.997.2 clause 7.7.1 and 7.8.1.";
+        "ITU-T G.997.2 clauses 7.7.1 and 7.8.1";
     }
     leaf invalid-data-flag {
       type boolean;
       description
-        "Reports the validity of the corresponding
-         performance monitoring data.  true = invalid.";
+        "Reports the validity of the corresponding performance
+         monitoring data.  true = invalid.";
       reference
-        "ITU-T G.997.2 clause 7.7.2 and 7.8.2.";
+        "ITU-T G.997.2 clauses 7.7.2 and 7.8.2";
     }
     leaf code-violations-c {
       type bbf-yang:performance-counter32;
@@ -160,8 +169,7 @@ submodule bbf-vdsl-xtu-channel-performance-body {
          is subject to inhibiting - see ITU-T G.997.1 clause
          7.2.7.13.";
       reference
-        "ITU-T G.997.1 clause 7.2.2.1.1 Code violation - Channel
-         (CV-C)";
+        "ITU-T G.997.1 clause 7.2.2.1.1 (CV-C)";
     }
     leaf forward-error-corrections-c {
       type bbf-yang:performance-counter32;
@@ -169,87 +177,104 @@ submodule bbf-vdsl-xtu-channel-performance-body {
         "This parameter is a count of Forward Error Correction (FEC)
          anomalies (the number of corrected code words) occurring in
          the bearer channel during the accumulation period. This
-         parameter is subject to inhibiting - see ITU-T G.997.1 clause
-         7.2.7.13.";
+         parameter is subject to inhibiting.";
       reference
-        "ITU-T G.997.1 clause 7.2.2.1.2 Forward error correction
-         - Channel (FEC-C)";
+        "ITU-T G.997.1 clauses 7.2.2.1.2 (FEC-C) and 7.2.7.13";
     }
     leaf uncorrected-dtu-c {
       type bbf-yang:performance-counter32;
       description
-        "This parameter is a count of rtx-uc anomalies
-         (the number of uncorrected Data Transfer Units (DTU))
-         occurring in the bearer channel during the accumulation
-         period. This parameter only applies to systems supporting
-         ITU-T G.998.4. This parameter is subject to inhibiting -
-         see ITU-T G.997.1 clause 7.2.7.13.";
+        "This parameter is a count of rtx-uc anomalies (the number of
+         uncorrected Data Transfer Units (DTU)) occurring in the
+         bearer channel during the accumulation period. This parameter
+         only applies to systems supporting ITU-T G.998.4. This
+         parameter is subject to inhibiting.";
       reference
-        "ITU-T G.997.1 clause 7.2.2.1.3 Uncorrected DTU - Channel
-         (RTXUC-C).";
+        "ITU-T G.997.1 clauses 7.2.2.1.3 (RTXUC-C) and 7.2.7.13;
+         ITU-T G.998.4 clause 12";
+    }
+    leaf retransmitted-dtu-c {
+      type bbf-yang:performance-counter32;
+      description
+        "This parameter is a count of rtx-tx anomalies (the number of
+         retransmitted Data Transfer Units (DTU)) occurring in the
+         bearer channel during the accumulation period. This parameter
+         only applies to systems supporting ITU-T G.998.4. This
+         parameter is subject to inhibiting.";
+      reference
+        "ITU-T G.997.1 clauses 7.2.2.1.4 (RTXTX-C) and 7.2.7.13;
+         ITU-T G.998.4 clause 12";
     }
   }
 
   grouping xtu-channel-performance-cfe {
     description
       "The xDSL Transceiver Unit (xTU) Channel far-end performance
-       object represents channel performance related data for a
+       parameters represent channel performance related data for a
        particular channel associated with a particular xDSL
        Transceiver Unit - Remote side (xTU-R).";
     leaf measured-time {
       type uint32;
+      units "seconds";
       description
-        "Reports the amount of time, measured in seconds,
-         that statistics for this interval have been counted.";
+        "Reports the amount of time, measured in seconds, that
+         statistics for this interval have been counted.";
       reference
-        "ITU-T G.997.2 clause 7.7.1 and 7.8.1.";
+        "ITU-T G.997.2 clauses 7.7.1 and 7.8.1";
     }
     leaf invalid-data-flag {
       type boolean;
       description
-        "Reports the validity of the corresponding
-         performance monitoring data.  true = invalid.";
+        "Reports the validity of the corresponding performance
+         monitoring data.  true = invalid.";
       reference
-        "ITU-T G.997.2 clause 7.7.2 and 7.8.2.";
+        "ITU-T G.997.2 clauses 7.7.2 and 7.8.2";
     }
     leaf code-violations-cfe {
       type bbf-yang:performance-counter32;
       description
         "This parameter is a count of Far-End Block Error (FEBE)
          anomalies occurring in the bearer channel during the
-         accumulation period. This parameter is subject to inhibiting
-         - see ITU-T G997.1 clause 7.2.7.13.";
+         accumulation period. This parameter is subject to
+         inhibiting.";
       reference
-        "ITU-T G.997.1 clause 7.2.2.2.1 Code violation - Channel
-         far-end (CV-CFE)";
+        "ITU-T G.997.1 clauses 7.2.2.2.1 (CV-CFE) and 7.2.7.13";
     }
     leaf forward-error-corrections-cfe {
       type bbf-yang:performance-counter32;
       description
         "This parameter is a count of Far-End Forward Error Correction
          (FFEC) anomalies occurring in the bearer channel during the
-         accumulation period. This parameter is subject to inhibiting
-         - see ITU-T G997.1 clause 7.2.7.13.";
+         accumulation period. This parameter is subject to
+         inhibiting.";
       reference
-        "ITU-T G.997.1 clause 7.2.2.2.2 Forward error correction
-         - Channel far-end (FEC-CFE)";
+        "ITU-T G.997.1 clauses 7.2.2.2.2 (FEC-CFE) and 7.2.7.13";
     }
     leaf uncorrected-dtu-cfe {
       type bbf-yang:performance-counter32;
       description
-        "This parameter is a count of far-end rtx-uc anomalies
-         (the number of uncorrected Data Transfer Units (DTU))
-         occurring in the bearer channel during the accumulation
-         period. This parameter only applies to systems supporting
-         ITU-T G.998.4. This parameter is subject to inhibiting -
-         see ITU-T G.997.1 clause 7.2.7.13.";
+        "This parameter is a count of far-end rtx-uc anomalies (the
+         number of uncorrected Data Transfer Units (DTU)) occurring in
+         the bearer channel during the accumulation period. This
+         parameter only applies to systems supporting ITU-T G.998.4.
+         This parameter is subject to inhibiting.";
       reference
-        "ITU-T G.997.1 clause 7.2.2.2.3 Uncorrected DTU - Channel
-         far-end (RTXUC-CFE)";
+        "ITU-T G.997.1 clauses 7.2.2.2.3 (RTXUC-CFE) and 7.2.7.13;
+         ITU-T G.998.4 clause 12";
+    }
+    leaf retransmitted-dtu-cfe {
+      type bbf-yang:performance-counter32;
+      description
+        "This parameter is a count of far-end rtx-tx anomalies (the
+         number of retransmitted Data Transfer Units (DTU)) occurring
+         in the bearer channel during the accumulation period. This
+         parameter only applies to systems supporting ITU-T G.998.4.
+         This parameter is subject to inhibiting.";
+      reference
+        "ITU-T G.997.1 clauses 7.2.2.2.4 (RTXTX-CFE) and 7.2.7.13;
+         ITU-T G.998.4 clause 12";
     }
   }
-
-  // end grouping xtu-channel-performance-cfe
 
   grouping performance-history-15min-parameters {
     description
@@ -259,7 +284,7 @@ submodule bbf-vdsl-xtu-channel-performance-body {
       type performance-15min-interval;
       description
         "The total number of 15 minute PM intervals for which data
-         was collected. ";
+         was collected.";
     }
     leaf non-valid-intervals {
       type performance-15min-interval;
@@ -277,7 +302,7 @@ submodule bbf-vdsl-xtu-channel-performance-body {
       type performance-24hr-interval;
       description
         "The total number of 24 hour performance monitoring
-         intervals for which data was collected. ";
+         intervals for which data was collected.";
     }
     leaf non-valid-intervals {
       type performance-24hr-interval;
@@ -296,7 +321,7 @@ submodule bbf-vdsl-xtu-channel-performance-body {
       description
         "Reports the start date/time for this interval.";
       reference
-        "ITU-T G.997.2 clause 7.8.3.";
+        "ITU-T G.997.2 clause 7.8.3";
     }
   }
 }

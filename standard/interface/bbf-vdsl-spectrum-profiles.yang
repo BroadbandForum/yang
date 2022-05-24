@@ -24,20 +24,18 @@ submodule bbf-vdsl-spectrum-profiles {
 
      Editor:      Ken Kerpez, ASSIA, Inc.
 
-     Editor:      Joey Boyd, ADTRAN
+     Editor:      Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia
 
-     WA Director: Joey Boyd, ADTRAN";
+     WA Director: Joey Boyd, Adtran";
   description
     "This submodule contains a collection of YANG definitions for
      managing VDSL spectrum profiles.
 
-     Copyright (c) 2016-2020 Broadband Forum
+     Copyright (c) 2016-2022 Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -77,9 +75,19 @@ submodule bbf-vdsl-spectrum-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-355a3; see
+     This version of this YANG module is part of TR-355a4; see
      the TR itself for full legal notices.";
 
+  revision 2022-05-23 {
+    description
+      "Amendment 4.
+       * Approval Date:    2022-05-23
+       * Publication Date: 2022-05-23.";
+    reference
+      "TR-355a4: YANG Modules for FTTdp Management
+                   <https://www.broadband-forum.org/download/
+                          TR-355_Amendment-4.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Amendment 3.
@@ -210,15 +218,17 @@ submodule bbf-vdsl-spectrum-profiles {
           description
             "Identifies the transmission system type.";
           reference
-            "ITU-T G.997.1 clause 7.3.1.1.1 xTU transmission system
-             enabling (XTSE).";
+            "ITU-T G.997.1 clause 7.3.1.1.1 (XTSE)";
         }
         leaf mode-specific-psd-profile {
           type bbf-vdsl:mode-specific-psd-profile-ref;
-          must
-            "/bbf-vdsl:vdsl/bbf-vdsl:spectrum
-             /bbf-vdsl:mode-specific-psd-profile
-             [bbf-vdsl:name=current()]/bbf-vdsl:ts = ../ts" {
+          must "/bbf-vdsl:vdsl/bbf-vdsl:spectrum
+                /bbf-vdsl:mode-specific-psd-profile
+                [bbf-vdsl:name=current()]/bbf-vdsl:ts = ../ts" {
+            error-message
+              "The transmission system used in this line spectrum "
+            + "profile does not match the one used in the referenced "
+            + "mode specific PSD profile.";
             description
               "The transmission system used in the mode specific
                profile must be the same as the one coupled to this
@@ -229,14 +239,11 @@ submodule bbf-vdsl-spectrum-profiles {
             "Identifies the mode specific Power Spectral Density (PSD)
              profile for this transmission system type.";
           reference
-            "ITU-T G.997.1 clause 7.3.1.1.1 xTU transmission system
-             enabling (XTSE).";
+            "ITU-T G.997.1 clause 7.3.1.1.1 (XTSE)";
         }
       }
-      // end list xtse
       uses line-spectrum-profile;
     }
-    // end line-spectrum-profile
     list mode-specific-psd-profile {
       key "name";
       description
