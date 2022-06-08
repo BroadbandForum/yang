@@ -1,0 +1,425 @@
+module bbf-onu-management-proxy {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-onu-management-proxy";
+  prefix bbf-onu-mgmt-p;
+
+  import bbf-network-function {
+    prefix bbf-nf;
+  }
+  import bbf-network-function-client {
+    prefix bbf-nfc;
+  }
+  import bbf-network-function-server {
+    prefix bbf-nfs;
+  }
+  import bbf-network-function-types {
+    prefix bbf-nft;
+  }
+  import bbf-voltmf-common {
+    prefix bbf-voltmf-c;
+  }
+  import bbf-voltmf-message-monitor {
+    prefix bbf-voltmf-msg-mon;
+  }
+  import bbf-vomci-common {
+    prefix bbf-vomci-c;
+  }
+  import bbf-vomci-types {
+    prefix bbf-vomcit;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import ietf-yang-schema-mount {
+    prefix yangmnt;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Tim Carey, Nokia
+
+     Editor:      Jeff Hartley, Commscope
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Bruno Cornaglia, Vodafone";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements for ONU
+     Management Proxy functionality as described in TR-451.
+
+     Copyright (c) 2019-2022, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-451; see
+     the TR itself for full legal notices.";
+
+  revision 2022-06-07 {
+    description
+      "Issue 1.
+       * Approval Date:    2022-06-07.
+       * Publication Date: 2022-06-07.";
+    reference
+      "TR-451: vOMCI Specification
+               <https://www.broadband-forum.org/technical/download/
+                        TR-451_Issue-1.pdf>";
+  }
+
+  // Features
+
+  feature nf-client {
+    description
+      "Indicates that client connectivity to network function
+       endpoints is supported.";
+  }
+
+  feature nf-server {
+    description
+      "Indicates that server connectivity to network function
+       endpoints is supported.";
+  }
+
+  container onu-management-proxy {
+    description
+      "Data nodes associated with the ONU Management Proxy.";
+    leaf message-timeout {
+      type uint16 {
+        range "10..max";
+      }
+      units "seconds";
+      default "900";
+      description
+        "The maximum number of seconds for a response to be received
+         to a transmitted message. The timeout is used to clean up
+         stale messages.";
+    }
+    container nf-topology {
+      description
+        "The VNFs, VNF instances and network function links that
+         cannot be discovered.
+
+         The network function has knowledge of:
+           VNFs: vOMCI Function, vOMCI Proxy, ONU Management Proxy
+           VNF Instances and links of Network Functions:
+             vOMCI function, vOMCI Proxy, OLT.";
+      uses bbf-nf:nf-topology {
+        augment "vnf-instance" {
+          description
+            "Add specific data nodes for the ONU management proxy.";
+          container data {
+            description
+              "The data nodes of the device's schema.";
+            yangmnt:mount-point "device-yang-library" {
+              description
+                "The YANG library associated with the device.";
+            }
+          }
+        }
+      }
+    }
+    container onu-vomci-assignment-policy {
+      description
+        "The policy rules to use to associate an ONU with a list of
+         vOMCI functions.";
+      uses bbf-voltmf-c:onu-vomci-assignment-policy;
+    }
+    container remote-nf {
+      presence "Enables access to remote network functions";
+      description
+        "The remote network function (NF) configuration.";
+      container nf-client {
+        if-feature "bbf-onu-mgmt-p:nf-client";
+        description
+          "Client network function configuration.";
+        leaf enabled {
+          type boolean;
+          default "true";
+          description
+            "Administratively enable the use of client connectivity
+             capability to connect to network function endpoints.";
+        }
+        uses bbf-nfc:nf-client;
+      } //nf-client
+      container nf-server {
+        if-feature "bbf-onu-mgmt-p:nf-server";
+        description
+          "Server network function configuration.";
+        leaf enabled {
+          type boolean;
+          default "true";
+          description
+            "Administratively enable the use of server connectivity
+             capability to connect to network function endpoints.";
+        }
+        uses bbf-nfs:nf-server;
+      }
+    }
+    container statistics {
+      config false;
+      description
+        "Counters for the YANG messages sent between the ONU
+         Management Proxy and the vOMCI function or vOMCI Proxy
+         that are not targeted to an ONU.";
+      action reset {
+        description
+          "Reset the statistics counters.";
+      }
+      uses bbf-voltmf-msg-mon:voltmf-message-statistics;
+    }
+    container managed-onus {
+      description
+        "The ONUs that are being managed by this entity.";
+      action create-onu {
+        description
+          "Create an ONU within the ONU Management Proxy.";
+        input {
+          leaf name {
+            type bbf-vomcit:onu-name;
+            description
+              "The unique name of the ONU.";
+          }
+          leaf xpon-onu-type {
+            type identityref {
+              base bbf-vomcit:xpon-onu-type;
+            }
+            description
+              "The ONU's xPON type.";
+          }
+          leaf vendor-id {
+            type bbf-vomcit:onu-vendor-id;
+            description
+              "The vendor name of the ONU.";
+          }
+          leaf software-version {
+            type bbf-vomcit:onu-software-version;
+            description
+              "The software version associated with the ONU.";
+          }
+        }
+      }
+      list managed-onu {
+        key "name";
+        config false;
+        description
+          "An ONU that is being managed by this entity.";
+        leaf name {
+          type bbf-vomcit:onu-name;
+          description
+            "The unique name of the ONU.";
+        }
+        leaf xpon-onu-type {
+          type identityref {
+            base bbf-vomcit:xpon-onu-type;
+          }
+          description
+            "The ONU's xPON type.";
+        }
+        action delete-onu {
+          description
+            "Delete an ONU within the ONU Proxy. Note that this is not
+             the YANG state data but the Managed Entities state data
+             used to manage the ONU (e.g., MIB data sync valule).";
+          input {
+            leaf delete-state-data {
+              type boolean;
+              default "true";
+              description
+                "When 'true', the ONU state data is deleted.";
+            }
+          }
+        }
+        action delete-only-onu-state-data {
+          description
+            "Delete remaining state data for ONUs that have already
+             been deleted from the list of managed ONUS.  Note - Do
+             not execute this unless the ONU has already been deleted
+             with 'delete-onu' and with the 'delete-state-data' leaf
+             set to 'true'. Note that this is not the YANG state data
+             but the Managed Entities state data used to manage the
+             ONU (e.g., MIB data sync valule).";
+        }
+        action set-onu-communication {
+          description
+            "Dynamically configure the information necessary to
+             establish if an ONU can be communicated with by the vOMCI
+             Proxy along with remote endpoint to use.";
+          input {
+            list onu-management-chain {
+              key "nf-type nf-instance";
+              ordered-by user;
+              leaf nf-type {
+                type identityref {
+                  base bbf-nft:nf-type;
+                }
+                description
+                  "The type of NF.";
+              }
+              leaf nf-instance {
+                type bbf-yang:string-ascii64;
+                description
+                  "The name of the NF.";
+              }
+              description
+                "The ordered list of ONU Management Proxy, vOMCI
+                 function, vOMCI Proxy and OLT instances to use for
+                 this ONU's management.";
+            }
+            leaf onu-communication-available {
+              type boolean;
+              description
+                "When true, the ONU is able to be communicated with
+                 across the ONU management chain of entities.";
+            }
+            uses bbf-vomci-c:vomci-onu-header;
+            leaf software-version {
+              type bbf-vomcit:onu-software-version;
+              description
+                "The software version associated with the ONU.";
+            }
+            leaf onu-management-chain-selection {
+              type enumeration {
+                enum vomci-policy {
+                  description
+                    "Identifies that the ONU management chain is
+                     computed using a policy to select the vOMCI
+                     function instance.";
+                }
+                enum configured {
+                  description
+                    "Identifies that the ONU management chain is
+                     configured by an external entity.";
+                }
+              }
+              description
+                "The option used to determine the ONU management
+                 chain.";
+            }
+            leaf xpon-onu-type {
+              type identityref {
+                base bbf-vomcit:xpon-onu-type;
+              }
+              description
+                "The ONU's xPON type.";
+            }
+          }
+        }
+        notification onu-management-chain-updated {
+          description
+            "The notification that reports that an ONU's management
+             chain has been modified by the entity.";
+          list current-onu-management-chain {
+            key "nf-type nf-instance";
+            ordered-by user;
+            leaf nf-type {
+              type identityref {
+                base bbf-nft:vnf-type;
+              }
+              description
+                "The type of NF.";
+            }
+            leaf nf-instance {
+              type bbf-yang:string-ascii64;
+              description
+                "The name of the NF.";
+            }
+            description
+              "The ordered list of ONU Management Proxy, vOMCI
+               function, vOMCI Proxy and OLT instances to use for
+               this ONU's management.";
+          }
+        }
+        uses bbf-vomci-c:vomci-onu-header;
+        leaf vendor-id {
+          type bbf-vomcit:onu-vendor-id;
+          description
+            "The vendor name of the ONU.";
+        }
+        leaf software-version {
+          type bbf-vomcit:onu-software-version;
+          description
+            "The software version associated with the ONU.";
+        }
+        leaf voltmf-remote-endpoint {
+          type bbf-yang:string-ascii64;
+          description
+            "The name remote endpoint to use for transmitting YANG
+             messages toward the vOLTMF.";
+        }
+        list onu-management-chain {
+          key "nf-type nf-instance";
+          config false;
+          ordered-by user;
+          leaf nf-type {
+            type identityref {
+              base bbf-nft:vnf-type;
+            }
+            description
+              "The type of NF.";
+          }
+          leaf nf-instance {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the NF.";
+          }
+          description
+            "The ordered list of ONU Management Proxy, vOMCI function,
+             vOMCI Proxy and OLT instances to use for this ONU's
+             management.";
+        }
+        container statistics {
+          config false;
+          description
+            "Statistics for per ONU interactions sent between the
+             entity and vOMCI function or ONU Management Proxy.";
+          action reset {
+            description
+              "Reset the counters of the statistics.";
+          }
+          uses bbf-voltmf-msg-mon:voltmf-message-statistics;
+        }
+      }
+    }
+  }
+}

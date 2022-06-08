@@ -1,0 +1,264 @@
+module bbf-grpc-client {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-grpc-client";
+  prefix bbf-grpcc;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Tim Carey, Nokia
+
+     Editor:      Jeff Hartley, Commscope
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Bruno Cornaglia, Vodafone";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements for gRPC client
+     functionality as described in TR-451.
+
+     Copyright (c) 2019-2022, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-451; see
+     the TR itself for full legal notices.";
+
+  revision 2022-06-07 {
+    description
+      "Issue 1.
+       * Approval Date:    2022-06-07.
+       * Publication Date: 2022-06-07.";
+    reference
+      "TR-451: vOMCI Specification
+               <https://www.broadband-forum.org/technical/download/
+                        TR-451_Issue-1.pdf>";
+  }
+
+  // Features
+
+  feature grpc-client {
+    description
+      "Indicates that the client supports gRPC as a message
+       transport protocol.";
+  }
+
+  feature connection-backoff {
+    description
+      "Indicates that the server supports managing how a client
+       reconnects to a remote endpoint, after discovering
+       its connection to the remote endpoint has dropped.";
+  }
+
+  // Groupings
+
+  grouping grpc-client {
+    description
+      "Data nodes for configuring a gRPC client, including the IP
+       address and port number it initiates a connection to.
+
+       Note that this grouping uses fairly typical descendant node
+       names such that a stack of 'uses' statements will have name
+       conflicts. It is intended that the consuming data model will
+       resolve the issue (e.g., by wrapping the 'uses' statement in a
+       container). This model purposely does not do this itself so as
+       to provide maximum flexibility to consuming models.";
+    container channel {
+      description
+        "The gRPC channel properties.";
+      leaf ping-interval {
+        type uint32 {
+          range "0..max";
+        }
+        units "seconds";
+        default "300";
+        description
+          "Sets the amount of time after which a ping request is sent.
+           A value of 0 disables pings from being sent.";
+      }
+    } // container channel
+    container connection-backoff {
+      if-feature "bbf-grpcc:connection-backoff";
+      description
+        "The connection backoff directs how a client reconnects to a
+         remote endpoint after discovering its connection to the
+         remote endpoint has dropped.";
+      reference
+        "github.com/grpc/grpc/blob/master/doc/connection-backoff.md.";
+      leaf enable {
+        type boolean;
+        default "true";
+        description
+          "If 'true', connection-backoff is enabled.";
+      }
+      leaf initial-backoff {
+        type uint16 {
+          range "1..max";
+        }
+        units "seconds";
+        default "30";
+        description
+          "The initial wait period after the first failure before
+           retrying.";
+      }
+      leaf min-connect-timeout {
+        type uint16 {
+          range "1..max";
+        }
+        units "seconds";
+        default "20";
+        description
+          "The minimum time to wait for the connection attempts.";
+      }
+      leaf multiplier {
+        type decimal64 {
+          fraction-digits 2;
+        }
+        default "1.60";
+        description
+          "The factor with which to multiply the backoff after a
+           failed retry.";
+      }
+      leaf jitter {
+        type decimal64 {
+          fraction-digits 2;
+        }
+        default "0.20";
+        description
+          "The factor with which to randomize the backoff.";
+      }
+      leaf max-backoff {
+        type uint16 {
+          range "1..max";
+        }
+        default "10";
+        description
+          "The number of times the client tries to connect to a
+           specific endpoint before moving on to the next endpoint
+           in the list (round robin).";
+      }
+    }
+  } //grouping grpc-client
+
+  grouping grpc-client-transport {
+    description
+      "The gRPC specific configuration for the connection.";
+    container grpc-client {
+      if-feature "bbf-grpcc:grpc-client";
+      description
+        "A wrapper around the gRPC client parameters to avoid name
+         collisions.";
+      uses bbf-grpcc:grpc-client;
+      list access-point {
+        key "name";
+        min-elements 1;
+        ordered-by user;
+        description
+          "A user-ordered list of access points that the client will
+           attempt to connect to in the specified sequence. Defining
+           more than one enables high-availability.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "An arbitrary name for the access point.";
+        }
+        container grpc-transport-parameters {
+          description
+            "gRPC agent transport parameters.";
+          choice tcp-client-options {
+            description
+              "Replicate some pre-standard IETF client/server
+               options in-file, and provide a place to add IETF
+               client/server stack options post-standard in the
+               future.";
+            case remote-port {
+              container remote-port {
+                description
+                  "The remote port identified by a client.";
+                leaf remote-port {
+                  type inet:port-number;
+                  default "8443";
+                  description
+                    "The client will attempt to connect to the
+                     common port value for 'grpc' (8443) if no
+                     value is specified.";
+                }
+              }
+            } // case remote-port
+          } //case tcp-options
+        } //grpc-transport-parameters
+        notification remote-endpoint-status-change {
+          description
+            "A notification traceable to a client remote-endpoint
+             and access-point. This notification is sent when a
+             remote-endpoint is connected or disconnected.";
+          leaf connected {
+            type boolean;
+            mandatory true;
+            description
+              "New remote-endpoint status.";
+          }
+          leaf last-changed {
+            type yang:date-and-time;
+            mandatory true;
+            description
+              "The system date and time when the remote-endpoint was
+               connected or disconnected.";
+          }
+        } // notification remote-endpoint-status-change
+      } // list access-point for grpc
+    } // grpc-client
+  } // grpc-client-transport
+
+}

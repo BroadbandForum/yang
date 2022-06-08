@@ -1,0 +1,191 @@
+module bbf-network-function-server {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-network-function-server";
+  prefix bbf-nfs;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Tim Carey, Nokia
+
+     Editor:      Jeff Hartley, Commscope
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Bruno Cornaglia, Vodafone";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements for network function
+     (NF) server functionality as described in TR-451.
+
+     Copyright (c) 2019-2022, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-451; see
+     the TR itself for full legal notices.";
+
+  revision 2022-06-07 {
+    description
+      "Issue 1.
+       * Approval Date:    2022-06-07.
+       * Publication Date: 2022-06-07.";
+    reference
+      "TR-451: vOMCI Specification
+               <https://www.broadband-forum.org/technical/download/
+                        TR-451_Issue-1.pdf>";
+  }
+
+  // Groupings
+
+  grouping nf-server {
+    description
+      "Data nodes to manage network function servers.";
+    container listen {
+      presence "Enables server to listen for client connections.";
+      description
+        "Configures listen behavior.";
+      leaf idle-timeout {
+        type uint16;
+        units "seconds";
+        default "3600";
+        description
+          "The maximum number of seconds that a session may remain
+           idle. A session will be dropped if it is idle for an
+           interval longer than this number of seconds. If set to
+           zero, then the server will never drop a session because
+           it is idle. Sessions that have a notification subscription
+           active are never dropped.";
+      }
+      list listen-endpoint {
+        key "name";
+        min-elements 1;
+        description
+          "The endpoints to listen for connections.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "An arbitrary name for the listen endpoint.";
+        }
+        leaf local-service-endpoint {
+          type bbf-yang:string-ascii64;
+          description
+            "The name that this network function will use when
+             reporting itself as an endpoint. For example, see section
+             5.8.2.1 Hello vOMCI service in TR-451 for how this
+             parameter is used for vOMCI communication. The value in
+             this leaf is typically the same value as the name of the
+             'listen-endpoint' but could be different for certain
+             deployments. If this leaf is not configured the name of
+             the 'listen-endpoint' is used.";
+          reference
+            "TR-451 section 5.8.2.1";
+        }
+        choice transport {
+          mandatory true;
+          description
+            "Selects between available transports.";
+        }
+        container remote-clients {
+          config false;
+          description
+            "Remote clients that are currently connected to the
+             server.";
+          list remote-client {
+            key "local-service-endpoint";
+            description
+              "A remote client that is currently connected.";
+            leaf local-service-endpoint {
+              type bbf-yang:string-ascii64;
+              description
+                "Identity of the local service endpoint of the remote
+                 endpoint as provided as part of the vOMCI hello
+                 exchange when the connection to the remote endpoint
+                 was established.";
+            }
+          }
+          notification remote-client-status-change {
+            description
+              "A notification traceable to a server listen endpoint
+               and a remote endpoint associated with the listen
+               endpoint. This notification is sent when remote
+               endpoint is connected or disconnected to/from the
+               listen endpoint.";
+            leaf remote-client {
+              type leafref {
+                path "../../../remote-clients/remote-client/"
+                   + "local-service-endpoint";
+                require-instance false;
+              }
+              mandatory true;
+              description
+                "The remote endpoint that was connected or
+                 disconnected.";
+            }
+            leaf connected {
+              type boolean;
+              mandatory true;
+              description
+                "If 'true', the remote endpoint was connected.";
+            }
+            leaf remote-endpoint-state-last-change {
+              type yang:date-and-time;
+              mandatory true;
+              description
+                "The system date and time when the remote endpoint was
+                 connected or disconnected.";
+            }
+          }
+        }
+      }
+    }
+  } // grouping nf-server
+
+}

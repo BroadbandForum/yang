@@ -1,0 +1,102 @@
+module bbf-voltmf-kafka-agent {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-voltmf-kafka-agent";
+  prefix bbf-voltmf-ka;
+
+  import bbf-kafka-agent {
+    prefix bbf-kafkaa;
+  }
+  import bbf-voltmf {
+    prefix bbf-voltmf;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Tim Carey, Nokia
+
+     Editor:      Jeff Hartley, Commscope
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Bruno Cornaglia, Vodafone";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements for vOLTMF kafka
+     transport functionality as described in TR-451.
+
+     Copyright (c) 2019-2022, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-451; see
+     the TR itself for full legal notices.";
+
+  revision 2022-06-07 {
+    description
+      "Issue 1.
+       * Approval Date:    2022-06-07.
+       * Publication Date: 2022-06-07.";
+    reference
+      "TR-451: vOMCI Specification
+               <https://www.broadband-forum.org/technical/download/
+                        TR-451_Issue-1.pdf>";
+  }
+
+  // Kafka Agent transport specific augment
+
+  augment "/bbf-voltmf:voltmf"
+        + "/bbf-voltmf:remote-nf"
+        + "/bbf-voltmf:nf-client"
+        + "/bbf-voltmf:initiate"
+        + "/bbf-voltmf:remote-server"
+        + "/bbf-voltmf:transport" {
+    description
+      "The Kafka client transport.";
+    case kafka {
+      description
+        "Selection for Kafka client transport.";
+      uses bbf-kafkaa:kafka-agent-transport;
+    }
+  }
+}

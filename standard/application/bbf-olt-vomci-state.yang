@@ -1,0 +1,135 @@
+module bbf-olt-vomci-state {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-olt-vomci-state";
+  prefix bbf-olt-vomci-s;
+
+  import bbf-vomci-common {
+    prefix bbf-vomci-c;
+  }
+  import bbf-vomci-types {
+    prefix bbf-vomcit;
+  }
+  import bbf-xponvani {
+    prefix bbf-xponvani;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Tim Carey, Nokia
+
+     Editor:      Jeff Hartley, Commscope
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Bruno Cornaglia, Vodafone";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements for a physical OLT's
+     implementation of the vOMCI state data functionality as described
+     in TR-451.
+
+     Copyright (c) 2019-2022, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-451; see
+     the TR itself for full legal notices.";
+
+  revision 2022-06-07 {
+    description
+      "Issue 1.
+       * Approval Date:    2022-06-07.
+       * Publication Date: 2022-06-07.";
+    reference
+      "TR-451: vOMCI Specification
+               <https://www.broadband-forum.org/technical/download/
+                        TR-451_Issue-1.pdf>";
+  }
+
+  augment "/if:interfaces-state/if:interface/bbf-xponvani:v-ani" {
+    description
+      "This augmentation defines the state data to support vANI's
+       that are managed using vOMCI.";
+    container vomci-onu {
+      config false;
+      description
+        "vOMCI state for an ONU.";
+      container vomci-function {
+        description
+          "The attributes of a vomci function.";
+        leaf remote-endpoint {
+          type bbf-yang:string-ascii64;
+          description
+            "The remote endpoint name associated with the ONU,
+             regardless of the way it was assigned (e.g.,
+             configuration, ONU filter).";
+        }
+        leaf communication-status {
+          type identityref {
+            base bbf-vomcit:vomci-communication-status;
+          }
+          description
+            "The status of the vOMCI communication with the
+             vOMCI function.";
+        }
+      }
+      container statistics {
+        description
+          "The counters related to vOMCI messages:
+
+           'in-xxx' counters are vOMCI messages sent by the OLT to
+           the vOMCI function.
+           'out-xxx' counters are vOMCI messages received by the OLT
+           from the vOMCI function.";
+        uses bbf-vomci-c:vomci-message-statistics;
+      }
+    }
+  }
+}

@@ -1,5 +1,10 @@
 ## Broadband Forum YANG Modules
 
+### 2022-06-07: [TR-451 Issue 1](https://www.broadband-forum.org/technical/download/TR-451_Issue-1.pdf) vOMCI Specification
+*Tag: [TR-451-v1.0.0](https://github.com/BroadbandForum/yang/tree/TR-451-v1.0.0)*
+
+TR-451 defines YANG data models that support the architecture, requirements and interface specifications for a virtualized OMCI (vOMCI) solution that moves the OMCI functionality that is traditionally embedded within Optical Line Termination (OLT) network elements into the Operator's network.
+
 ### 2022-05-23: [TR-355 Amendment 4](https://www.broadband-forum.org/technical/download/TR-355_Amendment-4.pdf) YANG Modules for FTTdp Management
 *Tag: [TR-355-v1.4.0](https://github.com/BroadbandForum/yang/tree/TR-355-v1.4.0)*
 
@@ -8,7 +13,6 @@
 * Correct backward compatiblity issue in the SELT YANG model, bbf-selt
 * Correct 24-hour channel performance error in the FAST YANG data model, bbf-fast
 * Extend the VDSL YANG model, bbf-vdsl, with support for retransmitted Data Transfer Units (DTU)
-
 
 ### 2022-03-01: [TR-383 Amendment 5](https://www.broadband-forum.org/technical/download/TR-383_Amendment-5.pdf) Common YANG Modules for Access Networks
 *Tag: [TR-383-v1.5.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.5.0)*

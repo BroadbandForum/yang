@@ -1,0 +1,252 @@
+module bbf-kafka-agent {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-kafka-agent";
+  prefix bbf-kafkaa;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Tim Carey, Nokia
+
+     Editor:      Jeff Hartley, Commscope
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Bruno Cornaglia, Vodafone";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements for Kafka agent
+     functionality as described in TR-451.
+
+     Copyright (c) 2019-2022, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-451; see
+     the TR itself for full legal notices.";
+
+  revision 2022-06-07 {
+    description
+      "Issue 1.
+       * Approval Date:    2022-06-07.
+       * Publication Date: 2022-06-07.";
+    reference
+      "TR-451: vOMCI Specification
+               <https://www.broadband-forum.org/technical/download/
+                        TR-451_Issue-1.pdf>";
+  }
+
+  // Features
+
+  feature message-publication {
+    description
+      "Indicates that the agent supports publication of messages to
+       the broker on specific topics.";
+  }
+
+  feature message-consumption {
+    description
+      "Indicates that the agent supports consumption of message from
+       the broker on specific topics.";
+  }
+
+  feature kafka-agent {
+    description
+      "Indicates that the network function client supports
+       Kafka as a message transport protocol.";
+  }
+
+  // Groupings
+
+  grouping kafka-topic-parameters {
+    description
+      "Data nodes for configuring Kafka topics.";
+    leaf name {
+      type string;
+      mandatory true;
+      description
+        "The name of the topic.";
+    }
+    leaf purpose {
+      type string;
+      description
+        "The purpose of the topic (e.g., VOMCI_NOTIFICATION,
+         VOMCI_REQUEST, VOMCI_RESPONSE).";
+    }
+    leaf partition {
+      type string;
+      description
+        "For topics that are partitioned, the partition used for
+         production and consumption.";
+    }
+  }
+
+  grouping kafka-agent {
+    description
+      "Data nodes for configuring a Kafka agent.
+
+       Note that this grouping uses fairly typical descendant node
+       names such that a stack of 'uses' statements will have name
+       conflicts. It is intended that the consuming data model will
+       resolve the issue (e.g., by wrapping the 'uses' statement in a
+       container). This model purposely does not do this itself so as
+       to provide maximum flexibility to consuming models.";
+    leaf client-id {
+      type string;
+      mandatory true;
+      description
+        "The identifier that the client/consumer (agent) uses
+         to identify the source of a message.";
+    }
+    container publication-parameters {
+      if-feature "bbf-kafkaa:message-publication";
+      description
+        "The Kafka agent publication properties.";
+      list topic {
+        key "name";
+        description
+          "The topics the agent will publish.";
+        uses kafka-topic-parameters;
+      }
+    }
+    container consumption-parameters {
+      if-feature "bbf-kafkaa:message-consumption";
+      description
+        "The Kafka agent consumption properties.";
+      leaf group-id {
+        type string;
+        mandatory true;
+        description
+          "The identifier of the group that the consumer can
+           participate in.";
+      }
+      list topic {
+        key "name";
+        description
+          "The topics the agent will consume.";
+        uses kafka-topic-parameters;
+      }
+    }
+  }
+
+  grouping kafka-agent-transport {
+    description
+      "The Kafka agent specific configuration for the connection.";
+    container kafka-agent {
+      if-feature "bbf-kafkaa:kafka-agent";
+      description
+        "A wrapper around the Kafka agent parameters to avoid name
+         collisions.";
+      uses bbf-kafkaa:kafka-agent;
+      list access-point {
+        key "name";
+        min-elements 1;
+        ordered-by user;
+        description
+          "A user-ordered list of access points that the client will
+           attempt to connect to in the specified sequence. Defining
+           more than one enables high-availability.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "An arbitrary name for the access point.";
+        }
+        container kafka-agent-transport-parameters {
+          description
+            "Kafka agent transport parameters.";
+          choice tcp-client-options {
+            description
+              "Replicate some pre-standard IETF client/server
+               options in-file, and provide a place to add IETF
+               client/server stack options post-standard in the
+               future.";
+            case remote-port {
+              container remote-port {
+                description
+                  "The remote port identified by a client.";
+                leaf remote-port {
+                  type inet:port-number;
+                  default "9092";
+                  description
+                    "The client will attempt to connect to the
+                     common port value for 'kafka' (9092) if no
+                     value is specified.";
+                }
+              }
+            } // case remote-port
+          } //case tcp-options
+        } //kafka-transport-parameters
+        notification remote-endpoint-status-change {
+          description
+            "A notification traceable to a client remote-endpoint
+             and access-point. This notification is sent when a
+             remote-endpoint is connected or disconnected.";
+          leaf connected {
+            type boolean;
+            mandatory true;
+            description
+              "New remote-endpoint status.";
+          }
+          leaf last-changed {
+            type yang:date-and-time;
+            mandatory true;
+            description
+              "The system date and time when the
+               remote-endpoint was connected or disconnected.";
+          }
+        } // notification remote-endpoint-status-change
+      } // list access-point for kafka-agent
+    } // kafka-agent
+  } // kafka-agent-transport
+
+}

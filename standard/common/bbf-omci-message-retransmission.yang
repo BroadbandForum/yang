@@ -1,0 +1,214 @@
+module bbf-omci-message-retransmission {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-omci-message-retransmission";
+  prefix bbf-omci-mr;
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Tim Carey, Nokia
+
+     Editor:      Jeff Hartley, Commscope
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Bruno Cornaglia, Vodafone";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements for OMCI message
+     retransmission functionality as described in TR-451.
+
+     Copyright (c) 2019-2022, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-451; see
+     the TR itself for full legal notices.";
+
+  revision 2022-06-07 {
+    description
+      "Issue 1.
+       * Approval Date:    2022-06-07.
+       * Publication Date: 2022-06-07.";
+    reference
+      "TR-451: vOMCI Specification
+               <https://www.broadband-forum.org/technical/download/
+                        TR-451_Issue-1.pdf>";
+  }
+
+  // Features
+
+  feature omci-message-retransmission {
+    description
+      "Indicates that network function supports the OMCI message
+       retransmission capability as defined in ITU G.988 section B.2.1
+       Message flow control and error recovery.";
+    reference
+      "ITU-T G.988 clause B.2.1";
+  }
+
+  // Groupings
+
+  grouping omci-message-retransmission-statistics {
+    description
+      "Data nodes for monitoring statistics of the OMCI message
+       retransmission capability.";
+    leaf last-reset-time {
+      type yang:date-and-time;
+      description
+        "The date and time that the counters were last reset or the
+         function was enabled.";
+    }
+    leaf out-low-priority-messages {
+      type yang:counter64;
+      units "messages";
+      description
+        "The number of ITU G.988 OMCI ME low priority messages that
+         have been sent by the function.";
+    }
+    leaf in-low-priority-messages {
+      type yang:counter64;
+      units "messages";
+      description
+        "The number of ITU G.988 OMCI ME low priority messages that
+         have been received by the function.";
+    }
+    leaf out-low-priority-messages-retransmissions {
+      type yang:counter64;
+      units "messages";
+      description
+        "The number of ITU G.988 OMCI ME low priority messages that
+         have been retransmitted.";
+    }
+    leaf out-high-priority-messages {
+      type yang:counter64;
+      units "messages";
+      description
+        "The number of ITU G.988 OMCI ME high priority messages that
+         have been sent by the function.";
+    }
+    leaf in-high-priority-messages {
+      type yang:counter64;
+      units "messages";
+      description
+        "The number of ITU G.988 OMCI ME high priority messages
+         that have been received by the function.";
+    }
+    leaf out-high-priority-messages-retransmissions {
+      type yang:counter64;
+      units "messages";
+      description
+        "The number of ITU G.988 OMCI ME high priority messages
+         that have been retransmitted.";
+    }
+    leaf min-onu-rtt {
+      type uint32;
+      units "milliseconds";
+      description
+        "The number of minimum round trip time (rtt) in milliseconds,
+         for any request to the ONU.";
+    }
+    leaf max-onu-rtt {
+      type uint32;
+      units "milliseconds";
+      description
+        "The number of maximum round trip time (rtt) in milliseconds,
+         for any request to the ONU.";
+    }
+  }
+
+  grouping omci-message-retransmission {
+    description
+      "Data nodes for management of the OMCI message retransmission
+       capability.";
+    leaf enabled {
+      type boolean;
+      default "true";
+      description
+        "Administratively enable the use of the OMCI message
+         retransmission capability for the network function.";
+    }
+    leaf low-priority-transmission-timeout {
+      type uint16 {
+        range "10..max";
+      }
+      units "milliseconds";
+      default "1000";
+      description
+        "The maximum number of milliseconds that the retransmission
+         function waits for an acknowledge before transmitting the
+         low priority message (Tmax0).";
+    }
+    leaf high-priority-transmission-timeout {
+      type uint16 {
+        range "10..max";
+      }
+      units "milliseconds";
+      default "1000";
+      description
+        "The maximum number of milliseconds that the retransmission
+         function waits for an acknowledge before transmitting the
+         high priority message (Tmax1).";
+    }
+    leaf low-priority-message-retries {
+      type uint8 {
+        range "0..max";
+      }
+      default "3";
+      description
+        "The maximum retries for a low priority message (Rmax0).";
+    }
+    leaf high-priority-message-retries {
+      type uint8 {
+        range "0..max";
+      }
+      default "3";
+      description
+        "The maximum retries for a high priority message (Rmax1).";
+    }
+  }
+}

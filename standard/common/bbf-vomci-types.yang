@@ -1,0 +1,289 @@
+module bbf-vomci-types {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-vomci-types";
+  prefix bbf-vomcit;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Tim Carey, Nokia
+
+     Editor:      Jeff Hartley, Commscope
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Bruno Cornaglia, Vodafone";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements for common types
+     used by functionality described in TR-451.
+
+     Copyright (c) 2019-2022, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-451; see
+     the TR itself for full legal notices.";
+
+  revision 2022-06-07 {
+    description
+      "Issue 1.
+       * Approval Date:    2022-06-07.
+       * Publication Date: 2022-06-07.";
+    reference
+      "TR-451: vOMCI Specification
+               <https://www.broadband-forum.org/technical/download/
+                        TR-451_Issue-1.pdf>";
+  }
+
+  // Definitions
+
+  typedef onu-vendor-id {
+    type string {
+      pattern '[a-zA-Z]{4}';
+    }
+    description
+      "The vendor ID portion of the TC layer ONU serial number.";
+  }
+
+  typedef onu-name {
+    type bbf-yang:string-ascii64;
+    description
+      "The name assigned to an ONU for use in communication between
+       the vOLTMF and vOMCI function.";
+  }
+
+  typedef olt-name {
+    type bbf-yang:string-ascii64;
+    description
+      "The name assigned to the OLT device.";
+  }
+
+  typedef onu-vendor {
+    type bbf-yang:string-ascii64;
+    description
+      "The vendor name or identification of an ONU.";
+  }
+
+  typedef onu-software-version {
+    type bbf-yang:string-ascii64;
+    description
+      "The software version of an ONU.";
+  }
+
+  typedef vomci-nf {
+    type enumeration {
+      enum voltmf {
+        description
+          "Identifies the type of vOMCI NF as a Virtualized OLT
+           Management Function.";
+      }
+      enum onu-management-proxy {
+        description
+          "Identifies the type of vOMCI NF as an ONU Management
+           Proxy.";
+      }
+      enum vomci-function {
+        description
+          "Identifies the type of vOMCI NF as a Virtualized OMCI
+           function.";
+      }
+      enum vomci-proxy {
+        description
+          "Identifies the type of vOMCI NF as a Virtualized OMCI
+           Proxy.";
+      }
+      enum olt {
+        description
+          "Identifies the type of vOMCI NF as an OLT.";
+      }
+    }
+    description
+      "The types of entities in the vOMCI solution.";
+  }
+
+  identity onu-endpoint-criteria {
+    description
+      "Base identity for defining ONU endpoint criteria related to ONU
+       endpoint filters.";
+  }
+
+  identity onu-vomci-criteria {
+    description
+      "Base identity for defining criteria related to ONU vOMCI
+       filters.";
+  }
+
+  identity any-onu {
+    base onu-endpoint-criteria;
+    base onu-vomci-criteria;
+    description
+      "The ONU criteria is valid for any ONU.";
+  }
+
+  identity onu-vendor {
+    base onu-endpoint-criteria;
+    base onu-vomci-criteria;
+    description
+      "The ONU criteria is identified by the vendor's identifier.";
+  }
+
+  identity onu-software-version {
+    base onu-vomci-criteria;
+    description
+      "The ONU criteria is identified by the software version of
+       the ONU.";
+  }
+
+  identity xpon-onu-type {
+    description
+      "The vOMCI ONU xPON types.";
+  }
+
+  identity ngpon2 {
+    base xpon-onu-type;
+    description
+      "This denotes a NG-PON2 ONU, per ITU-T G.989.3.";
+    reference
+      "ITU-T G.989.3";
+  }
+
+  identity xgs {
+    base xpon-onu-type;
+    description
+      "This denotes an XGS ONU, per ITU-T G.9807.1.";
+    reference
+      "ITU-T G.9807.1";
+  }
+
+  identity xgpon {
+    base xpon-onu-type;
+    description
+      "This denotes a XG-PON ONU, per ITU-T G.987.3.";
+    reference
+      "ITU-T G.987.3";
+  }
+
+  identity gpon {
+    base xpon-onu-type;
+    description
+      "This denotes a GPON ONU, per ITU-T G.984.3.";
+    reference
+      "ITU-T G.984.3";
+  }
+
+  // vOMCI Network function capabilities
+
+  identity vomci-nf-capability {
+    description
+      "Base identity for defining the capabilities of a vOMCI
+       network function.";
+  }
+
+  identity onu-data-handling {
+    base vomci-nf-capability;
+    description
+      "Base identity for defining the data handling capabilities of
+       a vOMCI network function.";
+  }
+
+  identity onu-state-only {
+    base onu-data-handling;
+    description
+      "The network function supports the capability to maintain only
+       the state information related to managing the ONU, not the
+       ONU's configuration.";
+  }
+
+  identity replica-vomci-nf {
+    base onu-data-handling;
+    description
+      "The network function supports the capability to maintain a
+       replica of the ONU's configuration along with the state
+       information related to managing the ONU.";
+  }
+
+  // vOMCI communication identities
+
+  identity vomci-communication-status {
+    description
+      "Base identity for the communication status between to remote
+       points that communicate to exchange vOMCI messages.";
+  }
+
+  identity connection-active {
+    base vomci-communication-status;
+    description
+      "The connection between the remote endpoints is active.";
+  }
+
+  identity connection-inactive {
+    base vomci-communication-status;
+    description
+      "The connection between the two endpoints is not active.";
+  }
+
+  identity remote-endpoint-is-not-assigned {
+    base vomci-communication-status;
+    description
+      "The connection to a remote endpoint is not assigned.";
+  }
+
+  identity vomci-communication-failure {
+    base vomci-communication-status;
+    description
+      "The remote endpoint connection is active but the endpoint
+       cannot exchange vOMCI messages with the remote endpoint.";
+  }
+
+  identity unspecified-failure {
+    base vomci-communication-status;
+    description
+      "The endpoint cannot communicate with the remote endpoint
+       to exchange vOMCI messages for an unspecified reason.";
+  }
+}

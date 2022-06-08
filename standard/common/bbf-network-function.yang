@@ -1,0 +1,281 @@
+module bbf-network-function {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-network-function";
+  prefix bbf-nf;
+
+  import bbf-network-function-types {
+    prefix bbf-nft;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Tim Carey, Nokia
+
+     Editor:      Jeff Hartley, Commscope
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Bruno Cornaglia, Vodafone";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements for network function
+     (NF) functionality as described in TR-451.
+
+     Copyright (c) 2019-2022, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-451; see
+     the TR itself for full legal notices.";
+
+  revision 2022-06-07 {
+    description
+      "Issue 1.
+       * Approval Date:    2022-06-07.
+       * Publication Date: 2022-06-07.";
+    reference
+      "TR-451: vOMCI Specification
+               <https://www.broadband-forum.org/technical/download/
+                        TR-451_Issue-1.pdf>";
+  }
+
+  grouping topology-type {
+    description
+      "Data nodes that define a type of topology.";
+    leaf type {
+      type identityref {
+        base bbf-nft:nf-topology;
+      }
+      description
+        "The type of deployment topology used by this network
+         function.";
+    }
+    leaf other-type {
+      when "derived-from-or-self(../type,"
+         + "'bbf-nft:other-topology')" {
+        description
+          "Only valid when the topology type is 'other-topology'.";
+      }
+      type bbf-yang:string-ascii64;
+      description
+        "The other type of deployment topology used by this network
+         function, when 'type' is set to 'other-topology'.";
+    }
+  }
+
+  grouping vnf {
+    description
+      "Data nodes describing the VNF 'flavor' (not instance) being
+       used. For example, vendor or version info.";
+    leaf vendor {
+      type bbf-yang:string-ascii64;
+      description
+        "The vendor of the VNF.";
+    }
+    leaf software-version {
+      type bbf-yang:string-ascii64;
+      description
+        "The software version of VNF.";
+    }
+    leaf nf-type {
+      type identityref {
+        base bbf-nft:vnf-type;
+      }
+      mandatory true;
+      description
+        "The type of the VNF within the solution context.
+         For example: ONU-Management-Proxy, vOMCI-function,
+         vOMCI-Proxy.";
+    }
+  }
+
+  grouping nf-topology {
+    description
+      "Data nodes that define a configured network function
+       topology.";
+    uses topology-type;
+    list vnf {
+      key "name";
+      description
+        "Data nodes describing the VNF 'flavor' (not instance) being
+         used. For example, vendor or version info.";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "The VNF 'flavor' (not instance) being used.";
+      }
+      uses bbf-nf:vnf;
+    }
+    list vnf-instance {
+      key "name";
+      description
+        "An instance of a VNF.";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "The name of the instance.";
+      }
+      leaf vnf {
+        type leafref {
+          path "../../vnf/name";
+        }
+        mandatory true;
+        description
+          "The VNF 'flavor' (not instance) being used.";
+      }
+    }
+    list nf-link {
+      key "name";
+      description
+        "A link to a network function. Depending on usage, this may
+         be to a physical or virtual NF, and may be one-ended or
+         two-ended.";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "The name of the link to the network function.";
+      }
+      list endpoint {
+        key "nf-instance endpoint";
+        max-elements 2;
+        description
+          "An endpoint at the network function.";
+        leaf nf-instance {
+          type bbf-yang:string-ascii64;
+          description
+            "The name of the instance of the network function at the
+             remote end of the link.
+
+             If the function is a PNF, then this value is the
+             device identifier of the PNF.";
+        }
+        leaf endpoint {
+          type bbf-yang:string-ascii64;
+          description
+            "The name of the endpoint at the network function.";
+        }
+        leaf nf-type {
+          type bbf-yang:string-ascii64;
+          description
+            "The type of the network function endpoint.";
+        }
+      }
+    }
+  }
+
+  grouping discovered-nf-topology {
+    description
+      "Data nodes that define a 'discovered' network function
+       topology (to be located in state data only).";
+    uses topology-type;
+    list vnf {
+      key "name";
+      description
+        "A discovered 'flavor' of VNF (not instance).";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "The name of the 'flavor' of VNF.";
+      }
+      uses bbf-nf:vnf;
+    }
+    list vnf-instance {
+      key "name";
+      description
+        "A discovered instance of a VNF.";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "The name of the VNF instance.";
+      }
+      leaf vnf {
+        type leafref {
+          path "../../vnf/name";
+          require-instance false;
+        }
+        mandatory true;
+        description
+          "The name of the 'flavor' of VNF.";
+      }
+    }
+    list nf-link {
+      key "name";
+      description
+        "A discovered link to a network function.";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "The name of the link to the network function.";
+      }
+      list endpoint {
+        key "nf-instance endpoint";
+        max-elements 2;
+        description
+          "A discovered endpoint at the network function.";
+        leaf nf-instance {
+          type bbf-yang:string-ascii64;
+          description
+            "The name of the instance of the network function at the
+             remote end of the link.
+
+             If the function is a PNF, then this value is the
+             device identifier of the PNF.";
+        }
+        leaf endpoint {
+          type bbf-yang:string-ascii64;
+          description
+            "The name of the network function endpoint.";
+        }
+        leaf nf-type {
+          type bbf-yang:string-ascii64;
+          description
+            "The type of the network function endpoint.";
+        }
+      }
+    }
+  }
+}

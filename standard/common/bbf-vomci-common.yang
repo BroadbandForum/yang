@@ -1,0 +1,147 @@
+module bbf-vomci-common {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-vomci-common";
+  prefix bbf-vomci-c;
+
+  import bbf-vomci-types {
+    prefix bbf-vomcit;
+  }
+  import bbf-xpon-types {
+    prefix bbf-xpon-types;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Tim Carey, Nokia
+
+     Editor:      Jeff Hartley, Commscope
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Bruno Cornaglia, Vodafone";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements for vOMCI
+     functionality as described in TR-451.
+
+     Copyright (c) 2019-2022, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-451; see
+     the TR itself for full legal notices.";
+
+  revision 2022-06-07 {
+    description
+      "Issue 1.
+       * Approval Date:    2022-06-07.
+       * Publication Date: 2022-06-07.";
+    reference
+      "TR-451: vOMCI Specification
+               <https://www.broadband-forum.org/technical/download/
+                        TR-451_Issue-1.pdf>";
+  }
+
+  // Groupings
+
+  grouping vomci-onu-header {
+    description
+      "The vOMCI header information used to identify the ONU.";
+    container onu-attachment-point {
+      description
+        "The current ONU attachment point";
+      leaf olt-name {
+        type bbf-vomcit:olt-name;
+        description
+          "The OLT name where the ONU is attached";
+      }
+      leaf channel-termination-name {
+        type string;
+        description
+          "The channel termination name where the ONU is attached.";
+      }
+      leaf onu-id {
+        type bbf-xpon-types:onu-id;
+        description
+          "This is the TC layer ONU-ID identifier assigned to the
+           ONU by the OLT during ONU activation.";
+        reference
+          "ITU-T G.984.3 clause 5.5.2
+           ITU-T G.987.3 clause 6.4.2
+           ITU-T G.9807.1 clause C.6.1.5.6
+           ITU-T G.989.3 clause 6.1.5.6";
+      }
+    }
+  }
+
+  grouping vomci-message-statistics {
+    description
+      "Grouping for vOMCI message data statistics";
+    leaf out-messages {
+      type yang:counter64;
+      units "counters";
+      description
+        "The number of vOMCI messages that have been transmitted by
+         the function.";
+    }
+    leaf in-messages {
+      type yang:counter64;
+      units "counters";
+      description
+        "The number of vOMCI messages that have been received by the
+         function.";
+    }
+    leaf errored-messages {
+      type yang:counter64;
+      units "counters";
+      description
+        "The number of vOMCI messages that have had errors.  This
+         includes both inbound and outbound errors. For example,
+         unable to send, or didn't receive expected response.";
+    }
+  }
+}

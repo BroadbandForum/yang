@@ -1,0 +1,235 @@
+module bbf-voltmf-common {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-voltmf-common";
+  prefix bbf-voltmf-c;
+
+  import bbf-network-function {
+    prefix bbf-nf;
+  }
+  import bbf-network-function-types {
+    prefix bbf-nft;
+  }
+  import bbf-voltmf-message-monitor {
+    prefix bbf-voltmf-msg-mon;
+  }
+  import bbf-vomci-types {
+    prefix bbf-vomcit;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Tim Carey, Nokia
+
+     Editor:      Jeff Hartley, Commscope
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Bruno Cornaglia, Vodafone";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements for virtual OLT
+     management function (vOLTMF) entity configuration and state
+     attributes as well as notifications needed to support
+     management of ONUs using vOMCI as defined in TR-451.
+
+     Copyright (c) 2019-2022, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-451; see
+     the TR itself for full legal notices.";
+
+  revision 2022-06-07 {
+    description
+      "Issue 1.
+       * Approval Date:    2022-06-07.
+       * Publication Date: 2022-06-07.";
+    reference
+      "TR-451: vOMCI Specification
+               <https://www.broadband-forum.org/technical/download/
+                        TR-451_Issue-1.pdf>";
+  }
+
+  // Groupings
+
+  grouping discovered-nf-topology {
+    description
+      "Discovered instances of VNFs.";
+    uses bbf-nf:discovered-nf-topology {
+      augment "vnf-instance" {
+        description
+          "Add vOLTMF-specific data nodes to discovered NF topology.";
+        leaf-list capability {
+          type identityref {
+            base bbf-vomcit:vomci-nf-capability;
+          }
+          description
+            "The capabilities associated with network functions of
+             this type.";
+        }
+        container statistics {
+          description
+            "Counters for the YANG messages sent between the ONU
+             Management Proxy and the vOMCI function or vOMCI
+             Proxy.";
+          uses bbf-voltmf-msg-mon:voltmf-message-statistics;
+        }
+      }
+    }
+  }
+
+  grouping onu-vomci-assignment-policy {
+    description
+      "The policy used to associate an ONU with a list of
+       vOMCI function types.";
+    list rule {
+      key "name";
+      ordered-by user;
+      description
+        "A rule to assign an ONU to vOMCI function types.
+
+         A rule contains a classification of resources that match a
+         criteria. The result is a list of vOMCI function types.
+
+         The rule is applied for a given ONU according to priority,
+         then list order as defined by the client for equal
+         priorities. Once a match is achieved, the search is
+         terminated and the list of vOMCI functions applied.";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "The rule name.";
+      }
+      leaf priority {
+        type uint16 {
+          range "1..max";
+        }
+        mandatory true;
+        description
+          "Indicates the priority for applying the match criteria of
+           this rule against the priority of match criteria of other
+           rules in this filter.
+
+           The higher the value, the lower the priority, i.e.
+           priority 1 is the highest priority.";
+      }
+      container match-criteria {
+        description
+          "Match criteria for ONU assignment policies. Specific match
+           criteria shall be provided using augments in a context
+           dependent way, e.g. match criteria can be augmented for
+           ONUs, or in another context match criteria can be
+           augmented for another resource.";
+        leaf criteria-type {
+          type identityref {
+            base bbf-vomcit:onu-vomci-criteria;
+          }
+          default "bbf-vomcit:any-onu";
+          description
+            "The type of ONU vOMCI selection criteria to apply to
+             this rule.";
+        }
+        leaf onu-vendor {
+          when "../criteria-type = 'bbf-vomcit:onu-vendor'";
+          type bbf-vomcit:onu-vendor-id;
+          mandatory true;
+          description
+            "ONU vendor as defined in the TC layer ONU-ID.";
+        }
+        leaf onu-software-version {
+          when "(../criteria-type = 'bbf-vomcit:onu-vendor') or
+                (../criteria-type = 
+                'bbf-vomcit:onu-software-version')";
+          type bbf-vomcit:onu-software-version;
+          mandatory true;
+          description
+            "ONU vendor's software version.";
+        }
+      }
+      leaf-list vomci-function {
+        type bbf-yang:string-ascii64;
+        min-elements 1;
+        description
+          "Data nodes describing the VNF 'flavor' (not instance) being
+           used for the ONU. For example, vendor or version info.";
+      }
+    } // rule
+  } //nf-filter
+
+  // vOMCI ONU Management information
+
+  grouping vomci-onu-state {
+    description
+      "State data needed to manage ONUs via vOMCI.";
+    leaf vomci-function {
+      type bbf-yang:string-ascii64;
+      description
+        "Data nodes describing the VNF 'flavor' (not instance) being
+         used for the ONU. For example, vendor or version info.";
+    }
+    list onu-management-chain {
+      key "nf-type nf-instance";
+      ordered-by user;
+      leaf nf-type {
+        type identityref {
+          base bbf-nft:nf-type;
+        }
+        description
+          "The type of NF.";
+      }
+      leaf nf-instance {
+        type bbf-yang:string-ascii64;
+        description
+          "The name of the instance of the NF.";
+      }
+      description
+        "The ordered list of ONU Management Proxy, vOMCI function,
+         vOMCI Proxy and OLT instances to use for this ONU's
+         management.";
+    }
+  }
+}

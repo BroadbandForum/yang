@@ -1,0 +1,400 @@
+module bbf-vomci-function {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-vomci-function";
+  prefix bbf-vomci-func;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import bbf-vomci-types {
+    prefix bbf-vomcit;
+  }
+  import bbf-network-function-client {
+    prefix bbf-nfc;
+  }
+  import bbf-network-function-server {
+    prefix bbf-nfs;
+  }
+  import bbf-omci-message-retransmission {
+    prefix bbf-omci-mr;
+  }
+  import bbf-vomci-common {
+    prefix bbf-vomci-c;
+  }
+  import bbf-voltmf-message-monitor {
+    prefix bbf-voltmf-msg-mon;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Tim Carey, Nokia
+
+     Editor:      Jeff Hartley, Commscope
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Bruno Cornaglia, Vodafone";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements for the vOMCI
+     function as described in TR-451.
+
+     Copyright (c) 2019-2022, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-451; see
+     the TR itself for full legal notices.";
+
+  revision 2022-06-07 {
+    description
+      "Issue 1.
+       * Approval Date:    2022-06-07.
+       * Publication Date: 2022-06-07.";
+    reference
+      "TR-451: vOMCI Specification
+               <https://www.broadband-forum.org/technical/download/
+                        TR-451_Issue-1.pdf>";
+  }
+
+  // Features
+
+  feature nf-client {
+    description
+      "Indicates that client connectivity to network function
+       endpoints is supported.";
+  }
+
+  feature nf-server {
+    description
+      "Indicates that server connectivity to network function
+       endpoints is supported.";
+  }
+
+  // Notifications
+
+  notification onu-alignment-result {
+    description
+      "Reports that the vOMCI function has completed an alignment on
+       an ONU.";
+    leaf onu-name {
+      type bbf-vomcit:onu-name;
+      description
+        "The name of the ONU that is the target of the alignment
+         result.";
+    }
+    leaf datastore-tag {
+      type string;
+      description
+        "The datastore tag associated with the ONU's configuration
+         data kept by the vOMCI function.";
+    }
+    leaf alignment-state {
+      type enumeration {
+        enum aligned {
+          description
+            "The ONU state is aligned.";
+        }
+        enum unaligned {
+          description
+            "The ONU state is unaligned.";
+        }
+      }
+      description
+        "The alignment status of the ONU.";
+    }
+  }
+
+  notification onu-alarm-misalignment {
+    description
+      "The vOMCI function detected a gap in the OMCI alarm
+        message's sequence number.";
+    leaf onu-name {
+      type bbf-vomcit:onu-name;
+      description
+        "The name of the ONU that is the target of the alignment
+         result.";
+    }
+    leaf detected-sequence-number {
+      type uint16;
+      description
+        "The sequence number that resulted in the misalignment.";
+    }
+  }
+
+  notification untranslated-omci-notification {
+    description
+      "The vOMC Message function cannot translate an OMCI Alarm or AVC
+       message into a specific YANG notification.";
+    leaf onu-name {
+      type bbf-vomcit:onu-name;
+      description
+        "The name of the ONU.";
+    }
+    anydata untranslated-data {
+      description
+        "The data received by the vOMCI function that could not be
+         translated.";
+    }
+  }
+
+  notification unsupported-version-vomci-function-message {
+    description
+      "The vOMCI function does not support the version of the message
+       sent by the vOLTMF.";
+    leaf request-payload-id {
+      type string;
+      description
+        "The request payload identifier.";
+    }
+    leaf message-version {
+      type string;
+      description
+        "The version that was on the message.";
+    }
+    leaf-list supported-message-versions {
+      type string;
+      description
+        "The version(s) that are supported by the vOMCI function.";
+    }
+  }
+
+  container vomci {
+    description
+      "Data nodes associated with the vOMCI function.";
+    leaf message-timeout {
+      type uint16 {
+        range "10..max";
+      }
+      units "seconds";
+      default "900";
+      description
+        "The maximum number of seconds for a response to be
+         received to a transmitted vOMCI message. The timeout is
+         used to clean up stale vOMCI messages. The timeout is
+         only applicable when OMCI message retransmission
+         capability is not currently enabled for this entity.";
+    }
+    container omci-message-retransmission {
+      if-feature "bbf-omci-mr:omci-message-retransmission";
+      description
+        "OMCI message retransmission capability.";
+      uses bbf-omci-mr:omci-message-retransmission;
+    } //OMCI message retransmission capability
+    container remote-nf {
+      presence "Enables access to remote network functions";
+      description
+        "Data nodes to manage remote network functions (NF).";
+      container nf-client {
+        if-feature "bbf-vomci-func:nf-client";
+        description
+          "Data nodes to manage the clients of the network
+           function.";
+        leaf enabled {
+          type boolean;
+          default "true";
+          description
+            "Administratively enable the use of client connectivity
+             capability to connect to network function endpoints.";
+        }
+        uses bbf-nfc:nf-client;
+      } //nf-client
+      container nf-server {
+        if-feature "bbf-vomci-func:nf-server";
+        description
+          "Data nodes to manage the server of the network function.";
+        leaf enabled {
+          type boolean;
+          default "true";
+          description
+            "Administratively enable the use of server connectivity
+             capability to connect to network function endpoints.";
+        }
+        uses bbf-nfs:nf-server;
+      } //nf-server
+    }
+    container statistics {
+      config false;
+      description
+        "The OMCI function statistics.";
+      action reset {
+        description
+          "Reset the counters of the statistics.";
+      }
+      uses bbf-omci-mr:omci-message-retransmission-statistics {
+        if-feature "bbf-omci-mr:omci-message-retransmission";
+      }
+      container voltmf {
+        config false;
+        description
+          "Counters for the vOLTMF messages sent between the vOLTMF
+           and the vOMCI function.";
+        uses bbf-voltmf-msg-mon:voltmf-message-statistics;
+      }
+    }
+    container managed-onus {
+      description
+        "The ONUs that are being managed by this entity.";
+      action create-onu {
+        description
+          "Create an ONU within the vOMCI function.";
+        input {
+          leaf name {
+            type bbf-vomcit:onu-name;
+            description
+              "The unique name of the ONU.";
+          }
+          leaf xpon-onu-type {
+            type identityref {
+              base bbf-vomcit:xpon-onu-type;
+            }
+            description
+              "The ONU's xPON type.";
+          }
+        }
+      }
+      list managed-onu {
+        key "name";
+        config false;
+        description
+          "An ONU that is being managed by this entity.";
+        leaf name {
+          type bbf-vomcit:onu-name;
+          description
+            "The unique name of the ONU.";
+        }
+        leaf xpon-onu-type {
+          type identityref {
+            base bbf-vomcit:xpon-onu-type;
+          }
+          description
+            "The ONU's xPON type.";
+        }
+        action delete-onu {
+          description
+            "Delete an ONU within the ONU Proxy. Note that this is not
+             the YANG state data but the Managed Entities state data
+             used to manage the ONU (e.g., MIB data sync valule).";
+          input {
+            leaf delete-state-data {
+              type boolean;
+              default "true";
+              description
+                "When true, the ONU state data is deleted.";
+            }
+          }
+        }
+        action delete-only-onu-state-data {
+          description
+            "Delete remaining state data for ONUs that have already
+             been deleted from the list of managed ONUS.  Note - Do
+             not execute this unless the ONU has already been deleted
+             with 'delete-onu' and with the 'delete-state-data' leaf
+             set to 'true'. Note that this is not the YANG state data
+             but the Managed Entities state data used to manage the
+             ONU (e.g, MIB data sync valule).";
+        }
+        action set-onu-communication {
+          description
+            "Dynamically configure the information necessary to
+             establish if an ONU can be communicated with by the vOMCI
+             function along with remote endpoint to use.";
+          input {
+            leaf onu-communication-available {
+              type boolean;
+              description
+                "When true, the ONU is able to be communicated with
+                 across the ONU management chain of entities.";
+            }
+            leaf olt-remote-endpoint {
+              type bbf-yang:string-ascii64;
+              description
+                "The remote endpoint name to use for transmitting
+                 vOMCI messages toward the OLT.";
+            }
+            leaf voltmf-remote-endpoint {
+              type bbf-yang:string-ascii64;
+              description
+                "The remote endpoint name to use for transmitting
+                 YANG messages toward the vOLTMF.";
+            }
+            leaf xpon-onu-type {
+              type identityref {
+                base bbf-vomcit:xpon-onu-type;
+              }
+              description
+                "The ONU's xPON type.";
+            }
+            uses bbf-vomci-c:vomci-onu-header;
+          }
+        }
+        uses bbf-vomci-c:vomci-onu-header;
+        leaf onu-communication-available {
+          type boolean;
+          description
+            "When true, the ONU is able to be communicated with
+             across the ONU management chain of entities.";
+        }
+        leaf olt-remote-endpoint {
+          type bbf-yang:string-ascii64;
+          description
+            "The name remote endpoint to use for transmitting vOMCI
+             messages toward the OLT.";
+        }
+        container statistics {
+          description
+            "vOMCI message and retransmission statistics.";
+          action reset {
+            description
+              "Reset the counters of the statistics.";
+          }
+          uses bbf-vomci-c:vomci-message-statistics;
+          uses bbf-omci-mr:omci-message-retransmission-statistics {
+            if-feature "bbf-omci-mr:omci-message-retransmission";
+          }
+        }
+      }
+    }
+  }
+}
