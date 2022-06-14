@@ -1,5 +1,9 @@
 ## Broadband Forum YANG Modules
 
+### 2022-06-13: [TR-355 Amendment 4 Corrigendum 1](https://www.broadband-forum.org/technical/download/TR-355_Amendment-4.pdf) YANG Modules for FTTdp Management
+*Tag: [TR-355-v1.4.1](https://github.com/BroadbandForum/yang/tree/TR-355-v1.4.1)*
+* Add the line performance counters for successful-dta, minimum-mds and maximum-mds that were erroneously removed during final review of Amendment 4
+
 ### 2022-06-07: [TR-451 Issue 1](https://www.broadband-forum.org/technical/download/TR-451_Issue-1.pdf) vOMCI Specification
 *Tag: [TR-451-v1.0.0](https://github.com/BroadbandForum/yang/tree/TR-451-v1.0.0)*
 
