@@ -12,6 +12,9 @@ module bbf-qos-policer-envelope-profiles {
   import bbf-qos-policing-types {
     prefix bbf-qos-plc-tp;
   }
+  import bbf-qos-policing {
+    prefix bbf-qos-plc;
+  }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -20,15 +23,13 @@ module bbf-qos-policer-envelope-profiles {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -41,7 +42,7 @@ module bbf-qos-policer-envelope-profiles {
      Specifically, this module augments classifiers to add management
      of envelope policing as described in MEF 10.3.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +82,19 @@ module bbf-qos-policer-envelope-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -115,20 +126,26 @@ module bbf-qos-policer-envelope-profiles {
                         TR-383_Amendment-1.pdf>";
   }
 
+  feature policing-action-in-envelope-policer {
+    description
+      "Indicates support for policing actions inline in the envelope
+       policer profile.";
+  }
+
   identity envelope-policing {
     base bbf-qos-cls:action-type;
     description
       "The action-type identity indicating the system will assign a
-       Policer flow as the classifier action.";
+       policer flow as the classifier action.";
   }
 
   grouping policer-flow-reference {
     description
-      "Nodes used to uniquely identify a Policer flow associated with
+      "Nodes used to uniquely identify a policer flow associated with
        an envelope.";
     container policer-envelope-flow {
       description
-        "Nodes used to uniquely identify a Policer flow associated
+        "Nodes used to uniquely identify a policer flow associated
          with an envelope.";
       leaf envelope {
         type leafref {
@@ -136,7 +153,7 @@ module bbf-qos-policer-envelope-profiles {
              + "envelope-profile/bbf-qos-plc-ep:name";
         }
         description
-          "A reference to a Policer envelope profile.";
+          "A reference to a policer envelope profile.";
       }
       leaf flow {
         type leafref {
@@ -146,7 +163,7 @@ module bbf-qos-policer-envelope-profiles {
              + "bbf-qos-plc-ep:rank";
         }
         description
-          "A reference to a Policer flow within an envelope.";
+          "A reference to a policer flow within an envelope.";
       }
     }
   }
@@ -165,9 +182,9 @@ module bbf-qos-policer-envelope-profiles {
     description
       "Reusable configuration for policer envelopes.
 
-       A Policer (also known as an Bandwidth Profile) is a
+       A policer (also known as an Bandwidth Profile) is a
        characterization of the lengths and arrival times for Service
-       Frames at a reference point. A Policer is specified using the
+       Frames at a reference point. A policer is specified using the
        concepts of a flow and envelope.";
     list envelope-profile {
       key "name";
@@ -201,7 +218,7 @@ module bbf-qos-policer-envelope-profiles {
       }
       container flows {
         description
-          "A Policer flow is a set of Service Frames that meet a
+          "A policer flow is a set of Service Frames that meet a
            specific set of criteria.";
         reference
           "MEF 10.3";
@@ -241,7 +258,7 @@ module bbf-qos-policer-envelope-profiles {
               "The Committed Burst Size (CBS) limits the maximum
                number of bytes available for a burst of Service Frames
                sent at ingress line speed that will be declared Green
-               by the Policer.";
+               by the policer.";
             reference
               "MEF 10.3, Section 12.1";
           }
@@ -250,7 +267,7 @@ module bbf-qos-policer-envelope-profiles {
             description
               "The Excess Information Rate (EIR) limits the average
                rate of in bits per second of Service Frames which will
-               be declared Yellow by the Policer.";
+               be declared yellow by the policer.";
             reference
               "MEF 10.3, Section 12.1";
           }
@@ -267,8 +284,8 @@ module bbf-qos-policer-envelope-profiles {
             description
               "The Excess Burst Size (EBS) limits the maximum number
                of bytes available for a burst of Service Frames at
-               ingress line speed that will be declared Yellow by the
-               Policer.";
+               ingress line speed that will be declared yellow by the
+               policer.";
             reference
               "MEF 10.3, Section 12.1";
           }
@@ -292,10 +309,15 @@ module bbf-qos-policer-envelope-profiles {
             type bbf-qos-plc-tp:color-mode;
             description
               "The Color Mode (CM) indicates the type of color
-               awareness which is employed by the Policer.";
+               awareness which is employed by the policer.";
             reference
               "MEF 10.3, Section 12.1";
           }
+        }
+      }
+      uses bbf-qos-plc:policing-action-profile-ref {
+        refine "policing-action-profile" {
+          if-feature "policing-action-in-envelope-policer";
         }
       }
     }
@@ -310,7 +332,7 @@ module bbf-qos-policer-envelope-profiles {
     case envelope-policing {
       description
         "The set of actions is extended with a possibility to
-         associate a Policer flow.";
+         associate a policer flow.";
       uses policer-flow-reference;
     }
   }

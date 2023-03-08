@@ -18,6 +18,9 @@ module bbf-qos-classifiers {
   import bbf-qos-types {
     prefix bbf-qos-t;
   }
+  import bbf-frame-processing-types {
+    prefix bbf-fpt;
+  }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -26,13 +29,13 @@ module bbf-qos-classifiers {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -46,7 +49,7 @@ module bbf-qos-classifiers {
      that can be used to classify frames and assign actions to be
      applied to those frames.
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -86,9 +89,19 @@ module bbf-qos-classifiers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -153,8 +166,21 @@ module bbf-qos-classifiers {
        behaviors is supported.";
   }
 
+  feature preserve-pbit-dei-from-frame-to-metadata {
+    description
+      "Indicates support for preserving p-bits and DEI fields from the
+       frame into metadata.";
+  }
+
+  feature qos-bac-color-from-flow-color {
+    description
+      "Indicates support for copying the flow color into the buffer
+       acceptance control (BAC) color.";
+  }
+
   typedef qos-pbit-marking-index {
-    type uint8;
+    type bbf-fpt:qos-pbit-marking-index;
+    status deprecated;
     description
       "An index to a Priority Code Point bits (p-bits) marking list.
 
@@ -176,7 +202,8 @@ module bbf-qos-classifiers {
   }
 
   typedef qos-dei-marking-index {
-    type uint8;
+    type bbf-fpt:qos-dei-marking-index;
+    status deprecated;
     description
       "An index to a Drop Eligibility Indicator (DEI) marking list.
 
@@ -195,6 +222,24 @@ module bbf-qos-classifiers {
        frame at the ingress side, this data travels with the frame
        through the switch, and the metadata is used at the egress side
        when a VLAN tag is pushed into the frame.";
+  }
+
+  typedef write-bac-color {
+    type union {
+      type bbf-qos-t:qos-color;
+      type enumeration {
+        enum copy-from-flow-color {
+          if-feature "qos-bac-color-from-flow-color";
+          description
+            "The BAC color of a frames is the same as its flow
+             color.";
+        }
+      }
+    }
+    description
+      "The BAC color to be written. Either this is a specific BAC
+       color value, or it indicates where to take the BAC color
+       from.";
   }
 
   identity classifier-entry-filter-operation-type {
@@ -286,20 +331,8 @@ module bbf-qos-classifiers {
   }
 
   typedef qos-color {
-    type enumeration {
-      enum green {
-        description
-          "Identifies the green color frame.";
-      }
-      enum yellow {
-        description
-          "Identifies the yellow color frame.";
-      }
-      enum red {
-        description
-          "Identifies the red color frame.";
-      }
-    }
+    type bbf-qos-t:qos-color;
+    status deprecated;
     description
       "Defines a frame color for QoS.";
   }
@@ -310,23 +343,40 @@ module bbf-qos-classifiers {
     list pbit-marking-list {
       key "index";
       description
-        "Creates metadata which can be used to determine p-bits values
-         to write to a VLAN tag or as match criteria for another
-         classifier associated with another QoS policy with which the
-         frame is to be processed. Each entry uses a unique numeric
-         index associated with a p-bits value.";
+        "Creates metadata which can be used to determine values of
+         the p-bits to write to a VLAN tag or as match criteria for
+         another classifier associated with another QoS policy with
+         which the frame is to be processed. Each entry uses a unique
+         numeric index associated with a value of the p-bits.";
       leaf index {
-        type qos-pbit-marking-index;
+        type bbf-fpt:qos-pbit-marking-index;
         description
-          "The index associated with a p-bits value.";
+          "The index associated with a value of the p-bits.";
       }
       leaf pbit-value {
         type bbf-dot1qt:pbit;
         description
-          "A p-bits value to be inserted in the p-bits of a frame's
-           VLAN tag or as match criteria for another classifier
-           associated with another QoS policy with which the frame is
-           to be processed.";
+          "A value of the p-bits to be inserted in the p-bits of a
+           frame's VLAN tag or as match criteria for another
+           classifier associated with another QoS policy with which
+           the frame is to be processed.";
+      }
+      leaf pbit-from-frame-tag {
+        if-feature "preserve-pbit-dei-from-frame-to-metadata";
+        type bbf-fpt:tag-index;
+        must 'not(boolean(../pbit-value))' {
+          error-message
+            "The leaf 'pbit-from-frame-tag' cannot be configured "
+          + "when the leaf 'pbit-value' is configured.";
+          description
+            "Ensure that the leaf 'pbit-value' is not present when the
+             leaf 'pbit-from-frame-tag' is present, and vice versa.";
+        }
+        description
+          "Indicates that frames will get a metadata value of the
+           p-bits by copying a value of the p-bits from a frame's
+           VLAN tag. The VLAN tag from which to copy the value of the
+           p-bits is identified by the value of this leaf.";
       }
     }
   }
@@ -343,7 +393,7 @@ module bbf-qos-classifiers {
          frame is to be processed. Each entry uses a unique numeric
          index associated with a DEI value.";
       leaf index {
-        type qos-dei-marking-index;
+        type bbf-fpt:qos-dei-marking-index;
         description
           "The index associated with a DEI value.";
       }
@@ -355,6 +405,78 @@ module bbf-qos-classifiers {
            with another QoS policy with which the frame is to be
            processed.";
       }
+      leaf dei-from-frame-tag {
+        if-feature "preserve-pbit-dei-from-frame-to-metadata";
+        type bbf-fpt:tag-index;
+        must 'not(boolean(../dei-value))' {
+          error-message
+            "The leaf 'dei-from-frame-tag' cannot be configured when"
+          + " the leaf 'dei-value' is configured.";
+          description
+            "Ensure that the leaf 'dei-value' is not present when the
+             leaf 'dei-from-frame-tag' is present, and vice versa.";
+        }
+        description
+          "Indicates that frames will get a metadata DEI value by
+           copying a DEI value from a frame's VLAN tag. The VLAN tag
+           from which to copy the DEI value is identified by the value
+           of this leaf.";
+      }
+    }
+  }
+
+  grouping in-pbit-list {
+    description
+      "Ingress Priority Bits (p-bits) configuration.";
+    leaf in-pbit-list {
+      type bbf-dot1qt:pbit-list;
+      description
+        "Filter containing value(s) of the p-bits to be matched with
+         the value of the corresponding frame field. The list of
+         values form an OR condition: in case the value of the frame
+         field matches with one of the values of the leaf then there
+         is a match. In case the leaf specifies a set of values and
+         none of them appear in the frame, then there is no match. In
+         case the leaf specifies a value for a frame field that is not
+         present, then no frames match the filter. For example, an
+         untagged frame does not contain p-bits, hence this frame will
+         not match a specified value of the p-bits. In case the leaf
+         is an empty list, or not configured, then no match is
+         required and all frames classify the filter, including
+         untagged frames.
+
+         An Ethernet frame can contain multiple VLAN tags or no VLAN
+         tag. The 'vlan-tag-match-type/vlan-tagged/tag' is a list and
+         the element with index 0 is used to match with the p-bits of
+         outermost VLAN tag of the frame, the element with index 1 is
+         used to match with the p-bits of the second VLAN tag of the
+         frame.";
+    }
+  }
+
+  grouping in-dei {
+    description
+      "Ingress Drop Eligible Indicator (DEI) configuration.";
+    leaf in-dei {
+      type uint8 {
+        range "0..1";
+      }
+      description
+        "Filter containing DEI bit value(s) to be matched with the
+         values of the corresponding frame fields. In case the leaf
+         specifies a value for a frame field that is not present, then
+         no frames match the filter. For example, an untagged frame
+         does not contain a DEI bit, hence this frame will not match a
+         specified DEI bit value. In case the leaf is not configured,
+         no match is required and all frames classify the filter,
+         including untagged frames.
+
+         An Ethernet frame can contain multiple VLAN tags or no VLAN
+         tag. The 'vlan-tag-match-type/vlan-tagged/tag' is a list and
+         the element with index 0 is used to match with the DEI bit of
+         the outermost VLAN tag of the frame, the element with index
+         1 is used to match with the DEI bit of the second VLAN tag of
+         the frame.";
     }
   }
 
@@ -427,7 +549,7 @@ module bbf-qos-classifiers {
               "The tags to match, with the outermost tag to match
                assigned index 0.";
             leaf index {
-              type bbf-classif:tag-index;
+              type bbf-fpt:tag-index;
               must 'count(../../tag[index = 0]) > 0' {
                 error-message
                   "An inner tag can only be matched on when also "
@@ -444,25 +566,26 @@ module bbf-qos-classifiers {
               type bbf-dot1qt:pbit-list;
               status deprecated;
               description
-                "Filter containing p-bits value(s) to be matched with
-                 the value of the corresponding frame field. The list
-                 of values form an OR condition: in case the value of
-                 the frame field matches with one of the values of the
-                 leaf then there is a match. In case the leaf
-                 specifies a set of values and none of them appear in
-                 the frame, then there is no match. In case the leaf
-                 specifies a value for a frame field that is not
-                 present, then no frames match the filter. For
+                "Filter containing value(s) of the p-bits to be
+                 matched with the value of the corresponding frame
+                 field. The list of values form an OR condition: in
+                 case the value of the frame field matches with one of
+                 the values of the leaf then there is a match. In case
+                 the leaf specifies a set of values and none of them
+                 appear in the frame, then there is no match. In case
+                 the leaf specifies a value for a frame field that is
+                 not present, then no frames match the filter. For
                  example, an untagged frame does not contain p-bits,
-                 hence this frame will not match a specified p-bits
-                 value. In case the leaf is an empty list, or unknown,
-                 then no match is required and all frames classify
-                 the filter, including untagged frames.
+                 hence this frame will not match a specified value of
+                 the p-bits. In case the leaf 'in-pbit-list' is an
+                 empty list, or is not configured, then no match is
+                 required and all frames classify the filter,
+                 including untagged frames.
 
                  An Ethernet frame can contain multiple VLAN tags or
-                 no VLAN tag. The vlan-tag-match-type/vlan-tagged/tag
-                 is a list and the element with index 0 is used to
-                 match with the p-bits of outermost VLAN tag of the
+                 no VLAN tag. The 'vlan-tag-match-type/vlan-tagged/
+                 tag' is a list and the element with index 0 is used
+                 to match with the p-bits of outermost VLAN tag of the
                  frame, the element with index 1 is used to match with
                  the p-bits of the second VLAN tag of the frame.";
             }
@@ -478,16 +601,16 @@ module bbf-qos-classifiers {
                  not present, then no frames match the filter. For
                  example, an untagged frame does not contain a DEI
                  bit, hence this frame will not match a specified DEI
-                 bit value. In case the leaf is unknown, no match is
-                 required and all frames classify the filter,
+                 bit value. In case the leaf is not configured, no
+                 match is required and all frames classify the filter,
                  including untagged frames.
 
                  An Ethernet frame can contain multiple VLAN tags or
-                 no VLAN tag. The vlan-tag-match-type/vlan-tagged/tag
-                 is a list and the element with index 0 is used to
-                 match with the DEI bit of the outermost VLAN tag of
-                 the frame, the element with index 1 is used to match
-                 with the DEI bit of the second VLAN tag of the
+                 no VLAN tag. The 'vlan-tag-match-type/vlan-tagged/
+                 tag' is a list and the element with index 0 is used
+                 to match with the DEI bit of the outermost VLAN tag
+                 of the frame, the element with index 1 is used to
+                 match with the DEI bit of the second VLAN tag of the
                  frame.";
             }
           }
@@ -620,6 +743,19 @@ module bbf-qos-classifiers {
     }
   }
 
+  grouping classifier-entry-ref {
+    description
+      "A reference to a classifier entry.";
+    leaf name {
+      type leafref {
+        path "/bbf-qos-cls:classifiers/bbf-qos-cls:classifier-"
+           + "entry/bbf-qos-cls:name";
+      }
+      description
+        "The name of the referenced classifier entry.";
+    }
+  }
+
   container classifiers {
     description
       "Provides data nodes that allow to manage methods to classify
@@ -665,7 +801,7 @@ module bbf-qos-classifiers {
       }
       leaf flow-color {
         type union {
-          type bbf-qos-cls:qos-color;
+          type bbf-qos-t:qos-color;
           type enumeration {
             enum discard {
               description
@@ -685,7 +821,7 @@ module bbf-qos-classifiers {
       }
       leaf bac-color {
         type union {
-          type bbf-qos-cls:qos-color;
+          type write-bac-color;
           type enumeration {
             enum discard {
               description
@@ -750,7 +886,7 @@ module bbf-qos-classifiers {
       }
       leaf flow-color {
         type union {
-          type qos-color;
+          type bbf-qos-t:qos-color;
           type enumeration {
             enum discard {
               description
@@ -770,7 +906,7 @@ module bbf-qos-classifiers {
       }
       leaf bac-color {
         type union {
-          type qos-color;
+          type write-bac-color;
           type enumeration {
             enum discard {
               description
@@ -836,73 +972,6 @@ module bbf-qos-classifiers {
         }
       }
       uses classifier-action-entry-cfg;
-    }
-  }
-
-  grouping classifier-entry-ref {
-    description
-      "A reference to a classifier entry.";
-    leaf name {
-      type leafref {
-        path "/bbf-qos-cls:classifiers/bbf-qos-cls:classifier-"
-           + "entry/bbf-qos-cls:name";
-      }
-      description
-        "The name of the referenced classifier entry.";
-    }
-  }
-
-  grouping in-pbit-list {
-    description
-      "Ingress Priority Bits (p-bits) configuration.";
-    leaf in-pbit-list {
-      type bbf-dot1qt:pbit-list;
-      description
-        "Filter containing p-bits value(s) to be matched with the
-         value of the corresponding frame field. The list of values
-         form an OR condition: in case the value of the frame field
-         matches with one of the values of the leaf then there is a
-         match. In case the leaf specifies a set of values and none of
-         them appear in the frame, then there is no match. In case
-         the leaf specifies a value for a frame field that is not
-         present, then no frames match the filter. E.g. an untagged
-         frame does not contain p-bits, hence this frame will not
-         match a specified p-bits value. In case the leaf is an empty
-         list, or unknown, then no match is required and all frames
-         classify the filter, including untagged frames.
-
-         An Ethernet frame can contain multiple VLAN tags or no VLAN
-         tag. The vlan-tag-match-type/vlan-tagged/tag is a list and
-         the element with index 0 is used to match with the p-bits of
-         outermost VLAN tag of the frame, the element with index 1 is
-         used to match with the p-bits of the second VLAN tag of the
-         frame.";
-    }
-  }
-
-  grouping in-dei {
-    description
-      "Ingress Drop Eligible Indicator (DEI) configuration.";
-    leaf in-dei {
-      type uint8 {
-        range "0..1";
-      }
-      description
-        "Filter containing DEI bit value(s) to be matched with the
-         values of the corresponding frame fields. In case the leaf
-         specifies a value for a frame field that is not present, then
-         no frames match the filter. E.g. an untagged frame does not
-         contain a DEI bit, hence this frame will not match a
-         specified DEI bit value. In case the leaf is unknown, no
-         match is required and all frames classify the filter,
-         including untagged frames.
-
-         An Ethernet frame can contain multiple VLAN tags or no VLAN
-         tag. The vlan-tag-match-type/vlan-tagged/tag is a list and
-         the element with index 0 is used to match with the DEI bit of
-         the outermost VLAN tag of the frame, the element with index
-         1 is used to match with the DEI bit of the second VLAN tag of
-         the frame.";
     }
   }
 }

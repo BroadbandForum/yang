@@ -9,20 +9,23 @@ module bbf-frame-processing-profiles {
   import bbf-dot1q-types {
     prefix bbf-dot1qt;
   }
+  import bbf-frame-processing-types {
+    prefix bbf-fpt;
+  }
+  import bbf-frame-classification {
+    prefix bbf-classif;
+  }
+  import bbf-frame-editing {
+    prefix bbf-fedit;
+  }
   import ietf-interfaces {
     prefix if;
   }
   import bbf-sub-interfaces {
     prefix bbf-subif;
   }
-  import bbf-frame-classification {
-    prefix bbf-classif;
-  }
   import bbf-sub-interface-tagging {
     prefix bbf-subif-tag;
-  }
-  import bbf-qos-classifiers {
-    prefix bbf-qos-cls;
   }
 
   organization
@@ -32,13 +35,13 @@ module bbf-frame-processing-profiles {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -53,7 +56,7 @@ module bbf-frame-processing-profiles {
      actions, and it augments the frame processing configuration of a
      (VLAN sub-)interface for using this profile
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -93,9 +96,19 @@ module bbf-frame-processing-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -139,14 +152,14 @@ module bbf-frame-processing-profiles {
          behavior. The frame processing behavior refers to both
          directions:
          - Ingress, refers to frames received from the lower-layer
-           interface of an interface referencing this profile into
-           the interface referencing this profile.
-         - Egress, refers to frames received from a higher layer of
+           interface of an interface referencing this profile into the
+           interface referencing this profile.
+         - Egress, refers to frames received from a higher-layer of
            the interface stack, or from a forwarder, and that are to
            be transmitted to the lower-layer of the interface
            referencing this profile.
          - In the ingress direction, classification criteria identify
-           whether a frame received on the lower layer interface shall
+           whether a frame received on the lower-layer interface shall
            be offered to the interface referencing this profile.
          - For both the ingress and egress direction, rewrite
            configuration provides the tag manipulations to be
@@ -167,7 +180,7 @@ module bbf-frame-processing-profiles {
            criteria of other rules of this or of other interfaces on
            the same lower-layer interface.
 
-           The higher the value, the lower the priority, i.e.
+           The higher the value, the lower the priority, i.e.,
            priority 1 is the highest priority.";
       }
       container match-criteria {
@@ -252,7 +265,8 @@ module bbf-frame-processing-profiles {
                 leaf tag-type {
                   type union {
                     type bbf-dot1qt:dot1q-tag-type;
-                    type uint16;
+                    type bbf-dot1qt:ether-type;
+                    type bbf-dot1qt:ether-type-hex;
                   }
                   mandatory true;
                   description
@@ -287,14 +301,14 @@ module bbf-frame-processing-profiles {
                     type enumeration {
                       enum any {
                         description
-                          "Matches any p-bits value in the range of 0
-                           to 7.";
+                          "Matches any value of the p-bits in the
+                           range of 0 to 7.";
                       }
                     }
                   }
                   default "any";
                   description
-                    "Allowed p-bits values.";
+                    "Allowed value of the p-bits.";
                 }
                 leaf dei {
                   type union {
@@ -303,7 +317,7 @@ module bbf-frame-processing-profiles {
                       enum any {
                         description
                           "Matches any Drop Eligible Indicator (DEI)
-                           value, i.e. value 0 or 1.";
+                           value, i.e., value 0 or 1.";
                       }
                     }
                   }
@@ -329,8 +343,8 @@ module bbf-frame-processing-profiles {
            will be configured with exclude criteria.";
         description
           "Exclude criteria extend the match criteria defined within
-           the container 'match-criteria'. I.e. a frame matches in the
-           interface referencing this profile when it matches the
+           the container 'match-criteria'. I.e., a frame matches in
+           the interface referencing this profile when it matches the
            criteria defined in 'match-criteria' container AND if it
            does not match the criteria defined in the
            'exclude-criteria' container. A non-existing
@@ -371,7 +385,7 @@ module bbf-frame-processing-profiles {
                     "The p-bits are not preserved.";
                 }
               }
-              type bbf-qos-cls:qos-pbit-marking-index;
+              type bbf-fpt:qos-pbit-marking-index;
             }
             default "not-preserved";
             description
@@ -386,7 +400,7 @@ module bbf-frame-processing-profiles {
                     "The DEI bit is not preserved.";
                 }
               }
-              type bbf-qos-cls:qos-pbit-marking-index;
+              type bbf-fpt:qos-dei-marking-index;
             }
             default "not-preserved";
             description
@@ -394,104 +408,14 @@ module bbf-frame-processing-profiles {
                which the DEI bit shall be copied.";
           }
         }
-        leaf pop-tags {
-          type uint8 {
-            range "0..2";
-          }
-          default "0";
-          description
-            "The number of tags to pop.";
-        }
-        list push-tag {
-          if-feature "bbf-fpprof:vlan-id-translation";
-          key "index";
-          max-elements 2;
-          description
-            "The VLAN tags to push.";
-          leaf index {
-            type bbf-classif:tag-index;
-            must '(count(../../push-tag[index = 0]) > 0)' {
-              error-message
-                "An inner tag has been specified without an outer "
-              + "tag";
-              description
-                "Only allow a push of an inner tag if an outer tag is
-                 also being pushed.";
-            }
+        uses bbf-fedit:pop-and-push-vlan-tags {
+          refine "push-tag" {
+            if-feature "bbf-fpprof:vlan-id-translation";
             description
-              "The index into the tag stack.";
+              "Makes the push-tag data node feature dependent.";
           }
-          leaf tag-type {
-            type union {
-              type bbf-dot1qt:dot1q-tag-type;
-              type uint16;
-            }
-            description
-              "VLAN tag type.";
-          }
-          leaf vlan-id {
-            type union {
-              type bbf-dot1qt:vlan-id-or-0;
-              type enumeration {
-                enum vlan-id-is-a-parameter {
-                  description
-                    "The VLAN ID of the tag to push into frames is
-                     not specified inside this profile but has to be
-                     specified at the place where this profile is
-                     referenced.";
-                }
-              }
-            }
-            mandatory true;
-            description
-              "The VLAN ID value to write in the sent frames'
-               identified VLAN tag.";
-          }
-          uses bbf-subif-tag:pbit-marking {
-            augment "pbit" {
-              description
-                "Provides a case for configuring where to find the
-                 p-bits of a VLAN tag of a frame.";
-              case generate-pbit-from-marking-list-or-0 {
-                description
-                  "The p-bits field in the VLAN tag is generated from
-                   the frame's p-bit marking list.
-
-                   If there is no p-bits in the p-bit marking list,
-                   then p-bits=000 is pushed in the VLAN tag of the
-                   frame.";
-                leaf pbit-marking-index {
-                  type bbf-qos-cls:qos-pbit-marking-index;
-                  description
-                    "This leaf provides the index in the p-bit marking
-                     list from which the p-bits value shall be taken
-                     to put in the VLAN tag.";
-                }
-              }
-            }
-          }
-          uses bbf-subif-tag:dei-marking {
-            augment "dei" {
-              description
-                "Provides a case for configuring where to find the
-                 DEI bit of a VLAN tag of a frame.";
-              case generate-dei-from-marking-list-or-0 {
-                description
-                  "The DEI field in the VLAN tag is generated from
-                   the frame's DEI marking list.
-
-                   If there is no DEI bit in the DEI marking list,
-                   then DEI bit 0 is pushed in the VLAN tag of the
-                   frame.";
-                leaf dei-marking-index {
-                  type bbf-qos-cls:qos-dei-marking-index;
-                  description
-                    "This leaf provides the index in the DEI marking
-                     list from which the DEI value shall be taken to
-                     put in the VLAN tag.";
-                }
-              }
-            }
+          refine "push-tag/pbit/write-pbit-value" {
+            if-feature "bbf-subif-tag:write-pbit-value-in-vlan-tag";
           }
         }
       }
@@ -502,114 +426,56 @@ module bbf-frame-processing-profiles {
         description
           "Egress refers to frames sent from the interface from which
            this profile is referenced towards the the lower-layer in
-           the interface stack, i.e. in the direction of the physical
+           the interface stack, i.e., in the direction of the physical
            interface. Rewrite refers to the supported tag
            manipulations.";
-        leaf pop-tags {
-          if-feature "bbf-fpprof:vlan-id-translation";
-          type uint8 {
-            range "0..2";
-          }
-          default "0";
-          description
-            "The number of tags to pop.";
-        }
-        list push-tag {
-          key "index";
-          max-elements 2;
-          description
-            "The VLAN tags to push.";
-          leaf index {
-            type bbf-classif:tag-index;
-            must '(count(../../push-tag[index = 0]) > 0)' {
-              error-message
-                "An inner tag has been specified without an outer "
-              + "tag";
-              description
-                "Only allow a push of an inner tag if an outer tag is
-                 also being pushed.";
-            }
+        uses bbf-fedit:pop-and-push-vlan-tags-framework {
+          refine "pop-tags" {
+            if-feature "bbf-fpprof:vlan-id-translation";
             description
-              "The index into the tag stack.";
+              "Makes the 'pop-tags' data node feature dependent.";
           }
-          leaf tag-type {
-            type union {
-              type bbf-dot1qt:dot1q-tag-type;
-              type uint16;
-              type enumeration {
-                enum tag-type-from-match {
-                  description
-                    "The same value that is used in the match-criteria
-                     tag's list element with the same index is pushed
-                     into the frame.";
-                }
-              }
-            }
-            default "tag-type-from-match";
+          refine "push-tag/pbit/write-pbit-value" {
+            if-feature "bbf-subif-tag:write-pbit-value-in-vlan-tag";
+          }
+          augment "push-tag" {
             description
-              "VLAN tag type.";
-          }
-          leaf vlan-id {
-            type union {
-              type bbf-dot1qt:vlan-id-or-0;
-              type enumeration {
-                enum vlan-id-from-match {
-                  description
-                    "The same value that is used in the match-criteria
-                     tag's list element with the same index is pushed
-                     into the frame.";
+              "Augments data nodes that provide values to be set in
+               the frames' tag.";
+            leaf tag-type {
+              type union {
+                type bbf-dot1qt:dot1q-tag-type;
+                type bbf-dot1qt:ether-type;
+                type bbf-dot1qt:ether-type-hex;
+                type enumeration {
+                  enum tag-type-from-match {
+                    description
+                      "The same value that is used in the
+                       match-criteria tag's list element with the same
+                       index is pushed into the frame.";
+                  }
                 }
               }
-            }
-            default "vlan-id-from-match";
-            description
-              "The VLAN ID value to write in the sent frames'
-               identified VLAN tag.";
-          }
-          uses bbf-subif-tag:pbit-marking {
-            augment "pbit" {
+              default "tag-type-from-match";
               description
-                "Provides a case for configuring where to find the
-                 p-bits of a VLAN tag of a frame.";
-              case generate-pbit-from-marking-list-or-0 {
-                description
-                  "The p-bits field in the VLAN tag is generated from
-                   the frame's p-bit marking list.
-
-                   If there is no p-bits in the p-bit marking list,
-                   then p-bits=000 is pushed in the VLAN tag of the
-                   frame.";
-                leaf pbit-marking-index {
-                  type bbf-qos-cls:qos-pbit-marking-index;
-                  description
-                    "This leaf provides the index in the p-bit marking
-                     list from which the p-bits value shall be taken
-                     to put in the VLAN tag.";
-                }
-              }
+                "VLAN tag type.";
             }
-          }
-          uses bbf-subif-tag:dei-marking {
-            augment "dei" {
-              description
-                "Provides a case for configuring where to find the
-                 DEI bit of a VLAN tag of a frame.";
-              case generate-dei-from-marking-list-or-0 {
-                description
-                  "The DEI field in the VLAN tag is generated from
-                   the frame's DEI marking list.
-
-                   If there is no DEI bit in the DEI marking list,
-                   then DEI bit 0 is pushed in the VLAN tag of the
-                   frame.";
-                leaf dei-marking-index {
-                  type bbf-qos-cls:qos-dei-marking-index;
-                  description
-                    "This leaf provides the index in the DEI marking
-                     list from which the DEI value shall be taken to
-                     put in the VLAN tag.";
+            leaf vlan-id {
+              type union {
+                type bbf-dot1qt:vlan-id-or-0;
+                type enumeration {
+                  enum vlan-id-from-match {
+                    description
+                      "The same value that is used in the
+                       match-criteria tag's list element with the same
+                       index is pushed into the frame.";
+                  }
                 }
               }
+              default "vlan-id-from-match";
+              description
+                "The VLAN ID value to write in the sent frames'
+                 identified VLAN tag.";
             }
           }
         }

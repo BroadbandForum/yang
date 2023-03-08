@@ -18,6 +18,9 @@ module bbf-frame-classification {
   import bbf-inet-types {
     prefix bbf-inet;
   }
+  import bbf-frame-processing-types {
+    prefix bbf-fpt;
+  }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -26,13 +29,13 @@ module bbf-frame-classification {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -45,7 +48,7 @@ module bbf-frame-classification {
      Specifically, this module contains reusable groupings defined for
      frame classification.
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -85,9 +88,19 @@ module bbf-frame-classification {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -150,7 +163,7 @@ module bbf-frame-classification {
     type enumeration {
       enum igmp {
         description
-          "Identifies IPv4 IGMP messages, i.e. the IPv4 packets for
+          "Identifies IPv4 IGMP messages, i.e., the IPv4 packets for
            which in the IPv4 header the protocol field is set to the
            value 0x02.";
       }
@@ -177,7 +190,7 @@ module bbf-frame-classification {
       enum pppoe-discovery {
         description
           "Identifies PPPoE discovery messages, which are Ethernet
-           frames with Ethertype=0x8863.";
+           frames with Ethertype 0x8863.";
       }
       enum icmpv6 {
         description
@@ -198,22 +211,22 @@ module bbf-frame-classification {
       enum arp {
         description
           "Identifies the ARP messages, which are Ethernet frames with
-           ethertype 0x0806.";
+           Ethertype 0x0806.";
       }
       enum cfm {
         description
           "Identifies the CFM messages, which are Ethernet frames with
-           ethertype 0x8902.";
+           Ethertype 0x8902.";
       }
       enum dot1x {
         description
           "Identifies the DOT1X messages, which are Ethernet frames
-           with ethertype 0x888E.";
+           with Ethertype 0x888E.";
       }
       enum lacp {
         description
           "Identifies the LACP messages, which are Ethernet frames
-           with ethertype 0x8809.";
+           with Ethertype 0x8809.";
       }
     }
     description
@@ -231,8 +244,18 @@ module bbf-frame-classification {
       }
     }
     description
-      "Specifies a range of DSCP values. A special value 'any'
-       allows for any DSCP value.";
+      "Specifies a range of DSCP values. A special value 'any' allows
+       for any DSCP value.";
+  }
+
+  typedef tag-index {
+    type bbf-fpt:tag-index;
+    status deprecated;
+    description
+      "The index of the VLAN tag in a frame.
+       - Tag 0 refers to the outer tag, i.e., the tag just after the
+       source MAC address.
+       - Tag 1 refers to the tag after tag 0.";
   }
 
   grouping mac-address-match {
@@ -243,9 +266,9 @@ module bbf-frame-classification {
         "A choice on the value of the MAC address.";
       case any-multicast-mac-address {
         description
-          "This represents the multicast MAC addresses, i.e. addresses
-           for which the least significant bit of the first octet is
-           set to 1.";
+          "This represents the multicast MAC addresses, i.e.,
+           addresses for which the least significant bit of the first
+           octet is set to 1.";
         leaf any-multicast-mac-address {
           type empty;
           description
@@ -254,7 +277,7 @@ module bbf-frame-classification {
       }
       case unicast-address {
         description
-          "This represents the unicast MAC addresses, i.e. addresses
+          "This represents the unicast MAC addresses, i.e., addresses
            for which the least significant bit of the first octet is
            set to 0 (zero).";
         leaf unicast-address {
@@ -265,7 +288,7 @@ module bbf-frame-classification {
       }
       case broadcast-address {
         description
-          "This represents the broadcast MAC address, i.e. address
+          "This represents the broadcast MAC address, i.e., address
            FF:FF:FF:FF:FF:FF.";
         leaf broadcast-address {
           type empty;
@@ -363,17 +386,6 @@ module bbf-frame-classification {
     }
   }
 
-  typedef tag-index {
-    type uint8 {
-      range "0..1";
-    }
-    description
-      "The index of the VLAN tag in a frame.
-       - Tag 0 refers to the outer tag, i.e. the tag just after the
-       source MAC address.
-       - Tag 1 refers to the tag after tag 0.";
-  }
-
   grouping dot1q-tag-ranges-or-any {
     description
       "Grouping to allow configuration to identify an 802.1Q VLAN tag
@@ -426,13 +438,14 @@ module bbf-frame-classification {
           type enumeration {
             enum any {
               description
-                "Matches any p-bits value in the range of 0 to 7.";
+                "Matches any value of the p-bits in the range of 0 to
+                 7.";
             }
           }
         }
         default "any";
         description
-          "Allowed p-bits values.";
+          "Allowed value of the p-bits.";
       }
       leaf dei {
         type union {
@@ -441,7 +454,7 @@ module bbf-frame-classification {
             enum any {
               description
                 "Matches any Drop Eligible Indicator (DEI) value,
-                 i.e. value 0 or 1.";
+                 i.e., value 0 or 1.";
             }
           }
         }
@@ -452,7 +465,7 @@ module bbf-frame-classification {
     }
   }
 
-  grouping multiple-vlan-tag-match {
+  grouping vlan-tag-match {
     description
       "Flexible match on the VLAN tags of Ethernet frames.";
     choice vlan-tag-match-type {
@@ -462,16 +475,6 @@ module bbf-frame-classification {
          If no case is configured, then the presence or absence of
          VLAN tags in the frame is not a matching criterion and then,
          as to this matching criterion, 'all frames match'.";
-      case match-all {
-        status deprecated;
-        leaf match-all {
-          type empty;
-          status deprecated;
-          description
-            "Matches all traffic, i.e; irrespective of the frame being
-             tagged or untagged.";
-        }
-      }
       case untagged {
         leaf untagged {
           type empty;
@@ -488,17 +491,45 @@ module bbf-frame-classification {
             "The tags to match, with the outermost tag to match
              assigned index 0.";
           leaf index {
-            type tag-index;
+            type bbf-fpt:tag-index;
             must 'count(../../tag[index = 0]) > 0' {
               error-message
                 "An inner tag can only be matched on when also "
               + "matching on an outer tag.";
               description
-                "Only allow matching on an inner tag, if also
-                 matching on the outer tags at the same time.";
+                "Only allow matching on an inner tag, if also matching
+                 on the outer tags at the same time.";
             }
             description
               "The index into the tag stack, outermost tag first.";
+          }
+        }
+      }
+    }
+  }
+
+  grouping multiple-vlan-tag-match {
+    description
+      "Flexible match on the VLAN tags of Ethernet frames, or the
+       deprecated 'match-all' classification.";
+    uses vlan-tag-match {
+      description
+        "Flexible match on the VLAN tags of Ethernet frames.";
+      augment "vlan-tag-match-type" {
+        description
+          "Provides a choice of how the frames may be matched.
+
+           If no case is configured, then the presence or absence of
+           VLAN tags in the frame is not a matching criterion and
+           then, as to this matching criterion, 'all frames match'.";
+        case match-all {
+          status deprecated;
+          leaf match-all {
+            type empty;
+            status deprecated;
+            description
+              "Matches all traffic, i.e., irrespective of the frame
+               being tagged or untagged.";
           }
         }
       }
@@ -536,10 +567,9 @@ module bbf-frame-classification {
       }
       case rip-multicast-address {
         description
-          "This represents the RIP version 2 IPv4 multicast
-           group address 224.0.0.9 that is used to send routing
-           information to all RIPv2-aware routers on a network
-           segment.";
+          "This represents the RIP version 2 IPv4 multicast group
+           address 224.0.0.9 that is used to send routing information
+           to all RIPv2-aware routers on a network segment.";
         leaf rip-multicast-address {
           type empty;
           description
@@ -698,8 +728,8 @@ module bbf-frame-classification {
       }
       case destination-mac-address {
         description
-          "The frame classification to be performed on the
-           destination MAC address.";
+          "The frame classification to be performed on the destination
+           MAC address.";
         uses bbf-classif:mac-address-match;
       }
       case destination-ipv4-address {
@@ -729,8 +759,8 @@ module bbf-frame-classification {
 
          If the container is not present, then none of the destination
          fields of the frame are used as match criterion and then, as
-         to this match criterion, 'all frames match'. The same
-         applies when the container exists but does not contain any
+         to this match criterion, 'all frames match'. The same applies
+         when the container exists but does not contain any
          configuration.";
       description
         "Identifies the set of frames to which the frame-forwarding
@@ -753,8 +783,8 @@ module bbf-frame-classification {
       list destination-ipv4-address {
         key "name";
         description
-          "The frame classification to be performed on the
-           destination IPv4 address.";
+          "The frame classification to be performed on the destination
+           IPv4 address.";
         leaf name {
           type bbf-yang:string-ascii64;
           description
@@ -765,8 +795,8 @@ module bbf-frame-classification {
       list destination-ipv6-address {
         key "name";
         description
-          "The frame classification to be performed on the
-           destination IPv6 address.";
+          "The frame classification to be performed on the destination
+           IPv6 address.";
         leaf name {
           type bbf-yang:string-ascii64;
           description
@@ -794,7 +824,7 @@ module bbf-frame-classification {
         leaf any-protocol {
           type empty;
           description
-            "Identifies any protocol, i.e. not match is specified for
+            "Identifies any protocol, i.e., not match is specified for
              any protocol.";
         }
       }

@@ -23,13 +23,13 @@ module bbf-qos-enhanced-scheduling {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -42,7 +42,7 @@ module bbf-qos-enhanced-scheduling {
      Specifically, this module augments interfaces to add additional
      configuration to manage enhanced traffic scheduling.
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -82,9 +82,19 @@ module bbf-qos-enhanced-scheduling {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -140,9 +150,15 @@ module bbf-qos-enhanced-scheduling {
 
   feature dual-rate-scheduling-from-scheduler {
     description
-      "Indicates support for dual rate scheduling, i.e. configuring
+      "Indicates support for dual rate scheduling, i.e., configuring
        from a parent scheduler a separate priority and/or weight for
        the CIR and EIR traffic from a single child scheduler.";
+  }
+
+  feature queue-templates-in-scheduler {
+    description
+      "Indicates that the network element supports templates to
+       configure queues within a scheduler.";
   }
 
   identity traffic-type {
@@ -203,6 +219,49 @@ module bbf-qos-enhanced-scheduling {
     }
   }
 
+  grouping scheduler-containing-queues-ref {
+    description
+      "A reference to a scheduling node.";
+    leaf root-if-name {
+      type leafref {
+        path "/if:interfaces/if:interface/if:name";
+      }
+      description
+        "The name of the interface that is the traffic management root
+         of a scheduling hierarchy.
+
+         In the case that this reference is being made from an
+         interface that is 'stacked' on lower layer interfaces, the
+         referenced interface must be to an interface that is lower in
+         the stack.
+
+         For example, a 'vlan-sub-interface' is stacked on top of an
+         'ethernet-like' interface which contains the 'tm-root'. If
+         the reference is being made from the 'vlan-sub-interface',
+         the 'root-if-name' must be of the 'ethernet-like' interface
+         on which it is stacked.";
+    }
+    leaf scheduler-node-name {
+      type leafref {
+        path "/if:interfaces/if:interface[if:name = current()/../"
+           + "root-if-name]/bbf-qos-tm:tm-root/bbf-qos-sched:"
+           + "scheduler-node/bbf-qos-sched:name";
+      }
+      must
+        "/if:interfaces/if:interface[if:name = current()/../"
+      + "root-if-name]/bbf-qos-tm:tm-root/bbf-qos-sched:"
+      + "scheduler-node[bbf-qos-sched:name=current()]/bbf-qos-sched:"
+      + "contains-queues = 'true'" {
+        error-message
+          "The referenced scheduler does not contain queues.";
+        description
+          "The referenced scheduler must contain queues.";
+      }
+      description
+        "The name of the referenced scheduling-nodes entry.";
+    }
+  }
+
   augment "/if:interfaces/if:interface/bbf-qos-tm:tm-root/bbf-qos-"
         + "tm:children-type" {
     description
@@ -248,7 +307,21 @@ module bbf-qos-enhanced-scheduling {
              must be lower than the scheduling-level of its referenced
              children.";
         }
-        uses bbf-qos-shap:shaper-profile-ref;
+        uses bbf-qos-shap:shaper-profile-ref {
+          refine "shaper-name" {
+            description
+              "Provides an optional reference to a shaper.
+
+               If the scheduler has queues as children and these
+               queues are created according to a template, then it is
+               possible that a shaper profile is referenced from
+               within the template. If a shaper profile is referenced
+               from within the template and in addition it is
+               referenced from the scheduler itself, then this last
+               one overrules, i.e., the shaper referenced from the
+               scheduler (here) is the one to be used.";
+          }
+        }
         choice children-type {
           description
             "Defines the child's node type of a scheduling node in
@@ -265,15 +338,20 @@ module bbf-qos-enhanced-scheduling {
                 type leafref {
                   path "../../../scheduler-node/name";
                 }
-                must
-                  'current()/../../../bbf-qos-sched:scheduler-node'
-                + '[bbf-qos-sched:name=current()]/scheduling-level > '
-                + 'current()/../../scheduling-level' {
+                must 'number(current()/../../../bbf-qos-sched:'
+                   + 'scheduler-node[bbf-qos-sched:name=current()]'
+                   + '/scheduling-level) > '
+                   + '(current()/../../scheduling-level)' {
                   error-message
-                    "The referenced child scheduler node must have "
-                  + "a configured scheduling level which is greater "
-                  + "than the configured scheduling level of the "
+                    "The referenced child scheduler node has a "
+                  + "configured scheduling level lower than or equal "
+                  + "to the configured scheduling level of the "
                   + "parent scheduler node which references it.";
+                  description
+                    "The referenced child scheduler node must have a
+                     configured scheduling level which is greater than
+                     the configured scheduling level of the parent
+                     scheduler node which references it.";
                 }
                 description
                   "The name of the referenced 'scheduler-node' entry.
@@ -420,6 +498,55 @@ module bbf-qos-enhanced-scheduling {
                 "Indicates the scheduler contains queues.";
             }
             uses bbf-qos-tm:queues;
+          }
+          case queues-from-template {
+            if-feature "bbf-qos-tm:queue-templates and "
+                     + "queue-templates-in-scheduler";
+            description
+              "The children are a list of queues, however these queues
+               are not explicitly configured. Instead a reference is
+               provided to a template that contains the definition of
+               queues to be created.
+
+               The queues' state data is as for case 'queue', i.e.,
+               when queue statistics collection is enabled, then the
+               state data will contain data statistics per queue. The
+               'queue-id' of the queues is the 'queue-id' used in the
+               template.";
+            container queues-from-template {
+              description
+                "Data for defining queues using a template.";
+              leaf queue-template {
+                type leafref {
+                  path "/bbf-qos-tm:tm-profiles"
+                     + "/bbf-qos-tm:queue-templates"
+                     + "/bbf-qos-tm:template"
+                     + "/bbf-qos-tm:name";
+                }
+                mandatory true;
+                description
+                  "A reference to a scheduler with queues template.";
+              }
+              leaf queue-statistics-enable {
+                if-feature "bbf-qos-tm:queue-statistics";
+                type boolean;
+                description
+                  "If 'false', no statistics will be collected. If
+                   'true', enable statistics collection per queue. 
+                   When transitioning from false to true (disabled to
+                   enabled), any existing counts should be cleared.
+
+                   Note that statistics collection can also be enabled
+                   from within the template. This leaf defined here
+                   overrules the setting inside the template.
+
+                   When the leaf defined here is not configured (does
+                   not exist) it means the setting within the template
+                   will be applied. When there is also no setting in
+                   the template it has the same meaning as queue
+                   statistics being disabled.";
+              }
+            }
           }
           case child-scheduler-queues {
             if-feature "child-scheduler-queue-references";
@@ -621,47 +748,7 @@ module bbf-qos-enhanced-scheduling {
         + "token-bucket shaper.";
       }
       description
-        "An absolute reference to a shaper profile.";
-    }
-  }
-
-  grouping scheduler-containing-queues-ref {
-    description
-      "An absolute reference to a scheduling node.";
-    leaf root-if-name {
-      type leafref {
-        path "/if:interfaces/if:interface/if:name";
-      }
-      description
-        "The name of the interface that is the traffic management root
-         of a scheduling hierarchy.
-
-         In the case that this reference is being made from an
-         interface that is 'stacked' on lower layer interfaces, the
-         referenced interface must be to an interface that is lower in
-         the stack.
-
-         For example, a 'vlan-sub-interface' is stacked on top of an
-         'ethernet-like' interface which contains the 'tm-root'. If
-         the reference is being made from the 'vlan-sub-interface',
-         the 'root-if-name' must be of the 'ethernet-like' interface
-         on which it is stacked.";
-    }
-    leaf scheduler-node-name {
-      type leafref {
-        path "/if:interfaces/if:interface[if:name = current()/../"
-           + "root-if-name]/bbf-qos-tm:tm-root/bbf-qos-sched:"
-           + "scheduler-node/bbf-qos-sched:name";
-      }
-      must
-        "/if:interfaces/if:interface[if:name = current()/../"
-      + "root-if-name]/bbf-qos-tm:tm-root/bbf-qos-sched:"
-      + "scheduler-node[bbf-qos-sched:name=current()]/bbf-qos-sched:"
-      + "contains-queues = 'true'" {
-        error-message "The referenced scheduler must contain queues.";
-      }
-      description
-        "The name of the referenced scheduling-nodes entry.";
+        "A reference to a shaper profile.";
     }
   }
 

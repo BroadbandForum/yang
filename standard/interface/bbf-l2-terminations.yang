@@ -12,6 +12,9 @@ module bbf-l2-terminations {
   import bbf-dot1q-types {
     prefix bbf-dot1qt;
   }
+  import bbf-frame-processing-types {
+    prefix bbf-fpt;
+  }
   import bbf-frame-classification {
     prefix bbf-classif;
   }
@@ -23,13 +26,13 @@ module bbf-l2-terminations {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -39,7 +42,7 @@ module bbf-l2-terminations {
      As such, this module is specific to access network equipment
      (e.g., BBF-specified Access Nodes and FTTdp DPUs).
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -79,9 +82,19 @@ module bbf-l2-terminations {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -101,6 +114,14 @@ module bbf-l2-terminations {
       "TR-383a3: Common YANG Modules
                  <https://www.broadband-forum.org/technical/download/
                           TR-383_Amendment-3.pdf>";
+  }
+
+  feature generate-pbit-from-marking-list {
+    description
+      "Indicates support for writing a configurable value of the
+       p-bits into a VLAN tag. This is done by copying a value
+       available in metadata into the frame. The metadata containing
+       such values is called a marking list.";
   }
 
   augment "/if:interfaces/if:interface" {
@@ -172,11 +193,41 @@ module bbf-l2-terminations {
             description
               "The VLAN ID or the value 0 (priority-tagged).";
           }
-          leaf pbit {
-            type bbf-dot1qt:pbit;
-            default "0";
+          choice write-pbit {
+            default "write-pbit-value";
             description
-              "Specified p-bit value to write into the tag.";
+              "Defines how to write the p-bits.";
+            case write-pbit-value {
+              description
+                "Write a value of the p-bits into the tag.";
+              leaf pbit {
+                type bbf-dot1qt:pbit;
+                default "0";
+                description
+                  "Specified value of the p-bits to write into the
+                   tag.";
+              }
+            }
+            case generate-pbit-from-marking-list-or-0 {
+              if-feature "generate-pbit-from-marking-list";
+              description
+                "The p-bits field in the VLAN tag is taken from the
+                 frame's p-bit marking list. This is a piece of
+                 metadata, associated to a frame during its
+                 processing, and in which values are stored based on
+                 configured processing rules.
+
+                 If there are no p-bits in the p-bit marking list,
+                 then p-bits=000 is pushed in the VLAN tag of the
+                 frame.";
+              leaf pbit-marking-index {
+                type bbf-fpt:qos-pbit-marking-index;
+                description
+                  "This leaf provides the index in the p-bit marking
+                   list from which the value of the p-bits shall be
+                   taken to put in the VLAN tag.";
+              }
+            }
           }
         }
       }

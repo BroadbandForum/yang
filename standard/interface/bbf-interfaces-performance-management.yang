@@ -20,13 +20,13 @@ module bbf-interfaces-performance-management {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -40,7 +40,7 @@ module bbf-interfaces-performance-management {
      statistics defined by the IETF interfaces data model,
      ietf-interfaces (RFC7223).
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -80,9 +80,19 @@ module bbf-interfaces-performance-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -153,7 +163,7 @@ module bbf-interfaces-performance-management {
   feature total-pkts {
     description
       "Indicates support for reporting the total transmitted and
-       received packets on an interface.";
+       received frames on an interface.";
   }
 
   feature current-interval-time-stamp {
@@ -295,8 +305,9 @@ module bbf-interfaces-performance-management {
        24 hour performance counters.";
     leaf in-octets {
       type bbf-yang:performance-counter64;
+      units "bytes";
       description
-        "The total number of octets received on the interface,
+        "The total number of bytes received on the interface,
          including framing characters.";
       reference
         "RFC 2863: The Interfaces Group MIB - ifHCInOctets";
@@ -304,13 +315,15 @@ module bbf-interfaces-performance-management {
     leaf in-pkts {
       if-feature "bbf-if-pm:total-pkts";
       type bbf-yang:performance-counter64;
+      units "frames";
       description
-        "The total number of packets received on the interface.";
+        "The total number of frames received on the interface.";
     }
     leaf in-unicast-pkts {
       type bbf-yang:performance-counter64;
+      units "frames";
       description
-        "The number of packets, delivered by this sub-layer to a
+        "The number of frames, delivered by this sub-layer to a
          higher (sub-)layer, that were not addressed to a
          multicast or broadcast address at this sub-layer.";
       reference
@@ -318,8 +331,9 @@ module bbf-interfaces-performance-management {
     }
     leaf in-broadcast-pkts {
       type bbf-yang:performance-counter64;
+      units "frames";
       description
-        "The number of packets, delivered by this sub-layer to a
+        "The number of frames, delivered by this sub-layer to a
          higher (sub-)layer, that were addressed to a broadcast
          address at this sub-layer.";
       reference
@@ -327,8 +341,9 @@ module bbf-interfaces-performance-management {
     }
     leaf in-multicast-pkts {
       type bbf-yang:performance-counter64;
+      units "frames";
       description
-        "The number of packets, delivered by this sub-layer to a
+        "The number of frames, delivered by this sub-layer to a
          higher (sub-)layer, that were addressed to a multicast
          address at this sub-layer. For a MAC-layer protocol,
          this includes both Group and Functional addresses.";
@@ -337,20 +352,22 @@ module bbf-interfaces-performance-management {
     }
     leaf in-discards {
       type bbf-yang:performance-counter32;
+      units "frames";
       description
-        "The number of inbound packets that were chosen to be
+        "The number of inbound frames that were chosen to be
          discarded even though no errors had been detected to
          prevent their being deliverable to a higher-layer
          protocol. One possible reason for discarding such a
-         packet could be to free up buffer space.";
+         frame could be to free up buffer space.";
       reference
         "RFC 2863: The Interfaces Group MIB - ifInDiscards";
     }
     leaf in-errors {
       type bbf-yang:performance-counter32;
+      units "frames";
       description
-        "For packet-oriented interfaces, the number of inbound
-         packets that contained errors preventing them from being
+        "For frame-oriented interfaces, the number of inbound
+         frames that contained errors preventing them from being
          deliverable to a higher-layer protocol. For character-
          oriented or fixed-length interfaces, the number of
          inbound transmission units that contained errors
@@ -361,8 +378,9 @@ module bbf-interfaces-performance-management {
     }
     leaf in-unknown-protos {
       type bbf-yang:performance-counter32;
+      units "frames";
       description
-        "For packet-oriented interfaces, the number of packets
+        "For frame-oriented interfaces, the number of frames
          received via the interface that were discarded because of an
          unknown or unsupported protocol. For character-oriented or
          fixed-length interfaces that support protocol multiplexing,
@@ -375,8 +393,9 @@ module bbf-interfaces-performance-management {
     }
     leaf out-octets {
       type bbf-yang:performance-counter64;
+      units "bytes";
       description
-        "The total number of octets transmitted out of the
+        "The total number of bytes transmitted out of the
          interface, including framing characters.";
       reference
         "RFC 2863: The Interfaces Group MIB - ifHCOutOctets";
@@ -384,14 +403,16 @@ module bbf-interfaces-performance-management {
     leaf out-pkts {
       if-feature "bbf-if-pm:total-pkts";
       type bbf-yang:performance-counter64;
+      units "frames";
       description
-        "The total number of packets transmitted out of the
+        "The total number of frames transmitted out of the
          interface.";
     }
     leaf out-unicast-pkts {
       type bbf-yang:performance-counter64;
+      units "frames";
       description
-        "The total number of packets that higher-level protocols
+        "The total number of frames that higher-level protocols
          requested be transmitted, and that were not addressed to a
          multicast or broadcast address at this sub-layer, including
          those that were discarded or not sent.";
@@ -400,8 +421,9 @@ module bbf-interfaces-performance-management {
     }
     leaf out-broadcast-pkts {
       type bbf-yang:performance-counter64;
+      units "frames";
       description
-        "The total number of packets that higher-level protocols
+        "The total number of frames that higher-level protocols
          requested be transmitted, and that were addressed to a
          broadcast address at this sub-layer, including those that
          were discarded or not sent.";
@@ -411,8 +433,9 @@ module bbf-interfaces-performance-management {
     }
     leaf out-multicast-pkts {
       type bbf-yang:performance-counter64;
+      units "frames";
       description
-        "The total number of packets that higher-level protocols
+        "The total number of frames that higher-level protocols
          requested be transmitted, and that were addressed to a
          multicast address at this sub-layer, including those that
          were discarded or not sent. For a MAC-layer protocol, this
@@ -423,20 +446,22 @@ module bbf-interfaces-performance-management {
     }
     leaf out-discards {
       type bbf-yang:performance-counter32;
+      units "frames";
       description
-        "The number of outbound packets that were chosen to be
+        "The number of outbound frames that were chosen to be
          discarded even though no errors had been detected to
          prevent their being transmitted. One possible reason
-         for discarding such a packet could be to free up buffer
+         for discarding such a frame could be to free up buffer
          space.";
       reference
         "RFC 2863: The Interfaces Group MIB - ifOutDiscards";
     }
     leaf out-errors {
       type bbf-yang:performance-counter32;
+      units "frames";
       description
-        "For packet-oriented interfaces, the number of outbound
-         packets that could not be transmitted because of errors.
+        "For frame-oriented interfaces, the number of outbound
+         frames that could not be transmitted because of errors.
          For character-oriented or fixed-length interfaces, the
          number of outbound transmission units that could not be
          transmitted because of errors.";

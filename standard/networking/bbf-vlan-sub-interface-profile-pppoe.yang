@@ -1,13 +1,13 @@
-module bbf-hardware-storage-drives {
+module bbf-vlan-sub-interface-profile-pppoe {
   yang-version 1.1;
-  namespace "urn:bbf:yang:bbf-hardware-storage-drives";
-  prefix bbf-hw-strg-drv;
+  namespace "urn:bbf:yang:bbf-vlan-sub-interface-profile-pppoe";
+  prefix bbf-vsi-prof-pppoe;
 
-  import iana-hardware {
-    prefix ianahw;
+  import bbf-vlan-sub-interface-profiles {
+    prefix bbf-vsi-prof;
   }
-  import ietf-hardware {
-    prefix hw;
+  import bbf-pppoe-intermediate-agent {
+    prefix bbf-pppoe-ia;
   }
 
   organization
@@ -28,13 +28,13 @@ module bbf-hardware-storage-drives {
      WA Director: Sven Ooghe, Nokia";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements on hardware
-     management as applicable to access network equipment. As such,
-     this module is specific to access network equipment (e.g.,
+     supporting the Broadband Forum requirements on the management of
+     sub-interfaces as applicable to access network equipment. As
+     such, this module is specific to access network equipment (e.g.,
      BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module augments the ietf-hardware model with
-     the management of storage drives.
+     Specifically, this module extends the VLAN sub-interface profile
+     with PPPoE data nodes.
 
      Copyright (c) 2017-2023, Broadband Forum
 
@@ -89,63 +89,41 @@ module bbf-hardware-storage-drives {
                  <https://www.broadband-forum.org/technical/download/
                           TR-383_Amendment-6.pdf>";
   }
-  revision 2020-10-13 {
-    description
-      "Amendment 3.
-       * Approval Date:    2020-10-13.
-       * Publication Date: 2020-10-13.";
-    reference
-      "TR-383a3: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-3.pdf>";
-  }
 
-  augment "/hw:hardware/hw:component" {
-    when 'derived-from-or-self (hw:class, "ianahw:storage-drive")' {
-      description
-        "Data nodes for hardware components of class
-         'storage-drive'.";
-    }
+  augment "/bbf-vsi-prof:vsi-profiles"
+        + "/bbf-vsi-prof:vsi-profile" {
     description
-      "Data nodes for hardware components of class 'storage-drive'.";
-    container storage-drive {
-      config false;
+      "Augments the VLAN sub-interface profile with PPPoE data
+       nodes.";
+    container pppoe {
+      presence
+        "Enables support of PPPoE Intermediate Agent functionality on
+         interfaces referencing this profile.";
       description
-        "Storage drive data nodes (e.g.,sda and sdb devices).";
-      leaf device-transfer-rate {
-        type decimal64 {
-          fraction-digits 2;
+        "PPPoE Intermediate Agent configuration parameters.";
+      leaf profile-ref {
+        type leafref {
+          path "/bbf-pppoe-ia:pppoe-profiles/bbf-pppoe-ia:pppoe-"
+             + "profile/bbf-pppoe-ia:name";
         }
-        units "transfers per second";
+        mandatory true;
         description
-          "The I/O requests that were transfered to/from the storage
-           drive.";
-      }
-      leaf device-data-read-rate {
-        type uint64;
-        units "bytes per second";
-        description
-          "The amount of data read from the device expressed in number
-           of bytes per second.";
-      }
-      leaf device-data-write-rate {
-        type uint64;
-        units "bytes per second";
-        description
-          "The amount of data written to the device expressed in
-           number of bytes per second.";
-      }
-      leaf device-data-read {
-        type uint64;
-        units "kilobytes";
-        description
-          "The total number of kilobytes read.";
-      }
-      leaf device-data-write {
-        type uint64;
-        units "kilobytes";
-        description
-          "The total number of kilobytes written.";
+          "Reference to the PPPoE configuration profile.
+
+           Affects the processing of PPPoE discovery messages,
+           received on an interface, that do not contain a
+           vendor-specific tag. A vendor-specific tag shall be added
+           before forwarding the message upstream. The content of the
+           vendor-specific tag is determined by the referenced
+           profile.
+
+           Also affects the processing of PPPoE discovery messages
+           received on an interface with vendor-specific tag present.
+           In that case the vendor-specific tag received on an
+           interface is removed and replaced by a newly generated one
+           according the referenced profile.";
+        reference
+          "TR-101i2 - Section 3.9.2";
       }
     }
   }

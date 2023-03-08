@@ -3,6 +3,9 @@ module bbf-hardware-transceivers {
   namespace "urn:bbf:yang:bbf-hardware-transceivers";
   prefix bbf-hw-xcvr;
 
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
   import ietf-hardware {
     prefix hw;
   }
@@ -17,13 +20,13 @@ module bbf-hardware-transceivers {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -36,7 +39,7 @@ module bbf-hardware-transceivers {
      Specifically, this module augments the ietf-hardware model with
      management of compact transceivers.
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -76,9 +79,19 @@ module bbf-hardware-transceivers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -196,6 +209,12 @@ module bbf-hardware-transceivers {
        Bytes 128-255;
        INF-8077i Rev 4.5, Section 5.45 Upper Memory Map Table 02h,
        Bytes 128-255";
+  }
+
+  feature optical-power-and-sensitivity-in-dbm {
+    description
+      "Indicates support for reporting optical power and sensitivity
+       diagnostic data in dBm.";
   }
 
   // Alarm/warning flags
@@ -535,7 +554,7 @@ module bbf-hardware-transceivers {
   identity vendor-specific {
     base physical-device;
     description
-      "Vendor specific physical device. A vendor may derive specific
+      "Vendor-specific physical device. A vendor may derive specific
        identities from this one.";
     reference
       "SFF-8024 Rev 4.8a, Table 4-1, Values 80h-FFh";
@@ -706,6 +725,34 @@ module bbf-hardware-transceivers {
       "SFF-8024 Rev 4.8a, Table 4-3, Value 24h";
   }
 
+  typedef power-milliwatts {
+    type decimal64 {
+      fraction-digits 4;
+    }
+    units "milliwatts";
+    description
+      "Defines the power detected at a transceiver in milliwatts.";
+  }
+
+  typedef power-dbm {
+    type union {
+      type enumeration {
+        enum undetermined {
+          description
+            "A value could not be determined or the transceiver
+             reports a power value of zero.";
+        }
+      }
+      type decimal64 {
+        fraction-digits 4;
+        range "-40..20";
+      }
+    }
+    units "dBm";
+    description
+      "Defines the power detected at a transceiver in dBm.";
+  }
+
   grouping link-parameters {
     description
       "Management data nodes related to the physical link of the
@@ -729,14 +776,60 @@ module bbf-hardware-transceivers {
       case wavelength {
         leaf wavelength {
           type uint32;
-          units "nm";
+          units "nanometers";
           description
             "For optical variants, this denotes the nominal
              transmitter output wavelength at room temperature.";
         }
       }
+      case high-resolution-wavelength {
+        leaf high-resolution-wavelength {
+          type decimal64 {
+            fraction-digits 2;
+          }
+          units "nanometers";
+          description
+            "For optical variants, reports the nominal
+             transmitter output wavelength at room temperature.
+
+             This data node is intended to be used for transceiver
+             links able to report wavelengths with subnanometer
+             granularity.
+
+             However, it may also be used with transceiver links that
+             cannot report wavelengths with subnanometer granularity,
+             in which case the decimal digits must be set to '.00'.";
+          reference
+            "SFF-8636 Rev 2.10a, Section 6.3.19
+             INF-8077i Rev 4.5, Section 5.33";
+        }
+      }
       case passive-cable-specification-compliance {
         leaf passive-cable-specification-compliance {
+          type enumeration {
+            enum fc-pi-4-appendix-h {
+              description
+                "Compliant to FC-PI-4 Appendix H.";
+              reference
+                "SFF-8472 Rev 12.4, Table 8-1, Address A0h, Byte 60,
+                 bit 1";
+            }
+            enum sff-8431-appendix-e {
+              description
+                "Compliant to SFF-8431 Appendix E.";
+              reference
+                "SFF-8472 Rev 12.4, Table 8-1, Address A0h, Byte 60,
+                 bit 0";
+            }
+          }
+          status deprecated;
+          description
+            "For passive cable variants, this denotes the passive
+             cable specification compliance.";
+          reference
+            "SFF-8472 Rev 12.4, Table 8-1";
+        }
+        leaf-list passive-cable-spec-compliance {
           type enumeration {
             enum fc-pi-4-appendix-h {
               description
@@ -792,6 +885,44 @@ module bbf-hardware-transceivers {
                  bit 0";
             }
           }
+          status deprecated;
+          description
+            "For active cable variants, this denotes the active cable
+             specification compliance.";
+          reference
+            "SFF-8472 Rev 12.4, Table 8-2";
+        }
+        leaf-list active-cable-spec-compliance {
+          type enumeration {
+            enum fc-pi-4-limiting {
+              description
+                "Compliant to FC-PI-4 Limiting.";
+              reference
+                "SFF-8472 Rev 12.4, Table 8-2, Address A0h, Byte 60,
+                 bit 3";
+            }
+            enum sff-8431-limiting {
+              description
+                "Compliant to SFF-8431 Limiting.";
+              reference
+                "SFF-8472 Rev 12.4, Table 8-2, Address A0h, Byte 60,
+                 bit 2";
+            }
+            enum fc-pi-4-appendix-h {
+              description
+                "Compliant to FC-PI-4 Appendix H.";
+              reference
+                "SFF-8472 Rev 12.4, Table 8-2, Address A0h, Byte 60,
+                 bit 1";
+            }
+            enum sff-8431-appendix-e {
+              description
+                "Compliant to SFF-8431 Appendix E.";
+              reference
+                "SFF-8472 Rev 12.4, Table 8-2, Address A0h, Byte 60,
+                 bit 0";
+            }
+          }
           description
             "For active cable variants, this denotes the active cable
              specification compliance.";
@@ -802,20 +933,18 @@ module bbf-hardware-transceivers {
     }
   }
 
-  /* Diagnostics */
-
   grouping transceiver-diagnostic-parameters {
     description
       "Management data nodes related to retrieving diagnostic data
        from the transceiver.";
     leaf temperature {
       type int32;
-      units "0.001 degrees Celsius";
+      units "millidegrees Celsius";
       config false;
       mandatory true;
       description
         "Internally measured transceiver temperature. Temperature
-         accuracy is vendor specific but must be better than +/- 3
+         accuracy is vendor-specific but must be better than +/- 3
          degrees Celsius over specified operating temperature and
          voltage.";
       reference
@@ -823,14 +952,14 @@ module bbf-hardware-transceivers {
     }
     leaf supply-voltage {
       type uint16;
-      units "100 uV";
+      units "0.1 millivolts";
       config false;
       mandatory true;
       description
         "Internally measured transceiver supply voltage. Practical
          considerations to be defined by transceiver manufacturer will
          tend to limit the actual bounds of the supply voltage
-         measurement. Accuracy is vendor specific but must be better
+         measurement. Accuracy is vendor-specific but must be better
          than +/- 3% of the manufacturer's nominal value over
          specified operating temperature and voltage. Note that in
          some transceivers, transmitter supply voltage and receiver
@@ -848,43 +977,45 @@ module bbf-hardware-transceivers {
        link data from the transceiver.";
     leaf tx-bias {
       type uint32;
-      units "uA";
+      units "microamperes";
       config false;
       mandatory true;
       description
-        "Measured transmit (TX) bias current in uA. Accuracy is vendor
-         specific but must be better than +/- 10% of the
-         manufacturer's nominal value over specified operating
+        "Measured transmit (TX) bias current in microampere (uA).
+         Accuracy is vendor-specific but must be better than +/- 10%
+         of the manufacturer's nominal value over specified operating
          temperature and voltage.";
       reference
         "SFF-8472 Rev 12.4, Table 9-16, Address A2h, Bytes 100-101";
     }
     choice power {
       config false;
-      mandatory true;
+      status deprecated;
       description
         "Measured receive (RX) and transmit (TX) power.";
       case power-in-mwatt {
+        status deprecated;
         leaf tx-power {
           type uint16;
-          units "0.1 mW";
-          mandatory true;
+          units "0.1 milliwatts";
+          status deprecated;
           description
-            "Measured transmit (TX) output power in tenths of a mW.
-             Data is assumed to be based on measurement of laser
-             monitor photodiode current. It is factory calibrated to
-             absolute units using the most representative fiber output
-             type. Accuracy is vendor specific but must be better than
-             +/- 3dB over specified temperature and voltage. Data is
-             not valid when the transmitter is disabled.";
+            "Measured transmit (TX) output power in tenths of a
+             milliwatt (mW). Data is assumed to be based on
+             measurement of laser monitor photodiode current. It is
+             factory calibrated to absolute units using the most
+             representative fiber output type. Accuracy is vendor-
+             specific but must be better than +/- 3dB over specified
+             temperature and voltage. Data is not valid when the
+             transmitter is disabled.";
           reference
             "SFF-8472 Rev 12.4, Table 9-16, Address A2h, Bytes 102-
              103";
         }
         leaf rx-power {
           type uint16;
-          units "0.1 mW";
-          mandatory true;
+          units "0.1 milliwatts";
+          status deprecated;
           description
             "Measured received (RX) optical power in tenths of a mW.
              Absolute accuracy is dependent upon the exact optical
@@ -897,20 +1028,100 @@ module bbf-hardware-transceivers {
              transmitted power minus cable plant loss (insertion loss
              or passive loss) per the appropriate standard. Absolute
              accuracy beyond this minimum required received input
-             optical power range is vendor specific.";
+             optical power range is vendor-specific.";
           reference
             "SFF-8472 Rev 12.4, Table 9-16, Address A2h, Bytes 104-
              105";
         }
       }
     }
+    container power-milliwatts {
+      presence "Indicates that monitoring of received power and
+                transmit power is reported in milliwatts.";
+      config false;
+      description
+        "Data nodes reporting the power levels measured at the
+         transceiver link in milliwatts.";
+      leaf transmit {
+        type power-milliwatts;
+        description
+          "Measured transmit (TX) output power in milliwatts. Data is
+           assumed to be based on measurement of laser monitor
+           photodiode current. It is factory calibrated to absolute
+           units using the most representative fiber output type.
+           Accuracy is vendor-specific but must be better than
+           +/- 3dB over specified temperature and voltage. Data is
+           not valid when the transmitter is disabled.";
+        reference
+          "SFF-8472 Rev 12.4, Table 9-16, Address A2h, Bytes 102-103";
+      }
+      leaf receive {
+        type power-milliwatts;
+        description
+          "Measured received (RX) optical power in milliwatts.
+           Absolute accuracy is dependent upon the exact optical
+           wavelength. For the vendor specified wavelength, accuracy
+           shall be better than +/- 3dB over specified temperature and
+           voltage. This accuracy shall be maintained for input
+           power levels up to the lesser of maximum transmitted or
+           maximum received optical power per the appropriate
+           standard. It shall be maintained down to the minimum
+           transmitted power minus cable plant loss (insertion loss
+           or passive loss) per the appropriate standard. Absolute
+           accuracy beyond this minimum required received input
+           optical power range is vendor-specific.";
+        reference
+          "SFF-8472 Rev 12.4, Table 9-16, Address A2h, Bytes 104-105";
+      }
+    }
+    container power-dbm {
+      if-feature "bbf-hw-xcvr:optical-power-and-sensitivity-in-dbm";
+      presence
+        "Indicates that monitoring of received power and transmit
+         power is reported in dBm.";
+      config false;
+      description
+        "Data nodes reporting the power levels measured at the
+         transceiver link in dBm.";
+      leaf transmit {
+        type power-dbm;
+        description
+          "Measured transmitted optical power in dBm. Data is assumed
+           to be based on measurement of laser monitor photodiode
+           current. It is factory calibrated to absolute units using
+           the most representative fiber output type. Accuracy is
+           vendor-specific but must be better than +/- 3dB over
+           specified temperature and voltage. Data is not valid when
+           the transmitter is disabled.";
+        reference
+          "SFF-8472 Rev 12.4, Table 9-16, Address A2h, Bytes 102-103";
+      }
+      leaf receive {
+        type power-dbm;
+        description
+          "Measured received optical power in dBm. Absolute accuracy
+           is dependent upon the exact optical wavelength. For the
+           vendor specified wavelength, accuracy shall be better than
+           +/- 3dB over specified temperature and voltage. This
+           accuracy shall be maintained for input power levels up to
+           the lesser of maximum transmitted or maximum received
+           optical power per the appropriate standard. It shall be
+           maintained down to the minimum transmitted power minus
+           cable plant loss (insertion loss or passive loss) per the
+           appropriate standard. Absolute accuracy beyond this minimum
+           required received input optical power range is vendor-
+           specific.";
+        reference
+          "SFF-8472 Rev 12.4, Table 9-16, Address A2h, Bytes 104-105";
+      }
+    }
     leaf laser-temperature {
       type int32;
-      units "0.001 degrees Celsius";
+      units "millidegrees Celsius";
       config false;
       description
         "Measured optional laser temperature. The relative and
-         absolute accuracy are vendor specific but relative laser
+         absolute accuracy are vendor-specific but relative laser
          temperature accuracy must be better than +/- 0.2 degrees
          Celsius. [Relative temperature accuracy refers to the
          accuracy of the reported temperature changes relative to the
@@ -920,17 +1131,17 @@ module bbf-hardware-transceivers {
     }
     leaf tec-current {
       type int16;
-      units "0.1 mA";
+      units "0.1 milliamperes";
       config false;
       description
         "Measured Thermoelectric Cooler (TEC) current. The format is
-         signed two's complement with the LSB equal to 0.1 mA. Thus a
-         range from -3276.8 to +3276.7 mA may be reported with a
-         resolution of 0.1 mA. Reported TEC current is a positive
-         number for cooling and a negative number for heating. The
-         accuracy of the TEC current monitor is vendor specific but
-         must be better than +/- 15% of the maximum TEC current as
-         stored in the TEC current high alarm threshold.";
+         signed two's complement with the LSB equal to 0.1 milliampere
+         (mA). Thus a range from -3276.8 to +3276.7 mA may be reported
+         with a resolution of 0.1 mA. Reported TEC current is a
+         positive number for cooling and a negative number for
+         heating. The accuracy of the TEC current monitor is vendor-
+         specific but must be better than +/- 15% of the maximum TEC
+         current as stored in the TEC current high alarm threshold.";
       reference
         "SFF-8472 Rev 12.4, Table 9-16, Address A2h, Bytes 108-109";
     }
@@ -1018,6 +1229,7 @@ module bbf-hardware-transceivers {
     description
       "Nodes which allow reporting of the transceivers compliance.";
     container compliance-codes {
+      status deprecated;
       description
         "Compliance codes which collectively represent the electronic
          or optical interfaces that are supported by the
@@ -1061,6 +1273,7 @@ module bbf-hardware-transceivers {
           }
         }
         config false;
+        status deprecated;
         description
           "10G Ethernet Compliance Codes.";
       }
@@ -1100,6 +1313,7 @@ module bbf-hardware-transceivers {
           }
         }
         config false;
+        status deprecated;
         description
           "Infiniband Compliance Codes.";
       }
@@ -1125,6 +1339,7 @@ module bbf-hardware-transceivers {
           }
         }
         config false;
+        status deprecated;
         description
           "ESCON Compliance Codes.";
       }
@@ -1220,6 +1435,7 @@ module bbf-hardware-transceivers {
           }
         }
         config false;
+        status deprecated;
         description
           "SONET Compliance Codes.";
       }
@@ -1287,6 +1503,7 @@ module bbf-hardware-transceivers {
           }
         }
         config false;
+        status deprecated;
         description
           "Ethernet Compliance Codes.";
       }
@@ -1333,6 +1550,7 @@ module bbf-hardware-transceivers {
           }
         }
         config false;
+        status deprecated;
         description
           "Fibre channel link length.";
       }
@@ -1393,6 +1611,7 @@ module bbf-hardware-transceivers {
           }
         }
         config false;
+        status deprecated;
         description
           "Fibre channel technology.";
       }
@@ -1418,6 +1637,7 @@ module bbf-hardware-transceivers {
           }
         }
         config false;
+        status deprecated;
         description
           "SFP+ cable technology.";
       }
@@ -1478,6 +1698,7 @@ module bbf-hardware-transceivers {
           }
         }
         config false;
+        status deprecated;
         description
           "Fibre channel transmission media.";
       }
@@ -1549,8 +1770,494 @@ module bbf-hardware-transceivers {
           }
         }
         config false;
+        status deprecated;
         description
           "Fibre channel speed.";
+      }
+    }
+    container codes {
+      description
+        "Compliance codes which collectively represent the electronic
+         or optical interfaces that are supported by the
+         transceiver.";
+      reference
+        "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Bytes 3-10, 36,
+         62";
+      leaf-list ten-gigabit-ethernet {
+        type enumeration {
+          enum 10g-base-er {
+            description
+              "10G Base-ER.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 3,
+               bit 7";
+          }
+          enum 10g-base-lrm {
+            description
+              "10G Base-LRM.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 3,
+               bit 6";
+          }
+          enum 10g-base-lr {
+            description
+              "10G Base-LR.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 3,
+               bit 5";
+          }
+          enum 10g-base-sr {
+            description
+              "10G Base-SR.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 3,
+               bit 4";
+          }
+        }
+        config false;
+        description
+          "10G Ethernet Compliance Codes.";
+      }
+      leaf-list infiniband {
+        type enumeration {
+          enum 1x-sx {
+            description
+              "1X SX.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 3,
+               bit 3";
+          }
+          enum 1x-lx {
+            description
+              "1X LX.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 3,
+               bit 2";
+          }
+          enum 1x-copper-active {
+            description
+              "1X Copper Active.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 3,
+               bit 1";
+          }
+          enum 1x-copper-passive {
+            description
+              "1X Copper Passive.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 3,
+               bit 0";
+          }
+        }
+        config false;
+        description
+          "InfiniBand (IB) Compliance Codes.";
+      }
+      leaf-list escon {
+        type enumeration {
+          enum escon-mmf {
+            description
+              "ESCON MMF, 1310nm LED.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 4,
+               bit 7";
+          }
+          enum escon-smf {
+            description
+              "ESCON SMF, 1310nm Laser.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 4,
+               bit 6";
+          }
+        }
+        config false;
+        description
+          "ESCON Compliance Codes.";
+      }
+      leaf-list sonet {
+        type enumeration {
+          enum oc-192-short-reach {
+            description
+              "OC-192, short reach.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 4,
+               bit 5";
+          }
+          enum sonet-reach-specifier-bit1 {
+            description
+              "SONET reach specifier bit 1.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 4,
+               bit 4";
+          }
+          enum sonet-reach-specifier-bit2 {
+            description
+              "SONET reach specifier bit 2.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 4,
+               bit 3";
+          }
+          enum oc-48-long-reach {
+            description
+              "OC-48, long reach.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 4,
+               bit 2";
+          }
+          enum oc-48-intermediate-reach {
+            description
+              "OC-48, intermediate reach.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 4,
+               bit 1";
+          }
+          enum oc-48-short-reach {
+            description
+              "OC-48, short reach.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 4,
+               bit 0";
+          }
+          enum oc-12-single-mode-long-reach {
+            description
+              "OC-12, single mode, long reach.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 5,
+               bit 6";
+          }
+          enum oc-12-single-mode-intermediate-reach {
+            description
+              "OC-12, single mode, intermediate reach.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 5,
+               bit 5";
+          }
+          enum oc-12-short-reach {
+            description
+              "OC-12, short reach.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 5,
+               bit 4";
+          }
+          enum oc-3-single-mode-long-reach {
+            description
+              "OC-3, single mode, long reach.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 5,
+               bit 2";
+          }
+          enum oc-3-single-mode-intermediate-reach {
+            description
+              "OC-3, single mode, intermediate reach.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 5,
+               bit 1";
+          }
+          enum oc-3-short-reach {
+            description
+              "OC-3, short reach.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 5,
+               bit 0";
+          }
+        }
+        config false;
+        description
+          "SONET Compliance Codes.";
+      }
+      leaf-list ethernet {
+        type enumeration {
+          enum base-px {
+            description
+              "BASE-PX.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 6,
+               bit 7";
+          }
+          enum base-bx10 {
+            description
+              "BASE-BX10.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 6,
+               bit 6";
+          }
+          enum 100base-fx {
+            description
+              "100BASE-FX.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 6,
+               bit 5";
+          }
+          enum 100base-lx-or-lx-10 {
+            description
+              "100BASE-LX/LX-10.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 6,
+               bit 4";
+          }
+          enum 1000base-t {
+            description
+              "1000BASE-T.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 6,
+               bit 3";
+          }
+          enum 1000base-cx {
+            description
+              "1000BASE-CX.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 6,
+               bit 2";
+          }
+          enum 1000base-lx {
+            description
+              "1000BASE-LX.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 6,
+               bit 1";
+          }
+          enum 1000base-sx {
+            description
+              "1000BASE-SX.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 6,
+               bit 0";
+          }
+        }
+        config false;
+        description
+          "Ethernet Compliance Codes.";
+      }
+      leaf-list fibre-channel-link-length {
+        type enumeration {
+          enum very-long-distance {
+            description
+              "Very long distance (V).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 7,
+               bit 7";
+          }
+          enum short-distance {
+            description
+              "Short distance (S).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 7,
+               bit 6";
+          }
+          enum intermediate-distance {
+            description
+              "Intermediate distance (I).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 7,
+               bit 5";
+          }
+          enum long-distance {
+            description
+              "Long distance (L).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 7,
+               bit 4";
+          }
+          enum medium-distance {
+            description
+              "Medium distance (M).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 7,
+               bit 3";
+          }
+        }
+        config false;
+        description
+          "Fibre channel link length.";
+      }
+      leaf-list fibre-channel-technology {
+        type enumeration {
+          enum shortwave-laser-linear {
+            description
+              "Shortwave laser, linear (SA).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 7,
+               bit 2";
+          }
+          enum longwave-laser-lc {
+            description
+              "Longwave laser (LC).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 7,
+               bit 1";
+          }
+          enum electrical-inter-enclosure {
+            description
+              "Electrical inter-enclosure (EL).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 7,
+               bit 0";
+          }
+          enum electrical-intra-enclosure {
+            description
+              "Electrical intra-enclosure (EL).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 8,
+               bit 7";
+          }
+          enum shortwave-laser-without-ofc {
+            description
+              "Shortwave laser w/o OFC (SN).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 8,
+               bit 6";
+          }
+          enum shortwave-laser-with-ofc {
+            description
+              "Shortwave laser with OFC (SL).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 8,
+               bit 5";
+          }
+          enum longwave-laser-ll {
+            description
+              "Longwave laser (LL).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 8,
+               bit 4";
+          }
+        }
+        config false;
+        description
+          "Fibre channel technology.";
+      }
+      leaf-list sfp-plus-cable-technology {
+        type enumeration {
+          enum active-cable {
+            description
+              "Active Cable.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 8,
+               bit 3";
+          }
+          enum passive-cable {
+            description
+              "Passive Cable.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 8,
+               bit 2";
+          }
+        }
+        config false;
+        description
+          "SFP+ cable technology.";
+      }
+      leaf-list fibre-channel-transmission-media {
+        type enumeration {
+          enum twin-axial-pair {
+            description
+              "Twin Axial Pair (TW).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 9,
+               bit 7";
+          }
+          enum twin-twisted-pair {
+            description
+              "Twin Twisted Pair (TP).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 9,
+               bit 6";
+          }
+          enum miniature-coax {
+            description
+              "Miniature Coax (MI).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 9,
+               bit 5";
+          }
+          enum video-coax {
+            description
+              "Video Coax (TV).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 9,
+               bit 4";
+          }
+          enum multimode-62.5um {
+            description
+              "Multimode, 62.5um (M6).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 9,
+               bit 3";
+          }
+          enum multimode-50um {
+            description
+              "Multimode, 50um (M5 or M5E).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 9,
+               bit 2";
+          }
+          enum single-mode {
+            description
+              "Single Mode (SM).";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 9,
+                bit 0";
+          }
+        }
+        config false;
+        description
+          "Fibre channel transmission media.";
+      }
+      leaf-list fibre-channel-speed {
+        type enumeration {
+          enum 1200-mbytes-sec {
+            description
+              "1200 MBytes/sec.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 10,
+               bit 7";
+          }
+          enum 800-mbytes-sec {
+            description
+              "800 MBytes/sec.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 10,
+               bit 6";
+          }
+          enum 1600-mbytes-sec {
+            description
+              "1600 MBytes/sec.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 10,
+               bit 5";
+          }
+          enum 400-mbytes-sec {
+            description
+              "400 MBytes/sec.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 10,
+               bit 4";
+          }
+          enum 3200-mbytes-sec {
+            description
+              "3200 MBytes/sec.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 10,
+               bit 3";
+          }
+          enum 200-mbytes-sec {
+            description
+              "200 MBytes/sec.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 10,
+               bit 2";
+          }
+          enum 100-mbytes-sec {
+            description
+              "100 MBytes/sec.";
+            reference
+              "SFF-8472 Rev 12.4, Table 5-3, Address A0h, Byte 10,
+               bit 0";
+          }
+        }
+        config false;
+        description
+          "Fibre channel speed (FCS).";
       }
     }
   }
@@ -1735,7 +2442,7 @@ module bbf-hardware-transceivers {
       }
       leaf nominal-bit-rate {
         type uint8;
-        units "MBd";
+        units "megabaud";
         config false;
         description
           "The nominal bit (signaling) rate (BR, nominal) is specified
@@ -1744,10 +2451,10 @@ module bbf-hardware-transceivers {
            those bits carrying data information.
 
            For bit rates < 25.0 Gbps, the value will be reported in
-           units of 100MBd to the nearest 100MBd.
+           units of 100 MBd to the nearest 100 MBd.
 
            For bit rates >= 25.0 Gbps, the value will be reported in
-           units of 250MBd to the nearest 250MBd.
+           units of 250 MBd to the nearest 250 MBd.
 
            A value of 0 indicates that the bit rate is not specified
            and must be determined from the transceiver technology. The
@@ -1758,22 +2465,20 @@ module bbf-hardware-transceivers {
            SFF-8472 Rev 12.4, Section 8.4, Address A0h, Byte 66";
       }
       leaf maximum-bit-rate {
-        type uint8;
-        units "1 percent above the nominal bit rate";
+        type bbf-yang:percent;
         config false;
         description
-          "The upper bit rate limit at which the transceiver will
-           still meet its specifications.";
+          "The upper bit rate limit above the nominal bit rate at
+           which the transceiver will still meet its specifications.";
         reference
           "SFF-8472 Rev 12.4, Section 8.4, Address A0h, Byte 66";
       }
       leaf minimum-bit-rate {
-        type uint8;
-        units "1 percent below the nominal bit rate";
+        type bbf-yang:percent;
         config false;
         description
-          "The lower bit rate limit at which the transceiver will
-           still meet its specifications.";
+          "The lower bit rate limit below the nominal bit rate at
+           which the transceiver will still meet its specifications.";
         reference
           "SFF-8472 Rev 12.4, Section 8.5, Address A0h, Byte 67";
       }
@@ -1790,17 +2495,18 @@ module bbf-hardware-transceivers {
         "SFF-8472 Rev 12.4, Section 5";
       leaf length-single-mode-km {
         type uint8;
-        units "km";
+        units "kilometers";
         config false;
         description
           "This value specifies the link length that is supported by
            the transceiver while operating in compliance with the
            applicable standards using single mode fiber. The value is
            in units of kilometers. A value of 255 means that the
-           transceiver supports a link length greater than 254 km. A
-           value of zero means that the transceiver does not support
-           single mode fiber or that the length information must be
-           determined from the transceiver technology.";
+           transceiver supports a link length greater than 254
+           kilometer (km). A value of zero means that the transceiver
+           does not support single mode fiber or that the length
+           information must be determined from the transceiver
+           technology.";
         reference
           "SFF-8472 Rev 12.4, Section 6.1, Address A0h, Byte 14";
       }
@@ -1837,10 +2543,30 @@ module bbf-hardware-transceivers {
         reference
           "SFF-8472 Rev 12.4, Section 6.3, Address A0h, Byte 16";
       }
+      leaf length-62.5um-om1 {
+        type uint8;
+        units "10 meters";
+        config false;
+        description
+          "This value specifies link length that is supported by the
+           transceiver while operating in compliance with applicable
+           standards using 62.5 micron multimode OM1 [200 MHz*km at
+           850nm, 500 MHz*km at 1310nm] fiber. The value is in units
+           of 10 meters. A value of 255 means that the transceiver
+           supports a link length greater than 2.54 km. A value of
+           zero means that the transceiver does not support 62.5
+           micron multimode fiber or that the length information must
+           determined from the transceiver technology. It is common
+           for a multimode transceiver to support OM1, OM2 and OM3
+           fiber.";
+        reference
+          "SFF-8472 Rev 12.4, Section 6.4, Address A0h, Byte 17";
+      }
       leaf length-62.5um-om2 {
         type uint8;
         units "10 meters";
         config false;
+        status deprecated;
         description
           "This value specifies link length that is supported by the
            transceiver while operating in compliance with applicable
@@ -1875,7 +2601,7 @@ module bbf-hardware-transceivers {
       }
       leaf length-active-cable-or-copper {
         type uint8;
-        units "1 meter";
+        units "meters";
         config false;
         description
           "This value specifies minimum link length supported by the
@@ -1914,7 +2640,7 @@ module bbf-hardware-transceivers {
 
   grouping vendor-fields {
     description
-      "Vendor specific transceiver data.";
+      "Vendor-specific transceiver data.";
     container vendor-fields {
       description
         "Transceiver information relative to the vendor. SFF-8472
@@ -2049,13 +2775,13 @@ module bbf-hardware-transceivers {
          The values reported in the alarm and warning thresholds area
          (see below) may be temperature compensated or otherwise
          adjusted when setting warning and/or alarm flags. Any
-         threshold compensation or adjustment is vendor specific and
+         threshold compensation or adjustment is vendor-specific and
          optional.";
       reference
         "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 0-39";
       leaf temperature-high-alarm {
         type int32;
-        units "0.001 degrees Celsius";
+        units "millidegrees Celsius";
         config false;
         description
           "The temperature above which will trigger a high temperature
@@ -2065,7 +2791,7 @@ module bbf-hardware-transceivers {
       }
       leaf temperature-low-alarm {
         type int32;
-        units "0.001 degrees Celsius";
+        units "millidegrees Celsius";
         config false;
         description
           "The temperature below which will trigger a low temperature
@@ -2075,7 +2801,7 @@ module bbf-hardware-transceivers {
       }
       leaf temperature-high-warning {
         type int32;
-        units "0.001 degrees Celsius";
+        units "millidegrees Celsius";
         config false;
         description
           "The temperature above which will trigger a high temperature
@@ -2085,7 +2811,7 @@ module bbf-hardware-transceivers {
       }
       leaf temperature-low-warning {
         type int32;
-        units "0.001 degrees Celsius";
+        units "millidegrees Celsius";
         config false;
         description
           "The temperature below which will trigger a low temperature
@@ -2095,7 +2821,7 @@ module bbf-hardware-transceivers {
       }
       leaf supply-voltage-high-alarm {
         type uint16;
-        units "100 uV";
+        units "0.1 millivolts";
         config false;
         description
           "The voltage above which will trigger a high supply voltage
@@ -2105,7 +2831,7 @@ module bbf-hardware-transceivers {
       }
       leaf supply-voltage-low-alarm {
         type uint16;
-        units "100 uV";
+        units "0.1 millivolts";
         config false;
         description
           "The voltage below which will trigger a low supply voltage
@@ -2115,7 +2841,7 @@ module bbf-hardware-transceivers {
       }
       leaf supply-voltage-high-warning {
         type uint16;
-        units "100 uV";
+        units "0.1 millivolts";
         config false;
         description
           "The voltage above which will trigger a high supply voltage
@@ -2125,7 +2851,7 @@ module bbf-hardware-transceivers {
       }
       leaf supply-voltage-low-warning {
         type uint16;
-        units "100 uV";
+        units "0.1 millivolts";
         config false;
         description
           "The voltage below which will trigger a low supply voltage
@@ -2135,7 +2861,7 @@ module bbf-hardware-transceivers {
       }
       leaf tx-bias-high-alarm {
         type uint32;
-        units "uA";
+        units "microamperes";
         config false;
         description
           "The bias current above which will trigger a high transmit
@@ -2145,7 +2871,7 @@ module bbf-hardware-transceivers {
       }
       leaf tx-bias-low-alarm {
         type uint32;
-        units "uA";
+        units "microamperes";
         config false;
         description
           "The bias current below which will trigger a low transmit
@@ -2155,7 +2881,7 @@ module bbf-hardware-transceivers {
       }
       leaf tx-bias-high-warning {
         type uint32;
-        units "uA";
+        units "microamperes";
         config false;
         description
           "The bias current above which will trigger a high transmit
@@ -2165,7 +2891,7 @@ module bbf-hardware-transceivers {
       }
       leaf tx-bias-low-warning {
         type uint32;
-        units "uA";
+        units "microamperes";
         config false;
         description
           "The bias current below which will trigger a low transmit
@@ -2174,8 +2900,8 @@ module bbf-hardware-transceivers {
           "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 22-23";
       }
       leaf tx-power-high-alarm {
-        type uint16;
-        units "0.1 uW";
+        type uint32;
+        units "0.1 microwatts";
         config false;
         description
           "The power above which will trigger a high transmit power
@@ -2184,8 +2910,8 @@ module bbf-hardware-transceivers {
           "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 24-25";
       }
       leaf tx-power-low-alarm {
-        type uint16;
-        units "0.1 uW";
+        type uint32;
+        units "0.1 microwatts";
         config false;
         description
           "The power below which will trigger a low transmit power
@@ -2194,8 +2920,8 @@ module bbf-hardware-transceivers {
           "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 26-27";
       }
       leaf tx-power-high-warning {
-        type uint16;
-        units "0.1 uW";
+        type uint32;
+        units "0.1 microwatts";
         config false;
         description
           "The power above which will trigger a high transmit power
@@ -2204,8 +2930,8 @@ module bbf-hardware-transceivers {
           "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 28-29";
       }
       leaf tx-power-low-warning {
-        type uint16;
-        units "0.1 uW";
+        type uint32;
+        units "0.1 microwatts";
         config false;
         description
           "The power below which will trigger a low transmit power
@@ -2214,8 +2940,8 @@ module bbf-hardware-transceivers {
           "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 30-31";
       }
       leaf rx-power-high-alarm {
-        type uint16;
-        units "0.1 uW";
+        type uint32;
+        units "0.1 microwatts";
         config false;
         description
           "The power above which will trigger a high receive power
@@ -2224,8 +2950,8 @@ module bbf-hardware-transceivers {
           "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 32-33";
       }
       leaf rx-power-low-alarm {
-        type uint16;
-        units "0.1 uW";
+        type uint32;
+        units "0.1 microwatts";
         config false;
         description
           "The power below which will trigger a low receive power
@@ -2234,8 +2960,8 @@ module bbf-hardware-transceivers {
           "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 34-35";
       }
       leaf rx-power-high-warning {
-        type uint16;
-        units "0.1 uW";
+        type uint32;
+        units "0.1 microwatts";
         config false;
         description
           "The power above which will trigger a high receive power
@@ -2244,8 +2970,8 @@ module bbf-hardware-transceivers {
           "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 36-37";
       }
       leaf rx-power-low-warning {
-        type uint16;
-        units "0.1 uW";
+        type uint32;
+        units "0.1 microwatts";
         config false;
         description
           "The power below which will trigger a low receive power
@@ -2253,9 +2979,81 @@ module bbf-hardware-transceivers {
         reference
           "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 38-39";
       }
+      leaf tx-power-dbm-high-alarm {
+        type power-dbm;
+        config false;
+        description
+          "The power value above which will trigger a high transmit
+           power alarm.";
+        reference
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 24-25";
+      }
+      leaf tx-power-dbm-low-alarm {
+        type power-dbm;
+        config false;
+        description
+          "The power value below which will trigger a low transmit
+           power alarm.";
+        reference
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 26-27";
+      }
+      leaf tx-power-dbm-high-warning {
+        type power-dbm;
+        config false;
+        description
+          "The power value above which will trigger a high transmit
+           power warning.";
+        reference
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 28-29";
+      }
+      leaf tx-power-dbm-low-warning {
+        type power-dbm;
+        config false;
+        description
+          "The power value below which will trigger a low transmit
+           power warning.";
+        reference
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 30-31";
+      }
+      leaf rx-power-dbm-high-alarm {
+        type power-dbm;
+        config false;
+        description
+          "The power value above which will trigger a high receive
+           power alarm.";
+        reference
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 32-33";
+      }
+      leaf rx-power-dbm-low-alarm {
+        type power-dbm;
+        config false;
+        description
+          "The power value below which will trigger a low receive
+           power alarm.";
+        reference
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 34-35";
+      }
+      leaf rx-power-dbm-high-warning {
+        type power-dbm;
+        config false;
+        description
+          "The power value above which will trigger a high receive
+           power warning.";
+        reference
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 36-37";
+      }
+      leaf rx-power-dbm-low-warning {
+        type power-dbm;
+        config false;
+        description
+          "The power value below which will trigger a low receive
+           power warning.";
+        reference
+          "SFF-8472 Rev 12.4, Table 9-5, Address A2h, Bytes 38-39";
+      }
       leaf laser-temperature-high-alarm {
         type int32;
-        units "0.001 degrees Celsius";
+        units "millidegrees Celsius";
         config false;
         description
           "The temperature above which will trigger a high laser
@@ -2265,7 +3063,7 @@ module bbf-hardware-transceivers {
       }
       leaf laser-temperature-low-alarm {
         type int32;
-        units "0.001 degrees Celsius";
+        units "millidegrees Celsius";
         config false;
         description
           "The temperature below which will trigger a low laser
@@ -2275,7 +3073,7 @@ module bbf-hardware-transceivers {
       }
       leaf laser-temperature-high-warning {
         type int32;
-        units "0.001 degrees Celsius";
+        units "millidegrees Celsius";
         config false;
         description
           "The temperature above which will trigger a high laser
@@ -2285,7 +3083,7 @@ module bbf-hardware-transceivers {
       }
       leaf laser-temperature-low-warning {
         type int32;
-        units "0.001 degrees Celsius";
+        units "millidegrees Celsius";
         config false;
         description
           "The temperature below which will trigger a low laser
@@ -2295,7 +3093,7 @@ module bbf-hardware-transceivers {
       }
       leaf tec-current-high-alarm {
         type int16;
-        units "0.1 mA";
+        units "0.1 milliamperes";
         config false;
         description
           "The current above which will trigger a high Thermoelectric
@@ -2305,7 +3103,7 @@ module bbf-hardware-transceivers {
       }
       leaf tec-current-low-alarm {
         type int16;
-        units "0.1 mA";
+        units "0.1 milliamperes";
         config false;
         description
           "The current below which will trigger a low Thermoelectric
@@ -2315,7 +3113,7 @@ module bbf-hardware-transceivers {
       }
       leaf tec-current-high-warning {
         type int16;
-        units "0.1 mA";
+        units "0.1 milliamperes";
         config false;
         description
           "The current above which will trigger a high Thermoelectric
@@ -2325,7 +3123,7 @@ module bbf-hardware-transceivers {
       }
       leaf tec-current-low-warning {
         type int16;
-        units "0.1 mA";
+        units "0.1 milliamperes";
         config false;
         description
           "The current below which will trigger a low Thermoelectric

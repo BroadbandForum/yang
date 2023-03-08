@@ -6,14 +6,14 @@ module bbf-qos-policies-sub-interfaces {
   import ietf-interfaces {
     prefix if;
   }
-  import bbf-qos-classifiers {
-    prefix bbf-qos-cls;
-  }
   import bbf-sub-interfaces {
     prefix bbf-subif;
   }
   import bbf-sub-interface-tagging {
     prefix bbf-subif-tag;
+  }
+  import bbf-frame-processing-types {
+    prefix bbf-fpt;
   }
 
   organization
@@ -23,15 +23,13 @@ module bbf-qos-policies-sub-interfaces {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -44,7 +42,7 @@ module bbf-qos-policies-sub-interfaces {
      Specifically, this module augments sub-interfaces to support
      policies to control the flow of frames.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -84,9 +82,19 @@ module bbf-qos-policies-sub-interfaces {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -155,15 +163,16 @@ module bbf-qos-policies-sub-interfaces {
          is assigned to the interface, then p-bits=000 is pushed in
          the VLAN tag of the frame.";
       leaf pbit-marking-index {
-        type bbf-qos-cls:qos-pbit-marking-index;
+        type bbf-fpt:qos-pbit-marking-index;
         description
-          "A QoS policy can generate more than one p-bits value (for
-           possible usage in multiple VLAN tags). In this case each of
-           them is identified by an index.
+          "Applying a QoS policy while processing a frame can generate
+           more than one metadata value for the p-bits (for possible
+           usage in multiple VLAN tags). In this case each of them is
+           identified by an index.
 
-           This leaf provides the index in the list
-           'pbit-marking-list' from which the p-bits value shall be
-           taken to put in the VLAN tag.";
+           This leaf provides the index in the metadata list of p-bits
+           values from which the value shall be taken to put in
+           the frame's VLAN tag.";
       }
     }
   }
@@ -185,15 +194,16 @@ module bbf-qos-policies-sub-interfaces {
          is assigned to the interface, then DEI bit=0 is pushed in the
          VLAN tag of the frame.";
       leaf dei-marking-index {
-        type bbf-qos-cls:qos-dei-marking-index;
+        type bbf-fpt:qos-dei-marking-index;
         description
-          "A QoS policy can generate more than one dei-value (for
-           possible usage in multiple VLAN tags). In this case each of
-           them is identified by an index.
+          "Applying a QoS policy while processing a frame can generate
+           more than one metadata value for the DEI bit (for possible
+           usage in multiple VLAN tags). In this case each of them is
+           identified by an index.
 
-           This leaf provides the index in the list 'dei-marking-list'
-           from which the DEI bit value shall be taken to put in the
-           VLAN tag.";
+           This leaf provides the index in the metadata list of DEI
+           bit values from which the value shall be taken to put in
+           the frame's VLAN tag.";
       }
     }
   }
@@ -214,15 +224,16 @@ module bbf-qos-policies-sub-interfaces {
          is assigned to the interface, then p-bits=000 is pushed in
          the VLAN tag of the frame.";
       leaf pbit-marking-index {
-        type bbf-qos-cls:qos-pbit-marking-index;
+        type bbf-fpt:qos-pbit-marking-index;
         description
-          "A QoS policy can generate more than one p-bits value (for
-           possible usage in multiple VLAN tags). In this case each of
-           them is identified by an index.
+          "Applying a QoS policy while processing a frame can generate
+           more than one metadata value for the p-bits (for possible
+           usage in multiple VLAN tags). In this case each of them is
+           identified by an index.
 
-           This leaf provides the index in the list
-           'pbit-marking-list' from which the p-bits value shall be
-           taken to put in the VLAN tag.";
+           This leaf provides the index in the metadata list of p-bits
+           values from which the value shall be taken to put in
+           the frame's VLAN tag.";
       }
     }
   }
@@ -242,15 +253,16 @@ module bbf-qos-policies-sub-interfaces {
          profile is assigned to the interface, then DEI bit = 0 is
          pushed in the VLAN tag of the frame.";
       leaf dei-marking-index {
-        type bbf-qos-cls:qos-dei-marking-index;
+        type bbf-fpt:qos-dei-marking-index;
         description
-          "A QoS policy can generate more than one dei-value (for
-           possible usage in multiple VLAN tags). In this case each of
-           them is identified by an index.
+          "Applying a QoS policy while processing a frame can generate
+           more than one metadata value for the DEI bit (for possible
+           usage in multiple VLAN tags). In this case each of them is
+           identified by an index.
 
-           This leaf provides the index in the list dei-marking-list
-           from which the DEI bits value shall be taken to put in the
-           VLAN tag.";
+           This leaf provides the index in the metadata list of DEI
+           bit values from which the value shall be taken to put in
+           the frame's VLAN tag.";
       }
     }
   }

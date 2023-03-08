@@ -10,15 +10,13 @@ module bbf-qos-types {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -31,7 +29,7 @@ module bbf-qos-types {
      Specifically, this module contains type definitions used in
      multiple QoS modules.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -71,9 +69,19 @@ module bbf-qos-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -103,5 +111,24 @@ module bbf-qos-types {
       "The identifier of a traffic class. A traffic class refers to
        a set of frames that are processed with the same Quality of
        Service characteristic.";
+  }
+
+  typedef qos-color {
+    type enumeration {
+      enum green {
+        description
+          "Identifies a green colored frame.";
+      }
+      enum yellow {
+        description
+          "Identifies a yellow colored frame.";
+      }
+      enum red {
+        description
+          "Identifies a red colored frame.";
+      }
+    }
+    description
+      "Defines a frame color for QoS.";
   }
 }

@@ -34,13 +34,13 @@ module bbf-mgmd {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -58,7 +58,7 @@ module bbf-mgmd {
      systems that act as a multicast proxy, snooper, or a snooper with
      proxy reporting.
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -98,9 +98,19 @@ module bbf-mgmd {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -313,12 +323,12 @@ module bbf-mgmd {
   grouping multicast-channel-with-admission-control {
     description
       "A grouping of data to support admission control on
-       multicast-channels.";
+       multicast channels.";
     list multicast-channel-admission-control {
       key "multicast-channel-name";
       description
         "A list containing admission control data per
-         multicast-channel.";
+         multicast channel.";
       leaf multicast-channel-name {
         type leafref {
           path "../../../bbf-mgmd:multicast-channel/bbf-mgmd:name";
@@ -348,7 +358,7 @@ module bbf-mgmd {
       }
       container access-parameters {
         description
-          "Access parameters for a multicast-channel.";
+          "Access parameters for a multicast channel.";
         leaf preview-parameter {
           when '../../access-right = "preview"';
           if-feature "bbf-mgmd:multicast-preview";
@@ -417,11 +427,27 @@ module bbf-mgmd {
             }
             enum total-time {
               description
-                "Set limit on total previewed time.";
+                "Set limit on total previewed time.
+
+                 This limit is applied to a one time opportunity per
+                 day to preview a multicast channel. I.e., if the
+                 preview lasts for the total time, then the user is
+                 kicked-out from the multicast tree by the device.
+                 When the user previewed the multicast channel over a
+                 period shorter than or equal to the total time, then
+                 the user has no more opportunity to preview that
+                 channel during the same day.";
             }
           }
           description
-            "This leaf controls the preview method.";
+            "This leaf controls the preview method.
+
+             This leaf not being configured means there is no preview.
+             In other words, a multicast channel with 'access-right'
+             set to 'preview' and referencing a profile with the leaf
+             'preview-control-style' not set, is treated in the same
+             way as when the multicast channel was configured with
+             'access-right' 'disabled'.";
         }
         container preview-pattern {
           when '../preview-control-style = "pattern"';
@@ -657,7 +683,7 @@ module bbf-mgmd {
           type inet:ip-version;
           default "ipv4";
           description
-            "The IP version identifies the type of IP-addresses used
+            "The IP version identifies the type of IP addresses used
              within this VPN.";
         }
         choice ip-to-host {
@@ -710,23 +736,23 @@ module bbf-mgmd {
             "This attribute specifies the multicast VPN behavior when
              the system receives a join for a multicast channel for
              which there is no explicit configuration in the
-             multicast-channel list.
+             'multicast-channel' list.
 
              When no multicast package is associated to a particular
              multicast interface to a host, then an unmatched join is
              a join on such an interface for a group address that is
-             not configured in the multicast channel list.
+             not configured in the 'multicast-channel' list.
 
              When a multicast package is associated to a particular
              multicast interface to a host, then this package controls
              authorization for all multicast channels for which there
-             is explicit configuration in the multicast-channel list.
-             This means, a join for a multicast channel that exists in
-             the multicast-channel list and is not part of the host's
-             package is never granted. Also in this case this leaf
-             controls the processing of joins for group addresses for
-             which there is no explicit configuration in the
-             multicast-channel list.
+             is explicit configuration in the 'multicast-channel'
+             list. This means, a join for a multicast channel that
+             exists in the 'multicast-channel' list and is not part of
+             the host's package is never granted. Also in this case
+             this leaf controls the processing of joins for group
+             addresses for which there is no explicit configuration in
+             the 'multicast-channel' list.
 
              This feature is useful in wholesale environments where
              group address authorization is performed elsewhere. The
@@ -807,7 +833,7 @@ module bbf-mgmd {
                  Reports as regular data. In that condition the system
                  shall by default further process the message using
                  the VLAN sub-interface referenced by the leaf
-                 vlan-sub-interface. Configuring the current leaf
+                 'vlan-sub-interface'. Configuring the current leaf
                  overrules this default and sets another VLAN
                  sub-interface to be used when further processing the
                  MGMD message as data frame.";
@@ -883,7 +909,7 @@ module bbf-mgmd {
           leaf multicast-rate-limit {
             if-feature "multicast-cac";
             type uint32;
-            units "kbits/second";
+            units "kilobits per second";
             default "0";
             description
               "The multicast rate limit specifies the total bandwidth
@@ -899,7 +925,7 @@ module bbf-mgmd {
               "The multicast rate limit exceed action specifies how a
                multicast switch shall act when the multicast CAC
                concludes that accepting the MGMD request would result
-               in a situation that more bandwith is needed than
+               in a situation that more bandwidth is needed than
                available on the host interface, then this request can
                be accepted, possibly resulting in frame loss, or the
                request can be dropped.";
@@ -1121,7 +1147,7 @@ module bbf-mgmd {
           leaf channel-rate {
             if-feature "multicast-cac";
             type uint32;
-            units "kbits/second";
+            units "kilobits per second";
             default "0";
             description
               "The bandwidth of the multicast channel to be used at
@@ -1227,6 +1253,7 @@ module bbf-mgmd {
           leaf multicast-rate-limit-exceeded-count {
             if-feature "multicast-cac";
             type yang:counter32;
+            units "messages";
             description
               "Counts the number of joins that did, or would have,
                exceeded the multicast rate limit, whether accepted or
@@ -1235,7 +1262,7 @@ module bbf-mgmd {
           leaf current-multicast-bw-delivered {
             if-feature "multicast-cac";
             type uint32;
-            units "kbits/second";
+            units "kilobits per second";
             description
               "The device its best effort estimate of the actual
                bandwidth currently being delivered or used.";

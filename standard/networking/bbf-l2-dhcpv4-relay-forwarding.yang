@@ -14,13 +14,13 @@ module bbf-l2-dhcpv4-relay-forwarding {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -34,7 +34,7 @@ module bbf-l2-dhcpv4-relay-forwarding {
      Specifically, this module augments bbf-l2-forwarding with
      subscriber management via the DHCPv4 protocol.
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -74,9 +74,19 @@ module bbf-l2-dhcpv4-relay-forwarding {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -125,22 +135,22 @@ module bbf-l2-dhcpv4-relay-forwarding {
           type enumeration {
             enum apply-layer2-forwarding {
               description
-                "Downstream broadcast DHCP messages are forwarded
+                "Downstream broadcast DHCPv4 messages are forwarded
                  according forwarding rules configured for the
                  forwarder. Especially applicable to the forwarding of
-                 DHCP broadcast messages is the configuration of
+                 broadcast DHCPv4 messages is the configuration of
                  flooding rules for broadcast frames.";
             }
             enum single-user-with-fallback-to-layer2 {
               description
-                "Downstream broadcast DHCP messages are first
+                "Downstream broadcast DHCPv4 messages are first
                  processed as defined for the value 'false', i.e. they
                  are forwarded to only one port of the forwarder which
-                 is identified by the DHCP message content. If however
-                 no port is identified in this way, then the message
-                 will be processed as identified in 'apply-layer2-
-                 forwarding', i.e. based on the (flooding) forwarding
-                 rules of the forwarder.";
+                 is identified by the DHCPv4 message content. If
+                 however no port is identified in this way, then the
+                 message will be processed as identified in 'apply-
+                 layer2-forwarding', i.e. based on the (flooding)
+                 forwarding rules of the forwarder.";
             }
           }
         }

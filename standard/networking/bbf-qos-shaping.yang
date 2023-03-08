@@ -20,15 +20,13 @@ module bbf-qos-shaping {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -42,7 +40,7 @@ module bbf-qos-shaping {
      with shaper profiles and augments interfaces to reference a
      shaper profile.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -82,9 +80,19 @@ module bbf-qos-shaping {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -121,6 +129,45 @@ module bbf-qos-shaping {
       "Indicates support for a two token bucket (dual rate) shaper.";
   }
 
+  grouping shaper-profile-ref {
+    description
+      "A reference to a shaper profile of the single token bucket
+       type.";
+    leaf shaper-name {
+      type leafref {
+        path "/bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/"
+           + "bbf-qos-shap:name";
+      }
+      description
+        "A reference to a shaper profile.";
+    }
+  }
+
+  grouping single-token-shaper-profile-ref {
+    description
+      "A reference to a shaper profile of the single token bucket
+       type.";
+    leaf shaper-name {
+      type leafref {
+        path "/bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/"
+           + "bbf-qos-shap:name";
+      }
+      must
+        'boolean(/bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile'
+      + '[bbf-qos-shap:name=current()]/bbf-qos-shap:'
+      + 'single-token-bucket)' {
+        error-message
+          "The referenced shaper is not a single-token bucket shaper "
+        + "type.";
+        description
+          "The referenced shaper shall be of the single-token bucket
+           type.";
+      }
+      description
+        "A reference to a shaper profile.";
+    }
+  }
+
   augment "/bbf-qos-tm:tm-profiles" {
     description
       "Augment the traffic management profile to add shaper
@@ -147,7 +194,7 @@ module bbf-qos-shaping {
                Rate (PIR).";
             leaf pir {
               type uint32;
-              units "kbits per second";
+              units "kilobits per second";
               description
                 "The Peak Information Rate (PIR), in kilobits per
                  second.";
@@ -174,7 +221,7 @@ module bbf-qos-shaping {
                Information Rate (EIR) traffic.";
             leaf pir {
               type uint32;
-              units "kbits per second";
+              units "kilobits per second";
               mandatory true;
               description
                 "The Peak Information Rate (PIR), in kilobits per
@@ -182,7 +229,7 @@ module bbf-qos-shaping {
             }
             leaf cir {
               type uint32;
-              units "kbits per second";
+              units "kilobits per second";
               mandatory true;
               description
                 "The Committed Information Rate (CIR), in kilobits per
@@ -194,39 +241,54 @@ module bbf-qos-shaping {
     }
   }
 
-  grouping shaper-profile-ref {
+  augment "/bbf-qos-tm:tm-profiles/bbf-qos-tm:queue-templates"
+        + "/bbf-qos-tm:template" {
+    if-feature "bbf-qos-tm:queue-templates";
     description
-      "A reference to a shaper profile of the single token bucket
-       type.";
-    leaf shaper-name {
-      type leafref {
-        path "/bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/"
-           + "bbf-qos-shap:name";
-      }
-      description
-        "An absolute reference to a shaper profile.";
-    }
+      "Augment the traffic management profile to add shaper
+       configuration for shaping the traffic of all queues
+       together.";
+    uses bbf-qos-shap:shaper-profile-ref;
   }
 
-  grouping single-token-shaper-profile-ref {
+  augment "/bbf-qos-tm:tm-profiles/bbf-qos-tm:queue-templates"
+        + "/bbf-qos-tm:template/bbf-qos-tm:queue" {
+    if-feature "bbf-qos-tm:queue-templates";
     description
-      "A reference to a shaper profile of the single token bucket
-       type.";
+      "Augment the traffic management profile to add shaper
+       configuration to a specific queue.";
     leaf shaper-name {
       type leafref {
-        path "/bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile/"
+        path "/bbf-qos-tm:tm-profiles/"
+           + "bbf-qos-shap:shaper-profile/"
            + "bbf-qos-shap:name";
       }
-      must
-        'boolean(/bbf-qos-tm:tm-profiles/bbf-qos-shap:shaper-profile'
-      + '[bbf-qos-shap:name=current()]/bbf-qos-shap:'
-      + 'single-token-bucket)' {
+      must '(not(boolean(current()/../'
+         + 'bbf-qos-tm:dual-rate-scheduling)) and '
+         + 'boolean(/bbf-qos-tm:tm-profiles/'
+         + 'bbf-qos-shap:shaper-profile[bbf-qos-shap:name='
+         + 'current()]/'
+         + 'bbf-qos-shap:single-token-bucket)) or '
+         + '(boolean(current()/../'
+         + 'bbf-qos-tm:dual-rate-scheduling) '
+         + 'and boolean(/bbf-qos-tm:tm-profiles/bbf-qos-shap:'
+         + 'shaper-profile[bbf-qos-shap:name=current()]'
+         + '/bbf-qos-shap:two-token-bucket))' {
         error-message
-          "The referenced shaper shall be of the single-token bucket "
-        + "type.";
+          "The referenced shaper is neither a two-token-bucket shaper"
+        + " for a dual-rate-scheduling queue nor is it a "
+        + "single-token-bucket shaper for a non-dual-rate-scheduling "
+        + "queue.";
+        description
+          "The referenced shaper shall be two-token-bucket shaper
+           for a dual-rate-scheduling queue or shall be a
+           single-token-bucket shaper for a non-dual-rate-scheduling
+           queue.";
       }
       description
-        "An absolute reference to a shaper profile.";
+        "A reference to a shaper profile. The referenced shaper data
+         is used to shape the traffic that is scheduled from the
+         queue.";
     }
   }
 
@@ -257,12 +319,18 @@ module bbf-qos-shaping {
       + '[bbf-qos-shap:name=current()]/bbf-qos-shap:'
       + 'two-token-bucket))' {
         error-message
-          "The referenced shaper shall be two-token-bucket for a "
-        + "dual-rate-scheduling queues or shall be a single-"
-        + "token-bucket shaper.";
+          "The referenced shaper is neither a two-token-bucket shaper"
+        + " for a dual-rate-scheduling queue nor is it a "
+        + "single-token-bucket shaper for a non-dual-rate-scheduling "
+        + "queue.";
+        description
+          "The referenced shaper shall be two-token-bucket shaper
+           for a dual-rate-scheduling queue or shall be a
+           single-token-bucket shaper for a non-dual-rate-scheduling
+           queue.";
       }
       description
-        "An absolute reference to a shaper profile.";
+        "A reference to a shaper profile.";
     }
   }
 }

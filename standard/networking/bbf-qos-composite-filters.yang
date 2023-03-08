@@ -18,6 +18,12 @@ module bbf-qos-composite-filters {
   import ietf-packet-fields {
     prefix packet-fields;
   }
+  import bbf-qos-types {
+    prefix bbf-qos-t;
+  }
+  import bbf-frame-processing-types {
+    prefix bbf-fpt;
+  }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -26,13 +32,13 @@ module bbf-qos-composite-filters {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -47,7 +53,7 @@ module bbf-qos-composite-filters {
      packet payload fields, and it contains filters composed of a
      combination of these fields.
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -87,9 +93,19 @@ module bbf-qos-composite-filters {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -285,7 +301,7 @@ module bbf-qos-composite-filters {
                positive to have a match. The outermost tag is
                assigned index 0. ";
             leaf index {
-              type bbf-classif:tag-index;
+              type bbf-fpt:tag-index;
               must 'count(../../tag[index = 0]) > 0' {
                 error-message
                   "An inner tag can only be matched on when also "
@@ -420,16 +436,16 @@ module bbf-qos-composite-filters {
          then the metadata p-bits fields are not a filter criterion
          and then, as to this filter, 'all frames match'.";
       leaf index {
-        type bbf-qos-cls:qos-pbit-marking-index;
+        type bbf-fpt:qos-pbit-marking-index;
         description
-          "The index associated with a metadata p-bits value.";
+          "The index associated with a metadata value of the p-bits.";
       }
       leaf-list pbit-value {
         type bbf-dot1qt:pbit;
         min-elements 1;
         description
-          "This leaf-list provides a set of possible p-bits values as
-           a criterion for classifying frames.
+          "This leaf-list provides a set of possible values of the
+           p-bits as a criterion for classifying frames.
 
            There is a match if the identified frame's metadata p-bits
            is one of the values specified in the leaf-list.";
@@ -453,7 +469,7 @@ module bbf-qos-composite-filters {
          not a filter criterion and then, as to this filter, 'all
          frames match'.";
       leaf index {
-        type bbf-qos-cls:qos-dei-marking-index;
+        type bbf-fpt:qos-dei-marking-index;
         description
           "The index associated with a metadata DEI value.";
       }
@@ -465,7 +481,7 @@ module bbf-qos-composite-filters {
       }
     }
     leaf-list flow-color {
-      type bbf-qos-cls:qos-color;
+      type bbf-qos-t:qos-color;
       description
         "This leaf-list provides a set of flow colors as a filter
          criterion for classifying frames with the intention to apply
@@ -480,6 +496,19 @@ module bbf-qos-composite-filters {
     }
   }
 
+  grouping composite-filter-entry-ref {
+    description
+      "A reference to a composite filter.";
+    leaf composite-filter-name {
+      type leafref {
+        path "/bbf-qos-cpsfilt:composite-filters"
+           + "/bbf-qos-cpsfilt:composite-filter/bbf-qos-cpsfilt:name";
+      }
+      description
+        "A reference to a composite filter.";
+    }
+  }
+
   container composite-filters {
     description
       "Provides data nodes that allow to configure filters in various
@@ -489,7 +518,7 @@ module bbf-qos-composite-filters {
       description
         "A composite filter.
 
-         An composite filter entry can contain multiple filter
+         A composite filter entry can contain multiple filter
          entries. In case it contains multiple filter entries, then
          these entries have to be combined using the setting of a
          filter operations.";
@@ -564,19 +593,6 @@ module bbf-qos-composite-filters {
           }
         }
       }
-    }
-  }
-
-  grouping composite-filter-entry-ref {
-    description
-      "A reference to an composite filter.";
-    leaf composite-filter-name {
-      type leafref {
-        path "/bbf-qos-cpsfilt:composite-filters"
-           + "/bbf-qos-cpsfilt:composite-filter/bbf-qos-cpsfilt:name";
-      }
-      description
-        "A reference to an composite filter.";
     }
   }
 

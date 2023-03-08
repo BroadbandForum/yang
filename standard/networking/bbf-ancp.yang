@@ -20,13 +20,13 @@ module bbf-ancp {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -39,7 +39,7 @@ module bbf-ancp {
      This data model is designed for the Network Management Datastore
      Architecture defined in RFC 8342.
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -79,11 +79,21 @@ module bbf-ancp {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
   reference
     "RFC 6320";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -118,7 +128,7 @@ module bbf-ancp {
       "Indicates that the device supports negotiation of the
        Partition ID to be used to be used by ANCP sessions to
        associate ANCP messages with the partition of the Access Node
-       (AN) managed by a session.";
+       managed by a session.";
   }
 
   feature session-statistics {
@@ -303,7 +313,7 @@ module bbf-ancp {
     }
     description
       "The instance number used to identify the link within the
-       AN or NAS.";
+       Access Node or NAS.";
     reference
       "RFC 6320 section 3.5.1";
   }
@@ -319,8 +329,8 @@ module bbf-ancp {
       config false;
       mandatory true;
       description
-        "The Name used by the entity (AN or NAS) as advertised in
-         the adjacency message.
+        "The Name used by the entity (Access Node or NAS) as
+         advertised in the adjacency message.
 
          This leaf has value 'unknown', if adjacency state is not
          ESTAB (established).";
@@ -330,8 +340,8 @@ module bbf-ancp {
       config false;
       mandatory true;
       description
-        "The value for Instance used by the entity (AN or NAS) to
-         identify the link to the peer.
+        "The value for Instance used by the entity (Access Node or
+         NAS) to identify the link to the peer.
 
          This leaf has value 'undefined', if adjacency state is not
          ESTAB (established).";
@@ -464,8 +474,8 @@ module bbf-ancp {
             }
             container access-node {
               description
-                "Configuration relevant to the AN side of the ANCP
-                 session.";
+                "Configuration relevant to the Access Node side of the
+                 ANCP session.";
               container name-source {
                 presence
                   "Enables selection of the source of the name to use
@@ -483,7 +493,7 @@ module bbf-ancp {
                   description
                     "Configures which source to use to generate the
                      Sender Name to use to identify the session at
-                     the AN to the NAS.";
+                     the Access Node to the NAS.";
                   reference
                     "RFC 6320 section 3.5.1 (Sender Name).";
                   case use-mac-address {
@@ -491,14 +501,14 @@ module bbf-ancp {
                       "Configures the session to use a system MAC
                        address to generate the Sender Name to be
                        inserted into ANCP messages to identify the
-                       AN.";
+                       Access Node.";
                     leaf use-mac-address {
                       type empty;
                       description
                         "Configures the session to use a system MAC
                          address to generate the Sender Name to be
                          inserted into ANCP messages to identify the
-                         AN.";
+                         Access Node.";
                     }
                   }
                 }
@@ -509,14 +519,14 @@ module bbf-ancp {
                 config false;
                 mandatory true;
                 description
-                  "The IP address of the AN.";
+                  "The IP address of the Access Node.";
               }
               leaf port {
                 type inet:port-number;
                 config false;
                 mandatory true;
                 description
-                  "The IP port of the AN.";
+                  "The IP port of the Access Node.";
               }
             }
             container network-access-server {
@@ -570,8 +580,8 @@ module bbf-ancp {
                   enum closed {
                     description
                       "The session to the NAS has been closed by the
-                       ANCP Agent on the AN, for example, due to a
-                       malfunction with the Adjacency Protocol.";
+                       ANCP Agent on the Access Node, for example, due
+                       to a malfunction with the Adjacency Protocol.";
                   }
                   enum malfunction {
                     description
@@ -614,7 +624,7 @@ module bbf-ancp {
                 "Configuration to manage the adjacency protocol.";
               leaf liveness-timer {
                 type uint8;
-                units "100 milliseconds";
+                units "0.1 seconds";
                 default "250";
                 description
                   "The nominal time between periodic adjacency
@@ -654,14 +664,13 @@ module bbf-ancp {
                   }
                   enum synchronization-lost {
                     description
-                      "Indicates that the AN and NAS are no longer
-                       synchronized. This may occur, if
+                      "Indicates that the Access Node and NAS are no
+                       longer synchronized. This may occur, if
                        - no valid ANCP messages are received in any
                          period of time in excess of three times the
                          value of the negotiated liveness timer;
                        or
                        - a mismatch in adjacency state is detected.
-
                        A corresponding alarm will be raised, if
                        supported.";
                     reference
@@ -670,24 +679,25 @@ module bbf-ancp {
                   enum estab {
                     description
                       "The state ESTAB (established) indicates that
-                       the AN has established a session.";
+                       the Access Node has established a session.";
                     reference
                       "RFC 6320 section 3.5.2.2.7";
                   }
                   enum synrcvd {
                     description
                       "The state SYNRCVD (synchronization received)
-                       indicates that the AN has received a connection
-                       request and sent an acknowledgment.";
+                       indicates that the Access Node has received a
+                       connection request and sent an
+                       acknowledgment.";
                     reference
                       "RFC 6320 section 3.5.2.2.1";
                   }
                   enum synsent {
                     description
                       "The state SYNSENT (synchronization sent)
-                       indicates that the AN is waiting for an
-                       acknowledgment from the NAS after having sent
-                       a connection request.";
+                       indicates that the Access Node is waiting for
+                       an acknowledgment from the NAS after having
+                       sent a connection request.";
                     reference
                       "RFC 6320 section 3.5.2.2.1";
                   }
@@ -721,7 +731,7 @@ module bbf-ancp {
                    + "[bbf-ancp:partition-id='global']))" {
                   description
                     "The use of a Partition ID is only applicable, if
-                     the AN has been partitioned.";
+                     the Access Node has been partitioned.";
                 }
                 if-feature "bbf-ancp:partition-id-negotiation";
                 type partition-id;
@@ -729,8 +739,8 @@ module bbf-ancp {
                 mandatory true;
                 description
                   "The Partition ID used by this session to associate
-                   ANCP messages with the partition of the AN managed
-                   by this session.
+                   ANCP messages with the partition of the Access Node
+                   managed by this session.
 
                    The final negotiated value, which will be constant
                    for the duration of the ANCP session, may be
@@ -971,6 +981,7 @@ module bbf-ancp {
               }
               leaf in-valid-messages {
                 type yang:zero-based-counter32;
+                units "messages";
                 mandatory true;
                 description
                   "The number of messages that have been received and
@@ -982,6 +993,7 @@ module bbf-ancp {
               }
               leaf in-discarded-messages {
                 type yang:zero-based-counter32;
+                units "messages";
                 mandatory true;
                 description
                   "The number of messages that in this session have
@@ -994,6 +1006,7 @@ module bbf-ancp {
               }
               leaf out-messages {
                 type yang:zero-based-counter32;
+                units "messages";
                 mandatory true;
                 description
                   "The number of messages that have been sent in this
@@ -1005,6 +1018,7 @@ module bbf-ancp {
               }
               leaf in-syn {
                 type yang:zero-based-counter32;
+                units "messages";
                 mandatory true;
                 description
                   "The number of adjacency SYN messages that in this
@@ -1012,14 +1026,16 @@ module bbf-ancp {
               }
               leaf in-synack {
                 type yang:zero-based-counter32;
+                units "messages";
                 mandatory true;
                 description
                   "The number of adjacency SYNACK messages that in
-                   this session have been received by the access
-                   node.";
+                   this session have been received by the Access
+                   Node.";
               }
               leaf in-ack {
                 type yang:zero-based-counter32;
+                units "messages";
                 mandatory true;
                 description
                   "The number of adjacency ACK messages that in this
@@ -1027,14 +1043,16 @@ module bbf-ancp {
               }
               leaf in-rstack {
                 type yang:zero-based-counter32;
+                units "messages";
                 mandatory true;
                 description
                   "The number of adjacency RSTACK messages that in
-                   this session have been received by the access
-                   node.";
+                   this session have been received by the Access
+                   Node.";
               }
               leaf out-syn {
                 type yang:zero-based-counter32;
+                units "messages";
                 mandatory true;
                 description
                   "The number of adjacency SYN messages that in this
@@ -1042,22 +1060,25 @@ module bbf-ancp {
               }
               leaf out-synack {
                 type yang:zero-based-counter32;
+                units "messages";
                 mandatory true;
                 description
                   "The number of adjacency SYNACK messages that in
-                   this session have been transmitted by the access
-                   node.";
+                   this session have been transmitted by the Access
+                   Node.";
               }
               leaf out-rstack {
                 type yang:zero-based-counter32;
+                units "messages";
                 mandatory true;
                 description
                   "The number of adjacency RSTACK messages that in
-                   this session have been transmitted by the access
-                   node.";
+                   this session have been transmitted by the Access
+                   Node.";
               }
               leaf out-ack {
                 type yang:zero-based-counter32;
+                units "messages";
                 mandatory true;
                 description
                   "The number of adjacency ACK messages that in this
@@ -1116,7 +1137,7 @@ module bbf-ancp {
                     range "1..max";
                   }
                 }
-                units "100 milliseconds";
+                units "0.1 seconds";
                 default "disabled";
                 description
                   "Configures the dampening mechanism controlling the

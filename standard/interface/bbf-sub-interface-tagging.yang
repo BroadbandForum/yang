@@ -18,6 +18,9 @@ module bbf-sub-interface-tagging {
   import bbf-frame-classification {
     prefix bbf-classif;
   }
+  import bbf-frame-editing {
+    prefix bbf-fedit;
+  }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -26,13 +29,13 @@ module bbf-sub-interface-tagging {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -46,7 +49,7 @@ module bbf-sub-interface-tagging {
      configuration of a (sub-)interface with additional criteria and
      adds VLAN-specific ingress and egress rewrite actions.
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -86,9 +89,19 @@ module bbf-sub-interface-tagging {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -148,8 +161,8 @@ module bbf-sub-interface-tagging {
 
   feature write-pbit-value-in-vlan-tag {
     description
-      "Indicates support for writing a configurable p-bits value
-       into a VLAN tag.";
+      "Indicates support for writing a configurable value of the
+       p-bits into a VLAN tag.";
   }
 
   feature exclude-criteria {
@@ -165,105 +178,23 @@ module bbf-sub-interface-tagging {
   }
 
   grouping pbit-marking {
+    status deprecated;
     description
       "The Priority bits (3 bits) of a VLAN tag (p-bits).
 
-       These p-bits are in the VLAN tag next to the Drop
-       Eligible Inidicator (DEI) bit (1 bit) and the VLAN ID
-       (12 bits).";
-    choice pbit {
-      mandatory true;
-      description
-        "Defines how to write the p-bits.";
-      case write-pbit-0 {
-        description
-          "Tagged and priority-tagged frames contain p-bits.
-           Untagged frames do not contain p-bits.
-
-           Write-pbit-0 provides a simple method to identify what
-           p-bits MUST be inserted in the output frame that can be
-           applied to all frame types. More advanced methods can be
-           provided via other pbit-action cases.";
-        leaf write-pbit-0 {
-          type empty;
-          description
-            "Push p-bits=000 in the tag.";
-        }
-      }
-      case copy-pbit-from-input-or-0 {
-        description
-          "Copy from the specified input tag, or write p-bits=000
-           if the input tag does not exist.";
-        leaf pbit-from-tag-index {
-          type bbf-classif:tag-index;
-          description
-            "Specifies from which tag the p-bits MUST be copied.";
-        }
-      }
-      case write-pbit-value {
-        if-feature "bbf-subif-tag:write-pbit-value-in-vlan-tag";
-        description
-          "Write a p-bits value into the tag.";
-        leaf write-pbit {
-          type bbf-dot1qt:pbit;
-          description
-            "Specified p-bits value to write into the tag.";
-        }
-      }
-    }
+       P-bits are part of the 16-bit VLAN tag along with the single
+       bit Drop Eligible Indicator (DEI) and the 12-bit VLAN ID.";
+    uses bbf-fedit:write-pbit;
   }
 
   grouping dei-marking {
+    status deprecated;
     description
       "The DEI bit (1 bit) of a VLAN tag.
 
-       This bit is in the VLAN tag next to the p-bits (3 bits) and
-       the VLAN ID (12 bits).";
-    choice dei {
-      mandatory true;
-      description
-        "Defines how to write the DEI bit.";
-      case write-dei-0 {
-        description
-          "Tagged and priority-tagged frames contain a DEI bit.
-           Untagged frames do not contain a DEI bit.
-
-           Write-dei-0 provides a simple method to identify what DEI
-           MUST be inserted in the output frame that can be applied to
-           all frame types. More advanced methods can be provided via
-           other dei-action cases.";
-        leaf write-dei-0 {
-          type empty;
-          description
-            "Push DEI=0 in the tag.";
-        }
-      }
-      case copy-dei-from-input-or-0 {
-        description
-          "Copy DEI from the specified input tag, or write DEI=0 if
-           the input tag does not exist.";
-        leaf dei-from-tag-index {
-          type bbf-classif:tag-index;
-          description
-            "Specifies from which tag the DEI bit MUST be copied.";
-        }
-      }
-      case write-dei-1 {
-        description
-          "Tagged and priority-tagged frames contain a DEI bit.
-           Untagged frames do not contain a DEI bit.
-
-           Write-dei-1 provides a simple method to identify what DEI
-           MUST be inserted in the output frame that can be applied to
-           all frame types. More advanced methods can be provided via
-           other dei-action cases.";
-        leaf write-dei-1 {
-          type empty;
-          description
-            "Push DEI=1 in the tag.";
-        }
-      }
-    }
+       The DEI bit is part of the 16-bit VLAN tag along with the 3-bit
+       Priority bits (p-bits) and the 12-bit VLAN ID.";
+    uses bbf-fedit:write-dei;
   }
 
   grouping dot1q-tag {
@@ -315,8 +246,12 @@ module bbf-sub-interface-tagging {
            specified input tag does not exist, the frame is
            discarded.";
       }
-      uses pbit-marking;
-      uses dei-marking;
+      uses bbf-fedit:write-pbit {
+        refine "pbit/write-pbit-value" {
+          if-feature "bbf-subif-tag:write-pbit-value-in-vlan-tag";
+        }
+      }
+      uses bbf-fedit:write-dei;
     }
   }
 
@@ -373,27 +308,34 @@ module bbf-sub-interface-tagging {
         "This container collects match criteria for various frame
          fields.
 
-         The match criteria are unambiguously in case a frame field
-         is unique. This is not the case for the match criteria
-         defined via leaf ethernet-frame-type included via the uses
-         ethertype-match. The value provided by the leaf inside this
-         grouping is to be compared with the first Ethertype of an
-         untagged Ethernet frame; or for frames that contain one or
-         more VLAN tags it is the value to be compared with the
-         Ethertype that is the first after the VLAN tags for which a
-         matching criteria is specified via the leafs of the grouping
-         multiple-vlan-tag-match.
+         The match criteria are unambiguous in case a frame field is
+         unique. This is not the case for the match criteria defined
+         via leaf 'ethernet-frame-type' included via the 'uses
+         bbf-classif:ethertype-match'. The value provided by the leaf
+         inside this grouping is to be compared with the first
+         Ethertype of an untagged Ethernet frame; or for frames that
+         contain one or more VLAN tags it is the value to be compared
+         with the Ethertype that is the first after the VLAN tags for
+         which a matching criteria is specified via the list 'tag'.
 
          For example, if matching criteria are specified for one outer
          VLAN tag, and a received IPoE frame is single tagged, then
-         the ethernet-frame-type refers to the Ethertype 0x0800 being
-         the Ethertype that identifies the frame as IPoE. While the
-         same YANG configuration applied to a received IPoE frame that
-         is double tagged, then the ethernet-frame-type refers to the
-         Ethertype 0x8100 being the Ethertype that identifies the
-         frame contains an inner VLAN tag.";
+         the leaf 'ethernet-frame-type' refers to the Ethertype 0x0800
+         being the Ethertype that identifies the frame as IPoE. While
+         the same YANG configuration applied to a received IPoE frame
+         that is double tagged, then the leaf 'ethernet-frame-type'
+         refers to the Ethertype 0x8100 being the Ethertype that
+         identifies the frame contains an inner VLAN tag.";
       uses bbf-classif:frame-destination-match;
-      uses bbf-classif:multiple-vlan-tag-match;
+      uses bbf-classif:multiple-vlan-tag-match {
+        augment "vlan-tag-match-type/vlan-tagged/tag" {
+          description
+            "Defines match criteria for all the fields of VLAN tags,
+             being the TPID, the VLAN ID, the p-bits, and the DEI
+             bit.";
+          uses bbf-classif:dot1q-tag-ranges-or-any;
+        }
+      }
       uses bbf-classif:ethertype-match;
       uses bbf-classif:protocol-match;
       uses bbf-classif:dscp-match {
@@ -409,8 +351,8 @@ module bbf-sub-interface-tagging {
          'flexible-match' container AND if it does not match the
          criteria defined in the 'exclude-criteria' container. A
          non-existing exclude-criteria container means it does not
-         provide additional criteria and all frames match that part
-         of the classification.";
+         provide additional criteria and all frames match that part of
+         the classification.";
       uses bbf-classif:frame-destination-match-specific;
       uses bbf-classif:ethertype-match-no-default;
       uses bbf-classif:protocol-match-specific;
@@ -423,29 +365,12 @@ module bbf-sub-interface-tagging {
   augment "/if:interfaces/if:interface/bbf-subif:frame-processing/"
         + "bbf-subif:inline-frame-processing/bbf-subif:inline-"
         + "frame-processing/bbf-subif:ingress-rule/bbf-subif:rule/"
-        + "bbf-subif:flexible-match/match-criteria/vlan-tag-match-"
-        + "type/vlan-tagged/tag" {
-    when "derived-from-or-self(../../../../../../if:type,"
-       + "'bbfift:vlan-sub-interface')" {
-      description
-        "Defines match criteria for all the fields of VLAN tags,
-         being the TPID, the VLAN ID, the p-bits, and the DEI bit.";
-    }
-    description
-      "Defines match criteria for all the fields of VLAN tags, being
-       the TPID, the VLAN ID, the p-bits, and the DEI bit.";
-    uses bbf-classif:dot1q-tag-ranges-or-any;
-  }
-
-  augment "/if:interfaces/if:interface/bbf-subif:frame-processing/"
-        + "bbf-subif:inline-frame-processing/bbf-subif:inline-"
-        + "frame-processing/bbf-subif:ingress-rule/bbf-subif:rule/"
         + "bbf-subif:ingress-rewrite" {
     when "derived-from-or-self(../../../../if:type,"
        + "'bbfift:vlan-sub-interface')" {
       description
-        "Augments the general ingress-rewrite container with
-         specific VLAN rewrite actions.";
+        "Augments the general ingress-rewrite container with specific
+         VLAN rewrite actions.";
     }
     description
       "Augments the general ingress-rewrite container with specific

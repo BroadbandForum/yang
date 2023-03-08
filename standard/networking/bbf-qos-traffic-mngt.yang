@@ -23,13 +23,13 @@ module bbf-qos-traffic-mngt {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -42,7 +42,7 @@ module bbf-qos-traffic-mngt {
      Specifically, this module contains a collection of functions for
      QoS traffic management (TM).
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -82,9 +82,19 @@ module bbf-qos-traffic-mngt {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -155,7 +165,7 @@ module bbf-qos-traffic-mngt {
   feature tc-id-2-queue-id-mapping-config {
     description
       "This feature indicates whether the network element supports
-       configuring traffic-class-id to queue-id mapping profiles.";
+       configuring traffic class ID to queue ID mapping profiles.";
   }
 
   feature extended-scheduling-weight {
@@ -176,6 +186,18 @@ module bbf-qos-traffic-mngt {
       "Indicates support for reporting statistics per queue.";
   }
 
+  feature queue-templates {
+    description
+      "Indicates that the network element supports templates to
+       configure queues.";
+  }
+
+  feature queue-template-in-tm-root {
+    description
+      "Indicates that the network element supports templates to
+       configure queues in the container 'tm-root'.";
+  }
+
   typedef queue-id {
     type uint32 {
       range "0..7";
@@ -184,8 +206,8 @@ module bbf-qos-traffic-mngt {
       "An integer number identifying a queue within the context from
        which traffic will be scheduled. It is an abstract identifier:
        its value does NOT represent the priority of the queue itself.
-       This queue-id value is determined by means of a
-       traffic-class-id to queue-id mapping profile.";
+       This 'queue-id' value is determined by means of a traffic class
+       ID to queue ID mapping profile.";
   }
 
   typedef scheduling-priority {
@@ -305,25 +327,29 @@ module bbf-qos-traffic-mngt {
       "Queue counters common to each frame type, e.g. green frames.";
     leaf out-frames {
       type yang:counter64;
+      units "frames";
       description
         "The number of frames transmitted by this queue.";
     }
     leaf out-octets {
       type yang:counter64;
+      units "bytes";
       description
-        "The number of octets in frames transmitted by this queue.";
+        "The number of bytes in frames transmitted by this queue.";
     }
     leaf congestion-discard-frames {
       type yang:counter64;
+      units "frames";
       description
         "The number of frames discarded by this queue due to
          congestion.";
     }
     leaf congestion-discard-octets {
       type yang:counter64;
+      units "bytes";
       description
-        "The number of octets in frames dropped by this
-         queue due to congestion.";
+        "The number of bytes in frames discarded by this queue due to
+         congestion.";
     }
   }
 
@@ -379,10 +405,305 @@ module bbf-qos-traffic-mngt {
     leaf enqueued-octets {
       type yang:gauge64;
       description
-        "The number of octets contained in frames currently enqueued
+        "The number of bytes contained in frames currently enqueued
          by this queue.";
     }
     uses queue-counters;
+  }
+
+  grouping tc-id-2-queue-id-mapping-profile-ref {
+    description
+      "A reference to a traffic class ID to queue ID mapping
+       profile.";
+    leaf tc-id-2-queue-id-mapping-profile-name {
+      if-feature "bbf-qos-tm:tc-id-2-queue-id-mapping-config";
+      type leafref {
+        path "/bbf-qos-tm:tm-profiles/bbf-qos-tm:tc-id-2-queue-id-"
+           + "mapping-profile/bbf-qos-tm:name";
+      }
+      description
+        "The name of a referenced traffic class ID to queue ID mapping
+         profile.";
+    }
+  }
+
+  grouping bac-ref {
+    description
+      "A reference to a BAC entry.";
+    leaf bac-name {
+      type leafref {
+        path "/bbf-qos-tm:tm-profiles/bbf-qos-tm:bac-entry/bbf-qos-"
+           + "tm:name";
+      }
+      description
+        "The name of a referenced BAC entry.";
+    }
+  }
+
+  grouping scheduling-gen-attr {
+    description
+      "Configuration data for scheduling traffic from queues.";
+    leaf priority {
+      type scheduling-priority;
+      description
+        "The priority used to schedule frames from a queue or
+         scheduler, relative to the priority assigned to other queues
+         or schedulers that are defined in the same traffic scheduling
+         context. For example the set of queues defined for a
+         particular interface form the context for scheduling outgoing
+         traffic to this interface.";
+    }
+    leaf weight {
+      type scheduling-weight;
+      description
+        "Queues or schedulers that are defined in a particular
+         context, e.g. queues defined to schedule outgoing traffic to
+         an interface, can have the same priority. The weight defines
+         the portion of traffic that will be taken from this queue or
+         scheduler by comparing the weight of this queue or scheduler
+         against the sum of the weights of all queues or schedulers
+         with the same scope and the same priority.";
+    }
+    leaf extended-weight {
+      if-feature "bbf-qos-tm:extended-scheduling-weight";
+      type extended-scheduling-weight;
+      must 'not(boolean(../weight))' {
+        error-message
+          "'extended-weight' and 'weight' are configured at the same "
+        + "time.";
+        description
+          "Both weight and extended weight must not be configured at
+           the same time.";
+      }
+      description
+        "Queues or schedulers that are defined in a particular
+         context, e.g. queues defined to schedule outgoing traffic to
+         an interface, can have the same priority. The weight defines
+         the portion of traffic that will be taken from this queue or
+         scheduler by comparing the weight of this queue or scheduler
+         against the sum of the weights of all queues or schedulers
+         with the same scope and the same priority.";
+    }
+  }
+
+  grouping scheduling-attributes {
+    description
+      "Configuration data for scheduling traffic from queues.";
+    leaf priority {
+      type extended-scheduling-priority;
+      description
+        "The priority used to schedule frames from a queue or
+         scheduler, relative to the priority assigned to other queues
+         or schedulers that are defined in the same traffic scheduling
+         context. For example the set of queues defined for a
+         particular interface form the context for scheduling outgoing
+         traffic to this interface.";
+    }
+    leaf extended-weight {
+      type extended-scheduling-weight;
+      description
+        "Queues or schedulers that are defined in a particular
+         context, e.g. queues defined to schedule outgoing traffic to
+         an interface, can have the same priority. The weight defines
+         the portion of traffic that will be taken from this queue or
+         scheduler by comparing the weight of this queue or scheduler
+         against the sum of the weights of all queues or schedulers
+         with the same scope and the same priority.";
+    }
+  }
+
+  grouping queues-base {
+    description
+      "Configuration data for queues.";
+    list queue {
+      key "local-queue-id";
+      description
+        "A queue.";
+      leaf local-queue-id {
+        type queue-id;
+        description
+          "The identification of a queue within the context of this
+           list.";
+      }
+      uses bac-ref;
+      choice queue-scheduling-cfg-type {
+        description
+          "Choice of queue scheduling types.";
+        case inline {
+          description
+            "The queue parameters are directly configured here.";
+        }
+        case dual-rate-scheduling {
+          if-feature "bbf-qos-tm:dual-rate-scheduling-from-queue";
+          description
+            "The queue parameters are directly configured here.";
+          container dual-rate-scheduling {
+            description
+              "Configuration which determines the separate processing
+               of CIR and EIR traffic.";
+            container cir-traffic {
+              description
+                "Configuration for the CIR type of traffic from the
+                 child scheduler that is used by the parent
+                 scheduler.";
+              uses bbf-qos-tm:scheduling-attributes;
+            }
+            container eir-traffic {
+              description
+                "Configuration for the EIR type of traffic from the
+                 child scheduler that is used by the parent
+                 scheduler.";
+              uses bbf-qos-tm:scheduling-attributes;
+            }
+          }
+        }
+      }
+      leaf pre-emption {
+        if-feature "bbf-qos-tm:pre-emption";
+        type boolean;
+        description
+          "Indicates whether the transmission of a frames from this
+           queue can be interrupted in favor of frames from a higher
+           priority queue.";
+      }
+    }
+    leaf queue-statistics-enable {
+      if-feature "bbf-qos-tm:queue-statistics";
+      type boolean;
+      description
+        "If true, enable statistics collection per queue. When
+         transitioning from false to true (disabled to enabled), any
+         existing counts should be cleared.
+
+         The leaf not existing has the same meaning as queue
+         statistics being disabled.";
+    }
+  }
+
+  grouping queues {
+    description
+      "Configuration data for queues.
+
+       This grouping exists for historical, backward compatibility
+       reasons: it provides per queue the original 'one byte' priority
+       and 'one byte' weight, and adds a second 'two bytes' weight.";
+    uses queues-base {
+      augment "queue/queue-scheduling-cfg-type/inline" {
+        description
+          "Adds data nodes to a queue configured with the inline
+           scheduling method.";
+        uses bbf-qos-tm:scheduling-gen-attr;
+      }
+    }
+  }
+
+  grouping queues-extended-scheduling {
+    description
+      "Configuration data for queues.
+
+       This grouping exists for an up-to-date scheduling definition:
+       it provides per queue a 'two bytes' priority and a 'two bytes'
+       weight.";
+    uses queues-base {
+      augment "queue/queue-scheduling-cfg-type/inline" {
+        description
+          "Adds data nodes to a queue configured with the inline
+           scheduling method.";
+        uses bbf-qos-tm:scheduling-attributes;
+      }
+    }
+  }
+
+  grouping tm-root {
+    description
+      "The root for traffic management data.
+       Traffic management involves the following aspects:
+       - the forwarding decision determined to egress a frame through
+         an outgoing traffic container (which can be an interface).
+       - the traffic container (which can be a bottleneck) is
+         associated to a scheduler resolving the contention of
+         different queues competing to access the traffic container.
+       - so after the outgoing traffic container is determined, the
+         system needs to determine in which queue of the traffic
+         container the frame must be directed. This takes place based
+         on the frame's traffic class by means of the traffic class ID
+         to queue ID mapping concept.
+       - at any time, the scheduler resolves which queue should
+         deliver the next frame to the egress traffic container by
+         looking at the scheduling-priority and scheduling-weight of
+         each of queues.
+       The tm-root represents the scheduling stage directly attached
+       to the bottleneck resource (typically an interface).";
+    container tm-root {
+      presence
+        "Indicates the interface supports queues, either directly or
+         through a scheduling hierarchy. Interfaces that support
+         queues are typically the lowest layer of an interface stack
+         that is Ethernet frame aware.";
+      description
+        "The attributes of the root in the scheduling tree.";
+      choice children-type {
+        description
+          "Choice of a tm-root's child data node types.";
+        case queues {
+          description
+            "In this mode the interface related to the tm-root can
+             directly be selected by the forwarding process and has
+             its own set of queues. Hence the scheduling of a frame
+             from a forwarder to the egress queue takes place in a
+             single stage.";
+          uses queues;
+        }
+        case queues-from-template {
+          if-feature "queue-templates and queue-template-in-tm-root";
+          description
+            "The child data nodes are a list of queues, however these
+             queues are not explicitly configured. Instead a reference
+             is provided to a template that contains the definition of
+             queues to be created.
+
+             The queues' state data is as for case 'queue', i.e., when
+             queue statistics collection is enabled, then the state
+             data will contain data statistics per queue. The
+             'queue-id' of the queues is the 'queue-id' used in the
+             template.";
+          container queues-from-template {
+            description
+              "Data for defining queues using a template.";
+            leaf queue-template {
+              type leafref {
+                path "/bbf-qos-tm:tm-profiles"
+                   + "/bbf-qos-tm:queue-templates"
+                   + "/bbf-qos-tm:template"
+                   + "/bbf-qos-tm:name";
+              }
+              description
+                "A reference to a queues template.";
+            }
+            leaf queue-statistics-enable {
+              if-feature "bbf-qos-tm:queue-statistics";
+              type boolean;
+              description
+                "If 'false', no statistics will be collected. If
+                 'true', enable statistics collection per queue. When
+                 transitioning from false to true (disabled to
+                 enabled), any existing counts should be cleared.
+
+                 Note that statistics collection can also be enabled
+                 from within the template. This leaf defined here
+                 overrules the setting inside the template.
+
+                 When the leaf defined here is not configured (does
+                 not exist) it means the setting within the template
+                 will be applied. When there is also no setting in the
+                 template it has the same meaning as queue statistics
+                 being disabled.";
+            }
+          }
+        }
+      }
+      uses tc-id-2-queue-id-mapping-profile-ref;
+    }
   }
 
   container tm-profiles {
@@ -393,22 +714,22 @@ module bbf-qos-traffic-mngt {
       if-feature "tc-id-2-queue-id-mapping-config";
       key "name";
       description
-        "A traffic-class-id to queue-id mapping profile.";
+        "A traffic class ID to queue ID mapping profile.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
-          "The name of a traffic-class-id to queue-id mapping
+          "The name of a traffic class ID to queue ID mapping
            profile.";
       }
       list mapping-entry {
         key "traffic-class-id";
         description
-          "A traffic-class-id to queue-id mapping profile. One profile
-           maps each of the traffic-class-ids to a queue-id.";
+          "A traffic class ID to queue ID mapping profile. One profile
+           maps each of the traffic class IDs to a queue ID.";
         leaf traffic-class-id {
           type bbf-qos-t:traffic-class-id;
           description
-            "A traffic-class-id.";
+            "A traffic class ID.";
         }
         leaf local-queue-id {
           type queue-id;
@@ -517,217 +838,28 @@ module bbf-qos-traffic-mngt {
         }
       }
     }
-  }
-
-  grouping tc-id-2-queue-id-mapping-profile-ref {
-    description
-      "A reference to a traffic-class-id to queue-id mapping
-       profile.";
-    leaf tc-id-2-queue-id-mapping-profile-name {
-      if-feature "bbf-qos-tm:tc-id-2-queue-id-mapping-config";
-      type leafref {
-        path "/bbf-qos-tm:tm-profiles/bbf-qos-tm:tc-id-2-queue-id-"
-           + "mapping-profile/bbf-qos-tm:name";
-      }
+    container queue-templates {
+      if-feature "queue-templates";
       description
-        "The name of a referenced traffic-class-id to queue-id mapping
-         profile.";
-    }
-  }
-
-  grouping bac-ref {
-    description
-      "A reference to a BAC entry.";
-    leaf bac-name {
-      type leafref {
-        path "/bbf-qos-tm:tm-profiles/bbf-qos-tm:bac-entry/bbf-qos-"
-           + "tm:name";
-      }
-      description
-        "The name of a referenced BAC entry.";
-    }
-  }
-
-  grouping scheduling-gen-attr {
-    description
-      "Configuration data for scheduling traffic from queues.";
-    leaf priority {
-      type scheduling-priority;
-      description
-        "The priority used to schedule frames from a queue or
-         scheduler, relative to the priority assigned to other queues
-         or schedulers that are defined in the same traffic scheduling
-         context. For example the set of queues defined for a
-         particular interface form the context for scheduling outgoing
-         traffic to this interface.";
-    }
-    leaf weight {
-      type scheduling-weight;
-      description
-        "Queues or schedulers that are defined in a particular
-         context, e.g. queues defined to schedule outgoing traffic to
-         an interface, can have the same priority. The weight defines
-         the portion of traffic that will be taken from this queue or
-         scheduler by comparing the weight of this queue or scheduler
-         against the sum of the weights of all queues or schedulers
-         with the same scope and the same priority.";
-    }
-    leaf extended-weight {
-      if-feature "bbf-qos-tm:extended-scheduling-weight";
-      type extended-scheduling-weight;
-      must 'not(boolean(../weight))' {
+        "Contains data nodes for configuring templates for a set of
+         queues.";
+      list template {
+        key "name";
         description
-          "Both weight and extended weight must not be configured at
-           the same time.";
-      }
-      description
-        "Queues or schedulers that are defined in a particular
-         context, e.g. queues defined to schedule outgoing traffic to
-         an interface, can have the same priority. The weight defines
-         the portion of traffic that will be taken from this queue or
-         scheduler by comparing the weight of this queue or scheduler
-         against the sum of the weights of all queues or schedulers
-         with the same scope and the same priority.";
-    }
-  }
+          "A template for a a set of queues.
 
-  grouping scheduling-attributes {
-    description
-      "Configuration data for scheduling traffic from queues.";
-    leaf priority {
-      type extended-scheduling-priority;
-      description
-        "The priority used to schedule frames from a queue or
-         scheduler, relative to the priority assigned to other queues
-         or schedulers that are defined in the same traffic scheduling
-         context. For example the set of queues defined for a
-         particular interface form the context for scheduling outgoing
-         traffic to this interface.";
-    }
-    leaf extended-weight {
-      type extended-scheduling-weight;
-      description
-        "Queues or schedulers that are defined in a particular
-         context, e.g. queues defined to schedule outgoing traffic to
-         an interface, can have the same priority. The weight defines
-         the portion of traffic that will be taken from this queue or
-         scheduler by comparing the weight of this queue or scheduler
-         against the sum of the weights of all queues or schedulers
-         with the same scope and the same priority.";
-    }
-  }
-
-  grouping queues {
-    description
-      "Configuration data for queues.";
-    list queue {
-      key "local-queue-id";
-      description
-        "A queue.";
-      leaf local-queue-id {
-        type queue-id;
-        description
-          "The identification of a queue within the context of this
-           list.";
-      }
-      uses bac-ref;
-      choice queue-scheduling-cfg-type {
-        description
-          "Choice of queue scheduling types.";
-        case inline {
+           A template provides a method to configure a pattern for a
+           specific behavior, but on its own it does not result in an
+           actual behavior. It needs to be referenced and then the
+           actual behavior is within the context from where it is
+           referenced.";
+        leaf name {
+          type bbf-yang:string-ascii64;
           description
-            "The queue parameters are directly configured here.";
-          uses scheduling-gen-attr;
+            "A name of a template with queues.";
         }
-        case dual-rate-scheduling {
-          if-feature "bbf-qos-tm:dual-rate-scheduling-from-queue";
-          description
-            "The queue parameters are directly configured here.";
-          container dual-rate-scheduling {
-            description
-              "Configuration which determines the separate processing
-               of CIR and EIR traffic.";
-            container cir-traffic {
-              description
-                "Configuration for the CIR type of traffic from the
-                 child scheduler that is used by the parent
-                 scheduler.";
-              uses bbf-qos-tm:scheduling-attributes;
-            }
-            container eir-traffic {
-              description
-                "Configuration for the EIR type of traffic from the
-                 child scheduler that is used by the parent
-                 scheduler.";
-              uses bbf-qos-tm:scheduling-attributes;
-            }
-          }
-        }
+        uses queues-extended-scheduling;
       }
-      leaf pre-emption {
-        if-feature "bbf-qos-tm:pre-emption";
-        type boolean;
-        description
-          "Indicates whether the transmission of a frames from this
-           queue can be interrupted in favor of frames from a higher
-           priority queue.";
-      }
-    }
-    leaf queue-statistics-enable {
-      if-feature "bbf-qos-tm:queue-statistics";
-      type boolean;
-      description
-        "If true, enable statistics collection per queue. When
-         transitioning from false to true (disabled to enabled), any
-         existing counts should be cleared.
-
-         The leaf not existing has the same meaning as queue
-         statistics being disabled.";
-    }
-  }
-
-  grouping tm-root {
-    description
-      "The root for traffic management data.
-       Traffic management involves the following aspects:
-       - the forwarding decision determined to egress a frame through
-         an outgoing traffic container (which can be an interface).
-       - the traffic container (which can be a bottleneck) is
-         associated to a scheduler resolving the contention of
-         different queues competing to access the traffic container.
-       - so after the outgoing traffic container is determined, the
-         system needs to determine in which queue of the traffic
-         container the frame must be directed. This takes place based
-         on the frame's traffic-class by means of the traffic-class-id
-         to queue-id mapping concept.
-       - at any time, the scheduler resolves which queue should
-         deliver the next frame to the egress traffic container by
-         looking at the scheduling-priority and scheduling-weight of
-         each of queues.
-       The tm-root represents the scheduling stage directly attached
-       to the bottleneck resource (typically an interface).";
-    container tm-root {
-      presence
-        "Indicates the interface supports queues, either directly or
-         through a scheduling hierarchy. Interfaces that support
-         queues are typically the lowest layer of an interface stack
-         that is Ethernet frame aware.";
-      description
-        "The attributes of the root in the scheduling tree.";
-      choice children-type {
-        description
-          "Choice of children types of a scheduler node.";
-        case queues {
-          description
-            "In this mode the interface related to the tm-root can
-             directly be selected by the forwarding process and has
-             its own set of queues. Hence the scheduling of a frame
-             from a forwarder to the egress queue takes place in a
-             single stage.";
-          uses queues;
-        }
-      }
-      uses tc-id-2-queue-id-mapping-profile-ref;
     }
   }
 

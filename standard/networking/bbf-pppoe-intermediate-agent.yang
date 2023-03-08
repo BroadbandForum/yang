@@ -26,13 +26,13 @@ module bbf-pppoe-intermediate-agent {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -43,7 +43,7 @@ module bbf-pppoe-intermediate-agent {
      network equipment (e.g., BBF-specified Access Nodes and FTTdp
      DPUs).
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -83,9 +83,19 @@ module bbf-pppoe-intermediate-agent {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -117,14 +127,37 @@ module bbf-pppoe-intermediate-agent {
       "Additions for PPPoE Intermediate Agent on the VLAN
        sub-interface.";
     container pppoe {
-      presence "Indicates PPPoE is configured on this sub-interface.";
+      presence
+        "Enables the management of PPPoE discovery process at this
+         VLAN sub-interface.";
       description
-        "PPPoE Intermediate Agent configuration parameters.";
+        "PPPoE Intermediate Agent configuration parameters.
+
+         The presence of the container itself does not instantiate a
+         PPPoE Intermediate Agent, this is dependent on the value of
+         the contained leaf 'enable'.
+
+         If the container is not present, no PPPoE Intermediate Agent
+         functionality is performed on this interface. Any received
+         PPPoE discovery messages are processed based on the layer 2
+         configuration, e.g. VLAN sub-interface and/or layer 2
+         forwarding.";
       leaf enable {
         type boolean;
         default "false";
         description
-          "Enable PPPoE Intermediate Agent functionality.";
+          "Controls the PPPoE Intermediate Agent functionality
+           processing of PPPoE discovery messages received on an
+           interface and messages to be sent to an interface.
+
+           If 'true', enables the PPPoE Intermediate Agent to process
+           PPPoE discovery messages based on the additional relay
+           agent configuration.
+
+           If 'false', no PPPoE Intermediate Agent functionality is
+           performed. Any received PPPoE discovery messages received
+           are processed based on the layer 2 configuration, E.g.,
+           VLAN sub-interface and/or layer 2 forwarding.";
       }
       leaf profile-ref {
         when "../enable = 'true'" {
@@ -138,7 +171,23 @@ module bbf-pppoe-intermediate-agent {
         }
         mandatory true;
         description
-          "Reference to the PPPoE configuration profile.";
+          "Reference to the PPPoE configuration profile.
+
+           Affects the processing of PPPoE discovery messages,
+           received on an interface, that do not contain a
+           vendor-specific tag. The existence of the 'profile-ref'
+           means that a vendor-specific tag shall be added before
+           forwarding the message upstream. The content of the
+           vendor-specific tag is determined by the referenced
+           profile.
+
+           Affects the processing of PPPoE discovery messages received
+           on an interface with vendor-specific tag present. In that
+           case the vendor-specific tag received on an interface is
+           removed and replaced by a newly generated one according the
+           referenced profile.";
+        reference
+          "TR-101i2 - Section 3.9.2";
       }
     }
   }
@@ -149,8 +198,7 @@ module bbf-pppoe-intermediate-agent {
     list pppoe-profile {
       key "name";
       description
-        "List containing the parameters for PPPoE Intermediate Agent
-         configuration.";
+        "A profile for a PPPoE Intermediate Agent.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
@@ -168,12 +216,13 @@ module bbf-pppoe-intermediate-agent {
                  specific tag with sub-option number 0x01.
 
                  The value inserted is the value of the leaf
-                 circuit-id defined in the instance in the list
-                 subscriber-profiles/subscriber-profile that is
-                 associated with the interface, if any. If this leaf
-                 is unknown, then a sub-option Agent Circuit ID will
-                 be generated according to the syntax defined in the
-                 leaf  default-circuit-id-syntax.";
+                 'circuit-id' defined in the instance in the
+                 '/bbf-subprof:subscriber-profiles/bbf-subprof:
+                 subscriber-profile' that is associated with the
+                 interface, if any. If this leaf is unknown, then a
+                 sub-option Agent Circuit ID will be generated
+                 according to the syntax defined in
+                 'default-circuit-id-syntax'.";
               reference
                 "TR-101i2 - Section 8.3";
             }
@@ -183,12 +232,13 @@ module bbf-pppoe-intermediate-agent {
                  vendor-specific tag with sub-option number 0x02.
 
                  The value inserted is the value of the leaf
-                 remote-id defined in the instance in the list
-                 subscriber-profiles/subscriber-profile that is
-                 associated with the interface, if any. If this leaf
-                 is unknown, then a sub-option Agent Remote ID will be
-                 generated according to the syntax defined in the leaf
-                 default-remote-id-syntax.";
+                 'remote-id' defined in the instance in the
+                 '/bbf-subprof:subscriber-profiles/bbf-subprof:
+                 subscriber-profile' that is associated with the
+                 interface, if any. If this leaf is unknown, then a
+                 sub-option Agent Remote ID will be generated
+                 according to the syntax defined in
+                 'default-remote-id-syntax'.";
               reference
                 "TR-101i2 - Section 8.3";
             }
@@ -199,7 +249,7 @@ module bbf-pppoe-intermediate-agent {
                  and 0x90.
 
                  The characteristics to be added to the sub-option are
-                 controlled via the leaf access-loop-subtags";
+                 controlled via 'access-loop-subtags'.";
               reference
                 "TR-101i2 - Section 8.4";
             }
@@ -214,8 +264,9 @@ module bbf-pppoe-intermediate-agent {
           default "";
           description
             "To be used to generate a sub-option Agent Circuit ID when
-             no circuit-id is provided for the VLAN sub-interface via
-             a referenced subscriber-profiles/subscriber-profile.
+             no 'circuit-id' is provided for the VLAN sub-interface
+             via a referenced '/bbf-subprof:subscriber-profiles/
+             bbf-subprof:subscriber-profiles'.
 
              The syntax is a string of ASCII characters that
              determines the actual value inserted in the sub-option.
@@ -229,8 +280,9 @@ module bbf-pppoe-intermediate-agent {
           default "";
           description
             "To be used to generate a sub-option Agent Remote ID when
-             no remote-id is provided for the VLAN sub-interface via a
-             referenced subscriber-profiles/subscriber-profile.
+             no 'remote-id' is provided for the VLAN sub-interface via
+             a referenced '/bbf-subprof:subscriber-profiles/
+             bbf-subprof:subscriber-profile'.
 
              The syntax is a string of ASCII characters that
              determines the actual value inserted in the sub-option.
@@ -252,8 +304,8 @@ module bbf-pppoe-intermediate-agent {
           type boolean;
           default "false";
           description
-            "In case the default-circuit-id-syntax or
-             default-remote-id-syntax indicates a Slot or a Port
+            "In case the 'default-circuit-id-syntax' or
+             'default-remote-id-syntax' indicates a Slot or a Port
              identification shall be added to the sub-tag value, then
              this leaf determines if the slot/port numbering MUST
              start from 0 or 1.";
@@ -264,8 +316,8 @@ module bbf-pppoe-intermediate-agent {
           type boolean;
           default "false";
           description
-            "In case the default-circuit-id-syntax or
-             default-remote-id-syntax indicates a Slot or a Port
+            "In case the 'default-circuit-id-syntax' or
+             'default-remote-id-syntax' indicates a Slot or a Port
              identification shall be added to the sub-tag value, then
              this leaf determines if the slot/port numbering MUST use
              leading 0's or not, i.e., generate a fixed-length string
@@ -304,6 +356,7 @@ module bbf-pppoe-intermediate-agent {
         "PPPoE Intermediate Agent message statistics.";
       leaf in-error-packets-from-client {
         type yang:counter32;
+        units "messages";
         description
           "Invalid PPPoE discovery stage messages received on the
            interface. The messages are received from a PPPoE Client
@@ -316,6 +369,7 @@ module bbf-pppoe-intermediate-agent {
       }
       leaf in-error-packets-from-server {
         type yang:counter32;
+        units "messages";
         description
           "Invalid PPPoE discovery stage messages received on the
            interface. The messages are received from a PPPoE Server
@@ -328,6 +382,7 @@ module bbf-pppoe-intermediate-agent {
       }
       leaf in-packets-from-client {
         type yang:counter32;
+        units "messages";
         description
           "Valid PPPoE discovery stage messages received on the
            interface. The messages are received from a PPPoE Client
@@ -340,6 +395,7 @@ module bbf-pppoe-intermediate-agent {
       }
       leaf in-packets-from-server {
         type yang:counter32;
+        units "messages";
         description
           "Valid PPPoE discovery stage messages received on the
            interface. The messages are received from a PPPoE Server
@@ -352,6 +408,7 @@ module bbf-pppoe-intermediate-agent {
       }
       leaf out-packets-to-server {
         type yang:counter32;
+        units "messages";
         description
           "Valid PPPoE discovery stage messages sent to the interface.
            The messages are sent to a PPPoE Server connected to it
@@ -364,6 +421,7 @@ module bbf-pppoe-intermediate-agent {
       }
       leaf out-packets-to-client {
         type yang:counter32;
+        units "messages";
         description
           "Valid PPPoE discovery stage messages sent to the interface.
            The messages are sent to a PPPoE Client connected to it
@@ -376,6 +434,7 @@ module bbf-pppoe-intermediate-agent {
       }
       leaf vendor-specific-tag-inserted-packets-to-server {
         type yang:counter32;
+        units "messages";
         description
           "PPPoE discovery stage messages from a Client to a Server
            that pass this interface and into which the PPPoE
@@ -389,6 +448,7 @@ module bbf-pppoe-intermediate-agent {
       }
       leaf vendor-specific-tag-removed-packets-to-client {
         type yang:counter32;
+        units "messages";
         description
           "PPPoE discovery stage messages from a Server to a Client
            that pass this interface and from which the PPPoE
@@ -402,6 +462,7 @@ module bbf-pppoe-intermediate-agent {
       }
       leaf outgoing-mtu-exceeded-packets-from-client {
         type yang:counter32;
+        units "messages";
         description
           "PPPoE discovery stage messages from a Client that are
            dropped because the PPPoE Message size after adding the

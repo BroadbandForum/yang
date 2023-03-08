@@ -1,0 +1,303 @@
+module bbf-frame-editing {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-frame-editing";
+  prefix bbf-fedit;
+
+  import bbf-dot1q-types {
+    prefix bbf-dot1qt;
+  }
+  import bbf-frame-processing-types {
+    prefix bbf-fpt;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, Adtran
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Joey Boyd, Adtran
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on frame
+     classification as applicable to access network equipment. As
+     such, this module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module contains reusable groupings defined for
+     frame editing.
+
+     Copyright (c) 2017-2023, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a6; see
+     the TR itself for full legal notices.";
+
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
+
+  grouping write-pbit {
+    description
+      "Defines data nodes to specify how to write the priority bits
+       (3 bits) of a VLAN tag (p-bits).
+
+       P-bits are part of the 16-bit VLAN tag along with the single
+       bit Drop Eligible Indicator (DEI) and the 12-bit VLAN ID.";
+    choice pbit {
+      mandatory true;
+      description
+        "Selects how the p-bits are to be written.";
+      case write-pbit-0 {
+        description
+          "Tagged and priority-tagged frames contain p-bits. Untagged
+           frames do not contain p-bits.
+
+           Provides a simple method to identify what p-bits MUST be
+           inserted in the output frame that can be applied to all
+           frame types. More advanced methods can be provided via
+           other cases of the choice 'pbit'.";
+        leaf write-pbit-0 {
+          type empty;
+          description
+            "Push p-bits=000 in the tag.";
+        }
+      }
+      case copy-pbit-from-input-or-0 {
+        description
+          "Copy from the specified input tag, or write p-bits=000 if
+           the input tag does not exist.";
+        leaf pbit-from-tag-index {
+          type bbf-fpt:tag-index;
+          description
+            "Specifies from which tag the p-bits MUST be copied.";
+        }
+      }
+      case write-pbit-value {
+        description
+          "Write a value of the p-bits into the tag.";
+        leaf write-pbit {
+          type bbf-dot1qt:pbit;
+          description
+            "Specified value of the p-bits to write into the tag.";
+        }
+      }
+      case generate-pbit-from-marking-list-or-0 {
+        description
+          "The p-bits field in the VLAN tag is generated from the
+           frame's p-bit marking list.
+
+           If there are no p-bits in the p-bit marking list, then
+           p-bits=000 is pushed in the VLAN tag of the frame.";
+        leaf pbit-marking-index {
+          type bbf-fpt:qos-pbit-marking-index;
+          description
+            "This leaf provides the index in the p-bit marking list
+             from which the value of the p-bits shall be taken to put
+             in the VLAN tag.";
+        }
+      }
+    }
+  }
+
+  grouping write-dei {
+    description
+      "Defines data nodes to specify how to write the DEI bit (1 bit)
+       of a VLAN tag.
+
+       The DEI bit is part of the 16-bit VLAN tag along with the 3-bit
+       Priority bits (p-bits) and the 12-bit VLAN ID.";
+    choice dei {
+      mandatory true;
+      description
+        "Selects how the DEI bit is to be written.";
+      case write-dei-0 {
+        description
+          "Tagged and priority-tagged frames contain a DEI bit.
+           Untagged frames do not contain a DEI bit.
+
+           Leaf 'write-dei-0' provides a simple method to identify
+           what DEI MUST be inserted in the output frame that can be
+           applied to all frame types. More advanced methods can be
+           provided via other cases of the choice 'dei'.";
+        leaf write-dei-0 {
+          type empty;
+          description
+            "Write the value 0 for DEI in the tag.";
+        }
+      }
+      case copy-dei-from-input-or-0 {
+        description
+          "Copy DEI from the specified input tag, or write DEI=0 if
+           the input tag does not exist.";
+        leaf dei-from-tag-index {
+          type bbf-fpt:tag-index;
+          description
+            "Specifies from which tag the DEI bit MUST be copied.";
+        }
+      }
+      case write-dei-1 {
+        description
+          "Tagged and priority-tagged frames contain a DEI bit.
+           Untagged frames do not contain a DEI bit.
+
+           Leaf 'write-dei-1' provides a simple method to identify
+           what DEI MUST be inserted in the output frame that can be
+           applied to all frame types. More advanced methods can be
+           provided via other cases of the choice 'dei'.";
+        leaf write-dei-1 {
+          type empty;
+          description
+            "Write the value 1 for DEI in the tag.";
+        }
+      }
+      case generate-dei-from-marking-list-or-0 {
+        description
+          "The DEI field in the VLAN tag is generated from the frame's
+           DEI marking list.
+
+           If there is no DEI bit in the DEI marking list, then the
+           DEI value 0 is written in the VLAN tag of the frame.";
+        leaf dei-marking-index {
+          type bbf-fpt:qos-dei-marking-index;
+          description
+            "This leaf provides the index in the DEI marking list from
+             which the DEI value shall be taken to put in the VLAN
+             tag.";
+        }
+      }
+    }
+  }
+
+  grouping pop-and-push-vlan-tags-framework {
+    description
+      "Provides a framework for the VLAN tag manipulation actions.
+
+       This grouping is not complete from the perspective of what is
+       needed for an actual tag manipulation, i.e., it misses the VLAN
+       tag type and VLAN ID value to insert in the VLAN tag.
+       Corresponding data nodes have to be augmented at the place
+       where this grouping is used.";
+    leaf pop-tags {
+      type uint8 {
+        range "0..2";
+      }
+      default "0";
+      description
+        "The number of tags to pop.";
+    }
+    list push-tag {
+      key "index";
+      max-elements 2;
+      description
+        "The VLAN tags to push.";
+      leaf index {
+        type bbf-fpt:tag-index;
+        must '(count(../../push-tag[index = 0]) > 0)' {
+          error-message
+            "An inner tag has been specified without an outer tag";
+          description
+            "Only allow a push of an inner tag if an outer tag is also
+             being pushed.";
+        }
+        description
+          "The index into the tag stack.";
+      }
+      uses bbf-fedit:write-pbit;
+      uses bbf-fedit:write-dei;
+    }
+  }
+
+  grouping pop-and-push-vlan-tags {
+    description
+      "Provides data nodes for VLAN tag manipulation actions.";
+    uses pop-and-push-vlan-tags-framework {
+      augment "push-tag" {
+        description
+          "Adds data modes to the framework's 'push-tag' to add the
+           information needed to push a tag during a rewrite.";
+        leaf tag-type {
+          type union {
+            type bbf-dot1qt:dot1q-tag-type;
+            type bbf-dot1qt:ether-type;
+            type bbf-dot1qt:ether-type-hex;
+          }
+          mandatory true;
+          description
+            "VLAN tag type.";
+        }
+        leaf vlan-id {
+          type union {
+            type bbf-dot1qt:vlan-id-or-0;
+            type enumeration {
+              enum vlan-id-is-a-parameter {
+                description
+                  "The VLAN ID of the tag to push into frames is
+                   not specified inside this profile but has to be
+                   specified at the place where this profile is
+                   referenced.";
+              }
+            }
+          }
+          mandatory true;
+          description
+            "The VLAN ID value to write in the sent frames'
+             identified VLAN tag.";
+        }
+      }
+    }
+  }
+}

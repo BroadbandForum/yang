@@ -23,13 +23,13 @@ module bbf-hardware-cpu {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -43,7 +43,7 @@ module bbf-hardware-cpu {
      the management of a CPU processor (with single or multiple
      cores).
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -83,9 +83,19 @@ module bbf-hardware-cpu {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -294,52 +304,53 @@ module bbf-hardware-cpu {
           "Statistics associated with memory utilization.";
         leaf used-mem {
           type uint64;
-          units "KiB";
+          units "kibibytes";
           description
-            "The total amount of memory in kibibytes (KiB).";
+            "The amount of memory, in kibibytes, currently in
+             use.";
         }
         leaf total-memory {
           type uint64;
-          units "KiB";
+          units "kibibytes";
           description
-            "The amount of memory, in kibibytes (KiB), currently in
-             use.";
+            "The total amount of memory in kibibytes.";
         }
         leaf free-memory {
           type uint64;
-          units "KiB";
+          units "kibibytes";
           description
-            "Total free memory in kibibytes (KiB).";
+            "Total free memory in kibibytes.";
         }
         leaf buffer-memory {
           type uint64;
-          units "KiB";
+          units "kibibytes";
           description
-            "Total buffer memory in kibibytes (KiB).";
+            "Total buffer memory in kibibytes.";
         }
         leaf total-swap-memory {
           type uint64;
-          units "KiB";
+          units "kibibytes";
           description
-            "Total swap memory in kibibytes (KiB).";
+            "Total swap memory in kibibytes.";
         }
         leaf used-swap {
           type uint64;
-          units "KiB";
+          units "kibibytes";
           description
-            "Used swap Memory in kibibytes (KiB).";
+            "The amount of swap memory, in kibibytes, currently in
+             use.";
         }
         leaf free-swap {
           type uint64;
-          units "KiB";
+          units "kibibytes";
           description
-            "Total free swap memory in kibibytes (KiB).";
+            "Total free swap memory in kibibytes.";
         }
         leaf available-mem {
           type uint64;
-          units "KiB";
+          units "kibibytes";
           description
-            "Total available memory in kibibytes (KiB).";
+            "Total available memory in kibibytes.";
         }
       }
     }

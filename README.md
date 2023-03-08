@@ -1,7 +1,17 @@
 ## Broadband Forum YANG Modules
 
+### 2023-03-07: [TR-383 Amendment 6](https://www.broadband-forum.org/technical/download/TR-383_Amendment-6.pdf) Common YANG Modules for Access Networks
+*Tag: [TR-383-v1.6.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.6.0)*
+
+* Add new modules to manage VLAN sub-interface profiles
+* Align 'units' statements to the latest OD-360 guidelines
+* Add missing 'units' statements to statistics counters
+* Corrections and enhancements to the hardware transceiver model
+* Enhancements to subscriber protocol and QoS models
+
 ### 2022-06-13: [TR-355 Amendment 4 Corrigendum 1](https://www.broadband-forum.org/technical/download/TR-355_Amendment-4.pdf) YANG Modules for FTTdp Management
 *Tag: [TR-355-v1.4.1](https://github.com/BroadbandForum/yang/tree/TR-355-v1.4.1)*
+
 * Add the line performance counters for successful-dta, minimum-mds and maximum-mds that were erroneously removed during final review of Amendment 4
 
 ### 2022-06-07: [TR-451 Issue 1](https://www.broadband-forum.org/technical/download/TR-451_Issue-1.pdf) vOMCI Specification

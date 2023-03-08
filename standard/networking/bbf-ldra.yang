@@ -26,13 +26,13 @@ module bbf-ldra {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -46,7 +46,7 @@ module bbf-ldra {
      This functionality is also known as a Lightweight DHCPv6 Relay
      Agent (LDRA).
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -86,9 +86,19 @@ module bbf-ldra {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -136,35 +146,57 @@ module bbf-ldra {
         "Applies only to VLAN sub-interfaces.";
     }
     description
-      "Additions for DHCPv6 LDRA on the VLAN sub-interface.";
+      "LDRA configuration per VLAN sub-interface.";
     container dhcpv6-ldra {
-      presence "Presence of this container indicates DHCPv6 LDRA
-                functionality is supported on this interface.";
+      presence
+        "Enables the management of DHCPv6 message processing at this
+         VLAN sub-interface.";
       description
-        "DHCPv6 LDRA configuration parameters.";
+        "LDRA configuration parameters.
+
+         The presence of the container itself does not instantiate an
+         LDRA, this is dependent on the value of the contained leaf
+         'enable'.
+
+         If the container is not present, no LDRA functionality is
+         performed on this interface. Any received DHCPv6 messages are
+         processed based on the layer 2 configuration, e.g. VLAN
+         sub-interface and/or layer 2 forwarding.";
       leaf enable {
         type boolean;
         default "false";
         description
-          "Enable DHCPv6 LDRA functionality.";
+          "Controls the LDRA processing of DHCPv6 messages received on
+           an interface and messages to be sent to an interface.
+
+           If 'true', enables the LDRA to process DHCPv6 messages
+           based on the additional relay agent configuration.
+
+           If 'false', no LDRA functionality is performed. Any
+           received DHCPv6 messages are processed based on the layer 2
+           configuration, e.g. VLAN sub-interface and/or layer 2
+           forwarding.";
       }
       leaf trusted-port {
         type boolean;
         default "false";
         description
-          "Mark the client-facing interface as trusted for the DHCPv6
-           LDRA. When a client-facing interface is deemed untrusted,
-           the DHCPv6 LDRA MUST discard any message of type
-           RELAY-FORW (12) received from the client-facing
-           interface.";
+          "Marks a client-facing interface as trusted for the LDRA.
+           When a client-facing interface is deemed untrusted, i.e.,
+           configured 'false', then the LDRA MUST discard any message
+           of type RELAY-FORW (12) received from the client-facing
+           interface. When an interface is trusted i.e., configured
+           'true', then the RELAY-FORW DHCPv6 message coming from an
+           LDRA, or other messages coming from a client such as a
+           Solicit message, are forwarded embedded in a new RELAY-FORW
+           message.";
         reference
           "RFC 6221 - Section 6.1.2";
       }
       leaf profile-ref {
         when "../enable = 'true'" {
           description
-            "Applicable only when DHCPv6 LDRA functionality is
-             enabled.";
+            "Applicable only when LDRA functionality is enabled.";
         }
         type leafref {
           path "/bbf-ldra:dhcpv6-ldra-profiles/bbf-ldra:dhcpv6-"
@@ -179,12 +211,11 @@ module bbf-ldra {
 
   container dhcpv6-ldra-profiles {
     description
-      "DHCPv6 LDRA configuration profile.";
+      "LDRA configuration profiles.";
     list dhcpv6-ldra-profile {
       key "name";
       description
-        "List containing the parameters for DHCPv6 LDRA
-         configuration.";
+        "An LDRA configuration profile.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
@@ -207,12 +238,13 @@ module bbf-ldra {
                  policies.
 
                  The value inserted is the value of the leaf
-                 circuit-id defined in the instance in the list
-                 subscriber-profiles/subscriber-profile that is
-                 associated with the interface, if any. If this leaf
-                 is unknown, then the option interface-ID will be
-                 generated according to the syntax defined in the leaf
-                 default-interface-id-syntax.";
+                 'circuit-id' defined in the instance in the list
+                 'bbf-subprof:subscriber-profiles/bbf-subprof:
+                 subscriber-profile' that is associated with the
+                 interface, if any. If this leaf is not configured,
+                 then the option interface-ID will be generated
+                 according to the syntax defined in the
+                 'default-interface-id-syntax'.";
               reference
                 "RFC 6221 - Section 5.3.2";
             }
@@ -222,12 +254,13 @@ module bbf-ldra {
                  (RELAY-FORW) DHCPv6 messages.
 
                  The value inserted is the value of the leaf
-                 remote-id defined in the instance in the list
-                 subscriber-profiles/subscriber-profile that is
-                 associated with the interface, if any. If this leaf
-                 is unknown, then the option remote-ID will be
-                 generated according to the syntax defined in the leaf
-                 default-remote-id-syntax.";
+                 'remote-id' defined in the instance in the list
+                 'bbf-subprof:subscriber-profiles/bbf-subprof:
+                 subscriber-profile' that is associated with the
+                 interface, if any. If this leaf is not configured,
+                 then the option remote-ID will be generated according
+                 to the syntax defined in the leaf
+                 'default-remote-id-syntax'.";
               reference
                 "RFC 4649 - Section 4";
             }
@@ -236,12 +269,12 @@ module bbf-ldra {
                 "Add option subscriber-ID (code 38) to the relayed
                  (RELAY-FORW) DHCPv6 messages.
 
-                 The value inserted is the value of the leaf
-                 subscriber-id defined in the instance in the list
-                 subscriber-profiles/subscriber-profile that is
-                 associated with the interface, if any. If this leaf
-                 unknown, then the option will contain an empty
-                 string.";
+                 The value inserted is the value of the
+                 'subscriber-id' defined in the instance in
+                 '/bbf-subprof:subscriber-profiles/bbf-subprof:
+                 subscriber-profile' that is associated with the
+                 interface, if any. If this leaf is not configured,
+                 then the option will contain an empty string.";
               reference
                 "RFC 4580 - Section 3";
             }
@@ -256,8 +289,8 @@ module bbf-ldra {
               description
                 "Add access loop characteristics (code 17) to the
                  relayed (RELAY-FORW) DHCPv6 messages. The content of
-                 the option is controlled via the leaf
-                 access-loop-characteristics.";
+                 the option is controlled via the
+                 'access-loop-characteristics'.";
               reference
                 "TR-177 - R12";
             }
@@ -272,8 +305,9 @@ module bbf-ldra {
           default "";
           description
             "To be used to generate a option interface-ID when no
-             circuit-id is provided for the VLAN sub-interface via a
-             referenced subscriber-profiles/subscriber-profile.
+             'circuit-id' is provided for the VLAN sub-interface via a
+             referenced '/bbf-subprof:subscriber-profiles/bbf-subprof:
+             subscriber-profile'.
 
              The syntax is a string of ASCII characters that
              determines the actual value inserted in the option.
@@ -287,13 +321,14 @@ module bbf-ldra {
           default "";
           description
             "To be used to generate a option remote-ID when no
-             remote-id is provided for the VLAN sub-interface via a
-             referenced subscriber-profiles/subscriber-profile.
+             'remote-id' is provided for the VLAN sub-interface via a
+             referenced '/bbf-subprof:subscriber-profiles/bbf-subprof:
+             subscriber-profile'.
 
              The syntax is a string of ASCII characters that
-             determines the actual value inserted in the option.
-             Parts of the syntax that are recognized as predefined
-             keywords will be replaced by an actual value.";
+             determines the actual value inserted in the option. Parts
+             of the syntax that are recognized as predefined keywords
+             will be replaced by an actual value.";
           reference
             "TR-177 - R09";
         }
@@ -318,8 +353,8 @@ module bbf-ldra {
           type boolean;
           default "false";
           description
-            "In case the default-interface-id-syntax or
-             default-remote-id-syntax indicates a Slot or a Port
+            "In case the 'default-interface-id-syntax' or
+             'default-remote-id-syntax' indicates a Slot or a Port
              identification shall be added to the sub-option value,
              then this leaf determines if the slot/port numbering
              MUST start from 0 or 1.";
@@ -330,8 +365,8 @@ module bbf-ldra {
           type boolean;
           default "false";
           description
-            "In case the default-interface-id-syntax or
-             default-remote-id-syntax indicates a Slot or a Port
+            "In case the 'default-interface-id-syntax' or
+             'default-remote-id-syntax' indicates a Slot or a Port
              identification shall be added to the sub-option value,
              then this leaf determines if the slot/port numbering
              MUST use leading 0's or not, i.e., generate a fixed-
@@ -359,20 +394,20 @@ module bbf-ldra {
     when "derived-from-or-self (../if:type,
           'bbfift:vlan-sub-interface')" {
       description
-        "Applies only to VLAN sub-interfaces and only when the DHCPv6
-         LDRA functionality is enabled.";
+        "Applies only to VLAN sub-interfaces and only when the LDRA
+         functionality is enabled.";
     }
     description
-      "DHCPv6 LDRA statistics.";
+      "LDRA statistics.";
     container dhcpv6-ldra {
-      presence
-        "Statistics are provided when the DHCPv6 LDRA functionality is
-         enabled.";
+      presence "LDRA functionality is enabled and LDRA statistics are
+                available.";
       description
         "A container presents the message statistics related to the
-         DHCPv6 LDRA.";
+         LDRA.";
       leaf in-bad-packets-from-client {
         type yang:counter32;
+        units "messages";
         description
           "Bad DHCPv6 messages received on the interface. The messages
            are received from a DHCPv6 Client connected to it (directly
@@ -380,10 +415,11 @@ module bbf-ldra {
 
            Discontinuities in the counter can occur at
            re-initialization of the management system, and/or when the
-           DHCPv6 LDRA functionality is disabled/enabled.";
+           LDRA functionality is disabled/enabled.";
       }
       leaf in-bad-packets-from-server {
         type yang:counter32;
+        units "messages";
         description
           "Bad DHCPv6 messages received on the interface. The messages
            are received from a DHCPv6 Server connected to it (directly
@@ -391,76 +427,81 @@ module bbf-ldra {
 
            Discontinuities in the counter can occur at
            re-initialization of the management system, and/or when the
-           DHCPv6 LDRA functionality is disabled/enabled.";
+           LDRA functionality is disabled/enabled.";
       }
       leaf option-17-inserted-packets-to-server {
         type yang:counter32;
+        units "messages";
         description
           "DHCPv6 messages from a Client to a Server that passed this
-           interface and for which the DHCPv6 LDRA did insert
-           option 17.
+           interface and for which the LDRA did insert option 17.
 
            Discontinuities in the counter can occur at
            re-initialization of the management system, and/or when the
-           DHCPv6 LDRA functionality is disabled/enabled.";
+           LDRA functionality is disabled/enabled.";
       }
       leaf option-17-removed-packets-to-client {
         type yang:counter32;
+        units "messages";
         description
           "DHCPv6 messages from a Server to a Client that passed this
-           interface and for which the DHCPv6 LDRA did remove
+           interface and for which the LDRA did remove
            option 17.
 
            Discontinuities in the counter can occur at
            re-initialization of the management system, and/or when the
-           DHCPv6 LDRA functionality is disabled/enabled.";
+           LDRA functionality is disabled/enabled.";
       }
       leaf option-18-inserted-packets-to-server {
         type yang:counter32;
+        units "messages";
         description
           "DHCPv6 messages from a Client to a Server that passed this
-           interface and for which the DHCPv6 LDRA did insert
+           interface and for which the LDRA did insert
            option 18.
 
            Discontinuities in the counter can occur at
            re-initialization of the management system, and/or when the
-           DHCPv6 LDRA functionality is disabled/enabled.";
+           LDRA functionality is disabled/enabled.";
       }
       leaf option-18-removed-packets-to-client {
         type yang:counter32;
+        units "messages";
         description
           "DHCPv6 messages from a Server to a Client that passed this
-           interface and for which the DHCPv6 LDRA did remove
-           option 18.
+           interface and for which the LDRA did remove option 18.
 
            Discontinuities in the counter can occur at
            re-initialization of the management system, and/or when the
-           DHCPv6 LDRA functionality is disabled/enabled.";
+           LDRA functionality is disabled/enabled.";
       }
       leaf option-37-inserted-packets-to-server {
         type yang:counter32;
+        units "messages";
         description
           "DHCPv6 messages from a Client to a Server that passed this
-           interface and for which the DHCPv6 LDRA did insert
+           interface and for which the LDRA did insert
            option 37.
 
            Discontinuities in the counter can occur at
            re-initialization of the management system, and/or when the
-           DHCPv6 LDRA functionality is disabled/enabled.";
+           LDRA functionality is disabled/enabled.";
       }
       leaf option-37-removed-packets-to-client {
         type yang:counter32;
+        units "messages";
         description
           "DHCPv6 messages from a Server to a Client that passed this
-           interface and for which the DHCPv6 LDRA did remove
+           interface and for which the LDRA did remove
            option 37.
 
            Discontinuities in the counter can occur at
            re-initialization of the management system, and/or when the
-           DHCPv6 LDRA functionality is disabled/enabled.";
+           LDRA functionality is disabled/enabled.";
       }
       leaf outgoing-mtu-exceeded-packets-from-client {
         type yang:counter32;
+        units "messages";
         description
           "DHCPv6 messages from a Client that are dropped because the
            Relay-Message size after adding the options would exceed
@@ -468,7 +509,7 @@ module bbf-ldra {
 
            Discontinuities in the counter can occur at
            re-initialization of the management system, and/or when the
-           DHCPv6 LDRA functionality is disabled/enabled.";
+           LDRA functionality is disabled/enabled.";
         reference
           "RFC 6221 - Section 5.3.1";
       }

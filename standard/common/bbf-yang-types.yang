@@ -10,13 +10,13 @@ module bbf-yang-types {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -29,7 +29,7 @@ module bbf-yang-types {
      Specifically, this module defines common types used throughout
      BBF data models.
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -69,9 +69,19 @@ module bbf-yang-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -156,7 +166,7 @@ module bbf-yang-types {
     type uint8 {
       range "0..100";
     }
-    units "percentage";
+    units "percent";
     description
       "A percentage.";
   }
@@ -239,6 +249,32 @@ module bbf-yang-types {
        characters.";
   }
 
+  typedef string-ascii128 {
+    type string {
+      length "1..128";
+      pattern '[ -~]*';
+    }
+    description
+      "Used where a string is represented using at least 1 and no more
+       than 128 ASCII characters.
+
+       The character set is limited to the 95 printable ASCII
+       characters.";
+  }
+
+  typedef string-ascii128-or-empty {
+    type string {
+      length "0..128";
+      pattern '[ -~]*';
+    }
+    description
+      "Used where a string is needed which has a maximum length of
+       128 characters and also allows for a null string (length = 0).
+
+       The character set is limited to the 95 printable ASCII
+       characters.";
+  }
+
   typedef undetermined {
     type enumeration {
       enum undetermined {
@@ -255,7 +291,7 @@ module bbf-yang-types {
 
   typedef data-rate32 {
     type uint32;
-    units "kbits/second";
+    units "kilobits per second";
     description
       "A type which represents the rate at which data is being
        transferred.";
@@ -266,7 +302,7 @@ module bbf-yang-types {
       type undetermined;
       type data-rate32;
     }
-    units "kbits/second";
+    units "kilobits per second";
     description
       "A type which represents the rate at which data is being
        transferred. A special value, 'undetermined', is used to

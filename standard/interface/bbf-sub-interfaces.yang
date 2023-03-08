@@ -3,11 +3,11 @@ module bbf-sub-interfaces {
   namespace "urn:bbf:yang:bbf-sub-interfaces";
   prefix bbf-subif;
 
+  import bbf-frame-processing {
+    prefix bbf-fp;
+  }
   import ietf-interfaces {
     prefix if;
-  }
-  import bbf-yang-types {
-    prefix bbf-yang;
   }
   import bbf-if-type {
     prefix bbfift;
@@ -20,15 +20,13 @@ module bbf-sub-interfaces {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -41,7 +39,7 @@ module bbf-sub-interfaces {
      Specifically, this module augments an interface with
      sub-interface-specific frame processing configuration.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +79,19 @@ module bbf-sub-interfaces {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -146,7 +154,6 @@ module bbf-sub-interfaces {
         "Links the sub-interface to a lower-layer interface.";
       leaf interface {
         type if:interface-ref;
-        mandatory true;
         description
           "References the lower-layer interface.";
       }
@@ -157,16 +164,16 @@ module bbf-sub-interfaces {
 
          Multiple alternatives can be defined. They all have in common
          that the definition of the frame processing is relative to
-         the lower layer interface configured in leaf
+         the lower-layer interface configured in leaf
          'subif-lower-layer'.
 
          For example, if there is configuration for ingress frame
          processing, then this means that frames received on the
-         referenced lower layer interface are subject to evaluation
+         referenced lower-layer interface are subject to evaluation
          using the match criteria configured for this sub-interface.
          Not configuring any frame processing case implies that there
          are no ingress match criteria to select frames received from
-         the lower layer interface into this sub-interface, and hence
+         the lower-layer interface into this sub-interface, and hence
          this sub-interface will not have to process any ingress
          frame.";
       case inline-frame-processing {
@@ -175,67 +182,27 @@ module bbf-sub-interfaces {
             "The frame processing refers to both directions:
              - Ingress, which refers to frames received from the
                lower-layer interface.
-             - Egress, which refers to frames received from a higher
-               layer of the interface stack, or from a forwarder, and
-               to be transmitted to the lower-layer of the interface
-               stack.
+             - Egress, which refers to frames received from a
+               higher-layer of the interface stack, or from a
+               forwarder, and to be transmitted to the lower-layer of
+               the interface stack.
              - In the ingress direction classification criteria
                identify whether a received frame shall be offered to
                this sub-interface.
              - For both the ingress and egress direction, rewrite =
                tag manipulations can be supported.";
-          container ingress-rule {
-            description
-              "The match used to classify ingress frames to this
-               sub-interface, and it allows to specify re-tagging
-               actions before sending it to higher layers in the
-               interface stack or to a forwarder.";
-            list rule {
-              key "name";
-              min-elements 1;
+          uses bbf-fp:frame-processing {
+            refine "ingress-rule/rule/ingress-rewrite" {
+              if-feature "tag-rewrites";
+            }
+            refine "egress-rewrite" {
+              if-feature "tag-rewrites";
+            }
+            augment "ingress-rule/rule" {
               description
-                "A rule contains a classification and for frames that
-                 match this classification it specifies an ingress tag
-                 manipulation action.
-
-                 The definition is: first match, then stop searching
-                 for matches with other rules, then execute the
-                 ingress-rewrite actions specified in this rule.";
-              leaf name {
-                type bbf-yang:string-ascii64;
-                description
-                  "The rule name.";
-              }
-              leaf priority {
-                type uint16 {
-                  range "1..max";
-                }
-                mandatory true;
-                description
-                  "This field indicates the priority for applying the
-                   match criteria of this rule against the priority of
-                   match criteria of other rules of this and other
-                   sub-interfaces on the same parent-interface.
-
-                   The higher the value, the lower the priority, i.e.
-                   priority 1 is the highest priority.
-
-                   Note that priorities of rules do not have to be
-                   unique within a lower-layer interface. For example,
-                   if there is no overlap in the 'flexible-match'
-                   criteria of of a different sub-interfaces having
-                   the same lower layer interface, then the
-                   configuration is still unambiguous. If different
-                   sub-interfaces with the same lower layer interface
-                   are configured such that there is overlap between
-                   their flexible-match criteria, then unambiguity is
-                   achieved by configuring the rules with different
-                   priorities. If the priority is configured equal,
-                   despite having overlapping match criteria, then the
-                   device's behavior is undefined, meaning, it can be
-                   different in different devices, even more it can be
-                   different in single device over time.";
-              }
+                "Defines match criteria for all the fields of VLAN
+                 tags, being the TPID, the VLAN ID, the p-bits, and
+                 the DEI bit.";
               container flexible-match {
                 description
                   "This container provides a generic framework to
@@ -246,22 +213,7 @@ module bbf-sub-interfaces {
                    context match criteria can be augmented for MPLS
                    frames.";
               }
-              container ingress-rewrite {
-                if-feature "tag-rewrites";
-                description
-                  "Ingress rewrite refers to the supported tag
-                   manipulations before the frame is offered to a
-                   higher layer interface or to a forwarder.";
-              }
             }
-          }
-          container egress-rewrite {
-            if-feature "tag-rewrites";
-            description
-              "Egress refers to frames sent from the sub-interface
-               towards the the lower-layer in the interface stack,
-               i.e. in the direction of the physical interface.
-               Rewrite refers to the supported tag manipulations.";
           }
         }
       }

@@ -20,13 +20,13 @@ module bbf-ancp-fastdsl-threshold {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -43,7 +43,7 @@ module bbf-ancp-fastdsl-threshold {
      Architecture defined in RFC 6320. The line state reporting
      requirements are defined in BBF TR-147.
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -83,11 +83,21 @@ module bbf-ancp-fastdsl-threshold {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a6; see
      the TR itself for full legal notices.";
   reference
     "TR-147";
 
+  revision 2023-03-07 {
+    description
+      "Amendment 6.
+       * Approval Date:    2023-03-07.
+       * Publication Date: 2023-03-07.";
+    reference
+      "TR-383a6: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-6.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -133,7 +143,7 @@ module bbf-ancp-fastdsl-threshold {
         }
       }
     }
-    units "100 milliseconds";
+    units "0.1 seconds";
     description
       "Specifies the delay for taking an action.";
   }
@@ -147,7 +157,7 @@ module bbf-ancp-fastdsl-threshold {
       type bbf-yang:data-rate32 {
         range "1..max";
       }
-      units "kbits/second";
+      units "kilobits per second";
       mandatory true;
       description
         "The threshold to be applied to evaluate the difference in the
@@ -239,7 +249,18 @@ module bbf-ancp-fastdsl-threshold {
            + ' or '
            + 'derived-from-or-self(access-line-attribute,'
            + '"bbf-ancp-fastdsl-acc-ext:'
-           + 'attainable-net-data-rate-downstream")';
+           + 'attainable-net-data-rate-downstream")' {
+          error-message
+            "The configuration for reporting a data rate change is "
+          + "performed on a line attribute other than one of "
+          + "'actual-net-data-rate-upstream', "
+          + "'actual-net-data-rate-downstream', "
+          + "'attainable-net-data-rate-upstream' or "
+          + "'attainable-net-data-rate-downstream'";
+          description
+            "Reporting data rate changes is supported only for a
+             subset of the line attributes.";
+        }
         key "access-line-attribute";
         description
           "Sets configuration data controlling the reporting of data
@@ -299,7 +320,18 @@ module bbf-ancp-fastdsl-threshold {
            + ' or '
            + 'derived-from-or-self(access-line-attribute,'
            + '"bbf-ancp-fastdsl-acc-ext:'
-           + 'attainable-net-data-rate-downstream")';
+           + 'attainable-net-data-rate-downstream")' {
+          error-message
+            "The configuration for reporting a data rate change is "
+          + "performed on a line attribute other than one of "
+          + "'actual-net-data-rate-upstream', "
+          + "'actual-net-data-rate-downstream', "
+          + "'attainable-net-data-rate-upstream' or "
+          + "'attainable-net-data-rate-downstream'";
+          description
+            "Reporting data rate changes is supported only for a
+             subset of the line attributes.";
+        }
         key "access-line-attribute";
         description
           "Sets configuration data controlling the reporting of data
