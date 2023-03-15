@@ -1,5 +1,12 @@
 ## Broadband Forum YANG Modules
 
+### 2023-03-15 [OD-360 Issue 1 Amendment 1](https://yang.broadband-forum.org) BBF YANG Best Current Practices
+
+*Tag: [OD-360-v1.1.0](https://github.com/BroadbandForum/yang/tree/OD-360-v1.1.0)*
+
+* Add 'units' statement guidelines
+* Minor corrections to existing guidelines
+
 ### 2023-03-07: [TR-383 Amendment 6](https://www.broadband-forum.org/technical/download/TR-383_Amendment-6.pdf) Common YANG Modules for Access Networks
 *Tag: [TR-383-v1.6.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.6.0)*
 

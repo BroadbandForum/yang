@@ -97,7 +97,7 @@ they are expected to be used in the Broadband Forum.</p>
 
 <p>The deviate <em>replace</em> argument MAY be used to replace a type so long as the replacement type uses the same underlying built-in YANG type and the value represented does not fall outside the range of the definition of the type being replaced.</p>
 
-<p>An integer type can be replaced as long as the replacement uses the same built-in YANG type, e.g. uint32 or int64 and that the range specified falls within the range of the original definition. If the original does not define a range then any range can be specified in the deviation. If the original defines a range of values, the range of the deviation must fall within this defined range. In other words the new minimum value must be greater than or equal to the original and the new maximum value must be less than or equal to the original. For example, the following defines an object of type uint32 with a range of values 1 to 999999.</p>
+<p>An integer type can be replaced as long as the replacement uses the same built-in YANG type, e.g., uint32 or int64, and that the range specified falls within the range of the original definition. If the original does not define a range, then any range can be specified in the deviation. If the original defines a range of values, the range of the deviation must fall within this defined range. In other words the new minimum value must be greater than or equal to the original, and the new maximum value must be less than or equal to the original. For example, the following defines an object of type uint32 with a range of values 1 to 999999.</p>
 
 <pre><code>  leaf error-threshold {
     type uint32 {
@@ -119,7 +119,7 @@ they are expected to be used in the Broadband Forum.</p>
     }
   }</code></pre>
 
-<p>A string type can be replaced as long as its replacement is also a string and any specified length or pattern is valid per the original definition. If no length is specified in the original, this means that any length restriction may be added. If a length is specified, it means the new length can be specified so long as the new minimum value is greater than or equal to the original and the new maximum value is less than or equal to the original. If no pattern is specified in the original, any pattern may be added. If a pattern is specified in the original, the new pattern must be equal to or a subset of the original. For example, the following object is defined as a string with no length restriction and a pattern which allows for any alphanumeric character.</p>
+<p>A string type can be replaced as long as its replacement is also a string and any specified length or pattern is valid per the original definition. If no length is specified in the original, this means that any length restriction may be added. If a length is specified, it means the new length can be specified so long as the new minimum value is greater than or equal to the original, and the new maximum value is less than or equal to the original. If no pattern is specified in the original, any pattern may be added. If a pattern is specified in the original, the new pattern must be equal to or a subset of the original. For example, the following object is defined as a string with no length restriction and a pattern which allows for any alphanumeric character.</p>
 
 <pre><code>  leaf name {
     type string {
@@ -174,3 +174,4 @@ they are expected to be used in the Broadband Forum.</p>
 <p>The deviate <em>delete</em> argument MUST NOT be used in a deviation.</p>
 
 <p>By deleting a property, the value space of an object is typically being expanded which means the value accepted by the deviated definition is not valid per the original definition and thus, should never be allowed.</p>
+

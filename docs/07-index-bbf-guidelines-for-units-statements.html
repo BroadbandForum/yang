@@ -8,7 +8,7 @@
 Modules: A set of YANG modules for managing access networks"/>
   <meta name="theme-color" content="#157878"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
-  <title>BBF – BBF Deviation Guidelines</title>
+  <title>BBF – BBF Guidelines for ‘units’ Statements</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -154,255 +154,197 @@ modules on GitHub">YANG Modules</a>
 </nav>
 
     <header id="title-block-header">
-      <h1 class="title" id="sec:bbf-deviation-guidelines">BBF Deviation
-Guidelines<a href="#sec:bbf-deviation-guidelines" class="headerlink" title="Permalink to this header"> <img src="permalink.png" style="width: 0.8em"/></a></h1>
+      <h1 class="title" id="sec:bbf-guidelines-for-units-statements">BBF
+Guidelines for ‘units’
+Statements<a href="#sec:bbf-guidelines-for-units-statements" class="headerlink" title="Permalink to this header"> <img src="permalink.png" style="width: 0.8em"/></a></h1>
     </header>
     <nav id="_TOC" role="doc-toc">
 <ul>
-<li><a href="#sec:types-of-deviations"
-id="toc-sec:types-of-deviations">Types of Deviations <img
-src="permalink.png" style="width:0.8em" /></a></li>
-<li><a href="#sec:dev-1-not-supported"
-id="toc-sec:dev-1-not-supported">DEV-1: not-supported <img
-src="permalink.png" style="width:0.8em" /></a></li>
-<li><a href="#sec:dev-2-add---number-of-elements"
-id="toc-sec:dev-2-add---number-of-elements">DEV-2: add - Number of
-Elements <img src="permalink.png" style="width:0.8em" /></a></li>
-<li><a href="#sec:dev-3-add---must-constraints"
-id="toc-sec:dev-3-add---must-constraints">DEV-3: add - ‘must’
-Constraints <img src="permalink.png" style="width:0.8em" /></a></li>
-<li><a href="#sec:dev-4-replace---data-type"
-id="toc-sec:dev-4-replace---data-type">DEV-4: replace - Data Type <img
-src="permalink.png" style="width:0.8em" /></a></li>
-<li><a href="#sec:dev-5-replace---number-of-elements"
-id="toc-sec:dev-5-replace---number-of-elements">DEV-5: replace - Number
-of Elements <img src="permalink.png" style="width:0.8em" /></a></li>
-<li><a href="#sec:dev-6-delete" id="toc-sec:dev-6-delete">DEV-6: delete
+<li><a href="#sec:terminology-1" id="toc-sec:terminology-1">Terminology
 <img src="permalink.png" style="width:0.8em" /></a></li>
+<li><a href="#sec:units-1-unit-vs-symbol"
+id="toc-sec:units-1-unit-vs-symbol">UNITS-1: Unit vs Symbol <img
+src="permalink.png" style="width:0.8em" /></a></li>
+<li><a href="#sec:units-2-plural-form"
+id="toc-sec:units-2-plural-form">UNITS-2: Plural Form <img
+src="permalink.png" style="width:0.8em" /></a></li>
+<li><a href="#sec:units-3-base-vs-derived"
+id="toc-sec:units-3-base-vs-derived">UNITS-3: Base vs Derived <img
+src="permalink.png" style="width:0.8em" /></a></li>
+<li><a href="#sec:units-4-memory" id="toc-sec:units-4-memory">UNITS-4:
+Memory <img src="permalink.png" style="width:0.8em" /></a></li>
+<li><a href="#sec:units-5-unit-combinations"
+id="toc-sec:units-5-unit-combinations">UNITS-5: Unit Combinations <img
+src="permalink.png" style="width:0.8em" /></a></li>
+<li><a href="#sec:units-6-equivalent-units"
+id="toc-sec:units-6-equivalent-units">UNITS-6: Equivalent Units <img
+src="permalink.png" style="width:0.8em" /></a></li>
+<li><a href="#sec:units-7-use-of-decimal64"
+id="toc-sec:units-7-use-of-decimal64">UNITS-7: Use of decimal64 <img
+src="permalink.png" style="width:0.8em" /></a></li>
+<li><a href="#sec:units-8-exceptions"
+id="toc-sec:units-8-exceptions">UNITS-8: Exceptions <img
+src="permalink.png" style="width:0.8em" /></a></li>
+<li><a href="#sec:units-9-frames-vs-packets-vs-messages"
+id="toc-sec:units-9-frames-vs-packets-vs-messages">UNITS-9: Frames vs
+Packets vs Messages <img src="permalink.png"
+style="width:0.8em" /></a></li>
 </ul>
     </nav>
-<p>It is understood that there are times in which a device will need to
-support a subset of a standard YANG model whether it be from BBF or any
-other SDO. YANG provides a means to explicitly model this subset of
-support via a deviation. While a deviation allows for almost any change
-in the original definition, it is important that implementations only
-allow those deviations which are truly a subset of the original and that
-do not cause the device to violate the underlying specification on which
-the YANG model is based. The following sections describe the types of
-deviations and the guidelines by which they are expected to be used in
-the Broadband Forum.</p>
-<h3 id="sec:types-of-deviations">Types of Deviations <a
-href="06-index-bbf-deviation-guidelines.html#sec:types-of-deviations"
+<p>The following guidelines apply to the specification of ‘units’
+statements within Broadband Forum YANG modules. These guidelines are
+based on the following reference documentation as well as practical
+usage within Broadband Forum YANG modules:</p>
+<ol>
+<li>IEEE Std. 260.1</li>
+<li><a href="https://www.nist.gov/pml/special-publication-811">NIST
+Special Publication 811</a></li>
+</ol>
+<h3 id="sec:terminology-1">Terminology <a
+href="07-index-bbf-guidelines-for-units-statements.html#sec:terminology-1"
 class="headerlink" title="Permalink to this header"><img
 src="permalink.png" style="width:0.8em" /></a></h3>
-<p>The YANG <em>deviate</em> statement is used to define the manner in
-which the server deviates from a particular YANG module. There are 4
-types of deviations defined as arguments to the deviate statement:</p>
-<ul>
-<li>not-supported
-<ul>
-<li>Indicates the target node is not implemented by the server.</li>
-</ul></li>
-<li>add
-<ul>
-<li>Adds properties to the target node so long as they do not already
-exist.</li>
-</ul></li>
-<li>replace
-<ul>
-<li>Replaces properties of the target node so long as they already
-exist.</li>
-</ul></li>
-<li>delete
-<ul>
-<li>Deletes existing properties of the target node.</li>
-</ul></li>
-</ul>
-<h3 id="sec:dev-1-not-supported">DEV-1: not-supported <a
-href="06-index-bbf-deviation-guidelines.html#sec:dev-1-not-supported"
+<p>The following terminology is used throughout these guidelines.</p>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="header header">
+<th style="text-align: left;">Term</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd odd">
+<td style="text-align: left;">family</td>
+<td style="text-align: left;">refers to a group of ‘units’ statements
+representing a common functional area including, but not limited to,
+time, length, temperature, electricity, speed and memory storage</td>
+</tr>
+<tr class="even even">
+<td style="text-align: left;">unit</td>
+<td style="text-align: left;">the full text name of a unit, e.g.,
+seconds, milliwatts</td>
+</tr>
+<tr class="odd odd">
+<td style="text-align: left;">symbol</td>
+<td style="text-align: left;">the abbreviated form of expressing the
+units, e.g., mW, dBm</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sec:units-1-unit-vs-symbol">UNITS-1: Unit vs Symbol <a
+href="07-index-bbf-guidelines-for-units-statements.html#sec:units-1-unit-vs-symbol"
 class="headerlink" title="Permalink to this header"><img
 src="permalink.png" style="width:0.8em" /></a></h3>
-<p>The deviate <em>not-supported</em> argument MAY be used to announce
-lack of support for an optional node.</p>
-<p>An optional node is one which does not have a default value nor is
-made mandatory by use of the mandatory statement. Consider the following
-object definition which is defined with neither a default value nor a
-mandatory statement.</p>
-<pre><code>  leaf error-threshold {
+<p>All ‘units’ statements SHALL use either the “unit” or the “symbol” as
+defined in IEEE Std. 260.1 including the proper use of uppercase and
+lowercase. The chosen method used should be applied consistently within
+a family of units. In general, the “unit” should be used with the
+“symbol” being used on a case-by-case basis. For example, use “seconds”
+or some derivation (see UNITS-3) for time but “dBm” for power level as
+the term “decibel-milliwatts” is not commonly used.</p>
+<h3 id="sec:units-2-plural-form">UNITS-2: Plural Form <a
+href="07-index-bbf-guidelines-for-units-statements.html#sec:units-2-plural-form"
+class="headerlink" title="Permalink to this header"><img
+src="permalink.png" style="width:0.8em" /></a></h3>
+<p>Where applicable, the full “unit” text SHALL be written in plural
+form, e.g., seconds vs. second. This differs from the definitions in
+IEEE Std. 260.1 but aligns with NIST 811 as well as the current practice
+in industry standard YANG data models.</p>
+<h3 id="sec:units-3-base-vs-derived">UNITS-3: Base vs Derived <a
+href="07-index-bbf-guidelines-for-units-statements.html#sec:units-3-base-vs-derived"
+class="headerlink" title="Permalink to this header"><img
+src="permalink.png" style="width:0.8em" /></a></h3>
+<p>The base unit for a given family may not always be the one that
+provides the best granularity. For example, it would not be common to
+express 20 nanoseconds as 0.00000002 seconds as doing so would make
+readability difficult. In those situations, a “unit” derived from the
+base SHOULD be used where the derived unit is a multiple of
+10<sup>3</sup> from the base, e.g., seconds, milliseconds,
+nanoseconds.</p>
+<h3 id="sec:units-4-memory">UNITS-4: Memory <a
+href="07-index-bbf-guidelines-for-units-statements.html#sec:units-4-memory"
+class="headerlink" title="Permalink to this header"><img
+src="permalink.png" style="width:0.8em" /></a></h3>
+<p>For ‘units’ statements related to memory that need derived units for
+reasons similar to the usage described in UNITS-3, the derived unit
+SHALL be a multiple of 2<sup>10</sup>, e.g., bytes, kibibytes,
+mebibytes.</p>
+<h3 id="sec:units-5-unit-combinations">UNITS-5: Unit Combinations <a
+href="07-index-bbf-guidelines-for-units-statements.html#sec:units-5-unit-combinations"
+class="headerlink" title="Permalink to this header"><img
+src="permalink.png" style="width:0.8em" /></a></h3>
+<p>‘units’ statements requiring a combination of units SHALL fully spell
+out the relationship between the units, e.g., “bits per second” rather
+than “bits/second”. Regarding the applicability of UNITS-2, only the
+first “unit” will be plural in a combination, e.g., “bits” in “bits per
+second”.</p>
+<h3 id="sec:units-6-equivalent-units">UNITS-6: Equivalent Units <a
+href="07-index-bbf-guidelines-for-units-statements.html#sec:units-6-equivalent-units"
+class="headerlink" title="Permalink to this header"><img
+src="permalink.png" style="width:0.8em" /></a></h3>
+<p>If more than one “unit” definition is applicable for a given type of
+data, then one should be chosen and applied in a consistent manner. For
+example, use “bytes” instead of “octets”.</p>
+<h3 id="sec:units-7-use-of-decimal64">UNITS-7: Use of decimal64 <a
+href="07-index-bbf-guidelines-for-units-statements.html#sec:units-7-use-of-decimal64"
+class="headerlink" title="Permalink to this header"><img
+src="permalink.png" style="width:0.8em" /></a></h3>
+<p>For a given data node, a base or “unit” along with the decimal64 type
+SHOULD be used rather than a derived “unit” along with an integer
+type.</p>
+<p>For example, use</p>
+<pre><code>  leaf rx-power {
+    type decimal64 {
+      fraction-digits 4;
+    }
+    units &quot;watts&quot;;
+    description
+      &quot;The receive power reported in watts.&quot;;
+  }</code></pre>
+<p>rather than</p>
+<pre><code>  leaf rx-power {
     type uint32;
+    units &quot;0.1 milliwatts&quot;;
     description
-      &quot;The number of errors, when exceeded, will raise an alarm.&quot;;
+      &quot;The receive power reported in tenths of a milliwatt.&quot;;
   }</code></pre>
-<p>Since this node is optional, it is acceptable to announce the object
-as not supported.</p>
-<pre><code>  deviation error-threshold {
-    description
-      &quot;The optional error threshold is not supported.&quot;;
-    deviate not-supported;
-  }    </code></pre>
-<h3 id="sec:dev-2-add---number-of-elements">DEV-2: add - Number of
-Elements <a
-href="06-index-bbf-deviation-guidelines.html#sec:dev-2-add---number-of-elements"
+<p>When applying this guideline, along with UNITS-3 and UNITS-4, to
+already published data models, strict adherence may not always be
+possible due to backward compatiblity issues. In those cases, express
+the ‘units’ relative to the closest base or a derived unit, e.g., “0.1
+seconds” or “1/256 milliseconds”.</p>
+<h3 id="sec:units-8-exceptions">UNITS-8: Exceptions <a
+href="07-index-bbf-guidelines-for-units-statements.html#sec:units-8-exceptions"
 class="headerlink" title="Permalink to this header"><img
 src="permalink.png" style="width:0.8em" /></a></h3>
-<p>The deviate <em>add</em> argument MAY be used to add a restriction on
-the number of elements in a <em>leaf-list</em> or <em>list</em>.</p>
-<p>Adding a restriction on the number of elements is accomplished by
-adding a <em>min-elements</em> and/or <em>max-elements</em> statement
-where they were not previously defined. For example, you have a
-<em>leaf-list</em> which does not contain either a <em>min-elements</em>
-or <em>max-elements</em> statement and thus does not impose any limit on
-the number of elements contained in the <em>leaf-list</em>.</p>
-<pre><code>  leaf-list port {
-    type string;
-    description
-      &quot;A port associated with a port group.&quot;;
-  }</code></pre>
-<p>A particular implementation may want to limit the number to 4. In
-this case, a deviation can be used to add the <em>max-elements</em>
-statement to the definition.</p>
-<pre><code>  deviation port {
-    description
-      &quot;Limit the maximum number of ports to 4.&quot;;
-    deviate add {
-      max-elements 4;
-    }
-  }</code></pre>
-<h3 id="sec:dev-3-add---must-constraints">DEV-3: add - ‘must’
-Constraints <a
-href="06-index-bbf-deviation-guidelines.html#sec:dev-3-add---must-constraints"
+<p>At times, there may be a need to preserve the relationship with an
+underlying standard that would result in a non-adherence to these
+guidelines. Such instances should be carefuly evaluated on a
+case-by-case basis to determine if an exception should be made. For
+example, in TR-385, several data nodes exist that represent data in “125
+microsecond PHY frames”. Application of UNITS-1 would result in ‘units’
+statements of either “125 microseconds” or “0.125 milliseconds”.
+However, this would result in a disassociation with the underlying
+standard where the measurement in “PHY frames” is as equally important
+as is the representation of time.</p>
+<h3 id="sec:units-9-frames-vs-packets-vs-messages">UNITS-9: Frames vs
+Packets vs Messages <a
+href="07-index-bbf-guidelines-for-units-statements.html#sec:units-9-frames-vs-packets-vs-messages"
 class="headerlink" title="Permalink to this header"><img
 src="permalink.png" style="width:0.8em" /></a></h3>
-<p>The deviate <em>add</em> argument MAY be used to add a constraint on
-valid data by the use of the must statement.</p>
-<p>This constraint may be necessary depending on actual hardware in use.
-For example, the number of physical interfaces of a particular type will
-be limited by the number present on the hardware. For this, we could add
-a constraint on the interface list in <em>ietf-interfaces <span
-class="cite" data-citation-ids="RFC7223"><a
-href="01-index-references.html#ref-RFC7223">[1]</a></span></em> to
-explicitly announce how many interfaces are supported.</p>
-<pre><code>  deviation &quot;/if:interfaces&quot; {
-    description
-      &quot;There are only 8 G.fast interfaces supported.&quot;;
-    deviate add {
-      must &quot;count(interface[type=&#39;ianaift:gfast&#39;])=8&quot;;
-    }
-  }</code></pre>
-<h3 id="sec:dev-4-replace---data-type">DEV-4: replace - Data Type <a
-href="06-index-bbf-deviation-guidelines.html#sec:dev-4-replace---data-type"
-class="headerlink" title="Permalink to this header"><img
-src="permalink.png" style="width:0.8em" /></a></h3>
-<p>The deviate <em>replace</em> argument MAY be used to replace a type
-so long as the replacement type uses the same underlying built-in YANG
-type and the value represented does not fall outside the range of the
-definition of the type being replaced.</p>
-<p>An integer type can be replaced as long as the replacement uses the
-same built-in YANG type, e.g., uint32 or int64, and that the range
-specified falls within the range of the original definition. If the
-original does not define a range, then any range can be specified in the
-deviation. If the original defines a range of values, the range of the
-deviation must fall within this defined range. In other words the new
-minimum value must be greater than or equal to the original, and the new
-maximum value must be less than or equal to the original. For example,
-the following defines an object of type uint32 with a range of values 1
-to 999999.</p>
-<pre><code>  leaf error-threshold {
-    type uint32 {
-      range &quot;1..999999&quot;;
-    }
-    description
-      &quot;The number of errors, when exceeded, will raise an alarm.&quot;;
-  }</code></pre>
-<p>A particular implementation may only allow a range from 10 to 99999.
-Since this range is a subset of the original range definition, we can
-replace the uint32 type with another uint32 type that has the new
-range.</p>
-<pre><code>  deviation error-threshold {
-    description
-      &quot;The supported range of values is 10 to 99999.&quot;;
-    deviate replace {
-      type uint32 {
-        range &quot;10..99999&quot;;
-      }
-    }
-  }</code></pre>
-<p>A string type can be replaced as long as its replacement is also a
-string and any specified length or pattern is valid per the original
-definition. If no length is specified in the original, this means that
-any length restriction may be added. If a length is specified, it means
-the new length can be specified so long as the new minimum value is
-greater than or equal to the original, and the new maximum value is less
-than or equal to the original. If no pattern is specified in the
-original, any pattern may be added. If a pattern is specified in the
-original, the new pattern must be equal to or a subset of the original.
-For example, the following object is defined as a string with no length
-restriction and a pattern which allows for any alphanumeric
-character.</p>
-<pre><code>  leaf name {
-    type string {
-      pattern &#39;[A-Za-z0-9]*&#39;;
-    }
-    description
-      &quot;The name of a thing.&quot;;
-  }</code></pre>
-<p>A particular implementation may require that the maximum length of
-the string be 255 characters and that upper case characters are not
-supported. This is a valid deviation since the new string is shorter
-than the original and the character set is a subset of the original
-pattern.</p>
-<pre><code>  deviation name {
-    description
-      &quot;The name may be no more than 255 lowercase letters and/or
-       numbers.&quot;;
-    deviate replace {
-      type string {
-        length &quot;0..255&quot;;
-        pattern &#39;[a-z0-9]*&#39;;
-      }
-    }
-  }</code></pre>
-<h3 id="sec:dev-5-replace---number-of-elements">DEV-5: replace - Number
-of Elements <a
-href="06-index-bbf-deviation-guidelines.html#sec:dev-5-replace---number-of-elements"
-class="headerlink" title="Permalink to this header"><img
-src="permalink.png" style="width:0.8em" /></a></h3>
-<p>The deviate <em>replace</em> argument MAY be used to further restrict
-the number of elements in a <em>list</em> or <em>leaf-list</em>.</p>
-<p>For <em>min-elements</em>, the new value must be greater than or
-equal to the original. For <em>max-elements</em>, the new value must be
-less than or equal to the original. Suppose we have the following
-definition of a <em>leaf-list</em> of ports which must have at least 1
-and no more 10 entries.</p>
-<pre><code>  leaf-list port {
-    min-elements 1;
-    max-elements 10;
-    type string;
-    description
-      &quot;A port associated with a port group.&quot;;
-  }</code></pre>
-<p>Now we have an implementation which must have at least 2 ports but no
-more than 4 ports configured. Since this falls within the constraints of
-the original definition, it is a valid deviation.</p>
-<pre><code>  deviation port {
-    description
-      &quot;Specify that at least 2 but no more than 4 ports can be
-       configured.&quot;;
-    deviate replace {
-      min-elements 2;
-      max-elements 4;
-    }
-  }</code></pre>
-<h3 id="sec:dev-6-delete">DEV-6: delete <a
-href="06-index-bbf-deviation-guidelines.html#sec:dev-6-delete"
-class="headerlink" title="Permalink to this header"><img
-src="permalink.png" style="width:0.8em" /></a></h3>
-<p>The deviate <em>delete</em> argument MUST NOT be used in a
-deviation.</p>
-<p>By deleting a property, the value space of an object is typically
-being expanded which means the value accepted by the deviated definition
-is not valid per the original definition and thus, should never be
-allowed.</p>
+<p>The use of “frames”, “packets” and “messages” SHOULD be applied in a
+consistent manner based on the following guidelines:</p>
+<ul>
+<li>use “frames” when referring to layer 2, e.g., Ethernet frames,
+VLANs, etc.</li>
+<li>use “packets” when referring to layer 3, e.g., IP packets</li>
+<li>use “messages” when referring to protocols, e.g., DHCP messages,
+IGMP messages, etc.</li>
+</ul>
     <div style="clear: both;"/>
     <footer class="site-footer">
 <nav>

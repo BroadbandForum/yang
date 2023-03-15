@@ -80,7 +80,7 @@ Unpublished versions of BBF YANG modules MAY have 'revision' statements correspo
 
 ### BBF-9: Explicit Modeling
 
-Where YANG allows something or some behavior to be explicitly modeled (e.g. enumerations, range, units, must, etc.) then this SHOULD always be done. Mandatory requirements in descriptions SHOULD be used only where it is not possible to use formal YANG modeling to convey the requirement.
+Where YANG allows something or some behavior to be explicitly modeled (e.g., enumerations, range, units, must, etc.) then this SHOULD always be done. Mandatory requirements in descriptions SHOULD be used only where it is not possible to use formal YANG modeling to convey the requirement.
 
 ### BBF-10: Retroactive Application of OD-360 Guidelines
 
@@ -88,7 +88,7 @@ OD-360 guidelines SHOULD NOT be retroactively applied to published BBF YANG modu
 
 ### BBF-11: Multi-word Identifiers
 
-YANG identifiers which represent multiple words, e.g target margin, SHOULD use a dash between the normally whitespace separated words, e.g. 'target-margin'.
+YANG identifiers which represent multiple words, e.g., target margin, SHOULD use a dash between the normally whitespace separated words, e.g., 'target-margin'.
 
 ### BBF-12: Acronyms in Description Statements
 
@@ -115,24 +115,24 @@ This guideline defines the best practices when defining a new BBF YANG model and
 
 When creating or editing BBF YANG models, the following use cases apply:
 
- 1. **Requirements that are captured in a Broadband Forum Technical Report**
+ 1. **Requirements that are captured in a Broadband Forum Technical Report**:
 In this case, the BBF YANG model should meet the requirement set forward in the Technical Report.
-For example, the models contained in TR-383 build on the requirements of TR-101/156/167/301
+For example, the models contained in TR-383 build on the requirements of TR-101/156/167/301.
 
- 2. **Requirements (or information models) that are captured in standards documents published by other SDOs and referenced from a Broadband Forum Technical Report, for which the other SDO is not developing a YANG model**
+ 2. **Requirements (or information models) that are captured in standards documents published by other SDOs and referenced from a Broadband Forum Technical Report, for which the other SDO is not developing a YANG model**:
 In this case, the BBF YANG data model should reference the applicable standard and be able to meet the requirement(s) from that document.
-For example, the TR-355 G.fast YANG model contains attributes defined in ITU-T Recommendation G.997.2
+For example, the TR-355 G.fast YANG model contains attributes defined in ITU-T Recommendation G.997.2.
 
- 3. **A model requirement which is not formulated in a Broadband Forum Technical Report or a standard published by another SDO**
+ 3. **A model requirement which is not formulated in a Broadband Forum Technical Report or a standard published by another SDO**:
 In this case, the following guidelines apply:
 
     1. First, the requirement must be formulated based on inputs brought forward to the BBF (i.e. a contribution explaining the need for the requirement).
 
     2. There must be consensus among the participants in the Work Area/Project Stream to move forward with this requirement.
 
-    3. It is desirable, but not mandatory for the requirements to be captured in a BBF TR. But that should not hold up putting the requirement in the YANG model. In other words, if the Work Area agrees that something should be added in a BBF YANG model, then we do not need to wait until the requirement is captured in a TR.
+    3. It is desirable, but not mandatory, for the requirements to be captured in a BBF Technical Report. However, that should not hold up putting the requirement in the YANG model. In other words, if the Work Area agrees that something should be added in a BBF YANG model, then we do not need to wait until the requirement is captured in a Technical Report.
 
-    4. The new requirement must not break existing BBF TRs.
+    4. The new requirement must not break existing BBF Technical Reports.
 
     5. The new requirement must be reviewed by any Work Area(s) or Project Stream(s) for which it is clearly applicable (e.g., a PON related requirement is to be reviewed by the FAN WA).
 
@@ -192,7 +192,7 @@ The format of the revision statement in a development module shall be as follows
 
 ### BBF-16: Enum Naming
 
-All enums in an enumeration SHOULD be named using names which describe their functional meaning rather than something ambiguous such as an integer string, "1".
+All enums in an enumeration SHOULD be named using names that describe their functional meaning rather than something ambiguous such as an integer string, "1".
 
 For example, this definition is preferred
 ```
@@ -314,13 +314,13 @@ An 'if-feature' statement on any node defined within a top level grouping which 
 
 *This requirement is derived from section [7.9.3](https://datatracker.ietf.org/doc/html/rfc7950#section-7.9.3) and section [9.11](https://datatracker.ietf.org/doc/html/rfc7950#section-9.11) of RFC 7950 @RFC7950.*
 
-The default case of a choice statement MUST not contain sole descendant leaf node of type "empty".
+The default case of a choice statement MUST not contain a sole descendant leaf node of type "empty".
 
 Section 7.9.3 states that "The default case is only important when considering the 'default' statements of nodes under the cases (i.e., default values of leafs and leaf-lists, and default cases of nested choices)." It also states that "The default values and nested default cases under the default case are used if none of the nodes under any of the cases are present.".
 
 Section 9.11 states that an empty type cannot have a default value
 
-In the example below, the choice 'manual' has a leaf with an empty type as the only child node. Since an empty leaf cannot have a default value, the behavior of an <edit-config> request that creates the  'transfer' container without providing any data for the choice 'how' will be the same irrespective of whether the default 'manual' statement is present or not.
+In the example below, the choice 'manual' has a leaf with an empty type as the only child node. Since an empty leaf cannot have a default value, the behavior of an <edit-config\> request that creates the  'transfer' container without providing any data for the choice 'how' will be the same irrespective of whether the default 'manual' statement is present or not.
 
 The leaf 'manual' will not be created.
 

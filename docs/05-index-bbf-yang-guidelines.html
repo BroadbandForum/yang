@@ -64,6 +64,7 @@ modules on GitHub">YANG Modules</a>
  | <a href="04-index-ietf-yang-guidelines.html#sec:ietf-yang-guidelines">IETF YANG Guidelines</a>
  | <a href="05-index-bbf-yang-guidelines.html#sec:bbf-yang-guidelines">BBF YANG Guidelines</a>
  | <a href="06-index-bbf-deviation-guidelines.html#sec:bbf-deviation-guidelines">BBF Deviation Guidelines</a>
+ | <a href="07-index-bbf-guidelines-for-units-statements.html#sec:bbf-guidelines-for-units-statements">BBF Guidelines for &lsquo;units&rsquo; Statements</a>
 </p>
 </nav>
 
@@ -134,6 +135,19 @@ modules on GitHub">YANG Modules</a>
       <li><a href="06-index-bbf-deviation-guidelines.html#sec:dev-4-replace---data-type">DEV-4: replace - Data Type</a></li>
       <li><a href="06-index-bbf-deviation-guidelines.html#sec:dev-5-replace---number-of-elements">DEV-5: replace - Number of Elements</a></li>
       <li><a href="06-index-bbf-deviation-guidelines.html#sec:dev-6-delete">DEV-6: delete</a></li>
+    </ul>
+    <li><a href="07-index-bbf-guidelines-for-units-statements.html#sec:bbf-guidelines-for-units-statements">BBF Guidelines for &lsquo;units&rsquo; Statements</a></li>
+    <ul>
+      <li><a href="07-index-bbf-guidelines-for-units-statements.html#sec:terminology-1">Terminology</a></li>
+      <li><a href="07-index-bbf-guidelines-for-units-statements.html#sec:units-1-unit-vs-symbol">UNITS-1: Unit vs Symbol</a></li>
+      <li><a href="07-index-bbf-guidelines-for-units-statements.html#sec:units-2-plural-form">UNITS-2: Plural Form</a></li>
+      <li><a href="07-index-bbf-guidelines-for-units-statements.html#sec:units-3-base-vs-derived">UNITS-3: Base vs Derived</a></li>
+      <li><a href="07-index-bbf-guidelines-for-units-statements.html#sec:units-4-memory">UNITS-4: Memory</a></li>
+      <li><a href="07-index-bbf-guidelines-for-units-statements.html#sec:units-5-unit-combinations">UNITS-5: Unit Combinations</a></li>
+      <li><a href="07-index-bbf-guidelines-for-units-statements.html#sec:units-6-equivalent-units">UNITS-6: Equivalent Units</a></li>
+      <li><a href="07-index-bbf-guidelines-for-units-statements.html#sec:units-7-use-of-decimal64">UNITS-7: Use of decimal64</a></li>
+      <li><a href="07-index-bbf-guidelines-for-units-statements.html#sec:units-8-exceptions">UNITS-8: Exceptions</a></li>
+      <li><a href="07-index-bbf-guidelines-for-units-statements.html#sec:units-9-frames-vs-packets-vs-messages">UNITS-9: Frames vs Packets vs Messages</a></li>
     </ul>
   </ul>
 </ul>
@@ -318,9 +332,9 @@ href="05-index-bbf-yang-guidelines.html#sec:bbf-9-explicit-modeling"
 class="headerlink" title="Permalink to this header"><img
 src="permalink.png" style="width:0.8em" /></a></h3>
 <p>Where YANG allows something or some behavior to be explicitly modeled
-(e.g. enumerations, range, units, must, etc.) then this SHOULD always be
-done. Mandatory requirements in descriptions SHOULD be used only where
-it is not possible to use formal YANG modeling to convey the
+(e.g., enumerations, range, units, must, etc.) then this SHOULD always
+be done. Mandatory requirements in descriptions SHOULD be used only
+where it is not possible to use formal YANG modeling to convey the
 requirement.</p>
 <h3 id="sec:bbf-10-retroactive-application-of-od-360-guidelines">BBF-10:
 Retroactive Application of OD-360 Guidelines <a
@@ -338,9 +352,9 @@ Identifiers <a
 href="05-index-bbf-yang-guidelines.html#sec:bbf-11-multi-word-identifiers"
 class="headerlink" title="Permalink to this header"><img
 src="permalink.png" style="width:0.8em" /></a></h3>
-<p>YANG identifiers which represent multiple words, e.g target margin,
-SHOULD use a dash between the normally whitespace separated words,
-e.g. ‘target-margin’.</p>
+<p>YANG identifiers which represent multiple words, e.g., target margin,
+SHOULD use a dash between the normally whitespace separated words, e.g.,
+‘target-margin’.</p>
 <h3 id="sec:bbf-12-acronyms-in-description-statements">BBF-12: Acronyms
 in Description Statements <a
 href="05-index-bbf-yang-guidelines.html#sec:bbf-12-acronyms-in-description-statements"
@@ -377,33 +391,35 @@ model.</p>
 apply:</p>
 <ol>
 <li><p><strong>Requirements that are captured in a Broadband Forum
-Technical Report</strong> In this case, the BBF YANG model should meet
+Technical Report</strong>: In this case, the BBF YANG model should meet
 the requirement set forward in the Technical Report. For example, the
 models contained in TR-383 build on the requirements of
-TR-101/156/167/301</p></li>
+TR-101/156/167/301.</p></li>
 <li><p><strong>Requirements (or information models) that are captured in
 standards documents published by other SDOs and referenced from a
 Broadband Forum Technical Report, for which the other SDO is not
-developing a YANG model</strong> In this case, the BBF YANG data model
+developing a YANG model</strong>: In this case, the BBF YANG data model
 should reference the applicable standard and be able to meet the
 requirement(s) from that document. For example, the TR-355 G.fast YANG
 model contains attributes defined in ITU-T Recommendation
-G.997.2</p></li>
+G.997.2.</p></li>
 <li><p><strong>A model requirement which is not formulated in a
 Broadband Forum Technical Report or a standard published by another
-SDO</strong> In this case, the following guidelines apply:</p>
+SDO</strong>: In this case, the following guidelines apply:</p>
 <ol>
 <li><p>First, the requirement must be formulated based on inputs brought
 forward to the BBF (i.e. a contribution explaining the need for the
 requirement).</p></li>
 <li><p>There must be consensus among the participants in the Work
 Area/Project Stream to move forward with this requirement.</p></li>
-<li><p>It is desirable, but not mandatory for the requirements to be
-captured in a BBF TR. But that should not hold up putting the
-requirement in the YANG model. In other words, if the Work Area agrees
-that something should be added in a BBF YANG model, then we do not need
-to wait until the requirement is captured in a TR.</p></li>
-<li><p>The new requirement must not break existing BBF TRs.</p></li>
+<li><p>It is desirable, but not mandatory, for the requirements to be
+captured in a BBF Technical Report. However, that should not hold up
+putting the requirement in the YANG model. In other words, if the Work
+Area agrees that something should be added in a BBF YANG model, then we
+do not need to wait until the requirement is captured in a Technical
+Report.</p></li>
+<li><p>The new requirement must not break existing BBF Technical
+Reports.</p></li>
 <li><p>The new requirement must be reviewed by any Work Area(s) or
 Project Stream(s) for which it is clearly applicable (e.g., a PON
 related requirement is to be reviewed by the FAN WA).</p></li>
@@ -489,9 +505,9 @@ as follows:</p>
 href="05-index-bbf-yang-guidelines.html#sec:bbf-16-enum-naming"
 class="headerlink" title="Permalink to this header"><img
 src="permalink.png" style="width:0.8em" /></a></h3>
-<p>All enums in an enumeration SHOULD be named using names which
-describe their functional meaning rather than something ambiguous such
-as an integer string, “1”.</p>
+<p>All enums in an enumeration SHOULD be named using names that describe
+their functional meaning rather than something ambiguous such as an
+integer string, “1”.</p>
 <p>For example, this definition is preferred</p>
 <pre><code>  leaf ra-mode {
     type enumeration {
@@ -620,7 +636,7 @@ and section <a
 href="https://datatracker.ietf.org/doc/html/rfc7950#section-9.11">9.11</a>
 of RFC 7950 <span class="cite" data-citation-ids="RFC7950"><a
 href="01-index-references.html#ref-RFC7950">[2]</a></span>.</em></p>
-<p>The default case of a choice statement MUST not contain sole
+<p>The default case of a choice statement MUST not contain a sole
 descendant leaf node of type “empty”.</p>
 <p>Section 7.9.3 states that “The default case is only important when
 considering the ‘default’ statements of nodes under the cases (i.e.,
@@ -707,13 +723,14 @@ this ‘error-message’ would be reported as:</p>
  | <a href="04-index-ietf-yang-guidelines.html#sec:ietf-yang-guidelines">IETF YANG Guidelines</a>
  | <a href="05-index-bbf-yang-guidelines.html#sec:bbf-yang-guidelines">BBF YANG Guidelines</a>
  | <a href="06-index-bbf-deviation-guidelines.html#sec:bbf-deviation-guidelines">BBF Deviation Guidelines</a>
+ | <a href="07-index-bbf-guidelines-for-units-statements.html#sec:bbf-guidelines-for-units-statements">BBF Guidelines for &lsquo;units&rsquo; Statements</a>
 </p>
 </nav>
 
       <span class="site-footer-owner">
         OD-360 is developed and maintained
         by <a href="https://www.broadband-forum.org">The Broadband Forum</a>.
-        &copy; The Broadband Forum 2022</a>. All Rights Reserved.
+        &copy; The Broadband Forum 2023</a>. All Rights Reserved.
       </span>
       <span class="site-footer-credits">
         This page was generated by <a href="https://pandoc.org">pandoc</a>

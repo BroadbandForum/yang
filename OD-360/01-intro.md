@@ -2,9 +2,9 @@
 bbfNumber: OD-360
 bbfTitle: BBF YANG Best Current Practices
 bbfIssue: Issue
-bbfVersion: 1
-bbfMonth: February
-bbfYear: 2022
+bbfVersion: 1 Amendment 1
+bbfMonth: March
+bbfYear: 2023
 bbfType: document
 bbfStatus:
 bbfContrib:
@@ -44,8 +44,14 @@ bbfRevisionHistory:
   approval: 15 February 2022
   publication: 15 February 2022
   editors: |
-      Joey Boyd, ADTRAN
+      Joey Boyd, Adtran
   changes: Original
+- number: Issue 1 Amendment 1
+  approval: 15 March 2023
+  publication: 15 March 2023
+  editors: |
+      Joey Boyd, Adtran
+  changes: Add 'units' statement guidelines
 ...
 
 !include cover-page.md
@@ -82,7 +88,7 @@ submodules, the term submodule is used instead.
 
 ## Template
 
-New YANG modules MAY be created from the BBF template as shown below:
+New YANG modules MAY be created from the BBF template as shown here:
 [bbf-template.yang](https://wiki.broadband-forum.org/display/BBF/OD-360%3A+YANG+Module+Template).
 This template is based on the IETF YANG module template defined in the IETF YANG
 Guidelines.

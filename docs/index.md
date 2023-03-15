@@ -2,9 +2,9 @@
 bbfNumber: OD-360
 bbfTitle: BBF YANG Best Current Practices
 bbfIssue: Issue
-bbfVersion: 1
-bbfMonth: February
-bbfYear: 2022
+bbfVersion: 1 Amendment 1
+bbfMonth: March
+bbfYear: 2023
 bbfType: document
 bbfStatus:
 bbfContrib:
@@ -44,8 +44,14 @@ bbfRevisionHistory:
   approval: 15 February 2022
   publication: 15 February 2022
   editors: |
-      Joey Boyd, ADTRAN
+      Joey Boyd, Adtran
   changes: Original
+- number: Issue 1 Amendment 1
+  approval: 15 March 2023
+  publication: 15 March 2023
+  editors: |
+      Joey Boyd, Adtran
+  changes: Add 'units' statement guidelines
 ...
 
 !include cover-page.md
@@ -82,14 +88,14 @@ submodules, the term submodule is used instead.
 
 ## Template
 
-New YANG modules MAY be created from the BBF template as shown below:
+New YANG modules MAY be created from the BBF template as shown here:
 [bbf-template.yang](https://wiki.broadband-forum.org/display/BBF/OD-360%3A+YANG+Module+Template).
 This template is based on the IETF YANG module template defined in the IETF YANG
 Guidelines.
 
 ## IETF YANG Guidelines {.new-file}
 
-The general principle is that the IETF YANG Guidelines, defined in RFC 8407 @RFC8407, apply in their entirety to BBF YANG modules. However, they are aimed at IETF Standards Track YANG modules and therefore contain some IETF specifics which cannot be taken literally.
+The general principle is that the IETF YANG Guidelines, defined in RFC 8407 @RFC8407, apply in their entirety to BBF YANG modules. However, they are aimed at IETF Standards Track YANG modules and contain some IETF specific guidelines that cannot be applied literally to BBF YANG modules.
 
 * Sections 1 (introduction), 2 (Terminology) and 3 (General Documentation
   Guidelines) are mostly IETF-specific and have little impact on YANG module
@@ -109,7 +115,7 @@ The general principle is that the IETF YANG Guidelines, defined in RFC 8407 @RFC
 
 *This requirement extends section [2.2](https://datatracker.ietf.org/doc/html/rfc8407#section-2.2) of RFC 8407 @RFC8407.*
 
-BBF YANG modules MUST use YANG terminology, e.g. when used in descriptions the terms SHOULD refer to "data nodes", "containers", "lists", etc. For example, do not use the term "objects" and instead refer to "data nodes".
+BBF YANG modules MUST use YANG terminology, e.g., when used in descriptions the terms SHOULD refer to "data nodes", "containers", "lists", etc. For example, do not use the term "objects" and instead refer to "data nodes".
 
 ### IETF-2: YANG Validation
 
@@ -147,7 +153,7 @@ Each BBF YANG module or submodule MUST be stored in a file called <module-name\>
 
 *This requirement is an extension to section [6.1.3](https://datatracker.ietf.org/doc/html/rfc7950#section-6.1.3) of RFC 7950 @RFC7950.*
 
-The rules specified in this Section effectively mean that the second and subsequent lines of multi-line strings have to be aligned under the character following the opening double quote.
+The rules specified in this section effectively mean that the second and subsequent lines of multi-line strings have to be aligned under the character following the opening double quote.
 
 ```
   leaf multi-line-example {
@@ -164,7 +170,7 @@ The rules specified in this Section effectively mean that the second and subsequ
 
 <module-name\> or <submodule-name\> is the module name or submodule name, which (see below) MUST begin with the prefix “bbf-”.
 
-The remainder of the section applies with appropriate translations of IETF terms to BBF terms, e.g. “IETF” and “IANA” are read as “BBF”, and the “ietf-” prefix is read as “bbf-”.
+The remainder of the section applies with appropriate translations of IETF terms to BBF terms, e.g., “IETF” and “IANA” are read as “BBF”, and the “ietf-” prefix is read as “bbf-”.
 
 ### IETF-7: Module Header, Meta and Revision Statements
 
@@ -193,13 +199,13 @@ MUST use the following text:
 
 ```
   Comments or questions about this Broadband Forum YANG module
-  should be directed to <mailto:info@broadband-forum.org>.
+  should be directed to <mailto:help@broadband-forum.org>.
 ```
 
 Followed by:
 
  - Editor name(s) and affiliation(s)
- - Project Stream Leader name(s) and affiliation(s) - omit if not Project Stream Leader
+ - Project Stream Leader name(s) and affiliation(s) - omit if no Project Stream Leader
  - Work Area Director name(s) and affiliation(s)
 
 ```
@@ -225,7 +231,7 @@ The requirements from RFC 8407 apply with the following modifications:
  - The requirements relating to the reference substatement are replaced with a requirement to reference the associated TR Issue, Amendment(if any) and Corrigendum.
  - The requirements relating to reuse of the same revision statement within unpublished versions are reworded to refer only to "versions" and not to "Internet-Drafts".
  
-References to associated TRs use "full" TR names, e.g. "TR-181 Issue 2 Amendment 42 Corrigendum 156". 
+References to associated TRs use "abbreviated" TR names, e.g., "TR-101i2" or "TR-383a6". 
 
 
 ### IETF-8: Module Header, Meta and Revision Statements - Top Level Description
@@ -241,7 +247,7 @@ The top-level description MUST contain the following:
 
 *This requirement overrides section [4.9](https://datatracker.ietf.org/doc/html/rfc8407#section-4.9) of RFC 8407 @RFC8407.*
 
-Section 4.9 applies with appropriate translations of IETF terms to BBF terms, e.g. "IANA" is read as "BBF" and "non-Standards-Track" is read as "example" or "not-for-publication".
+Section 4.9 applies with appropriate translations of IETF terms to BBF terms, e.g., "IANA" is read as "BBF" and "non-Standards-Track" is read as "example" or "not-for-publication".
 
 BBF YANG module namespace MUST be of the form:
 
@@ -281,7 +287,7 @@ Example:
 
 The following apply to prefix usage of the local module:
 
- - The local module prefix SHOULD be used instead of no prefix in all path expressions.
+ - The local module prefix SHOULD be used instead of no prefix in all path expressions. The exceptions to this are path statements defined in a grouping that reference a node in another grouping. The referenced node will belong to the module(s) where the grouping is used, so the prefix cannot be assumed.
  - The local module prefix MUST be used instead of no prefix in all default statements for an identityref or instance-identifier data type.
  - The local module prefix MAY be used for references to typedefs, groupings, extensions, features and identities defined in the module.
 
@@ -306,7 +312,7 @@ As stated, conditional requirements for data nodes must be documented somewhere.
 
 Section 4.19.1 states that the augment statement is often used together with the 'when' statement and/or 'if-feature' statement to make the augmentation conditional on some portion of the data model.
 
-Where possible, all BBF YANG models SHOULD apply either 'when' or 'if-feature' statements to each augment.
+Where possible, all BBF YANG models SHOULD apply 'when' and/or 'if-feature' statements to each augment.
 
 ### IETF-15: Import or Include By Revision
 
@@ -444,7 +450,7 @@ Unpublished versions of BBF YANG modules MAY have 'revision' statements correspo
 
 ### BBF-9: Explicit Modeling
 
-Where YANG allows something or some behavior to be explicitly modeled (e.g. enumerations, range, units, must, etc.) then this SHOULD always be done. Mandatory requirements in descriptions SHOULD be used only where it is not possible to use formal YANG modeling to convey the requirement.
+Where YANG allows something or some behavior to be explicitly modeled (e.g., enumerations, range, units, must, etc.) then this SHOULD always be done. Mandatory requirements in descriptions SHOULD be used only where it is not possible to use formal YANG modeling to convey the requirement.
 
 ### BBF-10: Retroactive Application of OD-360 Guidelines
 
@@ -452,7 +458,7 @@ OD-360 guidelines SHOULD NOT be retroactively applied to published BBF YANG modu
 
 ### BBF-11: Multi-word Identifiers
 
-YANG identifiers which represent multiple words, e.g target margin, SHOULD use a dash between the normally whitespace separated words, e.g. 'target-margin'.
+YANG identifiers which represent multiple words, e.g., target margin, SHOULD use a dash between the normally whitespace separated words, e.g., 'target-margin'.
 
 ### BBF-12: Acronyms in Description Statements
 
@@ -479,24 +485,24 @@ This guideline defines the best practices when defining a new BBF YANG model and
 
 When creating or editing BBF YANG models, the following use cases apply:
 
- 1. **Requirements that are captured in a Broadband Forum Technical Report**
+ 1. **Requirements that are captured in a Broadband Forum Technical Report**:
 In this case, the BBF YANG model should meet the requirement set forward in the Technical Report.
-For example, the models contained in TR-383 build on the requirements of TR-101/156/167/301
+For example, the models contained in TR-383 build on the requirements of TR-101/156/167/301.
 
- 2. **Requirements (or information models) that are captured in standards documents published by other SDOs and referenced from a Broadband Forum Technical Report, for which the other SDO is not developing a YANG model**
+ 2. **Requirements (or information models) that are captured in standards documents published by other SDOs and referenced from a Broadband Forum Technical Report, for which the other SDO is not developing a YANG model**:
 In this case, the BBF YANG data model should reference the applicable standard and be able to meet the requirement(s) from that document.
-For example, the TR-355 G.fast YANG model contains attributes defined in ITU-T Recommendation G.997.2
+For example, the TR-355 G.fast YANG model contains attributes defined in ITU-T Recommendation G.997.2.
 
- 3. **A model requirement which is not formulated in a Broadband Forum Technical Report or a standard published by another SDO**
+ 3. **A model requirement which is not formulated in a Broadband Forum Technical Report or a standard published by another SDO**:
 In this case, the following guidelines apply:
 
     1. First, the requirement must be formulated based on inputs brought forward to the BBF (i.e. a contribution explaining the need for the requirement).
 
     2. There must be consensus among the participants in the Work Area/Project Stream to move forward with this requirement.
 
-    3. It is desirable, but not mandatory for the requirements to be captured in a BBF TR. But that should not hold up putting the requirement in the YANG model. In other words, if the Work Area agrees that something should be added in a BBF YANG model, then we do not need to wait until the requirement is captured in a TR.
+    3. It is desirable, but not mandatory, for the requirements to be captured in a BBF Technical Report. However, that should not hold up putting the requirement in the YANG model. In other words, if the Work Area agrees that something should be added in a BBF YANG model, then we do not need to wait until the requirement is captured in a Technical Report.
 
-    4. The new requirement must not break existing BBF TRs.
+    4. The new requirement must not break existing BBF Technical Reports.
 
     5. The new requirement must be reviewed by any Work Area(s) or Project Stream(s) for which it is clearly applicable (e.g., a PON related requirement is to be reviewed by the FAN WA).
 
@@ -556,7 +562,7 @@ The format of the revision statement in a development module shall be as follows
 
 ### BBF-16: Enum Naming
 
-All enums in an enumeration SHOULD be named using names which describe their functional meaning rather than something ambiguous such as an integer string, "1".
+All enums in an enumeration SHOULD be named using names that describe their functional meaning rather than something ambiguous such as an integer string, "1".
 
 For example, this definition is preferred
 ```
@@ -678,13 +684,13 @@ An 'if-feature' statement on any node defined within a top level grouping which 
 
 *This requirement is derived from section [7.9.3](https://datatracker.ietf.org/doc/html/rfc7950#section-7.9.3) and section [9.11](https://datatracker.ietf.org/doc/html/rfc7950#section-9.11) of RFC 7950 @RFC7950.*
 
-The default case of a choice statement MUST not contain sole descendant leaf node of type "empty".
+The default case of a choice statement MUST not contain a sole descendant leaf node of type "empty".
 
 Section 7.9.3 states that "The default case is only important when considering the 'default' statements of nodes under the cases (i.e., default values of leafs and leaf-lists, and default cases of nested choices)." It also states that "The default values and nested default cases under the default case are used if none of the nodes under any of the cases are present.".
 
 Section 9.11 states that an empty type cannot have a default value
 
-In the example below, the choice 'manual' has a leaf with an empty type as the only child node. Since an empty leaf cannot have a default value, the behavior of an <edit-config> request that creates the  'transfer' container without providing any data for the choice 'how' will be the same irrespective of whether the default 'manual' statement is present or not.
+In the example below, the choice 'manual' has a leaf with an empty type as the only child node. Since an empty leaf cannot have a default value, the behavior of an <edit-config\> request that creates the  'transfer' container without providing any data for the choice 'how' will be the same irrespective of whether the default 'manual' statement is present or not.
 
 The leaf 'manual' will not be created.
 
@@ -844,7 +850,7 @@ This constraint may be necessary depending on actual hardware in use. For exampl
 
 The deviate *replace* argument MAY be used to replace a type so long as the replacement type uses the same underlying built-in YANG type and the value represented does not fall outside the range of the definition of the type being replaced.
 
-An integer type can be replaced as long as the replacement uses the same built-in YANG type, e.g. uint32 or int64 and that the range specified falls within the range of the original definition. If the original does not define a range then any range can be specified in the deviation. If the original defines a range of values, the range of the deviation must fall within this defined range. In other words the new minimum value must be greater than or equal to the original and the new maximum value must be less than or equal to the original. For example, the following defines an object of type uint32 with a range of values 1 to 999999.
+An integer type can be replaced as long as the replacement uses the same built-in YANG type, e.g., uint32 or int64, and that the range specified falls within the range of the original definition. If the original does not define a range, then any range can be specified in the deviation. If the original defines a range of values, the range of the deviation must fall within this defined range. In other words the new minimum value must be greater than or equal to the original, and the new maximum value must be less than or equal to the original. For example, the following defines an object of type uint32 with a range of values 1 to 999999.
 
 ```
   leaf error-threshold {
@@ -870,7 +876,7 @@ A particular implementation may only allow a range from 10 to 99999. Since this 
   }
 ```
 
-A string type can be replaced as long as its replacement is also a string and any specified length or pattern is valid per the original definition. If no length is specified in the original, this means that any length restriction may be added. If a length is specified, it means the new length can be specified so long as the new minimum value is greater than or equal to the original and the new maximum value is less than or equal to the original. If no pattern is specified in the original, any pattern may be added. If a pattern is specified in the original, the new pattern must be equal to or a subset of the original. For example, the following object is defined as a string with no length restriction and a pattern which allows for any alphanumeric character.
+A string type can be replaced as long as its replacement is also a string and any specified length or pattern is valid per the original definition. If no length is specified in the original, this means that any length restriction may be added. If a length is specified, it means the new length can be specified so long as the new minimum value is greater than or equal to the original, and the new maximum value is less than or equal to the original. If no pattern is specified in the original, any pattern may be added. If a pattern is specified in the original, the new pattern must be equal to or a subset of the original. For example, the following object is defined as a string with no length restriction and a pattern which allows for any alphanumeric character.
 
 ```
   leaf name {
@@ -932,4 +938,95 @@ Now we have an implementation which must have at least 2 ports but no more than 
 The deviate *delete* argument MUST NOT be used in a deviation.
 
 By deleting a property, the value space of an object is typically being expanded which means the value accepted by the deviated definition is not valid per the original definition and thus, should never be allowed.  
+
+## BBF Guidelines for 'units' Statements {.new-file}
+
+The following guidelines apply to the specification of 'units' statements within Broadband Forum
+YANG modules. These guidelines are based on the following reference documentation as well as 
+practical usage within Broadband Forum YANG modules:
+
+  1. IEEE Std. 260.1
+  2. [NIST Special Publication 811](https://www.nist.gov/pml/special-publication-811)
+
+### Terminology
+
+The following terminology is used throughout these guidelines.
+  
+  | Term   | Description |
+  |--------|-------------|
+  | family | refers to a group of 'units' statements representing a common functional area including, but not limited to, time, length, temperature, electricity, speed and memory storage |
+  | unit   | the full text name of a unit, e.g., seconds, milliwatts |
+  | symbol | the abbreviated form of expressing the units, e.g., mW, dBm |
+
+### UNITS-1: Unit vs Symbol
+
+All 'units' statements SHALL use either the "unit" or the "symbol" as defined in IEEE Std. 260.1 including the proper use of uppercase and lowercase. The chosen method used should be applied consistently within a family of units. In general, the "unit" should be used with the "symbol" being used on a case-by-case basis. For example, use "seconds" or some derivation (see UNITS-3) for time but "dBm" for power level as the term "decibel-milliwatts" is not commonly used.
+  
+### UNITS-2: Plural Form
+
+Where applicable, the full "unit" text SHALL be written in plural form, e.g., seconds vs. second. This differs from the definitions in IEEE Std. 260.1 but aligns with NIST 811 as well as the current practice in industry standard YANG data models.
+  
+### UNITS-3: Base vs Derived
+
+The base unit for a given family may not always be the one that provides the best granularity. For example, it would not be common to express 20 nanoseconds as 0.00000002 seconds as doing so would make readability difficult. In those situations, a "unit" derived from the base SHOULD be used where the derived unit is a multiple of 10^3^ from the base, e.g., seconds, milliseconds, nanoseconds.
+  
+### UNITS-4: Memory
+
+For 'units' statements related to memory that need derived units for reasons similar to the usage described in UNITS-3, the derived unit SHALL be a multiple of 2^10^, e.g., bytes, kibibytes, mebibytes.
+  
+### UNITS-5: Unit Combinations
+
+'units' statements requiring a combination of units SHALL fully spell out the relationship between the units, e.g., "bits per second" rather than "bits/second". Regarding the applicability of UNITS-2, only the first "unit" will be plural in a combination, e.g., "bits" in "bits per second".
+  
+### UNITS-6: Equivalent Units
+
+If more than one "unit" definition is applicable for a given type of data, then one should be chosen and applied in a consistent manner. For example, use "bytes" instead of "octets".
+  
+### UNITS-7: Use of decimal64
+
+For a given data node, a base or "unit" along with the decimal64 type SHOULD be used rather than a derived "unit" along with an integer type.
+
+For example, use
+
+```
+  leaf rx-power {
+    type decimal64 {
+      fraction-digits 4;
+    }
+    units "watts";
+    description
+      "The receive power reported in watts.";
+  }
+```
+rather than
+```
+  leaf rx-power {
+    type uint32;
+    units "0.1 milliwatts";
+    description
+      "The receive power reported in tenths of a milliwatt.";
+  }
+```
+
+When applying this guideline, along with UNITS-3 and UNITS-4, to already published data models, strict adherence may not always be possible due to backward compatiblity issues. In those cases, express the 'units' relative to the closest base or a derived unit, e.g., "0.1 seconds" or "1/256 milliseconds". 
+
+
+### UNITS-8: Exceptions
+
+At times, there may be a need to preserve the relationship with an underlying standard that would result in a non-adherence to these guidelines. Such instances should be carefuly evaluated on a case-by-case basis to determine if an exception should be made. For example, in TR-385, several data nodes exist that represent data in "125 microsecond PHY frames". Application of UNITS-1 would result in 'units' statements of either "125 microseconds" or "0.125 milliseconds". However, this would result in a disassociation with the underlying standard where the measurement in "PHY frames" is as equally important as is the representation of time.
+
+### UNITS-9: Frames vs Packets vs Messages
+
+The use of "frames", "packets" and "messages" SHOULD be applied in a consistent manner based on the following guidelines:
+
+  - use "frames" when referring to layer 2, e.g., Ethernet frames, VLANs, etc.
+  - use "packets" when referring to layer 3, e.g., IP packets
+  - use "messages" when referring to protocols, e.g., DHCP messages, IGMP messages, etc.
+  
+  
+  
+
+
+  
+
 

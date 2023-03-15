@@ -1,6 +1,6 @@
 ## IETF YANG Guidelines {.new-file}
 
-The general principle is that the IETF YANG Guidelines, defined in RFC 8407 @RFC8407, apply in their entirety to BBF YANG modules. However, they are aimed at IETF Standards Track YANG modules and therefore contain some IETF specifics which cannot be taken literally.
+The general principle is that the IETF YANG Guidelines, defined in RFC 8407 @RFC8407, apply in their entirety to BBF YANG modules. However, they are aimed at IETF Standards Track YANG modules and contain some IETF specific guidelines that cannot be applied literally to BBF YANG modules.
 
 * Sections 1 (introduction), 2 (Terminology) and 3 (General Documentation
   Guidelines) are mostly IETF-specific and have little impact on YANG module
@@ -20,7 +20,7 @@ The general principle is that the IETF YANG Guidelines, defined in RFC 8407 @RFC
 
 *This requirement extends section [2.2](https://datatracker.ietf.org/doc/html/rfc8407#section-2.2) of RFC 8407 @RFC8407.*
 
-BBF YANG modules MUST use YANG terminology, e.g. when used in descriptions the terms SHOULD refer to "data nodes", "containers", "lists", etc. For example, do not use the term "objects" and instead refer to "data nodes".
+BBF YANG modules MUST use YANG terminology, e.g., when used in descriptions the terms SHOULD refer to "data nodes", "containers", "lists", etc. For example, do not use the term "objects" and instead refer to "data nodes".
 
 ### IETF-2: YANG Validation
 
@@ -58,7 +58,7 @@ Each BBF YANG module or submodule MUST be stored in a file called <module-name\>
 
 *This requirement is an extension to section [6.1.3](https://datatracker.ietf.org/doc/html/rfc7950#section-6.1.3) of RFC 7950 @RFC7950.*
 
-The rules specified in this Section effectively mean that the second and subsequent lines of multi-line strings have to be aligned under the character following the opening double quote.
+The rules specified in this section effectively mean that the second and subsequent lines of multi-line strings have to be aligned under the character following the opening double quote.
 
 ```
   leaf multi-line-example {
@@ -75,7 +75,7 @@ The rules specified in this Section effectively mean that the second and subsequ
 
 <module-name\> or <submodule-name\> is the module name or submodule name, which (see below) MUST begin with the prefix “bbf-”.
 
-The remainder of the section applies with appropriate translations of IETF terms to BBF terms, e.g. “IETF” and “IANA” are read as “BBF”, and the “ietf-” prefix is read as “bbf-”.
+The remainder of the section applies with appropriate translations of IETF terms to BBF terms, e.g., “IETF” and “IANA” are read as “BBF”, and the “ietf-” prefix is read as “bbf-”.
 
 ### IETF-7: Module Header, Meta and Revision Statements
 
@@ -104,13 +104,13 @@ MUST use the following text:
 
 ```
   Comments or questions about this Broadband Forum YANG module
-  should be directed to <mailto:info@broadband-forum.org>.
+  should be directed to <mailto:help@broadband-forum.org>.
 ```
 
 Followed by:
 
  - Editor name(s) and affiliation(s)
- - Project Stream Leader name(s) and affiliation(s) - omit if not Project Stream Leader
+ - Project Stream Leader name(s) and affiliation(s) - omit if no Project Stream Leader
  - Work Area Director name(s) and affiliation(s)
 
 ```
@@ -136,7 +136,7 @@ The requirements from RFC 8407 apply with the following modifications:
  - The requirements relating to the reference substatement are replaced with a requirement to reference the associated TR Issue, Amendment(if any) and Corrigendum.
  - The requirements relating to reuse of the same revision statement within unpublished versions are reworded to refer only to "versions" and not to "Internet-Drafts".
  
-References to associated TRs use "full" TR names, e.g. "TR-181 Issue 2 Amendment 42 Corrigendum 156". 
+References to associated TRs use "abbreviated" TR names, e.g., "TR-101i2" or "TR-383a6". 
 
 
 ### IETF-8: Module Header, Meta and Revision Statements - Top Level Description
@@ -152,7 +152,7 @@ The top-level description MUST contain the following:
 
 *This requirement overrides section [4.9](https://datatracker.ietf.org/doc/html/rfc8407#section-4.9) of RFC 8407 @RFC8407.*
 
-Section 4.9 applies with appropriate translations of IETF terms to BBF terms, e.g. "IANA" is read as "BBF" and "non-Standards-Track" is read as "example" or "not-for-publication".
+Section 4.9 applies with appropriate translations of IETF terms to BBF terms, e.g., "IANA" is read as "BBF" and "non-Standards-Track" is read as "example" or "not-for-publication".
 
 BBF YANG module namespace MUST be of the form:
 
@@ -192,7 +192,7 @@ Example:
 
 The following apply to prefix usage of the local module:
 
- - The local module prefix SHOULD be used instead of no prefix in all path expressions.
+ - The local module prefix SHOULD be used instead of no prefix in all path expressions. The exceptions to this are path statements defined in a grouping that reference a node in another grouping. The referenced node will belong to the module(s) where the grouping is used, so the prefix cannot be assumed.
  - The local module prefix MUST be used instead of no prefix in all default statements for an identityref or instance-identifier data type.
  - The local module prefix MAY be used for references to typedefs, groupings, extensions, features and identities defined in the module.
 
@@ -217,7 +217,7 @@ As stated, conditional requirements for data nodes must be documented somewhere.
 
 Section 4.19.1 states that the augment statement is often used together with the 'when' statement and/or 'if-feature' statement to make the augmentation conditional on some portion of the data model.
 
-Where possible, all BBF YANG models SHOULD apply either 'when' or 'if-feature' statements to each augment.
+Where possible, all BBF YANG models SHOULD apply 'when' and/or 'if-feature' statements to each augment.
 
 ### IETF-15: Import or Include By Revision
 

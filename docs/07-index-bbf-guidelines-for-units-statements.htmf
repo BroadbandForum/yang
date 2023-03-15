@@ -1,0 +1,99 @@
+<!-- <h2 class="new-file display-none" id="sec:bbf-guidelines-for-units-statements">BBF Guidelines for &lsquo;units&rsquo; Statements<a class="headerlink" href="07-index-bbf-guidelines-for-units-statements.html#sec:bbf-guidelines-for-units-statements" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h2> -->
+
+<p>The following guidelines apply to the specification of &lsquo;units&rsquo; statements within Broadband Forum
+YANG modules. These guidelines are based on the following reference documentation as well as
+practical usage within Broadband Forum YANG modules:</p>
+
+<ol>
+<li>IEEE Std. 260.1</li>
+<li><a href='https://www.nist.gov/pml/special-publication-811' title=''>NIST Special Publication 811</a></li>
+</ol>
+
+<h3 id="sec:terminology-1">Terminology<a class="headerlink" href="07-index-bbf-guidelines-for-units-statements.html#sec:terminology-1" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>The following terminology is used throughout these guidelines.</p>
+
+<table>
+<col width="38%" />
+<col width="62%" />
+<tr class="header">
+<th align="left">Term</th>
+<th align="left">Description</th>
+</tr>
+<tr class="odd">
+<td align="left">family</td>
+<td align="left">refers to a group of &lsquo;units&rsquo; statements representing a common functional area including, but not limited to, time, length, temperature, electricity, speed and memory storage</td>
+</tr>
+<tr class="even">
+<td align="left">unit</td>
+<td align="left">the full text name of a unit, e.g., seconds, milliwatts</td>
+</tr>
+<tr class="odd">
+<td align="left">symbol</td>
+<td align="left">the abbreviated form of expressing the units, e.g., mW, dBm</td>
+</tr>
+</table>
+
+<h3 id="sec:units-1-unit-vs-symbol">UNITS-1: Unit vs Symbol<a class="headerlink" href="07-index-bbf-guidelines-for-units-statements.html#sec:units-1-unit-vs-symbol" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>All &lsquo;units&rsquo; statements SHALL use either the &ldquo;unit&rdquo; or the &ldquo;symbol&rdquo; as defined in IEEE Std. 260.1 including the proper use of uppercase and lowercase. The chosen method used should be applied consistently within a family of units. In general, the &ldquo;unit&rdquo; should be used with the &ldquo;symbol&rdquo; being used on a case-by-case basis. For example, use &ldquo;seconds&rdquo; or some derivation (see UNITS-3) for time but &ldquo;dBm&rdquo; for power level as the term &ldquo;decibel-milliwatts&rdquo; is not commonly used.</p>
+
+<h3 id="sec:units-2-plural-form">UNITS-2: Plural Form<a class="headerlink" href="07-index-bbf-guidelines-for-units-statements.html#sec:units-2-plural-form" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>Where applicable, the full &ldquo;unit&rdquo; text SHALL be written in plural form, e.g., seconds vs. second. This differs from the definitions in IEEE Std. 260.1 but aligns with NIST 811 as well as the current practice in industry standard YANG data models.</p>
+
+<h3 id="sec:units-3-base-vs-derived">UNITS-3: Base vs Derived<a class="headerlink" href="07-index-bbf-guidelines-for-units-statements.html#sec:units-3-base-vs-derived" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>The base unit for a given family may not always be the one that provides the best granularity. For example, it would not be common to express 20 nanoseconds as 0.00000002 seconds as doing so would make readability difficult. In those situations, a &ldquo;unit&rdquo; derived from the base SHOULD be used where the derived unit is a multiple of 10<sup>3</sup> from the base, e.g., seconds, milliseconds, nanoseconds.</p>
+
+<h3 id="sec:units-4-memory">UNITS-4: Memory<a class="headerlink" href="07-index-bbf-guidelines-for-units-statements.html#sec:units-4-memory" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>For &lsquo;units&rsquo; statements related to memory that need derived units for reasons similar to the usage described in UNITS-3, the derived unit SHALL be a multiple of 2<sup>10</sup>, e.g., bytes, kibibytes, mebibytes.</p>
+
+<h3 id="sec:units-5-unit-combinations">UNITS-5: Unit Combinations<a class="headerlink" href="07-index-bbf-guidelines-for-units-statements.html#sec:units-5-unit-combinations" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>&lsquo;units&rsquo; statements requiring a combination of units SHALL fully spell out the relationship between the units, e.g., &ldquo;bits per second&rdquo; rather than &ldquo;bits/second&rdquo;. Regarding the applicability of UNITS-2, only the first &ldquo;unit&rdquo; will be plural in a combination, e.g., &ldquo;bits&rdquo; in &ldquo;bits per second&rdquo;.</p>
+
+<h3 id="sec:units-6-equivalent-units">UNITS-6: Equivalent Units<a class="headerlink" href="07-index-bbf-guidelines-for-units-statements.html#sec:units-6-equivalent-units" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>If more than one &ldquo;unit&rdquo; definition is applicable for a given type of data, then one should be chosen and applied in a consistent manner. For example, use &ldquo;bytes&rdquo; instead of &ldquo;octets&rdquo;.</p>
+
+<h3 id="sec:units-7-use-of-decimal64">UNITS-7: Use of decimal64<a class="headerlink" href="07-index-bbf-guidelines-for-units-statements.html#sec:units-7-use-of-decimal64" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>For a given data node, a base or &ldquo;unit&rdquo; along with the decimal64 type SHOULD be used rather than a derived &ldquo;unit&rdquo; along with an integer type.</p>
+
+<p>For example, use</p>
+
+<pre><code>  leaf rx-power {
+    type decimal64 {
+      fraction-digits 4;
+    }
+    units "watts";
+    description
+      "The receive power reported in watts.";
+  }</code></pre>
+
+<p>rather than</p>
+
+<pre><code>  leaf rx-power {
+    type uint32;
+    units "0.1 milliwatts";
+    description
+      "The receive power reported in tenths of a milliwatt.";
+  }</code></pre>
+
+<p>When applying this guideline, along with UNITS-3 and UNITS-4, to already published data models, strict adherence may not always be possible due to backward compatiblity issues. In those cases, express the &lsquo;units&rsquo; relative to the closest base or a derived unit, e.g., &ldquo;0.1 seconds&rdquo; or &ldquo;1/256 milliseconds&rdquo;.</p>
+
+<h3 id="sec:units-8-exceptions">UNITS-8: Exceptions<a class="headerlink" href="07-index-bbf-guidelines-for-units-statements.html#sec:units-8-exceptions" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>At times, there may be a need to preserve the relationship with an underlying standard that would result in a non-adherence to these guidelines. Such instances should be carefuly evaluated on a case-by-case basis to determine if an exception should be made. For example, in TR-385, several data nodes exist that represent data in &ldquo;125 microsecond PHY frames&rdquo;. Application of UNITS-1 would result in &lsquo;units&rsquo; statements of either &ldquo;125 microseconds&rdquo; or &ldquo;0.125 milliseconds&rdquo;. However, this would result in a disassociation with the underlying standard where the measurement in &ldquo;PHY frames&rdquo; is as equally important as is the representation of time.</p>
+
+<h3 id="sec:units-9-frames-vs-packets-vs-messages">UNITS-9: Frames vs Packets vs Messages<a class="headerlink" href="07-index-bbf-guidelines-for-units-statements.html#sec:units-9-frames-vs-packets-vs-messages" title="Permalink to this header"> <img src='permalink.png' title='' width="0.8em"/></a></h3>
+
+<p>The use of &ldquo;frames&rdquo;, &ldquo;packets&rdquo; and &ldquo;messages&rdquo; SHOULD be applied in a consistent manner based on the following guidelines:</p>
+
+<ul>
+<li>use &ldquo;frames&rdquo; when referring to layer 2, e.g., Ethernet frames, VLANs, etc.</li>
+<li>use &ldquo;packets&rdquo; when referring to layer 3, e.g., IP packets</li>
+<li>use &ldquo;messages&rdquo; when referring to protocols, e.g., DHCP messages, IGMP messages, etc.</li>
+</ul>
