@@ -1,12 +1,17 @@
-module bbf-xpongemtcont {
+module bbf-xponvani-onu-authentication {
   yang-version 1.1;
-  namespace "urn:bbf:yang:bbf-xpongemtcont";
-  prefix bbf-xpongemtcont;
+  namespace "urn:bbf:yang:bbf-xponvani-onu-authentication";
+  prefix bbf-xponvani-onu-auth;
 
-  include bbf-xpongemtcont-base;
-  include bbf-xpongemtcont-traffic-descriptor-profile-body;
-  include bbf-xpongemtcont-tcont-body;
-  include bbf-xpongemtcont-gemport-body;
+  import ietf-interfaces {
+    prefix if;
+  }
+  import bbf-xponvani {
+    prefix bbf-xponvani;
+  }
+  import bbf-xponvani-onu-authentication-groupings {
+    prefix bbf-xponvani-onu-authg;
+  }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -30,9 +35,9 @@ module bbf-xpongemtcont {
      such, this module is specific to access network equipment (e.g.,
      BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module defines management of G-PON
-     Encapsulation Method (GEM) ports, Transmission Containers
-     (T-CONT) and traffic descriptors.
+     Specifically, this module defines Virtual Access Network
+     Interface (vANI) data nodes used for Optical Network Unit
+     (ONU) authentication and the decision to apply an OMCI function.
 
      Copyright (c) 2018-2023, Broadband Forum
 
@@ -87,24 +92,21 @@ module bbf-xpongemtcont {
                <https://www.broadband-forum.org/technical/download/
                         TR-385_Issue-2_Amendment-1.pdf>";
   }
-  revision 2020-10-13 {
+
+  augment "/if:interfaces/if:interface/bbf-xponvani:v-ani" {
     description
-      "Issue 2.
-       * Approval Date:    2020-10-13.
-       * Publication Date: 2020-10-13.";
-    reference
-      "TR-385i2: ITU-T PON YANG Modules
-               <https://www.broadband-forum.org/technical/download/
-                        TR-385_Issue-2.pdf>";
+      "Virtual Access Network Interface (vANI) configuration
+       data for Optical Network Unit (ONU) authentication and
+       decision for eOMCI or vOMCI management mode.";
+    uses bbf-xponvani-onu-authg:v-ani-onu-authentication;
   }
-  revision 2019-02-25 {
+
+  augment "/if:interfaces-state/if:interface/bbf-xponvani:v-ani"
+        + "/bbf-xponvani:onu-present-on-this-olt" {
     description
-      "Initial revision.
-       * Approval Date:    2019-02-25.
-       * Publication Date: 2019-02-25.";
-    reference
-      "TR-385: ITU-T PON YANG Modules
-               <https://www.broadband-forum.org/technical/download/
-                        TR-385.pdf>";
+      "Virtual Access Network Interface (vANI) state
+       data for Optical Network Unit (ONU) authentication and
+       decision for eOMCI or vOMCI management mode.";
+    uses bbf-xponvani-onu-authg:v-ani-onu-authentication-state;
   }
 }

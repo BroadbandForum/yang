@@ -1,0 +1,492 @@
+module bbf-xpon-onu-authentication {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-xpon-onu-authentication";
+  prefix bbf-xpon-onu-auth;
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import bbf-xpon-types {
+    prefix bbf-xpon-types;
+  }
+  import bbf-xpon {
+    prefix bbf-xpon;
+  }
+  import bbf-xpon-onu-state {
+    prefix bbf-xpon-onu-s;
+  }
+  import bbf-xpon-onu-authentication-types {
+    prefix bbf-xpon-onu-autht;
+  }
+  import bbf-xpon-if-type {
+    prefix bbf-xponift;
+  }
+  import bbf-xpon-onu-authentication-features {
+    prefix bbf-xpon-onu-authf;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Fiber Access Networks Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Robert Peschi, Nokia
+
+     Editor:      Kevin Noll, Vecima
+
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on management of
+     ITU-T Passive Optical Network (PON) interfaces as defined in
+     ITU-T G.984.x, G.987.x, ITU-T G.989.x and ITU-T G.9807.x. As
+     such, this module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module defines channel termination state
+     data nodes and actions used for Optical Network Unit (ONU)
+     authentication and the decision to apply an OMCI function.
+
+     Copyright (c) 2018-2023, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385i2a1; see
+     the TR itself for full legal notices.";
+
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
+
+  augment
+    "/if:interfaces-state/if:interface/"
+  + "bbf-xpon:channel-termination/"
+  + "bbf-xpon-onu-s:onus-present-on-local-channel-termination/"
+  + "bbf-xpon-onu-s:onu" {
+    description
+      "Augment the list of Optical Network Units (ONUs) present
+       on the channel termination with state data related to
+       Optical Network Unit (ONU) authentication and the decision
+       to apply an OMCI function embedded in the OLT (eOMCI) or
+       an OMCI function virtualized in the Management Plane (vOMCI).";
+    leaf detected-loid {
+      if-feature "(bbf-xpon-onu-authf:"
+               + "can-retrieve-loid-pre-auth or "
+               + "bbf-xpon-onu-authf:"
+               + "support-onu-authentication-report)";
+      type string {
+        length "1..24";
+      }
+      description
+        "The Logical Identifier (LOID) value currently used
+         by an Optical Network Unit (ONU) that is present on
+         a channel termination. The OLT could directly
+         retrieve the LOID from the ONU (if able to do so before
+         the ONU is authenticated) or indirectly from
+         the Management Plane via the
+         'bbf-xpon-onu-auth:report-onu-authentication-results'
+         action (if the OLT supports it).
+         This data node is not present if the ONU is not using
+         any LOID or if the OLT lacks the capability to
+         query the ONU for its LOID before the ONU is authenticated
+         and didn't receive it either via the
+         'bbf-xpon-onu-auth:report-onu-authentication-results' action.
+         The LOID may be useful in identifying a particular ONU
+         installed at a particular location, for instance in an
+         failed ONU replacement scenario.";
+      reference
+        "ITU-T G.988 Clause 9.1.1
+         TR-489, section 8.2, R-OLT_11";
+    }
+    leaf determined-onu-management-mode {
+      type identityref {
+        base bbf-xpon-onu-autht:onu-management-state-base;
+      }
+      description
+        "The Optical Network Unit (ONU) management mode determined
+         by the Optical Line Termination (OLT) distinguishing between
+         eOMCI and vOMCI, or otherwise indicating an inconsistency
+         or error condition.
+
+         Note that this may only be present when the corresponding
+         ONU is present on a channel termination and has been
+         successfully authenticated.";
+      reference
+        "TR-489, section 6.1 and section 8.2, R-OLT_6, R-OLT_7,
+         R-OLT_8, R-OLT_9 and R-OLT_10";
+    }
+    leaf onu-name-from-management-plane {
+      type bbf-yang:string-ascii64;
+      description
+        "The name of the Optical Network Unit (ONU) device
+         corresponding to this virtual Access Network
+         Interface (vANI) as known by the Management Plane and
+         provided by the 'report-onu-authentication-results' action.
+         This 'onu-name' could be used as means to help
+         correlating the ONU authentication function with
+         the ONU management function.
+         It could be used as a direct ONU key in the Optical
+         Line Termination (OLT), as for instance
+         in TR-489 for Scenarios 1 or 3.";
+      reference
+        "TR-489, section 6.2 and section 8.3, R-MP_6";
+    }
+    leaf detected-vendor-id {
+      type bbf-xpon-types:string-ascii4-or-empty;
+      description
+        "The Optical Network Unit (ONU) vendor ID detected by the
+         Optical Line Termination (OLT).";
+      reference
+        "ITU-T G.988 Clause 9.1.1";
+    }
+    leaf detected-equipment-id {
+      if-feature
+        "bbf-xpon-onu-authf:"
+      + "can-retrieve-onu-eqpt-id-hw-and-sw-version-pre-auth";
+      type bbf-xpon-types:string-ascii20-or-empty;
+      description
+        "The Optical Network Unit (ONU) equipment ID detected by
+         the Optical Line Termination (OLT).";
+      reference
+        "ITU-T G.988 Clause 9.1.2";
+    }
+    leaf detected-hardware-version {
+      if-feature
+        "bbf-xpon-onu-authf:"
+      + "can-retrieve-onu-eqpt-id-hw-and-sw-version-pre-auth";
+      type bbf-xpon-types:string-ascii14-or-empty;
+      description
+        "The Optical Network Unit (ONU) hardware version detected
+         by the Optical Line Termination (OLT).";
+      reference
+        "ITU-T G.988 Clause 9.1.1";
+    }
+    leaf detected-active-software-version {
+      if-feature
+        "bbf-xpon-onu-authf:"
+      + "can-retrieve-onu-eqpt-id-hw-and-sw-version-pre-auth";
+      type bbf-xpon-types:string-ascii14-or-empty;
+      description
+        "The Optical Network Unit (ONU) active software version
+         detected by the Optical Line Termination (OLT).";
+      reference
+        "ITU-T G.988 Clause 9.1.4";
+    }
+  }
+
+  augment "/if:interfaces-state/if:interface"
+        + "/bbf-xpon:channel-termination"
+        + "/bbf-xpon-onu-s:onu-presence-state-change" {
+    description
+      "Augment the 'onu-presence-state-change' notification with the
+       Optical Network Unit (ONU) management mode as determined by
+       the OLT, ideally distinguishing between eOMCI and vOMCI.";
+    leaf determined-onu-management-mode {
+      type identityref {
+        base bbf-xpon-onu-autht:onu-management-state-base;
+      }
+      description
+        "The Optical Network Unit (ONU) management mode determined
+         by the Optical Line Termination (OLT) distinguishing between
+         eOMCI and vOMCI, or otherwise indicating an inconsistency
+         or error condition.
+
+         Note that this may only be present when the corresponding
+         ONU is present on a channel termination and has been
+         successfully authenticated. This is indicated when this
+         notification reports the 'onu-presence-state' to be
+         'onu-present-and-on-intended-channel-termination'.";
+      reference
+        "TR-489, section 6.1 and section 8.2, R-OLT_6, R-OLT_7,
+         R-OLT_8, R-OLT_9 and R-OLT_10";
+    }
+    leaf detected-loid {
+      if-feature "(bbf-xpon-onu-authf:"
+               + "can-retrieve-loid-pre-auth or "
+               + "bbf-xpon-onu-authf:"
+               + "support-onu-authentication-report)";
+      type string {
+        length "1..24";
+      }
+      description
+        "The Logical Identifier (LOID) value currently used
+         by an Optical Network Unit (ONU) that is present on
+         a channel termination. The OLT could directly
+         retrieve the LOID from the ONU (if able to do so before
+         the ONU is authenticated) or indirectly from
+         the Management Plane via the
+         'bbf-xpon-onu-auth:report-onu-authentication-results'
+         action (if the OLT supports it).
+         This data node is not present if the ONU is not using
+         any LOID or if the OLT lacks the capability to
+         query the ONU for its LOID before the ONU is authenticated
+         and didn't receive it either via the
+         'bbf-xpon-onu-auth:report-onu-authentication-results' action.
+         The LOID may be useful in identifying a particular ONU
+         installed at a particular location, for instance in an
+         failed ONU replacement scenario.";
+      reference
+        "ITU-T G.988 Clause 9.1.1
+         TR-489, section 8.2, R-OLT_11";
+    }
+    leaf onu-name-from-v-ani-config {
+      if-feature "bbf-xpon-onu-authf:"
+               + "configurable-onu-name";
+      type bbf-yang:string-ascii64;
+      description
+        "The name of the Optical Network Unit (ONU) device
+         as configured on the virtual Access Network
+         Interface (vANI). This 'onu-name' could be used by
+         the management plane as a direct key in its (ONU)
+         device aggegation function, as for instance
+         in TR-489 for Scenarios 2.";
+      reference
+        "TR-489, section 6.2.3 and section 8.2, R-OLT_6";
+    }
+    leaf detected-vendor-id {
+      type bbf-xpon-types:string-ascii4-or-empty;
+      description
+        "The Optical Network Unit (ONU) vendor ID detected by the
+         Optical Line Termination (OLT).";
+      reference
+        "ITU-T G.988 Clause 9.1.1";
+    }
+    leaf detected-equipment-id {
+      if-feature
+        "bbf-xpon-onu-authf:"
+      + "can-retrieve-onu-eqpt-id-hw-and-sw-version-pre-auth";
+      type bbf-xpon-types:string-ascii20-or-empty;
+      description
+        "The Optical Network Unit (ONU) equipment ID detected by
+         the Optical Line Termination (OLT).";
+      reference
+        "ITU-T G.988 Clause 9.1.2";
+    }
+    leaf detected-hardware-version {
+      if-feature
+        "bbf-xpon-onu-authf:"
+      + "can-retrieve-onu-eqpt-id-hw-and-sw-version-pre-auth";
+      type bbf-xpon-types:string-ascii14-or-empty;
+      description
+        "The Optical Network Unit (ONU) hardware version detected
+         by the Optical Line Termination (OLT).";
+      reference
+        "ITU-T G.988 Clause 9.1.1";
+    }
+    leaf detected-active-software-version {
+      if-feature
+        "bbf-xpon-onu-authf:"
+      + "can-retrieve-onu-eqpt-id-hw-and-sw-version-pre-auth";
+      type bbf-xpon-types:string-ascii14-or-empty;
+      description
+        "The Optical Network Unit (ONU) active software version
+         detected by the Optical Line Termination (OLT).";
+      reference
+        "ITU-T G.988 Clause 9.1.4";
+    }
+  }
+
+  augment "/if:interfaces-state/if:interface"
+        + "/bbf-xpon:channel-termination" {
+    description
+      "Augment the channel termination with an action to report to
+       the Optical Line Termination (OLT) the result, positive or
+       negative, of an Optical Network Unit (ONU) authentication
+       attempted by the Management Plane as for instance in TR-489
+       Scenario 1 and 3. In case the ONU has been successfully
+       authenticated, the action should also provide the
+       expectation from the Management Plane whether this ONU
+       should be managed via eOMCI or vOMCI.";
+    action report-onu-authentication-results {
+      if-feature "bbf-xpon-onu-authf:"
+               + "support-onu-authentication-report";
+      description
+        "This action reports to the Optical Line Termination
+         (OLT) the result, positive or negative, of an Optical
+         Network Unit (ONU) authentication attempted by the
+         Management Plane as for instance in TR-489 Scenario 1
+         and 3. In case the ONU has been successfully authenticated,
+         the action should also provide the
+         'requested-onu-management-mode' data node
+         reflecting the expectation from the Management Plane
+         whether this ONU should be managed via eOMCI or vOMCI.
+         If the 'requested-onu-management-mode' data node is
+         provided, the OLT should compare it with its own view
+         about how to manage the ONU (for instance as configured
+         on the vANI with 'expected-onu-management-mode') and
+         should report any inconsistency to the Management plane
+         by means of the 'determined-onu-management-mode' included
+         in the 'onu-presence-state-change' notification.
+         Per RFC 6241, if the invocation of this action is
+         unsuccessful the action will be replied with an error
+         and the 'error-app-tag' and 'error-message' in the
+         <rpc-error> element returned by the server are to
+         be populated as follows:
+          error-app-tag: A string in the form
+                         <module-name>:<identity> where <identity> is
+                         a string version of an identity value based
+                         on the identity
+                         'bbf-xpon-onu-autht:action-error-tag'
+                         that describes the reason the error occurred
+                         and <module-name> is the name of the module
+                         in which the identity is defined:
+                         'bbf-xpon-onu-authentication-types'
+          error-message: A text string describing the cause of the
+                         error when either no defined reason exists
+                         or additional information is available
+                         beyond that defined by the tag itself; it is
+                         a string suitable for human display.";
+      input {
+        leaf serial-number {
+          type bbf-xpon-types:onu-serial-number;
+          mandatory true;
+          description
+            "The serial number of the Optical Network Unit (ONU)
+             for which the result of the authentication is
+             reported. This serial number should correspond
+             to an ONU present on the channel termination.";
+          reference
+            "ITU-T G.984.3, clause 9.2.4.1
+             ITU-T G.987.3, clause 11.3.3.2
+             ITU-T G.9807.1, clauses C11.2.6.1, C11.2.6.2 and
+             C11.3.4.1
+             ITU-T G.989.3, clauses 11.2.6.1, 11.2.6.2 and 11.3.4.1.";
+        }
+        leaf authentication-results {
+          type identityref {
+            base bbf-xpon-onu-autht:onu-authentication-results-base;
+          }
+          mandatory true;
+          description
+            "Reports whether the Management Plane
+             could authenticate or not the Optical Network Unit
+             (ONU) identified by the 'serial-number' input
+             parameter (or confirm an ONU authentication
+             previously done by the Optical Line Termination (OLT),
+             as for instance in TR-489 Scenario 2). If the
+             authentication is successful (or confirmed) the
+             'v-ani' input parameter must be provided.";
+          reference
+            "TR-489, section 8.2, R-OLT_8 and section 8.3, R-MP_6";
+        }
+        leaf v-ani {
+          type if:interface-ref;
+          must "derived-from-or-self(/if:interfaces"
+             + "/if:interface[if:name=current()]/if:type,"
+             + "'bbf-xponift:v-ani')" {
+            error-message
+              "Must reference a configured virtual Access Network"
+            + " Interface (vANI).";
+            description
+              "The referenced interface must be a vANI.";
+          }
+          description
+            "Indicates the virtual Access Network Interface (vANI)
+             corresponding to this Optical Network Unit (ONU).
+
+             Note that this must be reported when the action reports
+             a successful ONU authentication.";
+        }
+        leaf onu-name {
+          type bbf-yang:string-ascii64;
+          description
+            "Indicates the name of the Optical Network Unit (ONU)
+             device as known by the management plane.
+
+             If an 'onu-name' is configured in the Optical Line
+             Termination (OLT) on the reported virtual Access
+             Network Interface (vANI), the OLT should check whether
+             they match for network consistency verification.
+
+             Note that this must be reported when the action
+             reports a successful ONU authentication.";
+          reference
+            "TR-489, section 8.2, R-OLT_8 and section 8.3, R-MP_6";
+        }
+        leaf detected-loid {
+          type string {
+            length "1..24";
+          }
+          description
+            "The Logical Identifier (LOID) value of the Optical
+             Network Unit (ONU) as known by the Management Plane.
+             This data node is not present if the ONU is not using
+             any LOID or if the Management Plane does not know
+             itself the ONU LOID.
+             The LOID may be useful in identifying a particular ONU
+             installed at a particular location, for instance in
+             a failed ONU replacement scenario.";
+          reference
+            "ITU-T G.988 Clause 9.1.1
+             TR-489, section 8.2, R-OLT_8";
+        }
+        leaf requested-onu-management-mode {
+          type identityref {
+            base bbf-xpon-onu-autht:onu-management-config-base;
+          }
+          description
+            "Indicates whether, according to the Management Plane,
+             the Optical Network Unit (ONU) is requested to be
+             managed via eOMCI or vOMCI. For network consistency,
+             the Optical Line Termination (OLT) should confirm
+             this aligns with its own expectation.
+
+             Note that this should be reported when the action
+             reports a successful ONU authentication.";
+          reference
+            "TR-489, section 8.2, R-OLT_8 and section 8.3, R-MP_6";
+        }
+      }
+    }
+  }
+}

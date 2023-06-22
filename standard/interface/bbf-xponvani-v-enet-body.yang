@@ -19,22 +19,20 @@ submodule bbf-xponvani-v-enet-body {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-
-     Editor:      Igor Ternovsky, Broadcom
-
      Editor:      Robert Peschi, Nokia
 
-     WA Director: Marta Seda, Calix
+     Editor:      Kevin Noll, Vecima
 
-     WA Director: Samuel Chen, Broadcom";
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
   description
     "This submodule contains data related to virtual Ethernet
      interfaces belonging to the virtual Optical Network Unit (ONU) at
      the Optical Line Termination (OLT), such as the 'olt-v-enet'
      interface.
 
-     Copyright (c) 2018-2020, Broadband Forum
+     Copyright (c) 2018-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -74,9 +72,19 @@ submodule bbf-xponvani-v-enet-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2; see
+     This version of this YANG module is part of TR-385i2a1; see
      the TR itself for full legal notices.";
 
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Issue 2.
@@ -110,12 +118,19 @@ submodule bbf-xponvani-v-enet-body {
 
   grouping olt-v-enet-config-data {
     description
-      "Config data intended for the olt-v-enet interface.";
+      "Config data intended for the OLT-vENET interface.";
     leaf lower-layer-interface {
       type if:interface-ref;
       must "derived-from-or-self(/if:interfaces"
          + "/if:interface[if:name = current()]/if:type,"
-         + "'bbf-xponift:v-ani')";
+         + "'bbf-xponift:v-ani')" {
+        error-message
+          "The referenced interface is not of type or derived from "
+        + "type 'bbf-xponift:v-ani'.";
+        description
+          "The referenced interface must be of or derived from type
+           'bbf-xponift:v-ani'.";
+      }
       mandatory true;
       description
         "References the virtual Access Network Interface (vANI) which

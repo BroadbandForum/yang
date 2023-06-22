@@ -10,15 +10,13 @@ module bbf-xpon-onu-types {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-
-     Editor:      Igor Ternovsky, Broadcom
-
      Editor:      Robert Peschi, Nokia
 
-     WA Director: Marta Seda, Calix
+     Editor:      Kevin Noll, Vecima
 
-     WA Director: Samuel Chen, Broadcom";
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on management of
@@ -30,7 +28,7 @@ module bbf-xpon-onu-types {
      Specifically, this module defines common YANG types used in the
      management of Optical Network Units (ONU).
 
-     Copyright (c) 2018-2020, Broadband Forum
+     Copyright (c) 2018-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +68,19 @@ module bbf-xpon-onu-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2; see
+     This version of this YANG module is part of TR-385i2a1; see
      the TR itself for full legal notices.";
 
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Issue 2.
@@ -117,15 +125,15 @@ module bbf-xpon-onu-types {
        (for instance consistently responding to Downstream PLOAM
        messages or consistently responding to bandwidth map messages).
        If an ONU has shown initial optical activity and is not
-       solicited by the OLT, e.g. after it failed to reach O5, it will
-       be considered not present if it does not spontaneously show
-       optical activity anymore after some time limit (recommended
-       value for time limit is in the order of 10s or 20s, compatible
-       with TO1 Ranging Time). As an exception, an ONU put in ITU-T
-       'Emergency Stop state' because the OLT sent it a
-       'Disable_Serial_Number' downstream PLOAM when it was present on
-       a channel termination is still considered 'present' on the
-       channel termination.";
+       solicited by the OLT, e.g., after it failed to reach O5, it
+       will be considered not present if it does not spontaneously
+       show optical activity anymore after some time limit
+       (recommended value for time limit is in the order of 10s
+       or 20s, compatible with TO1 Ranging Time). As an exception,
+       an ONU put in ITU-T 'Emergency Stop state' because the OLT
+       sent it a 'Disable_Serial_Number' downstream PLOAM when it
+       was present on a channel termination is still considered
+       'present' on the channel termination.";
     reference
       "ITU-T G.984.3, section 10.2.1
        ITU-T G.987.3, section 12.2.1
@@ -147,7 +155,7 @@ module bbf-xpon-onu-types {
        present on a channel termination local to this OLT (Refer to
        'inside-olt') and which corresponds to a local virtual Access
        Network Interface (vANI) and has reached ONU TC state O5
-       and for which it has been confirmed (e.g. by Inter Channel
+       and for which it has been confirmed (e.g., by Inter Channel
        Termination Protocol (ICTP) procedures) that the ONU is using
        the intended channel-termination based on the configured
        preferred and/or protection channel pair or resulting from the
@@ -307,7 +315,7 @@ module bbf-xpon-onu-types {
     description
       "This identity is used to denote that from the Optical Line
        Termination (OLT) point of view, the Optical Network Unit (ONU)
-       is not present on the OLT, i.e. the ONU is not transmitting
+       is not present on the OLT, i.e., the ONU is not transmitting
        optical signal in upstream on any channel termination local to
        this OLT (Refer to 'inside-olt') and is neither assumed to
        accept any optical signal in downstream from any channel

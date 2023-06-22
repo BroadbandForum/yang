@@ -17,20 +17,18 @@ submodule bbf-xpon-multicast-distribution-set-body {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-
-     Editor:      Igor Ternovsky, Broadcom
-
      Editor:      Robert Peschi, Nokia
 
-     WA Director: Marta Seda, Calix
+     Editor:      Kevin Noll, Vecima
 
-     WA Director: Samuel Chen, Broadcom";
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
   description
     "This submodule contains a collection of YANG definitions for
      managing multicast distribution sets.
 
-     Copyright (c) 2018-2020, Broadband Forum
+     Copyright (c) 2018-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -70,9 +68,19 @@ submodule bbf-xpon-multicast-distribution-set-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2; see
+     This version of this YANG module is part of TR-385i2a1; see
      the TR itself for full legal notices.";
 
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Issue 2.
@@ -110,6 +118,8 @@ submodule bbf-xpon-multicast-distribution-set-body {
       "All configuration data for a multicast distribution set.";
     list multicast-set {
       key "name";
+      description
+        "A multicast distribution set.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
@@ -118,19 +128,21 @@ submodule bbf-xpon-multicast-distribution-set-body {
       leaf multicast-gemport-ref {
         type multicast-gemport-ref;
         description
-          "Points to a multicast G-PON Encapsulation Method (GEM)
+          "Points to a multicast GPON Encapsulation Method (GEM)
            port.";
       }
       choice multicast-vlans {
         description
           "Multicast VLAN list or all. All means all multicast
-           VLANs are carried on the same G-PON Encapsulation Method
+           VLANs are carried on the same GPON Encapsulation Method
            (GEM) port.";
         case vlan-list {
           description
             "Multicast VLAN list.";
           list vlan-list {
             key "multicast-vlan-id";
+            description
+              "A muticast VLAN ID.";
             leaf multicast-vlan-id {
               type uint16 {
                 range "0..4095";
@@ -138,13 +150,11 @@ submodule bbf-xpon-multicast-distribution-set-body {
               description
                 "Multicast VLAN ID.";
             }
-            description
-              "List of VLANs.";
           }
         }
         case all-multicast-vlans {
           description
-            "All multicast VLANs are carried on the same G-PON
+            "All multicast VLANs are carried on the same GPON
              Encapsulation Method (GEM) port.";
           leaf all-multicast-vlans {
             type empty;
@@ -153,8 +163,6 @@ submodule bbf-xpon-multicast-distribution-set-body {
           }
         }
       }
-      description
-        "List of multicast sets.";
     }
   }
 }

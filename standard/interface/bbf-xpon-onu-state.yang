@@ -26,15 +26,13 @@ module bbf-xpon-onu-state {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-
-     Editor:      Igor Ternovsky, Broadcom
-
      Editor:      Robert Peschi, Nokia
 
-     WA Director: Marta Seda, Calix
+     Editor:      Kevin Noll, Vecima
 
-     WA Director: Samuel Chen, Broadcom";
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on management of
@@ -46,7 +44,7 @@ module bbf-xpon-onu-state {
      Specifically, this module defines state data and notifications
      related to each Optical Network Unit (ONU).
 
-     Copyright (c) 2018-2020, Broadband Forum
+     Copyright (c) 2018-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -86,9 +84,19 @@ module bbf-xpon-onu-state {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2; see
+     This version of this YANG module is part of TR-385i2a1; see
      the TR itself for full legal notices.";
 
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Issue 2.
@@ -108,6 +116,13 @@ module bbf-xpon-onu-state {
       "TR-385: ITU-T PON YANG Modules
                <https://www.broadband-forum.org/technical/download/
                         TR-385.pdf>";
+  }
+
+  feature notify-previous-onu-presence-state {
+    description
+      "Indicates support for providing the previous
+       Optical Network Unit (ONU) presence state in
+       in the 'onu-presence-state-change' notification.";
   }
 
   grouping onu-state-data {
@@ -274,8 +289,8 @@ module bbf-xpon-onu-state {
        Interface (vANI) is configured in the OLT are reported.
 
        An ONU is considered present on a channel termination when it
-       is using the optical signal of this channel termination i.e. as
-       early as the channel termination receives from the ONU a
+       is using the optical signal of this channel termination i.e.,
+       as early as the channel termination receives from the ONU a
        Physical Layer Operations, Administrations and Maintenance
        (PLOAM) Serial_Number_ONU message or as early as it receives a
        PLOAM Tuning_Resp(Complete_u) message and as long as the
@@ -316,6 +331,18 @@ module bbf-xpon-onu-state {
            the indicated presence state.";
       }
       uses onu-state-data;
+      leaf previous-onu-presence-state {
+        if-feature "bbf-xpon-onu-s:"
+                 + "notify-previous-onu-presence-state";
+        type identityref {
+          base bbf-xpon-onu-types:onu-presence-state-base;
+        }
+        mandatory true;
+        description
+          "The previous presence state of the Optical Network Unit
+           (ONU) after a presence state change. The most specific
+           applicable identity should be reported.";
+      }
     }
   }
 }

@@ -14,15 +14,13 @@ module bbf-xpon-types {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-
-     Editor:      Igor Ternovsky, Broadcom
-
      Editor:      Robert Peschi, Nokia
 
-     WA Director: Marta Seda, Calix
+     Editor:      Kevin Noll, Vecima
 
-     WA Director: Samuel Chen, Broadcom";
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on management of
@@ -34,7 +32,7 @@ module bbf-xpon-types {
      Specifically, this module defines common YANG types used in the
      management of xPON.
 
-     Copyright (c) 2018-2020, Broadband Forum
+     Copyright (c) 2018-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -74,9 +72,19 @@ module bbf-xpon-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2; see
+     This version of this YANG module is part of TR-385i2a1; see
      the TR itself for full legal notices.";
 
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Issue 2.
@@ -96,6 +104,18 @@ module bbf-xpon-types {
       "TR-385: ITU-T PON YANG Modules
                <https://www.broadband-forum.org/technical/download/
                         TR-385.pdf>";
+  }
+
+  feature support-unconditional-onu-authentication-by-mgmt-plane {
+    description
+      "Indicates support for configuring the value
+       'by-management-plane' as 'auth-method-type'.";
+  }
+
+  feature support-unconditional-onu-authentication-by-d-olt {
+    description
+      "Indicates support for configuring the value
+       'by-d-olt' as 'auth-method-type'.";
   }
 
   identity type-b-state-base {
@@ -192,7 +212,7 @@ module bbf-xpon-types {
   identity gpon {
     base channel-pair-type-base;
     description
-      "This identity is used to denote an G-PON channel pair,
+      "This identity is used to denote an GPON channel pair,
        per ITU-T G.984.3.";
     reference
       "ITU-T G.984.3";
@@ -407,6 +427,30 @@ module bbf-xpon-types {
            when it matches both the 'expected-serial-number' and the
            'expected-registration-id' of this vANI.";
       }
+      enum by-management-plane {
+        if-feature "bbf-xpon-types:support-unconditional-onu"
+                 + "-authentication-by-mgmt-plane";
+        description
+          "The OLT should not even try to authenticate the ONU but
+           instead should unconditionally ask the Management Plane
+           to authenticate the ONU. This can be used for instance
+           as an optimization - in case the operator never wants
+           that the OLT does ONU authentication - to avoid that the
+           OLT consumes time and processing resource to parses all
+           of its vANIs for nothing.";
+        reference
+          "TR-489, section 8.2, R-OLT_2";
+      }
+      enum by-d-olt {
+        if-feature "bbf-xpon-types:support-unconditional-onu"
+                 + "-authentication-by-d-olt";
+        description
+          "The physical OLT (pOLT) should not even try to
+           authenticate the ONU but instead should unconditionally
+           ask a D-OLT software component to authenticate the ONU.";
+        reference
+          "TR-489, section 8.2, R-OLT_12";
+      }
     }
     description
       "Method for authenticating an Optical Network Unit (ONU).";
@@ -466,11 +510,17 @@ module bbf-xpon-types {
 
   typedef onu-serial-number {
     type string {
-      pattern '[a-zA-Z]{4}[0-9a-fA-F]{8}';
+      pattern '[ -~]{4}[0-9a-fA-F]{8}';
     }
     description
-      "A type meant for the serial number of an Optical Network Unit
-       (ONU).";
+      "A type meant for the serial number of an Optical Network
+       Unit (ONU). In principle, ITU-T requires ONU vendors to
+       have an ONU serial number start with four letters.
+       However, to cope with real world deployments, it is also
+       allowed that an ONU serial number starts with any four
+       printable ASCII characters.";
+    reference
+      "ITU-T G.984.3 Clause 9.2.4.1";
   }
 
   typedef int16-or-unknown {
@@ -497,5 +547,44 @@ module bbf-xpon-types {
     description
       "The registration ID of an Optical Network Unit (ONU) with each
        octet represented as two hexadecimal characters.";
+  }
+
+  typedef string-ascii4-or-empty {
+    type string {
+      length "0..4";
+      pattern '[ -~]*';
+    }
+    description
+      "Used where a string is needed which has a maximum length of
+       4 characters and also allows for a null string (length = 0).
+
+       The character set is limited to the 95 printable ASCII
+       characters.";
+  }
+
+  typedef string-ascii14-or-empty {
+    type string {
+      length "0..14";
+      pattern '[ -~]*';
+    }
+    description
+      "Used where a string is needed which has a maximum length of
+       14 characters and also allows for a null string (length = 0).
+
+       The character set is limited to the 95 printable ASCII
+       characters.";
+  }
+
+  typedef string-ascii20-or-empty {
+    type string {
+      length "0..20";
+      pattern '[ -~]*';
+    }
+    description
+      "Used where a string is needed which has a maximum length of
+       20 characters and also allows for a null string (length = 0).
+
+       The character set is limited to the 95 printable ASCII
+       characters.";
   }
 }

@@ -23,15 +23,13 @@ module bbf-xpon-performance-management {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-
-     Editor:      Igor Ternovsky, Broadcom
-
      Editor:      Robert Peschi, Nokia
 
-     WA Director: Marta Seda, Calix
+     Editor:      Kevin Noll, Vecima
 
-     WA Director: Samuel Chen, Broadcom";
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on management of
@@ -44,7 +42,7 @@ module bbf-xpon-performance-management {
      bbf-interfaces-performance-management to manage performance
      monitoring of xPON interfaces.
 
-     Copyright (c) 2018-2020, Broadband Forum
+     Copyright (c) 2018-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -84,9 +82,19 @@ module bbf-xpon-performance-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2; see
+     This version of this YANG module is part of TR-385i2a1; see
      the TR itself for full legal notices.";
 
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Issue 2.
@@ -457,16 +465,16 @@ module bbf-xpon-performance-management {
 
   grouping xpon-gemport-pm {
     description
-      "xPON G-PON Encapsulation Method (GEM) port performance
+      "xPON GPON Encapsulation Method (GEM) port performance
        counters.";
     container gemport {
       description
-        "xPON G-PON Encapsulation Method (GEM) port performance
+        "xPON GPON Encapsulation Method (GEM) port performance
          counters.";
       leaf out-frames {
         type bbf-yang:performance-counter64;
         description
-          "Total number of G-PON Encapsulation Method (GEM) frames
+          "Total number of GPON Encapsulation Method (GEM) frames
            transmitted.
 
            For G-PON, reported per ANI (via OMCI). While not
@@ -488,7 +496,7 @@ module bbf-xpon-performance-management {
       leaf in-frames {
         type bbf-yang:performance-counter64;
         description
-          "Total number of G-PON Encapsulation Method (GEM) frames
+          "Total number of GPON Encapsulation Method (GEM) frames
            received.
 
            For G-PON, reported per ANI (via OMCI). While not
@@ -532,7 +540,7 @@ module bbf-xpon-performance-management {
       leaf hec-errors {
         type bbf-yang:performance-counter64;
         description
-          "Number of events involving loss of G-PON Encapsulation
+          "Number of events involving loss of GPON Encapsulation
            Method (GEM) channel delineation.
 
            For G-PON, not applicable.
@@ -616,7 +624,7 @@ module bbf-xpon-performance-management {
            For G-PON, not applicable.
            For XG-PON, not applicable.
            For XGS-PON, reported per ANI, v-ANI and CT.
-           For NG-PON2, reported per ANI, v-ANI and CT";
+           For NG-PON2, reported per ANI, v-ANI and CT.";
         reference
           "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
            Table 14-1: Transmitted bytes in non-idle XGEM frames
@@ -632,7 +640,7 @@ module bbf-xpon-performance-management {
            For G-PON, not applicable.
            For XG-PON, not applicable.
            For XGS-PON, reported per ANI, v-ANI and CT.
-           For NG-PON2, reported per ANI, v-ANI and CT";
+           For NG-PON2, reported per ANI, v-ANI and CT.";
         reference
           "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
            Table 14-1: Received bytes in non-idle XGEM frames
@@ -650,7 +658,7 @@ module bbf-xpon-performance-management {
            For G-PON, not applicable.
            For XG-PON, not applicable.
            For XGS-PON, reported per v-ANI and CT.
-           For NG-PON2, reported per v-ANI and CT";
+           For NG-PON2, reported per v-ANI and CT.";
         reference
           "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
            Table 14-1: Count of DBA inability to assign
@@ -959,7 +967,7 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI";
+               For NG-PON2, reported per ANI.";
             reference
               "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
                Table 14-1: Unsatisfied Adjust_Tx_Wavelength requests";
@@ -1231,7 +1239,7 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, reported per ANI and v-ANI.
              For XGS-PON, reported per ANI and v-ANI.
-             For NG-PON2, reported per ANI and v-ANI";
+             For NG-PON2, reported per ANI and v-ANI.";
           reference
             "ITU-T G.987.3 (01/2014)
              Table 14-1: Registration
@@ -1252,7 +1260,7 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, reported per ANI and v-ANI.
              For XGS-PON, reported per ANI and v-ANI.
-             For NG-PON2, reported per ANI and v-ANI";
+             For NG-PON2, reported per ANI and v-ANI.";
           reference
             "ITU-T G.987.3 (01/2014)
              Table 14-1: Key_Report
@@ -1273,7 +1281,7 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, reported per ANI and v-ANI.
              For XGS-PON, reported per ANI and v-ANI.
-             For NG-PON2, reported per ANI and v-ANI";
+             For NG-PON2, reported per ANI and v-ANI.";
           reference
             "ITU-T G.987.3 (01/2014)
              Table 14-1: Acknowledgement
@@ -1294,7 +1302,7 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, reported per ANI and v-ANI.
              For XGS-PON, reported per ANI and v-ANI.
-             For NG-PON2, reported per ANI and v-ANI";
+             For NG-PON2, reported per ANI and v-ANI.";
           reference
             "ITU-T G.987.3 (01/2014)
              Table 14-1: Sleep_Request
@@ -1321,7 +1329,7 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI and v-ANI";
+               For NG-PON2, reported per ANI and v-ANI.";
             reference
               "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
                Table 14-1: Tuning_Response message count,
@@ -1338,7 +1346,7 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI and v-ANI";
+               For NG-PON2, reported per ANI and v-ANI.";
             reference
               "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
                Table 14-1: Tuning_Response message count,
@@ -1355,7 +1363,7 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per ANI, v-ANI and CT";
+             For NG-PON2, reported per ANI, v-ANI and CT.";
           reference
             "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
              Table 14-1: Power_Consumption_Report message count";
@@ -1366,7 +1374,7 @@ module bbf-xpon-performance-management {
 
   grouping xpon-activation-pm {
     description
-      "xPON activation performance counters";
+      "xPON activation performance counters.";
     container activation {
       description
         "xPON activation performance counters.";
@@ -1384,7 +1392,7 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, reported per CT.
-             For NG-PON2, reported per CT";
+             For NG-PON2, reported per CT.";
           reference
             "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
              Table 14-1: Non-discernible activation attempts (in-band)
@@ -1402,7 +1410,7 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGs-PON, not applicable.
-             For NG-PON2, reported per CT";
+             For NG-PON2, reported per CT.";
           reference
             "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
              Table 14-1: Non-discernible activation attempts (AMCC)";
@@ -1420,7 +1428,7 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, reported per CT.
-             For NG-PON2, reported per CT";
+             For NG-PON2, reported per CT.";
           reference
             "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
              Table 14-1: Foreign activation attempts (in-band)
@@ -1436,7 +1444,7 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per CT";
+             For NG-PON2, reported per CT.";
           reference
             "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
              Table 14-1: Foreign activation attempts (AMCC)";
@@ -1455,7 +1463,7 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, reported per v-ANI and CT.
-             For NG-PON2, reported per v-ANI and CT";
+             For NG-PON2, reported per v-ANI and CT.";
           reference
             "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
              Table 14-1: Successful new activations (in-band)
@@ -1473,7 +1481,7 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per v-ANI and CT";
+             For NG-PON2, reported per v-ANI and CT.";
           reference
             "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
              Table 14-1: Successful new activations (AMCC)";
@@ -1495,7 +1503,7 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per v-ANI and CT";
+             For NG-PON2, reported per v-ANI and CT.";
           reference
             "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
              Table 14-1: Successful pre-configured
@@ -1510,7 +1518,7 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per v-ANI and CT";
+             For NG-PON2, reported per v-ANI and CT.";
           reference
             "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
              Table 14-1: Successful discretionary
@@ -1866,7 +1874,7 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per ANI";
+             For NG-PON2, reported per ANI.";
           reference
             "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
              Table 14-1: Tuning control requests failure reason:
@@ -2268,6 +2276,7 @@ module bbf-xpon-performance-management {
         "xPON energy conservation performance counters.";
       leaf time-spent-in-low-energy-state {
         type bbf-yang:performance-counter64;
+        units "microseconds";
         description
           "Time spent in each of the Optical Line Termination (OLT)/
            Optical Network Unit (ONU) low-power states, respectively.
@@ -2327,7 +2336,7 @@ module bbf-xpon-performance-management {
        with xPON specific attributes.";
     container xpon {
       description
-        "Current 15 minute xPON performance counters";
+        "Current 15 minute xPON performance counters.";
       uses xpon-performance-counters;
     }
   }
@@ -2350,7 +2359,7 @@ module bbf-xpon-performance-management {
        with xPON specific attributes.";
     container xpon {
       description
-        "Historic 15 minute xPON performance counters";
+        "Historic 15 minute xPON performance counters.";
       uses xpon-performance-counters;
     }
   }
@@ -2374,7 +2383,7 @@ module bbf-xpon-performance-management {
        with xPON specific attributes.";
     container xpon {
       description
-        "Current 24 hour xPON performance counters";
+        "Current 24 hour xPON performance counters.";
       uses xpon-performance-counters;
     }
   }
@@ -2398,7 +2407,7 @@ module bbf-xpon-performance-management {
        with xPON specific attributes.";
     container xpon {
       description
-        "Historic 24 hour xPON performance counters";
+        "Historic 24 hour xPON performance counters.";
       uses xpon-performance-counters;
     }
   }

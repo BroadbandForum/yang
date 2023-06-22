@@ -19,21 +19,19 @@ submodule bbf-xponani-v-enet-body {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-
-     Editor:      Igor Ternovsky, Broadcom
-
      Editor:      Robert Peschi, Nokia
 
-     WA Director: Marta Seda, Calix
+     Editor:      Kevin Noll, Vecima
 
-     WA Director: Samuel Chen, Broadcom";
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
   description
     "This submodule contains data related to virtual Ethernet
      interfaces belonging to the physical Optical Network Unit (ONU),
      such as the'onu-v-enet' and the 'onu-v-vrefpoint' interfaces.
 
-     Copyright (c) 2018-2020, Broadband Forum
+     Copyright (c) 2018-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -73,9 +71,19 @@ submodule bbf-xponani-v-enet-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2; see
+     This version of this YANG module is part of TR-385i2a1; see
      the TR itself for full legal notices.";
 
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Issue 2.
@@ -99,16 +107,23 @@ submodule bbf-xponani-v-enet-body {
 
   grouping onu-v-enet-config-data {
     description
-      "Config data intended for the onu-v-enet interface.
+      "Config data intended for the ONU-vENET interface.
        This data is brought to the Optical Network Unit (ONU) physical
        device, when present, for instance using ONU Management and
-       Control Interface (OMCI) on the Management G-PON Encapsulation
+       Control Interface (OMCI) on the Management GPON Encapsulation
        Method (GEM) port.";
     leaf ani {
       type if:interface-ref;
       must "derived-from-or-self(/if:interfaces"
          + "/if:interface[if:name = current()]/if:type,"
-         + "'bbf-xponift:ani')";
+         + "'bbf-xponift:ani')" {
+        error-message
+          "The referenced interface is not of type or derived from "
+        + "type 'bbf-xponift:ani'.";
+        description
+          "The referenced interface must be of or derived from type
+           'bbf-xponift:ani'.";
+      }
       mandatory true;
       description
         "References the Access Network Interface (ANI) which is the
@@ -118,17 +133,24 @@ submodule bbf-xponani-v-enet-body {
 
   grouping onu-v-vrefpoint-config-data {
     description
-      "Config data intended for the onu-v-vrefpoint interface,
+      "Config data intended for the ONU-vVREFPOINT interface,
        (sometimes also called 'virtual User Network Interface (UNI)').
        This data is brought to the Optical Network Unit (ONU) physical
        device, when present, for instance using ONU Management and
-       Control Interface (OMCI) on the Management G-PON Encapsulation
+       Control Interface (OMCI) on the Management GPON Encapsulation
        Method (GEM) port.";
     leaf related-onu {
       type if:interface-ref;
       must "derived-from-or-self(/if:interfaces"
          + "/if:interface[if:name = current()]/if:type,"
-         + "'bbf-xponift:ani')";
+         + "'bbf-xponift:ani')" {
+        error-message
+          "The referenced interface is not of type or derived from "
+        + "type 'bbf-xponift:ani'.";
+        description
+          "The referenced interface must be of or derived from type
+           'bbf-xponift:ani'.";
+      }
       mandatory true;
       description
         "References the Optical Network Unit (ONU) to which the

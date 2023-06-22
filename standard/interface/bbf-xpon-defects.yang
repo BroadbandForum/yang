@@ -10,15 +10,13 @@ module bbf-xpon-defects {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-
-     Editor:      Igor Ternovsky, Broadcom
-
      Editor:      Robert Peschi, Nokia
 
-     WA Director: Marta Seda, Calix
+     Editor:      Kevin Noll, Vecima
 
-     WA Director: Samuel Chen, Broadcom";
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on management of
@@ -29,7 +27,7 @@ module bbf-xpon-defects {
 
      Specifically, this module defines xPON defects.
 
-     Copyright (c) 2018-2020, Broadband Forum
+     Copyright (c) 2018-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -69,9 +67,19 @@ module bbf-xpon-defects {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2; see
+     This version of this YANG module is part of TR-385i2a1; see
      the TR itself for full legal notices.";
 
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Issue 2.
@@ -256,7 +264,7 @@ module bbf-xpon-defects {
   identity lcdgi {
     base items-detected-at-olt-for-v-ani;
     description
-      "LCDGi - Loss of G-PON Encapulation Method (GEM) channel
+      "LCDGi - Loss of GPON Encapulation Method (GEM) channel
        delineation.
 
        When GEM fragment delineation of ONUi is lost.";
@@ -451,9 +459,24 @@ module bbf-xpon-defects {
       "SD - Signal degraded.
 
        When the downstream Bit Error Rate (BER) of ONUi becomes
-       >= 10^-X, this state is entered. Y is configurable and must be
+       >= 10^-X, this state is entered. X is configurable and must be
        higher than Y (the SF threshold).";
     reference
       "ITU-T G.984.3 (01/2014) 11.1.2 SD";
+  }
+
+  typedef defect-state {
+    type enumeration {
+      enum cleared {
+        description
+          "Defect is cleared (not present).";
+      }
+      enum raised {
+        description
+          "Defect is raised (present).";
+      }
+    }
+    description
+      "Defect state.";
   }
 }

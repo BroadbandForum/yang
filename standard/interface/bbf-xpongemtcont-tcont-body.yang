@@ -23,20 +23,18 @@ submodule bbf-xpongemtcont-tcont-body {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-
-     Editor:      Igor Ternovsky, Broadcom
-
      Editor:      Robert Peschi, Nokia
 
-     WA Director: Marta Seda, Calix
+     Editor:      Kevin Noll, Vecima
 
-     WA Director: Samuel Chen, Broadcom";
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
   description
     "This submodule contains a collection of YANG definitions for
      managing Transmission Containers (T-CONT).
 
-     Copyright (c) 2018-2020, Broadband Forum
+     Copyright (c) 2018-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -76,9 +74,19 @@ submodule bbf-xpongemtcont-tcont-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2; see
+     This version of this YANG module is part of TR-385i2a1; see
      the TR itself for full legal notices.";
 
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Issue 2.
@@ -110,7 +118,7 @@ submodule bbf-xpongemtcont-tcont-body {
     type uint16;
     description
       "Transmission Container (T-CONT) Allocation Identifier
-       (Alloc-ID). For G-PON the value should be in [256..4095] and
+       (Alloc-ID). For GPON the value should be in [256..4095] and
        for XG-PON, XGS-PON and NG-PON2 it should be in
        [1024..16383].";
     reference
@@ -122,7 +130,7 @@ submodule bbf-xpongemtcont-tcont-body {
 
   augment "/bbf-xpongemtcont:xpongemtcont" {
     description
-      "Augment the xPON G-PON Encapsulation Method (GEM) port and
+      "Augment the xPON GPON Encapsulation Method (GEM) port and
        Transmission Container (T-CONT) configuration with T-CONT
        specific configuration.";
     container tconts {
@@ -134,7 +142,7 @@ submodule bbf-xpongemtcont-tcont-body {
 
   augment "/bbf-xpongemtcont:xpongemtcont-state" {
     description
-      "Augment the xPON G-PON Encapsulation Method (GEM) port and
+      "Augment the xPON GPON Encapsulation Method (GEM) port and
        Transmission Container (T-CONT) state data with T-CONT specific
        state data.";
     container tconts {
@@ -151,7 +159,7 @@ submodule bbf-xpongemtcont-tcont-body {
     list tcont {
       key "name";
       description
-        "List of Transmission Containers (T-CONT).";
+        "A Transmission Container (T-CONT).";
       leaf name {
         type bbf-yang:string-ascii64;
         description
@@ -165,7 +173,7 @@ submodule bbf-xpongemtcont-tcont-body {
            (Alloc-ID). When configured this is the value which must
            actually be used between the Optical Line Termination (OLT)
            device and Optical Network Unit (ONU) device for this
-           T-CONT. For G-PON the value should be in [256..4095] and
+           T-CONT. For GPON the value should be in [256..4095] and
            for XG-PON, XGS-PON and NG-PON2 it should be in
            [1024..16383].";
         reference
@@ -206,7 +214,7 @@ submodule bbf-xpongemtcont-tcont-body {
     list tcont {
       key "name";
       description
-        "List of Transmission Containers (T-CONT).";
+        "A Transmission Container (T-CONT).";
       leaf name {
         type bbf-yang:string-ascii64;
         description

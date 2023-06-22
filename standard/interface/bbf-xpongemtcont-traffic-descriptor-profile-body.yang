@@ -13,20 +13,18 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-
-     Editor:      Igor Ternovsky, Broadcom
-
      Editor:      Robert Peschi, Nokia
 
-     WA Director: Marta Seda, Calix
+     Editor:      Kevin Noll, Vecima
 
-     WA Director: Samuel Chen, Broadcom";
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
   description
     "This submodule contains a collection of YANG definitions for
      managing traffic descriptor profiles.
 
-     Copyright (c) 2018-2020, Broadband Forum
+     Copyright (c) 2018-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -66,9 +64,19 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2; see
+     This version of this YANG module is part of TR-385i2a1; see
      the TR itself for full legal notices.";
 
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Issue 2.
@@ -92,7 +100,7 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
 
   augment "/bbf-xpongemtcont:xpongemtcont" {
     description
-      "Augment the xPON G-PON Encapsulation Method (GEM) port and
+      "Augment the xPON GPON Encapsulation Method (GEM) port and
        Transmission Container (T-CONT) configuration with traffic
        descriptor profile specific configuration.";
     container traffic-descriptor-profiles {
@@ -116,7 +124,7 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
       }
       leaf fixed-bandwidth {
         type uint64;
-        units "bits/second";
+        units "bits per second";
         default "0";
         description
           "Represents the reserved portion of the link capacity that
@@ -127,7 +135,7 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
       }
       leaf assured-bandwidth {
         type uint64;
-        units "bits/second";
+        units "bits per second";
         default "0";
         description
           "Represents a portion of the link capacity that is allocated
@@ -139,25 +147,24 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
       }
       leaf maximum-bandwidth {
         type uint64;
-        units "bits/second";
-        must
-          "(boolean(../fixed-bandwidth) and
-           boolean(../assured-bandwidth) and
-           (. >= ../fixed-bandwidth + ../assured-bandwidth))
-           or
-           (boolean(../fixed-bandwidth) and
-           not(boolean(../assured-bandwidth)) and
-           (. >= ../fixed-bandwidth))
-           or
-           (not(boolean(../fixed-bandwidth)) and
-           boolean(../assured-bandwidth) and
-           (. >= ../assured-bandwidth))
-           or
-           (not(boolean(../fixed-bandwidth)) and
-           not(boolean(../assured-bandwidth)))" {
+        units "bits per second";
+        must "(boolean(../fixed-bandwidth) and
+              boolean(../assured-bandwidth) and
+              (. >= ../fixed-bandwidth + ../assured-bandwidth))
+              or
+              (boolean(../fixed-bandwidth) and
+              not(boolean(../assured-bandwidth)) and
+              (. >= ../fixed-bandwidth))
+              or
+              (not(boolean(../fixed-bandwidth)) and
+              boolean(../assured-bandwidth) and
+              (. >= ../assured-bandwidth))
+              or
+              (not(boolean(../fixed-bandwidth)) and
+              not(boolean(../assured-bandwidth)))" {
           error-message
-            "The maximum bandwidth must be greater than or equal to
-             the sum of the configured fixed and assured bandwidth.";
+            "The maximum bandwidth must be greater than or equal to "
+          + "the sum of the configured fixed and assured bandwidth.";
           description
             "The maximum bandwidth must be greater than or equal
              to the sum of any configured fixed and assured
@@ -228,7 +235,16 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
               or
               (not(boolean(../fixed-bandwidth)) and
               not(boolean(../assured-bandwidth)) and
-              ../maximum-bandwidth = 0)))";
+              ../maximum-bandwidth = 0)))" {
+          error-message
+            "Additional bandwidth eligibility is configured to 'none'"
+          + " and 'maximum-bandwidth' does not equal the sum of "
+          + "'fixed-bandwidth' and 'assured-bandwidth'.";
+          description
+            "If no bandwidth eligibility is configured, the maximum
+             bandwidth must be the sum of the fixed and assured
+             bandwidths.";
+        }
         description
           "In case of rate-proportional assignment of
            additional bandwidth, additional bandwidth
@@ -236,7 +252,8 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
            (non-assured-sharing, best-effort-sharing,
            or none). The additional bandwidth is described as:
 
-           maximum-bandwidth - (fixed-bandwidth + assured-bandwidth)";
+             maximum-bandwidth -
+             (fixed-bandwidth + assured-bandwidth).";
         reference
           "ITU-T G.984.3 clause 7.4.4.3
            ITU-T G.989.3 clause 7.3.5";

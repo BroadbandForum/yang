@@ -7,6 +7,9 @@ submodule bbf-xponani-ani-body {
   import ietf-interfaces {
     prefix if;
   }
+  import ietf-yang-types {
+    prefix yang;
+  }
   import bbf-xpon-types {
     prefix bbf-xpon-types;
   }
@@ -22,21 +25,19 @@ submodule bbf-xponani-ani-body {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-
-     Editor:      Igor Ternovsky, Broadcom
-
      Editor:      Robert Peschi, Nokia
 
-     WA Director: Marta Seda, Calix
+     Editor:      Kevin Noll, Vecima
 
-     WA Director: Samuel Chen, Broadcom";
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
   description
     "This submodule contains data related to the actual ONU devices.
      Each ONU device is 1:1 associated to its unique Access Network
      Interface (ANI).
 
-     Copyright (c) 2018-2020, Broadband Forum
+     Copyright (c) 2018-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -76,9 +77,19 @@ submodule bbf-xponani-ani-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2; see
+     This version of this YANG module is part of TR-385i2a1; see
      the TR itself for full legal notices.";
 
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Issue 2.
@@ -109,7 +120,7 @@ submodule bbf-xponani-ani-body {
   feature configurable-ani-management-gem-port-id {
     description
       "Indicates support for configuration of the management
-       G-PON Encapsulation Method (GEM) port.";
+       GPON Encapsulation Method (GEM) port.";
   }
 
   feature ani-onu-serial-number-reporting {
@@ -124,21 +135,28 @@ submodule bbf-xponani-ani-body {
        Network Interface (ANI).";
   }
 
+  feature ani-defect-notifications {
+    description
+      "Indicates support for reporting state change of the defects
+       observed at the Access Network Interface (ANI).";
+  }
+
   grouping ani-config-data {
     description
       "Configuration data intended for the Optical Network Unit (ONU)
        physical device. This data is brought to the ONU, when present,
        for instance via the Physical Layer Operations, Administrations
        and Maintenance (PLOAM) channel or using ONU Management and
-       Control Interface (OMCI) on the Management G-PON Encapsulation
+       Control Interface (OMCI) on the Management GPON Encapsulation
        Method (GEM) port.";
     leaf upstream-fec {
       type boolean;
       default "false";
       description
-        "Enable/Disable use of Forward Error Correction (FEC) in the
+        "If 'true', enable Forward Error Correction (FEC) in the
          upstream direction for this specific Optical Network Unit
-         (ONU).";
+         (ONU). If 'false', disable FEC in the upstream direction
+         for this specific ONU.";
       reference
         "ITU-T G.984.3 clause 13.3.1.1
          ITU-T G.987.3 clause 10.2
@@ -149,12 +167,12 @@ submodule bbf-xponani-ani-body {
       type boolean;
       default "false";
       description
-        "Used to designate whether Advanced Encryption Standard
-         (AES) should be enabled/disabled for the management G-PON
-         Encapsulation Method (GEM) port of this Optical Network Unit
-         (ONU).
+        "If 'true', enable Advanced Encryption Standard (AES)
+         for the management GPON Encapsulation Method (GEM) port
+         of this Optical Network Unit (ONU). If 'false', disable
+         AES for the management GEM port of this ONU.
 
-         For G-PON, this applies in the downstream direction. For
+         For GPON, this applies in the downstream direction. For
          XG-PON, XGS-PON and NG-PON2, this applies to both the
          upstream and downstream directions.";
       reference
@@ -167,11 +185,11 @@ submodule bbf-xponani-ani-body {
       if-feature "bbf-xponani:configurable-ani-onu-id";
       type bbf-xpon-types:onu-id;
       description
-        "This is the TC layer ONU-ID identifier. When configured this
+        "The TC layer ONU Identifier (ONU-ID). When configured this
          is the value which the Optical Line Termination (OLT) must
          assign to the Optical Network Unit (ONU) during the ONU's
          activation using the Assign_ONU-ID Physical Layer Operations,
-         Administrations and Maintenance (PLOAM) message. For G-PON
+         Administrations and Maintenance (PLOAM) message. For GPON
          the value should be in [0..253], for XG-PON it should be in
          [0..1022] and for XGS-PON and NG-PON2 it should be in
          [0..1020].";
@@ -188,8 +206,8 @@ submodule bbf-xponani-ani-body {
       description
         "This leaf is only relevant to GPON ONUs; it is ignored for
          non-GPON ONUs. In contrast with other xPON technologies, in
-         the case of G-PON, there is no requirement that the ITU-T TC
-         ID of the management G-PON Encapsulation Method (GEM) port
+         the case of GPON, there is no requirement that the ITU-T TC
+         ID of the management GPON Encapsulation Method (GEM) port
          for the Optical Network Unit (ONU) is numerically equal to
          the ONU-ID. This leaf provides the capability to specify
          value for the management GEM port ID.
@@ -203,6 +221,24 @@ submodule bbf-xponani-ani-body {
          ITU-T G.989.3, clause 6.1.5.8
          ITU-T G.9807.1 clause C.6.1.5.8";
     }
+    leaf-list notifiable-defect {
+      if-feature "bbf-xponani:ani-defect-notifications";
+      type identityref {
+        base bbf-xpon-def:items-detected-at-onu;
+      }
+      description
+        "Optical Network Unit (ONU) is expected to generate a
+         'defect-state-change' notification each time defect(s)
+         listed in this leaf-list are raised or cleared.
+         If 'notifiable-defect' includes an identity which
+         is the base value for other defect(s) identity(ies),
+         the OLT will generate a single notification when status of
+         any defect derived from this base value changes.
+
+         In case the leaf-list is empty (as by default) the OLT
+         should not generate any 'defect-state-change'
+         notification.";
+    }
   }
 
   grouping ani-state-data {
@@ -212,11 +248,11 @@ submodule bbf-xponani-ani-body {
        present, for instance via the Physical Layer Operations,
        Administrations and Maintenance (PLOAM) channel or using ONU
        Management and Control Interface (OMCI) on the Management
-       G-PON Encapsulation Method (GEM) port.";
+       GPON Encapsulation Method (GEM) port.";
     leaf onu-id {
       type bbf-xpon-types:onu-id;
       description
-        "This is the TC layer ONU-ID identifier which the Optical Line
+        "The TC layer ONU Identifier (ONU-ID) which the Optical Line
          Termination (OLT) has assigned to the Optical Network Unit
          (ONU) during the ONU's activation using the Assign_ONU-ID
          Physical Layer Operations, Administrations and Maintenance
@@ -266,9 +302,9 @@ submodule bbf-xponani-ani-body {
       type uint32;
       description
         "The ITU-T Transmission Convergence (TC) ID of the management
-         G-PON Encapsulation Method (GEM) port for the Optical Network
+         GPON Encapsulation Method (GEM) port for the Optical Network
          Unit (ONU). For NG-PON2, XGS-PON and XG-PON, it has the same
-         numerical value as the ITU-T TC ONU-ID. For G-PON, its value
+         numerical value as the ITU-T TC ONU-ID. For GPON, its value
          is not necessarily numerically equal to the ONU-ID.";
       reference
         "Reefer to 'OMCC Port-ID' in
@@ -292,19 +328,55 @@ submodule bbf-xponani-ani-body {
          ITU-T G.989.3 (2015)/Amd.2 (11/2018) Table 14-3
          ITU-T G.9807.1 (2016)/Amd.1 (10/2017) Table C.14.3 ";
     }
+    notification defect-state-change {
+      if-feature "bbf-xponani:ani-defect-notifications";
+      description
+        "A notification traceable to an ani which signifies that
+         defect(s) detected by an Optical Network Unit (ONU) have
+         been raised and/or cleared. Such notification is only
+         generated for defects listed in the 'notifiable-defect'
+         leaf list.";
+      list defect {
+        key "type";
+        description
+          "A notifiable defect that has changed state since
+           the previous 'defect-state-change' notification.";
+        leaf type {
+          type identityref {
+            base bbf-xpon-def:items-detected-at-onu;
+          }
+          description
+            "Defect type.";
+        }
+        leaf state {
+          type bbf-xpon-def:defect-state;
+          mandatory true;
+          description
+            "The current defect state.";
+        }
+        leaf last-change {
+          type yang:date-and-time;
+          mandatory true;
+          description
+            "The Optical Network Unit (ONU) system date and
+             time when the ONU has declared that the defect
+             state has changed.";
+        }
+      }
+    }
   }
 
   augment "/if:interfaces/if:interface/bbf-xponani:ani" {
     description
-      "Configuration of an xPON Access Network Interface (ANI), i.e.
-       an Optical Network Unit (ONU) device.";
+      "Configuration of an xPON Access Network Interface (ANI),
+       i.e., an Optical Network Unit (ONU) device.";
     uses ani-config-data;
   }
 
   augment "/if:interfaces-state/if:interface/bbf-xponani:ani" {
     description
-      "State data of an xPON Access Network Interface (ANI), i.e.
-       an Optical Network Unit (ONU) device.";
+      "State data of an xPON Access Network Interface (ANI),
+       i.e., an Optical Network Unit (ONU) device.";
     uses ani-state-data;
   }
 }

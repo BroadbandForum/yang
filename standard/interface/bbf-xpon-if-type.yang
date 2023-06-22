@@ -14,15 +14,13 @@ module bbf-xpon-if-type {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-
-     Editor:      Igor Ternovsky, Broadcom
-
      Editor:      Robert Peschi, Nokia
 
-     WA Director: Marta Seda, Calix
+     Editor:      Kevin Noll, Vecima
 
-     WA Director: Samuel Chen, Broadcom";
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on management of
@@ -35,7 +33,7 @@ module bbf-xpon-if-type {
      needed for Broadband Forum aplications, but are not defined by
      IANA.
 
-     Copyright (c) 2018-2020, Broadband Forum
+     Copyright (c) 2018-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -75,9 +73,19 @@ module bbf-xpon-if-type {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2; see
+     This version of this YANG module is part of TR-385i2a1; see
      the TR itself for full legal notices.";
 
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Issue 2.
@@ -162,7 +170,7 @@ module bbf-xpon-if-type {
       "Base type for ONU-vENET interfaces. The ONU-vENET interfaces
        are virtual interfaces which carry Ethernet frames, which
        belong to the Optical Network Unit (ONU) and which are facing
-       the xPON side of the ONU i.e. facing the Optical Line
+       the xPON side of the ONU i.e., facing the Optical Line
        Termination (OLT).
 
        ONU-vENET are virtual interfaces in the sense that they do not
@@ -183,11 +191,11 @@ module bbf-xpon-if-type {
     base bbf-xpon-interface-type;
     base bbfift:ethernet-like;
     description
-      "Base type for olt-v-enet interfaces. The OLT-vENET interfaces
+      "Base type for OLT-vENET interfaces. The OLT-vENET interfaces
        are virtual interfaces which carry Ethernet frames, which
        belong to the Optical Line Termination (OLT) and which are
-       facing the xPON side of the OLT i.e. facing the Optical Network
-       Unit (ONU).
+       facing the xPON side of the OLT i.e., facing the Optical
+       Network Unit (ONU).
 
        OLT-vENET are virtual interfaces in the sense that they do not
        directly refer to a physical port of an OLT. Instead, OLT-vENET

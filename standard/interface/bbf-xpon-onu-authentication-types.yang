@@ -1,0 +1,295 @@
+module bbf-xpon-onu-authentication-types {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-xpon-onu-authentication-types";
+  prefix bbf-xpon-onu-autht;
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Fiber Access Networks Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Robert Peschi, Nokia
+
+     Editor:      Kevin Noll, Vecima
+
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on management of
+     ITU-T Passive Optical Network (PON) interfaces as defined in
+     ITU-T G.984.x, G.987.x, ITU-T G.989.x and ITU-T G.9807.x. As
+     such, this module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module defines YANG types used for Optical
+     Network Unit (ONU) authentication and the decision to apply
+     an OMCI function.
+
+     Copyright (c) 2018-2023, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385i2a1; see
+     the TR itself for full legal notices.";
+
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
+
+  identity onu-management-config-base {
+    description
+      "Base identity used to reflects the expected
+       management mode for an Optical Network Unit (ONU).";
+  }
+
+  identity use-vomci {
+    base onu-management-config-base;
+    description
+      "The Optical Network Unit (ONU) should be managed
+       via a virtualized OMCI (vOMCI) function.";
+    reference
+      "TR-489, sections 5.1 and 5.2";
+  }
+
+  identity use-eomci {
+    base onu-management-config-base;
+    description
+      "The Optical Network Unit (ONU) should be managed
+       via an OMCI function embedded in the Optical Line
+       Termination (OLT),(eOMCI).";
+    reference
+      "TR-489, sections 5.3 and 5.4";
+  }
+
+  identity onu-management-state-base {
+    description
+      "Base identity used to reflect how an Optical Line
+       Termination (OLT) perceives the way that a specific
+       Optical Network Unit (ONU) should be managed.";
+  }
+
+  identity onu-management-mode-ok {
+    base onu-management-state-base;
+    description
+      "The Optical Line Termination (OLT) could
+       successfully determine the management mode
+       to be applied to a specific Optical Network
+       Unit (ONU).";
+  }
+
+  identity vomci-required {
+    base onu-management-mode-ok;
+    description
+      "The Optical Line Termination (OLT) expects that
+       a specific Optical Network Unit (ONU) should be
+       managed via a virtualized OMCI (vOMCI) function.";
+    reference
+      "TR-489, sections 5.1 and 5.2";
+  }
+
+  identity eomci-in-use {
+    base onu-management-mode-ok;
+    description
+      "The Optical Line Termination (OLT) has engaged
+       its embedded OMCI function (eOMCI) to manage a
+       specific Optical Network Unit (ONU).";
+    reference
+      "TR-489, sections 5.3 and 5.4";
+  }
+
+  identity onu-management-mode-not-ok {
+    base onu-management-state-base;
+    description
+      "The Optical Line Termination (OLT) has found some
+       error when attempting to determine the management
+       mode to be applied to a specific Optical Network
+       Unit (ONU).";
+    reference
+      "TR-489, figure 6-6, 6-7 and 7-2";
+  }
+
+  identity vani-management-mode-mismatch-with-requested-mode {
+    base onu-management-mode-not-ok;
+    description
+      "The Optical Line Termination (OLT) has found a
+       mismatch between the 'expected-onu-management-mode'
+       configured on a given vANI and the
+       'requested-onu-management-mode' that it received
+       for this Optical Network Unit (ONU) from an
+       'report-onu-authentication-results' action.";
+    reference
+      "TR-489, section 8.2, R-OLT_9";
+  }
+
+  identity eomci-per-olt-vomci-per-mgmt-plane {
+    base vani-management-mode-mismatch-with-requested-mode;
+    description
+      "The Optical Line Termination (OLT) has determined
+       that a given ONU should be managed via eOMCI but
+       it has received an 'report-onu-authentication-results'
+       action from the Management Plane indicating vOMCI as
+       'requested-onu-management-mode'.";
+    reference
+      "TR-489, section 6.2.2";
+  }
+
+  identity vomci-per-olt-eomci-per-mgmt-plane {
+    base vani-management-mode-mismatch-with-requested-mode;
+    description
+      "The Optical Line Termination (OLT) has determined
+       that a given ONU should be managed via vOMCI but
+       it has received an 'report-onu-authentication-results'
+       action from the Management Plane indicating eOMCI as
+       'requested-onu-management-mode'.";
+    reference
+      "TR-489, section 6.2.4";
+  }
+
+  identity eomci-expected-but-missing-onu-configuration {
+    base onu-management-mode-not-ok;
+    description
+      "The Optical Line Termination (OLT) has determined
+       that eOMCI should be engaged for a given Optical
+       Network Unit (ONU) but it misses data to do so,
+       for instance the ANI or the ONU configuration.";
+    reference
+      "TR-489, section 8.2, R-OLT_10";
+  }
+
+  identity onu-name-mismatch-olt-mgmt-plane {
+    base onu-management-mode-not-ok;
+    description
+      "The Optical Line Termination (OLT) has found
+       a mismatch between the 'onu-name' configured on
+       a given vANI and the 'onu-name' that it received
+       for this Optical Network Unit (ONU) from
+       an 'report-onu-authentication-results' action.";
+    reference
+      "TR-489, section 6.2.4";
+  }
+
+  identity undetermined {
+    base onu-management-mode-not-ok;
+    description
+      "The Optical Line Termination (OLT) has not determined
+       at this stage whether the Network Unit (ONU) should
+       be managed via an embedded OMCI function (eOMCI) or
+       a virtualized OMCI function (vOMCI).";
+    reference
+      "TR-489, sections 6.2.2 and 6.2.4 and section 8.2, R-OLT_3";
+  }
+
+  identity action-error-tag {
+    description
+      "Base identity used for defining failures with the
+       invocation of an 'report-onu-authentication-results'
+       action.";
+    reference
+      "TR-489, section 8.2, R-OLT_8";
+  }
+
+  identity parameter-error {
+    base action-error-tag;
+    description
+      "Parameter error.";
+  }
+
+  identity onu-not-present {
+    base parameter-error;
+    description
+      "The Optical Network Unit (ONU) is not present or
+       not present anymore on the channel termination.";
+  }
+
+  identity onu-management-mode-mismatch-with-v-ani {
+    base parameter-error;
+    description
+      "The required ONU management mode conflicts
+       with an explicitely configured
+       'expected-onu-magement-mode' on the vANI.";
+    reference
+      "TR-489, sections 6.2.2 and 6.2.4";
+  }
+
+  identity onu-name-mismatch-with-v-ani {
+    base parameter-error;
+    description
+      "The provided 'onu-name' conflicts with an
+       explicitely configured 'onu-name' on the vANI.";
+    reference
+      "TR-489, section 6.2.4";
+  }
+
+  identity undetermined-error {
+    base action-error-tag;
+    description
+      "Undetermined error.";
+  }
+
+  identity onu-authentication-results-base {
+    description
+      "Base identity used to reflect the results of
+       ONU authentication.";
+  }
+
+  identity onu-authentication-successful {
+    base onu-authentication-results-base;
+    description
+      "The ONU authentication is successful: a vANI
+       corresponding to the ONU could be identified.";
+  }
+
+  identity onu-authentication-failed {
+    base onu-authentication-results-base;
+    description
+      "The ONU authentication failed: a vANI
+       corresponding to the ONU could not be identified.";
+  }
+}

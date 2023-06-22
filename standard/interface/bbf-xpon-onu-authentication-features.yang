@@ -1,12 +1,7 @@
-module bbf-xpongemtcont {
+module bbf-xpon-onu-authentication-features {
   yang-version 1.1;
-  namespace "urn:bbf:yang:bbf-xpongemtcont";
-  prefix bbf-xpongemtcont;
-
-  include bbf-xpongemtcont-base;
-  include bbf-xpongemtcont-traffic-descriptor-profile-body;
-  include bbf-xpongemtcont-tcont-body;
-  include bbf-xpongemtcont-gemport-body;
+  namespace "urn:bbf:yang:bbf-xpon-onu-authentication-features";
+  prefix bbf-xpon-onu-authf;
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -30,9 +25,9 @@ module bbf-xpongemtcont {
      such, this module is specific to access network equipment (e.g.,
      BBF-specified Access Nodes and FTTdp DPUs).
 
-     Specifically, this module defines management of G-PON
-     Encapsulation Method (GEM) ports, Transmission Containers
-     (T-CONT) and traffic descriptors.
+     Specifically, this module defines features used for Optical
+     Network Unit (ONU) authentication and the decision to apply
+     an OMCI function.
 
      Copyright (c) 2018-2023, Broadband Forum
 
@@ -87,24 +82,45 @@ module bbf-xpongemtcont {
                <https://www.broadband-forum.org/technical/download/
                         TR-385_Issue-2_Amendment-1.pdf>";
   }
-  revision 2020-10-13 {
+
+  feature support-onu-authentication-report {
     description
-      "Issue 2.
-       * Approval Date:    2020-10-13.
-       * Publication Date: 2020-10-13.";
-    reference
-      "TR-385i2: ITU-T PON YANG Modules
-               <https://www.broadband-forum.org/technical/download/
-                        TR-385_Issue-2.pdf>";
+      "Indicates support for an action reporting the results
+       of Optical Network Unit (ONU) authentication by the
+       Management Plane.";
   }
-  revision 2019-02-25 {
+
+  feature can-retrieve-onu-eqpt-id-hw-and-sw-version-pre-auth {
     description
-      "Initial revision.
-       * Approval Date:    2019-02-25.
-       * Publication Date: 2019-02-25.";
-    reference
-      "TR-385: ITU-T PON YANG Modules
-               <https://www.broadband-forum.org/technical/download/
-                        TR-385.pdf>";
+      "Indicates that the OLT is capable to retrieve the equipment
+       ID, the hardware version and the software version from an ONU
+       before the ONU is already authenticated.
+       Note that this feature has to be understood in the strict
+       sense: when supported this feature does not necessary imply
+       that the OLT is capable to (fully) manage an ONU with an
+       embedded OMCI function (eOMCI).";
+  }
+
+  feature can-retrieve-loid-pre-auth {
+    description
+      "Indicates that the OLT is capable to retrieve the ONU
+       LogicalID (LOID) from an ONU before the ONU is already
+       authenticated. Note that this feature has to be
+       understood in the strict sense: when supported this feature
+       does not necessary imply that the OLT is capable to (fully)
+       manage an ONU with an embedded OMCI function (eOMCI).";
+  }
+
+  feature configurable-onu-name {
+    description
+      "Indicates support for configuring an 'onu-name'
+       at a virtual Access Network Interface (vANI).";
+  }
+
+  feature configurable-expected-onu-management-mode {
+    description
+      "Indicates support for configuring an
+       'expected-onu-management-mode' at a virtual
+       Access Network Interface (vANI).";
   }
 }

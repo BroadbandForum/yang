@@ -21,15 +21,13 @@ module bbf-xpongemtcont-gemport-performance-management {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-
-     Editor:      Igor Ternovsky, Broadcom
-
      Editor:      Robert Peschi, Nokia
 
-     WA Director: Marta Seda, Calix
+     Editor:      Kevin Noll, Vecima
 
-     WA Director: Samuel Chen, Broadcom";
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on management of
@@ -39,9 +37,9 @@ module bbf-xpongemtcont-gemport-performance-management {
      BBF-specified Access Nodes and FTTdp DPUs).
 
      Specifically, this module defines the management of performance
-     monitoring of G-PON Encapsulation Method (GEM) ports.
+     monitoring of GPON Encapsulation Method (GEM) ports.
 
-     Copyright (c) 2018-2020, Broadband Forum
+     Copyright (c) 2018-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +79,19 @@ module bbf-xpongemtcont-gemport-performance-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2; see
+     This version of this YANG module is part of TR-385i2a1; see
      the TR itself for full legal notices.";
 
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Issue 2.
@@ -106,7 +114,7 @@ module bbf-xpongemtcont-gemport-performance-management {
     leaf out-frames {
       type bbf-yang:performance-counter64;
       description
-        "Total number of G-PON Encapsulation Method (GEM) frames
+        "Total number of GPON Encapsulation Method (GEM) frames
          transmitted.";
       reference
         "ITU-T G.987.3 (01/2014)
@@ -121,7 +129,7 @@ module bbf-xpongemtcont-gemport-performance-management {
     leaf in-frames {
       type bbf-yang:performance-counter64;
       description
-        "Total number of G-PON Encapsulation Method (GEM) frames
+        "Total number of GPON Encapsulation Method (GEM) frames
          received.";
       reference
         "ITU-T G.987.3 (01/2014)
@@ -165,7 +173,7 @@ module bbf-xpongemtcont-gemport-performance-management {
           "If true, enables counting of performance statistics.
            Then performance statistics will be available in
            /xpongemtcont-state/gemports/gemport/performance.
-           i.e. 15 minutes statistics and 24 hours statistics,
+           i.e., 15 minutes statistics and 24 hours statistics,
            and for both there are current statistics and history
            data.
 
@@ -180,7 +188,7 @@ module bbf-xpongemtcont-gemport-performance-management {
       "Data nodes for the performance status parameters.";
     container performance {
       description
-        "Performance counters associated with G-PON Encapsulation
+        "Performance counters associated with GPON Encapsulation
          Method (GEM) ports.";
       container intervals-15min {
         description

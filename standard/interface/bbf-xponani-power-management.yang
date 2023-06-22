@@ -23,15 +23,13 @@ module bbf-xponani-power-management {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-
-     Editor:      Igor Ternovsky, Broadcom
-
      Editor:      Robert Peschi, Nokia
 
-     WA Director: Marta Seda, Calix
+     Editor:      Kevin Noll, Vecima
 
-     WA Director: Samuel Chen, Broadcom";
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on management of
@@ -43,7 +41,7 @@ module bbf-xponani-power-management {
      Specifically, this module defines Optical Network Unit (ONU)
      power management at the Access Network Interface (ANI).
 
-     Copyright (c) 2018-2020, Broadband Forum
+     Copyright (c) 2018-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -83,9 +81,19 @@ module bbf-xponani-power-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2; see
+     This version of this YANG module is part of TR-385i2a1; see
      the TR itself for full legal notices.";
 
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Issue 2.
@@ -123,45 +131,45 @@ module bbf-xponani-power-management {
       }
       leaf irxoff {
         type uint32;
-        units "125 us PHY frames";
+        units "125 microsecond PHY frames";
         description
           "Irxoff the maximum time the Optical Line Termination (OLT)
            can afford to wait from the moment it decides to wake up an
            Optical Network Unit (ONU) in the low-power state of the
            watchful sleep mode until the ONU is fully operational,
-           specified as a count of 125 us PHY frames.";
+           specified as a count of 125 microsecond PHY frames.";
         reference
           "ITU-T G.988 clause 9.1.14";
       }
       leaf iaware {
         type uint32;
-        units "125 us PHY frames";
+        units "125 microsecond PHY frames";
         description
           "The Iaware attribute specifies the time the Optical Network
-           Unit (ONU) spends in its aware state, as a count of 125 us
-           PHY frames, before it re-enters asleep or listen states.
-           Local or remote events may independently cause the ONU to
-           enter an active state rather than returning to a sleep
-           state.";
+           Unit (ONU) spends in its aware state, as a count of 125
+           microsecond PHY frames, before it re-enters asleep or
+           listen states. Local or remote events may independently
+           cause the ONU to enter an active state rather than
+           returning to a sleep state.";
         reference
           "ITU-T G.988 clause 9.1.14";
       }
       leaf ihold {
         type uint16;
-        units "125 us PHY frames";
+        units "125 microsecond PHY frames";
         description
           "The Ihold attribute specifies the minimum time during which
            the Optical Network Unit (ONU) remains in the active held
-           state, as a count of 125 us PHY frames.";
+           state, as a count of 125 microsecond PHY frames.";
         reference
           "ITU-T G.988 clause 9.1.14";
       }
       leaf idoze {
         type uint32;
-        units "125 us PHY frames";
+        units "125 microsecond PHY frames";
         description
           "Maximum sleep interval in doze mode, specified in units of
-           125 us PHY frames.
+           125 microsecond PHY frames.
 
            This parameter must be set to a value greater than 0 if
            Optical Network Unit (ONU) supports doze mode.";
@@ -170,11 +178,11 @@ module bbf-xponani-power-management {
       }
       leaf icyclic-sleep {
         type uint32;
-        units "125 us PHY frames";
+        units "125 microsecond PHY frames";
         default "0";
         description
           "Maximum sleep interval in cyclic-sleep mode, specified in
-           units of 125 us PHY frames.
+           units of 125 microsecond PHY frames.
 
            Local or remote events may cause the Optical Network Unit
            (ONU) to leave this state. This parameter must be set to a
@@ -195,7 +203,7 @@ module bbf-xponani-power-management {
   augment "/if:interfaces/if:interface/bbf-xponani:ani" {
     if-feature "bbf-xpon-pwr:xpon-power-management";
     description
-      "Optical Network Unit (ONU) power management configuration";
+      "Optical Network Unit (ONU) power management configuration.";
     container power-management {
       presence
         "The presence of this container indicates that Optical Network
@@ -219,7 +227,7 @@ module bbf-xponani-power-management {
     if-feature "bbf-xpon-pwr:xpon-power-management";
     description
       "Optical Network Unit (ONU) power management status
-       information";
+       information.";
     container power-management {
       description
         "Optical Network Unit (ONU) power management capabilities and
@@ -249,30 +257,30 @@ module bbf-xponani-power-management {
       }
       leaf itransinit {
         type uint16;
-        units "125 us PHY frames";
+        units "125 microsecond PHY frames";
         description
           "Optical Network Unit (ONU) vendor's statement of the
            complete transceiver initialization time: the time required
            for the ONU to regain full functionality when leaving the
            asleep state (i.e., turning on both the receiver and the
            transmitter and acquiring synchronization to the downstream
-           flow), measured in units of 125 us PHY frames. The value
-           zero indicates that the sleeping ONU can respond to a
+           flow), measured in units of 125 microsecond PHY frames. The
+           value zero indicates that the sleeping ONU can respond to a
            bandwidth grant without delay.";
         reference
           "ITU-T G.988 clause 9.1.14";
       }
       leaf itxinit {
         type uint16;
-        units "125 us PHY frames";
+        units "125 microsecond PHY frames";
         description
           "This attribute is the Optical Network Unit (ONU) vendor's
            statement of the transmitter initialization time: the time
            required for the ONU to regain full functionality when
            leaving the listen state (i.e., turning on the
-           transmitter), measured in units of 125 us PHY frames. The
-           value zero indicates that the dozing ONU can respond to a
-           bandwidth grant without delay.";
+           transmitter), measured in units of 125 microsecond PHY
+           frames. The value zero indicates that the dozing ONU can
+           respond to a bandwidth grant without delay.";
         reference
           "ITU-T G.988 clause 9.1.14";
       }

@@ -1,6 +1,15 @@
 ## Broadband Forum YANG Modules
 
-### 2023-03-15 [OD-360 Issue 1 Amendment 1](https://yang.broadband-forum.org) BBF YANG Best Current Practices
+### 2023-06-21: [TR-385 Issue 2 Amendment 1](https://www.broadband-forum.org/technical/download/TR-385_Issue-2_Amendment-1.pdf) ITU-T PON YANG Modules
+
+*Tag: [TR-385-v2.1.0](https://github.com/BroadbandForum/yang/tree/TR-385-v2.1.0)*
+
+* Align 'units' statements to the latest OD-360 guidelines 
+* Add new modules for managing ONU authentication as defined in [TR-489](https://www.broadband-forum.org/technical/download/TR-489.pdf)
+* Add new modules for managing burst profiles
+* Extend existing modules to support defect reporting
+
+### 2023-03-15: [OD-360 Issue 1 Amendment 1](https://yang.broadband-forum.org) BBF YANG Best Current Practices
 
 *Tag: [OD-360-v1.1.0](https://github.com/BroadbandForum/yang/tree/OD-360-v1.1.0)*
 

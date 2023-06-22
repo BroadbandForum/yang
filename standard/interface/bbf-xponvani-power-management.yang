@@ -26,15 +26,13 @@ module bbf-xponvani-power-management {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-
-     Editor:      Igor Ternovsky, Broadcom
-
      Editor:      Robert Peschi, Nokia
 
-     WA Director: Marta Seda, Calix
+     Editor:      Kevin Noll, Vecima
 
-     WA Director: Samuel Chen, Broadcom";
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on management of
@@ -46,7 +44,7 @@ module bbf-xponvani-power-management {
      Specifically, this module defines Optical Network Unit (ONU)
      power management at the virtual Access Network Interface (vANI).
 
-     Copyright (c) 2018-2020, Broadband Forum
+     Copyright (c) 2018-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -86,9 +84,19 @@ module bbf-xponvani-power-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2; see
+     This version of this YANG module is part of TR-385i2a1; see
      the TR itself for full legal notices.";
 
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Issue 2.
@@ -121,7 +129,7 @@ module bbf-xponvani-power-management {
       }
       leaf ilowpower {
         type uint32;
-        units "125 us PHY frames";
+        units "125 microsecond PHY frames";
         description
           "Ilowpower is the maximum time the Optical Network Unit
            (ONU) spends in its LowPower states, as a count of 125 us
@@ -136,14 +144,14 @@ module bbf-xponvani-power-management {
       }
       leaf iaware {
         type uint32;
-        units "125 us PHY frames";
+        units "125 microsecond PHY frames";
         description
           "Iaware is the minimum time the Optical Network Unit (ONU)
            spends in its Aware state before transitioning to the
-           LowPower state, as a count of 125 us PHY frames. During the
-           Iaware interval, local or remote events may independently
-           cause the ONU to enter the ActiveHeld state rather than
-           returning to the Low Power state.";
+           LowPower state, as a count of 125 microsecond PHY frames.
+           During the Iaware interval, local or remote events may
+           independently cause the ONU to enter the ActiveHeld state
+           rather than returning to the Low Power state.";
         reference
           "ITU-T G.984.3 Annex E
            ITU-T G.987.3 clause 16
@@ -152,16 +160,16 @@ module bbf-xponvani-power-management {
       }
       leaf itransinit {
         type uint32;
-        units "125 us PHY frames";
+        units "125 microsecond PHY frames";
         default "0";
         description
           "Complete transceiver initialization time: The time required
            for the Optical Network Unit (ONU) to gain full
            functionality when leaving the Asleep state (i.e., turning
            on both receiver and transmitter), measured in units of
-           125 us PHY frames, and known by design. The value of zero
-           indicates that the sleeping ONU can respond to a bandwidth
-           grant without delay.
+           125 microsecond PHY frames, and known by design. The value
+           of zero indicates that the sleeping ONU can respond to a
+           bandwidth grant without delay.
 
            itransinit value must be not less than the itransinit value
            reported in /interface-state/interface/bbf-xponani:ani/
@@ -174,16 +182,16 @@ module bbf-xponvani-power-management {
       }
       leaf itxinit {
         type uint32;
-        units "125 us PHY frames";
+        units "125 microsecond PHY frames";
         default "0";
         description
           "Transmitter initialization time: the time required for the
            Optical Network Unit (ONU) to gain full functionality when
            leaving the Listen state (i.e., turning on the transmitter
            while the receiver has remained on), measured in units of
-           125 us PHY frames. The value of zero indicates that the
-           dozing ONU can respond to a bandwidth grant without delay.
-           This leaf is ignored for G.989.x ONU.
+           125 microsecond PHY frames. The value of zero indicates
+           that the dozing ONU can respond to a bandwidth grant
+           without delay. This leaf is ignored for G.989.x ONU.
 
            itxinit value must be not less than the itxinit value
            reported in /interface-state/interface/bbf-xponani:ani/
@@ -196,14 +204,14 @@ module bbf-xponvani-power-management {
       }
       leaf irxoff {
         type uint32;
-        units "125 us PHY frames";
+        units "125 microsecond PHY frames";
         default "0";
         description
           "Irxoff is the maximum time the Optical Line Termination
            (OLT) Channel Termination (CT) can afford to wait from the
            moment it decides to wake up an Optical Network Unit (ONU)
            in the LowPower state until the ONU is fully operational,
-           specified as a count of 125 us PHY frames.";
+           specified as a count of 125 microsecond PHY frames.";
         reference
           "ITU-T G.984.3 Annex E
            ITU-T G.987.3 clause 16

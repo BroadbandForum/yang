@@ -14,7 +14,7 @@ submodule bbf-xpon-channel-group-body {
     prefix if;
   }
   import bbf-xpon-if-type {
-    prefix bbfxponift;
+    prefix bbf-xponift;
   }
   include bbf-xpon-base;
   include bbf-xpon-channel-partition-body;
@@ -26,20 +26,18 @@ submodule bbf-xpon-channel-group-body {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-
-     Editor:      Igor Ternovsky, Broadcom
-
      Editor:      Robert Peschi, Nokia
 
-     WA Director: Marta Seda, Calix
+     Editor:      Kevin Noll, Vecima
 
-     WA Director: Samuel Chen, Broadcom";
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
   description
     "This submodule contains a collection of YANG definitions for
      managing channel groups.
 
-     Copyright (c) 2018-2020, Broadband Forum
+     Copyright (c) 2018-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -79,9 +77,19 @@ submodule bbf-xpon-channel-group-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2; see
+     This version of this YANG module is part of TR-385i2a1; see
      the TR itself for full legal notices.";
 
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Issue 2.
@@ -113,7 +121,7 @@ submodule bbf-xpon-channel-group-body {
     description
       "A list of non-overlapping Allocation Identifier (Alloc-ID)
        values in ascending order, between 1024 to 16383 for G.9807.1
-       XGS-PON/G.989.3 NGPON2 compliant Optical Line Terminations
+       XGS-PON/G.989.3 NG-PON2 compliant Optical Line Terminations
        (OLT) and 256 to 4095 for G.984.3 GPON-compliant Optical Line
        Terminations (OLT).
 
@@ -139,9 +147,9 @@ submodule bbf-xpon-channel-group-body {
             + '0-5][0-5][0-3][0-4]))*)?';
     }
     description
-      "A list of non-overlapping xGEM/G-PON Encapsulation Method (GEM)
+      "A list of non-overlapping xGEM/GPON Encapsulation Method (GEM)
        port-ID values in ascending order, between 1021 to 65534 for
-       G.9807.1 XGS-PON/G.989.3 NGPON2 compliant Optical Line
+       G.9807.1 XGS-PON/G.989.3 NG-PON2 compliant Optical Line
        Terminations (OLT) and 254 to 4095 for G.984.3 GPON-compliant
        Optical Line Terminations (OLT).
 
@@ -167,7 +175,7 @@ submodule bbf-xpon-channel-group-body {
     description
       "A list of non-overlapping Optical Network Unit Identifier
        (ONU-ID) values in ascending order, between 0 to 1020 for
-       G.9807.1 XGS-PON/G.989.3 NGPON2 compliant Optical Line
+       G.9807.1 XGS-PON/G.989.3 NG-PON2 compliant Optical Line
        Terminations (OLT) and 0 to 253 for G.984.3 GPON-compliant
        Optical Line Terminations (OLT).
 
@@ -188,7 +196,7 @@ submodule bbf-xpon-channel-group-body {
   feature pon-pools {
     description
       "Indicates support of assignable PON resources (Allocation
-       Identifier (Alloc-ID), G-PON Encapsulation Method port
+       Identifier (Alloc-ID), GPON Encapsulation Method port
        Identifier (GEM port-ID), Optical Network Unit Identifier
        (ONU-ID) into PON pools.";
   }
@@ -200,14 +208,14 @@ submodule bbf-xpon-channel-group-body {
       type uint32 {
         range "1..864000";
       }
-      units "0.1 second";
+      units "0.1 seconds";
       default "100";
       description
         "The period between two consecutive times the auto-detection
          procedure on each pair in the group is executed.
          Used in NG-PON2 for quiet window control.
          Value represents tenths of seconds.
-         (e.g. 1 = 0.1 second, 864000 = 24 hours).";
+         (e.g., 1 = 0.1 second, 864000 = 24 hours).";
     }
     leaf raman-mitigation {
       type bbf-xpon-types:raman-mitigation-type;
@@ -236,8 +244,8 @@ submodule bbf-xpon-channel-group-body {
     container pon-pools {
       if-feature "bbf-xpon:pon-pools";
       description
-        "This container defines per channel termination PON resources
-         allocation. A channel termination can only be a member of a
+        "Manages per channel termination PON resources allocation.
+         A channel termination can only be a member of a
          single channel group. Within a channel group, PON resources
          should not overlap and only be assigned to a single
          channel termination.";
@@ -246,8 +254,8 @@ submodule bbf-xpon-channel-group-body {
         min-elements 1;
         max-elements 8;
         description
-          "List of the allocated PON pools of Allocation Identifiers
-           (Alloc-ID), G-PON Encapsulation Method port Identifiers
+          "The allocated PON pools of Allocation Identifiers
+           (Alloc-ID), GPON Encapsulation Method port Identifiers
            (GEM port-ID) and Optical Network Unit Identifiers
            (ONU-ID).";
         leaf name {
@@ -259,10 +267,9 @@ submodule bbf-xpon-channel-group-body {
           type if:interface-ref;
           must "derived-from-or-self(/if:interfaces/"
              + "if:interface[if:name = current()]/if:type,"
-             + "'bbfxponift:channel-termination')" {
-            error-message
-              "Referenced interface must be of type
-               'channel-termination'.";
+             + "'bbf-xponift:channel-termination')" {
+            error-message "Referenced interface must be of type "
+                        + "'channel-termination'.";
           }
           description
             "Reference to a channel termination to which PON resource
@@ -272,11 +279,11 @@ submodule bbf-xpon-channel-group-body {
           type alloc-id-values;
           description
             "The list of assignable Allocation Identifiers (Alloc-ID)
-             between 1024 to 16383 for G.9807.1 XGS-PON/G.989.3 NGPON2
-             compliant Optical Line Terminations (OLT) and 256 to 4095
-             for G.984.3 GPON-compliant Optical Line Terminations
-             (OLT). A single value or range of values can be
-             specified.
+             between 1024 to 16383 for G.9807.1 XGS-PON/G.989.3
+             NG-PON2 compliant Optical Line Terminations (OLT) and
+             256 to 4095 for G.984.3 GPON-compliant Optical Line
+             Terminations (OLT). A single value or range of values
+             can be specified.
 
              The format of this string can be any of the following:
               single value
@@ -293,9 +300,9 @@ submodule bbf-xpon-channel-group-body {
         leaf gemport-values {
           type gemport-values;
           description
-            "The list of assignable G-PON Encapsulation Method (GEM)
+            "The list of assignable GPON Encapsulation Method (GEM)
              port Identifiers (IDs) between 1021 to 65534 for G.9807.1
-             XGS-PON/G.989.3 NGPON2 compliant Optical Line
+             XGS-PON/G.989.3 NG-PON2 compliant Optical Line
              Terminations (OLT) and 254 to 4095 for G.984.3
              GPON-compliant Optical Line Terminations (OLT).
 
@@ -317,7 +324,7 @@ submodule bbf-xpon-channel-group-body {
           description
             "The list of assignable Optical Network Unit Identifier
              (ONU-ID) values between 0 to 1020 for G.9807.1 XGS-PON/
-             G.989.3 NGPON2 compliant Optical Line Terminations (OLT)
+             G.989.3 NG-PON2 compliant Optical Line Terminations (OLT)
              and 0 to 253 for G.984.3 GPON-compliant Optical Line
              Terminations (OLT).
 
@@ -380,7 +387,7 @@ submodule bbf-xpon-channel-group-body {
       description
         "The list maintained by the system of all the downstream
          wavelengths already allocated to the channel group
-         including all of the NG-PON2, XGS-PON, XG-PON and G-PON
+         including all of the NG-PON2, XGS-PON, XG-PON and GPON
          cases.
          This list is a helper to avoid wavelength conflicts
          when allocating channel pairs to a channel group.";
@@ -391,23 +398,22 @@ submodule bbf-xpon-channel-group-body {
            channel group. For NG-PON2 it must be a value in
            [156000..161000] expressed in hundredths of nm to fit
            ITU-T precision requirements. For the XGS-PON, XG-PON
-           and G-PON cases, it must have resp. the value 'xgs',
+           and GPON cases, it must have resp. the value 'xgs',
            'xgpon' or 'gpon'.";
       }
     }
     container pon-pools {
       if-feature "bbf-xpon:pon-pools";
       description
-        "This container describes the list of available and consumed
-         and unusable PON resources that a channel termination in a
-         channel group may have.";
+        "Reports the available and consumed per channel termination
+         PON resources allocation.";
       list pon-pool {
         key "name";
         min-elements 1;
         max-elements 8;
         description
-          "This container describes the current characteristics of the
-           PON pool of Allocation Identifiers (Alloc-ID), G-PON
+          "A channel termination's current pool
+           of Allocation Identifiers (Alloc-ID), GPON
            Encapsulation Method port Identifiers (GEM port-ID) and
            Optical Network Unit Identifiers (ONU-ID).";
         leaf name {
@@ -419,7 +425,7 @@ submodule bbf-xpon-channel-group-body {
           type if:interface-state-ref;
           must "derived-from-or-self(/if:interfaces-state"
              + "/if:interface[if:name = current()]/if:type,"
-             + "'bbfxponift:channel-termination')";
+             + "'bbf-xponift:channel-termination')";
           description
             "Reference the configured channel termination
              that is being reported against.";
@@ -436,7 +442,7 @@ submodule bbf-xpon-channel-group-body {
           leaf gemport-values {
             type gemport-values;
             description
-              "The list of consumed G-PON Encapsulation Method port
+              "The list of consumed GPON Encapsulation Method port
                Identifiers (GEM port-ID).
                For example: '1024-1300,1301,1303-1310'.";
           }
@@ -461,7 +467,7 @@ submodule bbf-xpon-channel-group-body {
           leaf gemport-values {
             type gemport-values;
             description
-              "The list of available G-PON Encapsulation Method port
+              "The list of available GPON Encapsulation Method port
                Identifiers (GEM port-IDs).
                For example: '1024-1300,1301,1303-1310'.";
           }

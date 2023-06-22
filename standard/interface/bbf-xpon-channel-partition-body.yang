@@ -22,20 +22,18 @@ submodule bbf-xpon-channel-partition-body {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Joey Boyd, ADTRAN
-
-     Editor:      Igor Ternovsky, Broadcom
-
      Editor:      Robert Peschi, Nokia
 
-     WA Director: Marta Seda, Calix
+     Editor:      Kevin Noll, Vecima
 
-     WA Director: Samuel Chen, Broadcom";
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Marta Seda, Calix";
   description
     "This submodule contains a collection of YANG definitions for
      managing channel partitions.
 
-     Copyright (c) 2018-2020, Broadband Forum
+     Copyright (c) 2018-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -75,9 +73,19 @@ submodule bbf-xpon-channel-partition-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2; see
+     This version of this YANG module is part of TR-385i2a1; see
      the TR itself for full legal notices.";
 
+  revision 2023-06-21 {
+    description
+      "Issue 2 Amendment 1.
+       * Approval Date:    2023-06-21.
+       * Publication Date: 2023-06-21.";
+    reference
+      "TR-385i2a1: ITU-T PON YANG Modules
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-2_Amendment-1.pdf>";
+  }
   revision 2020-10-13 {
     description
       "Issue 2.
@@ -101,7 +109,7 @@ submodule bbf-xpon-channel-partition-body {
 
   grouping channel-partition-config-data {
     description
-      "All configuration data for a channel partition";
+      "All configuration data for a channel partition.";
     leaf channel-group-ref {
       type if:interface-ref;
       must "derived-from-or-self(/if:interfaces"
@@ -140,7 +148,7 @@ submodule bbf-xpon-channel-partition-body {
       type uint16 {
         range "0..40";
       }
-      units "km";
+      units "kilometers";
       default "0";
       description
         "Establishes the distance of the closest Optical Network Unit
@@ -151,7 +159,7 @@ submodule bbf-xpon-channel-partition-body {
       type uint16 {
         range "20 | 40";
       }
-      units "km";
+      units "kilometers";
       default "20";
       description
         "This attribute provides the ability to set the maximum
@@ -173,8 +181,8 @@ submodule bbf-xpon-channel-partition-body {
       type boolean;
       default "false";
       description
-        "If true, enables Advanced Encryption Standard (AES) for
-         multicast G-PON Encapsulation Method (GEM) ports.";
+        "If 'true', enables Advanced Encryption Standard (AES) for
+         multicast GPON Encapsulation Method (GEM) ports.";
       reference
         "ITU-T G.984.3, section 12.2. and 9.2.3.8
          ITU-T G.987.3, section 15.5.1 and 15.5.4
