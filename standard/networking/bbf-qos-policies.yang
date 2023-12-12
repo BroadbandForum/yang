@@ -85,9 +85,19 @@ module bbf-qos-policies {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -268,25 +278,32 @@ module bbf-qos-policies {
     + "derived-from-or-self(if:type, 'bbfift:l2-termination') or "
     + "derived-from(if:type, 'bbfift:ethernet-like')" {
       description
-        "Interfaces that can have QoS policy profiles assigned.";
+        "Applies only to those types of interfaces that can have QoS
+         policy profiles assigned.";
     }
     description
-      "Interfaces that can have QoS policy profiles assigned.
+      "Add data nodes to manage the assignment of QoS policy profile
+       to an interface.
 
        If several interfaces linked by a parent-child relationship in
-       the interface stack are configured with a QOS policy of the
-       same type (e.g. ingress-qos-policy), then all QOS policies must
-       be applied sequentially.
+       the interface stack are configured with a QoS policy profile of
+       the same type (e.g., an 'ingress-qos-policy-profile'), then all
+       referenced QoS policies must be applied in the order specified
+       below.
 
-       In the case of ingress, the QOS policy on the lower-level
-       interface(s) (e.g. ethernetCsmacd) must first be applied before
-       the one on the upper-level interface(s) (e.g.
-       vlan-sub-interface).
+       In the case of ingress, the QoS policies referenced by the QoS
+       policy profile configured on the lower-level interface(s)
+       (e.g., 'ethernetCsmacd') must first be applied, followed by the
+       QoS policies referenced by the QoS policy profile configured on
+       the on the upper-level interface(s) (e.g.,
+       'vlan-sub-interface').
 
-       In the case of egress, the QOS policy on the upper-level
-       interface(s) (e.g. vlan-sub-interface) must first be applied
-       before the one on the lower-level interface(s) (e.g.
-       ethernetCsmacd).";
+       In the case of egress, the QoS policies referenced by the QoS
+       policy profile configured on the upper-level interface(s)
+       (e.g., 'vlan-sub-interface') must first be applied followed by
+       the QoS policies referenced by the QoS policy profile
+       configured on the lower-level interface(s) (e.g.,
+       'ethernetCsmacd').";
     uses qos-policy-profiles;
   }
 

@@ -82,9 +82,19 @@ module bbf-qos-enhanced-scheduling {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -231,7 +241,7 @@ module bbf-qos-enhanced-scheduling {
          of a scheduling hierarchy.
 
          In the case that this reference is being made from an
-         interface that is 'stacked' on lower layer interfaces, the
+         interface that is 'stacked' on lower-layer interfaces, the
          referenced interface must be to an interface that is lower in
          the stack.
 
@@ -532,7 +542,7 @@ module bbf-qos-enhanced-scheduling {
                 type boolean;
                 description
                   "If 'false', no statistics will be collected. If
-                   'true', enable statistics collection per queue. 
+                   'true', enable statistics collection per queue.
                    When transitioning from false to true (disabled to
                    enabled), any existing counts should be cleared.
 
@@ -612,7 +622,7 @@ module bbf-qos-enhanced-scheduling {
                       }
                       description
                         "The ID of the queue associated with the
-                         referenced child scheduler.";
+                         scheduler.";
                     }
                     choice scheduling-type {
                       description
@@ -636,9 +646,9 @@ module bbf-qos-enhanced-scheduling {
                           type bbf-qos-tm:extended-scheduling-weight;
                           description
                             "Queues or schedulers that are defined in
-                             a particular context, e.g. queues defined
-                             to schedule outgoing traffic to an
-                             interface, can have the same priority.
+                             a particular context, e.g., queues
+                             defined to schedule outgoing traffic to
+                             an interface, can have the same priority.
                              The weight defines the portion of traffic
                              that will be taken from this queue or
                              scheduler by comparing the weight of this

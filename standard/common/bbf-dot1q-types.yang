@@ -10,15 +10,13 @@ module bbf-dot1q-types {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -31,7 +29,7 @@ module bbf-dot1q-types {
      Specifically, this module defines common types for support of
      IEEE 802.1Q.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -71,9 +69,19 @@ module bbf-dot1q-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -143,7 +151,7 @@ module bbf-dot1q-types {
     description
       "Identifies a specific IEEE 802.1Q tag type.";
     reference
-      "IEEE 802.1Q-2014: Virtual Bridged Local Area Networks";
+      "IEEE 802.1Q-2014";
   }
 
   typedef vlan-id {
@@ -156,7 +164,7 @@ module bbf-dot1q-types {
        The range 1..4094 is defined by the referenced
        specification.";
     reference
-      "IEEE 802.1Q-2014: Virtual Bridged Local Area Networks";
+      "IEEE 802.1Q-2014";
   }
 
   typedef vlan-id-or-0 {
@@ -169,7 +177,7 @@ module bbf-dot1q-types {
        The range 1..4094 is defined by the referenced specification.
        The value 0 allows support of priority-tagged frames.";
     reference
-      "IEEE 802.1Q-2014: Virtual Bridged Local Area Networks";
+      "IEEE 802.1Q-2014";
   }
 
   typedef vlan-id-range {
@@ -194,7 +202,8 @@ module bbf-dot1q-types {
          comma separated list of ranges
            Example: '1-1000,2001-2999'
          comma separated list of values and ranges
-           Example: '1-1000,1500,2001-2999'";
+           Example: '1-1000,1500,2001-2999'
+       .";
   }
 
   typedef pbit {
@@ -208,7 +217,7 @@ module bbf-dot1q-types {
        can be used by quality of service (QoS) to prioritize
        different classes of traffic.";
     reference
-      "IEEE 802.1Q-2014: Virtual Bridged Local Area Networks";
+      "IEEE 802.1Q-2014";
   }
 
   typedef pbit-list {
@@ -220,8 +229,8 @@ module bbf-dot1q-types {
        ranges, in ascending order. Each p-bits value shall be between
        0 and 7.
 
-       Example: 0,2-4,7
-      ";
+         Example: 0,2-4,7
+       .";
   }
 
   typedef dei {
@@ -233,7 +242,7 @@ module bbf-dot1q-types {
        May be used separately or in conjunction with PCP to indicate
        frames eligible to be dropped in the presence of congestion.";
     reference
-      "IEEE 802.1Q-2014: Virtual Bridged Local Area Networks";
+      "IEEE 802.1Q-2014";
   }
 
   typedef ether-type {
@@ -241,7 +250,7 @@ module bbf-dot1q-types {
     description
       "The Ethernet Type (or Length) value.";
     reference
-      "IEEE 802.3-2012: IEEE Standard for Ethernet, clause 3.2.6";
+      "IEEE 802.3-2012 Clause 3.2.6";
   }
 
   typedef ether-type-hex {
@@ -249,10 +258,10 @@ module bbf-dot1q-types {
       pattern '0x[A-Fa-f0-9]{4}';
     }
     description
-      "The Ethernet Type (or Length) value expressed as a 4 hex digits
+      "The Ethernet Type (or Length) value expressed as 4 hex digits
        in the form 0xABCD.";
     reference
-      "IEEE 802.3-2012: IEEE Standard for Ethernet, clause 3.2.6";
+      "IEEE 802.3-2012 Clause 3.2.6";
   }
 
   typedef ether-type-or-acronym {

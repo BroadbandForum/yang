@@ -14,13 +14,13 @@ module bbf-hardware-types {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -33,7 +33,7 @@ module bbf-hardware-types {
      Specifically, this module specializes types defined in the
      iana-hardware model.
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -73,9 +73,19 @@ module bbf-hardware-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -125,6 +135,14 @@ module bbf-hardware-types {
        Management YANG data model.";
   }
 
+  feature xpon-nt {
+    description
+      "Indicates whether the device supports management of Network
+       Terminations (NT) connected to its xPON interfaces as a
+       remote hardware component within the device's hardware
+       Management YANG data model.";
+  }
+
   identity slot {
     base ianahw:container;
     description
@@ -158,7 +176,7 @@ module bbf-hardware-types {
     base ianahw:port;
     description
       "A 'transceiver-link' is a special type of port that terminates
-       an optical fiber.";
+       an optical signal.";
   }
 
   identity rj45 {
@@ -213,5 +231,13 @@ module bbf-hardware-types {
     description
       "A 'fastdsl-nt' is a remote hardware component that provides the
        network termination of a FAST or DSL line.";
+  }
+
+  identity xpon-nt {
+    if-feature "xpon-nt";
+    base bbf-hwt:remote-nt;
+    description
+      "A 'xpon-nt' is a remote hardware component that provides the
+       network termination of an xPON.";
   }
 }

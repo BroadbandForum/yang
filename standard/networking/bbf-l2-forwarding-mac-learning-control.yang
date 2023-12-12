@@ -75,9 +75,19 @@ submodule bbf-l2-forwarding-mac-learning-control {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -200,10 +210,15 @@ submodule bbf-l2-forwarding-mac-learning-control {
                  will be learned on the port or interface where the
                  frame is received, and the system will perform
                  (source) MAC address translation before forwarding
-                 the frame.";
+                 the frame.
+
+                 Note, the case exists because of the referenced
+                 requirement implying MAC address translation.
+                 However, there is no standardized method for MAC
+                 address translation. Therefore, defining data nodes
+                 is for further study.";
               reference
-                "TR-101i2: Migration to Ethernet-Based DSL Aggregation
-                 R-111";
+                "TR-101i2 R-111";
             }
             case learn-but-do-not-move {
               description
@@ -231,8 +246,8 @@ submodule bbf-l2-forwarding-mac-learning-control {
                  interface usage of the port or interface where the
                  frame is received is not part of this list.";
               reference
-                "TR-101i2: Migration to Ethernet-Based DSL Aggregation
-                 R-112 and R-113";
+                "TR-101i2 R-112;
+                 TR-101i2 R-113";
               leaf-list mac-can-not-move-to {
                 type bbf-if-usg:interface-usage;
                 description

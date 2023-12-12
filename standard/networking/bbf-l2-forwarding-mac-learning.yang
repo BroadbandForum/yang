@@ -77,9 +77,19 @@ submodule bbf-l2-forwarding-mac-learning {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -177,7 +187,7 @@ submodule bbf-l2-forwarding-mac-learning {
         description
           "A reference to a forwarding database.
 
-           The absence of a reference to a forwarding datase
+           The absence of a reference to a forwarding database
            automatically means that MAC addresses are not learned.";
       }
     }
@@ -245,14 +255,15 @@ submodule bbf-l2-forwarding-mac-learning {
               "The frame is forwarded despite the source MAC address
                can not be learned.";
             reference
-              "IEEE - 802.1Q-2014, Table 8-7";
+              "IEEE 802.1Q-2014 Table 8-7";
           }
           enum discard {
             description
               "The frame from which the source MAC address could not
                be learned is discarded.";
             reference
-              "TR-101i2 - R114, R115";
+              "TR-101i2 R-114;
+               TR-101i2 R-115";
           }
         }
         default "forward";

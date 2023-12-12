@@ -10,15 +10,13 @@ module bbf-location-types {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -32,7 +30,7 @@ module bbf-location-types {
      This module contains a collection of YANG definitions for
      types associated with BBF location information.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -72,9 +70,19 @@ module bbf-location-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -120,7 +128,7 @@ module bbf-location-types {
   identity plant-type {
     description
       "Base identity from which specific plant types are derived. A
-       plant is the place where the resource is located";
+       plant is the place where the resource is located.";
   }
 
   identity indoor {
@@ -150,7 +158,7 @@ module bbf-location-types {
   identity pole {
     base plant-type;
     description
-      "The location of the resource is on a pole. ";
+      "The location of the resource is on a pole.";
   }
 
   identity building-facade {

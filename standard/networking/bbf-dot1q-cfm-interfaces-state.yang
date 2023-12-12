@@ -29,13 +29,13 @@ module bbf-dot1q-cfm-interfaces-state {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -50,7 +50,7 @@ module bbf-dot1q-cfm-interfaces-state {
      data model to provide data nodes to report Maintenance Points
      present on an interface, i.e., the CFM stack of an interface.
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -90,9 +90,19 @@ module bbf-dot1q-cfm-interfaces-state {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -138,9 +148,9 @@ module bbf-dot1q-cfm-interfaces-state {
         leaf md-level {
           type cfm-types:md-level-type;
           description
-            "The Maintenance Domain Level of the Maintenance Point";
+            "The Maintenance Domain Level of the Maintenance Point.";
           reference
-            "12.14.2.1.2b  of IEEE Std 802.1Q-2018";
+            "IEEE 802.1Q-2018 Clause 12.14.2.1.2b";
         }
         leaf direction {
           type cfm-types:mp-direction-type;
@@ -148,7 +158,7 @@ module bbf-dot1q-cfm-interfaces-state {
             "The direction in which the Maintenance Point faces on the
              interface.";
           reference
-            "12.14.2.1.2c of IEEE Std 802.1Q-2018";
+            "IEEE 802.1Q-2018 Clause 12.14.2.1.2c";
         }
         leaf mac-address {
           type yang:mac-address;
@@ -156,20 +166,23 @@ module bbf-dot1q-cfm-interfaces-state {
           description
             "The MAC address of the Maintenance Point.";
           reference
-            "12.14.2.1.3e of IEEE Std 802.1Q-2018";
+            "IEEE 802.1Q-2018 Clause 12.14.2.1.3e";
         }
         choice maintenance-point {
           case mep {
             container mep {
               description
-                "This container provides information about the MEP.";
+                "This container provides information about the
+                 Maintenance Association Endpoint (MEP).";
               uses bbf-cfm:local-mep;
             }
           }
           case mhf {
             container mhf {
               description
-                "This container provides information about the MHF.";
+                "This container provides information about the
+                 Maintenance Domain Intermediate Point (MIP) Half
+                 Function (MHF).";
               uses bbf-cfm:local-mhf;
             }
           }
@@ -177,7 +190,7 @@ module bbf-dot1q-cfm-interfaces-state {
           description
             "Indicates the type of Maintenance Point.";
           reference
-            "12.14.2.1.3a of IEEE Std 802.1Q-2018";
+            "IEEE 802.1Q-2018 Clause 12.14.2.1.3a";
         }
       }
     }

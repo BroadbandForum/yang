@@ -89,9 +89,19 @@ module bbf-sub-interface-tagging {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -199,12 +209,14 @@ module bbf-sub-interface-tagging {
 
   grouping dot1q-tag {
     description
-      "Grouping to allow configuration to identify a single 802.1Q
-       VLAN tag.";
+      "Grouping to allow configuration to identify a single
+       IEEE 802.1Q VLAN tag.";
     container dot1q-tag {
       description
-        "Identifies an 802.1Q VLAN tag with an explicit tag-type and
-         a single VLAN ID.";
+        "Identifies an IEEE 802.1Q VLAN tag with an explicit tag-type
+         and a single VLAN ID.";
+      reference
+        "IEEE 802.1Q";
       leaf tag-type {
         type union {
           type bbf-dot1qt:dot1q-tag-type;
@@ -311,21 +323,22 @@ module bbf-sub-interface-tagging {
          The match criteria are unambiguous in case a frame field is
          unique. This is not the case for the match criteria defined
          via leaf 'ethernet-frame-type' included via the 'uses
-         bbf-classif:ethertype-match'. The value provided by the leaf
-         inside this grouping is to be compared with the first
-         Ethertype of an untagged Ethernet frame; or for frames that
-         contain one or more VLAN tags it is the value to be compared
-         with the Ethertype that is the first after the VLAN tags for
-         which a matching criteria is specified via the list 'tag'.
+         bbf-classif:ethertype-match' statement. The value provided by
+         the leaf inside this grouping is to be compared with the
+         first Ethertype of an untagged Ethernet frame; or for frames
+         that contain one or more VLAN tags it is the value to be
+         compared with the Ethertype that is the first after the VLAN
+         tags for which a matching criteria is specified via the list
+         'tag'.
 
          For example, if matching criteria are specified for one outer
          VLAN tag, and a received IPoE frame is single tagged, then
          the leaf 'ethernet-frame-type' refers to the Ethertype 0x0800
          being the Ethertype that identifies the frame as IPoE. While
-         the same YANG configuration applied to a received IPoE frame
-         that is double tagged, then the leaf 'ethernet-frame-type'
-         refers to the Ethertype 0x8100 being the Ethertype that
-         identifies the frame contains an inner VLAN tag.";
+         the same configuration applied to a received IPoE frame that
+         is double tagged, then the leaf 'ethernet-frame-type' refers
+         to the Ethertype 0x8100 being the Ethertype that identifies
+         the frame contains an inner VLAN tag.";
       uses bbf-classif:frame-destination-match;
       uses bbf-classif:multiple-vlan-tag-match {
         augment "vlan-tag-match-type/vlan-tagged/tag" {
@@ -346,9 +359,9 @@ module bbf-sub-interface-tagging {
       if-feature "exclude-criteria";
       description
         "Exclude criteria extend the match criteria defined within the
-         container 'flexible-match'. I.e. a frame matches in the
-         sub-interface if it matches the criteria defined in
-         'flexible-match' container AND if it does not match the
+         container 'flexible-match'. In other words, a frame matches
+         in the sub-interface if it matches the criteria defined in
+         the 'flexible-match' container AND if it does not match the
          criteria defined in the 'exclude-criteria' container. A
          non-existing exclude-criteria container means it does not
          provide additional criteria and all frames match that part of

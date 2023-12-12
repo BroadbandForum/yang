@@ -1,5 +1,13 @@
 ## Broadband Forum YANG Modules
 
+### 2023-12-15: [TR-383 Amendment 7](https://www.broadband-forum.org/technical/download/TR-383_Amendment-7.pdf) Common YANG Modules for Access Networks
+*Tag: [TR-383-v1.7.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.7.0)*
+
+* Enhancements to existing models.
+* Modifications to existing models to enable reuse of common YANG schemas.
+* New models for ICMPv6 and network functions.
+* New models added to DHCP, layer 2 forwarding, layer 2 multicast, PPPoE and subscribers.
+
 ### 2023-06-21: [TR-385 Issue 2 Amendment 1](https://www.broadband-forum.org/technical/download/TR-385_Issue-2_Amendment-1.pdf) ITU-T PON YANG Modules
 
 *Tag: [TR-385-v2.1.0](https://github.com/BroadbandForum/yang/tree/TR-385-v2.1.0)*

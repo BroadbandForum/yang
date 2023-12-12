@@ -96,9 +96,19 @@ module bbf-frame-processing-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -200,14 +210,15 @@ module bbf-frame-processing-profiles {
            first after the VLAN tags for which a matching criteria is
            specified via the leafs in the case 'vlan-tagged'.
 
-           E.g. if matching criteria are specified for one outer VLAN
-           tag, and a received IPoE frame is single tagged, then the
-           ethernet-frame-type refers to the Ethertype 0x0800 being
-           the Ethertype that identifies the frame as IPoE. While the
-           same YANG configuration applied to a received IPoE frame
-           that is double tagged, then the ethernet-frame-type refers
-           to the Ethertype 0x8100 being the Ethertype that identifies
-           the frame contains an inner VLAN tag.";
+           For example, if matching criteria are specified for one
+           outer VLAN tag, and a received IPoE frame is single tagged,
+           then the leaf 'ethernet-frame-type' refers to the Ethertype
+           0x0800 being the Ethertype that identifies the frame as
+           IPoE. While the same configuration applied to a received
+           IPoE frame that is double tagged, then the leaf
+           'ethernet-frame-type' refers to the Ethertype 0x8100 being
+           the Ethertype that identifies the frame contains an inner
+           VLAN tag.";
         leaf any-frame {
           type empty;
           description
@@ -343,10 +354,10 @@ module bbf-frame-processing-profiles {
            will be configured with exclude criteria.";
         description
           "Exclude criteria extend the match criteria defined within
-           the container 'match-criteria'. I.e., a frame matches in
-           the interface referencing this profile when it matches the
-           criteria defined in 'match-criteria' container AND if it
-           does not match the criteria defined in the
+           the container 'match-criteria'. In other words, a frame
+           matches in the interface referencing this profile when it
+           matches the criteria defined in 'match-criteria' container
+           AND if it does not match the criteria defined in the
            'exclude-criteria' container. A non-existing
            'exclude-criteria' container means it does not provide
            additional criteria and all frames match that part of the
@@ -364,7 +375,7 @@ module bbf-frame-processing-profiles {
            frames will be subject to VLAN tag manipulations.";
         description
           "Ingress rewrite refers to the supported tag manipulations
-           before the frame is offered to a higher layer interface or
+           before the frame is offered to a higher-layer interface or
            to a forwarder.";
         list copy-from-tags-to-marking-list {
           key "tag-index";
@@ -374,7 +385,7 @@ module bbf-frame-processing-profiles {
           leaf tag-index {
             type bbf-classif:tag-index;
             description
-              "Specifies from which input VLAN tag fields MUST be
+              "Specifies from which input VLAN tag fields must be
                copied to the frame's marking list.";
           }
           leaf pbit-marking-index {

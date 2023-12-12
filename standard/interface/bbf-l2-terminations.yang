@@ -82,9 +82,19 @@ module bbf-l2-terminations {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -137,7 +147,7 @@ module bbf-l2-terminations {
       container ingress-rewrite {
         description
           "Ingress rewrite refers to the supported tag manipulations
-           before the frame is sent to a higher layer interface.";
+           before the frame is sent to a higher-layer interface.";
         leaf pop-tags {
           type uint8 {
             range "0..2";
@@ -145,7 +155,7 @@ module bbf-l2-terminations {
           default "0";
           description
             "The number of tags to remove before the frame is
-             sent to a higher layer interface.";
+             sent to a higher-layer interface.";
         }
       }
       container egress-rewrite {

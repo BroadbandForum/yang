@@ -1,0 +1,692 @@
+module bbf-mgmd-common {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-mgmd-common";
+  prefix bbf-mgmdc;
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, Adtran
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Joey Boyd, Adtran
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on Multicast Group
+     Membership Discovery (MGMD) protocols.
+
+     Specifically, this module describes reusable groupings containing
+     configuration and operational data nodes used for managing the
+     Internet Group Management Protocol (IGMP) and the Multicast
+     Listener Discovery (MLD) protocol in case the system acts as a
+     snooper.
+
+     Copyright (c) 2017-2023, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a7; see
+     the TR itself for full legal notices.";
+
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
+
+  grouping interface-to-host {
+    description
+      "Data nodes used for configuring the Internet Group Management
+       Protocol (IGMP) and the Multicast Listener Discovery (MLD)
+       protocol on interfaces that connect multicast hosts.";
+    leaf query-interval {
+      type uint32 {
+        range "1..31744";
+      }
+      units "seconds";
+      default "125";
+      description
+        "The interval at which MGMD General Query messages (GMQs) are
+         sent on interfaces.";
+      reference
+        "RFC 3376 Section 8.2;
+         RFC 3810 Section 9.14.2;
+         RFC 5519 Section 5 - mgmdRouterInterfaceQueryInterval";
+    }
+    leaf query-max-response-time {
+      type uint32 {
+        range "0..31744";
+      }
+      units "0.1 seconds";
+      default "100";
+      description
+        "The maximum query response time advertised in MGMD General
+         Query messages sent on interfaces. The value 0 means that the
+         host receiving the Query message shall reply immediately to
+         it. A value different than 0 means that the host waits a
+         random time between 0 and the time specified in the Query
+         message before answering the Query message.
+
+         This configuration is shared between IGMPv2, MLDv1, IGMPv3
+         and MLDv2 but has a difference in translating the configured
+         value into a time inserted in the Query message:
+
+         IGMPv2:
+           Configured value < 255 : the time value is equal to the
+           configured value (units in 100ms)
+           Configured value >= 255 : the time value is 255 (units in
+           100ms)
+
+         MLDv1:
+           Configured value < 374 : the time value is equal to the
+           configured value (units in 100ms)
+           Configured value >= 374 : the time value is 374 (units in
+           100ms)
+
+         IGMPv3 & MLDv2:
+           Configured value < 128 : the time value is equal to the
+           configured value (units in 100ms)
+           Configured value >= 128 : the time value is calculated from
+           the data node value. It is the lowest discrete value higher
+           or equal to the data node value.
+           The supported set of discrete values are calculated from a
+           floating point calculation 'mantissa * (2 power(exponent))'
+           for which the mantissa is a number from 16 to 31 and the
+           exponent is a number from 3 to 10.";
+      reference
+        "RFC 2710 Section 7.3;
+         RFC 2933 Section 4 - igmpInterfaceQueryMaxResponseTime;
+         RFC 3376 Section 8.3;
+         RFC 3810 Section 5.1.9;
+         RFC 5519 Section 5 -
+         mgmdRouterInterfaceQueryMaxResponseTime";
+    }
+    leaf last-member-query-interval {
+      when '../immediate-leave = "disabled"';
+      type uint32 {
+        range "2..31744";
+      }
+      units "0.1 seconds";
+      default "10";
+      description
+        "The last member query interval is the max response time
+         inserted into MGMD Group-Specific Query messages sent in
+         response to leaves, and is also the amount of time between
+         MGMD Group-Specific Query messages.";
+      reference
+        "RFC 2710 Section 7.8;
+         RFC 3376 Section 8.8;
+         RFC 5519 Section 5 - mgmdRouterLastMemberQueryInterval";
+    }
+    leaf last-member-query-count {
+      when '../immediate-leave = "disabled"';
+      type uint32 {
+        range "1..255";
+      }
+      default "2";
+      description
+        "The number of unanswered MGMD Group-Specific Query messages
+         sent out before it is assumed that there are no local members
+         interested in the IP multicast stream.
+
+         This data node is applied to each interface on which the
+         proxy generates MGMD Membership Query messages.";
+      reference
+        "RFC 3376 Section 8.9";
+    }
+    leaf startup-query-interval {
+      type uint32 {
+        range "0..31744";
+      }
+      units "seconds";
+      default "30";
+      description
+        "This variable represents the interval between MGMD General
+         Query messages sent by a Querier on startup.";
+      reference
+        "RFC 3376 Section 8.6";
+    }
+    leaf startup-query-count {
+      type uint32 {
+        range "1..255";
+      }
+      default "2";
+      description
+        "The startup query count is the number of MGMD General Query
+         messages sent out on startup, separated by the startup query
+         interval.";
+      reference
+        "RFC 3376 Section 8.7";
+    }
+    leaf immediate-leave {
+      type enumeration {
+        enum enabled {
+          description
+            "Enabled.";
+        }
+        enum disabled {
+          description
+            "Disabled.";
+        }
+      }
+      default "disabled";
+      description
+        "Immediate leave controls the function by which an interface
+         that receives a leave for a certain group might immediately
+         delete the corresponding group record.
+
+         Configuring immediate leave reduces the amount of time it
+         takes for the switch to stop sending multicast traffic to an
+         interface when the last host on that interface leaves the
+         group.
+
+         When immediate leave is disabled, the switch no longer tracks
+         hosts. Instead, whenever it receives a leave from a host on
+         an interface, it sends out a MGMD Group-Specific Query
+         message to all hosts on that interface. If it does not
+         receive any MGMD Membership Report message on the interface
+         in response to the MGMD Group-Specific Query message within a
+         set interval, it stops forwarding multicast traffic to the
+         interface.";
+      reference
+        "ITU-T G.988 Clause 9.3.27 - Immediate Leave";
+    }
+    leaf robustness {
+      type uint32 {
+        range "1..255";
+      }
+      default "2";
+      description
+        "The robustness variable allows tuning for the expected packet
+         loss on a subnet. If a subnet is expected to be lossy, the
+         robustness variable may be increased. IGMP and MLD are robust
+         to (robustness variable - 1) packet losses.";
+      reference
+        "RFC 3376 Section 8.1;
+         RFC 5519 Section 5 - mgmdRouterInterfaceRobustness";
+    }
+  }
+
+  grouping interface-to-router {
+    description
+      "Data nodes used for configuring the Internet Group Management
+       Protocol (IGMP) and the Multicast Listener Discovery (MLD)
+       protocol on interfaces that connect multicast routers.";
+    leaf unsolicited-report-interval {
+      type uint32 {
+        range "1..255";
+      }
+      units "0.1 seconds";
+      default "10";
+      description
+        "The interval between repetitions of a host's initial report
+         of interest in a multicast address.";
+      reference
+        "RFC 3376 Section 8.11;
+         RFC 3810 Section 9.11";
+    }
+    leaf robustness {
+      type uint32 {
+        range "1..255";
+      }
+      default "2";
+      description
+        "The robustness variable allows tuning for the expected packet
+         loss on a subnet. If a subnet is expected to be lossy, the
+         robustness variable may be increased. IGMP and MLD are robust
+         to (robustness variable - 1) packet losses.";
+      reference
+        "RFC 3376 Section 8.1;
+         RFC 5519 Section 5 - mgmdHostInterfaceVersion3Robustness";
+    }
+  }
+
+  grouping multicast-snoop {
+    description
+      "Data nodes used for configuring the Internet Group Management
+       Protocol (IGMP) and the Multicast Listener Discovery (MLD)
+       protocol on a layer 2 system that connects multicast hosts
+       and multicast routers and for which the system acts as a
+       MGMD snooper.";
+    leaf immediate-leave {
+      type enumeration {
+        enum enabled {
+          description
+            "Immediate leave enabled means the system performs host
+             tracking. Then the reception of a leave results in
+             immediately removing this host from the subscription
+             list.";
+        }
+        enum disabled {
+          description
+            "Immediate leave disabled means the system sends MGMD
+             Group-Specific Query messages on the interface to find
+             out if other hosts connected to the same interface would
+             still be interested in receiving the multicast channel.";
+        }
+      }
+      default "disabled";
+      description
+        "Immediate leave controls the function by which an interface
+         that receives a leave for a certain group might immediately
+         delete the corresponding group record.
+
+         Configuring immediate leave reduces the amount of time it
+         takes for the switch to stop sending multicast traffic to an
+         interface when the last host on that interface leaves the
+         group.
+
+         When immediate leave is disabled, the switch no longer tracks
+         hosts. Instead, whenever it receives a leave from a host on
+         an interface, it waits for a period as specified by the group
+         membership interval. If it does not receive any MGMD
+         Membership Report on the interface in that time interval, it
+         stops forwarding multicast traffic to the interface.";
+      reference
+        "ITU-T G.988 Clause 9.3.27 - Immediate Leave;
+         RFC 3810 Section A.2";
+    }
+    leaf group-membership-interval {
+      type uint32 {
+        range "1..31744";
+      }
+      units "seconds";
+      default "260";
+      description
+        "The group membership interval is the amount of time that has
+         to pass before a multicast router decides there are no more
+         members of a group or a particular source on an interface.
+
+         This leaf, as a parameter of a snooper, has to be consistent
+         with the parameters configured in the multicast router that
+         is connected to the snooper. It has to be equal to or larger
+         than ((the Robustness Variable) times (the Query Interval))
+         plus (one Query Response Interval) as calculated from
+         parameters configured in the multicast router.";
+      reference
+        "RFC 4541 Section 2.1.1 - Item 6;
+         RFC 3376 Section 8.4";
+    }
+    leaf last-member-query-interval {
+      type uint32 {
+        range "2..31744";
+      }
+      units "0.1 seconds";
+      default "10";
+      description
+        "The last member query interval is the maximum response time
+         inserted into MGMD Group-Specific Query messages sent in
+         response to leaves, and is also the amount of time between
+         MGMD Group-Specific Query messages.
+
+         This feature is optional for a snooper and can be used in a
+         slow network. When this feature is enabled, it permits a
+         snooper to send a MGMD Group-Specific Query message after the
+         group membership has timed out to verify that clients have
+         stopped watching a channel. If no response is received to the
+         MGMD Group-Specific Query message, it removes the group state
+         and discontinuous multicast transmission for that channel.";
+      reference
+        "RFC 3376 Section 8.8;
+         RFC 5519 Section 5
+         - mgmdRouterInterfaceLastMemberQueryInterval";
+    }
+    leaf last-member-query-count {
+      type uint32 {
+        range "1..255";
+      }
+      default "2";
+      description
+        "The number of unanswered MGMD Group-Specific Query messages
+         sent out before it is assumed that there are no local members
+         interested in the IP multicast stream.
+
+         This feature is optional for a snooper and can be used in a
+         slow network. When this feature is enabled, it permits a
+         snooper to send a MGMD Group-Specific Query message after the
+         group membership has timed out to verify that clients have
+         stopped watching a channel. If no response is received to the
+         MGMD Group-Specific Query message, it removes the group state
+         and discontinuous multicast transmission for that channel.";
+      reference
+        "RFC 3376 Section 8.9";
+    }
+  }
+
+  grouping mgmd-interface-to-hosts-receive-state {
+    description
+      "Data nodes used for monitoring the Internet Group Management
+       Protocol (IGMP) and the Multicast Listener Discovery (MLD)
+       protocol on interfaces that connect a system to a multicast
+       host.";
+    leaf in-successful-join-requests {
+      type yang:counter32;
+      units "messages";
+      description
+        "Counts the total number of successful join requests received
+         from hosts connected to the interface. This includes new
+         joins (which make a new connection) and re-joins (which
+         already have a connection).
+
+         For MGMD version 2 it counts the number of Membership Report
+         messages that resulted in a successful join.
+
+         MGMD version 3 defines a Membership Report message to contain
+         multiple group records. Within a group record there is a
+         parameter 'multicast address' and a list of 'source
+         addresses'. A tree is managed per (multicast address, source
+         address) pair. Hence a join is a request that requests
+         associating the interface to a tree. In case one Membership
+         Report message results in requests for associating the
+         interface to N trees, then this corresponds to N joins. For
+         MGMD version 3 the counter result in-successful-join-requests
+         counts the number of joins that in successfully associating
+         the interface to a tree.";
+      reference
+        "TR-101i2 R-251 - 'Per port, per multicast VLAN counters',
+         Item 1";
+    }
+    leaf in-unsuccessful-join-requests {
+      type yang:counter32;
+      units "messages";
+      description
+        "Counts the total number of unsuccessful new join requests
+         from hosts connected to the interface. The failures could be
+         due to the following reasons: permission failure, bitrate
+         failure, lack of resource or invalid group address.
+
+         For MGMD version 2 it counts the number of Membership Report
+         messages that failed to result in a successful join.
+
+         MGMD version 3 defines a Membership Report message to contain
+         multiple group records. Within a group record there is a
+         parameter 'multicast address' and a list of 'source
+         addresses'. A tree is managed per (multicast address, source
+         address) pair. Hence a join is a request that requests
+         associating the interface to a tree. In case one Membership
+         Report message results in requests for associating the
+         interface to N trees, then this corresponds to N joins. For
+         MGMD version 3 the counter in-unsuccessful-join-requests
+         counts the number of joins that did not result in
+         successfully associating the interface to a tree.";
+    }
+    leaf in-leaves {
+      type yang:counter32;
+      units "messages";
+      description
+        "For MGMD version 2 it counts the number of Leave Group
+         messages received on this interface, i.e., messages that are
+         requesting to leave a multicast group address.
+
+         MGMD version 3 defines a Membership Report message to contain
+         multiple group records. Within a group record there is a
+         parameter 'multicast address' and a list of 'source
+         addresses'. A tree is managed per (multicast address, source
+         address) pair. Hence a leave is a request that requests to
+         remove the association from an interface to a tree. In case
+         one Membership Report message results in requests for
+         removing N associations from the interface from trees, then
+         this corresponds to N leaves.";
+      reference
+        "TR-101i2 R-251 - 'Per port, per multicast VLAN counters',
+         Item 2";
+    }
+    leaf in-valid-messages {
+      type yang:counter32;
+      units "messages";
+      description
+        "For MGMD version 2 it counts the number of Membership Report
+         messages plus the number of MGMD Leave Group messages
+         received on this interface and that had valid formatting.
+
+         For MGMD version 3 it also counts the number of Membership
+         Report messages received on this interface and that had valid
+         formatting.";
+    }
+    leaf in-invalid-messages {
+      type yang:counter32;
+      units "messages";
+      description
+        "Counts the number of invalid MGMD messages received on this
+         interface.";
+      reference
+        "TR-101i2 R-251 - 'Per port, per multicast VLAN counters',
+         Item 5";
+    }
+  }
+
+  grouping mgmd-interface-to-hosts-transmit-state {
+    description
+      "Data nodes used for monitoring the Internet Group Management
+       Protocol (IGMP) and the Multicast Listener Discovery (MLD)
+       protocol on interfaces that connect a system to multicast
+       hosts.";
+    leaf out-specific-queries {
+      type yang:counter32;
+      units "messages";
+      description
+        "For MGMD version 2 it counts the number of sent MGMD
+         Group-Specific Query messages.
+
+         MGMD version 3 defines a Query message to contain a single
+         group address' and a list of 'source addresses'. A tree is
+         managed per group address, source address) pair. For MGMD
+         version 3 a MGMD Group-Specific Query message is a Query
+         message for which the group address is not the zero address.
+         The counter out-specific-queries is incremented once for a
+         sent ASM Group-Specific Query message (i.e., no source
+         address), and is incremented with N for SSM Group-Specific
+         Query messages that are sent to the router, where N is the
+         number of source addresses in the Query message.";
+      reference
+        "TR-101i2 R-251 - 'Per port, per multicast VLAN counters',
+         Item 4";
+    }
+    leaf out-general-queries {
+      type yang:counter32;
+      units "messages";
+      description
+        "For MGMD version 2 it counts the number of sent MGMD General
+         Query messages.
+
+         MGMD version 3 defines a Query message to contain a single
+         group address' and a list of 'source addresses'. For MGMD
+         version 3 a MGMD General Query message is a Query message for
+         which the group address is the zero address and there are no
+         sources addresses. The counter out-generic-queries is
+         incremented once per sent MGMD General Query message.";
+      reference
+        "TR-101i2 R-251 - 'Per port, per multicast VLAN counters',
+         Item 3";
+    }
+  }
+
+  grouping mgmd-host-interface-state {
+    description
+      "Data nodes used for monitoring the Internet Group Management
+       Protocol (IGMP) and the Multicast Listener Discovery (MLD)
+       protocol on interfaces that connect a system to multicast
+       routers.";
+    leaf out-joins {
+      type yang:counter32;
+      units "messages";
+      description
+        "For MGMD version 2 it counts the number of Membership Report
+         messages sent on this interface, i.e., messages that are
+         requesting to join a multicast group address.
+
+         MGMD version 3 defines a Membership Report message to contain
+         multiple group records. Within a group record there is a
+         parameter 'multicast address' and a list of 'source
+         addresses'. A tree is managed per (multicast address, source
+         address) pair. Hence a join is a request that requests
+         associating the interface to a tree. In case one Membership
+         Report message results in requests for associating the
+         interface to N trees, then this corresponds to N joins. For
+         MGMD version 3 the counter counts the number of joins that
+         are sent to the router.";
+      reference
+        "TR-101i2 R-251 - 'Per multicast VLAN counters', Item 2";
+    }
+    leaf out-leaves {
+      type yang:counter32;
+      units "messages";
+      description
+        "For MGMD version 2 it counts the number of Leave Group
+         messages sent on this interface, i.e., messages that are
+         requesting to leave a multicast group address.
+
+         MGMD version 3 defines a Membership Report message to contain
+         multiple group records. Within a group record there is a
+         parameter 'multicast address' and a list of 'source
+         addresses'. A tree is managed per (multicast address, source
+         address) pair. Hence a leave is a request that requests to
+         remove the association from an interface to a tree. In case
+         one Membership Report message results in requests for
+         removing N associations from trees for the interface, then
+         this corresponds to N leaves.";
+      reference
+        "TR-101i2 R-251 - 'Per multicast VLAN counters', Item 4";
+    }
+    leaf in-general-queries {
+      type yang:counter32;
+      units "messages";
+      description
+        "For MGMD version 2 it counts the number of received General
+         Query messages.
+
+         MGMD version 3 defines a Query message to contain a single
+         'group address' and a list of 'source addresses'. For MGMD
+         version 3 a General Query message is a Query message for
+         which the group address is  the zero address and there are no
+         sources addresses. The counter in-general-queries is
+         incremented once per received General Query message.";
+      reference
+        "TR-101i2 R-251 - 'Per multicast VLAN counters', Item 7";
+    }
+    leaf in-specific-queries {
+      type yang:counter32;
+      units "messages";
+      description
+        "For MGMD version 2 it counts the number of received
+         Group-Specific Query messages.
+
+         MGMD version 3 defines a Query message to contain a single
+         'group address' and a list of 'source addresses'. A tree is
+         managed per group address, source address) pair. For MGMD
+         version 3 a Group-Specific Query message is a Query message
+         for which the group address is not the zero address.  The
+         counter in-specific-queries is incremented once for a
+         received ASM Group-Specific Query message (i.e., no source
+         address), and is incremented with N for SSM Group-Specific
+         Query messages received to the router, where N is the number
+         of source addresses in the Query message.";
+      reference
+        "TR-101i2 R-251 - 'Per multicast VLAN counters', Item 9";
+    }
+    leaf in-valid-messages {
+      type yang:counter32;
+      units "messages";
+      description
+        "For MGMD version 2 it counts the number of Query messages
+         received on this interface and that had valid formatting.
+
+         For MGMD version 3 it also counts the number of Query
+         messages received on this interface and that had valid
+         formatting.";
+    }
+    leaf in-invalid-message {
+      type yang:counter32;
+      units "messages";
+      description
+        "Counts the number of invalid messages received on the
+         interface.";
+      reference
+        "TR-101i2 R-251 - 'Per multicast VLAN counters', Item 10";
+    }
+    leaf in-interface-wrong-version-queries {
+      type yang:counter32;
+      units "messages";
+      description
+        "The number of MGMD General Query messages received whose IGMP
+         or MLD version does not match the version configured in the
+         VPN its protocol version.
+
+         Both IGMP and MLD require that all routers on a LAN be
+         configured to run the same version.  Thus, if any MGMD
+         General Query messages are received with the wrong version,
+         this indicates a configuration error.";
+      reference
+        "RFC 5519 Section 5 - mgmdRouterInterfaceWrongVersionQueries";
+    }
+    leaf host-interface-version2-querier-time {
+      type yang:timeticks;
+      units "0.01 seconds";
+      description
+        "The time remaining until the host assumes that there are no
+         MGMDv2 routers present on the interface. While this is
+         non-zero, the host will reply to all MGMD Membership Query
+         messages with version 2 Membership Reports. This variable
+         applies to MGMDv3 hosts that are forced to run in v2 for
+         compatibility with v2 hosts or routers present on the
+         interface.";
+      reference
+        "RFC 3376 Section 7.2.1;
+         RFC 5519 Section 5 - mgmdHostInterfaceVersion2QuerierTimer";
+    }
+  }
+}

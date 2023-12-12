@@ -1,0 +1,174 @@
+module bbf-icmpv6-profile-common {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-icmpv6-profile-common";
+  prefix bbf-icmpv6-pc;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, Adtran
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Joey Boyd, Adtran
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on subscriber
+     management via the Internet Control Message Protocol version 6
+     (ICMPv6) as applicable to access network equipment. As such, this
+     module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     The functionality to realize BBF's ICMPv6 protocol requirements
+     is called 'ICMPv6 Relay'.
+
+     Specifically, this module contains the definition of a profile
+     for subscriber information used by an ICMPv6 Relay in creating
+     an Agent Circuit ID and Remote ID as described in TR-101i2.
+
+     Copyright (c) 2017-2023, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a7; see
+     the TR itself for full legal notices.";
+
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
+
+  feature relay-with-lio {
+    description
+      "Support Line Identification Option (LIO) insertion/removal.";
+  }
+
+  grouping icmpv6-profiles {
+    description
+      "ICMPv6 configuration profiles.";
+    container icmpv6-profiles {
+      if-feature "bbf-icmpv6-pc:relay-with-lio";
+      description
+        "ICMPv6 configuration profiles.";
+      list icmpv6-profile {
+        key "name";
+        description
+          "An ICMPv6 Relay configuration profile.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "Name of the profile.";
+        }
+        container line-identification-option-format {
+          description
+            "Contains information that needs to be filled in the LIO
+             that is inserted together with the encapsulated Router
+             Solicitation message in a newly created IPv6 datagram.";
+          leaf default-circuit-id-syntax {
+            type bbf-yang:string-ascii63-or-empty;
+            default "";
+            description
+              "To be used to generate a LIO when no circuit-id is
+               provided for the VLAN sub-interface via a referenced
+               /bbf-subscriber-profiles:subscriber-profiles
+               /bbf-subscriber-profiles:subscriber-profile.
+
+               The syntax is a string of ASCII characters that
+               determines the actual value inserted in the sub-option.
+               Parts of the syntax that are recognized as predefined
+               keywords will be replaced by an actual value.";
+            reference
+              "TR-177 R-15;
+               TR-177 R-16";
+          }
+          leaf start-numbering-from-zero {
+            type boolean;
+            default "false";
+            description
+              "If the value of 'default-circuit-id-syntax' or
+               'default-remote-id-syntax' indicates that a Slot or a
+               Port identification shall be added to the sub-option
+               value, then this leaf determines whether the slot/port
+               numbering is to start from 0 or 1.";
+          }
+          leaf use-leading-zeroes {
+            type boolean;
+            default "false";
+            description
+              "If the value of'default-circuit-id-syntax' or 'default-
+               remote-id-syntax' indicates that a Slot or a Port
+               identification shall be added to the option value,
+               then this leaf determines whether the slot/port
+               numbering is to use leading 0's or not, i.e., to
+               generate a fixed-length string or a string with only
+               meaningful digits.
+
+               Note that the number of digits used to form the fixed-
+               length string is device specific. A device may use the
+               number of digits as specified in TR-101i2 Table 2 /
+               TR-156 Table 1 or a device may determine the number of
+               digits by the maximum value for the Slot or a Port
+               identification applicable to the device, i.e., if the
+               maximum value is less than or equal to 9, one digit may
+               be used; if the maximum value is less than or equal to
+               99, two digits may be used, etc.";
+          }
+        }
+      }
+    }
+  }
+}

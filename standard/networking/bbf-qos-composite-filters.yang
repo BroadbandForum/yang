@@ -93,9 +93,19 @@ module bbf-qos-composite-filters {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -163,7 +173,7 @@ module bbf-qos-composite-filters {
 
   grouping acl-transport-header-fields {
     description
-      "Transport header fields";
+      "Transport header fields.";
     container source-port-range {
       presence
         "The presence of this container enables configuration of the
@@ -228,10 +238,11 @@ module bbf-qos-composite-filters {
         description
           "This is logical operator for a filter.
 
-           When true, it indicates the filter looks for a match with
-           a pattern defined by the filter-field. When false, it looks
-           for a 'no match' with the pattern defined by the filter
-           field.";
+           If 'true', it indicates the filter looks for a match with a
+           pattern defined by the filter-field.
+
+           If 'false', it looks for a 'no match' with the pattern
+           defined by the filter field.";
       }
       uses bbf-classif:mac-address-match {
         refine "mac-address" {
@@ -255,10 +266,11 @@ module bbf-qos-composite-filters {
         description
           "This is logical operator for a filter.
 
-           When true, it indicates the filter looks for a match with
-           a pattern defined by the filter-field. When false, it looks
-           for a 'no match' with the pattern defined by the filter
-           field.";
+           If 'true', it indicates the filter looks for a match with a
+           pattern defined by the filter-field.
+
+           If 'false', it looks for a 'no match' with the pattern
+           defined by the filter field.";
       }
       uses bbf-classif:mac-address-match {
         refine "mac-address" {
@@ -299,7 +311,7 @@ module bbf-qos-composite-filters {
                corresponding VLAN tag fields. When multiple match
                criteria are specified, then all of them must evaluate
                positive to have a match. The outermost tag is
-               assigned index 0. ";
+               assigned index 0.";
             leaf index {
               type bbf-fpt:tag-index;
               must 'count(../../tag[index = 0]) > 0' {
@@ -421,10 +433,11 @@ module bbf-qos-composite-filters {
     list pbit-marking-list {
       key "index";
       description
-        "The pbit marking list provides match criteria for classifying
-         frames with the intention to apply actions at matching
-         condition. The p-bits fields to be evaluated are part of a
-         frame's metadata as provided as output of another QoS policy.
+        "The p-bits marking list provides match criteria for
+         classifying frames with the intention to apply actions at
+         matching condition. The p-bits fields to be evaluated are
+         part of a frame's metadata as provided as output of another
+         QoS policy.
 
          The match criteria provides a list because a frame can
          contain multiple VLAN tags and correspondingly can contain
@@ -558,7 +571,7 @@ module bbf-qos-composite-filters {
 
            When filter criteria are used for multiple fields, then all
            of them need a match in order to conclude there is a match
-           for this filter entry, i.e. all the match criteria
+           for this filter entry, i.e., all the match criteria
            specified in this filter have to be combined with a logical
            AND.";
         leaf name {
@@ -586,7 +599,7 @@ module bbf-qos-composite-filters {
 
                When filter criteria are used for multiple fields, then
                all of them need a match in order to conclude there is
-               a match for this composite-filter entry, i.e. all the
+               a match for this composite-filter entry, i.e., all the
                match criteria specified in this filter have to be
                combined with a logical AND.";
             uses extended-filter;
@@ -616,7 +629,7 @@ module bbf-qos-composite-filters {
 
          When filter criteria are used for multiple fields, then
          all of them need a match in order to conclude there is
-         a match for this enhanced-filter entry, i.e. all the
+         a match for this enhanced-filter entry, i.e., all the
          match criteria specified in this filter have to be
          combined with a logical AND.";
       uses extended-filter;

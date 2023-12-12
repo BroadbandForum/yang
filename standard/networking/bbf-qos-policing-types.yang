@@ -10,15 +10,13 @@ module bbf-qos-policing-types {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
-
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -31,7 +29,7 @@ module bbf-qos-policing-types {
      Specifically, this module contains common types used for
      management of policers.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -71,9 +69,19 @@ module bbf-qos-policing-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -127,41 +135,45 @@ module bbf-qos-policing-types {
       "The Coupling Flag (CF) allows the choice between two modes of
        operation of the rate enforcement algorithm.
 
-       When CF is set to 0, the long term average rate of Service
-       Frames that are declared Yellow is bound by EIR.
+       When the CF is set to 0, the long term average rate of service
+       frames that are declared yellow is bound by the Excess
+       Information Rate (EIR) which is then the equivalent of the Peak
+       Information Rate (PIR).
 
-       When CF is set to 1, the long term average rate of Service
-       Frames that are declared Yellow is bound by CIR+EIR depending
-       on the volume of offered Service Frames which are declared
-       Green.
+       When the CF is set to 1, the long term average rate of service
+       frames that are declared yellow is bound by the sum of the
+       Committed Information Rate (CIR) and Excess Information Rate
+       (EIR), i.e., CIR+EIR, depending on the volume of offered
+       service frames that are declared green. This sum is also
+       equivalent of the Peak Information Rate (PIR).
 
        In both cases, the burst size of Service Frames which are
        declared Yellow is bound by EBS.";
     reference
-      "MEF 10.3";
+      "MEF 10.3 R141";
   }
 
   typedef color-mode {
     type enumeration {
       enum color-aware {
         description
-          "A Policer property where a pre-determined level of
-           compliance for each Service Frame is taken into account
-           when determining the level of compliance for each Service
-           Frame.";
+          "A policer property where a pre-determined level of
+           compliance (color) for each Service Frame is taken into
+           account when determining the level of compliance for each
+           Service Frame.";
       }
       enum color-blind {
         description
-          "A Policer property where a pre-determined level of
-           compliance for each Service Frame, if present, is ignored
-           when determining the level of compliance for each Service
-           Frame.";
+          "A policer property where a pre-determined level of
+           compliance (color) for each Service Frame, if present, is
+           ignored when determining the level of compliance for each
+           Service Frame.";
       }
     }
     description
-      "The Color Mode (CM) indicates the type of color awareness which
-       is employed by the Policer.";
+      "The Color Mode indicates the type of color awareness which is
+       employed by the policer.";
     reference
-      "MEF 10.3, Section 12.1";
+      "MEF 10.3 R151";
   }
 }

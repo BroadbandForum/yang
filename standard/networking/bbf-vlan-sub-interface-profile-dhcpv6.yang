@@ -76,9 +76,19 @@ module bbf-vlan-sub-interface-profile-dhcpv6 {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -97,24 +107,25 @@ module bbf-vlan-sub-interface-profile-dhcpv6 {
        nodes.";
     container dhcpv6-ldra {
       presence
-        "Enables support of DHCPv6 LDRA on interfaces referencing
-         this profile.";
+        "Enables support of a Lightweight DHCPv6 Relay Agent (LDRA) on
+         interfaces referencing this profile.";
       description
-        "DHCPv6 LDRA configuration parameters.";
+        "Lightweight DHCPv6 Relay Agent (LDRA) configuration
+         parameters.";
       leaf trusted-port {
         type boolean;
         default "false";
         description
           "Marks a client-facing interface as trusted for the LDRA.
            When an interface is deemed untrusted, i.e., configured
-           'false', then the LDRA MUST discard any message of type
+           'false', then the LDRA must discard any message of type
            RELAY-FORW (12) received from the client-facing interface.
            When an interface is trusted i.e;, configured 'true', then
            the RELAY-FORW DHCPv6 message coming from an LDRA, or other
            messages coming from a client such as a Solicit message,
            are forwarded embedded in a new RELAY-FORW message.";
         reference
-          "RFC 6221 - Section 6.1.2";
+          "RFC 6221 Section 6.1.2";
       }
       leaf profile-ref {
         type leafref {

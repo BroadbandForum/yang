@@ -1,0 +1,318 @@
+module bbf-pppoe-intermediate-agent-profile-common {
+  yang-version 1.1;
+  namespace
+    "urn:bbf:yang:bbf-pppoe-intermediate-agent-profile-common";
+  prefix bbf-pppoe-ia-pc;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import bbf-subscriber-types {
+    prefix bbf-subtype;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, Adtran
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Joey Boyd, Adtran
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on subscriber
+     management via the PPPoE protocol as applicable to access
+     network equipment. As such, this module is specific to access
+     network equipment (e.g., BBF-specified Access Nodes and FTTdp
+     DPUs).
+
+     Specifically, this module contains the definition of a profile
+     for subscriber information used by a PPPoE Intermediate Agent in
+     creating an Agent Circuit ID and Remote ID as described in
+     TR-101i2.
+
+     Copyright (c) 2017-2023, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a7; see
+     the TR itself for full legal notices.";
+
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
+
+  grouping pppoe-profiles {
+    description
+      "PPPoE Intermediate Agent configuration profiles.";
+    container pppoe-profiles {
+      description
+        "PPPoE Intermediate Agent configuration profiles.";
+      list pppoe-profile {
+        key "name";
+        description
+          "A PPPoE Intermediate Agent configuration profile.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "Name of the profile.";
+        }
+        container pppoe-vendor-specific-tag {
+          description
+            "Contains information that needs to be filled in the
+             vendor-specific tag - 0x0105.";
+          leaf-list subtag {
+            type enumeration {
+              enum circuit-id {
+                description
+                  "Add the sub-option Agent Circuit ID in the vendor-
+                   specific tag with sub-option number 0x01.
+
+                   The value inserted is the value of the leaf
+                   'circuit-id' defined in the instance in the
+                   '/bbf-subprof:subscriber-profiles/bbf-subprof:
+                   subscriber-profile' that is associated with the
+                   interface, if any. If this leaf is unknown, then a
+                   sub-option Agent Circuit ID will be generated
+                   according to the syntax defined in
+                   'default-circuit-id-syntax'.";
+                reference
+                  "TR-101i2 Section 8.3";
+              }
+              enum remote-id {
+                description
+                  "Add the sub-option Agent Remote ID in the
+                   vendor-specific tag with sub-option number 0x02.
+
+                   The value inserted is the value of the leaf
+                   'remote-id' defined in the instance in the
+                   '/bbf-subprof:subscriber-profiles/bbf-subprof:
+                   subscriber-profile' that is associated with the
+                   interface, if any. If this leaf is unknown, then a
+                   sub-option Agent Remote ID will be generated
+                   according to the syntax defined in
+                   'default-remote-id-syntax'.";
+                reference
+                  "TR-101i2 Section 8.3";
+              }
+              enum access-loop-characteristics {
+                description
+                  "Access loop characteristics to be added in the
+                   vendor-specific tag with sub-tag-numbers 0x81-0x8E
+                   and 0x90.
+
+                   The characteristics to be added to the sub-option
+                   are controlled via 'access-loop-subtags'.";
+                reference
+                  "TR-101i2 Section 8.4";
+              }
+            }
+            min-elements 1;
+            description
+              "Identifies the sub-tags that should be part of the
+               vendor-specific tag.";
+          }
+          leaf default-circuit-id-syntax {
+            type bbf-yang:string-ascii63-or-empty;
+            default "";
+            description
+              "To be used to generate a sub-option Agent Circuit ID
+               when no 'circuit-id' is provided for the VLAN
+               sub-interface via a referenced '/bbf-subprof:
+               subscriber-profiles/bbf-subprof:subscriber-profiles'.
+
+               The syntax is a string of ASCII characters that
+               determines the actual value inserted in the sub-
+               option. Parts of the syntax that are recognized as
+               predefined keywords will be replaced by an actual
+               value.";
+            reference
+              "TR-178 R-117";
+          }
+          leaf default-remote-id-syntax {
+            type bbf-yang:string-ascii63-or-empty;
+            default "";
+            description
+              "To be used to generate a sub-option Agent Remote ID
+               when no 'remote-id' is provided for the VLAN sub-
+               interface via a referenced '/bbf-subprof:
+               subscriber-profiles/bbf-subprof:subscriber-profile'.
+
+               The syntax is a string of ASCII characters that
+               determines the actual value inserted in the sub-
+               option. Parts of the syntax that are recognized as
+               predefined keywords will be replaced by an actual
+               value.";
+            reference
+              "TR-178 R-120";
+          }
+          leaf access-loop-subtags {
+            type bbf-subtype:broadband-line-characteristics;
+            default "";
+            description
+              "Access Loop sub-tags that are to be added in the
+               vendor-specific tag.";
+            reference
+              "TR-178 R-123";
+          }
+          leaf start-numbering-from-zero {
+            type boolean;
+            default "false";
+            description
+              "In case the 'default-circuit-id-syntax' or
+               'default-remote-id-syntax' indicates a Slot or a Port
+               identification shall be added to the sub-tag value,
+               then this leaf determines if the slot/port numbering
+               must start from 0 or 1.";
+            reference
+              "TR-178 R-118";
+          }
+          leaf use-leading-zeroes {
+            type boolean;
+            default "false";
+            description
+              "In case the 'default-circuit-id-syntax' or
+               'default-remote-id-syntax' indicates a Slot or a Port
+               identification shall be added to the sub-tag value,
+               then this leaf determines if the slot/port numbering
+               must use leading 0's or not, i.e., generate a fixed-
+               length string or a string with only meaningful digits.
+
+               Note that the number of digits used to form the fixed-
+               length string is device specific. A device may use the
+               number of digits as specified in TR-101i2 Table 2/
+               TR-156 Table 1 or a device may determine the number of
+               digits by the maximum value for the Slot or a Port
+               identification applicable to the device, i.e., if the
+               maximum value is less than or equal to 9, one digit may
+               be used; if the maximum value is less than or equal to
+               99, two digits may be used, etc.";
+            reference
+              "TR-178 R-119;
+               TR-101i2 R-153;
+               TR-101i2 Table 2;
+               TR-156 Table 1";
+          }
+          list padding {
+            key "name";
+            description
+              "Configures how to insert values in an actual circuit-id
+               and/or remote-id string. In other words, when the
+               syntax 'default-circuit-id-syntax' or
+               'default-remote-id-syntax' is used to generate an
+               actual string, and the syntax contains a pre-defined
+               keyword, then an entity in this 'padding' list with
+               this pre-defined keyword as 'name' determines how the
+               value shall be generated and inserted in the string.
+
+               Configuring an entry for a particular keyword means:
+               - for the keywords 'Slot' and 'Port' (or for functional
+                 equivalent keywords, as exact keyword values are not
+                 standardized): this configuration overrules the
+                 configuration of the data node 'use-leading-zeroes'
+                 configured in the sibling data node to this list.
+               - for any other keyword: the system adds or does not
+                 add leading zeros as configured for this keyword.
+
+               Not configuring an entry for a particular keyword
+               means:
+               - for the keywords 'Slot' and 'Port' (or for functional
+                 equivalent keywords): the system behaves as
+                 configured in 'use-leading-zeroes' configured in the
+                 sibling data node to this list.
+               - for any other keyword: the possible use of leading
+                 zeros is system dependent.";
+            leaf name {
+              type bbf-yang:string-ascii64;
+              description
+                "A pre-defined keyword that can be used in the string
+                 'default-circuit-id-syntax' and/or
+                 'default-remote-id-syntax'.";
+            }
+            leaf use-leading-zeroes {
+              type boolean;
+              description
+                "This data node indicates whether or not leading zeros
+                 shall be used when generating a value for a pre-
+                 defined keyword in the 'default-circuit-id-syntax' or
+                 'default-remote-id-syntax'.
+
+                 When leading zeros shall be used the device shall
+                 generate a fixed-length string. When no leading zeros
+                 shall be inserted, then a string with only meaningful
+                 digits is generated.
+
+                 Note that the number of digits used to form the
+                 fixed-length string is device specific. A device may
+                 use the number of digits as specified in TR-101i2
+                 Table 2 / TR-156 Table 1 or a device may determine
+                 the number of digits by the maximum value it can
+                 have. For example, if the maximum value for the
+                 number of Slots in a device is less than or equal to
+                 9, one digit may be used; if the maximum value is
+                 less than or equal to 99, two digits may be used,
+                 etc.";
+              reference
+                "TR-178 R-119;
+                 TR-101i2 R-153;
+                 TR-101i2 Table 2;
+                 TR-156 Table 1";
+            }
+          }
+        }
+      }
+    }
+  }
+}

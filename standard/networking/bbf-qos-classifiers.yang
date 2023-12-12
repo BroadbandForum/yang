@@ -89,9 +89,19 @@ module bbf-qos-classifiers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -174,8 +184,8 @@ module bbf-qos-classifiers {
 
   feature qos-bac-color-from-flow-color {
     description
-      "Indicates support for copying the flow color into the buffer
-       acceptance control (BAC) color.";
+      "Indicates support for copying the flow color into the Buffer
+       Acceptance Control (BAC) color.";
   }
 
   typedef qos-pbit-marking-index {
@@ -184,18 +194,19 @@ module bbf-qos-classifiers {
     description
       "An index to a Priority Code Point bits (p-bits) marking list.
 
-       The marking list is a piece of metadata, i.e. it is data that
+       The marking list is a piece of metadata, i.e., it is data that
        belongs to the frame but is not a field of the frame itself.
-       Once assigned to the frame it travels with the frame until the
-       frame is transmitted or discarded, this independent of all
-       frame manipulations that take place. The content of this
-       marking list is generated via a QoS profile or via a copy from
-       the frame's pbit in a VLAN sub-interface ingress rewrite. Note
-       that a frame has just one p-bits marking list, i.e. if multiple
+       Once assigned to the frame, the metadata travels with the frame
+       until the frame is transmitted or discarded. This is
+       independent of all frame manipulations that take place prior to
+       the final egress rewrite. The content of this marking list is
+       generated via a QoS profile or via a copy from the frame's
+       p-bits in a VLAN sub-interface ingress rewrite. Note that a
+       frame has just one p-bits marking list, i.e., if multiple
        actions write to the same position in the list, then the last
        write overwrites the previous.
 
-       As an example, it is possible to provide a metadata pbit to a
+       As an example, it is possible to provide a metadata p-bits to a
        frame at the ingress side, this data travels with the frame
        through the switch, and the metadata is used at the egress side
        when a VLAN tag is pushed into the frame.";
@@ -207,16 +218,17 @@ module bbf-qos-classifiers {
     description
       "An index to a Drop Eligibility Indicator (DEI) marking list.
 
-       The marking list is a piece of metadata, i.e. it is data that
+       The marking list is a piece of metadata, i.e., it is data that
        belongs to the frame but is not a field of the frame itself.
-       Once assigned to the frame it travels with the frame until the
-       frame is transmitted or discarded, this independent of all
-       frame manipulations that take place. The content of this
-       marking list is generated via a QoS profile or via a copy from
-       the frame's DEI in a VLAN sub-interface ingress rewrite. Note
-       that a frame has just one DEI marking list, i.e. if multiple
-       actions write to the same position in the list, then the last
-       write overwrites the previous.
+       Once assigned to the frame, the metadata travels with the frame
+       until the frame is transmitted or discarded. This is
+       independent of all frame manipulations that take place prior to
+       the final egress rewrite. The content of this marking list is
+       generated via a QoS profile or via a copy from the frame's DEI
+       in a VLAN sub-interface ingress rewrite. Note that a frame has
+       just one DEI marking list, i.e., if multiple actions write to
+       the same position in the list, then the last write overwrites
+       the previous.
 
        As an example, it is possible to provide a metadata DEI to a
        frame at the ingress side, this data travels with the frame
@@ -297,10 +309,10 @@ module bbf-qos-classifiers {
   identity permit {
     base action-type;
     description
-      "The action-type identity indicating the permit action. I.e.
-       frames to which this action is assigned are permitted and will
-       be subject to the next step of frame processing where further
-       actions can be assigned.";
+      "The action-type identity indicating the permit action. In other
+       words, frames to which this action is assigned are permitted
+       and will be subject to the next step of frame processing where
+       further actions can be assigned.";
   }
 
   identity action-scope {
@@ -317,8 +329,8 @@ module bbf-qos-classifiers {
   identity ethernet-interface {
     base action-scope;
     description
-      "The scope of the action is the Ethernet like interface. This
-       encompasses all VLAN sub-interfaces within the Ethernet like
+      "The scope of the action is the Ethernet-like interface. This
+       encompasses all VLAN sub-interfaces within the Ethernet-like
        interface in scope.";
   }
 
@@ -638,7 +650,7 @@ module bbf-qos-classifiers {
             type empty;
             status deprecated;
             description
-              "Identifies any protocol, i.e. not match is specified
+              "Identifies any protocol, i.e., not match is specified
                for any protocol.";
           }
         }
@@ -775,7 +787,7 @@ module bbf-qos-classifiers {
 
          An example is the assignment of a traffic class. This traffic
          class is used, after the forwarding decision has been made
-         and all QOS polices are applied, to identify the queue on the
+         and all QoS polices are applied, to identify the queue on the
          outgoing interface. If a traffic class is not explicitly
          configured, a default must be used for each matched ingress
          frame. This value is reported in 'scheduling-traffic-class'.
@@ -859,7 +871,7 @@ module bbf-qos-classifiers {
 
          An example is the assignment of a traffic class. This traffic
          class is used, after the forwarding decision has been made
-         and all QOS polices are applied, to identify the queue on the
+         and all QoS polices are applied, to identify the queue on the
          outgoing interface. If a traffic class is not explicitly
          configured, a default must be used for each matched ingress
          frame. This value is configured in

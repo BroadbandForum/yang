@@ -83,9 +83,19 @@ module bbf-ethernet-performance-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -136,7 +146,7 @@ module bbf-ethernet-performance-management {
   grouping eth-interface-performance-counters {
     description
       "Counters associated with current and historical 15 minute and
-       24 hour performance counters";
+       24 hour performance counters.";
     leaf in-pkts-errors-fcs {
       type bbf-yang:performance-counter64;
       units "frames";
@@ -230,7 +240,7 @@ module bbf-ethernet-performance-management {
          Discontinuities in the value of this counter can occur at
          re-initialization of the management system, and at other
          times as indicated by the value of the interface's
-         'statistics/discontinuity-time' ";
+         'statistics/discontinuity-time'.";
       reference
         "IEEE 802.3, 30.3.1.1.15, aFramesLostDueToIntMACRcvError";
     }

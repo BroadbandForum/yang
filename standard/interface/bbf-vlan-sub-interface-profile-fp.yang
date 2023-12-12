@@ -47,7 +47,7 @@ module bbf-vlan-sub-interface-profile-fp {
 
      Specifically, this module extends the VLAN sub-interface profile
      with data nodes supporting the frame processing, i.e., data nodes
-     for matching frames received on a lower layer interface into a
+     for matching frames received on a lower-layer interface into a
      VLAN sub-interface, data nodes indicating the associated ingress
      rewrite actions, and data nodes for egress rewrite actions.
 
@@ -91,9 +91,19 @@ module bbf-vlan-sub-interface-profile-fp {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -171,16 +181,16 @@ module bbf-vlan-sub-interface-profile-fp {
     container exclude-criteria {
       presence
         "Presence of this container provides negative criteria to be
-         applied on a stream of frames. I.e., a frame matching this
-         configuration has to be excluded from the scope where this
-         exclude criteria is applied.";
+         applied on a stream of frames. In other words, a frame
+         matching this configuration has to be excluded from the scope
+         where this exclude criteria is applied.";
       description
         "This container provides criteria that if fulfilled exclude
          frames from the scope.
 
-         Exclude criteria go together with match criteria. I.e., a
-         frame matches if it matches what is configured as match
-         criteria, AND if it does not match exclude criteria.
+         Exclude criteria go together with match criteria. In other
+         words, a frame matches if it matches what is configured as
+         match criteria, AND if it does not match exclude criteria.
 
          For all exclude criteria in this container applies: if not
          configured then the corresponding frame field is not subject

@@ -88,9 +88,19 @@ module bbf-frame-classification {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -266,67 +276,75 @@ module bbf-frame-classification {
         "A choice on the value of the MAC address.";
       case any-multicast-mac-address {
         description
-          "This represents the multicast MAC addresses, i.e.,
-           addresses for which the least significant bit of the first
-           octet is set to 1.";
+          "This case applies when the to-be-classified MAC address is
+           classified as a multicast MAC address.";
         leaf any-multicast-mac-address {
           type empty;
           description
-            "Indicates the MAC address is a multicast address.";
+            "The MAC address is classified as a multicast address,
+             i.e., it is an address for which the least significant
+             bit of the first octet is set to 1.";
         }
       }
       case unicast-address {
         description
-          "This represents the unicast MAC addresses, i.e., addresses
-           for which the least significant bit of the first octet is
-           set to 0 (zero).";
+          "This case applies when the to-be-classified MAC address is
+           classified as a unicast address.";
         leaf unicast-address {
           type empty;
           description
-            "Indicates the MAC address is a unicast address.";
+            "The MAC address is classified as a unicast address, i.e.,
+             it is an address for which the least significant bit of
+             the first octet is set to 0 (zero).";
         }
       }
       case broadcast-address {
         description
-          "This represents the broadcast MAC address, i.e., address
-           FF:FF:FF:FF:FF:FF.";
+          "This case applies when the to-be-classified MAC address is
+           classified as the broadcast address.";
         leaf broadcast-address {
           type empty;
           description
-            "Indicates the MAC address is a broadcast address.";
+            "The MAC address is classified as a broadcast address,
+             i.e., address FF:FF:FF:FF:FF:FF.";
         }
       }
       case cfm-multicast-address {
         description
-          "This represents a mask for all CFM OAM multicast addresses.
-           These are the addresses of the form 01:80:C2:00:00:3X.";
+          "This case applies when the to-be-classified MAC address is
+           classified as a CFM OAM multicast address.";
         leaf cfm-multicast-address {
           type empty;
           description
-            "Indicates the MAC address is a CFM multicast address.";
+            "The MAC address is classified as a CFM multicast address,
+             i.e., it is an address of the form 01:80:C2:00:00:3X.";
           reference
-            "IEEE 802.1Q-2014, section 8.13.11";
+            "IEEE 802.1Q-2014 Clause 8.13.11";
         }
       }
       case ipv4-multicast-address {
         description
-          "This represents a mask for all IPv4 multicast addresses.
-           These are the addresses in the range 01:00:5E:00:00:00 up
-           to and including 01:00:5E:7F:FF:FF.";
+          "This case applies when the to-be-classified MAC address is
+           classified as an IPv4 multicast address.";
         leaf ipv4-multicast-address {
           type empty;
           description
-            "Indicates the MAC address is an IPv4 multicast address.";
+            "The MAC address is classified as an IPv4 multicast
+             address, i.e., it is an address in the range
+             01:00:5E:00:00:00 up to and including
+             01:00:5E:7F:FF:FF.";
         }
       }
       case ipv6-multicast-address {
         description
-          "This represents a mask for all IPv6 multicast addresses.
-           These are the addresses of the form 33:33:XX:XX:XX:XX.";
+          "This case applies when the to-be-classified MAC address is
+           classified as an IPv6 multicast address.";
         leaf ipv6-multicast-address {
           type empty;
           description
-            "Indicates the MAC address is an IPv6 multicast address.";
+            "The MAC address is classified as an IPv6 multicast
+             address, i.e., it is an address of the form
+             33:33:XX:XX:XX:XX.";
         }
       }
       case mac-address-filter {
@@ -718,8 +736,8 @@ module bbf-frame-classification {
            Configuring this 'any-frame' case is equivalent to not
            configuring any of the cases of this choice and means that
            'all frames match'. Configuring allows to have some
-           explicit configuration, e.g. in case of the Transparent LAN
-           service.";
+           explicit configuration, e.g., in case of the Transparent
+           LAN service.";
         leaf any-frame {
           type empty;
           description

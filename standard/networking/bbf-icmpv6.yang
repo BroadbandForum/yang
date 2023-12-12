@@ -1,0 +1,344 @@
+module bbf-icmpv6 {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-icmpv6";
+  prefix bbf-icmpv6;
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import bbf-if-type {
+    prefix bbfift;
+  }
+  import bbf-icmpv6-profile-common {
+    prefix bbf-icmpv6-pc;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, Adtran
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Joey Boyd, Adtran
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on subscriber
+     management via the Internet Control Message Protocol version 6
+     (ICMPv6) as applicable to access network equipment. As such, this
+     module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     The functionality to realize BBF's ICMPv6 protocol requirements
+     is called 'ICMPv6 Relay'.
+
+     Copyright (c) 2017-2023, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a7; see
+     the TR itself for full legal notices.";
+
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
+
+  grouping counters {
+    description
+      "Defines counter parameters.";
+    leaf forwarded-messages {
+      type yang:counter32;
+      description
+        "Number of messages forwarded.";
+    }
+    leaf discarded-messages {
+      type yang:counter32;
+      description
+        "Number of messages discarded.";
+    }
+  }
+
+  grouping icmpv6-counters {
+    description
+      "Defines ICMPv6 statistics parameters.";
+    container router-solicitation {
+      description
+        "ICMPv6 Router Solicitation statistics.";
+      uses counters;
+      reference
+        "TR-177 R-17";
+    }
+    container router-advertisement {
+      description
+        "ICMPv6 Router Advertisement statistics.";
+      uses counters;
+      reference
+        "TR-177 R-18";
+    }
+    container neighbor-advertisement {
+      description
+        "ICMPv6 Neighbor Advertisement statistics.";
+      uses counters;
+      reference
+        "TR-177 Section 5.6.2.4";
+    }
+    container neighbor-solicitation {
+      description
+        "ICMPv6 Neighbor Solicitation statistics.";
+      uses counters;
+      reference
+        "TR-177 Section 5.6.2.3";
+    }
+    container router-redirect {
+      description
+        "ICMPv6 Redirect Message statistics.";
+      uses counters;
+      reference
+        "TR-177 R-19";
+    }
+    container multicast-listener-query {
+      description
+        "ICMPv6 Multicast Listener Query statistics.";
+      uses counters;
+      reference
+        "TR-177 R-20";
+    }
+    container error-message {
+      description
+        "Aggregate count of the following ICMPv6 error messages:
+         Type 1 - Destination Unreachable
+         Type 2 - Message Too Big
+         Type 3 - Time Exceeded
+         Type 4 - Parameter Problem.";
+      uses counters;
+      reference
+        "TR-177 Section 5.6.2";
+    }
+    container informational-message {
+      description
+        "Aggregate count of the following ICMPv6 informational
+         messages:
+         Type 128 - Echo Request
+         Type 129 - Echo Reply.";
+      uses counters;
+      reference
+        "TR-177 Section 5.6.2";
+    }
+    container unknown-message {
+      description
+        "ICMPv6 invalid message statistics, i.e., ICMPv6 messages with
+         an unknown type.";
+      uses counters;
+      reference
+        "TR-177 R-13";
+    }
+  }
+
+  uses bbf-icmpv6-pc:icmpv6-profiles;
+
+  augment "/if:interfaces/if:interface" {
+    when
+      "derived-from-or-self (if:type, 'bbfift:vlan-sub-interface')" {
+      description
+        "Applies to VLAN sub-interfaces.";
+    }
+    description
+      "Additions for ICMPv6 message processing on the VLAN
+       sub-interface.";
+    container icmpv6 {
+      presence
+        "Indicates configuration related to ICMPv6 message processing
+         is present on this interface.";
+      description
+        "ICMPv6 Relay configuration parameters.
+
+         Configuration within this container instantiates (or may
+         instantiate, see leaf 'enabled') an ICMPv6 Relay with a
+         behavior based on the additional configuration contained
+         within this container.
+
+         If the container is not present, no ICMPv6 Relay
+         functionality is performed on this interface. Any received
+         ICMPv6 message is processed based on the layer 2
+         configuration, e.g., VLAN sub-interface and/or layer 2
+         forwarding.";
+      leaf enabled {
+        type union {
+          type boolean;
+          type enumeration {
+            enum secured-host {
+              description
+                "Upstream ICMPv6 messages that can be sent by a host
+                 are forwarded. Messages that can be sent only by a
+                 router are discarded. Discarded messages are:
+                 - Router Advertisement
+                 - Redirect
+                 - MLD query messages.
+
+                 Downstream ICMPv6 messages that could reveal data of
+                 one user to another shall be sent to the right user
+                 only or shall be discarded. For example, the
+                 multicast Neighbor Solicitation message sent to
+                 resolve a user's IP address to a MAC address shall be
+                 discarded.";
+            }
+          }
+        }
+        default "false";
+        description
+          "If 'true', the ICMPv6 Relay will process ICMPv6 messages
+           received on the interface as defined in the referenced
+           Technical Report:
+           - Discard messages that are only sent by routers, i.e.,
+             Router Advertisement, Redirect, MLD Query messages.
+           - Relay the received Router Solicitation within a new IPv6
+             datagram and insert a LIO.
+           - Forward other ICMPv6 messages as normal layer 2 frames.
+
+           The downstream IPv6 datagram received as a reply will be
+           unpacked and the Router Advertisement message included
+           within will be sent on the interface identified by the LIO.
+
+           Downstream ICMPv6 messages that can come from a router are
+           forwarded, Downstream ICMPv6 messages that can come only
+           from a host, i.e., the Router Solicitation message, shall
+           be discarded (if it reaches the VLAN sub-interface).
+
+           If 'false', no ICMPv6 Relay functionality is performed on
+           this interface. Received ICMPv6 messages are processed
+           based on the layer 2 configuration, e.g., VLAN
+           sub-interface and/or layer 2 forwarding.
+
+           Otherwise, the ICMPv6 Relay will forward messages as
+           defined in the selected enumeration.";
+        reference
+          "TR-177 R-17;
+           TR-177 R-18;
+           TR-177 R-19;
+           TR-177 R-20";
+      }
+      leaf unknown-type-processing {
+        type enumeration {
+          enum forward {
+            description
+              "ICMPv6 messages with a type unknown to the device are
+               processed based on the layer 2 forwarding
+               configuration.";
+          }
+          enum discard {
+            description
+              "ICMPv6 messages with a type unknown to the device are
+               discarded.";
+          }
+        }
+        default "forward";
+        description
+          "Manages how to process ICMPv6 messages with a type unknown
+           to the device.";
+        reference
+          "TR-177 R-13";
+      }
+      leaf profile-ref {
+        when "../enabled = 'true'" {
+          description
+            "Applicable only when ICMPv6 Relay functionality is
+             enabled.";
+        }
+        if-feature "bbf-icmpv6-pc:relay-with-lio";
+        type leafref {
+          path "/bbf-icmpv6:icmpv6-profiles/bbf-icmpv6:"
+             + "icmpv6-profile/bbf-icmpv6:name";
+        }
+        mandatory true;
+        description
+          "Reference to the ICMPv6 configuration profile.";
+      }
+    }
+  }
+
+  augment "/if:interfaces-state/if:interface/if:statistics" {
+    when "derived-from-or-self (../if:type, "
+       + "                      'bbfift:vlan-sub-interface')" {
+      description
+        "Applies only to VLAN sub-interfaces.";
+    }
+    description
+      "Add state data for ICMPv6 message processing statistics on
+       VLAN sub-interfaces.
+
+       Note that the model provides a rather complete set of optional
+       statistics. This does not turn the support of these statistics
+       into a requirement. For example, if certain ICMPv6 messages are
+       forwarded at layer 2 then such messages might not be counted.";
+    container icmpv6 {
+      presence "ICMPv6 statistics are available.";
+      description
+        "Container presents the message statistics related to the
+         ICMPv6 Relay.";
+      container upstream {
+        description
+          "Upstream ICMPv6 Relay statistics.";
+        uses icmpv6-counters;
+      }
+      container downstream {
+        description
+          "Downstream ICMPv6 Relay statistics.";
+        uses icmpv6-counters;
+      }
+    }
+  }
+}

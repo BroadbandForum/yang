@@ -82,9 +82,19 @@ module bbf-qos-traffic-mngt {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -176,7 +186,7 @@ module bbf-qos-traffic-mngt {
 
   feature dual-rate-scheduling-from-queue {
     description
-      "Indicates support for dual rate scheduling, i.e. configuring
+      "Indicates support for dual rate scheduling, i.e., configuring
        from a parent scheduler a separate priority and/or weight
        for the CIR and EIR traffic from a single child scheduler.";
   }
@@ -285,7 +295,7 @@ module bbf-qos-traffic-mngt {
          incoming frames in a random way.
 
          The value is a percentage to be calculated on the value of
-         the leaf max-queue-size of the queue on which the BAC is
+         the leaf 'max-queue-size' of the queue on which the BAC is
          applied.";
     }
   }
@@ -299,7 +309,7 @@ module bbf-qos-traffic-mngt {
         "The threshold to discard all incoming frames.
 
          The value is a percentage to be calculated on the value of
-         the leaf max-queue-size.";
+         the leaf 'max-queue-size'.";
     }
   }
 
@@ -324,7 +334,7 @@ module bbf-qos-traffic-mngt {
 
   grouping queue-counters-common {
     description
-      "Queue counters common to each frame type, e.g. green frames.";
+      "Queue counters common to each frame type, e.g., green frames.";
     leaf out-frames {
       type yang:counter64;
       units "frames";
@@ -388,7 +398,7 @@ module bbf-qos-traffic-mngt {
       description
         "Reset all queue counters associated with this queue.
 
-         Note: this resets the 'counters', i.e. the leafs that
+         Note: this resets the 'counters', i.e., the leafs that
          count and wrap around when coming to their maximum value.
          This does not include a reset of other gauge statistics.";
     }
@@ -457,7 +467,7 @@ module bbf-qos-traffic-mngt {
       type scheduling-weight;
       description
         "Queues or schedulers that are defined in a particular
-         context, e.g. queues defined to schedule outgoing traffic to
+         context, e.g., queues defined to schedule outgoing traffic to
          an interface, can have the same priority. The weight defines
          the portion of traffic that will be taken from this queue or
          scheduler by comparing the weight of this queue or scheduler
@@ -477,7 +487,7 @@ module bbf-qos-traffic-mngt {
       }
       description
         "Queues or schedulers that are defined in a particular
-         context, e.g. queues defined to schedule outgoing traffic to
+         context, e.g., queues defined to schedule outgoing traffic to
          an interface, can have the same priority. The weight defines
          the portion of traffic that will be taken from this queue or
          scheduler by comparing the weight of this queue or scheduler
@@ -503,7 +513,7 @@ module bbf-qos-traffic-mngt {
       type extended-scheduling-weight;
       description
         "Queues or schedulers that are defined in a particular
-         context, e.g. queues defined to schedule outgoing traffic to
+         context, e.g., queues defined to schedule outgoing traffic to
          an interface, can have the same priority. The weight defines
          the portion of traffic that will be taken from this queue or
          scheduler by comparing the weight of this queue or scheduler
@@ -522,8 +532,7 @@ module bbf-qos-traffic-mngt {
       leaf local-queue-id {
         type queue-id;
         description
-          "The identification of a queue within the context of this
-           list.";
+          "The unique ID of this queue.";
       }
       uses bac-ref;
       choice queue-scheduling-cfg-type {
@@ -571,7 +580,7 @@ module bbf-qos-traffic-mngt {
       if-feature "bbf-qos-tm:queue-statistics";
       type boolean;
       description
-        "If true, enable statistics collection per queue. When
+        "If 'true', enable statistics collection per queue. When
          transitioning from false to true (disabled to enabled), any
          existing counts should be cleared.
 
@@ -655,7 +664,8 @@ module bbf-qos-traffic-mngt {
           uses queues;
         }
         case queues-from-template {
-          if-feature "queue-templates and queue-template-in-tm-root";
+          if-feature "bbf-qos-tm:queue-templates and "
+                   + "bbf-qos-tm:queue-template-in-tm-root";
           description
             "The child data nodes are a list of queues, however these
              queues are not explicitly configured. Instead a reference

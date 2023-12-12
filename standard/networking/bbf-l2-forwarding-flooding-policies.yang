@@ -76,9 +76,19 @@ submodule bbf-l2-forwarding-flooding-policies {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -223,7 +233,45 @@ submodule bbf-l2-forwarding-flooding-policies {
                also allows specification of unicast addresses. If used
                this will apply to frames for which there was no
                forwarding decision identified via other means.";
-            uses bbf-classif:frame-destination-match;
+            uses bbf-classif:frame-destination-match {
+              augment "frame-filter/destination-ipv6-address"
+                    + "/ipv6-address" {
+                description
+                  "Augments specific IPv6 destination addresses to the
+                   flooding policies.";
+                case ipv6-all-bbf-access-nodes-multicast-address {
+                  description
+                    "This case applies when the to be classified IPv6
+                     address is classified as the all BBF access nodes
+                     multicast address.";
+                  leaf ipv6-all-bbf-access-nodes-multicast-address {
+                    type empty;
+                    description
+                      "The IPv6 address is classified as the IPv6 all
+                       BBF access nodes multicast address, i.e., the
+                       IPv6 multicast address ff02::10.";
+                  }
+                }
+                case ipv6-solicited-node-multicast-address {
+                  description
+                    "This case applies when the to be classified IPv6
+                     address is classified as an IPv6 solicited node
+                     multicast address.";
+                  leaf ipv6-solicited-node-multicast-address {
+                    type empty;
+                    description
+                      "The IPv6 address is classified as an IPv6
+                       solicited node multicast address. This is an
+                       IPv6 address in the range covered by the mask
+                       ff02::1:ff00:0/104. These address are assembled
+                       starting from ff02::1:ff00:0 with the least
+                       significant 24 bits replaced by the least
+                       significant 24 bits of the unicast address the
+                       sender plans to assign.";
+                  }
+                }
+              }
+            }
           }
           choice frame-forwarding {
             description
@@ -231,7 +279,7 @@ submodule bbf-l2-forwarding-flooding-policies {
                match the classification. Not configuring a frame
                forwarding case means that the frames in scope shall be
                discarded. In order not to discard these frames one
-               shall configure a non-empty 'out-interface-usages
+               shall configure a non-empty 'out-interface-usages'
                leaf-list.";
             case discard {
               leaf discard {
@@ -363,7 +411,45 @@ submodule bbf-l2-forwarding-flooding-policies {
                  addresses. If used this will apply to frames for
                  which there was no forwarding decision identified
                  via other means.";
-              uses bbf-classif:frame-destination-match;
+              uses bbf-classif:frame-destination-match {
+                augment "frame-filter/destination-ipv6-address"
+                      + "/ipv6-address" {
+                  description
+                    "Augments specific IPv6 destination addresses to
+                     the flooding policies.";
+                  case ipv6-all-bbf-access-nodes-multicast-address {
+                    description
+                      "This case applies when the to be classified
+                       IPv6 address is classified as the all BBF
+                       access nodes multicast address.";
+                    leaf ipv6-all-bbf-access-nodes-multicast-address {
+                      type empty;
+                      description
+                        "The IPv6 address is classified as the IPv6
+                         all BBF access nodes multicast address, i.e.,
+                         the IPv6 multicast address ff02::10.";
+                    }
+                  }
+                  case ipv6-solicited-node-multicast-address {
+                    description
+                      "This case applies when the to be classified
+                       IPv6 address is classified as an IPv6 solicited
+                       node multicast address.";
+                    leaf ipv6-solicited-node-multicast-address {
+                      type empty;
+                      description
+                        "The IPv6 address is classified as an IPv6
+                         solicited node multicast address. This is an
+                         IPv6 address in the range covered by the mask
+                         ff02::1:ff00:0/104. These address are
+                         assembled starting from ff02::1:ff00:0 with
+                         the least significant 24 bits replaced by the
+                         least significant 24 bits of the unicast
+                         address the sender plans to assign.";
+                    }
+                  }
+                }
+              }
             }
             choice frame-forwarding {
               description

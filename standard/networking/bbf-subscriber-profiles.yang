@@ -12,6 +12,9 @@ module bbf-subscriber-profiles {
   import bbf-yang-types {
     prefix bbf-yang;
   }
+  import bbf-subscriber-profile-common {
+    prefix bbf-subprof-pc;
+  }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -20,13 +23,13 @@ module bbf-subscriber-profiles {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Nick Hancock, Adtran
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, ADTRAN
+     WA Director: Joey Boyd, Adtran
 
      WA Director: Sven Ooghe, Nokia";
   description
@@ -41,7 +44,7 @@ module bbf-subscriber-profiles {
      subscriber profile. It also augments ietf-system to add
      system-specific subscriber management.
 
-     Copyright (c) 2017-2022, Broadband Forum
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +84,19 @@ module bbf-subscriber-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a5; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2022-03-01 {
     description
       "Amendment 5.
@@ -144,60 +157,7 @@ module bbf-subscriber-profiles {
       "A reference to a subscriber profile.";
   }
 
-  container subscriber-profiles {
-    description
-      "Subscriber configuration profile.";
-    list subscriber-profile {
-      key "name";
-      description
-        "List containing the parameters for a subscriber profile.
-         Various protocols need to insert strings in options /
-         sub-tags. These strings are used to identify the subscriber.
-         This insertion can be enabled per protocol per VLAN
-         sub-interface. Identifying the subscriber is independent of
-         the protocol and most likely identical for all VLAN
-         sub-interfaces on top of the same physical line. Therefore
-         this data is provided in a profile.";
-      leaf name {
-        type bbf-yang:string-ascii64;
-        description
-          "Name of the profile.";
-      }
-      leaf circuit-id {
-        type bbf-yang:string-ascii63-or-empty;
-        default "";
-        description
-          "The circuit ID string to be inserted in the subscriber
-           management protocol packets.";
-        reference
-          "TR-178 - R117 and TR-177 - R08";
-      }
-      leaf remote-id {
-        type bbf-yang:string-ascii63-or-empty;
-        default "";
-        description
-          "The remote-id string to be inserted in the subscriber
-           management protocol packets.";
-        reference
-          "TR-178 - R120 and TR-177 - R10";
-      }
-      leaf subscriber-id {
-        type bbf-yang:string-ascii63-or-empty;
-        default "";
-        description
-          "A subscriber-id string to be inserted in the subscriber
-           management protocol packets.
-
-           The subscriber-id carries a value that can be independent
-           of the physical network configuration through which the
-           subscriber is connected. This value complements, and might
-           well be used in addition to the network-based
-           information.";
-        reference
-          "RFC 4580 - Section 2";
-      }
-    }
-  }
+  uses bbf-subprof-pc:subscriber-profiles;
 
   augment "/if:interfaces/if:interface" {
     description
@@ -214,7 +174,7 @@ module bbf-subscriber-profiles {
          whether a reference is configured for this VLAN
          sub-interface. If this is the case, then this configuration
          is used. If this is not the case, then the device verifies
-         whether a profile is configured at the lower layer of this
+         whether a profile is configured at the lower-layer of this
          VLAN sub-interface. And this walking down the interface stack
          continues until a configured reference is identified, or
          until the bottom of the interface stack is reached, possibly
@@ -245,7 +205,7 @@ module bbf-subscriber-profiles {
            of the syntax according to which a subscriber
            identification string shall be generated.";
         reference
-          "TR-101i2 - R153";
+          "TR-101i2 R-153";
       }
     }
   }

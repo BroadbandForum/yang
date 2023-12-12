@@ -74,9 +74,19 @@ module bbf-l2-dhcpv4-relay-forwarding {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -124,11 +134,19 @@ module bbf-l2-dhcpv4-relay-forwarding {
       "Additions for L2 DHCPv4 Relay Agent at the forwarder level.";
     container l2-dhcpv4-relay {
       presence
-        "Presence of this container indicates L2 DHCPv4 Relay Agent
-         functionality is supported in the context of this
-         forwarder.";
+        "Indicates configuration related to L2 DHCPv4 Relay Agent is
+         present on the forwarder.";
       description
-        "L2 DHCPv4 Relay Agent related controls.";
+        "Configuration for the forwarding of DHCPv4 messages through a
+         forwarder.
+
+         Configuration within this container will specify the expected
+         behavior of the L2 DHCPv4 Relay Agent on this forwarder.
+
+         If the container is not present, no L2 DHCPv4 Relay Agent
+         functionality is performed by this forwarder. Received
+         DHCPv4 messages are processed based on layer 2 forwarding
+         configuration found elsewhere in the system.";
       leaf downstream-broadcast-flooding {
         type union {
           type boolean;
@@ -144,12 +162,12 @@ module bbf-l2-dhcpv4-relay-forwarding {
             enum single-user-with-fallback-to-layer2 {
               description
                 "Downstream broadcast DHCPv4 messages are first
-                 processed as defined for the value 'false', i.e. they
-                 are forwarded to only one port of the forwarder which
-                 is identified by the DHCPv4 message content. If
+                 processed as defined for the value 'false', i.e.,
+                 they are forwarded to only one port of the forwarder
+                 which is identified by the DHCPv4 message content. If
                  however no port is identified in this way, then the
                  message will be processed as identified in 'apply-
-                 layer2-forwarding', i.e. based on the (flooding)
+                 layer2-forwarding', i.e., based on the (flooding)
                  forwarding rules of the forwarder.";
             }
           }
@@ -162,7 +180,7 @@ module bbf-l2-dhcpv4-relay-forwarding {
 
            If it is configured as 'false', the L2 DHCP Relay Agent
            will forward downstream 'broadcast DHCPv4 messages' to only
-           one port of the forwarder, i.e. the one for which the
+           one port of the forwarder, i.e., the one for which the
            message is intended. Identifying the port for which the
            message is intended is based on frame content.
 

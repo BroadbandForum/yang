@@ -1,0 +1,286 @@
+module bbf-ldra-profile-common {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-ldra-profile-common";
+  prefix bbf-ldra-pc;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import bbf-subscriber-types {
+    prefix bbf-subtype;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Nick Hancock, Adtran
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Joey Boyd, Adtran
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on subscriber
+     management via the DHCPv6 protocol as applicable to access
+     network equipment. As such, this module is specific to access
+     network equipment (e.g., BBF-specified Access Nodes and FTTdp
+     DPUs).
+
+     This functionality is also known as a Lightweight DHCPv6 Relay
+     Agent (LDRA).
+
+     Specifically, this module contains the definition of a profile
+     for subscriber information used by an LDRA in creating an Agent
+     Circuit ID and Remote ID as described in TR-101i2.
+
+     Copyright (c) 2017-2023, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a7; see
+     the TR itself for full legal notices.";
+
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
+
+  grouping dhcpv6-ldra-profiles {
+    description
+      "LDRA configuration profiles.";
+    container dhcpv6-ldra-profiles {
+      description
+        "Lightweight DHCPv6 Relay Agent (LDRA) configuration
+         profiles.";
+      list dhcpv6-ldra-profile {
+        key "name";
+        description
+          "An LDRA configuration profile.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "Name of the profile.";
+        }
+        container options {
+          description
+            "Contains relay information that needs to be filled in the
+             relayed (RELAY-FORW) DHCPv6 messages.";
+          leaf-list option {
+            type enumeration {
+              enum interface-id {
+                description
+                  "Add option interface-ID (code 18) to the relayed
+                   (RELAY-FORW) DHCPv6 messages. The LDRA should use
+                   the same option value for a given interface, and
+                   this value should be retained  across restarts.
+                   This is because if the value changes, a server
+                   will not be able to use it reliably in parameter
+                   assignment policies.
+
+                   The value inserted is the value of the leaf
+                   'circuit-id' defined in the instance in the list
+                   'bbf-subprof:subscriber-profiles/bbf-subprof:
+                   subscriber-profile' that is associated with the
+                   interface, if any. If this leaf is not configured,
+                   then the option interface-ID will be generated
+                   according to the syntax defined in the
+                   'default-interface-id-syntax'.";
+                reference
+                  "RFC 6221 Section 5.3.2";
+              }
+              enum remote-id {
+                description
+                  "Add option remote-ID (code 37) to the relayed
+                   (RELAY-FORW) DHCPv6 messages.
+
+                   The value inserted is the value of the leaf
+                   'remote-id' defined in the instance in the list
+                   'bbf-subprof:subscriber-profiles/bbf-subprof:
+                   subscriber-profile' that is associated with the
+                   interface, if any. If this leaf is not configured,
+                   then the option remote-ID will be generated
+                   according to the syntax defined in the leaf
+                   'default-remote-id-syntax'.";
+                reference
+                  "RFC 4649 Section 4";
+              }
+              enum subscriber-id {
+                description
+                  "Add option subscriber-ID (code 38) to the relayed
+                   (RELAY-FORW) DHCPv6 messages.
+
+                   The value inserted is the value of the
+                   'subscriber-id' defined in the instance in
+                   '/bbf-subprof:subscriber-profiles/bbf-subprof:
+                   subscriber-profile' that is associated with the
+                   interface, if any. If this leaf is not configured,
+                   then the option will contain an empty string.";
+                reference
+                  "RFC 4580 Section 3";
+              }
+              enum enterprise-number {
+                description
+                  "Enterprise-number to be added to the relayed
+                   (RELAY-FORW) DHCPv6 messages.";
+                reference
+                  "RFC 8415";
+              }
+              enum vendor-specific-information {
+                description
+                  "Add access loop characteristics (code 17) to the
+                   relayed (RELAY-FORW) DHCPv6 messages. The content
+                   of the option is controlled via the
+                   'access-loop-characteristics'.";
+                reference
+                  "TR-177 R-12";
+              }
+            }
+            min-elements 1;
+            description
+              "Identifies the options that should be added to the
+               relayed (RELAY-FORW) DHCPv6 messages.";
+          }
+          leaf default-interface-id-syntax {
+            type bbf-yang:string-ascii63-or-empty;
+            default "";
+            description
+              "To be used to generate a option interface-ID when no
+               'circuit-id' is provided for the VLAN sub-interface via
+               a referenced '/bbf-subprof:subscriber-profiles/
+               bbf-subprof:subscriber-profile'.
+
+               The syntax is a string of ASCII characters that
+               determines the actual value inserted in the option.
+               Parts of the syntax that are recognized as predefined
+               keywords will be replaced by an actual value.";
+            reference
+              "TR-177 R-07";
+          }
+          leaf default-remote-id-syntax {
+            type bbf-yang:string-ascii63-or-empty;
+            default "";
+            description
+              "To be used to generate a option remote-ID when no
+               'remote-id' is provided for the VLAN sub-interface via
+               a referenced '/bbf-subprof:subscriber-profiles/
+               bbf-subprof:subscriber-profile'.
+
+               The syntax is a string of ASCII characters that
+               determines the actual value inserted in the option.
+               Parts of the syntax that are recognized as predefined
+               keywords will be replaced by an actual value.";
+            reference
+              "TR-177 R-09";
+          }
+          leaf enterprise-number {
+            type uint32;
+            default "3561";
+            description
+              "IANA Enterprise Number that identifies the vendor.
+
+               The Broadband Forum is assigned enterprise number
+               3561.";
+            reference
+              "RFC 8415";
+          }
+          leaf access-loop-characteristics {
+            type bbf-subtype:broadband-line-characteristics;
+            default "";
+            description
+              "Access Loop sub-options that are to be added in option
+               17.";
+            reference
+              "TR-178 R-122";
+          }
+          leaf start-numbering-from-zero {
+            type boolean;
+            default "false";
+            description
+              "In case the 'default-interface-id-syntax' or
+               'default-remote-id-syntax' indicates a Slot or a Port
+               identification shall be added to the sub-option value,
+               then this leaf determines if the slot/port numbering
+               must start from 0 or 1.";
+            reference
+              "TR-178 R-118";
+          }
+          leaf use-leading-zeroes {
+            type boolean;
+            default "false";
+            description
+              "In case the 'default-interface-id-syntax' or
+               'default-remote-id-syntax' indicates a Slot or a Port
+               identification shall be added to the sub-option value,
+               then this leaf determines if the slot/port numbering
+               must use leading 0's or not, i.e., generate a fixed-
+               length string or a string with only meaningful digits.
+
+               Note that the number of digits used to form the fixed-
+               length string is device specific. A device may use the
+               number of digits as specified in TR-101i2 Table 2/
+               TR-156 Table 1 or a device may determine the number of
+               digits by the maximum value for the Slot or a Port
+               identification applicable to the device, i.e., if the
+               maximum value is less than or equal to 9, one digit may
+               be used; if the maximum value is less than or equal to
+               99, two digits may be used, etc.";
+            reference
+              "TR-178 R-119;
+               TR-101i2 Table 2;
+               TR-156 Table 1";
+          }
+        }
+      }
+    }
+  }
+}

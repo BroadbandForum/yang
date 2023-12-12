@@ -34,7 +34,10 @@ module bbf-hardware-storage-drives {
      BBF-specified Access Nodes and FTTdp DPUs).
 
      Specifically, this module augments the ietf-hardware model with
-     the management of storage drives.
+     the management of hardware components with data storage
+     capability as their main functionality, e.g., hard disk drive
+     (HDD), solid-state device (SSD), solid-state hybrid drive (SSHD),
+     object storage device (OSD), or other.
 
      Copyright (c) 2017-2023, Broadband Forum
 
@@ -76,9 +79,19 @@ module bbf-hardware-storage-drives {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -111,14 +124,19 @@ module bbf-hardware-storage-drives {
     container storage-drive {
       config false;
       description
-        "Storage drive data nodes (e.g.,sda and sdb devices).";
+        "Storage drive data nodes.
+
+         A storage drive is a hardware component with data storage
+         capability as its main functionality, e.g., hard disk drive
+         (HDD), solid-state device (SSD), solid-state hybrid drive
+         (SSHD), object storage device (OSD), or other.";
       leaf device-transfer-rate {
         type decimal64 {
           fraction-digits 2;
         }
         units "transfers per second";
         description
-          "The I/O requests that were transfered to/from the storage
+          "The I/O requests that were transferred to/from the storage
            drive.";
       }
       leaf device-data-read-rate {

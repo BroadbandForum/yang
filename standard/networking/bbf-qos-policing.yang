@@ -97,9 +97,19 @@ module bbf-qos-policing {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -153,74 +163,74 @@ module bbf-qos-policing {
 
   feature single-rate-two-color-marker {
     description
-      "The system supports the single rate two color policer, also
+      "Indicates support of the single rate two color policer, also
        called single bucket policer.";
   }
 
   feature single-rate-three-color-marker {
     description
-      "The system supports the single rate three color policer.";
+      "Indicates support of the single rate three color policer.";
   }
 
   feature single-rate-three-color-marker-color-mode {
     if-feature "single-rate-three-color-marker";
     description
-      "The system supports the configuration of a color mode for the
+      "Indicates support of the configuration of a color mode for the
        single rate three color policer.";
   }
 
   feature two-rate-three-color-marker {
     description
-      "The system supports the two rate three color policer.";
+      "Indicates support of the two rate three color policer.";
   }
 
   feature two-rate-three-color-marker-color-mode {
     if-feature "two-rate-three-color-marker";
     description
-      "The system supports the configuration of a color mode for the
+      "Indicates support of the configuration of a color mode for the
        two rate three color policer.";
   }
 
   feature two-rate-three-color-marker-mef {
     description
-      "The system supports the two rate three color policer.";
+      "Indicates support of the two rate three color policer.";
     reference
-      "MEF 10.2: Ethernet Services Attributes Phase 2";
+      "MEF 10.2 Section 7.11.1";
   }
 
   feature two-rate-three-color-marker-color-promotion {
     description
-      "The system supports the two rate three color policer with
+      "Indicates support of the two rate three color policer with
        color promotion.";
   }
 
   feature interface-policing-management {
     if-feature "bbf-qos-pol:interface-policy-management";
     description
-      "Indicates support for managing policing per interface.";
+      "Indicates support of managing policing per interface.";
   }
 
   feature policing-statistics {
     description
-      "Indicates support for reporting statistics associated with
+      "Indicates support of reporting statistics associated with
        policing.";
   }
 
   feature counts-per-ingress-and-egress-color {
     if-feature "policing-statistics";
     description
-      "Indicates support for reporting byte and frame counts per
+      "Indicates support of reporting byte and frame counts per
        ingress color and egress color.";
   }
 
   feature policing-action-profiles {
     description
-      "Indicates support for policing action profiles.";
+      "Indicates support of policing action profiles.";
   }
 
   feature policing-action-in-policer {
     description
-      "Indicates support for policing actions inline in the policer
+      "Indicates support of policing actions inline in the policer
        profile.";
   }
 
@@ -248,7 +258,7 @@ module bbf-qos-policing {
   identity discard {
     base bbf-qos-cls:action-type;
     description
-      "The action-type identity indicating the drop action.";
+      "The action-type identity indicating the discard action.";
   }
 
   typedef qos-color {
@@ -259,6 +269,8 @@ module bbf-qos-policing {
   }
 
   grouping single-rate-two-color-marker {
+    description
+      "Single rate two color policer attributes.";
     container single-rate-two-color-marker {
       description
         "Single rate two color policer, also called single bucket
@@ -268,8 +280,8 @@ module bbf-qos-policing {
         description
           "Committed Information Rate (CIR) is used to define the
            average rate of traffic that respect the guarantees of
-           bandwidth. This traffic is defined as green traffic its
-           transmission is guaranteed across the network.";
+           bandwidth. This traffic is defined as green traffic, and
+           its transmission is guaranteed across the network.";
       }
       leaf cbs {
         type bbf-qos-plc-tp:burst-size;
@@ -280,21 +292,23 @@ module bbf-qos-policing {
            defined as red.";
       }
     }
-    description
-      "Single rate two color policer attributes.";
   }
 
   grouping single-rate-three-color-marker {
+    description
+      "Single rate three color policer attributes.";
     container single-rate-three-color-marker {
       description
         "Single rate three color policer.";
+      reference
+        "RFC 2697 Section 2";
       leaf cir {
         type bbf-qos-plc-tp:information-rate;
         description
           "Committed Information Rate (CIR) is used to define the
            average rate of traffic that respect the guarantees of
-           bandwidth. This traffic is defined as green traffic its
-           transmission is guaranteed across the network.";
+           bandwidth. This traffic is defined as green traffic, and
+           its transmission is guaranteed across the network.";
       }
       leaf cbs {
         type bbf-qos-plc-tp:burst-size;
@@ -321,27 +335,25 @@ module bbf-qos-policing {
 
            The color mode applied in case the leaf is not configured
            is system dependent.";
-        reference
-          "RFC 2697: A Single Rate Three Color Marker, section 3";
       }
     }
-    description
-      "Single rate three color policer attributes.";
-    reference
-      "RFC 2697: A Single Rate Three Color Marker";
   }
 
   grouping two-rate-three-color-marker {
+    description
+      "Two rate three color policer attributes.";
     container two-rate-three-color-marker {
       description
         "Two rate three color policer.";
+      reference
+        "RFC 2698 Section 2";
       leaf cir {
         type bbf-qos-plc-tp:information-rate;
         description
           "Committed Information Rate (CIR) is used to define the
            average rate of traffic that respect the guarantees of
-           bandwidth. This traffic is defined as green traffic its
-           transmission is guaranteed across the network.";
+           bandwidth. This traffic is defined as green traffic, and
+           its transmission is guaranteed across the network.";
       }
       leaf cbs {
         type bbf-qos-plc-tp:burst-size;
@@ -377,27 +389,25 @@ module bbf-qos-policing {
 
            The color mode applied in case the leaf is not configured
            is system dependent.";
-        reference
-          "RFC 2698: A Two Rate Three Color Marker, section 3";
       }
     }
-    description
-      "Two rate three color policer attributes.";
-    reference
-      "RFC 2698: A Two Rate Three Color Marker";
   }
 
   grouping two-rate-three-color-marker-mef {
+    description
+      "Two rate three color policer MEF attributes.";
     container two-rate-three-color-marker-mef {
       description
         "MEF standard two rate three color policer.";
+      reference
+        "MEF 10.2 Section 7.11.1";
       leaf cir {
         type bbf-qos-plc-tp:information-rate;
         description
           "Committed Information Rate (CIR) is used to define the
            average rate of traffic that respect the guarantees of
-           bandwidth. This traffic is defined as green traffic its
-           transmission is guaranteed across the network.";
+           bandwidth. This traffic is defined as green traffic, and
+           its transmission is guaranteed across the network.";
       }
       leaf cbs {
         type bbf-qos-plc-tp:burst-size;
@@ -428,14 +438,19 @@ module bbf-qos-policing {
           "The Coupling Flag CF controls the volume of the frames
            that are declared Yellow.
 
-           When CF is set to 0, the long term average bit rate of
-           frames that are declared Yellow is bounded by EIR.
+           When the CF is set to 0, the long term average rate of
+           service frames that are declared yellow is bound by the
+           Excess Information Rate (EIR) which is then the equivalent
+           of the Peak Information Rate (PIR).
 
-           When CF is set to 1, the long term average bit rate of
-           frames that are declared Yellow is bounded by CIR + EIR
-           depending on volume of the offered Service Frames that
-           are declared Green. In both cases the burst size of the
-           frames that are declared Yellow is bounded by EBS.";
+           When the CF is set to 1, the long term average rate of
+           service frames that are declared yellow is bound by the sum
+           of the Committed Information Rate (CIR) and Excess
+           Information Rate (EIR), i.e., CIR+EIR, depending on the
+           volume of offered service frames that are declared green.
+
+           This sum is also the equivalent of the Peak Information
+           Rate (PIR).";
       }
       leaf color-mode {
         type bbf-qos-plc-tp:color-mode;
@@ -448,13 +463,11 @@ module bbf-qos-policing {
            is system dependent.";
       }
     }
-    description
-      "Two rate three color policer MEF attributes.";
-    reference
-      "MEF 10.2: Ethernet Services Attributes Phase 2";
   }
 
   grouping two-rate-three-color-marker-color-promotion {
+    description
+      "Two rate three color policer with color promotion.";
     container two-rate-three-color-marker-color-promotion {
       description
         "Two rate three color policer with color promotion. This
@@ -499,8 +512,6 @@ module bbf-qos-policing {
            discarded directly by the policer (yellow).";
       }
     }
-    description
-      "Two rate three color policer with color promotion.";
   }
 
   grouping policing-statistics {
@@ -797,9 +808,9 @@ module bbf-qos-policing {
         description
           "Hierarchical policing is the concept in which frames are
            evaluated against multiple policers. These multiple
-           policers encompass one another. I.e. traffic processed in
-           the scope of a first policer is also processed in the scope
-           of a second policer.";
+           policers encompass one another. In other words, traffic
+           processed in the scope of a first policer is also processed
+           in the scope of a second policer.";
         uses policing-profile-ref;
       }
     }
@@ -930,7 +941,7 @@ module bbf-qos-policing {
       leaf flow-color {
         when '../bbf-qos-cls:action-type="bbf-qos-plc:flow-color"' {
           description
-            "Only applicable when the action-type is flow-color.";
+            "Only applicable when the action-type is 'flow-color'.";
         }
         type bbf-qos-t:qos-color;
         description
@@ -943,7 +954,7 @@ module bbf-qos-policing {
       leaf bac-color {
         when '../bbf-qos-cls:action-type="bbf-qos-plc:bac-color"' {
           description
-            "Only applicable when the action-type is bac-color.";
+            "Only applicable when the action-type is 'bac-color'.";
         }
         type bbf-qos-cls:write-bac-color;
         description
@@ -954,7 +965,7 @@ module bbf-qos-policing {
       leaf discard {
         when '../bbf-qos-cls:action-type="bbf-qos-plc:discard"' {
           description
-            "Only applicable when the action-type is discard.";
+            "Only applicable when the action-type is 'discard'.";
         }
         type empty;
         description
@@ -965,7 +976,7 @@ module bbf-qos-policing {
       container policing {
         when '../bbf-qos-cls:action-type="bbf-qos-plc:policing"' {
           description
-            "Only applicable when the action-type is policing.";
+            "Only applicable when the action-type is 'policing'.";
         }
         description
           "Defines a policing function shall be applied to a flow.";
@@ -994,7 +1005,7 @@ module bbf-qos-policing {
           type boolean;
           default "false";
           description
-            "If true, enables the accumulation and reporting of
+            "If 'true', enables the accumulation and reporting of
              statistics for all policers associated with this
              interface.";
         }
