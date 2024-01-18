@@ -20,11 +20,11 @@
     .join()
 }
 
-#import "typst-template.typ": conf
+#import "typst-template.typ": *
 
 #show: doc => conf(
   title: [OD\-360 – Broadband Forum YANG Modules],
-  date: [Issue Date: March 2023],
+  date: [Issue Date: January 2024],
   cols: 1,
   info: (
     PYTHONDIR: [..\/..\/..\/install\/pandoc\/\/..\/python],
@@ -34,18 +34,18 @@
     bbfCertProgram: [*\<BBF.NNN>*],
     bbfContrib: [],
     bbfIssue: [Issue],
-    bbfMonth: [March],
+    bbfMonth: [January],
     bbfNumber: [OD\-360],
     bbfProjectStream: [],
     bbfStatus: [],
     bbfTitle: [BBF YANG Best Current Practices],
     bbfType: [document],
-    bbfVersion: [1 Amendment 1],
+    bbfVersion: [1 Amendment 2],
     bbfWorkArea: [],
-    bbfYear: [2023],
+    bbfYear: [2024],
     citation-style: [bbf.csl],
-    copydate: [2023],
-    date: [Issue Date: March 2023],
+    copydate: [2024],
+    date: [Issue Date: January 2024],
     description-meta: [OD\-360 – Broadband Forum YANG Modules:
 A set of YANG modules for managing access networks],
     doctitle: [OD\-360 – BBF YANG Best Current Practices],
@@ -54,20 +54,23 @@ A set of YANG modules for managing access networks],
     linkReferences: [true],
     lofTitle: [
 
-#box[#heading(level: 3, outlined: false)[List of Figures]
-<list-of-figures>] <cls:unnumbered>
+#heading(level: 3, outlined: false)[
+  List of Figures
+] <list-of-figures>
 
 ],
     lolTitle: [
 
-#box[#heading(level: 3, outlined: false)[List of Listings]
-<list-of-listings>] <cls:unnumbered>
+#heading(level: 3, outlined: false)[
+  List of Listings
+] <list-of-listings>
 
 ],
     lotTitle: [
 
-#box[#heading(level: 3, outlined: false)[List of Tables]
-<list-of-tables>] <cls:unnumbered>
+#heading(level: 3, outlined: false)[
+  List of Tables
+] <list-of-tables>
 
 ],
     nameInLink: [true],
@@ -81,7 +84,7 @@ A set of YANG modules for managing access networks],
     shortname: [OD\-360],
     siteurl: [index.html],
     status: [],
-    subtitle: [Issue: 1 Amendment 1 ],
+    subtitle: [Issue: 1 Amendment 2 ],
     tagline: [A set of YANG modules for managing access networks],
     template: [typst-template.typ],
     theme-color: [\#157878],
@@ -95,16 +98,16 @@ A set of YANG modules for managing access networks],
 )
 
 // This header block can be overridden by the typst-headers metadata variable.
-#import "@preview/tablex:0.0.4": tablex, rowspanx, colspanx, hlinex, vlinex
 
-#let table-fill(columns: none, header-rows: 1, x, y) = {
+#let bbf-table-fill(columns: none, header-rows: 1, x, y) = {
   if header-rows > 0 and y == 0 {white.darken(10%)}
-  else if calc.even(x) {red.lighten(95%)}
+  // XXX have disabled fill for even rows
+  // else if calc.even(x) {red.lighten(98%)}
 }
 
 // scale = 1 will size the image at 1px = 1pt
-#let image-scale = 1
-#let natural-image(scale: image-scale, ..args) = style(styles => {
+#let bbf-image-scale = 1
+#let bbf-image(scale: bbf-image-scale, ..args) = style(styles => {
   let named = args.named()
   if "width" in named or "height" in named {
     image(..args)
@@ -129,8 +132,10 @@ A set of YANG modules for managing access networks],
   }
 })
 
-#box[#box[#heading(level: 3, outlined: false)[Notice] <sec:notice>]
-<cls:unnumbered>] <cls:new-page>
+#bbf-new-page[
+#heading(level: 3, outlined: false)[
+  Notice
+] <sec:notice>]
 
 The Broadband Forum is a non\-profit corporation organized to create
 guidelines for broadband network system development and deployment.
@@ -140,8 +145,9 @@ copyrighted by the Broadband Forum, and all rights are reserved.
 Portions of these Guidelines may be owned and\/or copyrighted by
 Broadband Forum members.
 
-#box[#heading(level: 3, outlined: false)[Intellectual Property]
-<sec:intellectual-property>] <cls:unnumbered>
+#heading(level: 3, outlined: false)[
+  Intellectual Property
+] <sec:intellectual-property>
 
 Recipients of these Guidelines are requested to submit, with their
 comments, notification of any relevant patent claims or other
@@ -150,8 +156,9 @@ infringed by any implementation of these Guidelines, or use of any
 software code normatively referenced in these Guidelines, and to provide
 supporting documentation.
 
-#box[#heading(level: 3, outlined: false)[Terms of Use]
-<sec:terms-of-use>] <cls:unnumbered>
+#heading(level: 3, outlined: false)[
+  Terms of Use
+] <sec:terms-of-use>
 
 *1. License*
 
@@ -198,20 +205,26 @@ THAT HAVE OR MAY BE MADE ARE SO LISTED.
 All copies of these Guidelines (or any portion hereof) must include the
 notices, legends, and other provisions set forth on this page.
 
-#box[#box[#heading(level: 3, outlined: false)[Issue History]
-<sec:bbfissue-history>] <cls:unnumbered>] <cls:new-page>
+#bbf-new-page[
+#heading(level: 3, outlined: false)[
+  Issue History
+] <sec:bbfissue-history>]
 
 #block(
   width: 99.07%)[
   #table(
     columns: (auto, auto, auto, auto),
     align: (left, left, left, left),
-    fill: table-fill.with(columns: 4, header-rows: 1),
-    [#strong[Issue Number]], [#strong[Approval Date]], [#strong[Issue Editor]],
-    [#strong[Changes]],
+    fill: bbf-table-fill.with(columns: 4, header-rows: 1),
+    [#strong[Issue Number]], [#strong[Approval Date]],
+    [#strong[Issue Editor]], [#strong[Changes]],
     [Issue 1], [15 February 2022], [Joey Boyd, Adtran], [Original],
     [Issue 1 Amendment 1], [15 March 2023], [Joey Boyd, Adtran], [Add
-      'units' statement guidelines]
+    'units' statement guidelines],
+    [Issue 1 Amendment 2], [19 January 2024], [Joey Boyd, Adtran], [Add
+    new IETF guidelines IETF\-21 and IETF\-22. Add new BBF guidelines
+    BBF\-21 through BBF\-29. Address minor corrections to existing
+    guidelines.]
   )
 ]
 
@@ -219,28 +232,28 @@ Comments or questions about this Broadband Forum document should be
 directed to
 #link("mailto:info@broadband-forum.org")[info\@broadband\-forum.org].
 
-#block[
+#[
 ]
 
-#block[
+#[
 ]
 
-#block[
+#[
 ]
 
-#block[
+#[
 ]
 
-#block[
+#[
 ]
 
-#block[
+#[
 ]
 
-#block[
+#[
 ]
 
-#block[
+#[
 ]
 
 #pagebreak()
@@ -264,38 +277,55 @@ directed to
 
 = References <sec:references>
 
-#block[ #block[ #block[
+#bbf-csl-bib-body[
+#bbf-references[
 
-#block[ #block[
-#box[[1] ] <cls:csl-left-margin>#box[RFC 7223,
+#bbf-csl-entry[
+#bbf-csl-left-margin[[1] ]#bbf-csl-right-inline[RFC 2119,
+_#link("https://www.rfc-editor.org/rfc/rfc2119.html")[Key words for use
+in RFCs to Indicate Requirement Levels]_, IETF, 1997]
+] <ref-RFC2119>
+
+#bbf-csl-entry[
+#bbf-csl-left-margin[[2] ]#bbf-csl-right-inline[RFC 7223,
 _#link("https://www.rfc-editor.org/rfc/rfc7223.html")[A YANG Data Model
-for Interface Management]_, IETF, 2014] <cls:csl-right-inline>
-] <ref-RFC7223> ] <cls:csl-entry>
+for Interface Management]_, IETF, 2014]
+] <ref-RFC7223>
 
-#block[ #block[
-#box[[2] ] <cls:csl-left-margin>#box[RFC 7950,
+#bbf-csl-entry[
+#bbf-csl-left-margin[[3] ]#bbf-csl-right-inline[RFC 7950,
 _#link("https://www.rfc-editor.org/rfc/rfc7950.html")[The YANG 1.1 Data
-Modeling Language]_, IETF, 2016] <cls:csl-right-inline>
-] <ref-RFC7950> ] <cls:csl-entry>
+Modeling Language]_, IETF, 2016]
+] <ref-RFC7950>
 
-#block[ #block[
-#box[[3] ] <cls:csl-left-margin>#box[RFC 8407,
+#bbf-csl-entry[
+#bbf-csl-left-margin[[4] ]#bbf-csl-right-inline[RFC 8174,
+_#link("https://www.rfc-editor.org/rfc/rfc8174.html")[Ambiguity of
+Uppercase vs Lowercase in RFC 2119 Key Words]_, IETF, 2017]
+] <ref-RFC8174>
+
+#bbf-csl-entry[
+#bbf-csl-left-margin[[5] ]#bbf-csl-right-inline[RFC 8407,
 _#link("https://www.rfc-editor.org/rfc/rfc8407.html")[Guidelines for
 Authors and Reviewers of Documents Containing YANG Data Models]_, IETF,
-2018] <cls:csl-right-inline>
-] <ref-RFC8407> ] <cls:csl-entry>
-] <refs> ] <cls:references> ] <cls:csl-bib-body>
+2018]
+] <ref-RFC8407>
+] <refs>]
 
 = Overview <sec:overview>
 
 OD\-360 provides a set of Best Current Practices for development of YANG
 Data Models in the Broadband Forum (BBF). The approach taken in
 establishing a set of best current practices is to utilize existing
-practices where those are relevant to the work of the Forum.
+practices where those are relevant to the work of the Forum. The
+guidelines put forth by this document not only provide guidance for
+authors of BBF YANG models but are also enforced prior to YANG model
+publication to ensure a high level of quality and consistency across BBF
+projects.
 
 == YANG Language Version <sec:yang-language-version>
 
-The BBF has adopted YANG 1.1 #link(<ref-RFC7950>)[[2]] for use in all
+The BBF has adopted YANG 1.1 #link(<ref-RFC7950>)[[3]] for use in all
 BBF YANG Data Models.
 
 = YANG Guidelines <sec:yang-guidelines>
@@ -318,15 +348,16 @@ New YANG modules MAY be created from the BBF template as shown here:
 This template is based on the IETF YANG module template defined in the
 IETF YANG Guidelines.
 
-#box[== IETF YANG Guidelines <sec:ietf-yang-guidelines>] <cls:new-file>
+#bbf-new-file[
+== IETF YANG Guidelines <sec:ietf-yang-guidelines>]
 
 The general principle is that the IETF YANG Guidelines, defined in RFC
-8407 #link(<ref-RFC8407>)[[3]], apply in their entirety to BBF YANG
-modules. However, they are aimed at IETF Standards Track YANG modules
+8407 #link(<ref-RFC8407>)[[5]], *apply in their entirety to BBF YANG
+modules*. However, they are aimed at IETF Standards Track YANG modules
 and contain some IETF specific guidelines that cannot be applied
 literally to BBF YANG modules.
 
-- Sections 1 (introduction), 2 (Terminology) and 3 (General
+- Sections 1 (Introduction), 2 (Terminology) and 3 (General
   Documentation Guidelines) are mostly IETF\-specific and have little
   impact on YANG module definitions. These sections do not apply unless
   specifically noted.
@@ -341,9 +372,9 @@ literally to BBF YANG modules.
 
 === IETF\-1: YANG Terms <sec:ietf-1-yang-terms>
 
-_This requirement extends section
+_This guideline extends section
 #link("https://datatracker.ietf.org/doc/html/rfc8407#section-2.2")[2.2]
-of RFC 8407 #link(<ref-RFC8407>)[[3]]._
+of RFC 8407 #link(<ref-RFC8407>)[[5]]._
 
 BBF YANG modules MUST use YANG terminology, e.g., when used in
 descriptions the terms SHOULD refer to "data nodes", "containers",
@@ -352,9 +383,9 @@ refer to "data nodes".
 
 === IETF\-2: YANG Validation <sec:ietf-2-yang-validation>
 
-_This requirement overrides section
+_This guideline overrides section
 #link("https://datatracker.ietf.org/doc/html/rfc8407#section-3.10")[3.10]
-of RFC 8407 #link(<ref-RFC8407>)[[3]]._
+of RFC 8407 #link(<ref-RFC8407>)[[5]]._
 
 BBF YANG modules MUST be validated using pyang 2.3.2 (or later).
 Validation MUST use the various "lint" options described below.
@@ -364,6 +395,13 @@ Validation MUST use the various "lint" options described below.
   --lint-modulename-prefix=bbf
   --lint-namespace-prefix=urn:bbf:yang:
   --max-line-len=70
+```
+
+Alternatively, pyang provides the following BBF\-specific option that
+performs the same checks as the options noted above.
+
+```
+  --bbf
 ```
 
 pyang can be installed via #link("https://pypi.org/")[PyPi].
@@ -378,28 +416,28 @@ version of pyang than is stated in this guideline.
 
 === IETF\-3: YANG Usage Guidelines <sec:ietf-3-yang-usage-guidelines>
 
-_This requirement restates section
+_This guideline restates section
 #link("https://datatracker.ietf.org/doc/html/rfc8407#section-4")[4] of
-RFC 8407 #link(<ref-RFC8407>)[[3]] in the context of the BBF._
+RFC 8407 #link(<ref-RFC8407>)[[5]] in the context of the BBF._
 
-BBF YANG modules comply with all syntactic and semantic requirements of
-YANG 1.1 #link(<ref-RFC7950>)[[2]].
+BBF YANG modules MUST comply with all syntactic and semantic
+requirements of YANG 1.1 #link(<ref-RFC7950>)[[3]].
 
 === IETF\-4: File Layout <sec:ietf-4-file-layout>
 
-_This requirement overrides section
+_This guideline overrides section
 #link("https://datatracker.ietf.org/doc/html/rfc7950#section-5.2")[5.2]
-of RFC 7950 #link(<ref-RFC7950>)[[2]]._
+of RFC 7950 #link(<ref-RFC7950>)[[3]]._
 
-Each BBF YANG module or submodule MUST be stored in a file called
-\<module\-name>.yang or \<submodule\-name>.yang. BBF YANG modules and
-submodules will not be stored with the revision\-date in the name.
+Each BBF YANG module or submodule MUST be stored within a BBF YANG
+repository in a file called \<module\-name>.yang or
+\<submodule\-name>.yang without revision\-date in the name.
 
 === IETF\-5: Quoting <sec:ietf-5-quoting>
 
-_This requirement is an extension to section
+_This guideline is an extension to section
 #link("https://datatracker.ietf.org/doc/html/rfc7950#section-6.1.3")[6.1.3]
-of RFC 7950 #link(<ref-RFC7950>)[[2]]._
+of RFC 7950 #link(<ref-RFC7950>)[[3]]._
 
 The rules specified in this section effectively mean that the second and
 subsequent lines of multi\-line strings have to be aligned under the
@@ -417,9 +455,9 @@ character following the opening double quote.
 === IETF\-6: Module Naming Conventions
 <sec:ietf-6-module-naming-conventions>
 
-_This requirement overrides section
+_This guideline overrides section
 #link("https://datatracker.ietf.org/doc/html/rfc8407#section-4.1")[4.1]
-of RFC 8407 #link(<ref-RFC8407>)[[3]]._
+of RFC 8407 #link(<ref-RFC8407>)[[5]]._
 
 \<module\-name> or \<submodule\-name> is the module name or submodule
 name, which (see below) MUST begin with the prefix "bbf\-".
@@ -431,9 +469,9 @@ the "ietf\-" prefix is read as "bbf\-".
 === IETF\-7: Module Header, Meta and Revision Statements
 <sec:ietf-7-module-header-meta-and-revision-statements>
 
-_These requirements override section
+_These guidelines override section
 #link("https://datatracker.ietf.org/doc/html/rfc8407#section-4.8")[4.8]
-of RFC 8407 #link(<ref-RFC8407>)[[3]]._
+of RFC 8407 #link(<ref-RFC8407>)[[5]]._
 
 ==== namespace <sec:namespace>
 
@@ -491,14 +529,14 @@ See IETF\-8.
 
 ==== revision <sec:revision>
 
-The requirements from RFC 8407 apply with the following modifications:
+The guidelines from RFC 8407 apply with the following modifications:
 
-- The requirements relating to the reference substatement are replaced
-  with a requirement to reference the associated TR Issue, Amendment(if
+- The guidelines relating to the reference substatement are replaced
+  with a guideline to reference the associated TR Issue, Amendment (if
   any) and Corrigendum.
-- The requirements relating to reuse of the same revision statement
-  within unpublished versions are reworded to refer only to "versions"
-  and not to "Internet\-Drafts".
+- The guidelines relating to reuse of the same revision statement within
+  unpublished versions are reworded to refer only to "versions" and not
+  to "Internet\-Drafts".
 
 References to associated TRs use "abbreviated" TR names, e.g.,
 "TR\-101i2" or "TR\-383a6".
@@ -507,9 +545,9 @@ References to associated TRs use "abbreviated" TR names, e.g.,
 Description
 <sec:ietf-8-module-header-meta-and-revision-statements---top-level-description>
 
-_This requirement overrides section
+_This guideline overrides section
 #link("https://datatracker.ietf.org/doc/html/rfc8407#section-4.8")[4.8]
-of RFC 8407 #link(<ref-RFC8407>)[[3]]._
+of RFC 8407 #link(<ref-RFC8407>)[[5]]._
 
 The top\-level description MUST contain the following:
 
@@ -518,9 +556,9 @@ The top\-level description MUST contain the following:
 
 === IETF\-9: Namespace Assignments <sec:ietf-9-namespace-assignments>
 
-_This requirement overrides section
+_This guideline overrides section
 #link("https://datatracker.ietf.org/doc/html/rfc8407#section-4.9")[4.9]
-of RFC 8407 #link(<ref-RFC8407>)[[3]]._
+of RFC 8407 #link(<ref-RFC8407>)[[5]]._
 
 Section 4.9 applies with appropriate translations of IETF terms to BBF
 terms, e.g., "IANA" is read as "BBF" and "non\-Standards\-Track" is read
@@ -535,9 +573,9 @@ BBF YANG module namespace MUST be of the form:
 === IETF\-10: Prefixes \- Imported Modules
 <sec:ietf-10-prefixes---imported-modules>
 
-_This requirement extends section
+_This guideline extends section
 #link("https://datatracker.ietf.org/doc/html/rfc8407#section-4.2")[4.2]
-of RFC 8407 #link(<ref-RFC8407>)[[3]]._
+of RFC 8407 #link(<ref-RFC8407>)[[5]]._
 
 Imported modules MUST have the same prefix defined in the module they
 are imported into as is defined in the imported module.
@@ -564,17 +602,16 @@ Example:
 
 === IETF\-11: Prefixes \- Usage <sec:ietf-11-prefixes---usage>
 
-_These requirements restate section
+_These guidelines restate section
 #link("https://datatracker.ietf.org/doc/html/rfc8407#section-4.2")[4.2]
-of RFC 8407 #link(<ref-RFC8407>)[[3]]._
+of RFC 8407 #link(<ref-RFC8407>)[[5]]._
 
 The following apply to prefix usage of the local module:
 
 - The local module prefix SHOULD be used instead of no prefix in all
-  path expressions. The exceptions to this are path statements defined
-  in a grouping that reference a node in another grouping. The
-  referenced node will belong to the module(s) where the grouping is
-  used, so the prefix cannot be assumed.
+  path expressions where the prefix is optional per section
+  #link("https://datatracker.ietf.org/doc/html/rfc7950#section-5.1")[5.1]
+  of RFC 7950 #link(<ref-RFC7950>)[[3]].
 - The local module prefix MUST be used instead of no prefix in all
   default statements for an identityref or instance\-identifier data
   type.
@@ -586,7 +623,7 @@ The following apply to prefix usage of the local module:
 
 _The following extends section
 #link("https://datatracker.ietf.org/doc/html/rfc8407#section-4.3.1")[4.3.1]
-of RFC 8407 #link(<ref-RFC8407>)[[3]]._
+of RFC 8407 #link(<ref-RFC8407>)[[5]]._
 
 These guidelines are stronger than the IETF guidelines because they do
 not allow upper\-case characters and the underscore character:
@@ -602,7 +639,7 @@ not allow upper\-case characters and the underscore character:
 
 _The following reiterates section
 #link("https://datatracker.ietf.org/doc/html/rfc8407#section-4.5")[4.5]
-of RFC 8407 #link(<ref-RFC8407>)[[3]]._
+of RFC 8407 #link(<ref-RFC8407>)[[5]]._
 
 As stated, conditional requirements for data nodes must be documented
 somewhere. Where possible, use YANG modeled constraints such as an
@@ -615,7 +652,7 @@ should be used to convey a constraint which cannot be modeled.
 
 _The following reiterates section
 #link("https://datatracker.ietf.org/doc/html/rfc8407#section-4.19.1")[4.19.1]
-of RFC 8407 #link(<ref-RFC8407>)[[3]]._
+of RFC 8407 #link(<ref-RFC8407>)[[5]]._
 
 Section 4.19.1 states that the augment statement is often used together
 with the 'when' statement and\/or 'if\-feature' statement to make the
@@ -629,7 +666,7 @@ Where possible, all BBF YANG models SHOULD apply 'when' and\/or
 
 _The following replaces statements in section
 #link("https://datatracker.ietf.org/doc/html/rfc8407#section-4.7")[4.7]
-of RFC 8407 #link(<ref-RFC8407>)[[3]] regarding the use of the
+of RFC 8407 #link(<ref-RFC8407>)[[5]] regarding the use of the
 'revision\-date' substatement._
 
 BBF YANG modules MUST NOT use 'revision\-date' on import and include
@@ -640,7 +677,7 @@ statements.
 
 _The following replaces portions of section
 #link("https://datatracker.ietf.org/doc/html/rfc7950#section-6")[6] of
-RFC 7950 #link(<ref-RFC7950>)[[2]]._
+RFC 7950 #link(<ref-RFC7950>)[[3]]._
 
 BBF YANG modules MUST be written using only printable ASCII characters.
 
@@ -649,7 +686,7 @@ BBF YANG modules MUST be written using only printable ASCII characters.
 
 _The following extends section
 #link("https://datatracker.ietf.org/doc/html/rfc8407#section-4.2")[4.2]
-of RFC 8407 #link(<ref-RFC8407>)[[3]]._
+of RFC 8407 #link(<ref-RFC8407>)[[5]]._
 
 In a submodule, the prefix defined for the parent module in the
 'belongs\-to' statement MUST match the prefix defined in the parent
@@ -675,9 +712,9 @@ module for itself.
 === IETF\-18: 'error\-message' sub\-statement to the 'must' statement
 <sec:ietf-18-error-message-sub-statement-to-the-must-statement>
 
-_This requirement overrides section
+_This guideline overrides section
 #link("https://datatracker.ietf.org/doc/html/rfc7950#section-7.5.4.1")[7.5.4.1]
-of RFC 7950 #link(<ref-RFC7950>)[[2]]._
+of RFC 7950 #link(<ref-RFC7950>)[[3]]._
 
 The 'error\-message' sub\-statement MUST be provided to 'must'
 statements in configuration data nodes for proper communication of the
@@ -686,23 +723,109 @@ constraint validation failure.
 === IETF\-19: 'description' sub\-statement to the 'must' statement
 <sec:ietf-19-description-sub-statement-to-the-must-statement>
 
-_This requirement overrides section
+_This guideline overrides section
 #link("https://datatracker.ietf.org/doc/html/rfc7950#section-7.5.4")[7.5.4]
-of RFC 7950 #link(<ref-RFC7950>)[[2]]._
+of RFC 7950 #link(<ref-RFC7950>)[[3]]._
 
-The 'description' sub\-statement MUST be provided to the 'must'
-statement for proper communication of the intent of the statement.
+Not everyone reading a YANG model is an expert in YANG and\/or XPath. In
+order to provide assistence in understanding the intent, all 'must'
+statements SHALL contain a description statement. This description
+should convey the intent of the 'must' condition in easy to understand
+language.
 
 === IETF\-20: Tabs and Spacing <sec:ietf-20-tabs-and-spacing>
 
-_This requirement is an extension to section
+_This guideline is an extension to section
 #link("https://datatracker.ietf.org/doc/html/rfc7950#section-6.1.3")[6.1.3]
-of RFC 7950 #link(<ref-RFC7950>)[[2]]._
+of RFC 7950 #link(<ref-RFC7950>)[[3]]._
 
 BBF YANG modules MUST NOT contain any tab characters and MUST use 2
 space characters for indentation.
 
-#box[== BBF YANG Guidelines <sec:bbf-yang-guidelines>] <cls:new-file>
+=== IETF\-21: Normative Language <sec:ietf-21-normative-language>
+
+_This guideline clarifies section
+#link("https://datatracker.ietf.org/doc/html/rfc8407#section-3.6")[3.6]
+of RFC 8407 #link(<ref-RFC8407>)[[5]]._
+
+BBF YANG modules SHALL NOT use normative keywords in their description
+statements as defined in RFC 2119 #link(<ref-RFC2119>)[[1]] and
+clarified in RFC 8174 #link(<ref-RFC8174>)[[4]]. Explicitly, this means
+avoiding the use of the keywords in all capital letters, e.g., MUST,
+SHOULD, SHALL, etc.
+
+This does not apply to the license text included as part of each
+top\-level module description.
+
+=== IETF\-22: 'leafref' path in a 'grouping'
+<sec:ietf-22-leafref-path-in-a-grouping>
+
+_The following extends section
+#link("https://datatracker.ietf.org/doc/html/rfc8407#section-4.13")[4.13]
+of RFC 8407 #link(<ref-RFC8407>)[[5]]._
+
+When defined in a 'grouping', a leaf or leaf\-list of type 'leafref'
+MUST NOT specify a path using a relative XPath statement to a node that
+exists outside the grouping. Referencing nodes outside of a grouping
+makes assumptions about where within a schema tree the grouping is to be
+used and thus limits the reusability of the grouping.
+
+The following example violates this guideline because the leaf
+'profile\-ref' is referencing the leaf 'name' that exists outside of the
+'grouping' statement. For this path to be valid, the grouping has to be
+used in a schema where the data node hierarchy, specified in the 'path',
+exists.
+
+```
+grouping example-grouping {
+  description
+    "An example grouping.";
+  leaf profile-ref {
+    type leafref {
+      path '../profiles/profile/name';
+    }
+    description
+      "Reference to a profile.";
+  }
+}
+```
+
+The next example demonstrates the use of a relative path to a node
+within the grouping, which does not violate the guideline.
+
+```
+grouping example-grouping {
+  description
+    "An example grouping.";
+  leaf profile-ref {
+    type leafref {
+      path '../profiles/profile/name';
+    }
+    description
+      "Reference to a profile.";
+  }
+  
+  container profiles {
+    description
+      "Configuration associated with profiles.";
+    
+    list profile {
+      key name;
+      description
+        "A profile.";
+      
+      leaf name {
+        type string;
+        description
+          "The name of the profile.";
+      }
+    }
+  }
+}
+```
+
+#bbf-new-file[
+== BBF YANG Guidelines <sec:bbf-yang-guidelines>]
 
 This section adds BBF\-specific guidelines that go beyond the scope of
 the IETF YANG Guidelines.
@@ -714,7 +837,7 @@ BBF YANG modules MUST use standard IANA\/IETF YANG modules whenever
 possible. In this context, "use" implies adherence to the letter and
 spirit of such modules and of their defining RFCs.
 
-Individual Working Text documents SHOULD reference the standard models
+Individual Working Text documents MUST reference the standard models
 which are applicable.
 
 === BBF\-2: Line Length <sec:bbf-2-line-length>
@@ -743,8 +866,9 @@ messaging and improve efficiency.
 
 All descriptions MUST read as sentences or sentence fragments containing
 proper capitalization and punctuation, e.g., ending with periods.
-However, reference statements need not meet this requirement and do not
-need to terminate with a period.
+However, #link(<sec:bbf-25-reference-statements>)[reference statements]
+need not meet this requirement and do not need to terminate with a
+period.
 
 === BBF\-6: Special Values <sec:bbf-6-special-values>
 
@@ -752,8 +876,7 @@ Special values SHOULD be parameterized in an enumeration as part of a
 union with the normal values.
 
 Enumerations SHOULD NOT be used in cases where a special value means
-"XXX or less" or "YYY or more", i.e.~where the special value indicates
-clipping.
+"XXX or less" or "YYY or more".
 
 Example:
 
@@ -782,7 +905,7 @@ Example:
 
 In the above example, \-511 refers to a value less than or equal to
 \-51.1; +511 refers to a value greater than or equal to +51.1 and the
-enum undetermined refers to a value which is undetermined.
+enum "undetermined" refers to a value which is undetermined.
 
 === BBF\-7: Paragraph Separation in Description Statements
 <sec:bbf-7-paragraph-separation-in-description-statements>
@@ -801,24 +924,41 @@ Example:
 
 === BBF\-8: Revision Statements <sec:bbf-8-revision-statements>
 
-Unpublished versions of BBF YANG modules MAY have 'revision' statements
-corresponding to individual pull requests. However, published versions
-MUST remove these 'revision' statements and replace with a single
-'revision' statement corresponding to the published version.
+Superseded by BBF\-15.
 
 === BBF\-9: Explicit Modeling <sec:bbf-9-explicit-modeling>
 
 Where YANG allows something or some behavior to be explicitly modeled
 (e.g., enumerations, range, units, must, etc.) then this SHOULD always
 be done. Mandatory requirements in descriptions SHOULD be used only
-where it is not possible to use formal YANG modeling to convey the
-requirement.
+where it is not possible or practical to use formal YANG modeling to
+convey the requirement.
+
+Example:
+
+```
+  leaf forwarder {
+    type bbf-l2-fwd:forwarder-ref;
+    description
+      "A reference to a forwarder.
+
+       The following is a constraint that could not be captured in
+       YANG: multiple Maintenance Groups referencing the same
+       forwarder are allowed, but only if they have a different
+       level.
+
+       Note that there is no BBF requirement for multiple levels
+       with up-MEPs. Within BBF context multiple levels on a
+       forwarder go together with one level using up-MEPs and a
+       higher level using MIPs.";
+  }
+```
 
 === BBF\-10: Retroactive Application of OD\-360 Guidelines
 <sec:bbf-10-retroactive-application-of-od-360-guidelines>
 
-OD\-360 guidelines SHOULD NOT be retroactively applied to published BBF
-YANG modules and MUST NOT be applied if the resulting change is backward
+OD\-360 guidelines MAY be retroactively applied to published BBF YANG
+modules but MUST NOT be applied if the resulting change is backward
 incompatible with the previously published version. For example, an
 existing node named using an underscore ’\_’ instead of a dash '\-' MUST
 NOT be changed in published module as the resulting renaming is not
@@ -853,11 +993,11 @@ For example:
 <sec:bbf-13-abbreviations-in-description-statements>
 
 Abbreviations can be used in description statements. However, the first
-instance of the acronym in a description statement SHOULD have its
+instance of the abbreviation in a description statement SHOULD have its
 meaning clearly conveyed.
 
-=== BBF\-14: Adding and\/or Creating BBF YANG Models
-<sec:bbf-14-adding-andor-creating-bbf-yang-models>
+=== BBF\-14: Creating and\/or Extending BBF YANG Models
+<sec:bbf-14-creating-andor-extending-bbf-yang-models>
 
 This guideline defines the best practices when defining a new BBF YANG
 model and\/or having BBF extend an existing (BBF or non\-BBF) YANG
@@ -876,12 +1016,13 @@ When creating or editing BBF YANG models, the following use cases apply:
   the applicable standard and be able to meet the requirement(s) from
   that document. For example, the TR\-355 G.fast YANG model contains
   attributes defined in ITU\-T Recommendation G.997.2.
-+ *A model requirement which is not formulated in a Broadband Forum
++ *A model requirement which is not formulated as required, or not
+  formulated at all, for the specific use case in a Broadband Forum
   Technical Report or a standard published by another SDO*: In this
   case, the following guidelines apply:
 
   + First, the requirement must be formulated based on inputs brought
-    forward to the BBF (i.e.~a contribution explaining the need for the
+    forward to the BBF (i.e., a contribution explaining the need for the
     requirement).
   + There must be consensus among the participants in the Work
     Area\/Project Stream to move forward with this requirement.
@@ -891,7 +1032,8 @@ When creating or editing BBF YANG models, the following use cases apply:
     Work Area agrees that something should be added in a BBF YANG model,
     then we do not need to wait until the requirement is captured in a
     Technical Report.
-  + The new requirement must not break existing BBF Technical Reports.
+  + The new requirement must not deviate from any existing requirements
+    in BBF Technical Reports.
   + The new requirement must be reviewed by any Work Area(s) or Project
     Stream(s) for which it is clearly applicable (e.g., a PON related
     requirement is to be reviewed by the FAN WA).
@@ -921,7 +1063,8 @@ Each published module and submodule SHALL:
   submodules associated with a module SHALL have the same revision date
   as the parent module regardless of whether they were changed.
 - maintain all revision statements from previously published revisions.
-- contain the standard BBF software license.
+- contain the standard BBF software license with correct copyright
+  year(s).
 
 ==== Draft <sec:draft>
 
@@ -932,7 +1075,7 @@ Each draft module and submodule SHALL:
   submodules associated with a module SHALL have the same revision date
   as the parent module regardless of whether they were changed.
 - maintain all revision statements from previously published revisions.
-- contain the draft BBF software license.
+- contain the draft BBF software license with correct copyright year(s).
 
 ==== Development <sec:development>
 
@@ -1030,13 +1173,13 @@ When modeling an enumeration where each enum corresponds to an integer
 value specified by a underlying standard specification, a model MAY
 choose to model those values in the 'value' statement.
 
-_The 'value' carries no meaning via NETCONF nor RESTCONF but is used for
-an implementation and reference aid._
+The 'value' carries no meaning via NETCONF nor RESTCONF but is used for
+an implementation and reference aid.
 
-_For an enumeration whose underlying values are 0..n, the 'value'
+For an enumeration whose underlying values are 0..n, the 'value'
 statements are not necessary as all enums have an implied value if not
 explicitly specified. The implied values begin with 0 and increment by 1
-for each enum in the enumeration._
+for each enum in the enumeration.
 
 ```
   leaf ra-mode {
@@ -1074,6 +1217,9 @@ the 'if\-feature' statement.
 
 ```
   module bbf-availability {
+    yang-version 1.1;
+    namespace "urn:bbf:yang:bbf-availability";
+    prefix bbf-avail;
     ...
    
     feature availability {
@@ -1113,7 +1259,7 @@ _This requirement is derived from section
 #link("https://datatracker.ietf.org/doc/html/rfc7950#section-7.9.3")[7.9.3]
 and section
 #link("https://datatracker.ietf.org/doc/html/rfc7950#section-9.11")[9.11]
-of RFC 7950 #link(<ref-RFC7950>)[[2]]._
+of RFC 7950 #link(<ref-RFC7950>)[[3]]._
 
 The default case of a choice statement MUST not contain a sole
 descendant leaf node of type "empty".
@@ -1192,13 +1338,21 @@ error-message
    be the name of a multicast network interface.";
 ```
 
-Per RFC 7950 #link(<ref-RFC7950>)[[2]], section
+Per RFC 7950 #link(<ref-RFC7950>)[[3]], section
 #link("https://datatracker.ietf.org/doc/html/rfc7950#section-6.1.3")[6.1.3],
-this 'error\-message' would be reported as:
+this 'error\-message' would be reported as either
 
 ```
 <error-message>The name of a multicast interface to host can not\nbe the name of a multicast network interface.</error-message>
 ```
+
+or
+
+```
+<error-message>The name of a multicast interface to host can notbe the name of a multicast network interface.</error-message>
+```
+
+depending on how the system interprets a new line.
 
 Corrected:
 
@@ -1214,8 +1368,319 @@ Which would be reported as:
 <error-message>The name of a multicast interface to host can not be the name of a multicast network interface.</error-message>
 ```
 
-#box[== BBF Deviation Guidelines <sec:bbf-deviation-guidelines>]
-<cls:new-file>
+=== BBF\-21: Deprecating and Obsoleting Data Nodes
+<sec:bbf-21-deprecating-and-obsoleting-data-nodes>
+
+There are times when the need arises to migrate away from using
+previously published data nodes:
+
+- A newer, possibly more efficient, method has been defined.
+- Error(s) existing in the current definition that cannot be resolved in
+  a backward compatible way.
+- Data nodes were unnecessary or modeled by mistake, and there is no
+  need to maintain or replace them.
+
+The process for this is as follows:
+
++ Change the status of the applicable data nodes from "current" to
+  "deprecated" by adding a status statement with the value "deprecated".
++ The deprecated data nodes MUST remain in this state for at least two
+  years.
++ Beginning with the next publication after at least two years, the data
+  nodes MAY be transitioned from "deprecated" to "obsolete".
++ The obsoleted data nodes MUST never be deleted from the YANG model.
+
+=== BBF\-22: Backwards Compatibility
+<sec:bbf-22-backwards-compatibility>
+
+In general, BBF YANG modules SHOULD NOT introduce changes that are
+defined as backwards incompatible per RFC 7950 #link(<ref-RFC7950>)[[3]]
+section
+#link("https://datatracker.ietf.org/doc/html/rfc7950#section-11")[11].
+Instead, add new definitions and use methods of deprecating and
+obsoleting previous definitions per RFC 7950 #link(<ref-RFC7950>)[[3]]
+section
+#link("https://datatracker.ietf.org/doc/html/rfc7950#section-7.21.2")[7.21.2]
+and further clarified by BBF\-21.
+
+However, experience has shown that in certain cases, changes that are
+backwards incompatible according to RFC 7950 #link(<ref-RFC7950>)[[3]]
+section
+#link("https://datatracker.ietf.org/doc/html/rfc7950#section-11")[11]
+may nevertheless be compatible in conjunction with other changes made at
+the same time. Therefore, it may be possible to address a specific
+problem, through backwards incompatible changes.
+
+However, before agreeing to such changes to a published YANG module,
+Work Areas must ensure, to the greatest possible extent, that these
+changes will indeed be backwards compatible and not impact any existing
+operator configuration or operations or other SDOs or vendors
+augmentations of these standardized modules.
+
+=== BBF\-23: "enable" vs.~"enabled" <sec:bbf-23-enable-vs.-enabled>
+
+Data nodes used to enable\/disable some function, and whose identifier
+is intended to include the term "enable", either solely or as part of a
+larger name, SHALL use the "enabled" form of the word, e.g., 'enabled'
+or 'statistics\-enabled'. This also applies to the names of enums or
+bits.
+
+=== BBF\-24: "oper\-state" vs.~"oper\-status"
+<sec:bbf-24-oper-state-vs.-oper-status>
+
+BBF YANG modules SHALL use the term 'oper\-state' when defining a data
+node that reports the operational state. This is applicable whether it
+is the full name or part of the name of the data node, e.g.,
+'oper\-state', 'oper\-state\-timestamp'.
+
+=== BBF\-25: Reference Statements <sec:bbf-25-reference-statements>
+
+The goal of a reference statement is not only to completely and
+unambiguously guide the user to the documentation that supports the data
+node(s) being modeled, but also to enable the user to locate data nodes
+within YANG modules that implement specific attributes or parameters
+specified in the given documentation by searching through the YANG
+modules for references to those attributes or parameters. To that end,
+the following guideline is provided.
+
+Reference statements SHALL reference technical specifications in a
+consistent manner using one or both of the following formats:
+
+```
+reference
+  "[<single-reference>; <EOL>]* <single-reference>";
+
+<single-reference> ::=  [<SDO>] <doc#> [(<version>)] [<R/S/C/T/F>] [- <descr>] | <URL> [- <descr>]
+```
+
+where
+
+- \<SDO>: Standards Defining Organization
+
+  - Examples: IEEE, ITU\-T
+  - Optional: For well known document types, e.g., RFC implies IETF and
+    TR implies BBF, the SDO is not required.
+- \<doc\#>: Document number
+
+  - Examples: TR\-101i2, RFC 7950
+  - Mandatory
+  - For BBF documents, the Issue and\/or Amendment and\/or Corrigendum
+    are included in the document number in the abbreviated format as
+    described in IETF\-7, e.g., TR\-101i2, TR\-385i2a1.
+- \<version>: Version or revision number and\/or date
+
+  - Examples: (Revision 12.3), (2008\/07)
+  - Optional: For documents whose name implies or specifies the version,
+    e.g., RFC 8348, TR\-383a6, additional version information is not
+    required.
+- \<R\/S\/C\/T\/F>: Requirement\/Section\/Clause\/Table\/Figure
+
+  - Examples: R\-13, Section 3.6, Clause 7.2.1, Table 2, Figure 5\-4
+  - Optional: Only if applicable.
+  - Terminology MUST align with the terms used by the reference, e.g.,
+    Sections for RFCs, Clauses for ITU\-T specifications.
+  - First letter is capitalized, e.g., "Section" instead of "section".
+  - If multiple are applicable in a given document, treat each as a
+    separate reference.
+- \<descr>: Description of the reference
+
+  - Examples: variable name or specific identifier within the Section or
+    Clause
+  - Optional: Should be used when it is possible to uniquely identify
+    the parameter being modeled within the given reference.
+
+    - Examples:
+
+      - An ME defined in an ITU\-T G.988 Clause contains one or more
+        parameters. If the reference is for one specific parameter, it
+        must be identified in the reference, e.g., "ITU\-T G.988 Clause
+        9.9.6 \- PSTN protocol variant".
+      - A parameter defined in an ITU\-T G.997.x Clause is typically
+        fully contained within the clause, i.e., no ambiguity. However,
+        for implementers, it is useful to be able to quickly search for
+        a desired parameter when the Clause is not known. For this use
+        case, both the descriptive and shorthand (if applicable)
+        representation should be identified, e.g., "ITU\-T G.997.2
+        Clause 7.2.1.1 \- Maximum net data rate (MAXNDRds\/us)".
+      - However, if the G.997.x parameter represents more than one
+        distinct value, e.g., upstream and downstream, and the data node
+        only applies to one, the reference should only contain the value
+        for which it is applicable, e.g., "ITU\-T G.997.2 Clause 7.2.1.1
+        \- Maximum net data rate downstream (MAXNDRds)".
+      - A parameter defined in a Table in SFF\-8472 is specified by its
+        memory location (address and byte numbers). References for these
+        types of parameters should include the address and bytes, e.g.,
+        "SFF\-8472 (Revision 12.4) Table 4\-1 \- Address A0h, Bytes
+        96\-127".
+  - In general, the title associated with the reference should not be
+    used unless it also represents one of the above.
+- \<URL>: The URL of the associated reference used when there is no
+  formal technical specification
+
+  - Example:
+    github.com\/grpc\/grpc\/blob\/master\/doc\/connection\-backoff.md
+  - Do not include the URL scheme, e.g., http:\/\/ or https:\/\/, as it
+    may change. For example, a site may move from an unsecure (http)
+    scheme to a secure (https) scheme.
+- ';': Requirement separator
+
+  - Mandatory: A semicolon MUST be used to terminate all but the last
+    reference when there are multiple references in a reference
+    statement.
+  - Each reference MUST start on a new line.
+  - This is not applicable when there is only one reference in the
+    reference statement.
+- If a single reference spans multiple lines, the first character on the
+  second and subsequent lines of the reference SHALL align under the
+  first character on the first line of the reference.
+
+Example:
+
+```
+reference
+  "RFC 5519 Section 5 - mgmdRouterInterfaceQueryInterval;
+   TR-101i2 Table 2;
+   SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+   Bytes 40-41;
+   ITU-T G.997.2 Clause 7.11.1.1 - Net data rate (NDRds/us);
+   ITU-T G.997.2 Clause 7.2.1.1 - Maximum net data rate downstream (MAXNDRds);
+   IEEE 802.1Q (2018) Clause 20.23.3;
+   IEEE 802.1Q (2018) Table 20-1 - xconCCMdefect;
+   github.com/grpc/grpc/blob/master/doc/connection-backoff.md - INITIAL_BACKOFF";
+```
+
+Additional Notes:
+
+- While external references must be documented in the 'reference'
+  statement, it is also allowed to refer to them in the description
+  itself.
+- This guideline does not apply to a reference statement within a
+  revision statement. Those reference statements have a unique format
+  used for drafts and publication.
+- URL references should be periodically reviewed to ensure they still
+  exist or have not been moved.
+
+=== BBF\-26: Body Statements <sec:bbf-26-body-statements>
+
+The order of body statements in BBF YANG modules SHOULD follow the order
+as stated in the body\-stmt ABNF grammar defined in RFC 7950
+#link(<ref-RFC7950>)[[3]] section
+#link("https://datatracker.ietf.org/doc/html/rfc7950#section-14")[14]
+and as shown in the YANG Module Template defined in RFC 8407
+#link(<ref-RFC8407>)[[5]] Appendix
+#link("https://datatracker.ietf.org/doc/html/rfc8407#appendix-B")[B].
+Note that while the ABNF grammar specifies deviation statements follow
+notifications, the YANG Module Template states "DO NOT put deviation
+statements in a published module". BBF YANG modules MUST follow this
+stated guideline on deviation statements.
+
+Body Statement Order:
+
+- extension statements
+- feature statements
+- identity statements
+- typedef statements
+- grouping statements
+- data definition statements
+- augment statements
+- rpc statements
+- notification statements
+
+=== BBF\-27: 'list' and 'leaf\-list' Naming and Descriptions
+<sec:bbf-27-list-and-leaf-list-naming-and-descriptions>
+
+The name of a 'list' or 'leaf\-list' data node SHALL be in the singular
+form. The motiviation is that the XML representation repeats the name
+for each entry.
+
+Example YANG:
+
+```
+list traffic-management-profile {
+  key name;
+  description
+    "A traffic management profile.";
+  
+  leaf name {
+    type string;
+    description
+      "The name of the profile.";
+  }
+}
+```
+
+Example XML:
+
+```
+<traffic-management-profile>
+  <name>multicast</name>
+</traffic-management-profile>
+<traffic-management-profile>
+  <name>hsi</name>
+</traffic-management-profile>
+```
+
+Note in the example YANG, the description for the 'list' node describes
+a single entry in the list, "A traffic management profile".
+
+The description statement for a 'list' or 'leaf\-list' data node SHALL
+describe what an entry represents rather than describing the entire
+list. In other words, the description should follow the example above
+rather than:
+
+```
+list traffic-management-profile {
+  key name;
+  description
+    "A list of traffic management profiles.";
+  
+  leaf name {
+    type string;
+    description
+      "The name of the profile.";
+  }
+}
+```
+
+=== BBF\-28: Description on 'when' statements
+<sec:bbf-28-description-on-when-statements>
+
+Not everyone reading a YANG model is an expert in YANG and\/or XPath. In
+order to provide assistence in understanding the intent, all 'when'
+statements SHALL contain a description statement. This description
+should convey the intent of the 'when' condition in easy to understand
+language.
+
+Examples:
+
+```
+when "derived-from-or-self(hw:class,'bbf-hwt:transceiver-link') {
+  description
+    "Applicable when the class of hardware component is either a
+     transceiver link or another class derived from a transceiver
+     link.";
+}
+```
+
+```
+when "not(boolean(../enable))"
+   + " or "
+   + "(../enable='true')" {
+  description
+    "If the administrative state of a session is
+     supported, the session must be currently
+     administratively enabled to reset the session.";
+}
+```
+
+=== BBF\-29: Use of English Contractions
+<sec:bbf-29-use-of-english-contractions>
+
+Descriptions in YANG modules are considered to be formal documentation.
+Therefore, English contractions, e.g., can’t, isn’t, etc., SHALL NOT be
+used in description statements.
+
+\#\# BBF Deviation Guidelines {.new\-file}
 
 It is understood that there are times in which a device will need to
 support a subset of a standard YANG model whether it be from BBF or any
@@ -1322,13 +1787,13 @@ This constraint may be necessary depending on actual hardware in use.
 For example, the number of physical interfaces of a particular type will
 be limited by the number present on the hardware. For this, we could add
 a constraint on the interface list in _ietf\-interfaces
-#link(<ref-RFC7223>)[[1]]_ to explicitly announce how many interfaces
-are supported.
+#link(<ref-RFC7223>)[[2]]_ to explicitly enforce how many interfaces are
+present.
 
 ```
   deviation "/if:interfaces" {
     description
-      "There are only 8 G.fast interfaces supported.";
+      "There are always 8 G.fast interfaces present.";
     deviate add {
       must "count(interface[type='ianaift:gfast'])=8";
     }
@@ -1465,8 +1930,9 @@ By deleting a property, the value space of an object is typically being
 expanded which means the value accepted by the deviated definition is
 not valid per the original definition and thus, should never be allowed.
 
-#box[== BBF Guidelines for 'units' Statements
-<sec:bbf-guidelines-for-units-statements>] <cls:new-file>
+#bbf-new-file[
+== BBF Guidelines for 'units' Statements
+<sec:bbf-guidelines-for-units-statements>]
 
 The following guidelines apply to the specification of 'units'
 statements within Broadband Forum YANG modules. These guidelines are
@@ -1484,13 +1950,14 @@ The following terminology is used throughout these guidelines.
 #table(
   columns: (auto, auto),
   align: (auto, auto),
-  fill: table-fill.with(columns: 2, header-rows: 1),
+  fill: bbf-table-fill.with(columns: 2, header-rows: 1),
   [#strong[Term]], [#strong[Description]],
   [family], [refers to a group of 'units' statements representing a
-    common functional area including, but not limited to, time, length,
-    temperature, electricity, speed and memory storage],
+  common functional area including, but not limited to, time, length,
+  temperature, electricity, speed and memory storage],
   [unit], [the full text name of a unit, e.g., seconds, milliwatts],
-  [symbol], [the abbreviated form of expressing the units, e.g., mW, dBm]
+  [symbol], [the abbreviated form of expressing the units, e.g., mW,
+  dBm]
 )
 
 === UNITS\-1: Unit vs Symbol <sec:units-1-unit-vs-symbol>

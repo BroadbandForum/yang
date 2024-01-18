@@ -9,7 +9,7 @@ BBF YANG modules MUST use standard IANA/IETF YANG modules whenever possible. In
 this context, "use" implies adherence to the letter and spirit of such modules
 and of their defining RFCs.
 
-Individual Working Text documents SHOULD reference the standard models which
+Individual Working Text documents MUST reference the standard models which
 are applicable.
 
 ### BBF-2: Line Length
@@ -28,13 +28,13 @@ Lists and leaf-lists may have many elements resulting in large amounts of data p
 
 ### BBF-5: Descriptions and References
 
-All descriptions MUST read as sentences or sentence fragments containing proper capitalization and punctuation, e.g., ending with periods. However, reference statements need not meet this requirement and do not need to terminate with a period.
+All descriptions MUST read as sentences or sentence fragments containing proper capitalization and punctuation, e.g., ending with periods. However, [reference statements](#bbf-25-reference-statements) need not meet this requirement and do not need to terminate with a period.
 
 ### BBF-6: Special Values
 
 Special values SHOULD be parameterized in an enumeration as part of a union with the normal values.
 
-Enumerations SHOULD NOT be used in cases where a special value means "XXX or less" or "YYY or more", i.e. where the special value indicates clipping.
+Enumerations SHOULD NOT be used in cases where a special value means "XXX or less" or "YYY or more".
 
 Example:
 
@@ -60,7 +60,7 @@ Example:
        signal-to-noise ratio margin is greater than or equal to
        +51.1dB.";
 ```
-In the above example, -511 refers to a value less than or equal to -51.1; +511 refers to a value greater than or equal to +51.1 and the enum undetermined refers to a value which is undetermined.
+In the above example, -511 refers to a value less than or equal to -51.1; +511 refers to a value greater than or equal to +51.1 and the enum "undetermined" refers to a value which is undetermined.
 
 ### BBF-7: Paragraph Separation in Description Statements
 
@@ -76,15 +76,34 @@ Example:
 
 ### BBF-8: Revision Statements
 
-Unpublished versions of BBF YANG modules MAY have 'revision' statements corresponding to individual pull requests. However, published versions MUST remove these 'revision' statements and replace with a single 'revision' statement corresponding to the published version.
+Superseded by BBF-15.
 
 ### BBF-9: Explicit Modeling
 
-Where YANG allows something or some behavior to be explicitly modeled (e.g., enumerations, range, units, must, etc.) then this SHOULD always be done. Mandatory requirements in descriptions SHOULD be used only where it is not possible to use formal YANG modeling to convey the requirement.
+Where YANG allows something or some behavior to be explicitly modeled (e.g., enumerations, range, units, must, etc.) then this SHOULD always be done. Mandatory requirements in descriptions SHOULD be used only where it is not possible or practical to use formal YANG modeling to convey the requirement.
+
+Example:
+```
+  leaf forwarder {
+    type bbf-l2-fwd:forwarder-ref;
+    description
+      "A reference to a forwarder.
+
+       The following is a constraint that could not be captured in
+       YANG: multiple Maintenance Groups referencing the same
+       forwarder are allowed, but only if they have a different
+       level.
+
+       Note that there is no BBF requirement for multiple levels
+       with up-MEPs. Within BBF context multiple levels on a
+       forwarder go together with one level using up-MEPs and a
+       higher level using MIPs.";
+  }
+```
 
 ### BBF-10: Retroactive Application of OD-360 Guidelines
 
-OD-360 guidelines SHOULD NOT be retroactively applied to published BBF YANG modules and MUST NOT be applied if the resulting change is backward incompatible with the previously published version. For example, an existing node named using an underscore '_' instead of a dash '-' MUST NOT be changed in published module as the resulting renaming is not backward compatible.
+OD-360 guidelines MAY be retroactively applied to published BBF YANG modules but MUST NOT be applied if the resulting change is backward incompatible with the previously published version. For example, an existing node named using an underscore '_' instead of a dash '-' MUST NOT be changed in published module as the resulting renaming is not backward compatible.
 
 ### BBF-11: Multi-word Identifiers
 
@@ -103,13 +122,13 @@ For example:
        that can be admitted above the Committed Information Rate
        (CIR) and considered green.";
   }
-```  
+```
 
 ### BBF-13: Abbreviations in Description Statements
 
-Abbreviations can be used in description statements. However, the first instance of the acronym in a description statement SHOULD have its meaning clearly conveyed.
+Abbreviations can be used in description statements. However, the first instance of the abbreviation in a description statement SHOULD have its meaning clearly conveyed.
 
-### BBF-14: Adding and/or Creating BBF YANG Models
+### BBF-14: Creating and/or Extending BBF YANG Models
 
 This guideline defines the best practices when defining a new BBF YANG model and/or having BBF extend an existing (BBF or non-BBF) YANG model.
 
@@ -123,16 +142,16 @@ For example, the models contained in TR-383 build on the requirements of TR-101/
 In this case, the BBF YANG data model should reference the applicable standard and be able to meet the requirement(s) from that document.
 For example, the TR-355 G.fast YANG model contains attributes defined in ITU-T Recommendation G.997.2.
 
- 3. **A model requirement which is not formulated in a Broadband Forum Technical Report or a standard published by another SDO**:
+ 3. **A model requirement which is not formulated as required, or not formulated at all, for the specific use case in a Broadband Forum Technical Report or a standard published by another SDO**:
 In this case, the following guidelines apply:
 
-    1. First, the requirement must be formulated based on inputs brought forward to the BBF (i.e. a contribution explaining the need for the requirement).
+    1. First, the requirement must be formulated based on inputs brought forward to the BBF (i.e., a contribution explaining the need for the requirement).
 
     2. There must be consensus among the participants in the Work Area/Project Stream to move forward with this requirement.
 
     3. It is desirable, but not mandatory, for the requirements to be captured in a BBF Technical Report. However, that should not hold up putting the requirement in the YANG model. In other words, if the Work Area agrees that something should be added in a BBF YANG model, then we do not need to wait until the requirement is captured in a Technical Report.
 
-    4. The new requirement must not break existing BBF Technical Reports.
+    4. The new requirement must not deviate from any existing requirements in BBF Technical Reports.
 
     5. The new requirement must be reviewed by any Work Area(s) or Project Stream(s) for which it is clearly applicable (e.g., a PON related requirement is to be reviewed by the FAN WA).
 
@@ -152,7 +171,7 @@ Each published module and submodule SHALL:
 
  - have a new, if previously published, or initial revision statement containing the TR publication date as the revision date. All submodules associated with a module SHALL have the same revision date as the parent module regardless of whether they were changed.
  - maintain all revision statements from previously published revisions.
- - contain the standard BBF software license.
+ - contain the standard BBF software license with correct copyright year(s). 
 
 #### Draft
 
@@ -160,7 +179,7 @@ Each draft module and submodule SHALL:
 
  - have a new, if previously published, or initial revision statement containing the draft publication date as the revision date. All submodules associated with a module SHALL have the same revision date as the parent module regardless of whether they were changed.
  - maintain all revision statements from previously published revisions.
- - contain the draft BBF software license.
+ - contain the draft BBF software license with correct copyright year(s). 
 
 #### Development
 
@@ -175,7 +194,7 @@ The end of the license must state the following (replacing xxx with the Working 
 ```
   This version of this YANG module is part of WT-xxx; see
   the WT itself for full legal notices.";
-```  
+```
  
 The format of the revision statement in a development module shall be as follows:
 
@@ -188,7 +207,7 @@ The format of the revision statement in a development module shall be as follows
     reference
       "TBD";
   }
-```  
+```
 
 ### BBF-16: Enum Naming
 
@@ -215,7 +234,7 @@ For example, this definition is preferred
           "Mode 4 = DYNAMIC with SOS.";
       }
     }
-```  
+```
 over this one.
 ```
   leaf ra-mode {
@@ -243,9 +262,9 @@ over this one.
 
 When modeling an enumeration where each enum corresponds to an integer value specified by a underlying standard specification, a model MAY choose to model those values in the 'value' statement.
 
-*The 'value' carries no meaning via NETCONF nor RESTCONF but is used for an implementation and reference aid.*
+The 'value' carries no meaning via NETCONF nor RESTCONF but is used for an implementation and reference aid.
 
-*For an enumeration whose underlying values are 0..n, the 'value' statements are not necessary as all enums have an implied value if not explicitly specified. The implied values begin with 0 and increment by 1 for each enum in the enumeration.*
+For an enumeration whose underlying values are 0..n, the 'value' statements are not necessary as all enums have an implied value if not explicitly specified. The implied values begin with 0 and increment by 1 for each enum in the enumeration.
 ```
   leaf ra-mode {
     type enumeration {
@@ -278,6 +297,9 @@ An 'if-feature' statement on any node defined within a top level grouping which 
 
 ```
   module bbf-availability {
+    yang-version 1.1;
+    namespace "urn:bbf:yang:bbf-availability";
+    prefix bbf-avail;
     ...
    
     feature availability {
@@ -369,10 +391,16 @@ error-message
   "The name of a multicast interface to host can not
    be the name of a multicast network interface.";
 ```
-Per RFC 7950 @RFC7950, section [6.1.3](https://datatracker.ietf.org/doc/html/rfc7950#section-6.1.3), this 'error-message' would be reported as:
+Per RFC 7950 @RFC7950, section [6.1.3](https://datatracker.ietf.org/doc/html/rfc7950#section-6.1.3), this 'error-message' would be reported as either
 ```
 <error-message>The name of a multicast interface to host can not\nbe the name of a multicast network interface.</error-message>
 ```
+or
+
+```
+<error-message>The name of a multicast interface to host can notbe the name of a multicast network interface.</error-message>
+```
+depending on how the system interprets a new line.
 
 Corrected:
 ```
@@ -383,5 +411,192 @@ error-message
 Which would be reported as:
 ```
 <error-message>The name of a multicast interface to host can not be the name of a multicast network interface.</error-message>
-```  
+```
+
+### BBF-21: Deprecating and Obsoleting Data Nodes
+There are times when the need arises to migrate away from using previously published data nodes:
+
+ - A newer, possibly more efficient, method has been defined.
+ - Error(s) existing in the current definition that cannot be resolved in a backward compatible way.
+ - Data nodes were unnecessary or modeled by mistake, and there is no need to maintain or replace them.
+
+The process for this is as follows:
+
+ 1. Change the status of the applicable data nodes from “current” to “deprecated” by adding a status statement with the value “deprecated”.
+ 2. The deprecated data nodes MUST remain in this state for at least two years.
+ 3. Beginning with the next publication after at least two years, the data nodes MAY be transitioned from “deprecated” to “obsolete”.
+ 4. The obsoleted data nodes MUST never be deleted from the YANG model.
+
+### BBF-22: Backwards Compatibility
+In general, BBF YANG modules SHOULD NOT introduce changes that are defined as backwards incompatible per RFC 7950 @RFC7950 section [11](https://datatracker.ietf.org/doc/html/rfc7950#section-11). Instead, add new definitions and use methods of deprecating and obsoleting previous definitions per RFC 7950 @RFC7950 section [7.21.2](https://datatracker.ietf.org/doc/html/rfc7950#section-7.21.2) and further clarified by BBF-21.
+
+However, experience has shown that in certain cases, changes that are backwards incompatible according to RFC 7950 @RFC7950 section [11](https://datatracker.ietf.org/doc/html/rfc7950#section-11) may nevertheless be compatible in conjunction with other changes made at the same time. Therefore, it may be possible to address a specific problem, through backwards incompatible changes.
+
+However, before agreeing to such changes to a published YANG module, Work Areas must ensure, to the greatest possible extent, that these changes will indeed be backwards compatible and not impact any existing operator configuration or operations or other SDOs or vendors augmentations of these standardized modules.
+
+### BBF-23: "enable" vs. "enabled"
+Data nodes used to enable/disable some function, and whose identifier is intended to include the term “enable”, either solely or as part of a larger name, SHALL use the “enabled” form of the word, e.g., ‘enabled’ or ‘statistics-enabled’. This also applies to the names of enums or bits.
+
+### BBF-24: "oper-state" vs. "oper-status"
+BBF YANG modules SHALL use the term ‘oper-state’ when defining a data node that reports the operational state. This is applicable whether it is the full name or part of the name of the data node, e.g., ‘oper-state’, ‘oper-state-timestamp’.
+
+### BBF-25: Reference Statements
+The goal of a reference statement is not only to completely and unambiguously guide the user to the documentation that supports the data node(s) being modeled, but also to enable the user to locate data nodes within YANG modules that implement specific attributes or parameters specified in the given documentation by searching through the YANG modules for references to those attributes or parameters. To that end, the following guideline is provided.
+
+Reference statements SHALL reference technical specifications in a consistent manner using one or both of the following formats:
+
+```
+reference
+  "[<single-reference>; <EOL>]* <single-reference>";
+
+<single-reference> ::=  [<SDO>] <doc#> [(<version>)] [<R/S/C/T/F>] [- <descr>] | <URL> [- <descr>]
+```
+
+where
+
+ * <SDO>: Standards Defining Organization
+     - Examples: IEEE, ITU-T
+     - Optional: For well known document types, e.g., RFC implies IETF and TR implies BBF, the SDO is not required.
+ * <doc#>: Document number
+     - Examples: TR-101i2, RFC 7950
+     - Mandatory
+     - For BBF documents, the Issue and/or Amendment and/or Corrigendum are included in the document number in the abbreviated format as described in IETF-7, e.g., TR-101i2, TR-385i2a1.
+ * <version>: Version or revision number and/or date
+     - Examples: (Revision 12.3), (2008/07)
+     - Optional: For documents whose name implies or specifies the version, e.g., RFC 8348, TR-383a6, additional version information is not required.
+ * <R/S/C/T/F>: Requirement/Section/Clause/Table/Figure
+     - Examples: R-13, Section 3.6, Clause 7.2.1, Table 2, Figure 5-4
+     - Optional: Only if applicable.
+     - Terminology MUST align with the terms used by the reference, e.g., Sections for RFCs, Clauses for ITU-T specifications.
+     - First letter is capitalized, e.g., "Section" instead of "section".
+     - If multiple are applicable in a given document, treat each as a separate reference.
+ * <descr>: Description of the reference
+     - Examples: variable name or specific identifier within the Section or Clause
+     - Optional: Should be used when it is possible to uniquely identify the parameter being modeled within the given reference.
+         - Examples:
+             - An ME defined in an ITU-T G.988 Clause contains one or more parameters. If the reference is for one specific parameter, it must be identified in the reference, e.g., "ITU-T G.988 Clause 9.9.6 - PSTN protocol variant".
+             - A parameter defined in an ITU-T G.997.x Clause is typically fully contained within the clause, i.e., no ambiguity. However, for implementers, it is useful to be able to quickly search for a desired parameter when the Clause is not known. For this use case, both the descriptive and shorthand (if applicable) representation should be identified, e.g., "ITU-T G.997.2 Clause 7.2.1.1 - Maximum net data rate (MAXNDRds/us)".
+             - However, if the G.997.x parameter represents more than one distinct value, e.g., upstream and downstream, and the data node only applies to one, the reference should only contain the value for which it is applicable, e.g., "ITU-T G.997.2 Clause 7.2.1.1 - Maximum net data rate downstream (MAXNDRds)".
+             - A parameter defined in a Table in SFF-8472 is specified by its memory location (address and byte numbers). References for these types of parameters should include the address and bytes, e.g., "SFF-8472 (Revision 12.4) Table 4-1 - Address A0h, Bytes 96-127".
+     - In general, the title associated with the reference should not be used unless it also represents one of the above.
+ * <URL>: The URL of the associated reference used when there is no formal technical specification
+     - Example: github.com/grpc/grpc/blob/master/doc/connection-backoff.md
+     - Do not include the URL scheme, e.g., http:// or https://, as it may change. For example, a site may move from an unsecure (http) scheme to a secure (https) scheme.
+ * ';': Requirement separator
+     - Mandatory: A semicolon MUST be used to terminate all but the last reference when there are multiple references in a reference statement.
+     - Each reference MUST start on a new line.
+     - This is not applicable when there is only one reference in the reference statement.
+ * If a single reference spans multiple lines, the first character on the second and subsequent lines of the reference SHALL align under the first character on the first line of the reference.
+
+Example:
+
+```
+reference
+  "RFC 5519 Section 5 - mgmdRouterInterfaceQueryInterval;
+   TR-101i2 Table 2;
+   SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+   Bytes 40-41;
+   ITU-T G.997.2 Clause 7.11.1.1 - Net data rate (NDRds/us);
+   ITU-T G.997.2 Clause 7.2.1.1 - Maximum net data rate downstream (MAXNDRds);
+   IEEE 802.1Q (2018) Clause 20.23.3;
+   IEEE 802.1Q (2018) Table 20-1 - xconCCMdefect;
+   github.com/grpc/grpc/blob/master/doc/connection-backoff.md - INITIAL_BACKOFF";
+```
+
+Additional Notes:
+ 
+ * While external references must be documented in the 'reference' statement, it is also allowed to refer to them in the description itself. 
+ * This guideline does not apply to a reference statement within a revision statement. Those reference statements have a unique format used for drafts and publication.
+ * URL references should be periodically reviewed to ensure they still exist or have not been moved.
+
+### BBF-26: Body Statements
+The order of body statements in BBF YANG modules SHOULD follow the order as stated in the body-stmt ABNF grammar defined in RFC 7950 @RFC7950 section [14](https://datatracker.ietf.org/doc/html/rfc7950#section-14) and as shown in the YANG Module Template defined in RFC 8407 @RFC8407 Appendix [B](https://datatracker.ietf.org/doc/html/rfc8407#appendix-B). Note that while the ABNF grammar specifies deviation statements follow notifications, the YANG Module Template states "DO NOT put deviation statements in a published module". BBF YANG modules MUST follow this stated guideline on deviation statements.
+
+Body Statement Order:
+
+ * extension statements
+ * feature statements
+ * identity statements
+ * typedef statements
+ * grouping statements
+ * data definition statements
+ * augment statements
+ * rpc statements
+ * notification statements
+ 
+### BBF-27: 'list' and 'leaf-list' Naming and Descriptions
+The name of a 'list' or 'leaf-list' data node SHALL be in the singular form. The motiviation is that the XML representation repeats the name for each entry.
+
+Example YANG:
+
+```
+list traffic-management-profile {
+  key name;
+  description
+    "A traffic management profile.";
+  
+  leaf name {
+    type string;
+    description
+      "The name of the profile.";
+  }
+}
+```
+
+Example XML:
+
+```
+<traffic-management-profile>
+  <name>multicast</name>
+</traffic-management-profile>
+<traffic-management-profile>
+  <name>hsi</name>
+</traffic-management-profile>
+```
+
+Note in the example YANG, the description for the 'list' node describes a single entry in the list, "A traffic management profile".
+
+The description statement for a 'list' or 'leaf-list' data node SHALL describe what an entry represents rather than describing the entire list. In other words, the description should follow the example above rather than:
+
+```
+list traffic-management-profile {
+  key name;
+  description
+    "A list of traffic management profiles.";
+  
+  leaf name {
+    type string;
+    description
+      "The name of the profile.";
+  }
+}
+```
+
+### BBF-28: Description on 'when' statements
+Not everyone reading a YANG model is an expert in YANG and/or XPath. In order to provide assistence in understanding the intent, all 'when' statements SHALL contain a description statement. This description should convey the intent of the 'when' condition in easy to understand language.
+
+Examples:
+
+```
+when "derived-from-or-self(hw:class,'bbf-hwt:transceiver-link') {
+  description
+    "Applicable when the class of hardware component is either a
+     transceiver link or another class derived from a transceiver
+     link.";
+}
+```
+
+```
+when "not(boolean(../enable))"
+   + " or "
+   + "(../enable='true')" {
+  description
+    "If the administrative state of a session is
+     supported, the session must be currently
+     administratively enabled to reset the session.";
+}
+```
+
+### BBF-29: Use of English Contractions
+Descriptions in YANG modules are considered to be formal documentation. Therefore, English contractions, e.g., can't, isn't, etc., SHALL NOT be used in description statements.
 

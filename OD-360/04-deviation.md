@@ -1,4 +1,4 @@
-## BBF Deviation Guidelines {.new-file}
+\## BBF Deviation Guidelines {.new-file}
 
 It is understood that there are times in which a device will need to support a
 subset of a standard YANG model whether it be from BBF or any other SDO. YANG
@@ -76,12 +76,12 @@ A particular implementation may want to limit the number to 4. In this case, a d
 
 The deviate *add* argument MAY be used to add a constraint on valid data by the use of the must statement.
 
-This constraint may be necessary depending on actual hardware in use. For example, the number of physical interfaces of a particular type will be limited by the number present on the hardware. For this, we could add a constraint on the interface list in *ietf-interfaces @RFC7223* to explicitly announce how many interfaces are supported.
+This constraint may be necessary depending on actual hardware in use. For example, the number of physical interfaces of a particular type will be limited by the number present on the hardware. For this, we could add a constraint on the interface list in *ietf-interfaces @RFC7223* to explicitly enforce how many interfaces are present.
 
 ```
   deviation "/if:interfaces" {
     description
-      "There are only 8 G.fast interfaces supported.";
+      "There are always 8 G.fast interfaces present.";
     deviate add {
       must "count(interface[type='ianaift:gfast'])=8";
     }

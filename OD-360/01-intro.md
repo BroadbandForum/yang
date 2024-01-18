@@ -2,11 +2,11 @@
 bbfNumber: OD-360
 bbfTitle: BBF YANG Best Current Practices
 bbfIssue: Issue
-bbfVersion: 1 Amendment 1
-bbfMonth: March
-bbfYear: 2023
+bbfVersion: 1 Amendment 2
+bbfMonth: January
+bbfYear: 2024
 bbfType: document
-bbfStatus:
+bbfStatus: 
 bbfContrib:
 
 # information shown on each page header
@@ -52,6 +52,14 @@ bbfRevisionHistory:
   editors: |
       Joey Boyd, Adtran
   changes: Add 'units' statement guidelines
+- number: Issue 1 Amendment 2
+  approval: 19 January 2024
+  publication: 19 January 2024
+  editors: |
+      Joey Boyd, Adtran
+  changes: Add new IETF guidelines IETF-21 and IETF-22.
+           Add new BBF guidelines BBF-21 through BBF-29.
+           Address minor corrections to existing guidelines.
 ...
 
 !include cover-page.md
@@ -67,7 +75,7 @@ bbfRevisionHistory:
 
 # Overview
 
-OD-360 provides a set of Best Current Practices for development of YANG Data Models in the Broadband Forum (BBF). The approach taken in establishing a set of best current practices is to utilize existing practices where those are relevant to the work of the Forum.
+OD-360 provides a set of Best Current Practices for development of YANG Data Models in the Broadband Forum (BBF). The approach taken in establishing a set of best current practices is to utilize existing practices where those are relevant to the work of the Forum. The guidelines put forth by this document not only provide guidance for authors of BBF YANG models but are also enforced prior to YANG model publication to ensure a high level of quality and consistency across BBF projects.
 
 ## YANG Language Version
 

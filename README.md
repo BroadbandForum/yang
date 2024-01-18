@@ -1,5 +1,12 @@
 ## Broadband Forum YANG Modules
 
+### 2024-01-19: [OD-360 Issue 1 Amendment 2](https://yang.broadband-forum.org) BBF YANG Best Current Practices
+*Tag: [OD-360-v1.2.0](https://github.com/BroadbandForum/yang/tree/OD-360-v1.2.0)*
+* Add new IETF guidelines IETF-21 and IETF-22
+* Add new BBF guidelines BBF-21 through BBF-29
+* Change terminology to always reference guidelines rather than requirements
+* Minor corrections to existing guidelines
+
 ### 2023-12-15: [TR-383 Amendment 7](https://www.broadband-forum.org/technical/download/TR-383_Amendment-7.pdf) Common YANG Modules for Access Networks
 *Tag: [TR-383-v1.7.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.7.0)*
 
@@ -9,7 +16,6 @@
 * New models added to DHCP, layer 2 forwarding, layer 2 multicast, PPPoE and subscribers.
 
 ### 2023-06-21: [TR-385 Issue 2 Amendment 1](https://www.broadband-forum.org/technical/download/TR-385_Issue-2_Amendment-1.pdf) ITU-T PON YANG Modules
-
 *Tag: [TR-385-v2.1.0](https://github.com/BroadbandForum/yang/tree/TR-385-v2.1.0)*
 
 * Align 'units' statements to the latest OD-360 guidelines 
@@ -18,7 +24,6 @@
 * Extend existing modules to support defect reporting
 
 ### 2023-03-15: [OD-360 Issue 1 Amendment 1](https://yang.broadband-forum.org) BBF YANG Best Current Practices
-
 *Tag: [OD-360-v1.1.0](https://github.com/BroadbandForum/yang/tree/OD-360-v1.1.0)*
 
 * Add 'units' statement guidelines
@@ -64,7 +69,6 @@ TR-451 defines YANG data models that support the architecture, requirements and 
 * Enhancements to the QoS models
 
 ### 2022-02-15 [OD-360 Issue 1](https://yang.broadband-forum.org) BBF YANG Best Current Practices
-
 *Tag: [OD-360-v1.0.0](https://github.com/BroadbandForum/yang/tree/OD-360-v1.0.0)*
 
 OD-360 provides a set of Best Current Practices for development of YANG Data Models in the Broadband Forum (BBF).

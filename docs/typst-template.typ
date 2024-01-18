@@ -1,6 +1,118 @@
-#import "@preview/tablex:0.0.4": tablex, rowspanx, colspanx
-
+#import "@preview/tablex:0.0.7": tablex, rowspanx, colspanx, vlinex, cellx
 #import "typst-stringify.typ": stringify
+
+// XXX should filter out things that need to be ignored
+#let bbf-passthrough(content) = { content }
+
+// XXX this should pick up the release info
+#let bbf-release = bbf-passthrough
+#let bbf-new-file = bbf-passthrough
+#let bbf-same-file = bbf-passthrough
+#let bbf-same-section = bbf-passthrough
+// XXX might need to convert this to vertical space
+#let bbf-spacer = bbf-passthrough
+// XXX might be able to do something clever with these
+#let bbf-left = bbf-passthrough
+#let bbf-right = bbf-passthrough
+#let bbf-clear = bbf-passthrough
+
+// pagebreak() can only be used at the outer level
+#let bbf-new-page(content) = { pagebreak(weak: true); content }
+
+// annexes
+#let bbf-annex1 = bbf-new-page
+#let bbf-annex2 = bbf-passthrough
+#let bbf-annex3 = bbf-passthrough
+#let bbf-annex4 = bbf-passthrough
+#let bbf-annex5 = bbf-passthrough
+#let bbf-annex6 = bbf-passthrough
+#let bbf-annex = bbf-passthrough
+
+// appendices
+#let bbf-appendix1 = bbf-new-page
+#let bbf-appendix2 = bbf-passthrough
+#let bbf-appendix3 = bbf-passthrough
+#let bbf-appendix4 = bbf-passthrough
+#let bbf-appendix5 = bbf-passthrough
+#let bbf-appendix6 = bbf-passthrough
+#let bbf-appendix = bbf-passthrough
+
+// bibliographic references
+// XXX the fractional widths should be customizable
+#let bbf-references = bbf-passthrough
+#let bbf-csl-entry = bbf-passthrough
+#let bbf-csl-bib-body = block.with(spacing: 0.25em)
+#let bbf-csl-left-margin = box.with(width: 1fr, baseline: 100%)
+#let bbf-csl-right-inline = box.with(width: 15fr, baseline: 100%)
+
+// tablex
+#let bbf-tablex-chain(obj, ..opts) = {
+  if type(obj) == content {
+    cellx(obj, ..opts)
+  } else {
+    // it's expected to be a dictionary
+    assert.eq(opts.pos(), ())
+    obj + opts.named()
+  }
+}
+
+// WT-181/specification/local.css
+#let bbf-tablex-command = cellx.with(fill: rgb("#66cdaa"))
+#let bbf-tablex-object = cellx.with(fill: rgb("#ffff99"))
+
+// XXX these are rather arbiotrary
+#let bbf-tablex-blue = obj => bbf-tablex-chain(obj, fill: blue.lighten(50%))
+#let bbf-tablex-red = obj => bbf-tablex-chain(obj, fill: red.lighten(50%))
+#let bbf-tablex-right = obj => bbf-tablex-chain(obj, align: right)
+
+// XXX maybe there's a better solution for things like the following
+
+// XXX this hides content but it still occupies space; is there
+//     an equivalent of CSS 'display: none'?
+#let bbf-hidden = hide
+
+// XXX this assumes a box rather than a block
+#let bbf-gray = box.with(fill: gray.lighten(50%))
+
+// XXX is there a more idiomatic way of doing this?
+#let bbf-emphasis(content) = { emph(content) }
+
+#let bbf-raw-size = 0.8em
+#let bbf-raw-font = ("Courier New", "Courier", "Liberation Mono", "monospace")
+#let bbf-code(content) = { set text(size: bbf-raw-size, font: bbf-raw-font);
+                           content}
+// XXX need to review this
+#let bbf-ebnf = bbf-code
+
+// alerts
+#let bbf-alert(width: 100%, inset: 0.5em, radius: 0.3em, color: black,
+               gutter: 0.8em, icon: none, iheight: 0.8em, label: none,
+               content) = {
+  let fcolor = color.lighten(95%)
+  let scolor = color.lighten(60%)
+  set block(width: width, inset: inset, radius: radius, fill: fcolor,
+            stroke: scolor)
+
+  set image(height: iheight)
+  let thumb = if icon != none {image(icon)} else {none}
+
+  let cgutt = if thumb != none {gutter} else {0.0em}
+  set grid(columns: 2, gutter: gutter, column-gutter: cgutt)
+
+  let hfill = [#h(1fr)]
+
+  if label == none {
+    block(grid(thumb, content + hfill))
+  } else {
+    block(grid(thumb, label, none, content + hfill))
+  }
+}
+
+#let bbf-bug = bbf-alert.with(color: yellow, icon: "bee.png", iheight: 2.0em)
+#let bbf-note = bbf-alert.with(color: blue, icon: "pencil.png")
+#let bbf-see-also = bbf-alert.with(color: green, icon: "right.png",
+                                   label: [*See also:*])
+#let bbf-tip = bbf-alert.with(color: red, icon: "tick.png")
 
 // XXX some of these are ignored, e.g. authors and abstract
 #let conf(
@@ -19,80 +131,27 @@
   info: (),
   doc,
 ) = {
+
+  // the various bbfXxx variables are passed via the info variable
+  let bbf-contrib = info.bbfContrib
+  let bbf-issue = info.bbfIssue
+  let bbf-month = info.bbfMonth
+  let bbf-number = info.bbfNumber
+  let bbf-status = info.bbfStatus
+  let bbf-title = info.bbfTitle
+  let bbf-type = info.bbfType
+  let bbf-version = info.bbfVersion
+  let bbf-year = info.bbfYear
+
   // these can be set as metadata or variables
   let figure-numbering = info.at("figure-numbering", default: false)
   let hyphenate = info.at("hyphenate", default: true)
   let justify = info.at("justify", default: false)
 
-  ///////////////
-  // begin styles
-
-  // XXX I couldn't work out how to put these in a separate file
-  //     should check https://typst.app/docs/tutorial/
-  //                      making-a-template#set-and-show-rules
-
-  // pagebreak() can only be used at the outer level
-  show <cls:new-page>: it => {
-    pagebreak(weak: true)
-    it
-  }
-
-  // XXX this hides content but it still occupies space; is there
-  //     an equivalent of CSS display: none?
-  show <cls:hidden>: it => hide(it)
-
-  // XXX can't use .or() with label selectors so have to repeat?
-  show <cls:annex1>: it => {
-    pagebreak(weak: true)
-    it
-  }
-
-  // XXX can't use .or() with label selectors so have to repeat?
-  show <cls:appendix1>: it => {
-    pagebreak(weak: true)
-    it
-  }
-
-  // XXX setting weak to true suppresses the vertical space
+  // setting weak to true suppresses the vertical space
   show heading.where(level: 1): it => {
     v(1em, weak: false)
     it
-  }
-
-  // XXX the overall width is wrong when there's no icon
-  let alert(width: 100%, inset: 0.5em, radius: 0.3em, color: black,
-      gutter: 0.8em, icon: none, iheight: 0.8em, label: none, body) = {
-    let fcolor = color.lighten(90%)
-    let scolor = color.lighten(50%)
-    set block(width: width, inset: inset, radius: radius, fill: fcolor)
-
-    set image(height: iheight)
-    let thumb = if icon != none {image(icon)} else {none}
-
-    let cgutt = if thumb != none {gutter} else {0.0em}
-    set grid(columns: 2, gutter: gutter, column-gutter: cgutt)
-
-    if label == none {
-      block(stroke: scolor, grid(thumb, body))
-    } else {
-      block(stroke: scolor, grid(thumb, label, none, body))
-    }
-  }
-
-  show block.where(label: <cls:bug>): it => {
-    alert(color: yellow, icon: "bee.png", iheight: 2.0em, it)
-  }
-
-  show block.where(label: <cls:note>): it => {
-    alert(color: blue, icon: "pencil.png", it)
-  }
-
-  show block.where(label: <cls:see-also>): it => {
-    alert(color: green, icon: "right.png", label: [*See also:*], it)
-  }
-
-  show block.where(label: <cls:tip>): it => {
-    alert(color: red, icon: "tick.png", it)
   }
 
   set outline(indent: 1em)
@@ -111,36 +170,27 @@
     ]
   }
 
-  show figure: it => align(left)[
-    #let body-at-top = (it.kind != table)
-    #v(15pt, weak: true)
-    #if body-at-top {it.body}
-    #v(10pt, weak: true)
-    #[
-      #set align(center)
-      *#if figure-numbering [#it.supplement
-           #it.counter.display(it.numbering):] #it.caption.body*
-    ]
-    #v(10pt, weak: true)
-    #if not body-at-top {it.body}
-    #v(15pt, weak: true)
+  // why aren't figures breakable by default? blocks are
+  show figure: set block(breakable: true)
+
+  show figure.where(kind: table): set align(left)
+
+  show figure.where(kind: table): set figure.caption(position: top)
+
+  show figure.caption: it => [
+    *#if figure-numbering [#it.supplement
+                           #it.counter.display(it.numbering):] #it.body*
   ]
 
+  // XXX don't use bbf-raw-size here; it makes it too small; why?
   show raw.where(block: true): it => {
-    set text(size: 0.9em)
+    set text(font: bbf-raw-font)
     it
   }
 
-  // these are for bibliographic references
-  // XXX the fractional widths should be customizable
-  show <cls:csl-bib-body>: set block(spacing: 0.25em)
-
-  show <cls:csl-left-margin>: it => box(width: 1fr, baseline: 100%, it)
-
-  show <cls:csl-right-inline>: it => box(width: 15fr, baseline: 100%, it)
-
   /*
   // XXX this is disabled until can resolve the issues listed below
+  // XXX is this still a problem?
 
   set footnote.entry(gap: 0.8em)
 
@@ -158,26 +208,12 @@
   }
   */
 
-  // end styles
-  /////////////
-
   // set the document properties
   // XXX if authors is an array, we should pass an array
   set document(
     title: stringify(title),
     author: stringify(authors)
   )
-
-  // the various bbfXxx variables are passed via the info variable
-  let bbf-contrib = info.bbfContrib
-  let bbf-issue = info.bbfIssue
-  let bbf-month = info.bbfMonth
-  let bbf-number = info.bbfNumber
-  let bbf-status = info.bbfStatus
-  let bbf-title = info.bbfTitle
-  let bbf-type = info.bbfType
-  let bbf-version = info.bbfVersion
-  let bbf-year = info.bbfYear
 
   // the copyright is fixed text
   let copyright = [#sym.copyright The Broadband Forum. All rights reserved]

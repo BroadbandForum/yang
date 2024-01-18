@@ -1,8 +1,8 @@
 ## IETF YANG Guidelines {.new-file}
 
-The general principle is that the IETF YANG Guidelines, defined in RFC 8407 @RFC8407, apply in their entirety to BBF YANG modules. However, they are aimed at IETF Standards Track YANG modules and contain some IETF specific guidelines that cannot be applied literally to BBF YANG modules.
+The general principle is that the IETF YANG Guidelines, defined in RFC 8407 @RFC8407, **apply in their entirety to BBF YANG modules**. However, they are aimed at IETF Standards Track YANG modules and contain some IETF specific guidelines that cannot be applied literally to BBF YANG modules.
 
-* Sections 1 (introduction), 2 (Terminology) and 3 (General Documentation
+* Sections 1 (Introduction), 2 (Terminology) and 3 (General Documentation
   Guidelines) are mostly IETF-specific and have little impact on YANG module
   definitions. These sections do not apply unless specifically noted.
 
@@ -18,13 +18,13 @@ The general principle is that the IETF YANG Guidelines, defined in RFC 8407 @RFC
 
 ### IETF-1: YANG Terms
 
-*This requirement extends section [2.2](https://datatracker.ietf.org/doc/html/rfc8407#section-2.2) of RFC 8407 @RFC8407.*
+*This guideline extends section [2.2](https://datatracker.ietf.org/doc/html/rfc8407#section-2.2) of RFC 8407 @RFC8407.*
 
 BBF YANG modules MUST use YANG terminology, e.g., when used in descriptions the terms SHOULD refer to "data nodes", "containers", "lists", etc. For example, do not use the term "objects" and instead refer to "data nodes".
 
 ### IETF-2: YANG Validation
 
-*This requirement overrides section [3.10](https://datatracker.ietf.org/doc/html/rfc8407#section-3.10) of RFC 8407 @RFC8407.*
+*This guideline overrides section [3.10](https://datatracker.ietf.org/doc/html/rfc8407#section-3.10) of RFC 8407 @RFC8407.*
 
 BBF YANG modules MUST be validated using pyang 2.3.2 (or later). Validation MUST use the various "lint" options described below.
 
@@ -33,6 +33,12 @@ BBF YANG modules MUST be validated using pyang 2.3.2 (or later). Validation MUST
   --lint-modulename-prefix=bbf
   --lint-namespace-prefix=urn:bbf:yang:
   --max-line-len=70
+```
+
+Alternatively, pyang provides the following BBF-specific option that performs the same checks as the options noted above.
+
+```
+  --bbf
 ```
 
 pyang can be installed via [PyPi](https://pypi.org/).
@@ -44,19 +50,19 @@ There is a docker image available that contains an installation of pyang, yangli
 
 ### IETF-3: YANG Usage Guidelines
 
-*This requirement restates section [4](https://datatracker.ietf.org/doc/html/rfc8407#section-4) of RFC 8407 @RFC8407 in the context of the BBF.*
+*This guideline restates section [4](https://datatracker.ietf.org/doc/html/rfc8407#section-4) of RFC 8407 @RFC8407 in the context of the BBF.*
 
-BBF YANG modules comply with all syntactic and semantic requirements of YANG 1.1 @RFC7950.
+BBF YANG modules MUST comply with all syntactic and semantic requirements of YANG 1.1 @RFC7950.
 
 ### IETF-4: File Layout
 
-*This requirement overrides section [5.2](https://datatracker.ietf.org/doc/html/rfc7950#section-5.2) of RFC 7950 @RFC7950.*
+*This guideline overrides section [5.2](https://datatracker.ietf.org/doc/html/rfc7950#section-5.2) of RFC 7950 @RFC7950.*
 
-Each BBF YANG module or submodule MUST be stored in a file called <module-name\>.yang or <submodule-name\>.yang. BBF YANG modules and submodules will not be stored with the revision-date in the name.
+Each BBF YANG module or submodule MUST be stored within a BBF YANG repository in a file called <module-name\>.yang or <submodule-name\>.yang without revision-date in the name.
 
 ### IETF-5: Quoting
 
-*This requirement is an extension to section [6.1.3](https://datatracker.ietf.org/doc/html/rfc7950#section-6.1.3) of RFC 7950 @RFC7950.*
+*This guideline is an extension to section [6.1.3](https://datatracker.ietf.org/doc/html/rfc7950#section-6.1.3) of RFC 7950 @RFC7950.*
 
 The rules specified in this section effectively mean that the second and subsequent lines of multi-line strings have to be aligned under the character following the opening double quote.
 
@@ -71,7 +77,7 @@ The rules specified in this section effectively mean that the second and subsequ
 
 ### IETF-6: Module Naming Conventions
 
-*This requirement overrides section [4.1](https://datatracker.ietf.org/doc/html/rfc8407#section-4.1) of RFC 8407 @RFC8407.*
+*This guideline overrides section [4.1](https://datatracker.ietf.org/doc/html/rfc8407#section-4.1) of RFC 8407 @RFC8407.*
 
 <module-name\> or <submodule-name\> is the module name or submodule name, which (see below) MUST begin with the prefix “bbf-”.
 
@@ -79,7 +85,7 @@ The remainder of the section applies with appropriate translations of IETF terms
 
 ### IETF-7: Module Header, Meta and Revision Statements
 
-*These requirements override section [4.8](https://datatracker.ietf.org/doc/html/rfc8407#section-4.8) of RFC 8407 @RFC8407.*
+*These guidelines override section [4.8](https://datatracker.ietf.org/doc/html/rfc8407#section-4.8) of RFC 8407 @RFC8407.*
 
 #### namespace
 See IETF-9.
@@ -131,17 +137,17 @@ Followed by:
 See IETF-8.
 
 #### revision
-The requirements from RFC 8407 apply with the following modifications:
+The guidelines from RFC 8407 apply with the following modifications:
 
- - The requirements relating to the reference substatement are replaced with a requirement to reference the associated TR Issue, Amendment(if any) and Corrigendum.
- - The requirements relating to reuse of the same revision statement within unpublished versions are reworded to refer only to "versions" and not to "Internet-Drafts".
+ - The guidelines relating to the reference substatement are replaced with a guideline to reference the associated TR Issue, Amendment (if any) and Corrigendum.
+ - The guidelines relating to reuse of the same revision statement within unpublished versions are reworded to refer only to "versions" and not to "Internet-Drafts".
  
 References to associated TRs use "abbreviated" TR names, e.g., "TR-101i2" or "TR-383a6". 
 
 
 ### IETF-8: Module Header, Meta and Revision Statements - Top Level Description
 
-*This requirement overrides section [4.8](https://datatracker.ietf.org/doc/html/rfc8407#section-4.8) of RFC 8407 @RFC8407.*
+*This guideline overrides section [4.8](https://datatracker.ietf.org/doc/html/rfc8407#section-4.8) of RFC 8407 @RFC8407.*
 
 The top-level description MUST contain the following:
 
@@ -150,7 +156,7 @@ The top-level description MUST contain the following:
  
 ### IETF-9: Namespace Assignments
 
-*This requirement overrides section [4.9](https://datatracker.ietf.org/doc/html/rfc8407#section-4.9) of RFC 8407 @RFC8407.*
+*This guideline overrides section [4.9](https://datatracker.ietf.org/doc/html/rfc8407#section-4.9) of RFC 8407 @RFC8407.*
 
 Section 4.9 applies with appropriate translations of IETF terms to BBF terms, e.g., "IANA" is read as "BBF" and "non-Standards-Track" is read as "example" or "not-for-publication".
 
@@ -163,7 +169,7 @@ BBF YANG module namespace MUST be of the form:
  
 ### IETF-10: Prefixes - Imported Modules
 
-*This requirement extends section [4.2](https://datatracker.ietf.org/doc/html/rfc8407#section-4.2) of RFC 8407 @RFC8407.*
+*This guideline extends section [4.2](https://datatracker.ietf.org/doc/html/rfc8407#section-4.2) of RFC 8407 @RFC8407.*
 
 Imported modules MUST have the same prefix defined in the module they are imported into as is defined in the imported module.
 
@@ -188,11 +194,11 @@ Example:
 
 ### IETF-11: Prefixes - Usage
 
-*These requirements restate section [4.2](https://datatracker.ietf.org/doc/html/rfc8407#section-4.2) of RFC 8407 @RFC8407.*
+*These guidelines restate section [4.2](https://datatracker.ietf.org/doc/html/rfc8407#section-4.2) of RFC 8407 @RFC8407.*
 
 The following apply to prefix usage of the local module:
 
- - The local module prefix SHOULD be used instead of no prefix in all path expressions. The exceptions to this are path statements defined in a grouping that reference a node in another grouping. The referenced node will belong to the module(s) where the grouping is used, so the prefix cannot be assumed.
+ - The local module prefix SHOULD be used instead of no prefix in all path expressions where the prefix is optional per section [5.1](https://datatracker.ietf.org/doc/html/rfc7950#section-5.1) of RFC 7950 @RFC7950.
  - The local module prefix MUST be used instead of no prefix in all default statements for an identityref or instance-identifier data type.
  - The local module prefix MAY be used for references to typedefs, groupings, extensions, features and identities defined in the module.
 
@@ -255,20 +261,82 @@ In a submodule, the prefix defined for the parent module in the 'belongs-to' sta
 
 ### IETF-18: 'error-message' sub-statement to the 'must' statement
 
-*This requirement overrides section [7.5.4.1](https://datatracker.ietf.org/doc/html/rfc7950#section-7.5.4.1) of RFC 7950 @RFC7950.*
+*This guideline overrides section [7.5.4.1](https://datatracker.ietf.org/doc/html/rfc7950#section-7.5.4.1) of RFC 7950 @RFC7950.*
 
 The ‘error-message’ sub-statement MUST be provided to ‘must’ statements in configuration data nodes for proper communication of the constraint validation failure.
 
 ### IETF-19: 'description' sub-statement to the 'must' statement
 
-*This requirement overrides section [7.5.4](https://datatracker.ietf.org/doc/html/rfc7950#section-7.5.4) of RFC 7950 @RFC7950.*
+*This guideline overrides section [7.5.4](https://datatracker.ietf.org/doc/html/rfc7950#section-7.5.4) of RFC 7950 @RFC7950.*
 
-The ‘description’ sub-statement MUST be provided to the ‘must’ statement for proper communication of the intent of the statement.
+Not everyone reading a YANG model is an expert in YANG and/or XPath. In order to provide assistence in understanding the intent, all 'must' statements SHALL contain a description statement. This description should convey the intent of the 'must' condition in easy to understand language.
 
 ### IETF-20: Tabs and Spacing
 
-*This requirement is an extension to section [6.1.3](https://datatracker.ietf.org/doc/html/rfc7950#section-6.1.3) of RFC 7950 @RFC7950.*
+*This guideline is an extension to section [6.1.3](https://datatracker.ietf.org/doc/html/rfc7950#section-6.1.3) of RFC 7950 @RFC7950.*
 
 BBF YANG modules MUST NOT contain any tab characters and MUST use 2 space characters for indentation.
 
+### IETF-21: Normative Language
+
+*This guideline clarifies section [3.6](https://datatracker.ietf.org/doc/html/rfc8407#section-3.6) of RFC 8407 @RFC8407.*
+
+BBF YANG modules SHALL NOT use normative keywords in their description statements as defined in RFC 2119 @RFC2119 and clarified in RFC 8174 @RFC8174. Explicitly, this means avoiding the use of the keywords in all capital letters, e.g., MUST, SHOULD, SHALL, etc.
+
+This does not apply to the license text included as part of each top-level module description.
+
+### IETF-22: 'leafref' path in a 'grouping'
+
+*The following extends section [4.13](https://datatracker.ietf.org/doc/html/rfc8407#section-4.13) of RFC 8407 @RFC8407.*
+
+When defined in a 'grouping', a leaf or leaf-list of type 'leafref' MUST NOT specify a path using a relative XPath statement to a node that exists outside the grouping. Referencing nodes outside of a grouping makes assumptions about where within a schema tree the grouping is to be used and thus limits the reusability of the grouping.
+
+The following example violates this guideline because the leaf 'profile-ref' is referencing the leaf 'name' that exists outside of the 'grouping' statement. For this path to be valid, the grouping has to be used in a schema where the data node hierarchy, specified in the 'path', exists. 
+
+```
+grouping example-grouping {
+  description
+    "An example grouping.";
+  leaf profile-ref {
+    type leafref {
+      path '../profiles/profile/name';
+    }
+    description
+      "Reference to a profile.";
+  }
+}
+```
+
+The next example demonstrates the use of a relative path to a node within the grouping, which does not violate the guideline.
+
+```
+grouping example-grouping {
+  description
+    "An example grouping.";
+  leaf profile-ref {
+    type leafref {
+      path '../profiles/profile/name';
+    }
+    description
+      "Reference to a profile.";
+  }
+  
+  container profiles {
+    description
+      "Configuration associated with profiles.";
+    
+    list profile {
+      key name;
+      description
+        "A profile.";
+      
+      leaf name {
+        type string;
+        description
+          "The name of the profile.";
+      }
+    }
+  }
+}
+```
 
