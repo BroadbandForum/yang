@@ -2,6 +2,7 @@
 
 ### 2024-01-19: [OD-360 Issue 1 Amendment 2](https://yang.broadband-forum.org) BBF YANG Best Current Practices
 *Tag: [OD-360-v1.2.0](https://github.com/BroadbandForum/yang/tree/OD-360-v1.2.0)*
+
 * Add new IETF guidelines IETF-21 and IETF-22
 * Add new BBF guidelines BBF-21 through BBF-29
 * Change terminology to always reference guidelines rather than requirements
