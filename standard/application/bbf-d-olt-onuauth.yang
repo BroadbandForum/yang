@@ -1,0 +1,366 @@
+module bbf-d-olt-onuauth {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-d-olt-onuauth";
+  prefix bbf-d-olt-onuauth;
+
+  import bbf-xponvani-onu-authentication-groupings {
+    prefix bbf-xponvani-onu-authg;
+  }
+  import bbf-xpon-onu-authentication-types {
+    prefix bbf-xpon-onu-autht;
+  }
+  import bbf-xpon-types {
+    prefix bbf-xpon-types;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Andre Brizido, Altice Labs
+
+     Editor:      Antonio Marsico, Reply
+
+     PS Leader:   Haomian Zheng, Huawei
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Bruno Cornaglia, Vodafone";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements for disaggregation
+     of network functions from a physical OLT (pOLT) into a
+     Disaggregated OLT instance (D-OLT) as described in TR-477.
+
+     Specifically, this module describes D-OLT Optical Network Unit
+     (ONU) Authentication functionality.
+
+     Copyright (c) 2024, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-477; see
+     the TR itself for full legal notices.";
+
+  revision 2024-01-19 {
+    description
+      "Issue 1.
+       * Approval Date:    2024-01-19.
+       * Publication Date: 2024-01-19.";
+    reference
+      "TR-477: Cloud CO Enhancement - Access Node Functional
+               Disaggregation <https://www.broadband-forum.org/
+                               technical/download/TR-477.pdf>";
+  }
+
+  feature tcp-client-username-password {
+    description
+      "Indicates that the client supports authenticating using
+       username/password when initiating TCP connections.";
+  }
+
+  feature tcp-server-username-password {
+    description
+      "Indicates that the server supports authenticating using
+       username/password when receiving TCP connections.";
+  }
+
+  container d-olt-onuauth {
+    description
+      "The function-specific configuration and data for ONU
+       authentication.";
+    container devices {
+      description
+        "pOLTs, DPUs, or other devices using this D-OLT-ONUAUTH.";
+      reference
+        "TR-385 Issue 2 Amendment 1.";
+      list device {
+        key "name";
+        description
+          "pOLT, DPU, or other device using this D-OLT-ONUAUTH.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "The unique name of the device.";
+        }
+        container virtual-access-network-interfaces {
+          description
+            "The virtual-ANIs on this device utilizing this
+             D-OLT-ONUAUTH.";
+          list vani {
+            key "name";
+            description
+              "A vANI.";
+            leaf name {
+              type bbf-yang:string-ascii64;
+              description
+                "The unique name of the vANI.";
+            }
+            uses bbf-xponvani-onu-authg:v-ani-onu-authentication;
+            leaf expected-serial-number {
+              type bbf-xpon-types:onu-serial-number;
+              description
+                "The serial number the Optical Line Termination
+                 (OLT) expects to retrieve from the Optical Network
+                 Unit (ONU). The serial number is unique for each
+                 ONU. It contains the vendor ID and vendor specific
+                 serial number. The first four bytes are an ASCII-
+                 encoded vendor ID four letter mnemonic. The second
+                 four bytes are a binary encoded serial number,
+                 under the control of the ONU vendor.";
+              reference
+                "ITU-T G.984.3, clause 9.2.4.1
+                 ITU-T G.987.3, clause 11.3.3.2
+                 ITU-T G.9807.1, clauses C11.2.6.1, C11.2.6.2 and
+                 C11.3.4.1
+                 ITU-T G.989.3, clauses 11.2.6.1, 11.2.6.2 and
+                 11.3.4.1.";
+            }
+            leaf expected-registration-id {
+              type bbf-xpon-types:onu-registration-id;
+              default "";
+              description
+                "A string that has been assigned to the subscriber
+                 on the management level, entered into and stored in
+                 non-volatile storage at the Optical Network Unit
+                 (ONU). Registration ID may be useful in identifying
+                 a particular ONU installed at a particular
+                 location. Each octet is represented as 2
+                 hexadecimal characters, therefore the leaf must
+                 contain an even number of characters.
+
+                 For ITU-T G.984.3, the leaf can only be up to 20
+                 characters long (refer to 'password' 10 bytes
+                 long).
+
+                 For ITU-T G.987.3, ITU-T G.9807.3 and ITU-T G.989.3
+                 the leaf can be up to 72 characters long (refer to
+                 'registration id' 36 bytes long).";
+              reference
+                "ITU-T G.984.3 clause 9.2.4.2
+                 ITU-T G.987.3 clause 11.3.4.2
+                 ITU-T G.9807.3 clause C.11.3.4.2
+                 ITU-T G.989.3 clause 11.3.4.2";
+            }
+            container state {
+              config false;
+              description
+                "ONU Authentication state data.";
+              leaf detected-serial-number {
+                type bbf-xpon-types:onu-serial-number;
+                description
+                  "The serial number of the Optical Network Unit
+                   (ONU).";
+                reference
+                  "ITU-T G.984.3, clause 9.2.4.1
+                   ITU-T G.987.3, clause 11.3.3.2
+                   ITU-T G.9807.1, clauses C11.2.6.1, C11.2.6.2 and
+                   C11.3.4.1
+                   ITU-T G.989.3, clauses 11.2.6.1, 11.2.6.2 and
+                   11.3.4.1.";
+              }
+              leaf detected-registration-id {
+                type bbf-xpon-types:onu-registration-id;
+                description
+                  "The registration ID value which the Optical Line
+                   Termination (OLT) has received from the Optical
+                   Network Unit (ONU). This leaf is not present if the
+                   ONU has not provided any registration ID to the
+                   OLT. Registration ID may be useful in identifying a
+                   particular ONU installed at a particular location.
+                   Each octet is represented as 2 hexadecimal
+                   characters, therefore the leaf must contain an even
+                   number of characters. For ITU-T G.984.3, the leaf
+                   can only be up to 20 octets long (refer to
+                   'password'), for ITU-T G.987.3, ITU-T G.9807.3 and
+                   ITU-T G.989.3 the leaf can be up to 72 octets
+                   long.";
+                reference
+                  "ITU-T G.984.3 clause 9.2.4.2
+                   ITU-T G.987.3 clause 11.3.4.2
+                   ITU-T G.9807.3 clause C.11.3.4.2
+                   ITU-T G.989.3 clause 11.3.4.2";
+              }
+              uses
+                bbf-xponvani-onu-authg:v-ani-onu-authentication-state;
+              leaf last-authentication-result {
+                type enumeration {
+                  enum has-been-authenticated {
+                    description
+                      "The credentials from an ONU have matched this
+                       vANI and the authentication result was
+                       reported successfully to the pOLT.";
+                  }
+                  enum not-yet-authenticated {
+                    description
+                      "No ONU has yet been matched to the credentials
+                       specified by this vANI.";
+                  }
+                  enum authentication-failed {
+                    description
+                      "The credentials from an ONU have matched this
+                       vANI but the authentication process could not
+                       be completed. For example, the authentication
+                       result could not be reported to the pOLT.";
+                  }
+                }
+                mandatory true;
+                description
+                  "Determines whether the vANI has already matched
+                   the credentials provided by an ONU and, in such
+                   case, whether the last match could be successfully
+                   reported to the pOLT.";
+              }
+              leaf last-onu-auth-match-time {
+                type yang:date-and-time;
+                description
+                  "The last time the credentials specified by this
+                   vANI have been matched by an authentication
+                   request sent from the pOLT. This data node is
+                   not applicable if the vANI has not yet been
+                   matched with an ONU.";
+              }
+              container onuauth-statistics {
+                description
+                  "ONU Authentication message statistics.";
+                leaf successful-authentications {
+                  type bbf-yang:performance-counter64;
+                  description
+                    "The number of times that credentials from an ONU
+                     have matched this vANI and the authentication
+                     result was reported successfully to the pOLT.";
+                }
+                action reset {
+                  description
+                    "Reset the statistics.";
+                }
+              }
+            }
+          }
+        }
+        notification onu-authentication-result {
+          description
+            "Indicates the result of an ONU authentication to
+             management systems, such as an Access SDN M&C.";
+          leaf result {
+            type identityref {
+              base "bbf-xpon-onu-autht:"
+                 + "onu-authentication-results-base";
+            }
+            mandatory true;
+            description
+              "The result of the authentication attempt.";
+          }
+          leaf serial-number {
+            type bbf-xpon-types:onu-serial-number;
+            mandatory true;
+            description
+              "The serial number of the Optical Network Unit (ONU)
+               for which the result of the authentication is
+               reported.";
+            reference
+              "ITU-T G.984.3, clause 9.2.4.1
+               ITU-T G.987.3, clause 11.3.3.2
+               ITU-T G.9807.1, clauses C11.2.6.1, C11.2.6.2 and
+               C11.3.4.1
+               ITU-T G.989.3, clauses 11.2.6.1, 11.2.6.2 and
+               11.3.4.1.";
+          }
+          leaf detected-registration-id {
+            type bbf-xpon-types:onu-registration-id;
+            description
+              "The registration ID value which the Optical Line
+               Termination (OLT) has received from the Optical Network
+               Unit (ONU). This leaf is not present if the ONU has not
+               provided any registration ID to the OLT. Registration
+               ID may be useful in identifying a particular ONU
+               installed at a particular location. Each octet is
+               represented as 2 hexadecimal characters, therefore the
+               leaf must contain an even number of characters. For
+               ITU-T G.984.3, the leaf can only be up to 20 octets
+               long (refer to 'password'), for ITU-T G.987.3,
+               ITU-T G.9807.3 and ITU-T G.989.3 the leaf can be up to
+               72 octets long.";
+            reference
+              "ITU-T G.984.3 clause 9.2.4.2
+               ITU-T G.987.3 clause 11.3.4.2
+               ITU-T G.9807.3 clause C.11.3.4.2
+               ITU-T G.989.3 clause 11.3.4.2";
+          }
+          leaf detected-loid {
+            type string {
+              length "1..24";
+            }
+            description
+              "The Logical Identifier (LOID) value of the Optical
+               Network Unit (ONU) as known by the Management Plane.
+               This data node is not present if the ONU is not using
+               any LOID or if the Management Plane does not know
+               itself the ONU LOID.
+               The LOID may be useful in identifying a particular ONU
+               installed at a particular location, for instance in
+               a failed ONU replacement scenario.";
+            reference
+              "ITU-T G.988 Clause 9.1.1
+               TR-489, section 8.2, R-OLT_8";
+          }
+          leaf vani-name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the vANI corresponding to the ONU.";
+          }
+          leaf onu-name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the ONU being authenticated.";
+          }
+        }
+      }
+    }
+  }
+}

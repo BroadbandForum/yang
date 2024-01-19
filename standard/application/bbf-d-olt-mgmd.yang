@@ -1,0 +1,710 @@
+module bbf-d-olt-mgmd {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-d-olt-mgmd";
+  prefix bbf-d-olt-mgmd;
+
+  import bbf-d-olt-message-monitor {
+    prefix bbf-d-olt-msg-mon;
+  }
+  import bbf-d-olt-network-function-types {
+    prefix bbf-d-olt-nft;
+  }
+  import bbf-grpc-client {
+    prefix bbf-grpcc;
+  }
+  import bbf-grpc-server {
+    prefix bbf-grpcs;
+  }
+  import bbf-mgmd-common {
+    prefix bbf-mgmdc;
+  }
+  import bbf-network-function-client {
+    prefix bbf-nfc;
+  }
+  import bbf-network-function-server {
+    prefix bbf-nfs;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import ietf-crypto-types {
+    prefix ct;
+  }
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ietf-tcp-client {
+    prefix tcpc;
+  }
+  import ietf-tcp-server {
+    prefix tcps;
+  }
+  import ietf-tls-client {
+    prefix tlsc;
+  }
+  import ietf-tls-server {
+    prefix tlss;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Andre Brizido, Altice Labs
+
+     Editor:      Antonio Marsico, Reply
+
+     PS Leader:   Haomian Zheng, Huawei
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Bruno Cornaglia, Vodafone";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements for disaggregation
+     of network functions from a physical OLT (pOLT) into a
+     disaggregated-OLT instance (D-OLT) as described in WT-477.
+
+     Specifically, this module describes D-OLT Multicast
+     Group Listener Discover (MGMD) functionality.
+
+     Copyright (c) 2024, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-477; see
+     the TR itself for full legal notices.";
+
+  revision 2024-01-19 {
+    description
+      "Issue 1.
+       * Approval Date:    2024-01-19.
+       * Publication Date: 2024-01-19.";
+    reference
+      "TR-477: Cloud CO Enhancement - Access Node Functional
+               Disaggregation <https://www.broadband-forum.org/
+                               technical/download/TR-477.pdf>";
+  }
+
+  feature multicast-cac {
+    description
+      "Multicast Connection Admission Control (CAC) functionality is
+       supported.";
+  }
+
+  feature mgmd-group-ip-range {
+    description
+      "Indicates support for the configuration of a range of
+       multicast group IP addresses";
+  }
+
+  feature static-multicast-host-associations {
+    description
+      "The system supports static associations of multicast hosts to
+       the tree of a multicast channel. The existence of a static
+       association is controlled via configuration and not via dynamic
+       IGMP or MLD protocol messages.";
+  }
+
+  feature tcp-client-username-password {
+    description
+      "Indicates that the client supports authenticating using
+       username/password when initiating TCP connections.";
+  }
+
+  feature tcp-server-username-password {
+    description
+      "Indicates that the server supports authenticating using
+       username/password when receiving TCP connections.";
+  }
+
+  container d-olt-mgmd {
+    description
+      "The function-specific configuration and data for MGMD";
+    container devices {
+      description
+        "pOLTs, DPUs, or other devices using this D-OLT MGMD.";
+      reference
+        "TR-156 Issue 4, Section 5.3.2";
+      list device {
+        key "name";
+        description
+          "pOLT, DPU, or other device using this D-OLT MGMD.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "The unique name of the device.";
+        }
+        container multicast-vpns {
+          description
+            "The Multicast Virtual Private Network (VPN)s on this
+             device utilizing this D-OLT MGMD.";
+          list multicast-vpn {
+            key "name";
+            description
+              "Multicast Virtual Private Network (VPN). A multicast
+               VPN defines the context of the multicast service. A
+               service operator may choose to configure a single
+               multicast VPN or multiple multicast VPN (e.g., open
+               access environment).";
+            leaf name {
+              type bbf-yang:string-ascii64;
+              description
+                "The name associated with a particular multicast VPN
+                 (service context).";
+            }
+            leaf ip-version {
+              type inet:ip-version;
+              default "ipv4";
+              description
+                "The IP version identifies the type of IP addresses
+                 used within this VPN.";
+            }
+            list multicast-network-interface {
+              key "name";
+              description
+                "The network topology dependent configuration data a
+                 multicast switch needs to reach MGMD routers. This
+                 basically provides the list of network interfaces
+                 via which it can reach them and in case the
+                 multicast switch acts as a proxy or as a snooper
+                 with proxy reporting it also provides the IP
+                 address.";
+              leaf name {
+                type bbf-yang:string-ascii64;
+                description
+                  "The name of the multicast network interface.";
+              }
+            }
+            list multicast-interface-to-host {
+              key "name";
+              description
+                "Multicast interface to a host state data. A
+                 multicast interface to a host is connecting a MGMD
+                 host to the multicast switch.";
+              leaf name {
+                type bbf-yang:string-ascii64;
+                description
+                  "The name of the multicast interface to a host.";
+              }
+              container interface-to-host-rx-state-data {
+                description
+                  "Contains all the counters for received MGMD
+                   messages when the multicast switch operates as a
+                   proxy, a snooper or a snooper with proxy
+                   reporting.";
+                uses bbf-mgmdc:mgmd-interface-to-hosts-receive-state;
+              }
+              container interface-to-hosts-tx-state-data {
+                description
+                  "Contains all the counters for generated MGMD
+                   messages when the multicast switch operates as a
+                   proxy. In that case it acts as a multicast router
+                   for this interface, and generates MGMD Membership
+                   Query messages itself.";
+                uses bbf-mgmdc:mgmd-interface-to-hosts-transmit-state;
+              }
+              leaf multicast-rate-limit-exceeded-count {
+                if-feature "multicast-cac";
+                type yang:counter32;
+                units "messages";
+                description
+                  "Counts the number of joins that did, or would
+                   have, exceeded the multicast rate limit, whether
+                   accepted or denied.";
+              }
+              leaf current-multicast-bw-delivered {
+                if-feature "multicast-cac";
+                type uint32;
+                units "kilobits per second";
+                description
+                  "The device its best effort estimate of the actual
+                   bandwidth currently being delivered or used.";
+              }
+              leaf number-active-multicast-channels {
+                type uint32;
+                description
+                  "The total number of active multicast channels
+                   used by the host.";
+              }
+            }
+            list multicast-channel {
+              key "name";
+              unique
+                "ipv4/group-ipv4-address ipv4/source-ipv4-address";
+              unique
+                "ipv6/group-ipv6-address ipv6/source-ipv6-address";
+              description
+                "Management information of multicast channels for Any
+                 Source Multicast (ASM) and Source Specific Multicast
+                 (SSM) mode of operations. Multicast channels are
+                 uniquely identified by the source and multicast
+                 group IP address.";
+              leaf name {
+                type bbf-yang:string-ascii64;
+                description
+                  "The name associated with a particular multicast
+                   channel.";
+              }
+              leaf network-interface {
+                type leafref {
+                  path "../../multicast-network-interface/name";
+                }
+                mandatory true;
+                description
+                  "The multicast network interface on which the
+                   multicast channel is received.";
+              }
+              container ipv4 {
+                description
+                  "Container for all IPv4 dependent configuration
+                   data.";
+                leaf source-ipv4-address {
+                  when "../../../ip-version = 'ipv4'";
+                  type inet:ipv4-address;
+                  default "0.0.0.0";
+                  description
+                    "The source IP address of the multicast channel.
+                     A value '0.0.0.0' is used in the ASM mode of
+                     operation. A value different of '0.0.0.0' is
+                     used in the SSM mode of operation.";
+                }
+                leaf group-ipv4-address {
+                  when "../../../ip-version = 'ipv4'";
+                  type inet:ipv4-address;
+                  mandatory true;
+                  description
+                    "The group IP address of the multicast
+                     channel.";
+                }
+                leaf group-ipv4-address-end {
+                  when "../../../ip-version = 'ipv4'";
+                  if-feature "mgmd-group-ip-range";
+                  type inet:ipv4-address;
+                  description
+                    "If the leaf 'group-ipv4-address-end' is not
+                     present, then the configuration is for a single
+                     group address as specified in the leaf
+                     'group-ipv4-address'.
+
+                     A 'group-ipv4-address-end' with a value lower
+                     than the value of the leaf 'group-ipv4-address'
+                     is invalid.
+
+                     A 'group-ipv4-address-end' with a value greater
+                     than the value of the leaf 'group-ipv4-address'
+                     is valid, in which case the configurations apply
+                     to all the group addresses starting from the
+                     value of the leaf 'group-ipv4-address' up to and
+                     including the value of
+                     'group-ipv4-address-end'.";
+                }
+              }
+              container ipv6 {
+                description
+                  "Container for all IPv6 dependent configuration
+                   data.";
+                leaf source-ipv6-address {
+                  when "../../../ip-version = 'ipv6'";
+                  type inet:ipv6-address;
+                  default "::";
+                  description
+                    "The source IP address of the multicast channel.
+                     A value '::' is used in the ASM mode of
+                     operation. A value different of '::' is used in
+                     the SSM mode of operation.";
+                }
+                leaf group-ipv6-address {
+                  when "../../../ip-version = 'ipv6'";
+                  type inet:ipv6-address;
+                  mandatory true;
+                  description
+                    "The group IP address of the multicast
+                     channel.";
+                }
+                leaf group-ipv6-address-end {
+                  when "../../../ip-version = 'ipv6'";
+                  if-feature "mgmd-group-ip-range";
+                  type inet:ipv6-address;
+                  description
+                    "If the leaf 'group-ipv6-address-end' is not
+                     present, then the configuration is for a single
+                     group address as specified by the leaf
+                     'group-ipv6-address'.
+
+                     A 'group-ipv6-address-end' with a value lower
+                     than the value of the leaf 'group-ipv6-address'
+                     is invalid.
+
+                     A 'group-ipv6-address-end' with a value greater
+                     than the value of the leaf 'group-ipv6-address'
+                     is valid, in which case the configuration apply
+                     to all the group addresses starting from the
+                     value of the leaf 'group-ipv6-address' up to and
+                     including the value of the leaf
+                     'group-ipv6-address-end'.";
+                }
+              }
+              leaf channel-rate {
+                if-feature "multicast-cac";
+                type uint32;
+                units "kilobits per second";
+                default "0";
+                description
+                  "The bandwidth of the multicast channel to be used
+                   at CAC.";
+              }
+              leaf-list interface-to-host {
+                if-feature "static-multicast-host-associations";
+                type leafref {
+                  path "../../multicast-interface-to-host/name";
+                }
+                description
+                  "The host interfaces that are associated to the
+                   multicast channel by configuration. I.e. hosts
+                   that will receive the multicast frames (video
+                   traffic) of this multicast channel.";
+              }
+            }
+            list active-channel {
+              key "source-address group-address";
+              description
+                "The active multicast channels state data. Active
+                 channels are those for which the system maintains a
+                 multicast tree. This includes the multicast
+                 channels with static branches.";
+              leaf source-address {
+                type inet:ip-address;
+                description
+                  "The source IP Address of the of the active
+                   multicast channel. The IPv4 address '0.0.0.0' or
+                   IPv6 address '::' is used for ASM mode of
+                   operation.";
+              }
+              leaf group-address {
+                type inet:ip-address;
+                description
+                  "The group IP Address of the active multicast
+                   channel.";
+                reference
+                  "RFC 5519 section 5, mgmdHostCacheAddress";
+              }
+              leaf name {
+                type bbf-yang:string-ascii64;
+                description
+                  "The name that identifies the multicast channel
+                   with this source- and group-address in the
+                   configuration data, if any.
+
+                   In case the 'grant-unauthorized-membership-report'
+                   mod of operation is used it can happen that an
+                   active multicast tree is built for a not
+                   configured source / group address combination.
+                   In that case the name will be the empty
+                   string ''.";
+              }
+              leaf multicast-network-interface {
+                type leafref {
+                  path "../../multicast-network-interface/name";
+                }
+                description
+                  "The multicast network interface via which the
+                   multicast channel is received.";
+              }
+              leaf number-active-interfaces-to-hosts {
+                type uint32;
+                description
+                  "The total number of interfaces to hosts
+                   associated to the tree of the multicast
+                   channel.";
+              }
+              list multicast-interface-to-host {
+                key "name";
+                description
+                  "The multicast interfaces to a host joining the
+                   multicast channel.";
+                leaf name {
+                  type leafref {
+                    path "../../../multicast-interface-to-host/"
+                       + "name";
+                  }
+                  description
+                    "Reference to a multicast interface to a host
+                     joining this multicast channel.";
+                }
+                leaf-list host-reporter-address {
+                  type inet:ip-address;
+                  description
+                    "On a single multicast interface to a host
+                     multiple MGMD hosts can be active, each being
+                     identified with a different source IP address.
+                     A multicast switch supporting immediate leave
+                     inspects and records the source IP address of
+                     each host sending a leave or join. This enables
+                     the MGMD switch to track, for each multicast
+                     group, the exact number and identity (i.e.
+                     IP address) of hosts receiving it.";
+                  reference
+                    "TR-101i2 R-246";
+                }
+              }
+              leaf uptime {
+                type yang:timeticks;
+                units "0.01 seconds";
+                description
+                  "The time elapsed since this multicast channel is
+                   active.";
+                reference
+                  "RFC 5519 section 5, mgmdHostCacheUpTime";
+              }
+            }
+            action reset {
+              description
+                "Reset the statistics.";
+            }
+          }
+        }
+      }
+    }
+    container remote-nf {
+      presence "Enables access to remote network functions";
+      description
+        "Remote network function (NF) configuration.";
+      container nf-client {
+        description
+          "Client network function configuration.";
+        leaf enabled {
+          type boolean;
+          default "true";
+          description
+            "Administratively enable the use of client connectivity
+             capability to connect to network function endpoints.";
+        }
+        uses bbf-nfc:nf-client {
+          augment "initiate/remote-server" {
+            description
+              "Insert an identifier for Mfc-SCi or Mfc-CPRi. In
+               the current version of TR-477 only Mfc-CPRi is used.";
+            leaf mfc-type {
+              type identityref {
+                base bbf-d-olt-nft:d-olt-mfc;
+              }
+              default "bbf-d-olt-nft:mfc-cpri";
+              description
+                "Type of Mfc.";
+            }
+          }
+          augment "initiate/remote-server/transport" {
+            description
+              "Augment the client network function remote server
+               transport choice with an option for gRPC.";
+            case grpc {
+              description
+                "Selection for gRPC client transport.";
+              uses bbf-grpcc:grpc-client-transport {
+                augment
+                  "grpc-client/access-point/"
+                + "grpc-transport-parameters/tcp-client-options" {
+                  description
+                    "The gRPC client can use TCP and optional TLS.";
+                  case tcp-or-tls-transport {
+                    description
+                      "Select TCP and optional TLS transport.";
+                    container tcp-client-parameters {
+                      description
+                        "The TCP configuration.";
+                      uses tcpc:tcp-client-grouping;
+                      choice auth-type {
+                        description
+                          "A choice among supported authentication
+                           mechanisms.";
+                        case username-password {
+                          if-feature "tcp-client-username-password";
+                          container username-password {
+                            leaf username {
+                              type string;
+                              mandatory true;
+                              description
+                                "The 'username' value to use for
+                                 client identification.";
+                            }
+                            uses ct:password-grouping {
+                              description
+                                "The password to be used for client
+                                 authentication.";
+                            }
+                            description
+                              "The username/password
+                               configuration.";
+                          }
+                        }
+                      }
+                    }
+                    container tls-client-parameters {
+                      presence "Indicates usage of optional TLS.";
+                      description
+                        "The TLS configuration.";
+                      uses tlsc:tls-client-grouping;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          augment "initiate/remote-server" {
+            description
+              "Augment the client network function remote server
+               with Mfc_CPRi statatistics.";
+            container mfc-statistics {
+              config false;
+              description
+                "Mfc_CPRi statistics.";
+              action reset {
+                description
+                  "Reset the statistics.";
+              }
+              uses bbf-d-olt-msg-mon:d-olt-message-statistics;
+            }
+          }
+        }
+      }
+      container nf-server {
+        description
+          "Server network function configuration.";
+        leaf enabled {
+          type boolean;
+          default "true";
+          description
+            "Administratively enable the use of server connectivity
+             capability to connect from network function
+             endpoints.";
+        }
+        uses bbf-nfs:nf-server {
+          augment "listen/listen-endpoint" {
+            description
+              "Insert an identifier for Mfc-SCi or Mfc-CPRi. In
+               the current version of TR-477 only Mfc-CPRi is used.";
+            leaf mfc-type {
+              type identityref {
+                base bbf-d-olt-nft:d-olt-mfc;
+              }
+              default "bbf-d-olt-nft:mfc-cpri";
+              description
+                "Type of Mfc.";
+            }
+          }
+          augment "listen/listen-endpoint/transport" {
+            description
+              "The Mfc-CPRi and Mfc-SCi server endpoints.";
+            case grpc {
+              description
+                "Selection for gRPC client transport.";
+              uses bbf-grpcs:grpc-server-transport {
+                augment "grpc-server/tcp-client-options" {
+                  description
+                    "The gRPC server can use TCP and optional TLS.";
+                  case tcp-or-tls-transport {
+                    description
+                      "Select TCP and optional TLS transport.";
+                    container tcp-server-parameters {
+                      description
+                        "The TCP configuration.";
+                      uses tcps:tcp-server-grouping;
+                      choice auth-type {
+                        description
+                          "A choice among supported authentication
+                           mechanisms.";
+                        case username-password {
+                          if-feature "tcp-server-username-password";
+                          container username-password {
+                            leaf username {
+                              type string;
+                              mandatory true;
+                              description
+                                "The 'username' value to permit for
+                                 client identification.";
+                            }
+                            uses ct:password-grouping {
+                              description
+                                "The password to permit for client
+                                 authentication.";
+                            }
+                            description
+                              "Contains username/password
+                               configuration.";
+                          }
+                        }
+                      }
+                    }
+                    container tls-server-parameters {
+                      presence "Indicates usage of optional TLS.";
+                      description
+                        "The TLS configuration.";
+                      uses tlss:tls-server-grouping;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          augment "listen/listen-endpoint" {
+            description
+              "Statistics for Mfc-CPRi.";
+            container mfc-statistics {
+              config false;
+              description
+                "Mfc_CPRi statistics.";
+              action reset {
+                description
+                  "Reset the statistics.";
+              }
+              uses bbf-d-olt-msg-mon:d-olt-message-statistics;
+            }
+          }
+        }
+      }
+    }
+  }
+}

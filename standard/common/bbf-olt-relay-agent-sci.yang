@@ -1,0 +1,167 @@
+module bbf-olt-relay-agent-sci {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-olt-relay-agent-sci";
+  prefix bbf-olt-rasci;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
+  import bbf-if-type {
+    prefix bbfift;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Andre Brizido, Altice Labs
+
+     Editor:      Antonio Marsico, Reply
+
+     PS Leader:   Haomian Zheng, Huawei
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Bruno Cornaglia, Vodafone";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements for disaggregation
+     of network functions from a physical OLT (pOLT) into a
+     Disaggregated-OLT instance (D-OLT) as described in TR-477.
+
+     Specifically, this module describes the Management flow control
+     State Control interface (Mfc_SCi)data model for the DHCP Relay
+     Agent and PPPoE Intermediate Agent functionality.
+
+     Copyright (c) 2024, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-477; see
+     the TR itself for full legal notices.";
+
+  revision 2024-01-19 {
+    description
+      "Issue 1.
+       * Approval Date:    2024-01-19.
+       * Publication Date: 2024-01-19.";
+    reference
+      "TR-477: Cloud CO Enhancement - Access Node Functional
+               Disaggregation <https://www.broadband-forum.org/
+                               technical/download/TR-477.pdf>";
+  }
+
+  typedef session-type {
+    type enumeration {
+      enum pppoe {
+        description
+          "The session type is PPPoE.";
+      }
+      enum ipoe {
+        description
+          "The session type is IPoE.";
+      }
+    }
+    description
+      "This type allows to specify the session type associated to a
+       specific IP address.";
+  }
+
+  augment "/if:interfaces/if:interface" {
+    when "derived-from-or-self (if:type,
+          'bbfift:vlan-sub-interface')" {
+      description
+        "Applies only to VLAN sub-interfaces.";
+    }
+    description
+      "Operations for the D-OLT to set associations between IP
+       addresses and MAC addresses on the OLT - ARP (Address
+       Resolution Protocol) entries. These ARP entries can be used
+       by the OLT to enforce anti-spoofing functionality. Setting the
+       aging time is outside of the scope of the VLAN sub-interface
+       (VSI). The expiration of the entries is controlled by the relay
+       function which snoops control packets.";
+    action add-arp-entry {
+      description
+        "Adds an ARP entry on the device.";
+      input {
+        leaf address {
+          type inet:ip-address;
+          mandatory true;
+          description
+            "The IP address associated with the entry.";
+        }
+        leaf mac-address {
+          type yang:mac-address;
+          mandatory true;
+          description
+            "The MAC address associated with the IP address.";
+        }
+        leaf session-type {
+          type session-type;
+          mandatory true;
+          description
+            "Specified the session type, e.g., PPPoE, IPoE,
+             associated with the ARP entry.";
+        }
+      }
+    }
+    action delete-arp-entry {
+      description
+        "Deletes an ARP entry on the device.";
+      input {
+        leaf address {
+          type inet:ip-address;
+          mandatory true;
+          description
+            "The IP address associated with the entry.";
+        }
+      }
+    }
+  }
+}

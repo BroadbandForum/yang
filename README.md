@@ -1,5 +1,10 @@
 ## Broadband Forum YANG Modules
 
+### 2024-01-19: [TR-477 Issue 1](https://www.broadband-forum.org/technical/download/TR-477.pdf) Cloud CO Enhancement - Access Node Functional Disaggregation
+*Tag: [TR-477-v1.0.0](https://github.com/BroadbandForum/yang/tree/TR-477-v1.0.0)*
+
+* TR-477 specifies the necessary architecture, network function (NF) definitions, requirements, interfaces and protocols associated with the Disaggregated OLT (D-OLT) software component enabling the deployment of OLTs with disaggregated functionalities into a CloudCO architecture.
+
 ### 2024-01-19: [OD-360 Issue 1 Amendment 2](https://yang.broadband-forum.org) BBF YANG Best Current Practices
 *Tag: [OD-360-v1.2.0](https://github.com/BroadbandForum/yang/tree/OD-360-v1.2.0)*
 

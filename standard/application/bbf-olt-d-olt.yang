@@ -1,0 +1,506 @@
+module bbf-olt-d-olt {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-olt-d-olt";
+  prefix bbf-olt-d-olt;
+
+  import bbf-d-olt-message-monitor {
+    prefix bbf-d-olt-msg-mon;
+  }
+  import bbf-d-olt-network-function-types {
+    prefix bbf-d-olt-nft;
+  }
+  import bbf-grpc-client {
+    prefix bbf-grpcc;
+  }
+  import bbf-grpc-server {
+    prefix bbf-grpcs;
+  }
+  import bbf-if-type {
+    prefix bbfift;
+  }
+  import bbf-network-function-client {
+    prefix bbf-nfc;
+  }
+  import bbf-network-function-server {
+    prefix bbf-nfs;
+  }
+  import ietf-crypto-types {
+    prefix ct;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ietf-tcp-client {
+    prefix tcpc;
+  }
+  import ietf-tcp-server {
+    prefix tcps;
+  }
+  import ietf-tls-client {
+    prefix tlsc;
+  }
+  import ietf-tls-server {
+    prefix tlss;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Andre Brizido, Altice Labs
+
+     Editor:      Antonio Marsico, Reply
+
+     PS Leader:   Haomian Zheng, Huawei
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Bruno Cornaglia, Vodafone";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements for a physical OLT's
+     (pOLT) remote endpoint connectivity to Disaggregated OLT (D-OLT)
+     network functions (NFs) as described in TR-477.
+
+     Copyright (c) 2024, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-477; see
+     the TR itself for full legal notices.";
+
+  revision 2024-01-19 {
+    description
+      "Issue 1.
+       * Approval Date:    2024-01-19.
+       * Publication Date: 2024-01-19.";
+    reference
+      "TR-477: Cloud CO Enhancement - Access Node Functional
+               Disaggregation <https://www.broadband-forum.org/
+                               technical/download/TR-477.pdf>";
+  }
+
+  feature d-olt-remote-nf {
+    description
+      "Indicates the physical OLT (pOLT) supports remote Disaggregated
+       (D-OLT) Network Function (NF) endpoints.";
+  }
+
+  feature d-olt-dhcpra-vsi {
+    description
+      "Indicates the physical OLT (pOLT) supports the Disaggregated
+       (D-OLT) DHCPv4 Relay Agent (DHCPRA) and/or Lightweight DHCPv6
+       Relay Agent (LDRA) processing over a VLAN sub-interface
+       (VSI).";
+  }
+
+  feature d-olt-pppoeia-vsi {
+    description
+      "Indicates the physical OLT (pOLT) supports the Disaggregated
+       (D-OLT) Point-to-Point Protocol over Ethernet (PPPoE)
+       Intermediate Agent processing over a VLAN sub-interface
+       (VSI).";
+  }
+
+  feature tcp-client-username-password {
+    description
+      "Indicates that the client supports authenticating using
+       username/password when initiating TCP connections.";
+  }
+
+  feature tcp-server-username-password {
+    description
+      "Indicates that the server supports authenticating using
+       username/password when receiving TCP connections.";
+  }
+
+  container d-olt-remote-nf {
+    if-feature "d-olt-remote-nf";
+    presence "Enables access to remote D-OLT NF endpoints.";
+    description
+      "Remote network function (NF) configuration.";
+    container d-olt-nf-client {
+      description
+        "Client network function configuration.";
+      leaf enabled {
+        type boolean;
+        default "true";
+        description
+          "Administratively enable the use of client connectivity
+           capability to connect to network function endpoints.";
+      }
+      uses bbf-nfc:nf-client {
+        augment "initiate/remote-server" {
+          description
+            "Augment the client network function remote server with
+             the type of Management Flow Control (Mfc) interface to
+             use.";
+          leaf mfc-type {
+            type identityref {
+              base bbf-d-olt-nft:d-olt-mfc;
+            }
+            description
+              "Type of Mfc.";
+          }
+        }
+        augment "initiate/remote-server/transport" {
+          description
+            "Augment the client network function remote server
+             transport choice with an option for gRPC.";
+          case grpc {
+            description
+              "Selection for gRPC client transport.";
+            uses bbf-grpcc:grpc-client-transport {
+              augment "grpc-client/access-point/"
+                    + "grpc-transport-parameters/tcp-client-options" {
+                description
+                  "The gRPC client can use TCP and optional TLS.";
+                case tcp-or-tls-transport {
+                  description
+                    "Select TCP and optional TLS transport.";
+                  container tcp-client-parameters {
+                    description
+                      "The TCP configuration.";
+                    uses tcpc:tcp-client-grouping;
+                    choice auth-type {
+                      description
+                        "A choice among supported authentication
+                         mechanisms.";
+                      case username-password {
+                        if-feature "tcp-client-username-password";
+                        container username-password {
+                          leaf username {
+                            type string;
+                            mandatory true;
+                            description
+                              "The 'username' value to use for
+                               client identification.";
+                          }
+                          uses ct:password-grouping {
+                            description
+                              "The password to be used for client
+                               authentication.";
+                          }
+                          description
+                            "The username/password
+                             configuration.";
+                        }
+                      }
+                    }
+                  }
+                  container tls-client-parameters {
+                    presence "Indicates usage of optional TLS.";
+                    description
+                      "The TLS configuration.";
+                    uses tlsc:tls-client-grouping;
+                  }
+                }
+              }
+            }
+          }
+        } // augment of initiate/remote-server/transport
+        augment "initiate/remote-server" {
+          description
+            "Statistics for Mfc-SCi or Mfc-CPRi.";
+          container mfc-statistics {
+            config false;
+            description
+              "Statistics for Mfc-SCi or Mfc-CPRi.";
+            action reset {
+              description
+                "Reset the statistics.";
+            }
+            uses bbf-d-olt-msg-mon:d-olt-message-statistics;
+          }
+        }
+      }
+    } // d-olt-nf-client
+    container d-olt-nf-server {
+      description
+        "Server network function configuration.";
+      leaf enabled {
+        type boolean;
+        default "true";
+        description
+          "Administratively enable the use of server connectivity
+           capability to connect from network function
+           endpoints.";
+      }
+      uses bbf-nfs:nf-server {
+        augment "listen/listen-endpoint" {
+          description
+            "Augment the server network function listen endpoint with
+             the type of Management Flow Control (Mfc) interface to
+             use.";
+          leaf mfc-type {
+            type identityref {
+              base bbf-d-olt-nft:d-olt-mfc;
+            }
+            description
+              "Type of Mfc.";
+          }
+        }
+        augment "listen/listen-endpoint/transport" {
+          description
+            "Augment the server network function listen endpoint
+             choice with an option for gRPC.";
+          case grpc {
+            description
+              "Selection for gRPC client transport.";
+            uses bbf-grpcs:grpc-server-transport {
+              augment "grpc-server/tcp-client-options" {
+                description
+                  "The gRPC server can use TCP and optional TLS.";
+                case tcp-or-tls-transport {
+                  description
+                    "Select TCP and optional TLS transport.";
+                  container tcp-server-parameters {
+                    description
+                      "The TCP configuration.";
+                    uses tcps:tcp-server-grouping;
+                    choice auth-type {
+                      description
+                        "A choice among supported authentication
+                         mechanisms.";
+                      case username-password {
+                        if-feature "tcp-server-username-password";
+                        container username-password {
+                          leaf username {
+                            type string;
+                            mandatory true;
+                            description
+                              "The 'username' value to permit for
+                               client identification.";
+                          }
+                          uses ct:password-grouping {
+                            description
+                              "The password to permit for client
+                               authentication.";
+                          }
+                          description
+                            "Contains Username/Password
+                             configuration.";
+                        }
+                      }
+                    }
+                  }
+                  container tls-server-parameters {
+                    presence "Indicates usage of optional TLS.";
+                    description
+                      "The optional TLS configuration.";
+                    uses tlss:tls-server-grouping;
+                  }
+                }
+              }
+            }
+          }
+        }
+        augment "listen/listen-endpoint" {
+          description
+            "Statistics for Mfc-SCi or Mfc-CPRi.";
+          container mfc-statistics {
+            config false;
+            description
+              "Statistics for Mfc-SCi or Mfc-CPRi.";
+            action reset {
+              description
+                "Reset the statistics.";
+            }
+            uses bbf-d-olt-msg-mon:d-olt-message-statistics;
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface" {
+    when "derived-from-or-self(if:type,
+                               'bbfift:vlan-sub-interface')" {
+      description
+        "Applies only to VLAN sub-interfaces (VSI).";
+    }
+    description
+      "Additions for D-OLT on the VLAN sub-interface.";
+    container d-olt-dhcpra-vsi {
+      if-feature "d-olt-dhcpra-vsi";
+      presence
+        "Enables the management of DHCPv4 and DHCPv6 message
+         processing at this VSI over a D-OLT remote Network Function
+         (NF) endpoint.";
+      description
+        "L2 DHCP v4 and v6 Relay Agent configuration parameters.
+
+         If the container is not present, no remote L2 DHCP Relay
+         Agent (L2DHCPRA) functionality is performed on this
+         interface.  Note that there may be local L2DHCPRA
+         processing separately enabled from remote.
+
+         L2 DHCP Relay Agent functionality is also dependent on the
+         value of the contained leaves 'dhcpv4-enable' and
+         'dhcpv6-enable'.";
+      leaf dhcpv4-enable {
+        type boolean;
+        default "false";
+        description
+          "If 'true', enables DHCPRA processing of DHCPv4 messages
+           received on this interface and messages to be sent to a
+           D-OLT remote NF.";
+      }
+      leaf dhcpv6-enable {
+        type boolean;
+        default "false";
+        description
+          "If 'true', enables LDRA processing of DHCPv6 messages
+           received on this interface and messages to be sent to a
+           D-OLT remote NF.";
+      }
+      leaf mfc-sci-server {
+        if-feature "d-olt-remote-nf";
+        type leafref {
+          path "/d-olt-remote-nf/d-olt-nf-server/listen/"
+             + "listen-endpoint/name";
+        }
+        description
+          "The Mfc-SCi server endpoint for this VSI.";
+      }
+      choice mfc-client-or-server {
+        if-feature "d-olt-remote-nf";
+        description
+          "Mfc gRPC connection can be client or server, not both.";
+        case client {
+          leaf mfc-cpri-client {
+            type leafref {
+              path "/d-olt-remote-nf/d-olt-nf-client/initiate/"
+                 + "remote-server/name";
+            }
+            description
+              "The Mfc-SCi client endpoint for this VSI.";
+          }
+        }
+        case server {
+          leaf mfc-cpri-server {
+            type leafref {
+              path "/d-olt-remote-nf/d-olt-nf-server/listen/"
+                 + "listen-endpoint/name";
+            }
+            description
+              "The Mfc-SCi server endpoint for this VSI.";
+          }
+        }
+      }
+    }
+    container d-olt-pppoeia-vsi {
+      if-feature "d-olt-pppoeia-vsi";
+      presence
+        "Enables the management of PPPoE discovery process at this
+         VSI over a D-OLT remote NF endpoint.";
+      description
+        "PPPoE Intermediate Agent configuration parameters.
+
+         If the container is not present, no remote PPPoE IA
+         functionality is performed on this interface. Any received
+         PPPoE discovery messages are processed based on the layer 2
+         configuration, e.g. VLAN sub-interface and/or layer 2
+         forwarding.
+
+         PPPoE Intermediate Agent functionality is also dependent on
+         the value of the contained leaf 'enable'.";
+      leaf enable {
+        type boolean;
+        default "false";
+        description
+          "Controls the remote PPPoE IA functionality processing of
+           PPPoE discovery messages received on an interface and
+           messages to be sent to an interface.
+
+           If 'true', enables the remote PPPoE IA to process PPPoE
+           discovery messages based on the additional relay agent
+           configuration.
+
+           If 'false', no PPPoE Intermediate Agent functionality is
+           performed. Any received PPPoE discovery messages received
+           are processed based on the layer 2 configuration, E.g.,
+           VLAN sub-interface and/or layer 2 forwarding.";
+      }
+      leaf mfc-sci-server {
+        if-feature "d-olt-remote-nf";
+        type leafref {
+          path "/d-olt-remote-nf/d-olt-nf-server/listen/"
+             + "listen-endpoint/name";
+        }
+        description
+          "The Mfc-SCi server endpoint for this VSI.";
+      }
+      choice mfc-cpri-client-or-server {
+        if-feature "d-olt-remote-nf";
+        description
+          "Mfc gRPC connection can be client or server, not both.
+           Note that in most cases, the CPRi on the pOLT is the client
+           and the D-OLT xNF is the server. In the case of a TR-484
+           or similar deployment with a Control Relay function, the
+           pOLT can be the server and the Control Relay can be the
+           client. Thus this configuration is left up to the specific
+           implementation.";
+        case client {
+          leaf mfc-cpri-client {
+            type leafref {
+              path "/d-olt-remote-nf/d-olt-nf-client/initiate/"
+                 + "remote-server/name";
+            }
+            description
+              "The Mfc-CPRi client endpoint for this VSI.";
+          }
+        }
+        case server {
+          leaf mfc-cpri-server {
+            type leafref {
+              path "/d-olt-remote-nf/d-olt-nf-server/listen/"
+                 + "listen-endpoint/name";
+            }
+            description
+              "The Mfc-CPRi server endpoint for this VSI.";
+          }
+        }
+      }
+    }
+  }
+}
