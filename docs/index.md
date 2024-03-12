@@ -1047,7 +1047,7 @@ when "not(boolean(../enable))"
 Descriptions in YANG modules are considered to be formal documentation. Therefore, English contractions, e.g., can't, isn't, etc., SHALL NOT be used in description statements.
 
 
-\## BBF Deviation Guidelines {.new-file}
+## BBF Deviation Guidelines {.new-file}
 
 It is understood that there are times in which a device will need to support a
 subset of a standard YANG model whether it be from BBF or any other SDO. YANG

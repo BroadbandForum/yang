@@ -11,10 +11,6 @@
 #let bbf-same-section = bbf-passthrough
 // XXX might need to convert this to vertical space
 #let bbf-spacer = bbf-passthrough
-// XXX might be able to do something clever with these
-#let bbf-left = bbf-passthrough
-#let bbf-right = bbf-passthrough
-#let bbf-clear = bbf-passthrough
 
 // pagebreak() can only be used at the outer level
 #let bbf-new-page(content) = { pagebreak(weak: true); content }
@@ -39,6 +35,7 @@
 
 // bibliographic references
 // XXX the fractional widths should be customizable
+#let bbf-nocase = bbf-passthrough
 #let bbf-references = bbf-passthrough
 #let bbf-csl-entry = bbf-passthrough
 #let bbf-csl-bib-body = block.with(spacing: 0.25em)
@@ -56,11 +53,33 @@
   }
 }
 
+// left / right / clear (intended for use with divs)
+#let bbf-left-state = state("bbf-left")
+#let bbf-right-state = state("bbf-right")
+
+#let bbf-left = content => state("bbf-left").update(content)
+#let bbf-right = content => state("bbf-right").update(content)
+
+#let bbf-clear = (..args) => {
+  set table(columns: (50%, 50%), stroke: 1pt + black.lighten(95%),
+            ..args.named())
+  locate(loc => {
+    let left_content = state("bbf-left").at(loc)
+    let right_content = state("bbf-right").at(loc)
+    if left_content != none and right_content != none {
+      table(left_content, right_content)
+    }
+  })
+  bbf-left(none)
+  bbf-right(none)
+  args.pos().join()
+}
+
 // WT-181/specification/local.css
 #let bbf-tablex-command = cellx.with(fill: rgb("#66cdaa"))
 #let bbf-tablex-object = cellx.with(fill: rgb("#ffff99"))
 
-// XXX these are rather arbiotrary
+// XXX these are rather arbitrary
 #let bbf-tablex-blue = obj => bbf-tablex-chain(obj, fill: blue.lighten(50%))
 #let bbf-tablex-red = obj => bbf-tablex-chain(obj, fill: red.lighten(50%))
 #let bbf-tablex-right = obj => bbf-tablex-chain(obj, align: right)

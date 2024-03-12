@@ -283,32 +283,33 @@ directed to
 #bbf-csl-entry[
 #bbf-csl-left-margin[[1] ]#bbf-csl-right-inline[RFC 2119,
 _#link("https://www.rfc-editor.org/rfc/rfc2119.html")[Key words for use
-in RFCs to Indicate Requirement Levels]_, IETF, 1997]
+in #[RFCs] to #[Indicate] #[Requirement] #[Levels]]_, IETF, 1997]
 ] <ref-RFC2119>
 
 #bbf-csl-entry[
 #bbf-csl-left-margin[[2] ]#bbf-csl-right-inline[RFC 7223,
-_#link("https://www.rfc-editor.org/rfc/rfc7223.html")[A YANG Data Model
-for Interface Management]_, IETF, 2014]
+_#link("https://www.rfc-editor.org/rfc/rfc7223.html")[A #[YANG] #[Data]
+#[Model] for #[Interface] #[Management]]_, IETF, 2014]
 ] <ref-RFC7223>
 
 #bbf-csl-entry[
 #bbf-csl-left-margin[[3] ]#bbf-csl-right-inline[RFC 7950,
-_#link("https://www.rfc-editor.org/rfc/rfc7950.html")[The YANG 1.1 Data
-Modeling Language]_, IETF, 2016]
+_#link("https://www.rfc-editor.org/rfc/rfc7950.html")[The #[YANG] 1.1
+#[Data] #[Modeling] #[Language]]_, IETF, 2016]
 ] <ref-RFC7950>
 
 #bbf-csl-entry[
 #bbf-csl-left-margin[[4] ]#bbf-csl-right-inline[RFC 8174,
 _#link("https://www.rfc-editor.org/rfc/rfc8174.html")[Ambiguity of
-Uppercase vs Lowercase in RFC 2119 Key Words]_, IETF, 2017]
+#[Uppercase] vs #[Lowercase] in #[RFC] 2119 #[Key] #[Words]]_, IETF,
+2017]
 ] <ref-RFC8174>
 
 #bbf-csl-entry[
 #bbf-csl-left-margin[[5] ]#bbf-csl-right-inline[RFC 8407,
 _#link("https://www.rfc-editor.org/rfc/rfc8407.html")[Guidelines for
-Authors and Reviewers of Documents Containing YANG Data Models]_, IETF,
-2018]
+#[Authors] and #[Reviewers] of #[Documents] #[Containing] #[YANG]
+#[Data] #[Models]]_, IETF, 2018]
 ] <ref-RFC8407>
 ] <refs>]
 
@@ -1680,7 +1681,8 @@ Descriptions in YANG modules are considered to be formal documentation.
 Therefore, English contractions, e.g., can’t, isn’t, etc., SHALL NOT be
 used in description statements.
 
-\#\# BBF Deviation Guidelines {.new\-file}
+#bbf-new-file[
+== BBF Deviation Guidelines <sec:bbf-deviation-guidelines>]
 
 It is understood that there are times in which a device will need to
 support a subset of a standard YANG model whether it be from BBF or any

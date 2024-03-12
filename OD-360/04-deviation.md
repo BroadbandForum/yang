@@ -1,4 +1,4 @@
-\## BBF Deviation Guidelines {.new-file}
+## BBF Deviation Guidelines {.new-file}
 
 It is understood that there are times in which a device will need to support a
 subset of a standard YANG model whether it be from BBF or any other SDO. YANG
