@@ -10,6 +10,9 @@
 
 cwd=`pwd`
 
+# experimental YANG
+exp_dir="$cwd/experimental"
+
 # default arguments
 bbf_dir="$cwd/standard/bbf"
 ietf_dir="$cwd/standard/ietf"
@@ -45,7 +48,7 @@ ietf_dir=`pwd`
 
 cd $cwd
 
-pyang_flags="--max-line-length=70 --lint --lint-modulename-prefix=bbf --lint-namespace-prefix=urn:bbf:yang: --lint-ensure-hyphenated-name --verbose --path=$bbf_dir --path=$ietf_dir --path=$ieee_dir"
+pyang_flags="--max-line-length=70 --lint --lint-modulename-prefix=bbf --lint-namespace-prefix=urn:bbf:yang: --lint-ensure-hyphenated-name --verbose --path=$bbf_dir --path=$exp_dir --path=$ietf_dir --path=$ieee_dir"
 
 checkDir () {
     local dir="$bbf_dir/$1"
