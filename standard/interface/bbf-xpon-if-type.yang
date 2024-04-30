@@ -16,8 +16,6 @@ module bbf-xpon-if-type {
 
      Editor:      Robert Peschi, Nokia
 
-     Editor:      Kevin Noll, Vecima
-
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Marta Seda, Calix";
@@ -33,7 +31,7 @@ module bbf-xpon-if-type {
      needed for Broadband Forum aplications, but are not defined by
      IANA.
 
-     Copyright (c) 2018-2023, Broadband Forum
+     Copyright (c) 2018-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -73,9 +71,19 @@ module bbf-xpon-if-type {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2a1; see
+     This version of this YANG module is part of TR-385i3; see
      the TR itself for full legal notices.";
 
+  revision 2024-04-23 {
+    description
+      "Issue 3.
+       * Approval Date:    2024-04-23.
+       * Publication Date: 2024-04-23.";
+    reference
+      "TR-385i3: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3.pdf>";
+  }
   revision 2023-06-21 {
     description
       "Issue 2 Amendment 1.
@@ -205,13 +213,14 @@ module bbf-xpon-if-type {
        counter-part ONU-vENET interface on the ONU.
 
        In the specific case of a TR-156 deployment scheme, there is
-       typically no need for the ONU to instanciate ONU-vENET
+       typically no need for the ONU to instantiate ONU-vENET
        interfaces for subscriber traffic: in that case OLT-vENET
        interfaces can directly 1-1 correspond to individual user
        facing interface of the ONU, being physical (per TR-156) or
        virtual (per TR-167).";
     reference
-      "BBF TR-156; BBF TR-167";
+      "BBF TR-156;
+       BBF TR-167";
   }
 
   identity onu-v-vrefpoint {
@@ -231,6 +240,8 @@ module bbf-xpon-if-type {
        the ONU U reference point defined in TR-156 (ref. TR-156,
        Section 4).";
     reference
-      "BBF TR-156; BBF TR-167";
+      "BBF TR-156 Section 4;
+       BBF TR-167 Section 4;
+       BBF TR-167 Section 4.1";
   }
 }

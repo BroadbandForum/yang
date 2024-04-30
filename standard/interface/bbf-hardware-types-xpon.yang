@@ -1,7 +1,10 @@
-submodule bbf-xpongemtcont-base {
+module bbf-hardware-types-xpon {
   yang-version 1.1;
-  belongs-to bbf-xpongemtcont {
-    prefix bbf-xpongemtcont;
+  namespace "urn:bbf:yang:bbf-hardware-types-xpon";
+  prefix bbf-hwt-xpon;
+
+  import bbf-hardware-types {
+    prefix bbf-hwt;
   }
 
   organization
@@ -17,9 +20,15 @@ submodule bbf-xpongemtcont-base {
 
      WA Director: Marta Seda, Calix";
   description
-    "This submodule contains a collection of YANG definitions for
-     managing top level xPON G-PON Encapsulation Method (GEM) port and
-     Transmission Container (T-CONT) configuration and state data.
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on management of
+     ITU-T Passive Optical Network (PON) interfaces as defined in
+     ITU-T G.984.x, G.987.x, ITU-T G.989.x and ITU-T G.9807.x. As
+     such, this module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module defines specialization of transceiver
+     links per xPON types.
 
      Copyright (c) 2018-2024, Broadband Forum
 
@@ -74,46 +83,24 @@ submodule bbf-xpongemtcont-base {
                <https://www.broadband-forum.org/technical/download/
                         TR-385_Issue-3.pdf>";
   }
-  revision 2023-06-21 {
+
+  identity transceiver-link-gpon {
+    base bbf-hwt:transceiver-link;
     description
-      "Issue 2 Amendment 1.
-       * Approval Date:    2023-06-21.
-       * Publication Date: 2023-06-21.";
-    reference
-      "TR-385i2a1: ITU-T PON YANG Modules
-               <https://www.broadband-forum.org/technical/download/
-                        TR-385_Issue-2_Amendment-1.pdf>";
-  }
-  revision 2020-10-13 {
-    description
-      "Issue 2.
-       * Approval Date:    2020-10-13.
-       * Publication Date: 2020-10-13.";
-    reference
-      "TR-385i2: ITU-T PON YANG Modules
-               <https://www.broadband-forum.org/technical/download/
-                        TR-385_Issue-2.pdf>";
-  }
-  revision 2019-02-25 {
-    description
-      "Initial revision.
-       * Approval Date:    2019-02-25.
-       * Publication Date: 2019-02-25.";
-    reference
-      "TR-385: ITU-T PON YANG Modules
-               <https://www.broadband-forum.org/technical/download/
-                        TR-385.pdf>";
+      "A transceiver link that terminates a G-PON optical signal.";
   }
 
-  container xpongemtcont {
+  identity transceiver-link-xgs {
+    base bbf-hwt:transceiver-link;
     description
-      "Configuration associated with xPON G-PON Encapsulation Method
-       (GEM) ports, T-CONTs, and traffic descriptors.";
+      "A transceiver link that terminates an XGS-PON optical
+       signal.";
   }
-  container xpongemtcont-state {
-    config false;
+
+  identity transceiver-link-twentyfivegspon {
+    base bbf-hwt:transceiver-link;
     description
-      "State data associated with xPON G-PON Encapsulation Method
-       (GEM) ports, T-CONTs, and traffic descriptors.";
+      "A transceiver link that terminates a 25GS-PON optical
+       signal.";
   }
 }

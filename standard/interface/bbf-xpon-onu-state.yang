@@ -28,8 +28,6 @@ module bbf-xpon-onu-state {
 
      Editor:      Robert Peschi, Nokia
 
-     Editor:      Kevin Noll, Vecima
-
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Marta Seda, Calix";
@@ -44,7 +42,7 @@ module bbf-xpon-onu-state {
      Specifically, this module defines state data and notifications
      related to each Optical Network Unit (ONU).
 
-     Copyright (c) 2018-2023, Broadband Forum
+     Copyright (c) 2018-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -84,9 +82,19 @@ module bbf-xpon-onu-state {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2a1; see
+     This version of this YANG module is part of TR-385i3; see
      the TR itself for full legal notices.";
 
+  revision 2024-04-23 {
+    description
+      "Issue 3.
+       * Approval Date:    2024-04-23.
+       * Publication Date: 2024-04-23.";
+    reference
+      "TR-385i3: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3.pdf>";
+  }
   revision 2023-06-21 {
     description
       "Issue 2 Amendment 1.
@@ -145,10 +153,11 @@ module bbf-xpon-onu-state {
          Optical Network Unit (ONU) is currently using on the channel
          group.";
       reference
-        "ITU-T G.984.3 clause 5.5.2
-         ITU-T G.987.3 clause 6.4.2
-         ITU-T G.9807.1 clause C.6.1.5.6
-         ITU-T G.989.3 clause 6.1.5.6";
+        "ITU-T G.984.3 Clause 5.5.2;
+         ITU-T G.987.3 Clause 6.4.2;
+         ITU-T G.9807.1 Clause C.6.1.5.6;
+         ITU-T G.989.3 Clause 6.1.5.6;
+         ITU-T G.9804.2 Clause 6.5.2.5";
     }
     leaf detected-registration-id {
       type bbf-xpon-types:onu-registration-id;
@@ -162,13 +171,14 @@ module bbf-xpon-onu-state {
          characters, therefore the leaf must contain an even number of
          characters. For ITU-T G.984.3, the leaf can only be up to
          20 octets long (refer to 'password'), for ITU-T G.987.3,
-         ITU-T G.9807.3 and ITU-T G.989.3 the leaf can be up to 72
-         octets long.";
+         ITU-T G.9807.1, ITU-T G.989.3 and ITU-G G.9804.2,
+         the leaf can be up to 72 octets long.";
       reference
-        "ITU-T G.984.3 clause 9.2.4.2
-         ITU-T G.987.3 clause 11.3.4.2
-         ITU-T G.9807.3 clause C.11.3.4.2
-         ITU-T G.989.3 clause 11.3.4.2";
+        "ITU-T G.984.3 Clause 9.2.4.2;
+         ITU-T G.987.3 Clause 11.3.4.2;
+         ITU-T G.9807.1 Clause C.11.3.4.2;
+         ITU-T G.989.3 Clause 11.3.4.2;
+         ITU-T G.9804.2 Clause 11.3.4.2";
     }
     leaf v-ani-ref {
       type if:interface-ref;
@@ -213,11 +223,17 @@ module bbf-xpon-onu-state {
           description
             "The serial number of the Optical Network Unit (ONU).";
           reference
-            "ITU-T G.984.3, clause 9.2.4.1
-             ITU-T G.987.3, clause 11.3.3.2
-             ITU-T G.9807.1, clauses C11.2.6.1, C11.2.6.2 and
-             C11.3.4.1
-             ITU-T G.989.3, clauses 11.2.6.1, 11.2.6.2 and 11.3.4.1.";
+            "ITU-T G.984.3 Clause 9.2.4.1;
+             ITU-T G.987.3 Clause 11.3.3.2;
+             ITU-T G.9807.1 Clause C.11.2.6.1;
+             ITU-T G.9807.1 Clause C.11.2.6.2;
+             ITU-T G.9807.1 Clause C.11.3.4.1;
+             ITU-T G.989.3 Clause 11.2.6.1;
+             ITU-T G.989.3 Clause 11.2.6.2;
+             ITU-T G.989.3 Clause 11.3.4.1;
+             ITU-T G.9804.2 Clause 11.2.6.1;
+             ITU-T G.9804.2 Clause 11.2.6.2;
+             ITU-T G.9804.2 Clause 11.3.4.1";
         }
         uses onu-state-data;
         leaf onu-detected-datetime {
@@ -317,10 +333,17 @@ module bbf-xpon-onu-state {
           "The serial number of the Optical Network Unit (ONU)
            entering the new state.";
         reference
-          "ITU-T G.984.3, clause 9.2.4.1
-           ITU-T G.987.3, clause 11.3.3.2
-           ITU-T G.9807.1, clauses C11.2.6.1, C11.2.6.2 and C11.3.4.1
-           ITU-T G.989.3, clauses 11.2.6.1, 11.2.6.2 and 11.3.4.1.";
+          "ITU-T G.984.3 Clause 9.2.4.1;
+           ITU-T G.987.3 Clause 11.3.3.2;
+           ITU-T G.9807.1 Clause C.11.2.6.1;
+           ITU-T G.9807.1 C.11.2.6.2;
+           ITU-T G.9807.1 C.11.3.4.1;
+           ITU-T G.989.3 Clause 11.2.6.1;
+           ITU-T G.989.3 Clause 11.2.6.2;
+           ITU-T G.989.3 Clause 11.3.4.1;
+           ITU-T G.9804.2 Clause 11.2.6.1;
+           ITU-T G.9804.2 Clause 11.2.6.2;
+           ITU-T G.9804.2 Clause 11.3.4.1";
       }
       leaf last-change {
         type yang:date-and-time;

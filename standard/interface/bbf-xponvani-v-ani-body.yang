@@ -36,8 +36,6 @@ submodule bbf-xponvani-v-ani-body {
 
      Editor:      Robert Peschi, Nokia
 
-     Editor:      Kevin Noll, Vecima
-
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Marta Seda, Calix";
@@ -47,7 +45,7 @@ submodule bbf-xponvani-v-ani-body {
      Termination (OLT) and represents an Optical Network Unit (ONU) as
      seen from the perspective of the OLT.
 
-     Copyright (c) 2018-2023, Broadband Forum
+     Copyright (c) 2018-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -87,9 +85,19 @@ submodule bbf-xponvani-v-ani-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2a1; see
+     This version of this YANG module is part of TR-385i3; see
      the TR itself for full legal notices.";
 
+  revision 2024-04-23 {
+    description
+      "Issue 3.
+       * Approval Date:    2024-04-23.
+       * Publication Date: 2024-04-23.";
+    reference
+      "TR-385i3: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3.pdf>";
+  }
   revision 2023-06-21 {
     description
       "Issue 2 Amendment 1.
@@ -141,7 +149,7 @@ submodule bbf-xponvani-v-ani-body {
   feature configurable-v-ani-management-gem-port-id {
     description
       "Indicates support for configuration of the management
-       GPON Encapsulation Method (GEM) port.";
+       G-PON Encapsulation Method (GEM) port.";
   }
 
   feature v-ani-defect-notifications {
@@ -162,21 +170,27 @@ submodule bbf-xponvani-v-ani-body {
          identifier. When configured this is the value which the
          Optical Line Termination (OLT) must assign to an Optical
          Network Unit (ONU) during the ONU's activation using the
-         Assign_ONU-ID PLOAM message. For GPON the value should
-         be in [0..253], for XG-PON it should be in [0..1022] and
-         for XGS-PON and NG-PON2 it should be in [0..1020].";
+         Assign_ONU-ID PLOAM message.
+         For G-PON, range is 0..253.
+         For XG-PON, range is 0..1022.
+         For XGS-PON, range is 0..1020.
+         For NG-PON2, range is 0..1020.
+         For 25GS-PON, range is 0..1018.
+         For 50G-PON, range is 0..1019.";
       reference
-        "ITU-T G.984.3 clause 5.5.2
-         ITU-T G.987.3 clause 6.4.2
-         ITU-T G.9807.1 clause C.6.1.5.6
-         ITU-T G.989.3 clause 6.1.5.6";
+        "ITU-T G.984.3 Clause 5.5.2;
+         ITU-T G.987.3 Clause 6.4.2;
+         ITU-T G.9807.1 Clause C.6.1.5.6;
+         ITU-T G.989.3 Clause 6.1.5.6;
+         ITU-T G.9804.2 Clause 6.5.2.5;
+         MSA 25GS-PON Section C.6.1.5.7";
     }
     leaf channel-partition {
       type if:interface-ref;
       must "derived-from-or-self(/if:interfaces"
          + "/if:interface[if:name=current()]/if:type,"
          + "'bbf-xponift:channel-partition')" {
-        error-message "Must reference a channel partition";
+        error-message "Must reference a channel partition.";
       }
       description
         "Reference to the parent interface of the virtual Access
@@ -193,10 +207,17 @@ submodule bbf-xponvani-v-ani-body {
          bytes are a binary encoded serial number, under the control
          of the ONU vendor.";
       reference
-        "ITU-T G.984.3, clause 9.2.4.1
-         ITU-T G.987.3, clause 11.3.3.2
-         ITU-T G.9807.1, clauses C11.2.6.1, C11.2.6.2 and C11.3.4.1
-         ITU-T G.989.3, clauses 11.2.6.1, 11.2.6.2 and 11.3.4.1.";
+        "ITU-T G.984.3 Clause 9.2.4.1;
+         ITU-T G.987.3 Clause 11.3.3.2;
+         ITU-T G.9807.1 Clause C.11.2.6.1;
+         ITU-T G.9807.1 Clause C.11.2.6.2;
+         ITU-T G.9807.1 Clause C.11.3.4.1;
+         ITU-T G.989.3 Clause 11.2.6.1;
+         ITU-T G.989.3 Clause 11.2.6.2;
+         ITU-T G.989.3 Clause 11.3.4.1;
+         ITU-T G.9804.2 Clause 11.2.6.1;
+         ITU-T G.9804.2 Clause 11.2.6.2;
+         ITU-T G.9804.2 Clause 11.3.4.1";
     }
     leaf expected-registration-id {
       type bbf-xpon-types:onu-registration-id;
@@ -213,14 +234,15 @@ submodule bbf-xponvani-v-ani-body {
          For ITU-T G.984.3, the leaf can only be up to 20 characters
          long (refer to 'password' 10 bytes long).
 
-         For ITU-T G.987.3, ITU-T G.9807.3 and ITU-T G.989.3 the
-         leaf can be up to 72 characters long (refer to
-         'registration id' 36 bytes long).";
+         For ITU-T G.987.3, ITU-T G.9807.1, ITU-T G.989.3, and
+         ITU-T G.9804.2, the leaf can be up to 72 characters long
+         (refer to 'registration id' 36 bytes long).";
       reference
-        "ITU-T G.984.3 clause 9.2.4.2
-         ITU-T G.987.3 clause 11.3.4.2
-         ITU-T G.9807.3 clause C.11.3.4.2
-         ITU-T G.989.3 clause 11.3.4.2";
+        "ITU-T G.984.3 Clause 9.2.4.2;
+         ITU-T G.987.3 Clause 11.3.4.2;
+         ITU-T G.9807.1 Clause C.11.3.4.2;
+         ITU-T G.989.3 Clause 11.3.4.2;
+         ITU-T G.9804.2 Clause 11.3.4.2";
     }
     leaf preferred-channel-pair {
       type if:interface-ref;
@@ -288,10 +310,11 @@ submodule bbf-xponvani-v-ani-body {
          Unit (ONU). If 'false', disable FEC in the upstream
          direction for this specific ONU.";
       reference
-        "ITU-T G.984.3 clause 13.3.1.1
-         ITU-T G.987.3 clause 10.2
-         ITU-T G.9807.1 clause C.10.1.3.2.4
-         ITU-T G.989.3 clause 10.1.3.2.4";
+        "ITU-T G.984.3 Clause 13.3.1.1;
+         ITU-T G.987.3 Clause 10.2;
+         ITU-T G.9807.1 Clause C.10.1.3.2.4;
+         ITU-T G.989.3 Clause 10.1.3.2.4;
+         ITU-T G.9804.2 Clause 10.3.2.4";
     }
     leaf management-gemport-id {
       when "derived-from-or-self(/if:interfaces"
@@ -307,40 +330,43 @@ submodule bbf-xponvani-v-ani-body {
       type uint32;
       description
         "In contrast with other xPON technologies, in the case of
-         GPON, there is no requirement that the ITU-T Transmission
-         Convergence (TC) ID of the management GPON Encapsulation
+         G-PON, there is no requirement that the ITU-T Transmission
+         Convergence (TC) ID of the management G-PON Encapsulation
          Method (GEM) port for the Optical Network Unit (ONU) is
          numerically equal to the ONU-ID. This leaf provides the
          capability to specify a specific value to the management GEM
          port ID. If this leaf is not configured the management GEM
          port ID must be numerically equal to the ONU-ID.
 
-         This configuration is ignored for XG-PON, XGS-PON and
-         NG-PON2 as the 'management-gemport-id' is implicitly
-         configured to be the same as the ONU-ID.";
+         This configuration is ignored for XG-PON, XGS-PON,
+         NG-PON2, 50G-PON and 25GS-PON as the 'management-gemport-id'
+         is implicitly configured to be the same as the ONU-ID.";
       reference
-        "ITU-T G.984.3 clause 5.5.5
-         ITU-T G.987.3 clause 6.4.4
-         ITU-T G.9807.1 clause C.6.1.5.8
-         ITU-T G.989.3, clause 6.1.5.8";
+        "ITU-T G.984.3 Clause 5.5.5;
+         ITU-T G.987.3 Clause 6.4.4;
+         ITU-T G.9807.1 Clause C.6.1.5.8;
+         ITU-T G.989.3 Clause 6.1.5.8;
+         ITU-T G.9804.2 Clause 6.5.2.7;
+         MSA 25GS-PON Section 5";
     }
     leaf management-gemport-aes-indicator {
       type boolean;
       default "false";
       description
         "If 'true', enable Advanced Encryption Standard (AES)
-         for the management GPON Encapsulation Method (GEM) port
+         for the management G-PON Encapsulation Method (GEM) port
          of this Optical Network Unit (ONU). If 'false', disable
          AES for the management GEM port of this ONU.
 
-         For GPON, this applies in the downstream direction. For
-         XG-PON, XGS-PON and NG-PON2, this applies to both the
-         upstream and downstream directions.";
+         For G-PON, this applies in the downstream direction. For
+         XG-PON, XGS-PON, NG-PON2, and 50G-PON, this applies to both
+         the upstream and downstream directions.";
       reference
-        "ITU-T G.984.3 section 12.1
-         ITU-T G.987.3 section 15.5.1
-         ITU-T G.9807.1 clause C.15.5.1
-         ITU-T G.989.3 clause 15.5.1.";
+        "ITU-T G.984.3 Clause 12.1;
+         ITU-T G.987.3 Clause 15.5.1;
+         ITU-T G.9807.1 Clause C.15.5.1;
+         ITU-T G.989.3 Clause 15.5.1;
+         ITU-T G.9804.2 Clause 15.5.1";
     }
     action in-service-onu-tune-request {
       description
@@ -443,10 +469,11 @@ submodule bbf-xponvani-v-ani-body {
          identifies an ONU on a channel group and is unique on a
          channel group.";
       reference
-        "ITU-T G.984.3 clause 5.5.2
-         ITU-T G.987.3 clause 6.4.2
-         ITU-T G.9807.1 clause C.6.1.5.6
-         ITU-T G.989.3 clause 6.1.5.6";
+        "ITU-T G.984.3 Clause 5.5.2;
+         ITU-T G.987.3 Clause 6.4.2;
+         ITU-T G.9807.1 Clause C.6.1.5.6;
+         ITU-T G.989.3 Clause 6.1.5.6;
+         ITU-T G.9804.2 Clause 6.5.2.5";
     }
     leaf management-tcont-alloc-id {
       type uint32;
@@ -456,27 +483,27 @@ submodule bbf-xponvani-v-ani-body {
          Unit (ONU). It has the same numerical value as the ITU-T TC
          ONU-ID.";
       reference
-        "Refer to 'Default Alloc-ID' in
-         ITU-T G.987.3 clause 6.1.5.7
-         ITU-T G.9807.1 clause C.6.1.5.7
-         ITU-T G.987.3 clause 6.4.3
-         ITU-T G.984.3 clause 5.5.3";
+        "ITU-T G.987.3 Clause 6.1.5.7 - Default Alloc-ID;
+         ITU-T G.9807.1 Clause C.6.1.5.7 - Default Alloc-ID;
+         ITU-T G.987.3 Clause 6.4.3 - Default Alloc-ID;
+         ITU-T G.984.3 Clause 5.5.3 - Default Alloc-ID;
+         ITU-T G.9804.2 Clause 6.5.2.6 - Default Alloc-ID";
     }
     leaf management-gemport-id {
       type uint32;
       description
         "The ITU-T Transmission Convergence (TC) Id of the management
-         GPON Encapsulation Methiod (GEM) port for the Optical
-         Network Unit (ONU). For NG-PON2, XGS-PON and XG-PON, it has
-         the same numerical value as the ITU-T TC ONU-ID. For GPON,
-         its value is not necessarily numerically equal to the
-         ONU-ID.";
+         G-PON Encapsulation Methiod (GEM) port for the Optical
+         Network Unit (ONU). For NG-PON2, XGS-PON, XG-PON, and
+         50G-PON, it has the same numerical value as the ITU-T TC
+         ONU-ID. For G-PON, its value is not necessarily numerically
+         equal to the ONU-ID.";
       reference
-        "Refer to 'OMCC Port-ID' in
-         ITU-T G.987.3 clause 6.1.5.8
-         ITU-T G.9807.1 clause C.6.1.5.8
-         ITU-T G.987.3 clause 6.4.4
-         ITU-T G.984.3 clause 5.5.5";
+        "ITU-T G.987.3 Clause 6.1.5.8 - OMCC Port-ID;
+         ITU-T G.9807.1 Clause C.6.1.5.8 - OMCC Port-ID;
+         ITU-T G.987.3 Clause 6.4.4 - OMCC Port-ID;
+         ITU-T G.984.3 Clause 5.5.5 - OMCC Port-ID;
+         ITU-T G.9804.2 Clause 6.5.2.7 - OMCC Port-ID";
     }
     leaf onu-presence-state {
       type identityref {
@@ -499,10 +526,11 @@ submodule bbf-xponvani-v-ani-body {
          Network Interface (vANI) is configured. All applicable
          identities should be reported.";
       reference
-        "ITU-T G.984.3 (01/2014) 11.1.1
-         ITU-T G.987.3 (01/2014) 14.2.1
-         ITU-T G.989.3 (2015)/Amd.2 (11/2018) Table 14-2
-         ITU-T G.9807.1 (2016)/Amd.1 (10/2017) Table C.14.2";
+        "ITU-T G.984.3 Clause 11.1.1;
+         ITU-T G.987.3 Clause 14.2.1;
+         ITU-T G.989.3 Amd.2 Table 14-2;
+         ITU-T G.9807.1 Amd.1 Table C.14.2;
+         ITU-T G.9804.2 Table 14-3";
     }
     container onu-present-on-this-olt {
       presence
@@ -529,7 +557,9 @@ submodule bbf-xponvani-v-ani-body {
          container contains state data such as which channel pair
          and which channel termination the ONU is using.";
       reference
-        "ITU-T G.989.3 clause 11.3.2, 12.2.2.1 and 14.2.1";
+        "ITU-T G.989.3 Clause 11.3.2;
+         ITU-T G.989.3 Clause 12.2.2.1;
+         ITU-T G.989.3 Clause 14.2.1";
       leaf onu-present-on-this-channel-pair {
         type if:interface-ref;
         mandatory true;
@@ -557,19 +587,28 @@ submodule bbf-xponvani-v-ani-body {
            implementation-specific. ITU-T recommendated method allows
            fiber distance measurement with 1% precision.";
         reference
-          "ITU-T G.9807.1 clause C.13.1.8, G.989.3,
-           G.987.3 clause 13.1.8 and G.984.3 clause 10.3.6.";
+          "ITU-T G.984.3 Clause 10.3.6;
+           ITU-T G.987.3 Clause 13.1.8;
+           ITU-T G.989.3 Clause 13.1.8;
+           ITU-T G.9807.1 Clause C.13.1.8;
+           ITU-T G.9804.2 Clause 13.1.8";
       }
       leaf detected-serial-number {
         type bbf-xpon-types:onu-serial-number;
         description
           "The serial number of the Optical Network Unit (ONU).";
         reference
-          "ITU-T G.984.3, clause 9.2.4.1
-           ITU-T G.987.3, clause 11.3.3.2
-           ITU-T G.9807.1, clauses C11.2.6.1, C11.2.6.2 and
-           C11.3.4.1
-           ITU-T G.989.3, clauses 11.2.6.1, 11.2.6.2 and 11.3.4.1.";
+          "ITU-T G.984.3 Clause 9.2.4.1;
+           ITU-T G.987.3 Clause 11.3.3.2;
+           ITU-T G.9807.1 Clause C.11.2.6.1;
+           ITU-T G.9807.1 Clause C.11.2.6.2;
+           ITU-T G.9807.1 Clause C.11.3.4.1;
+           ITU-T G.989.3 Clause 11.2.6.1;
+           ITU-T G.989.3 Clause 11.2.6.2;
+           ITU-T G.989.3 Clause 11.3.4.1;
+           ITU-T G.9804.2 Clause 11.2.6.1;
+           ITU-T G.9804.2 Clause 11.2.6.2;
+           ITU-T G.9804.2 Clause 11.3.4.1";
       }
       leaf detected-registration-id {
         type bbf-xpon-types:onu-registration-id;
@@ -583,13 +622,14 @@ submodule bbf-xponvani-v-ani-body {
            hexadecimal characters, therefore the leaf must contain an
            even number of characters. For ITU-T G.984.3, the leaf
            can only be up to 20 octets long (refer to 'password'),
-           for ITU-T G.987.3, ITU-T G.9807.3 and ITU-T G.989.3
-           the leaf can be up to 72 octets long.";
+           for ITU-T G.987.3, ITU-T G.9807.1, ITU-T G.989.3, and
+           ITU-T G.9804.2, the leaf can be up to 72 octets long.";
         reference
-          "ITU-T G.984.3 clause 9.2.4.2
-           ITU-T G.987.3 clause 11.3.4.2
-           ITU-T G.9807.3 clause C.11.3.4.2
-           ITU-T G.989.3 clause 11.3.4.2";
+          "ITU-T G.984.3 Clause 9.2.4.2;
+           ITU-T G.987.3 Clause 11.3.4.2;
+           ITU-T G.9807.1 Clause C.11.3.4.2;
+           ITU-T G.989.3 Clause 11.3.4.2;
+           ITU-T G.9804.2 Clause 11.3.4.2";
       }
     }
     container onu-wl-protected {
@@ -609,7 +649,9 @@ submodule bbf-xponvani-v-ani-body {
          protection, such as the protecting channel-termination it has
          been told by the Optical Line Termination (OLT).";
       reference
-        "ITU-T G.989.3 clause 11.3.2, 12.2.2.1 and 14.2.1";
+        "ITU-T G.989.3 Clause 11.3.2;
+         ITU-T G.989.3 Clause 12.2.2.1;
+         ITU-T G.989.3 Clause 14.2.1";
       leaf wl-protecting-ct-announced-to-onu {
         type if:interface-ref;
         description
@@ -620,7 +662,8 @@ submodule bbf-xponvani-v-ani-body {
            information is announced to the ONU via the
            'Protection_Control' downstream PLOAM message.";
         reference
-          "ITU-T G.989.3 clause 11.3.1 and 11.3.3.15";
+          "ITU-T G.989.3 Clause 11.3.1;
+           ITU-T G.989.3 Clause 11.3.3.15";
       }
     }
     notification defect-state-change {

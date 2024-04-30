@@ -25,8 +25,6 @@ module bbf-xpon-performance-management {
 
      Editor:      Robert Peschi, Nokia
 
-     Editor:      Kevin Noll, Vecima
-
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Marta Seda, Calix";
@@ -42,7 +40,7 @@ module bbf-xpon-performance-management {
      bbf-interfaces-performance-management to manage performance
      monitoring of xPON interfaces.
 
-     Copyright (c) 2018-2023, Broadband Forum
+     Copyright (c) 2018-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -82,16 +80,26 @@ module bbf-xpon-performance-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2a1; see
+     This version of this YANG module is part of TR-385i3; see
      the TR itself for full legal notices.";
 
+  revision 2024-04-23 {
+    description
+      "Issue 3.
+       * Approval Date:    2024-04-23.
+       * Publication Date: 2024-04-23.";
+    reference
+      "TR-385i3: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3.pdf>";
+  }
   revision 2023-06-21 {
     description
       "Issue 2 Amendment 1.
        * Approval Date:    2023-06-21.
        * Publication Date: 2023-06-21.";
     reference
-      "TR-385i2a1: ITU-T PON YANG Modules
+      "TR-385i2a1 - ITU-T PON YANG Modules
                <https://www.broadband-forum.org/technical/download/
                         TR-385_Issue-2_Amendment-1.pdf>";
   }
@@ -118,19 +126,17 @@ module bbf-xpon-performance-management {
           "The number of bytes that were corrected by the Forward
            Error Correction (FEC) function.
 
-           For G-PON, reported per v-ANI.
-           For XG-PON, reported per ANI and v-ANI.
-           For XGS-PON, reported per ANI and v-ANI.
-           For NG-PON2, reported per ANI and v-ANI.";
+           For G-PON, reported per vANI.
+           For XG-PON, reported per ANI and vANI.
+           For XGS-PON, reported per ANI and vANI.
+           For 25GS-PON, reported per ANI and vANI.
+           For NG-PON2, reported per ANI and vANI.
+           For 50G-PON, reported per ANI and vANI.";
         reference
-          "ITU-T G.987.3 (01/2014),
-           Table 14-1: Corrected FEC bytes.
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017),
-           Table C.14.1 Corrected FEC bytes.
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018),
-           Table 14-1: Corrected FEC bytes.";
+          "ITU-T G.987.3 Table 14-1 - Corrected FEC bytes;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - Corrected FEC bytes;
+           ITU-T G.989.3 Amd.2 Table 14-1 - Corrected FEC bytes;
+           ITU-T G.9804.2 Table 14-1 - Corrected FEC bits";
       }
       leaf corrected-fec-codewords {
         type bbf-yang:performance-counter64;
@@ -138,19 +144,18 @@ module bbf-xpon-performance-management {
           "Count of Forward Error Correction (FEC) codewords that
            contained errors but were corrected by the FEC function.
 
-           For G-PON, reported per v-ANI.
-           For XG-PON, reported per ANI and v-ANI.
-           For XGS-PON, reported per ANI and v-ANI.
-           For NG-PON2, reported per ANI and v-ANI.";
+           For G-PON, reported per vANI.
+           For XG-PON, reported per ANI and vANI.
+           For XGS-PON, reported per ANI and vANI.
+           For 25GS-PON, reported per ANI and vANI.
+           For NG-PON2, reported per ANI and vANI.
+           For 50G-PON, reported per ANI and vANI.";
         reference
-          "ITU-T G.987.3 (01/2014),
-           Table 14-1: Corrected FEC codewords.
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017),
-           Table C.14.1 Corrected FEC codewords.
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018),
-           Table 14-1: Corrected FEC codewords.";
+          "ITU-T G.987.3 Table 14-1 - Corrected FEC codewords;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - Corrected FEC
+           codewords;
+           ITU-T G.989.3 Amd.2 Table 14-1 - Corrected FEC codewords;
+           ITU-T G.9804.2 Table 14-1 - Corrected FEC codewords";
       }
       leaf uncorrectable-fec-codewords {
         type bbf-yang:performance-counter64;
@@ -159,19 +164,19 @@ module bbf-xpon-performance-management {
            contained errors and could not be corrected by the FEC
            function.
 
-           For G-PON, reported per v-ANI and CT.
-           For XG-PON, reported per ANI, v-ANI and CT.
-           For XGS-PON, reported per ANI, v-ANI and CT.
-           For NG-PON2, reported per ANI, v-ANI and CT.";
+           For G-PON, reported per vANI and CT.
+           For XG-PON, reported per ANI, vANI and CT.
+           For XGS-PON, reported per ANI, vANI and CT.
+           For 25GS-PON, reported per ANI, vANI and CT.
+           For NG-PON2, reported per ANI, vANI and CT.
+           For 50G-PON, reported per ANI, vANI and CT.";
         reference
-          "ITU-T G.987.3 (01/2014),
-           Table 14-1: Uncorrectable FEC codewords.
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017),
-           Table C.14.1 Uncorrectable FEC codewords.
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018),
-           Table 14-1: Uncorrectable FEC codewords.";
+          "ITU-T G.987.3 Table 14-1 - Uncorrectable FEC codewords;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - Uncorrectable FEC
+           codewords;
+           ITU-T G.989.3 Amd.2 Table 14-1 - Uncorrectable FEC
+           codewords;
+           ITU-T G.9804.2 Table 14-1 - Uncorrectable FEC codewords";
       }
       leaf in-fec-codewords {
         type bbf-yang:performance-counter64;
@@ -179,19 +184,17 @@ module bbf-xpon-performance-management {
           "Count of total received Forward Error Correction (FEC)
            codewords.
 
-           For G-PON, reported per v-ANI and CT.
-           For XG-PON, reported per ANI, v-ANI and CT.
-           For XGS-PON, reported per ANI, v-ANI and CT.
-           For NG-PON2, reported per ANI, v-ANI and CT.";
+           For G-PON, reported per vANI and CT.
+           For XG-PON, reported per ANI, vANI and CT.
+           For XGS-PON, reported per ANI, vANI and CT.
+           For 25GS-PON, reported per ANI, vANI and CT.
+           For NG-PON2, reported per ANI, vANI and CT.
+           For 50G-PON, reported per ANI, vANI and CT.";
         reference
-          "ITU-T G.987.3 (01/2014),
-           Table 14-1: Total FEC codewords.
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017),
-           Table C.14.1 Total FEC codewords.
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018),
-           Table 14-1: Total FEC codewords.";
+          "ITU-T G.987.3 Table 14-1 - Total FEC codewords;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - Total FEC codewords;
+           ITU-T G.989.3 Amd.2 Table 14-1 - Total FEC codewords;
+           ITU-T G.9804.2 Table 14-1 - Total FEC codewords";
       }
       leaf fec-seconds {
         type bbf-yang:performance-counter32;
@@ -202,10 +205,11 @@ module bbf-xpon-performance-management {
            For G-PON, reported per ANI.
            For XG-PON, reported per ANI.
            For XGS-PON, reported per ANI.
-           For NG-PON2, reported per ANI.";
+           For 25GS-PON, reported per ANI.
+           For NG-PON2, reported per ANI.
+           For 50G-PON, reported per ANI.";
         reference
-          "ITU-T G.988 (11/2017),
-           Section 9.2.9 FEC Seconds.";
+          "ITU-T G.988 Clause 9.2.9 - FEC Seconds";
       }
       leaf in-bip-protected-words {
         type bbf-yang:performance-counter64;
@@ -213,22 +217,23 @@ module bbf-xpon-performance-management {
           "Count of received 4-byte words that are included in the
            Bit-Interleaved even Parity (BIP-32) check.
 
-           For G-PON, reported per ANI (via PLOAM), v-ANI and CT.
-           For XG-PON, reported per v-ANI and CT.
-           For XGS-PON, reported per v-ANI and CT.
-           For NG-PON2, reported per ANI (via OMCI), vANI and CT.";
+           For G-PON, reported per ANI (via PLOAM), vANI and CT.
+           For XG-PON, reported per vANI and CT.
+           For XGS-PON, reported per vANI and CT.
+           For 25GS-PON, reported per vANI and CT.
+           For NG-PON2, reported per ANI (via OMCI), vANI and CT.
+           For 50G-PON, reported per vANI and CT.";
         reference
-          "ITU-T G.984.3 (2014),
-           Sections 8.1.3.4 and 8.2.2.1.
-
-           ITU-T G.987.3 (01/2014)
-           Table 14-1: Total received words protected by BIP-32.
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1, Total received words protected by BIP-32.
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Total received words protected by BIP-32.";
+          "ITU-T G.984.3 Clause 8.1.3.4;
+           ITU-T G.984.3 Clause 8.2.2.1;
+           ITU-T G.987.3 Table 14-1 - Total received words protected
+           by BIP-32;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - Total received words
+           protected by BIP-32;
+           ITU-T G.989.3 Amd.2 Table 14-1 - Total received words
+           protected by BIP-32;
+           ITU-T G.9804.2 Table 14-1 - Total received words protected
+           by BIP-32.";
       }
       leaf in-bip-errors {
         type bbf-yang:performance-counter64;
@@ -236,24 +241,23 @@ module bbf-xpon-performance-management {
           "Count of the bit errors according to Bit-Interleaved
            even Parity (BIP-32).
 
-           For G-PON, reported per ANI (via PLOAM), v-ANI and CT.
-           For XG-PON, reported per v-ANI and CT.
-           For XGS-PON, reported per v-ANI and CT.
-           For NG-PON2, reported per ANI (via OMCI), vANI and CT.";
+           For G-PON, reported per ANI (via PLOAM), vANI and CT.
+           For XG-PON, reported per vANI and CT.
+           For XGS-PON, reported per vANI and CT.
+           For 25GS-PON, reported per vANI and CT.
+           For NG-PON2, reported per ANI (via OMCI), vANI and CT.
+           For 50G-PON, reported per vANI and CT.";
         reference
-          "ITU-T G.984.3 (2014)
-           Sections 8.1.3.4, 8.2.2.1, 9.2.2 and 11.2:
-           BIP-8 errors of ONUi at OLT side (section 11.2.1) and
-           BIP-8 errors at ONU side (section 11.2.2)
-
-           ITU-T G.987.3 (01/2014)
-           Table 14-1: BIP-32 error count
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 BIP-32 error count
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: BIP-32 error count.";
+          "ITU-T G.984.3 Clause 8.1.3.4;
+           ITU-T G.984.3 Clause 8.2.2.1;
+           ITU-T G.984.3 Clause 9.2.2;
+           ITU-T G.984.3 Clause 11.2.1 - BIP-8 errors of ONUi at OLT
+           side;
+           ITU-T G.984.3 Clause 11.2.2 - BIP-8 errors at ONU side;
+           ITU-T G.987.3 Table 14-1 - BIP-32 error count;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - BIP-32 error count;
+           ITU-T G.989.3 Amd.2 Table 14-1 - BIP-32 error count;
+           ITU-T G.9804.2 Table 14-1 - BIP-32 error count";
       }
       leaf psbd-hec-errors {
         type bbf-yang:performance-counter64;
@@ -264,16 +268,14 @@ module bbf-xpon-performance-management {
            For G-PON, not applicable.
            For XG-PON, reported per ANI.
            For XGS-PON, reported per ANI.
-           For NG-PON2, reported per ANI.";
+           For 25GS-PON, reported per ANI.
+           For NG-PON2, reported per ANI.
+           For 50G-PON, reported per ANI.";
         reference
-          "ITU-T G.987.3 (01/2014)
-           Table 14-1: PSBd HEC error count
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 PSBd HEC error count
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: PSBd HEC error count.";
+          "ITU-T G.987.3 Table 14-1 - PSBd HEC error count;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - PSBd HEC error count;
+           ITU-T G.989.3 Amd.2 Table 14-1 - PSBd HEC error count;
+           ITU-T G.9804.2 Table 14-1 - PSBd HEC error count";
       }
       leaf fs-hec-errors {
         type bbf-yang:performance-counter64;
@@ -285,18 +287,16 @@ module bbf-xpon-performance-management {
            received.
 
            For G-PON, not applicable.
-           For XG-PON, reported per ANI and v-ANI.
-           For XGS-PON, reported per ANI and v-ANI.
-           For NG-PON2, reported per ANI and v-ANI.";
+           For XG-PON, reported per ANI and vANI.
+           For XGS-PON, reported per ANI and vANI.
+           For 25GS-PON, reported per ANI and vANI.
+           For NG-PON2, reported per ANI and vANI.
+           For 50G-PON, reported per ANI and vANI.";
         reference
-          "ITU-T G.987.3 (01/2014)
-           Table 14-1: XGTC HEC error count
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 FS HEC error count
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: FS HEC error count.";
+          "ITU-T G.987.3 Table 14-1 - XGTC HEC error count;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - FS HEC error count;
+           ITU-T G.989.3 Amd.2 Table 14-1 - FS HEC error count;
+           ITU-T G.9804.2 Table 14-1 - FS HEC error count";
       }
       leaf unknown-profiles {
         type bbf-yang:performance-counter64;
@@ -308,16 +308,14 @@ module bbf-xpon-performance-management {
            For G-PON, not applicable.
            For XG-PON, reported per ANI.
            For XGS-PON, reported per ANI.
-           For NG-PON2, reported per ANI.";
+           For 25GS-PON, reported per ANI.
+           For NG-PON2, reported per ANI.
+           For 50G-PON, reported per ANI.";
         reference
-          "ITU-T G.987.3 (01/2014)
-           Table 14-1: Unknown profile
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 Unknown profile count
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Unknown profile count.";
+          "ITU-T G.987.3 Table 14-1 - Unknown profile;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - Unknown profile count;
+           ITU-T G.989.3 Amd.2 Table 14-1 - Unknown profile count;
+           ITU-T G.9804.2 Table 14-1 - Unknown profile count";
       }
     }
   }
@@ -337,17 +335,19 @@ module bbf-xpon-performance-management {
            For G-PON, not applicable.
            For XG-PON, not applicable.
            For XGS-PON, reported per ANI.
-           For NG-PON2, reported per ANI.";
+           For 25GS-PON, reported per ANI.
+           For NG-PON2, reported per ANI.
+           For 50G-PON, reported per ANI.";
         reference
-          "ITU-T G.9807.1 (2016)/Amd.1 (10/2017),
-           Table C.14.1 Total number of LODS events.
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018),
-           Table 14-1: Total number of LODS events.";
+          "ITU-T G.9807.1 Amd.1 Table C.14.1 - Total number of LODS
+           events;
+           ITU-T G.989.3 Amd.2 Table 14-1 - Total number of LODS
+           events;
+           ITU-T G.9804.2 Table 14-1 - Total number of LODS events";
       }
       container restored {
         description
-          "Counters associated with Loss of Downstream Sychronization
+          "Counters associated with Loss of Downstream Synchronization
            (LODS) events restored relative to a Time and Division
            Wavelength Multiplexing (TWDM) channel.";
         leaf operating-twdm {
@@ -359,14 +359,15 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, reported per ANI.
-             For NG-PON2, reported per ANI.";
+             For 25GS-PON, reported per ANI.
+             For NG-PON2, reported per ANI.
+             For 50G-PON, reported per ANI.";
           reference
-            "ITU-T G.9807.1 (2016)/Amd.1 (10/2017),
-             Table C.14.1 LODS events restored.
-
-             ITU-T G.989.3 (2015)/Amd.2 (11/2018),
-             Table 14-1: LODS events restored
-             in the operating TWDM channel.";
+            "ITU-T G.9807.1 Amd.1 Table C.14.1 - LODS events restored;
+             ITU-T G.989.3 Amd.2 Table 14-1 - LODS events restored in
+             the operating TWDM channel;
+             ITU-T G.9804.2 Table 14-1 - LODS events restored in the
+             operating TWDM channel";
         }
         leaf precfg-protect-twdm {
           type bbf-yang:performance-counter64;
@@ -378,10 +379,13 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per ANI.";
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per ANI.
+             For 50G-PON, reported per ANI.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018),
-             Table 14-1: LODS events restored in the
+            "ITU-T G.989.3 Amd.2 Table 14-1 - LODS events restored in
+             the pre-configured protection TWDM channel;
+             ITU-T G.9804.2 Table 14-1 - LODS events restored in the
              pre-configured protection TWDM channel";
         }
         leaf discretionary-twdm {
@@ -394,16 +398,19 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per ANI.";
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per ANI.
+             For 50G-PON, reported per ANI.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018),
-             Table 14-1: LODS events restored
-             in a discretionary TWDM channel";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - LODS events restored in
+             a discretionary TWDM channel;
+             ITU-T G.9804.2 Table 14-1 - LODS events restored in a
+             discretionary TWDM channel";
         }
       }
       container onu-reactivation {
         description
-          "Counters associated with Loss of Downstream Sychronization
+          "Counters associated with Loss of Downstream Synchronization
            (LODS) events resulting in Optical Network Unit (ONU)
            reactivation.";
         leaf no-sync-reacquired {
@@ -416,15 +423,18 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, reported per ANI.
-             For NG-PON2, reported per ANI.";
+             For 25GS-PON, reported per ANI.
+             For NG-PON2, reported per ANI.
+             For 50G-PON, reported per ANI.";
           reference
-            "ITU-T G.9807.1 (2016)/Amd.1 (10/2017),
-             Table C.14.1 LODS events resulting in ONU reactivation
-             without synchronization being reacquired
-
-             ITU-T G.989.3 (2015)/Amd.2 (11/2018),
-             Table 14-1: LODS events resulting in ONU reactivation
-             without synchronization being reacquired";
+            "ITU-T G.9807.1 Amd.1 Table C.14.1 - LODS events resulting
+             in ONU reactivation without synchronization being
+             reacquired;
+             ITU-T G.989.3 Amd.2 Table 14-1 - LODS events resulting in
+             ONU reactivation without synchronization being
+             reacquired;
+             ITU-T G.9804.2 Table 14-1 - LODS events resulting in ONU
+             reactivation without synchronization being reacquired";
         }
         leaf after-us-hs-fail-precfg-twdm {
           type bbf-yang:performance-counter64;
@@ -435,12 +445,16 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per ANI.";
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per ANI.
+             For 50G-PON, reported per ANI.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018),
-             Table 14-1: LODS events resulting in ONU reactivation
-             after upstream handshake failure in pre-configured TWDM
-             channel.";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - LODS events resulting in
+             ONU reactivation after upstream handshake failure in
+             pre-configured TWDM channel;
+             ITU-T G.9804.2 Table 14-1 - LODS events resulting in ONU
+             reactivation after upstream handshake failure in
+             pre-configured TWDM channel";
         }
         leaf after-us-hs-fail-discretionary-twdm {
           type bbf-yang:performance-counter64;
@@ -452,12 +466,16 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per ANI.";
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per ANI.
+             For 50G-PON, reported per ANI.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018),
-             Table 14-1: LODS events resulting in ONU reactivation
-             after upstream handshake failure in discretionary TWDM
-             channel.";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - LODS events resulting in
+             ONU reactivation after upstream handshake failure in
+             discretionary TWDM channel;
+             ITU-T G.9804.2 Table 14-1 - LODS events resulting in ONU
+             reactivation after upstream handshake failure in
+             discretionary TWDM channel";
         }
       }
     }
@@ -465,16 +483,16 @@ module bbf-xpon-performance-management {
 
   grouping xpon-gemport-pm {
     description
-      "xPON GPON Encapsulation Method (GEM) port performance
+      "xPON G-PON Encapsulation Method (GEM) port performance
        counters.";
     container gemport {
       description
-        "xPON GPON Encapsulation Method (GEM) port performance
+        "xPON G-PON Encapsulation Method (GEM) port performance
          counters.";
       leaf out-frames {
         type bbf-yang:performance-counter64;
         description
-          "Total number of GPON Encapsulation Method (GEM) frames
+          "Total number of G-PON Encapsulation Method (GEM) frames
            transmitted.
 
            For G-PON, reported per ANI (via OMCI). While not
@@ -482,21 +500,20 @@ module bbf-xpon-performance-management {
            this count per CT.
            For XG-PON, reported per ANI and CT.
            For XGS-PON, reported per ANI and CT.
-           For NG-PON2, reported per ANI and CT.";
+           For 25GS-PON, reported per ANI and CT.
+           For NG-PON2, reported per ANI and CT.
+           For 50G-PON, reported per ANI and CT.";
         reference
-          "ITU-T G.987.3 (01/2014)
-           Table 14-1: Transmitted XGEM frames
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 Transmitted XGEM frames
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Transmitted XGEM frames.";
+          "ITU-T G.987.3 Table 14-1 - Transmitted XGEM frames;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - Transmitted XGEM
+           frames;
+           ITU-T G.989.3 Amd.2 Table 14-1 - Transmitted XGEM frames;
+           ITU-T G.9804.2 Table 14-1 - Transmitted XGEM frames";
       }
       leaf in-frames {
         type bbf-yang:performance-counter64;
         description
-          "Total number of GPON Encapsulation Method (GEM) frames
+          "Total number of G-PON Encapsulation Method (GEM) frames
            received.
 
            For G-PON, reported per ANI (via OMCI). While not
@@ -504,16 +521,14 @@ module bbf-xpon-performance-management {
            this count per CT.
            For XG-PON, reported per ANI and CT.
            For XGS-PON, reported per ANI and CT.
-           For NG-PON2, reported per ANI and CT.";
+           For 25GS-PON, reported per ANI and CT.
+           For NG-PON2, reported per ANI and CT.
+           For 50G-PON, reported per ANI and CT.";
         reference
-          "ITU-T G.987.3 (01/2014)
-           Table 14-1: Received XGEM frames
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 Received XGEM frames
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Received XGEM frames.";
+          "ITU-T G.987.3 Table 14-1 - Received XGEM frames;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - Received XGEM frames;
+           ITU-T G.989.3 Amd.2 Table 14-1 - Received XGEM frames;
+           ITU-T G.9804.2 Table 14-1 - Received XGEM frames";
       }
       leaf out-frames-lf-bit-not-set {
         type bbf-yang:performance-counter64;
@@ -523,39 +538,39 @@ module bbf-xpon-performance-management {
            For G-PON, not applicable.
            For XG-PON, reported per ANI and CT.
            For XGS-PON, reported per ANI and CT.
-           For NG-PON2, reported per ANI and CT.";
+           For 25GS-PON, reported per ANI and CT.
+           For NG-PON2, reported per ANI and CT.
+           For 50G-PON, reported per ANI and CT.";
         reference
-          "ITU-T G.987.3 (01/2014)
-           Table 14-1: Count of the number of transmitted
-           XGEM frames with LF bit NOT set
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 Count of the number of transmitted
-           XGEM frames with LF bit NOT set
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Count of the number of transmitted
-           XGEM frames with LF bit NOT set.";
+          "ITU-T G.987.3 Table 14-1 - Count of the number of
+           transmitted XGEM frames with LF bit NOT set;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - Count of the number of
+           transmitted XGEM frames with LF bit NOT set;
+           ITU-T G.989.3 Amd.2 Table 14-1 - Count of the number of
+           transmitted XGEM frames with LF bit NOT set;
+           ITU-T G.9804.2 Table 14-1 - Count of the number of
+           transmitted XGEM frames with LF bit NOT set";
       }
       leaf hec-errors {
         type bbf-yang:performance-counter64;
         description
-          "Number of events involving loss of GPON Encapsulation
+          "Number of events involving loss of G-PON Encapsulation
            Method (GEM) channel delineation.
 
            For G-PON, not applicable.
-           For XG-PON, reported per ANI and v-ANI.
-           For XGS-PON, reported per ANI and v-ANI.
-           For NG-PON2, reported per ANI and v-ANI.";
+           For XG-PON, reported per ANI and vANI.
+           For XGS-PON, reported per ANI and vANI.
+           For 25GS-PON, reported per ANI and vANI.
+           For NG-PON2, reported per ANI and vANI.
+           For 50G-PON, reported per ANI and vANI.";
         reference
-          "ITU-T G.987.3 (01/2014)
-           Table 14-1: XGEM frame header HEC errors
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 Count of XGEM frame header HEC errors
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Count of XGEM frame header HEC errors.";
+          "ITU-T G.987.3 Table 14-1 - XGEM frame header HEC errors;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - Count of XGEM frame
+           header HEC errors;
+           ITU-T G.989.3 Amd.2 Table 14-1 - Count of XGEM frame header
+           HEC errors;
+           ITU-T G.9804.2 Table 14-1 - Count of XGEM frame header HEC
+           errors";
       }
       leaf fs-frame-words-lost {
         type bbf-yang:performance-counter64;
@@ -565,21 +580,20 @@ module bbf-xpon-performance-management {
            that the number of lost GEM frames is not available.
 
            For G-PON, not applicable.
-           For XG-PON, reported per ANI and v-ANI.
-           For XGS-PON, reported per ANI and v-ANI.
-           For NG-PON2, reported per ANI and v-ANI.";
+           For XG-PON, reported per ANI and vANI.
+           For XGS-PON, reported per ANI and vANI.
+           For 25GS-PON, reported per ANI and vANI.
+           For NG-PON2, reported per ANI and vANI.
+           For 50G-PON, reported per ANI and vANI.";
         reference
-          "ITU-T G.987.3 (01/2014)
-           Table 14-1: Count of XGTC frame words lost
-           due to GEM frame HEC error
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 Count of FS frame words lost
-           due to XGEM frame HEC error
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Count of FS frame words lost
-           due to XGEM frame HEC error.";
+          "ITU-T G.987.3 Table 14-1 - Count of XGTC frame words lost
+           due to GEM frame HEC error;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - Count of FS frame words
+           lost due to XGEM frame HEC error;
+           ITU-T G.989.3 Amd.2 Table 14-1 - Count of FS frame words
+           lost due to XGEM frame HEC error;
+           ITU-T G.9804.2 Table 14-1 - Count of FS frame words lost
+           due to XGEM frame HEC error";
       }
       leaf key-errors {
         type bbf-yang:performance-counter64;
@@ -594,18 +608,16 @@ module bbf-xpon-performance-management {
            index. This count is included in the 'in-frames' count.
 
            For G-PON, not applicable.
-           For XG-PON, reported per ANI and v-ANI.
-           For XGS-PON, reported per ANI and v-ANI.
-           For NG-PON2, reported per ANI and v-ANI.";
+           For XG-PON, reported per ANI and vANI.
+           For XGS-PON, reported per ANI and vANI.
+           For 25GS-PON, reported per ANI and vANI.
+           For NG-PON2, reported per ANI and vANI.
+           For 50G-PON, reported per ANI and vANI.";
         reference
-          "ITU-T G.987.3 (01/2014)
-           Table 14-1: XGEM key errors
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 XGEM key error count
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: XGEM key error count.";
+          "ITU-T G.987.3 Table 14-1 - XGEM key errors;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - XGEM key error count;
+           ITU-T G.989.3 Amd.2 Table 14-1 - XGEM key error count;
+           ITU-T G.9804.2 Table 14-1 - XGEM key error count";
       }
     }
   }
@@ -623,14 +635,17 @@ module bbf-xpon-performance-management {
 
            For G-PON, not applicable.
            For XG-PON, not applicable.
-           For XGS-PON, reported per ANI, v-ANI and CT.
-           For NG-PON2, reported per ANI, v-ANI and CT.";
+           For XGS-PON, reported per ANI, vANI and CT.
+           For 25GS-PON, reported per ANI, vANI and CT.
+           For NG-PON2, reported per ANI, vANI and CT.
+           For 50G-PON, reported per ANI, vANI and CT.";
         reference
-          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Transmitted bytes in non-idle XGEM frames
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 Transmitted bytes in non-idle XGEM frames.";
+          "ITU-T G.989.3 Amd.2 Table 14-1 - Transmitted bytes in
+           non-idle XGEM frames;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - Transmitted bytes in
+           non-idle XGEM frames;
+           ITU-T G.9804.2 Table 14-1 - Transmitted bytes in non-idle
+           XGEM frames";
       }
       leaf in-bytes-non-idle-xgem-frames {
         type bbf-yang:performance-counter64;
@@ -639,14 +654,17 @@ module bbf-xpon-performance-management {
 
            For G-PON, not applicable.
            For XG-PON, not applicable.
-           For XGS-PON, reported per ANI, v-ANI and CT.
-           For NG-PON2, reported per ANI, v-ANI and CT.";
+           For XGS-PON, reported per ANI, vANI and CT.
+           For 25GS-PON, reported per ANI, vANI and CT.
+           For NG-PON2, reported per ANI, vANI and CT.
+           For 50G-PON, reported per ANI, vANI and CT.";
         reference
-          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Received bytes in non-idle XGEM frames
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 Received bytes in non-idle XGEM frames";
+          "ITU-T G.989.3 Amd.2 Table 14-1 - Received bytes in non-idle
+           XGEM frames;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - Received bytes in
+           non-idle XGEM frames;
+           ITU-T G.9804.2 Table 14-1 - Received bytes in non-idle XGEM
+           frames";
       }
       leaf bw-not-assigned {
         type bbf-yang:performance-counter64;
@@ -657,16 +675,17 @@ module bbf-xpon-performance-management {
 
            For G-PON, not applicable.
            For XG-PON, not applicable.
-           For XGS-PON, reported per v-ANI and CT.
-           For NG-PON2, reported per v-ANI and CT.";
+           For XGS-PON, reported per vANI and CT.
+           For 25GS-PON, reported per vANI and CT.
+           For NG-PON2, reported per vANI and CT.
+           For 50G-PON, reported per vANI and CT.";
         reference
-          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Count of DBA inability to assign
-           guaranteed bandwidth in the presence of demand
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 Count of DBA inability to assign
-           guaranteed bandwidth in the presence of demand";
+          "ITU-T G.989.3 Amd.2 Table 14-1 - Count of DBA inability to
+           assign guaranteed bandwidth in the presence of demand;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - Count of DBA inability
+           to assign guaranteed bandwidth in the presence of demand;
+           ITU-T G.9804.2 Table 14-1 - Count of DBA inability to
+           assign guaranteed bandwidth in the presence of demand";
       }
     }
   }
@@ -688,16 +707,14 @@ module bbf-xpon-performance-management {
            For G-PON, not applicable.
            For XG-PON, reported per CT.
            For XGS-PON, reported per CT.
-           For NG-PON2, reported per CT.";
+           For 25GS-PON, reported per CT.
+           For NG-PON2, reported per CT.
+           For 50G-PON, reported per CT.";
         reference
-          "ITU-T G.987.3 (01/2014)
-           Table 14-1: SN grant count
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: SN grant count
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 SN grant count";
+          "ITU-T G.987.3 Table 14-1 - SN grant count;
+           ITU-T G.989.3 Amd.2 Table 14-1 - SN grant count;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 SN grant count;
+           ITU-T G.9804.2 Table 14-1 - SN grant count";
       }
       leaf mic-errors {
         type bbf-yang:performance-counter64;
@@ -707,18 +724,16 @@ module bbf-xpon-performance-management {
            Message Integrity Check (MIC) errors.
 
            For G-PON, not applicable.
-           For XG-PON, reported per ANI and v-ANI.
-           For XGS-PON, reported per ANI and v-ANI.
-           For NG-PON2, reported per ANI and v-ANI.";
+           For XG-PON, reported per ANI and vANI.
+           For XGS-PON, reported per ANI and vANI.
+           For 25GS-PON, reported per ANI and vANI.
+           For NG-PON2, reported per ANI and vANI.
+           For 50G-PON, reported per ANI and vANI.";
         reference
-          "ITU-T G.987.3 (01/2014)
-           Table 14-1: PLOAM MIC errors
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: PLOAM MIC errors
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 PLOAM MIC errors";
+          "ITU-T G.987.3 Table 14-1 - PLOAM MIC errors;
+           ITU-T G.989.3 Amd.2 Table 14-1 - PLOAM MIC errors;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 PLOAM MIC errors;
+           ITU-T G.9804.2 Table 14-1 - PLOAM MIC errors";
       }
       leaf timeouts {
         type bbf-yang:performance-counter64;
@@ -730,16 +745,14 @@ module bbf-xpon-performance-management {
            For G-PON, not applicable.
            For XG-PON, reported per CT.
            For XGS-PON, reported per CT.
-           For NG-PON2, reported per CT.";
+           For 25GS-PON, reported per CT.
+           For NG-PON2, reported per CT.
+           For 50G-PON, reported per CT.";
         reference
-          "ITU-T G.987.3 (01/2014)
-           Table 14-1: PLOAM timeouts
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: PLOAM timeouts
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 PLOAM timeouts";
+          "ITU-T G.987.3 Table 14-1 - PLOAM timeouts;
+           ITU-T G.989.3 Amd.2 Table 14-1 - PLOAM timeouts;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - PLOAM timeouts;
+           ITU-T G.9804.2 Table 14-1 - PLOAM timeouts";
       }
       leaf dying-gasps {
         type bbf-yang:performance-counter64;
@@ -747,18 +760,16 @@ module bbf-xpon-performance-management {
           "Count of dying gasp bursts received.
 
            For G-PON, not applicable.
-           For XG-PON, reported per v-ANI.
-           For XGS-PON, reported per v-ANI.
-           For NG-PON2, reported per v-ANI.";
+           For XG-PON, reported per vANI.
+           For XGS-PON, reported per vANI.
+           For 25GS-PON, reported per vANI.
+           For NG-PON2, reported per vANI.
+           For 50G-PON, reported per vANI.";
         reference
-          "ITU-T G.987.3 (01/2014)
-           Table 14-1: DG count
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: DG count
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 DG count";
+          "ITU-T G.987.3 Table 14-1 - DG count;
+           ITU-T G.989.3 Amd.2 Table 14-1 - DG count;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 DG count;
+           ITU-T G.9804.2 Table 14-1 - DG count";
       }
       container downstream-messages {
         description
@@ -772,22 +783,24 @@ module bbf-xpon-performance-management {
             "Count of Physical Layer Operations, Administrations and
              Maintenance (PLOAM) messages sent by the Optical Line
              Termination (OLT) Channel Termination (CT), received by
-             Optical Network Unit (ONU), either broadcast or
+             Optical Network Unit (ONU) either broadcast or
              directed to the specific ONU-ID.
 
              For G-PON, not applicable.
-             For XG-PON, reported per ANI, v-ANI and CT.
-             For XGS-PON, reported per ANI, v-ANI and CT.
-             For NG-PON2, reported per ANI, v-ANI and CT.";
+             For XG-PON, reported per ANI, vANI and CT.
+             For XGS-PON, reported per ANI, vANI and CT.
+             For 25GS-PON, reported per ANI, vANI and CT.
+             For NG-PON2, reported per ANI, vANI and CT.
+             For 50G-PON, reported per ANI, vANI and CT.";
           reference
-            "ITU-T G.987.3 (01/2014)
-             Table 14-1: Downstream PLOAM message count
-
-             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Downstream PLOAM message count
-
-             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-             Table C.14.1 Downstream PLOAM message count";
+            "ITU-T G.987.3 Table 14-1 - Downstream PLOAM message
+             count;
+             ITU-T G.989.3 Amd.2 Table 14-1 - Downstream PLOAM message
+             count;
+             ITU-T G.9807.1 Amd.1 Table C.14.1 - Downstream PLOAM
+             message count;
+             ITU-T G.9804.2 Table 14-1 - Downstream PLOAM message
+             count";
         }
         leaf system-profile {
           type bbf-yang:performance-counter64;
@@ -800,10 +813,14 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per ANI and CT.";
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per ANI and CT.
+             For 50G-PON, reported per ANI and CT.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: System_Profile message count";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - System_Profile message
+             count;
+             ITU-T G.9804.2 Table 14-1 - System_Profile message
+             count";
         }
         leaf channel-profile {
           type bbf-yang:performance-counter64;
@@ -816,10 +833,14 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per ANI and CT.";
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per ANI and CT.
+             For 50G-PON, reported per ANI and CT.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Channel_Profile message count";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - Channel_Profile message
+             count;
+             ITU-T G.9804.2 Table 14-1 - Channel_Profile message
+             count";
         }
         leaf burst-profile {
           type bbf-yang:performance-counter64;
@@ -832,16 +853,16 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, reported per ANI and CT.
              For XGS-PON, reported per ANI and CT.
-             For NG-PON2, reported per ANI and CT.";
+             For 25GS-PON, reported per ANI and CT.
+             For NG-PON2, reported per ANI and CT.
+             For 50G-PON, reported per ANI and CT.";
           reference
-            "ITU-T G.987.3 (01/2014)
-             Table 14-1: Profile
-
-             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Burst_Profile message count
-
-             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-             Table C.14.1 Burst_Profile message count";
+            "ITU-T G.987.3 Table 14-1 - Profile;
+             ITU-T G.989.3 Amd.2 Table 14-1 - Burst_Profile message
+             count;
+             ITU-T G.9807.1 Amd.1 Table C.14.1 - Burst_Profile message
+             count;
+             ITU-T G.9804.2 Table 14-1 - Burst_Profile message count";
         }
         leaf assign-onu-id {
           type bbf-yang:performance-counter64;
@@ -854,16 +875,16 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, reported per ANI and CT.
              For XGS-PON, reported per ANI and CT.
-             For NG-PON2, reported per ANI and CT.";
+             For 25GS-PON, reported per ANI and CT.
+             For NG-PON2, reported per ANI and CT.
+             For 50G-PON, reported per ANI and CT.";
           reference
-            "ITU-T G.987.3 (01/2014)
-             Table 14-1: Assign_ONU-ID
-
-             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Assign_ONU-ID message count
-
-             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-             Table C.14.1 Assign_ONU-ID message count";
+            "ITU-T G.987.3 Table 14-1 - Assign_ONU-ID;
+             ITU-T G.989.3 Amd.2 Table 14-1 - Assign_ONU-ID message
+             count;
+             ITU-T G.9807.1 Amd.1 Table C.14.1 - Assign_ONU-ID message
+             count;
+             ITU-T G.9804.2 Table 14-1 - Assign_ONU-ID message count";
         }
         leaf ranging-time {
           type bbf-yang:performance-counter64;
@@ -874,18 +895,18 @@ module bbf-xpon-performance-management {
              (CT).
 
              For G-PON, not applicable.
-             For XG-PON, reported per ANI, v-ANI and CT.
-             For XGS-PON, reported per ANI, v-ANI and CT.
-             For NG-PON2, reported per ANI, v-ANI and CT.";
+             For XG-PON, reported per ANI, vANI and CT.
+             For XGS-PON, reported per ANI, vANI and CT.
+             For 25GS-PON, reported per ANI, vANI and CT.
+             For NG-PON2, reported per ANI, vANI and CT.
+             For 50G-PON, reported per ANI, vANI and CT.";
           reference
-            "ITU-T G.987.3 (01/2014)
-             Table 14-1: Ranging_Time message count
-
-             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Ranging_Time message count
-
-             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-             Table C.14.1 Ranging_Time message count";
+            "ITU-T G.987.3 Table 14-1 - Ranging_Time message count;
+             ITU-T G.989.3 Amd.2 Table 14-1 - Ranging_Time message
+             count;
+             ITU-T G.9807.1 Amd.1 Table C.14.1 - Ranging_Time message
+             count;
+             ITU-T G.9804.2 Table 14-1 - Ranging_Time message count";
         }
         leaf protect-control {
           type bbf-yang:performance-counter64;
@@ -898,10 +919,14 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per ANI, v-ANI and CT.";
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per ANI, vANI and CT.
+             For 50G-PON, reported per ANI, vANI and CT.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Protection_Control message count";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - Protection_Control
+             message count;
+             ITU-T G.9804.2 Table 14-1 - Protection_Control message
+             count";
         }
         container adjust-tx-wavelength {
           description
@@ -919,11 +944,15 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and
-               CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and
+               CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Adjust_Tx_Wavelength message count";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Adjust_Tx_Wavelength
+               message count;
+               ITU-T G.9804.2 Table 14-1 - Adjust_Tx_Wavelength
+               message count";
           }
           leaf wavelength-dithering {
             type bbf-yang:performance-counter64;
@@ -936,11 +965,14 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and
-               CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and
+               CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Wavelength dithering
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Wavelength dithering
+               Adjust_Tx_Wavelength message count;
+               ITU-T G.9804.2 Table 14-1 - Wavelength dithering
                Adjust_Tx_Wavelength message count";
           }
           leaf adjustment-amplitude {
@@ -952,10 +984,14 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI and v-ANI.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI and vANI.
+               For 50G-PON, reported per ANI and vANI.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Adjust_Tx_Wavelength adjustment amplitude";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Adjust_Tx_Wavelength
+               adjustment amplitude;
+               ITU-T G.9804.2 Table 14-1 - Adjust_Tx_Wavelength
+               adjustment amplitude";
           }
           leaf unsatisfied-requests {
             type bbf-yang:performance-counter64;
@@ -967,10 +1003,14 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI.
+               For 50G-PON, reported per ANI.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Unsatisfied Adjust_Tx_Wavelength requests";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Unsatisfied
+               Adjust_Tx_Wavelength requests;
+               ITU-T G.9804.2 Table 14-1 - Unsatisfied
+               Adjust_Tx_Wavelength requests";
           }
         }
         leaf deactivate-onu-id {
@@ -984,16 +1024,17 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, reported per ANI and CT.
              For XGS-PON, reported per ANI and CT.
-             For NG-PON2, reported per ANI and CT.";
+             For 25GS-PON, reported per ANI and CT.
+             For NG-PON2, reported per ANI and CT.
+             For 50G-PON, reported per ANI and CT.";
           reference
-            "ITU-T G.987.3 (01/2014)
-             Table 14-1: Deactivate_ONU-ID
-
-             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Deactivate_ONU-ID message count
-
-             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-             Table C.14.1 Deactivate_ONU-ID message count";
+            "ITU-T G.987.3 Table 14-1 - Deactivate_ONU-ID;
+             ITU-T G.989.3 Amd.2 Table 14-1 - Deactivate_ONU-ID
+             message count;
+             ITU-T G.9807.1 Amd.1 Table C.14.1 - Deactivate_ONU-ID
+             message count;
+             ITU-T G.9804.2 Table 14-1 - Deactivate_ONU-ID message
+             count";
         }
         leaf disable-serial-number {
           type bbf-yang:performance-counter64;
@@ -1006,16 +1047,17 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, reported per ANI and CT.
              For XGS-PON, reported per ANI and CT.
-             For NG-PON2, reported per ANI and CT.";
+             For 25GS-PON, reported per ANI and CT.
+             For NG-PON2, reported per ANI and CT.
+             For 50G-PON, reported per ANI and CT.";
           reference
-            "ITU-T G.987.3 (01/2014)
-             Table 14-1: Disable_Serial_Number
-
-             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Disable_Serial_Number message count
-
-             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-             Table C.14.1 Disable_Serial_Number message count";
+            "ITU-T G.987.3 Table 14-1 - Disable_Serial_Number;
+             ITU-T G.989.3 Amd.2 Table 14-1 - Disable_Serial_Number
+             message count;
+             ITU-T G.9807.1 Amd.1 Table C.14.1 - Disable_Serial_Number
+             message count;
+             ITU-T G.9804.2 Table 14-1 - Disable_Serial_Number message
+             count";
         }
         leaf request-registration {
           type bbf-yang:performance-counter64;
@@ -1026,18 +1068,19 @@ module bbf-xpon-performance-management {
              (CT).
 
              For G-PON, not applicable.
-             For XG-PON, reported per ANI and v-ANI.
-             For XGS-PON, reported per ANI and v-ANI.
-             For NG-PON2, reported per ANI and v-ANI.";
+             For XG-PON, reported per ANI and vANI.
+             For XGS-PON, reported per ANI and vANI.
+             For 25GS-PON, reported per ANI and vANI.
+             For NG-PON2, reported per ANI and vANI.
+             For 50G-PON, reported per ANI and vANI.";
           reference
-            "ITU-T G.987.3 (01/2014)
-             Table 14-1: Request_Registration
-
-             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Request_Registration message count
-
-             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-             Table C.14.1 Request_Registration message count";
+            "ITU-T G.987.3 Table 14-1 - Request_Registration;
+             ITU-T G.989.3 Amd.2 Table 14-1 - Request_Registration
+             message count;
+             ITU-T G.9807.1 Amd.1 Table C.14.1 - Request_Registration
+             message count;
+             ITU-T G.9804.2 Table 14-1 - Request_Registration message
+             count";
         }
         leaf assign-alloc-id {
           type bbf-yang:performance-counter64;
@@ -1048,18 +1091,19 @@ module bbf-xpon-performance-management {
              (CT).
 
              For G-PON, not applicable.
-             For XG-PON, reported per ANI and v-ANI.
-             For XGS-PON, reported per ANI and v-ANI.
-             For NG-PON2, reported per ANI and v-ANI.";
+             For XG-PON, reported per ANI and vANI.
+             For XGS-PON, reported per ANI and vANI.
+             For 25GS-PON, reported per ANI and vANI.
+             For NG-PON2, reported per ANI and vANI.
+             For 50G-PON, reported per ANI and vANI.";
           reference
-            "ITU-T G.987.3 (01/2014)
-             Table 14-1: Assign_Alloc-ID
-
-             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Assign_Alloc-ID message count
-
-             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-             Table C.14.1 Assign_Alloc-ID message count";
+            "ITU-T G.987.3 Table 14-1 - Assign_Alloc-ID;
+             ITU-T G.989.3 Amd.2 Table 14-1 - Assign_Alloc-ID message
+             count;
+             ITU-T G.9807.1 Amd.1 Table C.14.1 - Assign_Alloc-ID
+             message count;
+             ITU-T G.9804.2 Table 14-1 - Assign_Alloc-ID message
+             count";
         }
         leaf key-control {
           type bbf-yang:performance-counter64;
@@ -1070,18 +1114,18 @@ module bbf-xpon-performance-management {
              (CT).
 
              For G-PON, not applicable.
-             For XG-PON, reported per ANI, v-ANI and CT.
-             For XGS-PON, reported per ANI, v-ANI and CT.
-             For NG-PON2, reported per ANI, v-ANI and CT.";
+             For XG-PON, reported per ANI, vANI and CT.
+             For XGS-PON, reported per ANI, vANI and CT.
+             For 25GS-PON, reported per ANI, vANI and CT.
+             For NG-PON2, reported per ANI, vANI and CT.
+             For 50G-PON, reported per ANI, vANI and CT.";
           reference
-            "ITU-T G.987.3 (01/2014)
-             Table 14-1: Key_Control
-
-             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Key_Control message count
-
-             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-             Table C.14.1 Key_Control message count";
+            "ITU-T G.987.3 Table 14-1 - Key_Control;
+             ITU-T G.989.3 Amd.2 Table 14-1 - Key_Control message
+             count;
+             ITU-T G.9807.1 Amd.1 Table C.14.1 - Key_Control message
+             count;
+             ITU-T G.9804.2 Table 14-1 - Key_Control message count";
         }
         leaf sleep-allow {
           type bbf-yang:performance-counter64;
@@ -1092,18 +1136,18 @@ module bbf-xpon-performance-management {
              (CT).
 
              For G-PON, not applicable.
-             For XG-PON, reported per ANI, v-ANI and CT.
-             For XGS-PON, reported per ANI, v-ANI and CT.
-             For NG-PON2, reported per ANI, v-ANI and CT.";
+             For XG-PON, reported per ANI, vANI and CT.
+             For XGS-PON, reported per ANI, vANI and CT.
+             For 25GS-PON, reported per ANI, vANI and CT.
+             For NG-PON2, reported per ANI, vANI and CT.
+             For 50G-PON, reported per ANI, vANI and CT.";
           reference
-            "ITU-T G.987.3 (01/2014)
-             Table 14-1: Sleep_Allow
-
-             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Sleep_Allow message count
-
-             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-             Table C.14.1 Sleep_Allow message count";
+            "ITU-T G.987.3 Table 14-1 - Sleep_Allow;
+             ITU-T G.989.3 Amd.2 Table 14-1 - Sleep_Allow message
+             count;
+             ITU-T G.9807.1 Amd.1 Table C.14.1 - Sleep_Allow message
+             count;
+             ITU-T G.9804.2 Table 14-1 - Sleep_Allow message count";
         }
         container tuning-control {
           description
@@ -1121,11 +1165,14 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning_Control message count,
-               Request operation code";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning_Control message
+               count, Request operation code;
+               ITU-T G.9804.2 Table 14-1 - Tuning_Control message
+               count, Request operation code";
           }
           leaf complete-operation {
             type bbf-yang:performance-counter64;
@@ -1138,11 +1185,14 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning_Control message count,
-               Complete_d operation code";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning_Control message
+               count, Complete_d operation code;
+               ITU-T G.9804.2 Table 14-1 - Tuning_Control message
+               count, Complete_d operation code";
           }
         }
       }
@@ -1157,10 +1207,85 @@ module bbf-xpon-performance-management {
            For G-PON, not applicable.
            For XG-PON, not applicable.
            For XGS-PON, not applicable.
-           For NG-PON2, reported per ANI, v-ANI and CT.";
+           For 25GS-PON, not applicable.
+           For NG-PON2, reported per ANI and CT.
+           For 50G-PON, reported per ANI and CT.";
         reference
-          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Calibration_Request message count";
+          "ITU-T G.989.3 Amd.2 Table 14-1 - Calibration_Request
+           message count;
+           ITU-T G.9804.2 Table 14-1 - Calibration_Request message
+           count";
+      }
+      leaf power-inquire {
+        type bbf-yang:performance-counter64;
+        description
+          "Count of Power_Consumption_Inquire Physical Layer
+           Operations, Administrations and Maintenance (PLOAM)
+           messages sent by the Optical Line Termination (OLT) Channel
+           Termination (CT).
+
+           For G-PON, not applicable.
+           For XG-PON, not applicable.
+           For XGS-PON, not applicable.
+           For 25GS-PON, not applicable.
+           For NG-PON2, not applicable.
+           For 50G-PON, reported per ANI, vANI and CT.";
+        reference
+          "ITU-T G.9804.2 Table 14-1 -
+           Power_Consumption_Inquire message count";
+      }
+      leaf reboot-onu {
+        type bbf-yang:performance-counter64;
+        description
+          "Count of Reboot_ONU Physical Layer Operations,
+           Administrations and Maintenance (PLOAM) messages sent by
+           the Optical Line Termination (OLT) Channel Termination
+           (CT).
+
+           For G-PON, not applicable.
+           For XG-PON, not applicable.
+           For XGS-PON, not applicable.
+           For 25GS-PON, not applicable.
+           For NG-PON2, not applicable.
+           For 50G-PON, reported per ANI and CT.";
+        reference
+          "ITU-T G.9804.2 Table 14-1 - Reboot_ONU message count";
+      }
+      leaf bonded-channel-status {
+        type bbf-yang:performance-counter64;
+        description
+          "Count of Bonded_Channel_Status Physical Layer Operations,
+           Administrations and Maintenance (PLOAM) messages sent by
+           the Optical Line Termination (OLT) Channel Termination
+           (CT).
+
+           For G-PON, not applicable.
+           For XG-PON, not applicable.
+           For XGS-PON, not applicable.
+           For 25GS-PON, not applicable.
+           For NG-PON2, not applicable.
+           For 50G-PON, reported per ANI, vANI and CT.";
+        reference
+          "ITU-T G.9804.2 Table 14-1 - Bonded_Channel_Status message
+           count";
+      }
+      leaf get-set-capabilities {
+        type bbf-yang:performance-counter64;
+        description
+          "Count of Get_Set_Capabilities Physical Layer Operations,
+           Administrations and Maintenance (PLOAM) messages sent by
+           the Optical Line Termination (OLT) Channel Termination
+           (CT).
+
+           For G-PON, not applicable.
+           For XG-PON, not applicable.
+           For XGS-PON, not applicable.
+           For 25GS-PON, not applicable.
+           For NG-PON2, not applicable.
+           For 50G-PON, reported per ANI and vANI.";
+        reference
+          "ITU-T G.9804.2 Table 14-1 - Get_Set_Capabilities message
+           count";
       }
       container upstream-messages {
         description
@@ -1175,18 +1300,19 @@ module bbf-xpon-performance-management {
              Optical Line Termination (OLT).
 
              For G-PON, not applicable.
-             For XG-PON, reported per ANI and v-ANI.
-             For XGS-PON, reported per ANI and v-ANI.
-             For NG-PON2, reported per ANI, v-ANI and CT.";
+             For XG-PON, reported per ANI and vANI.
+             For XGS-PON, reported per ANI and vANI.
+             For 25GS-PON, reported per ANI and vANI.
+             For NG-PON2, reported per ANI, vANI and CT.
+             For 50G-PON, reported per ANI, vANI and CT.";
           reference
-            "ITU-T G.987.3 (01/2014)
-             Table 14-1: Upstream PLOAM message count
-
-             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Upstream PLOAM message count
-
-             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-             Table C.14.1 Upstream PLOAM message count";
+            "ITU-T G.987.3 Table 14-1 - Upstream PLOAM message count;
+             ITU-T G.989.3 Amd.2 Table 14-1 - Upstream PLOAM message
+             count;
+             ITU-T G.9807.1 Amd.1 Table C.14.1 - Upstream PLOAM
+             message count;
+             ITU-T G.9804.2 Table 14-1 - Upstream PLOAM message
+             count";
         }
         container serial-number-onu {
           description
@@ -1200,18 +1326,19 @@ module bbf-xpon-performance-management {
                by the Optical Network Unit (ONU).
 
                For G-PON, not applicable.
-               For XG-PON, reported per ANI, v-ANI and CT.
-               For XGS-PON, reported per ANI, v-ANI and CT.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For XG-PON, reported per ANI, vANI and CT.
+               For XGS-PON, reported per ANI, vANI and CT.
+               For 25GS-PON, reported per ANI, vANI and CT.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.987.3 (01/2014)
-               Table 14-1: Serial_Number_ONU
-
-               ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Serial_Number_ONU (in-band) message count
-
-               ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-               Table C.14.1 Serial_Number_ONU message count";
+              "ITU-T G.987.3 Table 14-1 - Serial_Number_ONU;
+               ITU-T G.989.3 Amd.2 Table 14-1 - Serial_Number_ONU
+               (in-band) message count;
+               ITU-T G.9807.1 Amd.1 Table C.14.1 - Serial_Number_ONU
+               message count;
+               ITU-T G.9804.2 Table 14-1 - Serial_Number_ONU message
+               count";
           }
           leaf amcc {
             type bbf-yang:performance-counter64;
@@ -1223,10 +1350,12 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, not applicable.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Serial_Number_ONU (AMCC) message count";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Serial_Number_ONU
+               (AMCC) message count";
           }
         }
         leaf registration {
@@ -1237,18 +1366,18 @@ module bbf-xpon-performance-management {
              the Optical Network Unit (ONU).
 
              For G-PON, not applicable.
-             For XG-PON, reported per ANI and v-ANI.
-             For XGS-PON, reported per ANI and v-ANI.
-             For NG-PON2, reported per ANI and v-ANI.";
+             For XG-PON, reported per ANI and vANI.
+             For XGS-PON, reported per ANI and vANI.
+             For 25GS-PON, reported per ANI and vANI.
+             For NG-PON2, reported per ANI and vANI.
+             For 50G-PON, reported per ANI and vANI.";
           reference
-            "ITU-T G.987.3 (01/2014)
-             Table 14-1: Registration
-
-             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Registration message count
-
-             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-             Table C.14.1 Registration message count";
+            "ITU-T G.987.3 Table 14-1 - Registration;
+             ITU-T G.989.3 Amd.2 Table 14-1 - Registration message
+             count;
+             ITU-T G.9807.1 Amd.1 Table C.14.1 - Registration message
+             count;
+             ITU-T G.9804.2 Table 14-1 - Registration message count";
         }
         leaf key-report {
           type bbf-yang:performance-counter64;
@@ -1258,18 +1387,18 @@ module bbf-xpon-performance-management {
              the Optical Network Unit (ONU).
 
              For G-PON, not applicable.
-             For XG-PON, reported per ANI and v-ANI.
-             For XGS-PON, reported per ANI and v-ANI.
-             For NG-PON2, reported per ANI and v-ANI.";
+             For XG-PON, reported per ANI and vANI.
+             For XGS-PON, reported per ANI and vANI.
+             For 25GS-PON, reported per ANI and vANI.
+             For NG-PON2, reported per ANI and vANI.
+             For 50G-PON, reported per ANI and vANI.";
           reference
-            "ITU-T G.987.3 (01/2014)
-             Table 14-1: Key_Report
-
-             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Key_Report message count
-
-             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-             Table C.14.1 Key_Report message count";
+            "ITU-T G.987.3 Table 14-1 - Key_Report;
+             ITU-T G.989.3 Amd.2 Table 14-1 - Key_Report message
+             count;
+             ITU-T G.9807.1 Amd.1 Table C.14.1 - Key_Report message
+             count;
+             ITU-T G.9804.2 Table 14-1 - Key_Report message count";
         }
         leaf acknowledgement {
           type bbf-yang:performance-counter64;
@@ -1279,18 +1408,19 @@ module bbf-xpon-performance-management {
              the Optical Network Unit (ONU).
 
              For G-PON, not applicable.
-             For XG-PON, reported per ANI and v-ANI.
-             For XGS-PON, reported per ANI and v-ANI.
-             For NG-PON2, reported per ANI and v-ANI.";
+             For XG-PON, reported per ANI and vANI.
+             For XGS-PON, reported per ANI and vANI.
+             For 25GS-PON, reported per ANI and vANI.
+             For NG-PON2, reported per ANI and vANI.
+             For 50G-PON, reported per ANI and vANI.";
           reference
-            "ITU-T G.987.3 (01/2014)
-             Table 14-1: Acknowledgement
-
-             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Acknowledgement message count
-
-             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-             Table C.14.1 Acknowledgement message count";
+            "ITU-T G.987.3 Table 14-1 - Acknowledgement;
+             ITU-T G.989.3 Amd.2 Table 14-1 - Acknowledgement message
+             count;
+             ITU-T G.9807.1 Amd.1 Table C.14.1 - Acknowledgement
+             message count;
+             ITU-T G.9804.2 Table 14-1 - Acknowledgement message
+             count";
         }
         leaf sleep-request {
           type bbf-yang:performance-counter64;
@@ -1300,18 +1430,18 @@ module bbf-xpon-performance-management {
              the Optical Network Unit (ONU).
 
              For G-PON, not applicable.
-             For XG-PON, reported per ANI and v-ANI.
-             For XGS-PON, reported per ANI and v-ANI.
-             For NG-PON2, reported per ANI and v-ANI.";
+             For XG-PON, reported per ANI and vANI.
+             For XGS-PON, reported per ANI and vANI.
+             For 25GS-PON, reported per ANI and vANI.
+             For NG-PON2, reported per ANI and vANI.
+             For 50G-PON, reported per ANI and vANI.";
           reference
-            "ITU-T G.987.3 (01/2014)
-             Table 14-1: Sleep_Request
-
-             ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Sleep_Request message count
-
-             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-             Table C.14.1 Sleep_Request message count";
+            "ITU-T G.987.3 Table 14-1 - Sleep_Request;
+             ITU-T G.989.3 Amd.2 Table 14-1 - Sleep_Request message
+             count;
+             ITU-T G.9807.1 Amd.1 Table C.14.1 - Sleep_Request message
+             count;
+             ITU-T G.9804.2 Table 14-1 - Sleep_Request message count";
         }
         container tuning-response {
           description
@@ -1329,11 +1459,14 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI and v-ANI.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI and vANI.
+               For 50G-PON, reported per ANI and vANI.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning_Response message count,
-               ACK/NACK operation codes";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning_Response
+               message count, ACK/NACK operation codes;
+               ITU-T G.9804.2 Table 14-1 - Tuning_Response
+               message count, ACK/NACK operation codes";
           }
           leaf complete-rollback {
             type bbf-yang:performance-counter64;
@@ -1346,11 +1479,14 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI and v-ANI.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI and vANI.
+               For 50G-PON, reported per ANI and vANI.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning_Response message count,
-               Complete_u/Rollback operation codes";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning_Response
+               message count, Complete_u/Rollback operation codes;
+               ITU-T G.9804.2 Table 14-1 - Tuning_Response message
+               count, Complete_u/Rollback operation codes";
           }
         }
         leaf power-consumption-report {
@@ -1363,10 +1499,48 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per ANI, v-ANI and CT.";
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per ANI, vANI and CT.
+             For 50G-PON, reported per ANI, vANI and CT.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Power_Consumption_Report message count";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - Power_Consumption_Report
+             message count;
+             ITU-T G.9804.2 Table 14-1 - Power_Consumption_Report
+             message count";
+        }
+        leaf bonded-channel-rsp {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of Bonded_Channel_Response Physical Layer
+             Operations, Administrations and Maintenance (PLOAM)
+             messages sent by the Optical Network Unit (ONU).
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For 25GS-PON, not applicable.
+             For NG-PON2, not applicable.
+             For 50G-PON, reported per ANI, vANI and CT.";
+          reference
+            "ITU-T G.9804.2 Table 14-1 - Bonded_Channel_Response
+             message count";
+        }
+        leaf onu-capabilities {
+          type bbf-yang:performance-counter64;
+          description
+            "Count of ONU_Capabilities Physical Layer
+             Operations, Administrations and Maintenance (PLOAM)
+             messages sent by the Optical Network Unit (ONU).
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For 25GS-PON, not applicable.
+             For NG-PON2, not applicable.
+             For 50G-PON, reported per ANI and vANI.";
+          reference
+            "ITU-T G.9804.2 Table 14-1 - ONU_Capabilities message
+             count";
         }
       }
     }
@@ -1392,13 +1566,16 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, reported per CT.
-             For NG-PON2, reported per CT.";
+             For 25GS-PON, reported per CT.
+             For NG-PON2, reported per CT.
+             For 50G-PON, reported per CT.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Non-discernible activation attempts (in-band)
-
-             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-             Table C.14.1 Non-discernible activation attempts";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - Non-discernible
+             activation attempts (in-band);
+             ITU-T G.9807.1 Amd.1 Table C.14.1 - Non-discernible
+             activation attempts;
+             ITU-T G.9804.2 Table 14-1 - Non-discernible activation
+             attempts";
         }
         leaf amcc {
           type bbf-yang:performance-counter64;
@@ -1409,11 +1586,13 @@ module bbf-xpon-performance-management {
 
              For G-PON, not applicable.
              For XG-PON, not applicable.
-             For XGs-PON, not applicable.
-             For NG-PON2, reported per CT.";
+             For XGS-PON, not applicable.
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per CT.
+             For 50G-PON, not applicable.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Non-discernible activation attempts (AMCC)";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - Non-discernible
+             activation attempts (AMCC)";
         }
       }
       container foreign-activation-attempts {
@@ -1428,13 +1607,15 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, reported per CT.
-             For NG-PON2, reported per CT.";
+             For 25GS-PON, reported per CT.
+             For NG-PON2, reported per CT.
+             For 50G-PON, reported per CT.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Foreign activation attempts (in-band)
-
-             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-             Table C.14.1 Foreign activation attempts";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - Foreign activation
+             attempts (in-band);
+             ITU-T G.9807.1 Amd.1 Table C.14.1 - Foreign activation
+             attempts;
+             ITU-T G.9804.2 Table 14-1 - Foreign activation attempts";
         }
         leaf amcc {
           type bbf-yang:performance-counter64;
@@ -1444,10 +1625,12 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per CT.";
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per CT.
+             For 50G-PON, not applicable.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Foreign activation attempts (AMCC)";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - Foreign activation
+             attempts (AMCC)";
         }
       }
       container successful-new-activations {
@@ -1462,14 +1645,16 @@ module bbf-xpon-performance-management {
 
              For G-PON, not applicable.
              For XG-PON, not applicable.
-             For XGS-PON, reported per v-ANI and CT.
-             For NG-PON2, reported per v-ANI and CT.";
+             For XGS-PON, reported per vANI and CT.
+             For 25GS-PON, reported per vANI and CT.
+             For NG-PON2, reported per vANI and CT.
+             For 50G-PON, reported per vANI and CT.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Successful new activations (in-band)
-
-             ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-             Table C.14.1 Successful new activations";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - Successful new
+             activations (in-band);
+             ITU-T G.9807.1 Amd.1 Table C.14.1 - Successful new
+             activations;
+             ITU-T G.9804.2 Table 14-1 - Successful new activations";
         }
         leaf amcc {
           type bbf-yang:performance-counter64;
@@ -1481,10 +1666,12 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per v-ANI and CT.";
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per vANI and CT.
+             For 50G-PON, not applicable.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Successful new activations (AMCC)";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - Successful new
+             activations (AMCC)";
         }
       }
       container successful-precfg-twdm-channel-handovers {
@@ -1503,14 +1690,18 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per v-ANI and CT.";
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per vANI and CT.
+             For 50G-PON, reported per vANI and CT.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Successful pre-configured
-             TWDM channel handovers (in-band)";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - Successful
+             pre-configured TWDM channel handovers (in-band);
+             ITU-T G.9804.2 Table 14-1 - Successful pre-configured
+             TWDM channel handovers";
         }
         leaf amcc {
           type bbf-yang:performance-counter64;
+          status deprecated;
           description
             "Optical Network Unit (ONU) retunes to the channel of its
              choice. ONU calibrated, pre-ranged.
@@ -1518,11 +1709,37 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per v-ANI and CT.";
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per vANI and CT.
+
+             This counter is not available via AMCC, so this leaf
+             has been deprecated.";
+        }
+      }
+      container successful-discretionary-twdm-channel-handovers {
+        description
+          "Performance counters associated with successful
+           discretionary TWDM channel handovers.";
+        leaf in-band {
+          type bbf-yang:performance-counter64;
+          description
+            "Optical Network Unit (ONU) calibrated, pre-ranged
+             downstream and upstream wavelength channels set in
+             advance with Protection_Control Physical Layer
+             Operations, Administrations and Maintenance (PLOAM)
+             message.
+
+             For G-PON, not applicable.
+             For XG-PON, not applicable.
+             For XGS-PON, not applicable.
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per vANI and CT.
+             For 50G-PON, reported per vANI and CT.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Successful discretionary
-             TWDM channel handovers (in-band)";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - Successful discretionary
+             TWDM channel handovers (in-band);
+             ITU-T G.9804.2 Table 14-1 - Successful discretionary
+             TWDM channel handovers";
         }
       }
     }
@@ -1543,11 +1760,13 @@ module bbf-xpon-performance-management {
            For G-PON, not applicable.
            For XG-PON, not applicable.
            For XGS-PON, not applicable.
-           For NG-PON2, reported per ANI, v-ANI and CT.";
+           For 25GS-PON, not applicable.
+           For NG-PON2, reported per ANI, vANI and CT.";
         reference
-          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Tuning control requests
-           for Rx only or Rx and Tx";
+          "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control requests
+           for Rx only or Rx and Tx;
+           ITU-T G.9804.2 Table 14-1 - Tuning control requests for Rx
+           only or Rx and Tx";
       }
       leaf requests-for-tx {
         type bbf-yang:performance-counter64;
@@ -1558,10 +1777,14 @@ module bbf-xpon-performance-management {
            For G-PON, not applicable.
            For XG-PON, not applicable.
            For XGS-PON, not applicable.
-           For NG-PON2, reported per ANI, v-ANI and CT.";
+           For 25GS-PON, not applicable.
+           For NG-PON2, reported per ANI, vANI and CT.
+           For 50G-PON, reported per ANI, vANI and CT.";
         reference
-          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Tuning control requests for Tx only";
+          "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control requests
+           for Tx only;
+           ITU-T G.9804.2 Table 14-1 - Tuning control requests for Tx
+           only";
       }
       container rejected-requests {
         description
@@ -1576,13 +1799,16 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per ANI, v-ANI and CT.";
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per ANI, vANI and CT.
+             For 50G-PON, reported per ANI, vANI and CT.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Tuning control requests rejected
-             on internal condition
-             (not ready to start transceiver tuning by specified
-             time)";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control requests
+             rejected on internal condition (not ready to start
+             transceiver tuning by specified time);
+             ITU-T G.9804.2 Table 14-1 - Tuning control requests
+             rejected on internal condition (not ready to start
+             transceiver tuning by specified time)";
         }
         container downstream {
           description
@@ -1598,12 +1824,16 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests rejected
-               on target downstream
-               wavelength channel inconsistency";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests rejected on target downstream wavelength
+               channel inconsistency;
+               ITU-T G.9804.2 Table 14-1 - Tuning control requests
+               rejected on target downstream wavelength channel
+               inconsistency";
           }
           leaf albl {
             type bbf-yang:performance-counter64;
@@ -1614,11 +1844,16 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests rejected
-               on downstream administrative label inconsistency";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests rejected on downstream administrative label
+               inconsistency;
+               ITU-T G.9804.2 Table 14-1 - Tuning control requests
+               rejected on downstream administrative label
+               inconsistency";
           }
           leaf void {
             type bbf-yang:performance-counter64;
@@ -1629,11 +1864,16 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests rejected
-               on void downstream wavelength channel descriptor";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests rejected on void downstream wavelength channel
+               descriptor;
+               ITU-T G.9804.2 Table 14-1 - Tuning control requests
+               rejected on void downstream wavelength channel
+               descriptor";
           }
           leaf part {
             type bbf-yang:performance-counter64;
@@ -1644,11 +1884,14 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests rejected
-               on channel partition violation";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests rejected on channel partition violation;
+               ITU-T G.9804.2 Table 14-1 - Tuning control
+               requests rejected on channel partition violation";
           }
           leaf tunr {
             type bbf-yang:performance-counter64;
@@ -1659,12 +1902,16 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests rejected
-               due to target DS wavelength channel being
-               out of Rx tuning range.";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests rejected due to target DS wavelength channel
+               being out of Rx tuning range;
+               ITU-T G.9804.2 Table 14-1 - Tuning control
+               requests rejected due to target DS wavelength channel
+               being out of Rx tuning range";
           }
           leaf lnrt {
             type bbf-yang:performance-counter64;
@@ -1675,11 +1922,15 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests rejected
-               on downstream line rate inconsistency";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests rejected on downstream line rate
+               inconsistency;
+               ITU-T G.9804.2 Table 14-1 - Tuning control requests
+               rejected on downstream line rate inconsistency";
           }
           leaf lncd {
             type bbf-yang:performance-counter64;
@@ -1690,11 +1941,15 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests rejected
-               on downstream line code inconsistency";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests rejected on downstream line code
+               inconsistency;
+               ITU-T G.9804.2 Table 14-1 - Tuning control requests
+               rejected on downstream line code inconsistency";
           }
         }
         container upstream {
@@ -1711,11 +1966,16 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests rejected
-               on target upstream wavelength channel inconsistency";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests rejected on target upstream wavelength channel
+               inconsistency;
+               ITU-T G.9804.2 Table 14-1 - Tuning control
+               requests rejected on target upstream wavelength channel
+               inconsistency";
           }
           leaf albl {
             type bbf-yang:performance-counter64;
@@ -1726,11 +1986,16 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests rejected
-               on upstream administrative label inconsistency";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests rejected on upstream administrative label
+               inconsistency;
+               ITU-T G.9804.2 Table 14-1 - Tuning control requests
+               rejected on upstream administrative label
+               inconsistency";
           }
           leaf void {
             type bbf-yang:performance-counter64;
@@ -1741,11 +2006,16 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests rejected
-               on void upstream wavelength channel descriptor";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests rejected on void upstream wavelength channel
+               descriptor;
+               ITU-T G.9804.2 Table 14-1 - Tuning control
+               requests rejected on void upstream wavelength channel
+               descriptor";
           }
           leaf tunr {
             type bbf-yang:performance-counter64;
@@ -1756,12 +2026,16 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests rejected
-               due to target US wavelength channel being out of Tx
-               tuning range.";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests rejected due to target US wavelength channel
+               being out of Tx tuning range;
+               ITU-T G.9804.2 Table 14-1 - Tuning control
+               requests rejected due to target US wavelength channel
+               being out of Tx tuning range";
           }
           leaf clbr {
             type bbf-yang:performance-counter64;
@@ -1772,11 +2046,14 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control request rejected
-               due to insufficient calibration accuracy.";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control request
+               rejected due to insufficient calibration accuracy;
+               ITU-T G.9804.2 Table 14-1 - Tuning control request
+               rejected due to insufficient calibration accuracy";
           }
           leaf lktp {
             type bbf-yang:performance-counter64;
@@ -1787,11 +2064,16 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests rejected
-               on upstream optical link type inconsistency";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests rejected on upstream optical link type
+               inconsistency;
+               ITU-T G.9804.2 Table 14-1 - Tuning control
+               requests rejected on upstream optical link type
+               inconsistency";
           }
           leaf lnrt {
             type bbf-yang:performance-counter64;
@@ -1802,11 +2084,14 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests rejected
-               on upstream line rate inconsistency";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests rejected on upstream line rate inconsistency;
+               ITU-T G.9804.2 Table 14-1 - Tuning control
+               requests rejected on upstream line rate inconsistency";
           }
           leaf lncd {
             type bbf-yang:performance-counter64;
@@ -1817,11 +2102,14 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests rejected
-               on upstream line code inconsistency";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests rejected on upstream line code inconsistency;
+               ITU-T G.9804.2 Table 14-1 - Tuning control
+               requests rejected on upstream line code inconsistency";
           }
         }
       }
@@ -1840,11 +2128,14 @@ module bbf-xpon-performance-management {
            For G-PON, not applicable.
            For XG-PON, not applicable.
            For XGS-PON, not applicable.
-           For NG-PON2, reported per ANI, v-ANI and CT.";
+           For 25GS-PON, not applicable.
+           For NG-PON2, reported per ANI, vANI and CT.
+           For 50G-PON, reported per ANI, vANI and CT.";
         reference
-          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Tuning control requests fulfilled
-           with ONU reacquired at target channel";
+          "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control requests
+           fulfilled with ONU reacquired at target channel;
+           ITU-T G.9804.2 Table 14-1 - Tuning control requests
+           fulfilled with ONU reacquired at target channel";
       }
       container failed-requests {
         description
@@ -1859,11 +2150,14 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per ANI.";
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per ANI.
+             For 50G-PON, reported per ANI.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Tuning control requests failure reason:
-             target DS wavelength channel not found.";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control requests
+             failure reason: target DS wavelength channel not found;
+             ITU-T G.9804.2 Table 14-1 - Tuning control requests
+             failure reason: target DS wavelength channel not found";
         }
         leaf no-feedback-in-target-us-wl-channel {
           type bbf-yang:performance-counter64;
@@ -1874,11 +2168,16 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per ANI.";
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per ANI.
+             For 50G-PON, reported per ANI.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Tuning control requests failure reason:
-             no tuning feedback in target US wavelength channel.";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control requests
+             failure reason: no tuning feedback in target US
+             wavelength channel;
+             ITU-T G.9804.2 Table 14-1 - Tuning control requests
+             failure reason: no tuning feedback in target US
+             wavelength channel";
         }
       }
       leaf resolved-requests {
@@ -1890,11 +2189,14 @@ module bbf-xpon-performance-management {
            For G-PON, not applicable.
            For XG-PON, not applicable.
            For XGS-PON, not applicable.
-           For NG-PON2, reported per ANI, v-ANI and CT.";
+           For 25GS-PON, not applicable.
+           For NG-PON2, reported per ANI, vANI and CT.
+           For 50G-PON, reported per ANI, vANI and CT.";
         reference
-          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Tuning control requests resolved
-           with ONU reacquired at discretionary channel";
+          "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control requests
+           resolved with ONU reacquired at discretionary channel;
+           ITU-T G.9804.2 Table 14-1 - Tuning control requests
+           resolved with ONU reacquired at discretionary channel";
       }
       container failed-requests-rollback {
         description
@@ -1910,11 +2212,14 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per ANI, v-ANI and CT.";
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per ANI, vANI and CT.
+             For 50G-PON, reported per ANI, vANI and CT.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Tuning control requests failed
-             with ONU Rollback due to communication condition";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control requests
+             failed with ONU Rollback due to communication condition;
+             ITU-T G.9804.2 Table 14-1 - Tuning control requests
+             failed with ONU Rollback due to communication condition";
         }
         container downstream {
           description
@@ -1931,12 +2236,16 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests failed
-               with ONU Rollback due to downstream target
-               wavelength channel inconsistency";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests failed with ONU Rollback due to downstream
+               target wavelength channel inconsistency;
+               ITU-T G.9804.2 Table 14-1 - Tuning control
+               requests failed with ONU Rollback due to downstream
+               target wavelength channel inconsistency";
           }
           leaf albl {
             type bbf-yang:performance-counter64;
@@ -1947,12 +2256,16 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests failed
-               with ONU Rollback due to
-               downstream administrative label inconsistency";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests failed with ONU Rollback due to downstream
+               administrative label inconsistency;
+               ITU-T G.9804.2 Table 14-1 - Tuning control
+               requests failed with ONU Rollback due to downstream
+               administrative label inconsistency";
           }
           leaf lktp {
             type bbf-yang:performance-counter64;
@@ -1963,12 +2276,16 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests failed
-               with ONU Rollback due to
-               downstream optical link type inconsistency";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests failed with ONU Rollback due to downstream
+               optical link type inconsistency;
+               ITU-T G.9804.2 Table 14-1 - Tuning control
+               requests failed with ONU Rollback due to downstream
+               optical link type inconsistency";
           }
         }
         container upstream {
@@ -1986,12 +2303,16 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests failed with ONU
-               Rollback due to upstream target wavelength channel
-               parameter violation";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests failed with ONU Rollback due to upstream
+               target wavelength channel parameter violation;
+               ITU-T G.9804.2 Table 14-1 - Tuning control
+               requests failed with ONU Rollback due to upstream
+               target wavelength channel parameter violation";
           }
           leaf albl {
             type bbf-yang:performance-counter64;
@@ -2002,12 +2323,16 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests failed
-               with ONU Rollback due to
-               upstream administrative label violation";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests failed with ONU Rollback due to upstream
+               administrative label violation;
+               ITU-T G.9804.2 Table 14-1 - Tuning control
+               requests failed with ONU Rollback due to upstream
+               administrative label violation";
           }
           leaf void {
             type bbf-yang:performance-counter64;
@@ -2018,11 +2343,16 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests rejected
-               on void upstream wavelength channel descriptor";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests rejected on void upstream wavelength channel
+               descriptor;
+               ITU-T G.9804.2 Table 14-1 - Tuning control
+               requests rejected on void upstream wavelength channel
+               descriptor";
           }
           leaf tunr {
             type bbf-yang:performance-counter64;
@@ -2033,11 +2363,14 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests rejected
-               on Tx tuning range violation";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests rejected on Tx tuning range violation;
+               ITU-T G.9804.2 Table 14-1 - Tuning control
+               requests rejected on Tx tuning range violation";
           }
           leaf lktp {
             type bbf-yang:performance-counter64;
@@ -2048,11 +2381,14 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1 Tuning control requests rejected
-               on upstream link type violation";
+              "ITU-T G.989.3 Amd.2 Table 14-1 Tuning control requests
+               rejected on upstream link type violation;
+               ITU-T G.9804.2 Table 14-1 Tuning control requests
+               rejected on upstream link type violation";
           }
           leaf lnrt {
             type bbf-yang:performance-counter64;
@@ -2063,11 +2399,14 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests rejected
-               on upstream link type violation";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests rejected on upstream link type violation;
+               ITU-T G.9804.2 Table 14-1 - Tuning control
+               requests rejected on upstream link type violation";
           }
           leaf lncd {
             type bbf-yang:performance-counter64;
@@ -2078,11 +2417,14 @@ module bbf-xpon-performance-management {
                For G-PON, not applicable.
                For XG-PON, not applicable.
                For XGS-PON, not applicable.
-               For NG-PON2, reported per ANI, v-ANI and CT.";
+               For 25GS-PON, not applicable.
+               For NG-PON2, reported per ANI, vANI and CT.
+               For 50G-PON, reported per ANI, vANI and CT.";
             reference
-              "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-               Table 14-1: Tuning control requests rejected
-               on upstream line code violation";
+              "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control
+               requests rejected on upstream line code violation;
+               ITU-T G.9804.2 Table 14-1 - Tuning control
+               requests rejected on upstream line code violation";
           }
         }
       }
@@ -2096,10 +2438,13 @@ module bbf-xpon-performance-management {
            For G-PON, not applicable.
            For XG-PON, not applicable.
            For XGS-PON, not applicable.
-           For NG-PON2, reported per ANI, v-ANI and CT.";
+           For 25GS-PON, not applicable.
+           For NG-PON2, reported per ANI, vANI and CT.
+           For 50G-PON, reported per ANI, vANI and CT.";
         reference
-          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Tuning control requests failed
+          "ITU-T G.989.3 Amd.2 Table 14-1 - Tuning control requests
+           failed with ONU reactivation;
+           ITU-T G.9804.2 Table 14-1 - Tuning control requests failed
            with ONU reactivation";
       }
     }
@@ -2125,11 +2470,14 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per ANI, v-ANI and CT.";
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per ANI, vANI and CT.
+             For 50G-PON, reported per ANI, vANI and CT.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Change_Power_Level messages rejected
-             due to Parameter Error";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - Change_Power_Level
+             messages rejected due to Parameter Error;
+             ITU-T G.9804.2 Table 14-1 - Change_Power_Level messages
+             rejected due to Parameter Error";
         }
         leaf without-completion-ack {
           type bbf-yang:performance-counter64;
@@ -2142,11 +2490,14 @@ module bbf-xpon-performance-management {
              For G-PON, not applicable.
              For XG-PON, not applicable.
              For XGS-PON, not applicable.
-             For NG-PON2, reported per ANI, v-ANI and CT.";
+             For 25GS-PON, not applicable.
+             For NG-PON2, reported per ANI, vANI and CT.
+             For 50G-PON, reported per ANI, vANI and CT.";
           reference
-            "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-             Table 14-1: Change_Power_Level messages without
-             completion acknowledgement";
+            "ITU-T G.989.3 Amd.2 Table 14-1 - Change_Power_Level
+             messages without completion acknowledgement;
+             ITU-T G.9804.2 Table 14-1 - Change_Power_Level messages
+             without completion acknowledgement";
         }
       }
     }
@@ -2167,18 +2518,18 @@ module bbf-xpon-performance-management {
            (OMCI) baseline message count.
 
            For G-PON, not applicable.
-           For XG-PON, reported per ANI and v-ANI.
-           For XGS-PON, reported per ANI and v-ANI.
-           For NG-PON2, reported per ANI and v-ANI.";
+           For XG-PON, reported per ANI and vANI.
+           For XGS-PON, reported per ANI and vANI.
+           For 25GS-PON, reported per ANI and vANI.
+           For NG-PON2, reported per ANI and vANI.
+           For 50G-PON, reported per ANI and vANI.";
         reference
-          "ITU-T G.987.3 (01/2014)
-           Table 14-1: OMCI baseline message count
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: OMCI baseline message count
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 OMCI baseline message count";
+          "ITU-T G.987.3 Table 14-1 - OMCI baseline message count;
+           ITU-T G.989.3 Amd.2 Table 14-1 - OMCI baseline message
+           count;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - OMCI baseline message
+           count;
+           ITU-T G.9804.2 Table 14-1 - OMCI baseline message count";
       }
       leaf extended-messages {
         type bbf-yang:performance-counter64;
@@ -2187,18 +2538,18 @@ module bbf-xpon-performance-management {
            (OMCI) extended message count.
 
            For G-PON, not applicable.
-           For XG-PON, reported per ANI and v-ANI.
-           For XGS-PON, reported per ANI and v-ANI.
-           For NG-PON2, reported per ANI and v-ANI.";
+           For XG-PON, reported per ANI and vANI.
+           For XGS-PON, reported per ANI and vANI.
+           For 25GS-PON, reported per ANI and vANI.
+           For NG-PON2, reported per ANI and vANI.
+           For 50G-PON, reported per ANI and vANI.";
         reference
-          "ITU-T G.987.3 (01/2014)
-           Table 14-1: OMCI extended message count
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: OMCI extended message count
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 OMCI extended message count";
+          "ITU-T G.987.3 Table 14-1 - OMCI extended message count;
+           ITU-T G.989.3 Amd.2 Table 14-1 - OMCI extended message
+           count;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 OMCI extended message
+           count;
+           ITU-T G.9804.2 Table 14-1 - OMCI extended message count";
       }
       leaf autonomus-messages {
         type bbf-yang:performance-counter64;
@@ -2207,18 +2558,16 @@ module bbf-xpon-performance-management {
            (OMCI) Autonomous message count.
 
            For G-PON, not applicable.
-           For XG-PON, reported per v-ANI.
-           For XGS-PON, reported per v-ANI.
-           For NG-PON2, reported per v-ANI.";
+           For XG-PON, reported per vANI.
+           For XGS-PON, reported per vANI.
+           For 25GS-PON, reported per vANI.
+           For NG-PON2, reported per vANI.
+           For 50G-PON, reported per vANI.";
         reference
-          "ITU-T G.987.3 (01/2014)
-           Table 14-1: Autonomous messages
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Autonomous messages
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 Autonomous messages";
+          "ITU-T G.987.3 Table 14-1 - Autonomous messages;
+           ITU-T G.989.3 Amd.2 Table 14-1 - Autonomous messages;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - Autonomous messages;
+           ITU-T G.9804.2 Table 14-1 - Autonomous messages";
       }
       leaf mic-errors {
         type bbf-yang:performance-counter64;
@@ -2228,18 +2577,16 @@ module bbf-xpon-performance-management {
            Check (MIC) errors.
 
            For G-PON, not applicable.
-           For XG-PON, reported per ANI and v-ANI.
-           For XGS-PON, reported per ANI and v-ANI.
-           For NG-PON2, reported per ANI and v-ANI.";
+           For XG-PON, reported per ANI and vANI.
+           For XGS-PON, reported per ANI and vANI.
+           For 25GS-PON, reported per ANI and vANI.
+           For NG-PON2, reported per ANI and vANI.
+           For 50G-PON, reported per ANI and vANI.";
         reference
-          "ITU-T G.987.3 (01/2014)
-           Table 14-1: OMCI MIC errors
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: OMCI MIC errors
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 OMCI MIC errors";
+          "ITU-T G.987.3 Table 14-1 - OMCI MIC errors;
+           ITU-T G.989.3 Amd.2 Table 14-1 - OMCI MIC errors;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - OMCI MIC errors;
+           ITU-T G.9804.2 Table 14-1 - OMCI MIC errors";
       }
     }
   }
@@ -2255,15 +2602,15 @@ module bbf-xpon-performance-management {
         units "0.1 dBm";
         description
           "Depending on the network configuration (integrated vs.
-           external WM, presence of RE), the maintained value refers
+           external WM, presence of RE) the maintained value refers
            to one of three reference points: S/R-CP, S/R-CG, or
            S'R'.";
         reference
-          "ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Transmit Optical power level
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 Transmit Optical power level";
+          "ITU-T G.989.3 Amd.2 Table 14-1 - Transmit Optical power
+           level;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - Transmit Optical power
+           level;
+           ITU-T G.9804.2 Table 14-1 - Transmit Optical power level";
       }
     }
   }
@@ -2282,21 +2629,17 @@ module bbf-xpon-performance-management {
            Optical Network Unit (ONU) low-power states, respectively.
 
            For G-PON, not applicable.
-           For XG-PON, reported per ANI and v-ANI.
-           For XGS-PON, reported per ANI and v-ANI.
-           For NG-PON2, reported per ANI and v-ANI.";
+           For XG-PON, reported per ANI and vANI.
+           For XGS-PON, reported per ANI and vANI.
+           For 25GS-PON, reported per ANI and vANI.
+           For NG-PON2, reported per ANI and vANI.";
         reference
-          "ITU-T G.987.3 (01/2014)
-           Table 14-1: Time spent in each of the OLT/ONU
-           low-power states, respectively
-
-           ITU-T G.989.3 (2015)/Amd.2 (11/2018)
-           Table 14-1: Time spent in each of the OLT/ONU
-           low-power states, respectively
-
-           ITU-T G.9807.1 (2016)/Amd.1 (10/2017)
-           Table C.14.1 Time spent in each of the OLT/ONU
-           low-power states, respectively";
+          "ITU-T G.987.3 Table 14-1 - Time spent in each of the
+           OLT/ONU low-power states, respectively;
+           ITU-T G.989.3 Amd.2 Table 14-1 - Time spent in each of the
+           OLT/ONU low-power states, respectively;
+           ITU-T G.9807.1 Amd.1 Table C.14.1 - Time spent in each of
+           the OLT/ONU low-power states, respectively";
       }
     }
   }

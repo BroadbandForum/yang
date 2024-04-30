@@ -1,5 +1,10 @@
 ## Broadband Forum YANG Modules
 
+### 2024-04-23: [TR-385 Issue 3](https://www.broadband-forum.org/technical/download/TR-385_Issue-3.pdf) YANG Modules for PON Management
+*Tag: [TR-385-v3.0.0](https://github.com/BroadbandForum/yang/tree/TR-385-v3.0.0)*
+
+* Add support for ITU-T G.9804.x (50G-PON) and MSA 25GS-PON
+
 ### 2024-01-19: [TR-477 Issue 1](https://www.broadband-forum.org/technical/download/TR-477.pdf) Cloud CO Enhancement - Access Node Functional Disaggregation
 *Tag: [TR-477-v1.0.0](https://github.com/BroadbandForum/yang/tree/TR-477-v1.0.0)*
 

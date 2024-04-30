@@ -25,8 +25,6 @@ module bbf-hardware-transceivers-xpon {
 
      Editor:      Robert Peschi, Nokia
 
-     Editor:      Kevin Noll, Vecima
-
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Marta Seda, Calix";
@@ -41,7 +39,7 @@ module bbf-hardware-transceivers-xpon {
      Specifically, this module augments the bbf-hardware-transceivers
      model to define transceiver data specific to PON applications.
 
-     Copyright (c) 2018-2023, Broadband Forum
+     Copyright (c) 2018-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +79,19 @@ module bbf-hardware-transceivers-xpon {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2a1; see
+     This version of this YANG module is part of TR-385i3; see
      the TR itself for full legal notices.";
 
+  revision 2024-04-23 {
+    description
+      "Issue 3.
+       * Approval Date:    2024-04-23.
+       * Publication Date: 2024-04-23.";
+    reference
+      "TR-385i3: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3.pdf>";
+  }
   revision 2023-06-21 {
     description
       "Issue 2 Amendment 1.
@@ -124,11 +132,17 @@ module bbf-hardware-transceivers-xpon {
         description
           "The serial number of the Optical Network Unit (ONU).";
         reference
-          "ITU-T G.984.3, clause 9.2.4.1
-           ITU-T G.987.3, clause 11.3.3.2
-           ITU-T G.9807.1, clauses C11.2.6.1, C11.2.6.2 and
-           C11.3.4.1
-           ITU-T G.989.3, clauses 11.2.6.1, 11.2.6.2 and 11.3.4.1.";
+          "ITU-T G.984.3 Clause 9.2.4.1;
+           ITU-T G.987.3 Clause 11.3.3.2;
+           ITU-T G.9807.1 Clause C.11.2.6.1;
+           ITU-T G.9807.1 Clause C.11.2.6.2;
+           ITU-T G.9807.1 Clause C.11.3.4.1;
+           ITU-T G.989.3 Clause 11.2.6.1;
+           ITU-T G.989.3 Clause 11.2.6.2;
+           ITU-T G.989.3 Clause 11.3.4.1;
+           ITU-T G.9804.2 Clause 11.2.6.1;
+           ITU-T G.9804.2 Clause 11.2.6.2;
+           ITU-T G.9804.2 Clause 11.3.4.1";
       }
       leaf rssi {
         type bbf-xpon-types:int16-or-unknown;
@@ -140,7 +154,7 @@ module bbf-hardware-transceivers-xpon {
            averaged optical power received from a specific Optical
            Network Unit (ONU) operating in burst mode.";
         reference
-          "ITU-T G.Sup48, section 3.1.";
+          "ITU-T G.Sup48 Clause 3.1";
       }
       leaf v-ani-ref {
         type if:interface-ref;

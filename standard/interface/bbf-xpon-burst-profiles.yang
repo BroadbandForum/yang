@@ -22,8 +22,6 @@ module bbf-xpon-burst-profiles {
 
      Editor:      Robert Peschi, Nokia
 
-     Editor:      Kevin Noll, Vecima
-
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Marta Seda, Calix";
@@ -37,7 +35,7 @@ module bbf-xpon-burst-profiles {
 
      Specifically, this module provides management of burst profiles.
 
-     Copyright (c) 2018-2023, Broadband Forum
+     Copyright (c) 2018-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -77,9 +75,19 @@ module bbf-xpon-burst-profiles {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2a1; see
+     This version of this YANG module is part of TR-385i3; see
      the TR itself for full legal notices.";
 
+  revision 2024-04-23 {
+    description
+      "Issue 3.
+       * Approval Date:    2024-04-23.
+       * Publication Date: 2024-04-23.";
+    reference
+      "TR-385i3: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3.pdf>";
+  }
   revision 2023-06-21 {
     description
       "Issue 2 Amendment 1.
@@ -111,9 +119,14 @@ module bbf-xpon-burst-profiles {
         description
           "Burst profile ID.";
         reference
-          "ITU-T G.987.3 clauses 8.1.2.6 and 11.3.3
-           ITU-T G.9807.1 clauses C.8.1.1.2.6 and C.11.3.3.1
-           ITU-T G.989.3 clauses 8.1.1.2.6 and 11.3.3.1";
+          "ITU-T G.987.3 Clause 8.1.2.6;
+           ITU-T G.987.3 Clasue 11.3.3;
+           ITU-T G.9807.1 Clause C.8.1.1.2.6;
+           ITU-T G.9807.1 Clause C.11.3.3.1;
+           ITU-T G.989.3 Clause 8.1.1.2.6;
+           ITU-T G.989.3 Clause 11.3.3.1;
+           ITU-T G.9804.2 Clause 8.1.2.6;
+           ITU-T G.9804.2 Clause 11.3.3.1";
       }
       leaf profile-version {
         type uint8 {
@@ -121,11 +134,13 @@ module bbf-xpon-burst-profiles {
         }
         default "0";
         description
-          "Burst profile version.";
+          "Burst profile version. For 50G-PON, the applicable
+           values are in [0..7].";
         reference
-          "ITU-T G.987.3 clause 11.3.3
-           ITU-T G.9807.1 clause C.11.3.3.1
-           ITU-T G.9809.3 clause 11.3.3.1";
+          "ITU-T G.987.3 Clause 11.3.3;
+           ITU-T G.9807.1 Clause C.11.3.3.1;
+           ITU-T G.9809.3 Clause 11.3.3.1;
+           ITU-T G.9804.2 Clause 11.3.3.1";
       }
       leaf delimiter {
         type string {
@@ -136,9 +151,10 @@ module bbf-xpon-burst-profiles {
            whereas each octet is represented as 2 hexadecimal ASCII
            characters.";
         reference
-          "ITU-T G.987.3 clause 11.3.3
-           ITU-T G.9807.1 clause C.11.3.3.1
-           ITU-T G.9809.3 clause 11.3.3.1";
+          "ITU-T G.987.3 Clause 11.3.3;
+           ITU-T G.9807.1 Clause C.11.3.3.1;
+           ITU-T G.9809.3 Clause 11.3.3.1;
+           ITU-T G.9804.2 Clause 11.3.3.1";
       }
       leaf preamble {
         type string {
@@ -149,9 +165,10 @@ module bbf-xpon-burst-profiles {
            whereas each octet is represented as 2 hexadecimal ASCII
            characters.";
         reference
-          "ITU-T G.987.3 clause 11.3.3
-           ITU-T G.9807.1 clause C.11.3.3.1
-           ITU-T G.9809.3 clause 11.3.3.1";
+          "ITU-T G.987.3 Clause 11.3.3;
+           ITU-T G.9807.1 Clause C.11.3.3.1;
+           ITU-T G.9809.3 Clause 11.3.3.1;
+           ITU-T G.9804.2 Clause 11.3.3.1";
       }
       leaf preamble-repeat-count {
         type uint8;
@@ -160,11 +177,25 @@ module bbf-xpon-burst-profiles {
           "Number of times the preamble is transmitted. The value 0
            specifies that no preamble is transmitted.
            This leaf is used only for XGS-PON (ITU-T G.9807.1) and
-           NGPON2 (ITU-T G.989.3) channel terminations. It is ignored
-           for GPON (ITU-T G.984.3) channel terminations.";
+           NG-PON2 (ITU-T G.989.3) channel terminations. It is ignored
+           for G-PON (ITU-T G.984.3) and 50G-PON (ITU-T G.9804.2)
+           channel terminations.";
         reference
-          "ITU-T G.9807.1 clause C.11.3.3.1
-           ITU-T G.9809.3 clause 11.3.3.1";
+          "ITU-T G.9807.1 Clause C.11.3.3.1;
+           ITU-T G.9809.3 Clause 11.3.3.1";
+      }
+      leaf preamble-word-count {
+        type uint16 {
+          range "0..65535";
+        }
+        description
+          "Preamble word count, in 64 bit words, range 0..Wmax, where
+           Wmax denotes the maximum word count, and should depend on
+           the upstream line rate. The value 0 specifies that no
+           preamble is transmitted.
+           This leaf is used only for 50G-PON (ITU-T G.9804.2).";
+        reference
+          "ITU-T G.9804.2 Clause 11.3.3.1";
       }
     }
   }
@@ -188,9 +219,9 @@ module bbf-xpon-burst-profiles {
         description
           "Burst profile ID for ranging time allocations.";
         reference
-          "ITU-T G.987.3 clause 8.1.2.6
-           ITU-T G.9807.1 clause C.8.1.1.2.6
-           ITU-T G.989.3 clauses 8.1.1.2.6";
+          "ITU-T G.987.3 Clause 8.1.2.6;
+           ITU-T G.9807.1 Clause C.8.1.1.2.6;
+           ITU-T G.989.3 Clause 8.1.1.2.6";
       }
     }
   }
@@ -216,9 +247,9 @@ module bbf-xpon-burst-profiles {
         description
           "Burst profile ID for data allocations.";
         reference
-          "ITU-T G.987.3 clause 8.1.2.6
-           ITU-T G.9807.1 clause C.8.1.1.2.6
-           ITU-T G.989.3 clauses 8.1.1.2.6";
+          "ITU-T G.987.3 Clause 8.1.2.6;
+           ITU-T G.9807.1 Clause C.8.1.1.2.6;
+           ITU-T G.989.3 Clause 8.1.1.2.6";
       }
     }
   }

@@ -37,8 +37,6 @@ module bbf-xpon-onu-authentication {
 
      Editor:      Robert Peschi, Nokia
 
-     Editor:      Kevin Noll, Vecima
-
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Marta Seda, Calix";
@@ -54,7 +52,7 @@ module bbf-xpon-onu-authentication {
      data nodes and actions used for Optical Network Unit (ONU)
      authentication and the decision to apply an OMCI function.
 
-     Copyright (c) 2018-2023, Broadband Forum
+     Copyright (c) 2018-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -94,9 +92,19 @@ module bbf-xpon-onu-authentication {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2a1; see
+     This version of this YANG module is part of TR-385i3; see
      the TR itself for full legal notices.";
 
+  revision 2024-04-23 {
+    description
+      "Issue 3.
+       * Approval Date:    2024-04-23.
+       * Publication Date: 2024-04-23.";
+    reference
+      "TR-385i3: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3.pdf>";
+  }
   revision 2023-06-21 {
     description
       "Issue 2 Amendment 1.
@@ -145,8 +153,8 @@ module bbf-xpon-onu-authentication {
          installed at a particular location, for instance in an
          failed ONU replacement scenario.";
       reference
-        "ITU-T G.988 Clause 9.1.1
-         TR-489, section 8.2, R-OLT_11";
+        "ITU-T G.988 Clause 9.1.1;
+         TR-489 R-OLT_11";
     }
     leaf determined-onu-management-mode {
       type identityref {
@@ -162,8 +170,12 @@ module bbf-xpon-onu-authentication {
          ONU is present on a channel termination and has been
          successfully authenticated.";
       reference
-        "TR-489, section 6.1 and section 8.2, R-OLT_6, R-OLT_7,
-         R-OLT_8, R-OLT_9 and R-OLT_10";
+        "TR-489 Section 6.1;
+         TR-489 R-OLT_6;
+         TR-489 R-OLT_7;
+         TR-489 R-OLT_8;
+         TR-489 R-OLT_9;
+         TR-489 R-OLT_10";
     }
     leaf onu-name-from-management-plane {
       type bbf-yang:string-ascii64;
@@ -179,7 +191,8 @@ module bbf-xpon-onu-authentication {
          Line Termination (OLT), as for instance
          in TR-489 for Scenarios 1 or 3.";
       reference
-        "TR-489, section 6.2 and section 8.3, R-MP_6";
+        "TR-489 Section 6.2;
+         TR-489 R-MP_6";
     }
     leaf detected-vendor-id {
       type bbf-xpon-types:string-ascii4-or-empty;
@@ -247,8 +260,12 @@ module bbf-xpon-onu-authentication {
          notification reports the 'onu-presence-state' to be
          'onu-present-and-on-intended-channel-termination'.";
       reference
-        "TR-489, section 6.1 and section 8.2, R-OLT_6, R-OLT_7,
-         R-OLT_8, R-OLT_9 and R-OLT_10";
+        "TR-489 Section 6.1;
+         TR-489 R-OLT_6;
+         TR-489 R-OLT_7;
+         TR-489 R-OLT_8;
+         TR-489 R-OLT_9;
+         TR-489 R-OLT_10";
     }
     leaf detected-loid {
       if-feature "(bbf-xpon-onu-authf:"
@@ -276,8 +293,8 @@ module bbf-xpon-onu-authentication {
          installed at a particular location, for instance in an
          failed ONU replacement scenario.";
       reference
-        "ITU-T G.988 Clause 9.1.1
-         TR-489, section 8.2, R-OLT_11";
+        "ITU-T G.988 Clause 9.1.1;
+         TR-489 R-OLT_11";
     }
     leaf onu-name-from-v-ani-config {
       if-feature "bbf-xpon-onu-authf:"
@@ -288,10 +305,11 @@ module bbf-xpon-onu-authentication {
          as configured on the virtual Access Network
          Interface (vANI). This 'onu-name' could be used by
          the management plane as a direct key in its (ONU)
-         device aggegation function, as for instance
+         device aggregation function, as for instance
          in TR-489 for Scenarios 2.";
       reference
-        "TR-489, section 6.2.3 and section 8.2, R-OLT_6";
+        "TR-489 Section 6.2.3;
+         TR-489 R-OLT_6";
     }
     leaf detected-vendor-id {
       type bbf-xpon-types:string-ascii4-or-empty;
@@ -396,11 +414,17 @@ module bbf-xpon-onu-authentication {
              reported. This serial number should correspond
              to an ONU present on the channel termination.";
           reference
-            "ITU-T G.984.3, clause 9.2.4.1
-             ITU-T G.987.3, clause 11.3.3.2
-             ITU-T G.9807.1, clauses C11.2.6.1, C11.2.6.2 and
-             C11.3.4.1
-             ITU-T G.989.3, clauses 11.2.6.1, 11.2.6.2 and 11.3.4.1.";
+            "ITU-T G.984.3 Clause 9.2.4.1;
+             ITU-T G.987.3 Clause 11.3.3.2;
+             ITU-T G.9807.1 Clause C.11.2.6.1;
+             ITU-T G.9807.1 Clause C.11.2.6.2;
+             ITU-T G.9807.1 Clause C.11.3.4.1;
+             ITU-T G.989.3 Clause 11.2.6.1;
+             ITU-T G.989.3 Clause 11.2.6.2;
+             ITU-T G.989.3 Clause 11.3.4.1;
+             ITU-T G.9804.2 Clause 11.2.6.1;
+             ITU-T G.9804.2 Clause 11.2.6.2;
+             ITU-T G.9804.2 Clause 11.3.4.1";
         }
         leaf authentication-results {
           type identityref {
@@ -417,7 +441,8 @@ module bbf-xpon-onu-authentication {
              authentication is successful (or confirmed) the
              'v-ani' input parameter must be provided.";
           reference
-            "TR-489, section 8.2, R-OLT_8 and section 8.3, R-MP_6";
+            "TR-489 R-OLT_8;
+             TR-489 R-MP_6";
         }
         leaf v-ani {
           type if:interface-ref;
@@ -451,7 +476,8 @@ module bbf-xpon-onu-authentication {
              Note that this must be reported when the action
              reports a successful ONU authentication.";
           reference
-            "TR-489, section 8.2, R-OLT_8 and section 8.3, R-MP_6";
+            "TR-489 R-OLT_8;
+             TR-489 R-MP_6";
         }
         leaf detected-loid {
           type string {
@@ -467,8 +493,8 @@ module bbf-xpon-onu-authentication {
              installed at a particular location, for instance in
              a failed ONU replacement scenario.";
           reference
-            "ITU-T G.988 Clause 9.1.1
-             TR-489, section 8.2, R-OLT_8";
+            "ITU-T G.988 Clause 9.1.1;
+             TR-489 R-OLT_8";
         }
         leaf requested-onu-management-mode {
           type identityref {
@@ -484,7 +510,8 @@ module bbf-xpon-onu-authentication {
              Note that this should be reported when the action
              reports a successful ONU authentication.";
           reference
-            "TR-489, section 8.2, R-OLT_8 and section 8.3, R-MP_6";
+            "TR-489 R-OLT_8;
+             TR-489 R-MP_6";
         }
       }
     }

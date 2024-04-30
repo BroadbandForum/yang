@@ -18,8 +18,6 @@ submodule bbf-xpon-wavelength-profile-body {
 
      Editor:      Robert Peschi, Nokia
 
-     Editor:      Kevin Noll, Vecima
-
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Marta Seda, Calix";
@@ -27,7 +25,7 @@ submodule bbf-xpon-wavelength-profile-body {
     "This submodule contains a collection of YANG definitions for
      managing wavelength profiles.
 
-     Copyright (c) 2018-2023, Broadband Forum
+     Copyright (c) 2018-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -67,9 +65,19 @@ submodule bbf-xpon-wavelength-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2a1; see
+     This version of this YANG module is part of TR-385i3; see
      the TR itself for full legal notices.";
 
+  revision 2024-04-23 {
+    description
+      "Issue 3.
+       * Approval Date:    2024-04-23.
+       * Publication Date: 2024-04-23.";
+    reference
+      "TR-385i3: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3.pdf>";
+  }
   revision 2023-06-21 {
     description
       "Issue 2 Amendment 1.
@@ -141,7 +149,7 @@ submodule bbf-xpon-wavelength-profile-body {
         description
           "Upstream channel ID.";
         reference
-          "ITU-T G.989.3 clause 6.1.5.5.";
+          "ITU-T G.989.3 Clause 6.1.5.5.";
       }
       leaf downstream-channel-id {
         type uint8 {
@@ -151,18 +159,23 @@ submodule bbf-xpon-wavelength-profile-body {
         description
           "Downstream channel ID.";
         reference
-          "ITU-T G.989.3 clause 6.1.5.4.";
+          "ITU-T G.989.3 Clause 6.1.5.4.";
       }
       leaf downstream-wavelength {
         type uint32 {
-          range "0 | 156000..161000";
+          range "0 | 134000..162500";
         }
         units "0.01 nanometers";
         default "0";
         description
           "Downstream wavelength.";
         reference
-          "ITU-T G.989.2";
+          "ITU-T G.989.2 Clause 11.1.4.3;
+           ITU-T G.989.2 Clause A.1.5;
+           ITU-T G.9807.1 Clause A.8.2;
+           MSA 25GS-PON Section B1;
+           ITU-T G.9804.3 Clause 9.2.6.2;
+           ITU-T G.9804.3 Table 9-5";
       }
     }
   }

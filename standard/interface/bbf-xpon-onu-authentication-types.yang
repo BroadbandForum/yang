@@ -12,8 +12,6 @@ module bbf-xpon-onu-authentication-types {
 
      Editor:      Robert Peschi, Nokia
 
-     Editor:      Kevin Noll, Vecima
-
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Marta Seda, Calix";
@@ -29,7 +27,7 @@ module bbf-xpon-onu-authentication-types {
      Network Unit (ONU) authentication and the decision to apply
      an OMCI function.
 
-     Copyright (c) 2018-2023, Broadband Forum
+     Copyright (c) 2018-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -69,9 +67,19 @@ module bbf-xpon-onu-authentication-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2a1; see
+     This version of this YANG module is part of TR-385i3; see
      the TR itself for full legal notices.";
 
+  revision 2024-04-23 {
+    description
+      "Issue 3.
+       * Approval Date:    2024-04-23.
+       * Publication Date: 2024-04-23.";
+    reference
+      "TR-385i3: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3.pdf>";
+  }
   revision 2023-06-21 {
     description
       "Issue 2 Amendment 1.
@@ -95,7 +103,8 @@ module bbf-xpon-onu-authentication-types {
       "The Optical Network Unit (ONU) should be managed
        via a virtualized OMCI (vOMCI) function.";
     reference
-      "TR-489, sections 5.1 and 5.2";
+      "TR-489 Section 5.1;
+       TR-489 Section 5.2";
   }
 
   identity use-eomci {
@@ -105,7 +114,8 @@ module bbf-xpon-onu-authentication-types {
        via an OMCI function embedded in the Optical Line
        Termination (OLT),(eOMCI).";
     reference
-      "TR-489, sections 5.3 and 5.4";
+      "TR-489 Section 5.3;
+       TR-489 Section 5.4";
   }
 
   identity onu-management-state-base {
@@ -131,7 +141,8 @@ module bbf-xpon-onu-authentication-types {
        a specific Optical Network Unit (ONU) should be
        managed via a virtualized OMCI (vOMCI) function.";
     reference
-      "TR-489, sections 5.1 and 5.2";
+      "TR-489 Section 5.1;
+       TR-489 Section 5.2";
   }
 
   identity eomci-in-use {
@@ -141,7 +152,8 @@ module bbf-xpon-onu-authentication-types {
        its embedded OMCI function (eOMCI) to manage a
        specific Optical Network Unit (ONU).";
     reference
-      "TR-489, sections 5.3 and 5.4";
+      "TR-489 Section 5.3;
+       TR-489 Section 5.4";
   }
 
   identity onu-management-mode-not-ok {
@@ -152,7 +164,9 @@ module bbf-xpon-onu-authentication-types {
        mode to be applied to a specific Optical Network
        Unit (ONU).";
     reference
-      "TR-489, figure 6-6, 6-7 and 7-2";
+      "TR-489 Figure 6-6;
+       TR-489 Figure 6-7;
+       TR-489 Figure 7-2";
   }
 
   identity vani-management-mode-mismatch-with-requested-mode {
@@ -165,7 +179,7 @@ module bbf-xpon-onu-authentication-types {
        for this Optical Network Unit (ONU) from an
        'report-onu-authentication-results' action.";
     reference
-      "TR-489, section 8.2, R-OLT_9";
+      "TR-489 R-OLT_9";
   }
 
   identity eomci-per-olt-vomci-per-mgmt-plane {
@@ -177,7 +191,7 @@ module bbf-xpon-onu-authentication-types {
        action from the Management Plane indicating vOMCI as
        'requested-onu-management-mode'.";
     reference
-      "TR-489, section 6.2.2";
+      "TR-489 Section 6.2.2";
   }
 
   identity vomci-per-olt-eomci-per-mgmt-plane {
@@ -189,7 +203,7 @@ module bbf-xpon-onu-authentication-types {
        action from the Management Plane indicating eOMCI as
        'requested-onu-management-mode'.";
     reference
-      "TR-489, section 6.2.4";
+      "TR-489 Section 6.2.4";
   }
 
   identity eomci-expected-but-missing-onu-configuration {
@@ -200,7 +214,7 @@ module bbf-xpon-onu-authentication-types {
        Network Unit (ONU) but it misses data to do so,
        for instance the ANI or the ONU configuration.";
     reference
-      "TR-489, section 8.2, R-OLT_10";
+      "TR-489 R-OLT_10";
   }
 
   identity onu-name-mismatch-olt-mgmt-plane {
@@ -212,7 +226,7 @@ module bbf-xpon-onu-authentication-types {
        for this Optical Network Unit (ONU) from
        an 'report-onu-authentication-results' action.";
     reference
-      "TR-489, section 6.2.4";
+      "TR-489 Section 6.2.4";
   }
 
   identity undetermined {
@@ -223,7 +237,9 @@ module bbf-xpon-onu-authentication-types {
        be managed via an embedded OMCI function (eOMCI) or
        a virtualized OMCI function (vOMCI).";
     reference
-      "TR-489, sections 6.2.2 and 6.2.4 and section 8.2, R-OLT_3";
+      "TR-489 Section 6.2.2;
+       TR-489 Section 6.2.4;
+       TR-489 R-OLT_3";
   }
 
   identity action-error-tag {
@@ -232,7 +248,7 @@ module bbf-xpon-onu-authentication-types {
        invocation of an 'report-onu-authentication-results'
        action.";
     reference
-      "TR-489, section 8.2, R-OLT_8";
+      "TR-489 R-OLT_8";
   }
 
   identity parameter-error {
@@ -255,7 +271,8 @@ module bbf-xpon-onu-authentication-types {
        with an explicitely configured
        'expected-onu-magement-mode' on the vANI.";
     reference
-      "TR-489, sections 6.2.2 and 6.2.4";
+      "TR-489 Section 6.2.2;
+       TR-489 Section 6.2.4";
   }
 
   identity onu-name-mismatch-with-v-ani {
@@ -264,7 +281,7 @@ module bbf-xpon-onu-authentication-types {
       "The provided 'onu-name' conflicts with an
        explicitely configured 'onu-name' on the vANI.";
     reference
-      "TR-489, section 6.2.4";
+      "TR-489 Section 6.2.4";
   }
 
   identity undetermined-error {

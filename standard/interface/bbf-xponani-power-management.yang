@@ -25,8 +25,6 @@ module bbf-xponani-power-management {
 
      Editor:      Robert Peschi, Nokia
 
-     Editor:      Kevin Noll, Vecima
-
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Marta Seda, Calix";
@@ -41,7 +39,7 @@ module bbf-xponani-power-management {
      Specifically, this module defines Optical Network Unit (ONU)
      power management at the Access Network Interface (ANI).
 
-     Copyright (c) 2018-2023, Broadband Forum
+     Copyright (c) 2018-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +79,19 @@ module bbf-xponani-power-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2a1; see
+     This version of this YANG module is part of TR-385i3; see
      the TR itself for full legal notices.";
 
+  revision 2024-04-23 {
+    description
+      "Issue 3.
+       * Approval Date:    2024-04-23.
+       * Publication Date: 2024-04-23.";
+    reference
+      "TR-385i3: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3.pdf>";
+  }
   revision 2023-06-21 {
     description
       "Issue 2 Amendment 1.
@@ -115,7 +123,7 @@ module bbf-xponani-power-management {
         "Optical Network Unit (ONU) power management configuration
          parameters.";
       reference
-        "ITU-T G.988 clause 9.1.14";
+        "ITU-T G.988 Clause 9.1.14";
       leaf name {
         type bbf-yang:string-ascii64;
         description
@@ -139,7 +147,7 @@ module bbf-xponani-power-management {
            watchful sleep mode until the ONU is fully operational,
            specified as a count of 125 microsecond PHY frames.";
         reference
-          "ITU-T G.988 clause 9.1.14";
+          "ITU-T G.988 Clause 9.1.14";
       }
       leaf iaware {
         type uint32;
@@ -152,7 +160,7 @@ module bbf-xponani-power-management {
            cause the ONU to enter an active state rather than
            returning to a sleep state.";
         reference
-          "ITU-T G.988 clause 9.1.14";
+          "ITU-T G.988 Clause 9.1.14";
       }
       leaf ihold {
         type uint16;
@@ -162,7 +170,7 @@ module bbf-xponani-power-management {
            the Optical Network Unit (ONU) remains in the active held
            state, as a count of 125 microsecond PHY frames.";
         reference
-          "ITU-T G.988 clause 9.1.14";
+          "ITU-T G.988 Clause 9.1.14";
       }
       leaf idoze {
         type uint32;
@@ -174,7 +182,7 @@ module bbf-xponani-power-management {
            This parameter must be set to a value greater than 0 if
            Optical Network Unit (ONU) supports doze mode.";
         reference
-          "ITU-T G.988 clause 9.1.14";
+          "ITU-T G.988 Clause 9.1.14";
       }
       leaf icyclic-sleep {
         type uint32;
@@ -188,7 +196,7 @@ module bbf-xponani-power-management {
            (ONU) to leave this state. This parameter must be set to a
            value greater than 0 if ONU supports cyclic sleep mode.";
         reference
-          "ITU-T G.988 clause 9.1.14";
+          "ITU-T G.988 Clause 9.1.14";
       }
     }
   }
@@ -240,10 +248,11 @@ module bbf-xponani-power-management {
           "Optical Network Unit (ONU) power management state at
            Optical Line Termination (OLT).";
         reference
-          "ITU-T G.9807.1 clause C.16.1
-           ITU-T G.989.3 clause 16
-           ITU-T G.987.3 clause 16
-           ITU-T G.984.3 Annex E.";
+          "ITU-T G.9807.1 Clause C.16.1;
+           ITU-T G.989.3 Clause 16;
+           ITU-T G.987.3 Clause 16;
+           ITU-T G.984.3 Annex E;
+           ITU-T G.9804.2 Clause 16";
       }
       leaf-list capability {
         type identityref {
@@ -253,7 +262,7 @@ module bbf-xponani-power-management {
           "List of dynamic power management capabilities supported
            by the Optical Network Unit (ONU).";
         reference
-          "ITU-T G.988.x clause 9.1.14.";
+          "ITU-T G.988 Clause 9.1.14";
       }
       leaf itransinit {
         type uint16;
@@ -268,7 +277,7 @@ module bbf-xponani-power-management {
            value zero indicates that the sleeping ONU can respond to a
            bandwidth grant without delay.";
         reference
-          "ITU-T G.988 clause 9.1.14";
+          "ITU-T G.988 Clause 9.1.14";
       }
       leaf itxinit {
         type uint16;
@@ -282,7 +291,7 @@ module bbf-xponani-power-management {
            frames. The value zero indicates that the dozing ONU can
            respond to a bandwidth grant without delay.";
         reference
-          "ITU-T G.988 clause 9.1.14";
+          "ITU-T G.988 Clause 9.1.14";
       }
     }
   }

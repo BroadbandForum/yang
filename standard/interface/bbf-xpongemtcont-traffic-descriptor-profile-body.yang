@@ -15,8 +15,6 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
 
      Editor:      Robert Peschi, Nokia
 
-     Editor:      Kevin Noll, Vecima
-
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Marta Seda, Calix";
@@ -24,7 +22,7 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
     "This submodule contains a collection of YANG definitions for
      managing traffic descriptor profiles.
 
-     Copyright (c) 2018-2023, Broadband Forum
+     Copyright (c) 2018-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -64,9 +62,19 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2a1; see
+     This version of this YANG module is part of TR-385i3; see
      the TR itself for full legal notices.";
 
+  revision 2024-04-23 {
+    description
+      "Issue 3.
+       * Approval Date:    2024-04-23.
+       * Publication Date: 2024-04-23.";
+    reference
+      "TR-385i3: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3.pdf>";
+  }
   revision 2023-06-21 {
     description
       "Issue 2 Amendment 1.
@@ -100,7 +108,7 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
 
   augment "/bbf-xpongemtcont:xpongemtcont" {
     description
-      "Augment the xPON GPON Encapsulation Method (GEM) port and
+      "Augment the xPON G-PON Encapsulation Method (GEM) port and
        Transmission Container (T-CONT) configuration with traffic
        descriptor profile specific configuration.";
     container traffic-descriptor-profiles {
@@ -131,7 +139,7 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
            is allocated to the given traffic flow, regardless of its
            traffic demand and the overall traffic load conditions.";
         reference
-          "ITU-T G.984.3 clause 7.4.4.3";
+          "ITU-T G.984.3 Clause 7.4.4.3";
       }
       leaf assured-bandwidth {
         type uint64;
@@ -143,7 +151,7 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
            unsatisfied traffic demand, regardless of the overall
            traffic conditions.";
         reference
-          "ITU-T G.984.3 clause 7.4.4.3";
+          "ITU-T G.984.3 Clause 7.4.4.3";
       }
       leaf maximum-bandwidth {
         type uint64;
@@ -176,7 +184,7 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
            be allocated to the traffic flow under any traffic
            conditions.";
         reference
-          "ITU-T G.984.3 clause 7.4.4.3";
+          "ITU-T G.984.3 Clause 7.4.4.3";
       }
       leaf priority {
         type uint8 {
@@ -186,7 +194,7 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
           "Used for scheduling traffic on a Transmission Container
            (T-CONT).";
         reference
-          "ITU-T G.984.3 clause 7.4.5";
+          "ITU-T G.984.3 Clause 7.4.5";
       }
       leaf weight {
         type uint8;
@@ -194,7 +202,7 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
           "Used for scheduling traffic on a Transmission Container
            (T-CONT).";
         reference
-          "ITU-T G.984.3 clause 7.4.5";
+          "ITU-T G.984.3 Clause 7.4.5";
       }
       leaf additional-bw-eligibility-indicator {
         type enumeration {
@@ -255,8 +263,8 @@ submodule bbf-xpongemtcont-traffic-descriptor-profile-body {
              maximum-bandwidth -
              (fixed-bandwidth + assured-bandwidth).";
         reference
-          "ITU-T G.984.3 clause 7.4.4.3
-           ITU-T G.989.3 clause 7.3.5";
+          "ITU-T G.984.3 Clause 7.4.4.3;
+           ITU-T G.989.3 Clause 7.3.5";
       }
       description
         "List of traffic descriptor profiles.";

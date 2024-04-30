@@ -25,8 +25,6 @@ submodule bbf-xpon-channel-pair-body {
 
      Editor:      Robert Peschi, Nokia
 
-     Editor:      Kevin Noll, Vecima
-
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Marta Seda, Calix";
@@ -34,7 +32,7 @@ submodule bbf-xpon-channel-pair-body {
     "This submodule contains a collection of YANG definitions for
      managing channel pairs.
 
-     Copyright (c) 2018-2023, Broadband Forum
+     Copyright (c) 2018-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -74,9 +72,19 @@ submodule bbf-xpon-channel-pair-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2a1; see
+     This version of this YANG module is part of TR-385i3; see
      the TR itself for full legal notices.";
 
+  revision 2024-04-23 {
+    description
+      "Issue 3.
+       * Approval Date:    2024-04-23.
+       * Publication Date: 2024-04-23.";
+    reference
+      "TR-385i3: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3.pdf>";
+  }
   revision 2023-06-21 {
     description
       "Issue 2 Amendment 1.
@@ -123,8 +131,9 @@ submodule bbf-xpon-channel-pair-body {
          to have several channel-pairs with identical downstream
          channel-ID or upstream channel-ID or transmit wavelength
          simultaneously active on the same chnanel-group.
-         In particular there may be only a maximum of one XGS-PON,
-         one XG-PON and one GPON active on the same channel group.
+         In particular there may be only a maximum of one 25GS-PON,
+         one XGS-PON, one XG-PON and one G-PON active on the same
+         channel group.
          The YANG model does not enforce these constraints which are
          assumed to be enforced or verified by the OLT network
          element software.";
@@ -149,19 +158,17 @@ submodule bbf-xpon-channel-pair-body {
          + "'bbf-xpon-types:ngpon2-twdm') or derived-from-or-self"
          + "(../channel-pair-type, 'bbf-xpon-types:ngpon2-ptp') or "
          + "derived-from-or-self(../channel-pair-type,"
-         + "'bbf-xpon-types:xgs')" {
-        description
-          "Only applicable for Time Wavelength Division Multiplexing
-           (TWDM) NG-PON2, Point-to-Point (PtP) NG-PON2 or XGS-PON
-           channel pairs.";
-      }
+         + "'bbf-xpon-types:xgs') or "
+         + "derived-from-or-self(../channel-pair-type,"
+         + "'bbf-xpon-types:twentyfivegs')";
       type wavelength-prof-ref;
       description
-        "An NG-PON2 channel pair needs to point to an existing
-         wavelength profile. Similar for XGS-PON (ref: ITU-T G.9807.1
-         A.8.2: Basic Wavelength and Optional Wavelength sets). The
-         wavelength for XG-PON and GPON is fixed per ITU-T standards
-         and needs not be configured via a wavelength profile.";
+        "Reference to a wavelength profile. Applicable to XGS-PON,
+         NG-PON2 and 25GS-PON only.";
+      reference
+        "ITU-T G.9807.1 Clause A.8.2 - Basic Wavelength and
+         Optional Wavelength sets;
+         MSA 25GS-PON Annex B";
     }
     leaf channel-pair-type {
       type identityref {
@@ -170,8 +177,8 @@ submodule bbf-xpon-channel-pair-body {
       mandatory true;
       description
         "Represents the type of channel pair
-         (e.g., TWDM NG-PON2, PtP NG-PON2, XGS-PON, XG-PON,
-         GPON).";
+         (e.g., TDM 50G-PON, 25GS-PON, TWDM NG-PON2, PtP NG-PON2,
+          XGS-PON, XG-PON, G-PON).";
     }
     leaf channel-pair-line-rate {
       when "derived-from-or-self(../channel-pair-type,"
@@ -191,8 +198,40 @@ submodule bbf-xpon-channel-pair-body {
          speed for NG-PON2. The line rates for
              XGS-PON (downstream 10Gbps/upstream 10Gbps),
              XG-PON(downstream 10Gbps/upstream 2.5Gbps) and
-             GPON (downstream 2.5Gbps/upstream 1.2Gbps)
+             G-PON (downstream 2.5Gbps/upstream 1.2Gbps)
          are fixed per ITU-T standards and need not be configured.";
+    }
+    leaf fiftyg-channel-pair-line-rate {
+      when "derived-from-or-self(../channel-pair-type,"
+         + "'bbf-xpon-types:fiftyg-tdm') or "
+         + "derived-from-or-self(../channel-pair-type,"
+         + "'bbf-xpon-types:fiftyg-twdm')";
+      type identityref {
+        base "bbf-xpon-types:"
+           + "fiftyg-channel-pair-line-rate-profile-base";
+      }
+      default "bbf-xpon-types:unplanned-50g-cp-line-rate";
+      description
+        "Represents the planned downstream/upstream channel pair
+         speed for 50G-PON.";
+      reference
+        "ITU-T G.9804.3 Clause 9.2.1;
+         ITU-T G.9804.2 Clause 1.1";
+    }
+    leaf twentyfivegs-channel-pair-line-rate {
+      when "derived-from-or-self(../channel-pair-type,"
+         + "'bbf-xpon-types:twentyfivegs')";
+      type identityref {
+        base "bbf-xpon-types:"
+           + "twentyfivegs-channel-pair-line-rate-profile-base";
+      }
+      default "bbf-xpon-types:unplanned-25gs-cp-line-rate";
+      description
+        "Represents the planned downstream/upstream channel pair
+         speed for 25GS-PON.";
+      reference
+        "MSA 25GS-PON Table 6.1;
+         MSA 25GS-PON Table 6.2";
     }
     leaf gpon-pon-id-interval {
       when "derived-from-or-self"
@@ -203,15 +242,14 @@ submodule bbf-xpon-channel-pair-body {
       units "seconds";
       default "0";
       description
-        "This attribute is used to specify the frequency of
-         transmission of the periodic downstream PON-ID PLOAM
-         message for this GPON. See ITU-T G.984.3 C1. The default
-         value '0' allows not to generate this PLOAM message,
-         fulfilling ITU-T G.984.3 C2 requirement.
-         This is only applicable to GPON.";
+        "Specifies the frequency of transmission of the
+         periodic downstream PON-ID PLOAM message for this G-PON.
+         See ITU-T G.984.3 C.1. The default value '0' allows not
+         to generate this PLOAM message, fulfilling ITU-T G.984.3
+         C.2 requirement. This is only applicable to G-PON.";
       reference
-        "ITU-T G.984.3 C1
-         ITU-T G.984.3 C2";
+        "ITU-T G.984.3 Clause C.1;
+         ITU-T G.984.3 Clause C.2";
     }
   }
 
@@ -219,16 +257,13 @@ submodule bbf-xpon-channel-pair-body {
     description
       "All state data for a channel pair.";
     leaf actual-downstream-wavelength {
-      type uint32 {
-        range "0 | 148000..162000";
-      }
+      type uint32;
       units "0.01 nanometers";
       default "0";
       description
-        "Represents the Actual Downstream wavelength for the
-         channel pair for any of the NG-PON2, XGS-PON, XG-PON or
-         GPON case. It is expressed in hundredths of nm to fit
-         ITU-T precision requirements.";
+        "Represents the Actual Downstream wavelength of the
+         channel pair. It is expressed in hundredths of nanometer
+         to fit ITU-T precision requirements.";
     }
     leaf primary-ct-assigned {
       type boolean;
@@ -237,7 +272,7 @@ submodule bbf-xpon-channel-pair-body {
         "If 'true', a channel termination with Primary type B
          role has been assigned to this channel pair.";
       reference
-        "ITU-T G.989.3 clause 18.2";
+        "ITU-T G.989.3 Clause 18.2";
     }
     leaf secondary-ct-assigned {
       type boolean;
@@ -246,7 +281,7 @@ submodule bbf-xpon-channel-pair-body {
         "If 'true', a channel termination with Secondary type B
          role has been assigned to this channel pair.";
       reference
-        "ITU-T G.989.3 clause 18.2";
+        "ITU-T G.989.3 Clause 18.2";
     }
   }
 

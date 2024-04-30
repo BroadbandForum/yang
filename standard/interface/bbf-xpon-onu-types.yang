@@ -12,8 +12,6 @@ module bbf-xpon-onu-types {
 
      Editor:      Robert Peschi, Nokia
 
-     Editor:      Kevin Noll, Vecima
-
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Marta Seda, Calix";
@@ -28,7 +26,7 @@ module bbf-xpon-onu-types {
      Specifically, this module defines common YANG types used in the
      management of Optical Network Units (ONU).
 
-     Copyright (c) 2018-2023, Broadband Forum
+     Copyright (c) 2018-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -68,9 +66,19 @@ module bbf-xpon-onu-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2a1; see
+     This version of this YANG module is part of TR-385i3; see
      the TR itself for full legal notices.";
 
+  revision 2024-04-23 {
+    description
+      "Issue 3.
+       * Approval Date:    2024-04-23.
+       * Publication Date: 2024-04-23.";
+    reference
+      "TR-385i3: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3.pdf>";
+  }
   revision 2023-06-21 {
     description
       "Issue 2 Amendment 1.
@@ -135,10 +143,11 @@ module bbf-xpon-onu-types {
        was present on a channel termination is still considered
        'present' on the channel termination.";
     reference
-      "ITU-T G.984.3, section 10.2.1
-       ITU-T G.987.3, section 12.2.1
-       ITU-T G.9807.1, Table C.12.2
-       ITU-T G.989.3, Table 12-2";
+      "ITU-T G.984.3 Clause 10.2.1;
+       ITU-T G.987.3 Clause 12.2.1;
+       ITU-T G.9807.1 Table C.12.2;
+       ITU-T G.989.3 Table 12-2;
+       ITU-T G.9804.2 Table 12-2";
   }
 
   identity onu-present-and-on-intended-channel-termination {
@@ -304,10 +313,11 @@ module bbf-xpon-onu-types {
        the OLT (Refer to 'inside-olt') which has put the ONU in ITU-T
        'Emergency Stop state'.";
     reference
-      "ITU-T G.984.3 Section 9.2.1
-       ITU-T G.987.3 Table 11.2
-       ITU-T G.9807.3 Table C.11.2
-       ITU-T G.989.3 Table 11.2";
+      "ITU-T G.984.3 Clause 9.2.1;
+       ITU-T G.987.3 Table 11-2;
+       ITU-T G.9807.1 Table C.11.2;
+       ITU-T G.989.3 Table 11-2;
+       ITU-T G.9804.2 Table 11-3";
   }
 
   identity onu-not-present {

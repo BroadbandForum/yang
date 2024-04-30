@@ -24,8 +24,6 @@ submodule bbf-xpon-channel-partition-body {
 
      Editor:      Robert Peschi, Nokia
 
-     Editor:      Kevin Noll, Vecima
-
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Marta Seda, Calix";
@@ -33,7 +31,7 @@ submodule bbf-xpon-channel-partition-body {
     "This submodule contains a collection of YANG definitions for
      managing channel partitions.
 
-     Copyright (c) 2018-2023, Broadband Forum
+     Copyright (c) 2018-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -73,9 +71,19 @@ submodule bbf-xpon-channel-partition-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2a1; see
+     This version of this YANG module is part of TR-385i3; see
      the TR itself for full legal notices.";
 
+  revision 2024-04-23 {
+    description
+      "Issue 3.
+       * Approval Date:    2024-04-23.
+       * Publication Date: 2024-04-23.";
+    reference
+      "TR-385i3: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3.pdf>";
+  }
   revision 2023-06-21 {
     description
       "Issue 2 Amendment 1.
@@ -126,23 +134,36 @@ submodule bbf-xpon-channel-partition-body {
         range "0..15";
       }
       description
-        "This attribute identifies the partition inside the channel
-         group.";
+        "Identifies the partition inside the channel group.";
       reference
-        "ITU-T G.989.3 clause 6.1.5.9 and clause 11.3.3.14.";
+        "ITU-T G.989.3 Clause 6.1.5.9;
+         ITU-T G.989.3 Clause 11.3.3.14";
     }
     leaf downstream-fec {
       type boolean;
       default "true";
       description
-        "Enable/Disable downstream Forward Error Correciton (FEC).
-         Note that downstream FEC is always enabled for XG-PON and
-         XGS-PON and thus a value of 'false' is ignored.";
+        "If 'true', enables downstream Forward Error Correction (FEC).
+         Note that downstream FEC is always enabled for XG-PON,
+         XGS-PON, 50G-PON and 25GS-PON and thus a value of 'false' is
+         ignored.";
       reference
-        "ITU-T G.984.3 clause 13.1.2.1
-         ITU-T G.987.3 clause 10.1
-         ITU-T G.9807.1 clause C.10.1.1.1.3
-         ITU-T G.989.3 clause 10.1.1.1.3";
+        "ITU-T G.984.3 Clause 13.1.2.1;
+         ITU-T G.987.3 Clause 10.3;
+         ITU-T G.9807.1 Clause C.10.1.3.1.2;
+         ITU-T G.989.3 Clause 10.1.3.1.2;
+         ITU-T G.9804.2 Clause 10.3.1.2;
+         MSA 25GS-PON Section C.10.1.3.1.1";
+    }
+    leaf downstream-interleaving {
+      type boolean;
+      default "false";
+      description
+        "If 'true', enables downstream interleaving mode. This is only
+         applicable for 50G-PON (ITU-T G.9804.2). The configuration is
+         ignored for G-PON, XG-PON, XGS-PON, and 25GS-PON.";
+      reference
+        "ITU-T G.9804.2 Clause 10.5";
     }
     leaf closest-onu-distance {
       type uint16 {
@@ -162,11 +183,11 @@ submodule bbf-xpon-channel-partition-body {
       units "kilometers";
       default "20";
       description
-        "This attribute provides the ability to set the maximum
-         differential logical reach for a channel partition.";
+        "Provides the ability to set the maximum differential
+         logical reach for a channel partition.";
       reference
-        "ITU-T G.989.1 clause 8.2
-         ITU-T G.989.3 clause 13.1.";
+        "ITU-T G.989.1 Clause 8.2;
+         ITU-T G.989.3 Clause 13.1";
     }
     leaf authentication-method {
       type bbf-xpon-types:auth-method-type;
@@ -175,19 +196,25 @@ submodule bbf-xpon-channel-partition-body {
         "Optical Network Unit (ONU) Authentication mode option for
          this channel partition.";
       reference
-        "ITU-T G.984.3, section VI.1.";
+        "ITU-T G.984.3, Clause VI.1";
     }
     leaf multicast-aes-indicator {
       type boolean;
       default "false";
       description
         "If 'true', enables Advanced Encryption Standard (AES) for
-         multicast GPON Encapsulation Method (GEM) ports.";
+         multicast G-PON Encapsulation Method (GEM) ports.";
       reference
-        "ITU-T G.984.3, section 12.2. and 9.2.3.8
-         ITU-T G.987.3, section 15.5.1 and 15.5.4
-         ITU-T G.9807.1, section C.15.5.1 and C.15.5.4
-         ITU-T G.989.3, section 15.5.1 and 5.5.4.";
+        "ITU-T G.984.3 Clause 12.2;
+         ITU-T G.984.3 Clause 9.2.3.8;
+         ITU-T G.987.3 Clause 15.5.1;
+         ITU-T G.987.3 Clause 15.5.4;
+         ITU-T G.9807.1 Clause C.15.5.1;
+         ITU-T G.9807.1 Clause C.15.5.4;
+         ITU-T G.989.3 Clause 15.5.1;
+         ITU-T G.989.3 Clause 15.5.4;
+         ITU-T G.9804.2 Clause 15.5.1;
+         ITU-T G.9804.2 Clause 15.5.4";
     }
   }
 

@@ -25,8 +25,6 @@ submodule bbf-xpongemtcont-tcont-body {
 
      Editor:      Robert Peschi, Nokia
 
-     Editor:      Kevin Noll, Vecima
-
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Marta Seda, Calix";
@@ -34,7 +32,7 @@ submodule bbf-xpongemtcont-tcont-body {
     "This submodule contains a collection of YANG definitions for
      managing Transmission Containers (T-CONT).
 
-     Copyright (c) 2018-2023, Broadband Forum
+     Copyright (c) 2018-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -74,9 +72,19 @@ submodule bbf-xpongemtcont-tcont-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2a1; see
+     This version of this YANG module is part of TR-385i3; see
      the TR itself for full legal notices.";
 
+  revision 2024-04-23 {
+    description
+      "Issue 3.
+       * Approval Date:    2024-04-23.
+       * Publication Date: 2024-04-23.";
+    reference
+      "TR-385i3: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3.pdf>";
+  }
   revision 2023-06-21 {
     description
       "Issue 2 Amendment 1.
@@ -118,19 +126,25 @@ submodule bbf-xpongemtcont-tcont-body {
     type uint16;
     description
       "Transmission Container (T-CONT) Allocation Identifier
-       (Alloc-ID). For GPON the value should be in [256..4095] and
-       for XG-PON, XGS-PON and NG-PON2 it should be in
-       [1024..16383].";
+       (Alloc-ID).
+       For G-PON, range is 256..4095.
+       For XG-PON, range is 1024..16383.
+       For XGS-PON, range is 1024..16383.
+       For NG-PON2, range is 1024..16383.
+       For 25GS-PON, range is 1024..16383.
+       For 50G-PON, range is 1024..16383.";
     reference
-      "ITU-T G.984.3 clause 5.5.3
-       ITU-T G.987.3 clause 6.4.3
-       ITU-T G.9807.1 clause C.6.1.5.7
-       ITU-T G.989.3 clause 6.1.5.7";
+      "ITU-T G.984.3 Clause 5.5.3;
+       ITU-T G.987.3 Clause 6.4.3;
+       ITU-T G.9807.1 Clause C.6.1.5.7;
+       ITU-T G.989.3 Clause 6.1.5.7;
+       ITU-T G.9804.2 Clause 6.5.2.6;
+       MSA 25GS-PON Section C.6.1.5.7";
   }
 
   augment "/bbf-xpongemtcont:xpongemtcont" {
     description
-      "Augment the xPON GPON Encapsulation Method (GEM) port and
+      "Augment the xPON G-PON Encapsulation Method (GEM) port and
        Transmission Container (T-CONT) configuration with T-CONT
        specific configuration.";
     container tconts {
@@ -142,7 +156,7 @@ submodule bbf-xpongemtcont-tcont-body {
 
   augment "/bbf-xpongemtcont:xpongemtcont-state" {
     description
-      "Augment the xPON GPON Encapsulation Method (GEM) port and
+      "Augment the xPON G-PON Encapsulation Method (GEM) port and
        Transmission Container (T-CONT) state data with T-CONT specific
        state data.";
     container tconts {
@@ -173,14 +187,20 @@ submodule bbf-xpongemtcont-tcont-body {
            (Alloc-ID). When configured this is the value which must
            actually be used between the Optical Line Termination (OLT)
            device and Optical Network Unit (ONU) device for this
-           T-CONT. For GPON the value should be in [256..4095] and
-           for XG-PON, XGS-PON and NG-PON2 it should be in
-           [1024..16383].";
+           T-CONT.
+           For G-PON, range is 256..4095.
+           For XG-PON, range is 1024..16383.
+           For XGS-PON, range is 1024..16383.
+           For NG-PON2, range is 1024..16383.
+           For 25GS-PON, range is 1024..16383.
+           For 50G-PON, range is 1024..16383.";
         reference
-          "ITU-T G.984.3 clause 5.5.3
-           ITU-T G.987.3 clause 6.4.3
-           ITU-T G.9807.1 clause C.6.1.5.7
-           ITU-T G.989.3 clause 6.1.5.7";
+          "ITU-T G.984.3 Clause 5.5.3;
+           ITU-T G.987.3 Clause 6.4.3;
+           ITU-T G.9807.1 Clause C.6.1.5.7;
+           ITU-T G.989.3 Clause 6.1.5.7;
+           ITU-T G.9804.2 Clause 6.5.2.6;
+           MSA 25GS-PON Section C.6.1.5.7";
       }
       leaf interface-reference {
         type if:interface-ref;
@@ -228,10 +248,11 @@ submodule bbf-xpongemtcont-tcont-body {
            between the Optical Line Termination (OLT) device and
            Optical Network Unit (ONU) device for this T-CONT.";
         reference
-          "ITU-T G.984.3 clause 5.5.3
-           ITU-T G.987.3 clause 6.4.3
-           ITU-T G.9807.1 clause C.6.1.5.7
-           ITU-T G.989.3 clause 6.1.5.7";
+          "ITU-T G.984.3 Clause 5.5.3;
+           ITU-T G.987.3 Clause 6.4.3;
+           ITU-T G.9807.1 Clause C.6.1.5.7;
+           ITU-T G.989.3 Clause 6.1.5.7;
+           ITU-T G.9804.2 Clause 6.5.2.6";
       }
     }
   }

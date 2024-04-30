@@ -24,16 +24,14 @@ submodule bbf-xpon-multicast-gemport-body {
 
      Editor:      Robert Peschi, Nokia
 
-     Editor:      Kevin Noll, Vecima
-
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Marta Seda, Calix";
   description
     "This submodule contains a collection of YANG definitions for
-     managing multicast GPON Encapsulation Method (GEM) ports.
+     managing multicast G-PON Encapsulation Method (GEM) ports.
 
-     Copyright (c) 2018-2023, Broadband Forum
+     Copyright (c) 2018-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -73,9 +71,19 @@ submodule bbf-xpon-multicast-gemport-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2a1; see
+     This version of this YANG module is part of TR-385i3; see
      the TR itself for full legal notices.";
 
+  revision 2024-04-23 {
+    description
+      "Issue 3.
+       * Approval Date:    2024-04-23.
+       * Publication Date: 2024-04-23.";
+    reference
+      "TR-385i3: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3.pdf>";
+  }
   revision 2023-06-21 {
     description
       "Issue 2 Amendment 1.
@@ -113,17 +121,17 @@ submodule bbf-xpon-multicast-gemport-body {
          + "multicast-gemport/bbf-xpon:name";
     }
     description
-      "Reference to a multicast GPON Encapsulation Method (GEM)
+      "Reference to a multicast G-PON Encapsulation Method (GEM)
        port.";
   }
 
   augment "/bbf-xpon:xpon" {
     description
-      "Augment system level xPON configuration with multicast GPON
+      "Augment system level xPON configuration with multicast G-PON
        Encapsulation Method (GEM) port configuration.";
     container multicast-gemports {
       description
-        "Multicast GPON Encapsulation Method (GEM) ports
+        "Multicast G-PON Encapsulation Method (GEM) ports
          configuration data.";
       uses multicast-gemports-config-data;
     }
@@ -131,23 +139,23 @@ submodule bbf-xpon-multicast-gemport-body {
 
   grouping multicast-gemports-config-data {
     description
-      "The configuration data of multicast GPON Encapsulation Method
+      "The configuration data of multicast G-PON Encapsulation Method
        (GEM) ports. Multicast GEM ports can be used for multicast or
        broadcast.";
     list multicast-gemport {
       key "name";
       description
-        "A multicast GPON Encapsulation Method (GEM) port.";
+        "A multicast G-PON Encapsulation Method (GEM) port.";
       leaf name {
         type bbf-yang:string-ascii64;
         description
-          "The name of the multicast GPON Encapsulation Method (GEM)
+          "The name of the multicast G-PON Encapsulation Method (GEM)
            port.";
       }
       leaf gemport-id {
         type uint32;
         description
-          "The ID of the multicast GPON Encapsulation Method (GEM)
+          "The ID of the multicast G-PON Encapsulation Method (GEM)
            port.";
       }
       leaf interface {
@@ -158,7 +166,7 @@ submodule bbf-xpon-multicast-gemport-body {
         }
         description
           "Each channel pair has in general one or several multicast
-           GPON Encapsulation Method (GEM) ports.";
+           G-PON Encapsulation Method (GEM) ports.";
       }
       leaf traffic-class {
         type uint8 {
@@ -171,7 +179,7 @@ submodule bbf-xpon-multicast-gemport-body {
         type boolean;
         default "false";
         description
-          "If 'true', this multicast GPON Encapsulation Method (GEM)
+          "If 'true', this multicast G-PON Encapsulation Method (GEM)
            port is used for broadcast traffic.";
       }
     }
