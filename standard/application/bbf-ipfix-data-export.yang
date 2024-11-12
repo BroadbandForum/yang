@@ -1,0 +1,1101 @@
+module bbf-ipfix-data-export {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-ipfix-data-export";
+  prefix bbf-ipfix-de;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ietf-tls-client {
+    prefix tlsc;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Shiya Ashraf, Nokia
+
+     Editor:      Nick Hancock, Adtran
+
+     Editor:      Kevin Noll, CableLabs
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Aihua Guo, Futurewei
+
+     WA Director: Joey Boyd, Adtran
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module contains a collection of YANG definitions to manage
+     exporting data using the Internet Protocol Flow Information
+     Export (IPFIX) protocol.
+
+     This data model is designed for the Network Management Datastore
+     Architecture defined in RFC 8342.
+
+     Copyright (c) 2017-2024, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a8; see
+     the TR itself for full legal notices.";
+
+  revision 2024-11-11 {
+    description
+      "Amendment 8.
+       * Approval Date:    2024-11-11.
+       * Publication Date: 2024-11-11.";
+    reference
+      "TR-383a8: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-8.pdf>";
+  }
+
+  feature exporter {
+    description
+      "Indicates support for the device to be used as an exporter
+       allowing for configuration of exporting processes.";
+  }
+
+  identity export-mode {
+    description
+      "Base identity for defining the modes of exporting to the
+       destinations of an exporting process.";
+    reference
+      "RFC 6728 Section 4.4 - exportMode";
+  }
+
+  identity parallel {
+    base export-mode;
+    description
+      "Export each data record using all transport sessions configured
+       for the exporting process in parallel.";
+    reference
+      "RFC 6728 Section 4.4 - exportMode";
+  }
+
+  identity load-balancing {
+    base export-mode;
+    description
+      "Export each data record using exactly one transport session
+       configured for the exporting process according to a
+       load-balancing policy.";
+    reference
+      "RFC 6728 Section 4.4 - exportMode";
+  }
+
+  identity fallback {
+    base export-mode;
+    description
+      "Export each data record using the first transport session
+       configured for the exporting process, i.e., to the primary
+       destination.
+
+       If the export to the primary destination fails, the exporting
+       process is to export each data record using the second
+       transport session configured for the exporting process, i.e.,
+       to the secondary destination.
+
+       If the secondary destination fails as well, it continues with
+       the third configured transport session, i.e., to the tertiary,
+       etc.";
+    reference
+      "RFC 6728 Section 4.4 - exportMode";
+  }
+
+  identity options-type {
+    description
+      "Base identity for reporting the type of options exported with
+       options templates.";
+    reference
+      "RFC 6728 Section 4.4.5 - optionsType";
+  }
+
+  identity exporting-reliability {
+    base options-type;
+    description
+      "Statistics related to exporting process reliability.";
+    reference
+      "RFC 7011 Section 4.3";
+  }
+
+  identity reducing-redundancy {
+    base options-type;
+    description
+      "Enables the utilization of options templates to reduce
+       redundancy in the exported data records.";
+    reference
+      "RFC 5473";
+  }
+
+  identity extended-type-information {
+    base options-type;
+    description
+      "Export of extended type information for enterprise-specific
+       Information Elements used in the exported templates.";
+    reference
+      "RFC 5610";
+  }
+
+  typedef ie-id-type {
+    type uint16 {
+      range "1..32767";
+    }
+    description
+      "Type for Information Element identifiers.";
+  }
+
+  typedef transport-session-state {
+    type enumeration {
+      enum inactive {
+        description
+          "This value must be used for transport sessions that are
+           specified in the system but currently not active.
+
+           The value can be used for transport sessions that are
+           backup (secondary) sessions.";
+      }
+      enum active {
+        description
+          "This value must be used for transport sessions that are
+           currently active and transmitting or receiving data.";
+      }
+      enum unknown {
+        description
+          "This value must be used if the status of the transport
+           sessions cannot be detected by the device.
+
+           This value should be avoided as far as possible.";
+      }
+    }
+    description
+      "State of a transport session.";
+    reference
+      "RFC 6728 Section 4.7 - status";
+  }
+
+  grouping tcp-client-grouping {
+    description
+      "Data nodes used for configuring the TCP client.";
+    container source-address {
+      presence
+        "The source address of the transport session is defined by
+         configuration.";
+      description
+        "Data nodes to manage the transport session's source address.
+
+         If this container is not instantiated, the source address is
+         automatically selected by the device.";
+      choice addressing-method {
+        mandatory true;
+        description
+          "Selects the method to configure the source address for the
+           transport session.
+
+           Note that it is expected that other methods be available.
+           Such methods can be augmented into this choice.";
+        case interface {
+          leaf interface {
+            type if:interface-ref;
+            description
+              "The interface to be used by the transport session.";
+          }
+        }
+        case local-address {
+          leaf local-address {
+            type inet:host;
+            description
+              "The local IP address or hostname used by the transport
+               session.";
+            reference
+              "RFC 6724";
+          }
+        }
+      }
+    }
+    container destination-address {
+      description
+        "Manages the destination address for the transport session.";
+      choice addressing-method {
+        mandatory true;
+        description
+          "Selects the method to configure the destination address
+           for the transport session.
+
+           Note that it is expected that other methods be available.
+           Such methods can be augmented into this choice.";
+        case remote-address {
+          leaf remote-address {
+            type inet:host;
+            description
+              "The remote IP address or hostname of the collecting
+               process to which IPFIX Messages are sent.
+
+               A hostname may resolve to one or more IP addresses.
+               The actual IP address used for export is reported in
+               the 'destination-address' leaf of the state data.";
+            reference
+              "RFC 6724";
+          }
+        }
+      }
+    }
+    leaf destination-port {
+      type inet:port-number;
+      description
+        "If not configured by the user, the exporting device uses the
+         default port number for IPFIX, which is 4739 without TLS and
+         4740 if TLS is activated.";
+      reference
+        "RFC 6728 Section 4.4.3 - destinationPort";
+    }
+    leaf send-buffer-size {
+      type uint32;
+      units "bytes";
+      description
+        "Size of the send buffer.
+
+         If not configured, this size of the buffer is set by the
+         implementation.";
+      reference
+        "RFC 6728 Section 4.4.3 - sendBufferSize";
+    }
+    leaf rate-limit {
+      type uint32;
+      units "bytes per second";
+      description
+        "Maximum number of bytes per second the exporting process may
+         export to the given destination. The number of bytes is
+         calculated from the lengths of the IPFIX Messages exported.
+
+         If not configured, no rate limiting is performed.";
+      reference
+        "RFC 6728 Section 4.4.3 - rateLimit";
+    }
+    leaf connection-timeout {
+      type uint32;
+      units "seconds";
+      description
+        "Time after which the exporting process deems the underlying
+         TCP connection establishment to have failed.
+
+         The exporting process retries the TCP connection
+         establishment based on the retry-schedule.
+
+         If the parameter is not configured, the default timeout
+         value of the underlying TCP client will be used.";
+      reference
+        "RFC 7011 Section 10.4.4;
+         RFC 7011 Section 10.4.5";
+    }
+    leaf retry-schedule {
+      type uint32 {
+        range "60..max";
+      }
+      units "seconds";
+      default "60";
+      description
+        "Time after which the exporting process retries the TCP
+         connection to a collector.";
+      reference
+        "RFC 7011 Section 10.4.4";
+    }
+  }
+
+  grouping tcp-client-state-parameters {
+    description
+      "State parameters for the TCP client.";
+    leaf source-address {
+      type inet:ip-address;
+      description
+        "The local IP address used by the transport session to connect
+         to the collector.";
+      reference
+        "RFC 6728 Section 4.7 - sourceAddress";
+    }
+    leaf source-port {
+      type inet:port-number;
+      description
+        "The TCP port number of the exporter of the IPFIX transport
+         session.";
+      reference
+        "RFC 6728 Section 4.7 - sourcePort";
+    }
+    leaf destination-address {
+      type inet:ip-address;
+      description
+        "The remote IP address of the collector to which the transport
+         session is to be established.";
+      reference
+        "RFC 6728 Section 4.7 - destinationAddress";
+    }
+    leaf destination-port {
+      type inet:port-number;
+      description
+        "The TCP port number of the collector of the IPFIX transport
+         session.";
+      reference
+        "RFC 6728 Section 4.7 - destinationPort";
+    }
+  }
+
+  container ipfix-data-export {
+    description
+      "Management of IPFIX data export.";
+    list exporting-process {
+      if-feature "exporter";
+      key "name";
+      description
+        "An exporting process.";
+      reference
+        "RFC 6728 Section 4.4 - exportingProcess";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "The name of the exporting process.";
+      }
+      leaf enabled {
+        type boolean;
+        default "true";
+        description
+          "If 'true', this exporting process is enabled for
+           exporting.";
+      }
+      leaf export-mode {
+        type identityref {
+          base export-mode;
+        }
+        default "fallback";
+        description
+          "The mode of operation of the exporting process.";
+        reference
+          "RFC 6728 Section 4.4 - exportMode";
+      }
+      container destinations {
+        description
+          "List of destinations to which the exporter is to export
+           data based on the 'export-mode' configuration.";
+        list destination {
+          key "name";
+          min-elements 1;
+          ordered-by user;
+          description
+            "An export destination.
+
+             The order of the list determines the priority of the
+             destinations when the export mode is set to fallback.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the export destination.";
+          }
+          leaf ipfix-version {
+            type uint16;
+            default "10";
+            description
+              "IPFIX version number.";
+            reference
+              "RFC 7011 Section 3.1 - Version";
+          }
+          choice transport {
+            mandatory true;
+            description
+              "Selects the transport to be used.";
+            case tls {
+              container tls {
+                description
+                  "Configuration parameters for TLS transport.";
+                container tcp-client-parameters {
+                  description
+                    "TCP-level client parameters to initiate a TLS
+                     connection to the destination.";
+                  uses tcp-client-grouping {
+                    refine "destination-port" {
+                      default "4740";
+                      description
+                        "If not configured by the user, the exporting
+                         device uses the default port number for IPFIX
+                         with TLS - 4740.";
+                    }
+                  }
+                }
+                container tls-client-parameters {
+                  description
+                    "TLS-level client parameters to initiate a TLS
+                     connection to the destination.";
+                  uses tlsc:tls-client-grouping;
+                }
+              }
+            }
+            case tcp {
+              container tcp {
+                description
+                  "Configuration parameters for TCP transport.";
+                container tcp-client-parameters {
+                  description
+                    "Client parameters to initiate a TCP connection
+                     to the destination.";
+                  uses tcp-client-grouping {
+                    refine "destination-port" {
+                      default "4739";
+                      description
+                        "If not configured by the user, the exporting
+                         device uses the default port number for IPFIX
+                         without TLS - 4739.";
+                    }
+                  }
+                }
+              }
+            }
+          }
+          container state {
+            config false;
+            description
+              "Transport session state data.";
+            leaf oper-state {
+              type transport-session-state;
+              description
+                "Operational state of the transport session.";
+              reference
+                "RFC 6728 Section 4.7 - status";
+            }
+            choice transport {
+              mandatory true;
+              description
+                "Selects the transport used.";
+              case tls {
+                container tls {
+                  description
+                    "Operational parameters for TLS transport.";
+                  container tcp-client-state-parameters {
+                    description
+                      "Operational TCP-level client parameters used to
+                       initiate the TLS connection to the
+                       destination.";
+                    uses bbf-ipfix-de:tcp-client-state-parameters;
+                  }
+                  container tls-client-parameters {
+                    description
+                      "Operational TLS-level client parameters used to
+                       initiate the TLS connection to the
+                       destination.";
+                  }
+                }
+              }
+              case tcp {
+                container tcp {
+                  description
+                    "Operational parameters for TCP transport.";
+                  container tcp-client-state-parameters {
+                    description
+                      "Operational TCP client parameters used to
+                       initiate the connection to the destination.";
+                    uses bbf-ipfix-de:tcp-client-state-parameters;
+                  }
+                }
+              }
+            }
+            leaf start-time {
+              type yang:date-and-time;
+              description
+                "The date and time the given transport session
+                 started.";
+              reference
+                "RFC 6728 Section 4.7 - transportSessionStartTime";
+            }
+            leaf rate {
+              type yang:gauge32;
+              units "bytes per second";
+              description
+                "The number of bytes per second transmitted by the
+                 exporting process.";
+              reference
+                "RFC 6728 Section 4.7 - rate";
+            }
+            list template {
+              key "name set-id";
+              description
+                "A template or an options template that is transmitted
+                 by the exporting process.
+
+                 A withdrawn or invalidated template or options
+                 template must not be present.";
+              leaf name {
+                type bbf-yang:string-ascii64;
+                description
+                  "The name of the template.
+
+                   If the value of leaf 'set-id' is set to
+                   'template-set', then the name references an entry
+                   in the list
+                      '/bbf-ipfix-de:ipfix-data-export
+                       /bbf-ipfix-de:template.'
+
+                   If the value of leaf 'set-id' is set to
+                   'options-template-set', then the name references an
+                   entry in the list
+                    '/bbf-ipfix-de:ipfix-data-export
+                     /bbf-ipfix-de:exporting-process
+                     /bbf-ipfix-de:options-template'.";
+              }
+              leaf set-id {
+                type enumeration {
+                  enum template-set {
+                    description
+                      "Identifies the set of records as a template
+                       set.";
+                    reference
+                      "RFC 7011 Section 3.3.2 - Value=2";
+                  }
+                  enum options-template-set {
+                    description
+                      "Identifies the set of records as an options
+                       template set.";
+                    reference
+                      "RFC 7011 Section 3.3.2 - Value=3";
+                  }
+                }
+                description
+                  "The Set ID of the template.";
+                reference
+                  "RFC 7011 Section 3.3.2 - Set ID;
+                   RFC 6728 Section 4.8 - setId";
+              }
+              leaf observation-domain-id {
+                type uint32;
+                description
+                  "The ID of the observation domain for which this
+                   template is defined.";
+                reference
+                  "RFC 6728 Section 4.8 - observationDomainId";
+              }
+              leaf id {
+                type uint16 {
+                  range "256..65535";
+                }
+                description
+                  "The template ID used in the template record.";
+                reference
+                  "RFC 6728 Section 4.8 - templateId;
+                   RFC 7011 Section 3.4.1 - Template Id";
+              }
+              leaf last-access-time {
+                type yang:date-and-time;
+                description
+                  "The date and time this template or options template
+                   was last sent to the collector(s).";
+                reference
+                  "RFC 6728 Section 4.8 - accessTime";
+              }
+              list field {
+                key "name";
+                description
+                  "A field within the template.
+
+                   The position of the field in this list corresponds
+                   to the position of the field in the template or
+                   options template record.";
+                leaf name {
+                  type bbf-yang:string-ascii64;
+                  description
+                    "The name of the template field.";
+                }
+                leaf ie-id {
+                  type ie-id-type;
+                  description
+                    "The Information Element identifier of the
+                     field.";
+                  reference
+                    "RFC 7011 Section 3.2 - Information Element
+                     identifier;
+                     RFC 6728 Section 4.8 - ieId";
+                }
+                leaf ie-name {
+                  type string;
+                  description
+                    "Name of the Information Element. It can be either
+                     be a name defined in one of the standard lists -
+                     IANA, BBF, etc. - or any proprietary string
+                     agreed by the exporter and the collector.";
+                  reference
+                    "RFC 7012 Section 2.1 - name";
+                }
+                leaf ie-length {
+                  type uint16;
+                  units "octets";
+                  description
+                    "The length of the Information Element.";
+                  reference
+                    "RFC 7011 Section 3.2 - Field Length;
+                     RFC 6728 Section 4.8 - ieLength";
+                }
+                leaf ie-enterprise-number {
+                  type uint32;
+                  description
+                    "The IANA Enterprise Number of the authority
+                     defining the Information Element identifier.
+
+                     If the Information Element is not enterprise-
+                     specific, the value is set to zero.";
+                  reference
+                    "RFC 6728 Section 4.8 - ieEnterpriseNumber;
+                     RFC 7011 Section 3.2 - Enterprise Number;
+                     www.iana.org/assignments/enterprise-numbers -
+                     IANA registry for Private Enterprise Numbers";
+                }
+                leaf is-scope {
+                  when "../../bbf-ipfix-de:set-id = "
+                     + "'options-template-set'" {
+                    description
+                      "Only applicable if the template is an options
+                       template.";
+                  }
+                  type empty;
+                  description
+                    "If present, indicates that this field is a scope
+                     field.";
+                  reference
+                    "RFC 6728 Section 4.8 - isScope;
+                     RFC 7011 Section 3.4.2 - Scope Field";
+                }
+              }
+              container statistics {
+                description
+                  "Statistics associated to this template within the
+                   context of this transport session.";
+                leaf discontinuity-time {
+                  type yang:date-and-time;
+                  description
+                    "Timestamp of the most recent occasion at which
+                     the counter 'data-records' suffered a
+                     discontinuity.";
+                  reference
+                    "RFC 6728 Section 4.8 -
+                     templateDiscontinuityTime";
+                }
+                leaf out-data-records {
+                  type yang:counter64;
+                  description
+                    "The number of data records transmitted as defined
+                     by the template or options template.
+
+                     Discontinuities in the value of this counter can
+                     occur at re-initialization of the management
+                     system, and at other times as indicated by the
+                     value of the leaf 'discontinuity-time'.";
+                  reference
+                    "RFC 6728 Section 4.8 - templateDataRecords";
+                }
+              }
+            }
+            container statistics {
+              description
+                "IPFIX statistics associated with this transport
+                 session.";
+              leaf discontinuity-time {
+                type yang:date-and-time;
+                description
+                  "The date and time of the most recent occasion at
+                   which one or more of the transport session counters
+                   suffered a discontinuity.";
+                reference
+                  "RFC 6728 Section 4.7 -
+                   transportSessionDiscontinuityTime";
+              }
+              leaf out-bytes {
+                type yang:counter64;
+                units "bytes";
+                description
+                  "The number of bytes transmitted by the exporting
+                   process.
+
+                   Discontinuities in the value of this counter can
+                   occur at re-initialization of the management
+                   system, and at other times as indicated by the
+                   value of 'discontinuity-time'.";
+                reference
+                  "RFC 6728 Section 4.7 - bytes";
+              }
+              leaf out-messages {
+                type yang:counter64;
+                description
+                  "The number of messages transmitted by the exporting
+                   process.
+
+                   Discontinuities in the value of this counter can
+                   occur at re-initialization of the management
+                   system, and at other times as indicated by the
+                   value of 'discontinuity-time'.";
+                reference
+                  "RFC 6728 Section 4.7 - messages";
+              }
+              leaf out-discarded-messages {
+                type yang:counter64;
+                description
+                  "The number of messages that could not be sent.
+
+                   Discontinuities in the value of this counter can
+                   occur at re-initialization of the management
+                   system, and at other times as indicated by the
+                   value of 'discontinuity-time'.";
+                reference
+                  "RFC 6728 Section 4.7 - discardedMessages";
+              }
+              leaf out-data-records {
+                type yang:counter64;
+                description
+                  "The number of data records transmitted by the
+                   exporting process.
+
+                   Discontinuities in the value of this counter can
+                   occur at re-initialization of the management
+                   system, and at other times as indicated by the
+                   value of 'discontinuity-time'.";
+                reference
+                  "RFC 6728 Section 4.7 - records";
+              }
+              leaf out-templates {
+                type yang:counter32;
+                description
+                  "The number of templates transmitted by the
+                   exporting process.
+
+                   Discontinuities in the value of this counter can
+                   occur at re-initialization of the management
+                   system, and at other times as indicated by the
+                   value of 'discontinuity-time'.";
+                reference
+                  "RFC 6728 Section 4.7 - templates";
+              }
+              leaf out-options-templates {
+                type yang:counter32;
+                description
+                  "The number of option templates transmitted by the
+                   exporting process.
+
+                   Discontinuities in the value of this counter can
+                   occur at re-initialization of the management
+                   system, and at other times as indicated by the
+                   value of 'discontinuity-time'.";
+                reference
+                  "RFC 6728 Section 4.7 - optionsTemplates";
+              }
+            }
+          }
+        }
+      }
+      list options-template {
+        key "name";
+        unique "type";
+        description
+          "An options template reported by the exporting process.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "The name of the options template.";
+        }
+        leaf type {
+          type identityref {
+            base options-type;
+          }
+          description
+            "Type of the exported options data.";
+          reference
+            "RFC 6728 Section 4.4.5 - optionsType";
+        }
+        leaf timeout {
+          type uint32;
+          units "milliseconds";
+          description
+            "Time interval for periodic export of the options data.
+             If set to zero, the export is triggered when the options
+             data has changed.
+
+             If not configured by the user, this parameter is set by
+             the exporting device.";
+        }
+      }
+      leaf exporting-process-id {
+        type uint32;
+        config false;
+        description
+          "The identifier used to identify the exporting process.
+
+           This value corresponds to the Information Element
+           'exportingProcessId', whose purpose is to help associate
+           exporting process reliability statistics exported with the
+           corresponding exporting process statistics.";
+        reference
+          "RFC 7011 Section 4.3 - exportingProcessId;
+           www.iana.org/assignments/ipfix -
+           IANA registry for IPFIX Entities";
+      }
+    }
+    list template {
+      key "name";
+      description
+        "A data template of the exporting device.";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "The name of the template.";
+      }
+      leaf enabled {
+        type boolean;
+        default "true";
+        description
+          "If 'true', this template and the corresponding data
+           records are to be exported by the exporting processes
+           referenced by the leaf 'exporting-process'.";
+      }
+      leaf export-interval {
+        type uint32;
+        units "seconds";
+        description
+          "The interval (in seconds) for the periodic export of data
+           records to the collector(s).
+
+           If not instantiated, the interval is set by the
+           implementation.
+
+           The implementation may choose to start the export
+           immediately or align it to the system time.";
+      }
+      leaf observation-domain-id {
+        type uint32;
+        default "0";
+        description
+          "An identifier of an observation domain that is locally
+           unique to an exporting process (see RFC 7011 Section 3.1).
+
+           Typically, the observation domain ID is used to implicitly
+           limit the scope of the data records exported.
+
+           A value of 0 indicates that the data records exported with
+           this template cannot be applied to a single observation
+           domain.";
+        reference
+          "RFC 7011 Section 3.1";
+      }
+      container fields {
+        description
+          "Defines the fields of a template.";
+        list field {
+          key "name";
+          min-elements 1;
+          ordered-by user;
+          description
+            "A field from a superset of fields that are included in
+             the data records generated by the device. The field is
+             specified by the corresponding Information Element.
+
+             The position of the field in this list corresponds
+             to the position of the field in the template or
+             options template record.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the field.";
+          }
+          choice identifier {
+            mandatory true;
+            description
+              "Selects how the Information Element to be added to the
+               template is to be identified.";
+            case ie-name {
+              leaf ie-name {
+                type string;
+                description
+                  "Name of the Information Element. It can be either
+                   be a name defined in one of the standard lists -
+                   IANA, BBF - or any proprietary string agreed by
+                   the exporter and the collector.";
+                reference
+                  "RFC 7012 Section 2.3";
+              }
+            }
+            case ie-id {
+              leaf ie-id {
+                type ie-id-type;
+                description
+                  "ID of the Information Element.";
+              }
+            }
+          }
+          leaf ie-length {
+            type union {
+              type enumeration {
+                enum variable-length {
+                  description
+                    "Indicates that the Information Element is of
+                     variable length.";
+                }
+              }
+              type uint16 {
+                range "1..65534";
+              }
+            }
+            units "octets";
+            description
+              "Length of the field in which the Information Element is
+               encoded.
+
+               For Information Elements of integer and float types,
+               the field length may be set to a smaller value than the
+               standard length of the abstract data type if the rules
+               of reduced size encoding are fulfilled.
+
+               If not instantiated, the value will be set by the
+               implementation.";
+            reference
+              "RFC 7011 Section 6.2";
+          }
+          leaf ie-enterprise-number {
+            type uint32;
+            default "0";
+            description
+              "If set to zero, the Information Element carried by the
+               field is registered in the IANA registry of IPFIX
+               Information Elements or is unspecified (if the
+               Informational Element is not IANA registered).
+
+               If set to a non-zero private enterprise number, the
+               Information Element is enterprise-specific.";
+            reference
+              "RFC 7011;
+               RFC 5103;
+               www.iana.org/assignments/enterprise-numbers -
+               IANA registry for Private Enterprise Numbers;
+               www.iana.org/assignments/ipfix -
+               IANA registry for IPFIX Entities";
+          }
+        }
+      }
+      container resources {
+        must 'count(*)>0' {
+          error-message
+            "The container 'resources' has been configured to "
+          + "identify specific resources from which to export data "
+          + "records, but no child nodes to identify resources have "
+          + "been configured.";
+          description
+            "If specific resources are to be selected, ensure that at
+             least one or more child data nodes are present.
+
+             Note that since additional methods of identifying
+             resources could be augmented into this container, it is
+             only possible to ensure that the number of child nodes is
+             not zero.";
+        }
+        presence
+          "Specific resources are to be identified, from which data
+           records are to be exported.";
+        description
+          "Manages the resources from which data records are to be
+           exported.
+
+           Note that in addition to methods implemented in this
+           container to identify resources, it is expected that other
+           methods may be supported in specific implementations or
+           provided in extensions to this module, for which specific
+           child nodes would be augmented into this container.
+
+           If this container is not present, then data records are to
+           be exported from all the available resources.";
+        leaf-list data-node {
+          type instance-identifier {
+            require-instance false;
+          }
+          description
+            "Identifies a resource that is modeled in YANG through a
+             reference to the data node in the data tree that
+             represents the resource.";
+        }
+      }
+      leaf-list exporting-process {
+        if-feature "exporter";
+        type leafref {
+          path "/bbf-ipfix-de:ipfix-data-export"
+             + "/bbf-ipfix-de:exporting-process"
+             + "/bbf-ipfix-de:name";
+        }
+        description
+          "An 'exporting-process' which is to use the template for
+           data export.";
+      }
+      container statistics {
+        config false;
+        description
+          "Statistics associated with this template.";
+        leaf discontinuity-time {
+          type yang:date-and-time;
+          description
+            "Timestamp of the most recent occasion at which the
+             counter 'data-records' suffered a discontinuity.";
+        }
+        leaf out-data-records {
+          type yang:counter64;
+          description
+            "The number of data records transmitted as defined
+             by the template or options template across all
+             transport sessions.
+
+             Discontinuities in the value of this counter can occur at
+             re-initialization of the management system, and at other
+             times as indicated by the value of 'discontinuity-
+             time'.";
+        }
+      }
+    }
+  }
+}

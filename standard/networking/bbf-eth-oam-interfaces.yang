@@ -1,0 +1,193 @@
+module bbf-eth-oam-interfaces {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-eth-oam-interfaces";
+  prefix bbf-eth-oam-if;
+
+  import ieee802-dot1q-cfm {
+    prefix dot1q-cfm;
+  }
+  import ieee802-dot1q-cfm-types {
+    prefix cfm-types;
+  }
+  import itut-eth-oam {
+    prefix eth-oam;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
+  import bbf-if-type {
+    prefix bbfift;
+  }
+  import bbf-dot1q-cfm-interfaces {
+    prefix bbf-cfm-if;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Common YANG Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Shiya Ashraf, Nokia
+
+     Editor:      Nick Hancock, Adtran
+
+     Editor:      Kevin Noll, CableLabs
+
+     Editor:      Ludwig Pauwels, Nokia
+
+     PS Leader:   Aihua Guo, Futurewei
+
+     WA Director: Joey Boyd, Adtran
+
+     WA Director: Sven Ooghe, Nokia";
+  description
+    "This module is part of a collection of YANG definitions for
+     supporting the Broadband Forum requirements on Connectivity Fault
+     Management (CFM) Operations, Administration, and Maintenance
+     (OAM) as applicable to access network equipment. As such, this
+     module is specific to access network equipment (e.g., BBF-
+     specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module augments the ITU-T G.8052.1 Carrier
+     Ethernet OAM YANG data model to link a Maintenance Entity Group
+     (MEG) Intermediate Point (MIP) to an interface.
+
+     Copyright (c) 2017-2024, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a8; see
+     the TR itself for full legal notices.";
+
+  revision 2024-11-11 {
+    description
+      "Amendment 8.
+       * Approval Date:    2024-11-11.
+       * Publication Date: 2024-11-11.";
+    reference
+      "TR-383a8: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-8.pdf>";
+  }
+
+  feature direct-mip-creation {
+    description
+      "Indicates that the direct creation of MIPs within the OAM
+       configuration of the ITU-T G.8052.1 Ethernet OAM YANG data
+       model is fully supported on the forwarding plane.";
+  }
+
+  augment "/dot1q-cfm:cfm/dot1q-cfm:maintenance-group/eth-oam:mip" {
+    if-feature "direct-mip-creation";
+    description
+      "Data nodes to configure MIPs and to link this configuration to
+       the interfaces relevant in BBF context.";
+    leaf interface {
+      type if:interface-ref;
+      must "derived-from-or-self(/if:interfaces"
+         + "/if:interface[if:name = current()]"
+         + "/if:type,'bbfift:vlan-sub-interface')" {
+        error-message
+          "A MIP cannot be created on an interface other than of the "
+        + "type, or derived from the type, "
+        + "'bbfift:vlan-sub-interface'.";
+        description
+          "Ensure that a MIP is only created on an interface of the
+           type, or derived from the type,
+           'bbfitf:vlan-sub-interface'.";
+      }
+      must 'not(current()/../../dot1q-cfm:mep[bbf-cfm-if:interface '
+         + '= current()])' {
+        error-message
+          "A MIP and a MEP cannot coexist on the same interface "
+        + "within a given Maintenance Group.";
+        description
+          "Within a Maintenance Group it is not possible to configure
+           a MIP and a MEP on the same interface as this would imply
+           that they have the same level (inherited from the
+           Maintenance Domain).";
+      }
+      must
+        "not(current()/../../dot1q-cfm:mep[dot1q-cfm:direction = "
+      + "'down'])" {
+        error-message
+          "A MIP may not coexist with a down MEP within the same "
+        + "Maintenance Group.";
+        description
+          "Ensure that a MIP is not configured within a Maintenance
+           Group in which a down MEP has been configured.";
+      }
+      must '(count(/dot1q-cfm:cfm/dot1q-cfm:maintenance-group'
+         + '/eth-oam:mip[bbf-eth-oam-if:interface = current()])'
+         + ' <= 1)' {
+        error-message
+          "More than one MIP may not be configured on a given VLAN "
+        + "sub-interface regardless of the Maintenance Group, in "
+        + "which the MIPs are configured.";
+        description
+          "Ensure that only a single MIP is created on given a VLAN
+           sub-interface.";
+      }
+      description
+        "References the interface on which the MIP will be created.
+         Note that MIPs are always VLAN-aware and hence always refer
+         to a VLAN sub-interface.
+
+         The following is a constraint that could not be captured in
+         YANG: all MIPs within a single MA will reference VLAN
+         sub-interfaces that participate in the same forwarder.";
+      reference
+        "ITU-T G.8052.1 clause 7.2.2.2";
+    }
+    leaf id-permission {
+      type cfm-types:sender-id-permission-type;
+      default "send-id-none";
+      description
+        "Enumerated value indicating what, if anything, is to be
+         included in the Sender ID TLV transmitted by MHFs
+         created by the Default Maintenance Domain. If this object
+         has the value send-if-defer, Sender ID TLV transmission
+         for this VLAN is controlled by md-id-permission-type.";
+      reference
+        "IEEE Std 802.1Q-2018, section 12.14.3.1.3e, 12.14.3.2.2a";
+    }
+  }
+}

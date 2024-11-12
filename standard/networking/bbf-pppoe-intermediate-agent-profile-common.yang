@@ -18,11 +18,15 @@ module bbf-pppoe-intermediate-agent-profile-common {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
+     Editor:      Shiya Ashraf, Nokia
+
      Editor:      Nick Hancock, Adtran
+
+     Editor:      Kevin Noll, CableLabs
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, Adtran
+     PS Leader:   Aihua Guo, Futurewei
 
      WA Director: Joey Boyd, Adtran
 
@@ -40,7 +44,7 @@ module bbf-pppoe-intermediate-agent-profile-common {
      creating an Agent Circuit ID and Remote ID as described in
      TR-101i2.
 
-     Copyright (c) 2017-2023, Broadband Forum
+     Copyright (c) 2017-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -80,9 +84,19 @@ module bbf-pppoe-intermediate-agent-profile-common {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a7; see
+     This version of this YANG module is part of TR-383a8; see
      the TR itself for full legal notices.";
 
+  revision 2024-11-11 {
+    description
+      "Amendment 8.
+       * Approval Date:    2024-11-11.
+       * Publication Date: 2024-11-11.";
+    reference
+      "TR-383a8: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-8.pdf>";
+  }
   revision 2023-12-15 {
     description
       "Amendment 7.
@@ -241,21 +255,22 @@ module bbf-pppoe-intermediate-agent-profile-common {
                99, two digits may be used, etc.";
             reference
               "TR-178 R-119;
-               TR-101i2 R-153;
                TR-101i2 Table 2;
                TR-156 Table 1";
           }
           list padding {
             key "name";
             description
-              "Configures how to insert values in an actual circuit-id
-               and/or remote-id string. In other words, when the
-               syntax 'default-circuit-id-syntax' or
-               'default-remote-id-syntax' is used to generate an
-               actual string, and the syntax contains a pre-defined
-               keyword, then an entity in this 'padding' list with
+              "Defines the format of the value to be inserted for a
+               pre-defined keyword in a 'circuit-id' and/or
+               'remote-circuit-id' string.
+
+               This applies when the syntax 'default-circuit-id-
+               syntax' or 'default-remote-id-syntax' is used to
+               generate an actual string, and the syntax contains a
+               pre-defined keyword, then an entity in this list with
                this pre-defined keyword as 'name' determines how the
-               value shall be generated and inserted in the string.
+               value will be generated and inserted in the string.
 
                Configuring an entry for a particular keyword means:
                - for the keywords 'Slot' and 'Port' (or for functional
@@ -264,7 +279,7 @@ module bbf-pppoe-intermediate-agent-profile-common {
                  configuration of the data node 'use-leading-zeroes'
                  configured in the sibling data node to this list.
                - for any other keyword: the system adds or does not
-                 add leading zeros as configured for this keyword.
+                 add leading zeroes as configured for this keyword.
 
                Not configuring an entry for a particular keyword
                means:
@@ -273,26 +288,26 @@ module bbf-pppoe-intermediate-agent-profile-common {
                  configured in 'use-leading-zeroes' configured in the
                  sibling data node to this list.
                - for any other keyword: the possible use of leading
-                 zeros is system dependent.";
+                 zeroes is system dependent.";
             leaf name {
               type bbf-yang:string-ascii64;
               description
-                "A pre-defined keyword that can be used in the string
-                 'default-circuit-id-syntax' and/or
-                 'default-remote-id-syntax'.";
+                "The pre-defined keyword that can be used in the
+                 string 'default-circuit-id-syntax' and/or 'default-
+                 remote-id-syntax'.";
             }
             leaf use-leading-zeroes {
               type boolean;
               description
-                "This data node indicates whether or not leading zeros
-                 shall be used when generating a value for a pre-
-                 defined keyword in the 'default-circuit-id-syntax' or
-                 'default-remote-id-syntax'.
+                "This data node indicates whether or not leading
+                 zeroes will be used when generating a value for a
+                 predefined keyword in the 'default-circuit-id-syntax'
+                 or 'default-remote-id-syntax'.
 
-                 When leading zeros shall be used the device shall
-                 generate a fixed-length string. When no leading zeros
-                 shall be inserted, then a string with only meaningful
-                 digits is generated.
+                 When leading zeroes are used the device will generate
+                 a fixed-length string. When no leading zeroes are
+                 inserted, then a string with only meaningful digits
+                 is generated.
 
                  Note that the number of digits used to form the
                  fixed-length string is device specific. A device may
@@ -306,7 +321,6 @@ module bbf-pppoe-intermediate-agent-profile-common {
                  etc.";
               reference
                 "TR-178 R-119;
-                 TR-101i2 R-153;
                  TR-101i2 Table 2;
                  TR-156 Table 1";
             }

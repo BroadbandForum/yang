@@ -1,13 +1,10 @@
-module bbf-dot1q-cfm {
+module bbf-eth-oam {
   yang-version 1.1;
-  namespace "urn:bbf:yang:bbf-dot1q-cfm";
-  prefix bbf-cfm;
+  namespace "urn:bbf:yang:bbf-eth-oam";
+  prefix bbf-eth-oam;
 
   import ieee802-dot1q-cfm {
     prefix dot1q-cfm;
-  }
-  import bbf-interface-usage {
-    prefix bbf-if-usg;
   }
 
   organization
@@ -39,7 +36,9 @@ module bbf-dot1q-cfm {
      specified Access Nodes and FTTdp DPUs).
 
      Specifically, this module augments the IEEE 802.1Qcx CFM YANG
-     data model with data nodes to support BBF-specific requirements.
+     data model with data nodes to support BBF-specific requirements
+     relating to Ethernet OAM capabilities defined in ITU-T G.8013 and
+     ITU-T G.8021.
 
      Copyright (c) 2017-2024, Broadband Forum
 
@@ -94,110 +93,30 @@ module bbf-dot1q-cfm {
                  <https://www.broadband-forum.org/technical/download/
                           TR-383_Amendment-8.pdf>";
   }
-  revision 2022-03-01 {
+
+  feature only-itut-oam-fm-supported {
     description
-      "Amendment 5.
-       * Approval Date:    2022-03-01.
-       * Publication Date: 2022-03-01.";
-    reference
-      "TR-383a5: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-5.pdf>";
+      "Indicates that only ITU-T Ethernet OAM FM state machines are
+       supported on the server, i.e., IEEE 802.1Q CFM state machines
+       are not supported on the server.";
   }
 
-  feature discard-ingressing-ltm {
+  augment "/dot1q-cfm:cfm/dot1q-cfm:maintenance-group" {
+    if-feature "not only-itut-oam-fm-supported";
     description
-      "Indicates support for discarding Link Trace Message (LTM) OAM
-       Protocol Data Units (PDU) at an interface.";
-    reference
-      "TR-101i2 R-301";
-  }
+      "Augments the Maintenance Group Broadband Forum specific
+       configuration.";
+    leaf itut-oam-fm-supported {
+      type boolean;
+      default "false";
+      description
+        "If 'true', the Maintenance Group implements ITU-T Ethernet
+         OAM Fault Management (FM) state machines.
 
-  grouping local-mep {
-    description
-      "Defines the parameters that uniquely identify a local
-       Maintenance Association (MA) End Point (MEP).";
-    leaf maintenance-group-id {
-      type leafref {
-        path "/dot1q-cfm:cfm/dot1q-cfm:maintenance-group"
-           + "/dot1q-cfm:maintenance-group-id";
-      }
-      mandatory true;
-      description
-        "The Maintenance Group that the MEP is associated with.";
-    }
-    leaf mep-id {
-      type leafref {
-        path "/dot1q-cfm:cfm"
-           + "/dot1q-cfm:maintenance-group"
-           + "[dot1q-cfm:maintenance-group-id = current()"
-           + "/../maintenance-group-id]"
-           + "/dot1q-cfm:mep/dot1q-cfm:mep-id";
-      }
-      mandatory true;
-      description
-        "A Maintenance Association Endpoint Identifier of a local
-         MEP.";
+         If 'false' the Maintenance Group implements IEEE 802.1Q CFM
+         state machines.";
       reference
-        "IEEE Std 802.1Q-2018 Clause 12.14.2.1.3d";
-    }
-  }
-
-  grouping local-mhf {
-    description
-      "Defines the parameters that uniquely identify a local
-       Maintenance Domain Intermediate Point (MIP) Half Function
-       (MHF).";
-    choice mip-creation {
-      case auto-created {
-        leaf md-id {
-          type leafref {
-            path "/dot1q-cfm:cfm/dot1q-cfm:maintenance-domain"
-               + "/dot1q-cfm:md-id";
-          }
-          mandatory true;
-          description
-            "The Maintenance Domain that the MHF is associated with.";
-        }
-        leaf ma-id {
-          type leafref {
-            path "/dot1q-cfm:cfm"
-               + "/dot1q-cfm:maintenance-domain"
-               + "[dot1q-cfm:md-id = current()/../md-id]"
-               + "/dot1q-cfm:maintenance-association/dot1q-cfm:ma-id";
-          }
-          mandatory true;
-          description
-            "The Maintenance Association that the MHF is associated
-             with.";
-        }
-      }
-      mandatory true;
-      description
-        "Identifies where the MIP exists.";
-    }
-  }
-
-  augment "/dot1q-cfm:cfm/dot1q-cfm:maintenance-domain/"
-        + "dot1q-cfm:maintenance-association" {
-    description
-      "Augment the Maintenance Association data.";
-    leaf-list discard-ingressing-ltm {
-      if-feature "discard-ingressing-ltm";
-      type bbf-if-usg:interface-usage;
-      description
-        "Indicates a type of interface usage from which ingressing
-         LTMs received by a MIP configured in this Maintenance
-         Association are to be discarded, because the device
-         generating the LTM on that type of interface is considered to
-         be non-trusted.
-
-         The interface usage not being added to this list means the
-         devices connected to that type of interface are trusted. An
-         empty list or a non-existing leaf means all peer devices are
-         trusted and LTM messages will not be discarded.";
-      reference
-        "TR-101i2 R-301";
+        "ITU-T G.8013 Clause 7";
     }
   }
 }

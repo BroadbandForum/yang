@@ -17,11 +17,15 @@ module bbf-ptm {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
+     Editor:      Shiya Ashraf, Nokia
+
      Editor:      Nick Hancock, Adtran
+
+     Editor:      Kevin Noll, CableLabs
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, Adtran
+     PS Leader:   Aihua Guo, Futurewei
 
      WA Director: Joey Boyd, Adtran
 
@@ -37,7 +41,7 @@ module bbf-ptm {
      model, ietf-interfaces (RFC7223), with nodes for managing
      Packet Transfer Mode (PTM) interfaces.
 
-     Copyright (c) 2017-2023, Broadband Forum
+     Copyright (c) 2017-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -77,9 +81,19 @@ module bbf-ptm {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a7; see
+     This version of this YANG module is part of TR-383a8; see
      the TR itself for full legal notices.";
 
+  revision 2024-11-11 {
+    description
+      "Amendment 8.
+       * Approval Date:    2024-11-11.
+       * Publication Date: 2024-11-11.";
+    reference
+      "TR-383a8: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-8.pdf>";
+  }
   revision 2023-12-15 {
     description
       "Amendment 7.
@@ -139,6 +153,9 @@ module bbf-ptm {
       must
         "derived-from-or-self(/if:interfaces/if:interface[if:name = "
       + "current()]/if:type, 'ianaift:ptm')" {
+        error-message
+          "The configured interface is neither of type 'ptm' nor "
+        + "derived from 'ptm'.";
         description
           "The referenced interface must be of the type PTM.";
       }

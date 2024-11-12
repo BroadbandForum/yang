@@ -20,11 +20,15 @@ module bbf-hardware-transceivers {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
+     Editor:      Shiya Ashraf, Nokia
+
      Editor:      Nick Hancock, Adtran
+
+     Editor:      Kevin Noll, CableLabs
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, Adtran
+     PS Leader:   Aihua Guo, Futurewei
 
      WA Director: Joey Boyd, Adtran
 
@@ -39,7 +43,7 @@ module bbf-hardware-transceivers {
      Specifically, this module augments the ietf-hardware model with
      management of compact transceivers.
 
-     Copyright (c) 2017-2023, Broadband Forum
+     Copyright (c) 2017-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -79,9 +83,19 @@ module bbf-hardware-transceivers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a7; see
+     This version of this YANG module is part of TR-383a8; see
      the TR itself for full legal notices.";
 
+  revision 2024-11-11 {
+    description
+      "Amendment 8.
+       * Approval Date:    2024-11-11.
+       * Publication Date: 2024-11-11.";
+    reference
+      "TR-383a8: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-8.pdf>";
+  }
   revision 2023-12-15 {
     description
       "Amendment 7.
@@ -357,7 +371,7 @@ module bbf-hardware-transceivers {
     reference
       "SFF-8472 (Revision 12.4) Table 5-1 - Address A0h, Byte 0,
        Value 00h;
-       SFF-8024 (Revision 4.8a) Table 4-1 - Value 00h";
+       SFF-8024 (Revision 4.11) Table 4-1 - Value 00h";
   }
 
   identity gbic {
@@ -367,7 +381,7 @@ module bbf-hardware-transceivers {
     reference
       "SFF-8472 (Revision 12.4) Table 5-1 - Address A0h, Byte 0,
        Value 01h;
-       SFF-8024 (Revision 4.8a) Table 4-1 - Value 01h";
+       SFF-8024 (Revision 4.11) Table 4-1 - Value 01h";
   }
 
   identity sff {
@@ -377,7 +391,7 @@ module bbf-hardware-transceivers {
     reference
       "SFF-8472 (Revision 12.4) Table 5-1 - Address A0h, Byte 0,
        Value 02h;
-       SFF-8024 (Revision 4.8a) Table 4-1 - Value 02h";
+       SFF-8024 (Revision 4.11) Table 4-1 - Value 02h";
   }
 
   identity sfp {
@@ -387,7 +401,7 @@ module bbf-hardware-transceivers {
     reference
       "SFF-8472 (Revision 12.4) Table 5-1 - Address A0h, Byte 0,
        Value 03h;
-       SFF-8024 (Revision 4.8a) Table 4-1 - Value 03h";
+       SFF-8024 (Revision 4.11) Table 4-1 - Value 03h";
   }
 
   identity xbi-300-pin {
@@ -395,7 +409,7 @@ module bbf-hardware-transceivers {
     description
       "300 pin XBI.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 04h";
+      "SFF-8024 (Revision 4.11) Table 4-1 - Value 04h";
   }
 
   identity xenpak {
@@ -403,7 +417,7 @@ module bbf-hardware-transceivers {
     description
       "XENPAK.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 05h";
+      "SFF-8024 (Revision 4.11) Table 4-1 - Value 05h";
   }
 
   identity xfp {
@@ -411,7 +425,7 @@ module bbf-hardware-transceivers {
     description
       "XFP.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 06h";
+      "SFF-8024 (Revision 4.11) Table 4-1 - Value 06h";
   }
 
   identity xff {
@@ -419,7 +433,7 @@ module bbf-hardware-transceivers {
     description
       "XFF.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 07h";
+      "SFF-8024 (Revision 4.11) Table 4-1 - Value 07h";
   }
 
   identity xfp-e {
@@ -427,7 +441,7 @@ module bbf-hardware-transceivers {
     description
       "XFP-E.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 08h";
+      "SFF-8024 (Revision 4.11) Table 4-1 - Value 08h";
   }
 
   identity xpak {
@@ -435,7 +449,7 @@ module bbf-hardware-transceivers {
     description
       "XPAK.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 09h";
+      "SFF-8024 (Revision 4.11) Table 4-1 - Value 09h";
   }
 
   identity x2 {
@@ -443,7 +457,7 @@ module bbf-hardware-transceivers {
     description
       "X2.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 0Ah";
+      "SFF-8024 (Revision 4.11) Table 4-1 - Value 0Ah";
   }
 
   identity dwdm-sfp {
@@ -451,15 +465,17 @@ module bbf-hardware-transceivers {
     description
       "DWDM-SFP/SFP+ (not using SFF-8472).";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 0Bh";
+      "SFF-8472 (Revision 12.4);
+       SFF-8024 (Revision 4.11) Table 4-1 - Value 0Bh";
   }
 
   identity qsfp {
     base physical-device;
     description
-      "QSFP (INF-8438).";
+      "QSFP (INF-8438i).";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 0Ch";
+      "INF-8438i (Revision 1.0);
+       SFF-8024 (Revision 4.11) Table 4-1 - Value 0Ch";
   }
 
   identity qsfp-plus-or-later {
@@ -468,7 +484,11 @@ module bbf-hardware-transceivers {
       "QSFP+ or later (SFF-8436, SFF-8635, SFF-8665, SFF-8685 et
        al).";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 0Dh";
+      "SFF-8436;
+       SFF-8635;
+       SFF-8665;
+       SFF-8685;
+       SFF-8024 (Revision 4.11) Table 4-1 - Value 0Dh";
   }
 
   identity cxp-or-later {
@@ -476,7 +496,7 @@ module bbf-hardware-transceivers {
     description
       "CXP or later.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 0Eh";
+      "SFF-8024 (Revision 4.11) Table 4-1 - Value 0Eh";
   }
 
   identity shielded-mini-multilane-hd-4x {
@@ -484,7 +504,7 @@ module bbf-hardware-transceivers {
     description
       "Shielded Mini Multilane HD 4x.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 0Fh";
+      "SFF-8024 (Revision 4.11) Table 4-1 - Value 0Fh";
   }
 
   identity shielded-mini-multilane-hd-8x {
@@ -492,7 +512,7 @@ module bbf-hardware-transceivers {
     description
       "Shielded Mini Multilane HD 8x.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 10h";
+      "SFF-8024 (Revision 4.11) Table 4-1 - Value 10h";
   }
 
   identity qsfp28-or-later {
@@ -500,7 +520,8 @@ module bbf-hardware-transceivers {
     description
       "QSFP28 or later (SFF-8665).";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 11h";
+      "SFF-8024 (Revision 4.11) Table 4-1 - Value 11h;
+       SFF-8665";
   }
 
   identity cxp2-or-later {
@@ -508,7 +529,7 @@ module bbf-hardware-transceivers {
     description
       "CXP2 (aka CXP28) or later.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 12h";
+      "SFF-8024 (Revision 4.11) Table 4-1 - Value 12h";
   }
 
   identity cdfp-style1-style2 {
@@ -516,7 +537,7 @@ module bbf-hardware-transceivers {
     description
       "CDFP (Style 1/Style 2).";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 13h";
+      "SFF-8024 (Revision 4.11) Table 4-1 - Value 13h";
   }
 
   identity shielded-mini-multilane-hd-4x-fanout-cable {
@@ -524,7 +545,7 @@ module bbf-hardware-transceivers {
     description
       "Shielded Mini Multilane HD 4x Fanout Cable.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 14h";
+      "SFF-8024 (Revision 4.11) Table 4-1 - Value 14h";
   }
 
   identity shielded-mini-multilane-hd-8x-fanout-cable {
@@ -532,7 +553,7 @@ module bbf-hardware-transceivers {
     description
       "Shielded Mini Multilane HD 8x Fanout Cable.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 15h";
+      "SFF-8024 (Revision 4.11) Table 4-1 - Value 15h";
   }
 
   identity cdfp-style3 {
@@ -540,7 +561,7 @@ module bbf-hardware-transceivers {
     description
       "CDFP (Style 3).";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 16h";
+      "SFF-8024 (Revision 4.11) Table 4-1 - Value 16h";
   }
 
   identity micro-qsfp {
@@ -548,7 +569,7 @@ module bbf-hardware-transceivers {
     description
       "Micro QSFP.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 17h";
+      "SFF-8024 (Revision 4.11) Table 4-1 - Value 17h";
   }
 
   identity qsfp-dd {
@@ -556,7 +577,8 @@ module bbf-hardware-transceivers {
     description
       "QSFP-DD Double Density 8X Pluggable Transceiver (INF-8628).";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Value 18h";
+      "INF-8628;
+       SFF-8024 (Revision 4.11) Table 4-1 - Value 18h";
   }
 
   identity vendor-specific {
@@ -565,7 +587,7 @@ module bbf-hardware-transceivers {
       "Vendor-specific physical device. A vendor may derive specific
        identities from this one.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-1 - Values 80h-FFh";
+      "SFF-8024 (Revision 4.11) Table 4-1 - Values 80h-FFh";
   }
 
   //Connector Types
@@ -586,7 +608,7 @@ module bbf-hardware-transceivers {
     description
       "Unknown or unspecified.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 00h";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 00h";
   }
 
   identity subscriber-connector {
@@ -594,7 +616,7 @@ module bbf-hardware-transceivers {
     description
       "SC (Subscriber Connector).";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 01h";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 01h";
   }
 
   identity fibre-channel-style-1-copper {
@@ -602,7 +624,7 @@ module bbf-hardware-transceivers {
     description
       "Fibre Channel Style 1 copper connector.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 02h";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 02h";
   }
 
   identity fibre-channel-style-2-copper {
@@ -610,7 +632,7 @@ module bbf-hardware-transceivers {
     description
       "Fibre Channel Style 2 copper connector.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 03h";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 03h";
   }
 
   identity bnc-tnc {
@@ -618,7 +640,7 @@ module bbf-hardware-transceivers {
     description
       "BNC/TNC (Bayonet/Threaded Neill-Concelman).";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 04h";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 04h";
   }
 
   identity fibre-channel-coax-headers {
@@ -626,7 +648,7 @@ module bbf-hardware-transceivers {
     description
       "Fibre Channel coax headers.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 05h";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 05h";
   }
 
   identity fibre-jack {
@@ -634,7 +656,7 @@ module bbf-hardware-transceivers {
     description
       "Fibre Jack.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 06h";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 06h";
   }
 
   identity lucent-connector {
@@ -642,7 +664,7 @@ module bbf-hardware-transceivers {
     description
       "LC (Lucent Connector).";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 07h";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 07h";
   }
 
   identity mt-rj {
@@ -650,7 +672,7 @@ module bbf-hardware-transceivers {
     description
       "MT-RJ (Mechanical Transfer - Registered Jack).";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 08h";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 08h";
   }
 
   identity mu {
@@ -658,7 +680,7 @@ module bbf-hardware-transceivers {
     description
       "MU (Multiple Optical).";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 09h";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 09h";
   }
 
   identity sg {
@@ -666,7 +688,7 @@ module bbf-hardware-transceivers {
     description
       "SG.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 0Ah";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 0Ah";
   }
 
   identity optical-pigtail {
@@ -674,7 +696,7 @@ module bbf-hardware-transceivers {
     description
       "Optical Pigtail.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 0Bh";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 0Bh";
   }
 
   identity mpo-1x12 {
@@ -682,7 +704,7 @@ module bbf-hardware-transceivers {
     description
       "MPO 1x12 (Multifiber Parallel Optic).";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 0Ch";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 0Ch";
   }
 
   identity mpo-2x16 {
@@ -690,7 +712,7 @@ module bbf-hardware-transceivers {
     description
       "MPO 2x16 (Multifiber Parallel Optic).";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 0Dh";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 0Dh";
   }
 
   identity hssdc-ii {
@@ -698,7 +720,7 @@ module bbf-hardware-transceivers {
     description
       "HSSDC II (High Speed Serial Data Connector).";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 20h";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 20h";
   }
 
   identity copper-pigtail {
@@ -706,7 +728,7 @@ module bbf-hardware-transceivers {
     description
       "Copper Pigtail.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 21h";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 21h";
   }
 
   identity rj45 {
@@ -714,7 +736,7 @@ module bbf-hardware-transceivers {
     description
       "RF45 (Registered Jack).";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 22h";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 22h";
   }
 
   identity no-separable-connector {
@@ -722,7 +744,7 @@ module bbf-hardware-transceivers {
     description
       "No separable connector.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 23h";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 23h";
   }
 
   identity mxc-2x16 {
@@ -730,7 +752,7 @@ module bbf-hardware-transceivers {
     description
       "MXC 2x16.";
     reference
-      "SFF-8024 (Revision 4.8a) Table 4-3 - Value 24h";
+      "SFF-8024 (Revision 4.11) Table 4-3 - Value 24h";
   }
 
   typedef power-milliwatts {
@@ -809,7 +831,7 @@ module bbf-hardware-transceivers {
              cannot report wavelengths with subnanometer granularity,
              in which case the decimal digits must be set to '.00'.";
           reference
-            "SFF-8636 (Revision 2.10a) Section 6.3.19
+            "SFF-8636 (Revision 2.11) Section 6.3.19;
              INF-8077i (Revision 4.5) Section 5.33";
         }
       }
@@ -2403,59 +2425,57 @@ module bbf-hardware-transceivers {
             description
               "Unspecified encoding.";
             reference
-              "SFF-8024 (Revision 4.8a) Table 4-2 - Common Value 00h";
+              "SFF-8024 (Revision 4.11) Table 4-2 - Unspecified";
           }
           enum 8b-10b {
             description
               "8-bit words to 10-bit symbols (8B/10B).";
             reference
-              "SFF-8024 (Revision 4.8a) Table 4-2 - Common Value 01h";
+              "SFF-8024 (Revision 4.11) Table 4-2 - 8B/10B";
           }
           enum 4b-5b {
             description
               "4-bits to 5-bits (4B/5B).";
             reference
-              "SFF-8024 (Revision 4.8a) Table 4-2 - Common Value 02h";
+              "SFF-8024 (Revision 4.11) Table 4-2 - 4B/5B";
           }
           enum nrz {
             description
               "Non-return-to-zero (NRZ).";
             reference
-              "SFF-8024 (Revision 4.8a) Table 4-2 - Common Value 03h";
+              "SFF-8024 (Revision 4.11) Table 4-2 - NRZ";
           }
           enum manchester {
             description
               "Manchester encoding.";
             reference
-              "SFF-8024 (Revision 4.8a) Table 4-2 -
-               SFF-8472 Value 04h, SFF-8436/8636 Value 00h";
+              "SFF-8024 (Revision 4.11) Table 4-2 - Manchester";
           }
           enum sonet-scrambled {
             description
               "SONET scrambled.";
             reference
-              "SFF-8024 (Revision 4.8a) Table 4-2 -
-               SFF-8472 Value 05h, SFF-8436/8636 Value 04h";
+              "SFF-8024 (Revision 4.11) Table 4-2 - SONET Scrambled";
           }
           enum 64b-66b {
             description
               "64-bit data to 66-bit line code (64B/66B).";
             reference
-              "SFF-8024 (Revision 4.8a) Table 4-2 -
-               SFF-8472 Value 06h, SFF-8436/8636 Value 05h";
+              "SFF-8024 (Revision 4.11) Table 4-2 - 64B/66B";
           }
           enum 256b-257b {
             description
               "4 66 bit line code blocks to 257-bit block
                (256B/257B).";
             reference
-              "SFF-8024 (Revision 4.8a) Table 4-2 - Common Value 07h";
+              "SFF-8024 (Revision 4.11) Table 4-2 - 256B/257B
+               (transcoded FEC-enabled data)";
           }
           enum pam4 {
             description
               "4-bit Pulse Amplitude Modulation (PAM4).";
             reference
-              "SFF-8024 (Revision 4.8a) Table 4-2 - Common Value 08h";
+              "SFF-8024 (Revision 4.11) Table 4-2 - PAM4";
           }
         }
         config false;
@@ -3354,7 +3374,8 @@ module bbf-hardware-transceivers {
               "Optional Application Select control implemented per
                SFF-8079.";
             reference
-              "SFF-8472 (Revision 12.4) Table 8-6 - Address A0h,
+              "SFF-8079;
+               SFF-8472 (Revision 12.4) Table 8-6 - Address A0h,
                Byte 93, bit 2";
           }
           bit alarm-rate-select-sff-8431 {
@@ -3362,7 +3383,8 @@ module bbf-hardware-transceivers {
               "Optional soft Rate Select control implemented per
                SFF-8431.";
             reference
-              "SFF-8472 (Revision 12.4) Table 8-6 - Address A0h,
+              "SFF-8431;
+               SFF-8472 (Revision 12.4) Table 8-6 - Address A0h,
                Byte 93, bit 1";
           }
         }

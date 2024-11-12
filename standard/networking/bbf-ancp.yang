@@ -20,11 +20,15 @@ module bbf-ancp {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
+     Editor:      Shiya Ashraf, Nokia
+
      Editor:      Nick Hancock, Adtran
+
+     Editor:      Kevin Noll, CableLabs
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, Adtran
+     PS Leader:   Aihua Guo, Futurewei
 
      WA Director: Joey Boyd, Adtran
 
@@ -39,7 +43,7 @@ module bbf-ancp {
      This data model is designed for the Network Management Datastore
      Architecture defined in RFC 8342.
 
-     Copyright (c) 2017-2023, Broadband Forum
+     Copyright (c) 2017-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -79,11 +83,21 @@ module bbf-ancp {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a7; see
+     This version of this YANG module is part of TR-383a8; see
      the TR itself for full legal notices.";
   reference
     "RFC 6320";
 
+  revision 2024-11-11 {
+    description
+      "Amendment 8.
+       * Approval Date:    2024-11-11.
+       * Publication Date: 2024-11-11.";
+    reference
+      "TR-383a8: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-8.pdf>";
+  }
   revision 2023-12-15 {
     description
       "Amendment 7.
@@ -192,7 +206,7 @@ module bbf-ancp {
        respective rates without having to rely on an integration
        with an OSS system.";
     reference
-      "RFC 6320 section 6";
+      "RFC 6320 Section 6";
   }
 
   identity access-line-technology {
@@ -200,7 +214,7 @@ module bbf-ancp {
       "Base identity for defining the technology of access lines
        managed by a partition.";
     reference
-      "RFC 6320 section 6.5";
+      "RFC 6320 Section 6.5";
   }
 
   identity access-line-attribute {
@@ -211,7 +225,7 @@ module bbf-ancp {
        This is an abstract identity and MUST NOT be used for access
        line attributes.";
     reference
-      "RFC 6320 section 6.5";
+      "RFC 6320 Section 6.5";
   }
 
   identity technology-independent-access-line-attribute {
@@ -223,7 +237,7 @@ module bbf-ancp {
        This is an abstract identity and MUST NOT be used for access
        line attributes.";
     reference
-      "RFC 6320 section 6.5";
+      "RFC 6320 Section 6.5";
   }
 
   identity access-loop-encapsulation {
@@ -232,7 +246,7 @@ module bbf-ancp {
       "The data link protocol and, optionally, the encapsulation
        overhead on the access loop.";
     reference
-      "RFC 6320 section 6.5.18";
+      "RFC 6320 Section 6.5.18";
   }
 
   identity adjacency-malfunction-cause {
@@ -273,7 +287,7 @@ module bbf-ancp {
            version = 50 in protocol messages as defined the joint
            GSMP / ANCP Version Registry.";
         reference
-          "RFC 6320 section 10.8";
+          "RFC 6320 Section 10.8";
       }
     }
     description
@@ -287,7 +301,7 @@ module bbf-ancp {
     description
       "Defines the Partition ID.";
     reference
-      "RFC 6320 section 3.5.1";
+      "RFC 6320 Section 3.5.1";
   }
 
   typedef entity-name {
@@ -306,7 +320,7 @@ module bbf-ancp {
       "An entity name used to identify the sender/receiver of an
        ANCP message.";
     reference
-      "RFC 6320 section 3.5.1";
+      "RFC 6320 Section 3.5.1";
   }
 
   typedef link-instance {
@@ -325,7 +339,7 @@ module bbf-ancp {
       "The instance number used to identify the link within the
        Access Node or NAS.";
     reference
-      "RFC 6320 section 3.5.1";
+      "RFC 6320 Section 3.5.1";
   }
 
   /* Groupings */
@@ -408,7 +422,7 @@ module bbf-ancp {
              the Adjacency Message must be being set to 0 (no
              partition) and 0 respectively.";
           reference
-            "RFC 6320 section 3.5.2.4.2";
+            "RFC 6320 Section 3.5.2.4.2";
         }
         leaf technology {
           type identityref {
@@ -445,7 +459,7 @@ module bbf-ancp {
                 "The ANCP protocol version to be used by the
                  session.";
               reference
-                "RFC 6320 section 3.5.1";
+                "RFC 6320 Section 3.5.1";
             }
             leaf-list capability {
               type identityref {
@@ -460,7 +474,7 @@ module bbf-ancp {
                  intended value and is to be found by operational
                  data.";
               reference
-                "RFC 6320 section 3.5.1 (Capability Fields).";
+                "RFC 6320 Section 3.5.1 - Capability Fields";
             }
             leaf oper-state {
               type enumeration {
@@ -505,7 +519,7 @@ module bbf-ancp {
                      Sender Name to use to identify the session at
                      the Access Node to the NAS.";
                   reference
-                    "RFC 6320 section 3.5.1 (Sender Name).";
+                    "RFC 6320 Section 3.5.1 - Sender Name";
                   case use-mac-address {
                     description
                       "Configures the session to use a system MAC
@@ -552,7 +566,7 @@ module bbf-ancp {
                   description
                     "Configures TCP as the transport for ANCP.";
                   reference
-                    "RFC 6320 section 3.2";
+                    "RFC 6320 Section 3.2";
                   container tcp {
                     description
                       "Contains TCP-specific configuration for ANCP.";
@@ -570,7 +584,7 @@ module bbf-ancp {
                       description
                         "The IP port of the NAS.";
                       reference
-                        "RFC 6320 section 3.2";
+                        "RFC 6320 Section 3.2";
                     }
                   }
                 }
@@ -645,7 +659,7 @@ module bbf-ancp {
                    different to the intended value and is to be found
                    by querying state data.";
                 reference
-                  "RFC 6320 section 3.5.1 (Timer).";
+                  "RFC 6320 Section 3.5.1 - Timer";
               }
               leaf adjacency-state {
                 type enumeration {
@@ -670,7 +684,7 @@ module bbf-ancp {
                         - administratively disable and then enable
                           the session.";
                     reference
-                      "RFC 5851 section 4.6.4 R-48.";
+                      "RFC 5851 R-48";
                   }
                   enum synchronization-lost {
                     description
@@ -684,14 +698,14 @@ module bbf-ancp {
                        A corresponding alarm will be raised, if
                        supported.";
                     reference
-                      "RFC 6320 section 3.5.2.7";
+                      "RFC 6320 Section 3.5.2.7";
                   }
                   enum estab {
                     description
                       "The state ESTAB (established) indicates that
                        the Access Node has established a session.";
                     reference
-                      "RFC 6320 section 3.5.2.2.7";
+                      "RFC 6320 Section 3.5.2.2.7";
                   }
                   enum synrcvd {
                     description
@@ -700,7 +714,7 @@ module bbf-ancp {
                        connection request and sent an
                        acknowledgment.";
                     reference
-                      "RFC 6320 section 3.5.2.2.1";
+                      "RFC 6320 Section 3.5.2.2.1";
                   }
                   enum synsent {
                     description
@@ -709,7 +723,7 @@ module bbf-ancp {
                        an acknowledgment from the NAS after having
                        sent a connection request.";
                     reference
-                      "RFC 6320 section 3.5.2.2.1";
+                      "RFC 6320 Section 3.5.2.2.1";
                   }
                   enum pending {
                     description
@@ -729,7 +743,7 @@ module bbf-ancp {
                 description
                   "The operational state of the adjacency protocol.";
                 reference
-                  "RFC 6320 section 3.5.2.2";
+                  "RFC 6320 Section 3.5.2.2";
               }
               leaf partition-id {
                 when "count(/bbf-ancp:ancp/bbf-ancp:partitions"
@@ -757,7 +771,7 @@ module bbf-ancp {
                    different to the Partition ID configured for the
                    partition.";
                 reference
-                  "RFC 6320 section 3.5.2.4.2";
+                  "RFC 6320 Section 3.5.2.4.2";
               }
               container malfunction {
                 when "../adjacency-state='malfunction'" {
@@ -810,8 +824,8 @@ module bbf-ancp {
                        TLV will be inserted, i.e., a TLV with
                        Length = 0.";
                     reference
-                      "RFC 6320 section 5.1.2.1,
-                       TR-101i2 Section 3.9.3.";
+                      "RFC 6320 Section 5.1.2.1;
+                       TR-101i2 Section 3.9.3";
                   }
                   enum access-loop-remote-id {
                     description
@@ -826,8 +840,8 @@ module bbf-ancp {
                        not present, then an empty TLV will be
                        inserted, i.e., a TLV with Length = 0.";
                     reference
-                      "RFC 6320 section 5.1.2.2,
-                       TR-101i2 Section 3.9.3.";
+                      "RFC 6320 Section 5.1.2.2;
+                       TR-101i2 Section 3.9.3";
                   }
                   enum access-aggregation-circuit-id-binary {
                     description
@@ -849,8 +863,8 @@ module bbf-ancp {
                        VLAN IDs is defined by the value configured
                        via the interface.";
                     reference
-                      "RFC 6320 section 5.1.2.3,
-                       TR-101i2 Section 3.9.3.";
+                      "RFC 6320 Section 5.1.2.3;
+                       TR-101i2 Section 3.9.3";
                   }
                   enum access-aggregation-circuit-id-ascii {
                     description
@@ -870,8 +884,8 @@ module bbf-ancp {
                        If this leaf is empty, then an empty TLV will
                        be inserted, i.e., a TLV with Length = 0.";
                     reference
-                      "RFC 6320 section 5.1.2.4,
-                       TR-101i2 Section 3.9.3.";
+                      "RFC 6320 Section 5.1.2.4;
+                       TR-101i2 Section 3.9.3";
                   }
                 }
                 min-elements 1;
@@ -888,8 +902,8 @@ module bbf-ancp {
                    any characters and variables, e.g.,
                    'Access_Node_ID eth slot/port'.";
                 reference
-                  "RFC 6320 section 5.1.2.1 and
-                   TR-101 Section 3.9.3.";
+                  "RFC 6320 Section 5.1.2.1;
+                   TR-101i2 Section 3.9.3";
               }
               leaf access-aggregation-circuit-id-ascii {
                 type bbf-yang:string-ascii63-or-empty;
@@ -901,12 +915,12 @@ module bbf-ancp {
                    Node. As per RFC 6320 it shall contain VLAN IDs
                    similar as the Access Aggregation Circuit ID
                    Binary TLV, but in a format as specified by
-                   TR-101.
+                   TR-101i2.
 
                    It may contain any characters and variables, e.g.,
                    'S-VID:C-VID'.";
                 reference
-                  "RFC 6320 section 5.1.2.4";
+                  "RFC 6320 Section 5.1.2.4";
               }
               leaf start-numbering-from-zero {
                 type boolean;
@@ -919,7 +933,7 @@ module bbf-ancp {
                    AN, then this leaf determines if the numbering
                    MUST start from 0 or 1.";
                 reference
-                  "TR-178 - R118";
+                  "TR-178 R-118";
               }
               leaf use-leading-zeroes {
                 type boolean;
@@ -936,18 +950,17 @@ module bbf-ancp {
                    Note that the number of digits used to form the
                    fixed-length string is device specific.
                    A device may use the number of digits as specified
-                   in TR-101 Table 2 / TR-156 Table 1 or a device may
-                   determine the number of digits by the maximum
+                   in TR-101i2 Table 2 / TR-156 Table 1 or a device
+                   may determine the number of digits by the maximum
                    value for the Slot or a Port identification
                    applicable to the device, i.e., if the maximum
                    value is less than or equal to 9, one digit may
                    be used; if the maximum value is less than or
                    equal to 99, two digits may be used, etc.";
                 reference
-                  "TR-178 - R119 and TR-101i2 - R153;
-                   TR-101i2 - Table 2 Circuit ID Syntax;
-                   TR-156 - Table 1 Port Identification String
-                   Elements.";
+                  "TR-178 R-119;
+                   TR-101i2 Table 2;
+                   TR-156 Table 1";
               }
             }
             container topology-discovery {
@@ -1165,7 +1178,7 @@ module bbf-ancp {
                    line is reported to the NAS (with the withholding
                    interval for that line applying again).";
                 reference
-                  "RFC 6320 section 6.4.1";
+                  "RFC 6320 Section 6.4.1";
               }
             }
           }

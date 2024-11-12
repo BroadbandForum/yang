@@ -14,11 +14,15 @@ module bbf-mgmd-common {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
+     Editor:      Shiya Ashraf, Nokia
+
      Editor:      Nick Hancock, Adtran
+
+     Editor:      Kevin Noll, CableLabs
 
      Editor:      Ludwig Pauwels, Nokia
 
-     PS Leader:   Joey Boyd, Adtran
+     PS Leader:   Aihua Guo, Futurewei
 
      WA Director: Joey Boyd, Adtran
 
@@ -34,7 +38,7 @@ module bbf-mgmd-common {
      Listener Discovery (MLD) protocol in case the system acts as a
      snooper.
 
-     Copyright (c) 2017-2023, Broadband Forum
+     Copyright (c) 2017-2024, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -74,9 +78,19 @@ module bbf-mgmd-common {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a7; see
+     This version of this YANG module is part of TR-383a8; see
      the TR itself for full legal notices.";
 
+  revision 2024-11-11 {
+    description
+      "Amendment 8.
+       * Approval Date:    2024-11-11.
+       * Publication Date: 2024-11-11.";
+    reference
+      "TR-383a8: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-8.pdf>";
+  }
   revision 2023-12-15 {
     description
       "Amendment 7.
@@ -268,7 +282,7 @@ module bbf-mgmd-common {
        protocol on interfaces that connect multicast routers.";
     leaf unsolicited-report-interval {
       type uint32 {
-        range "1..255";
+        range "1..max";
       }
       units "0.1 seconds";
       default "10";

@@ -1,5 +1,11 @@
 ## Broadband Forum YANG Modules
 
+### 2024-11-11: [TR-383 Amendment 8](https://www.broadband-forum.org/technical/download/TR-383_Amendment-8.pdf) Common YANG Modules for Access Networks
+*Tag: [TR-383-v1.8.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.8.0)*
+
+* Enhancements to existing models.
+* New models for Ethernet OAM, IP interfaces and IPFIX.
+
 ### 2024-04-23: [TR-385 Issue 3](https://www.broadband-forum.org/technical/download/TR-385_Issue-3.pdf) YANG Modules for PON Management
 *Tag: [TR-385-v3.0.0](https://github.com/BroadbandForum/yang/tree/TR-385-v3.0.0)*
 

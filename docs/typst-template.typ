@@ -1,4 +1,3 @@
-#import "@preview/tablex:0.0.7": tablex, rowspanx, colspanx, vlinex, cellx
 #import "typst-stringify.typ": stringify
 
 // XXX should filter out things that need to be ignored
@@ -14,6 +13,16 @@
 
 // pagebreak() can only be used at the outer level
 #let bbf-new-page(content) = { pagebreak(weak: true); content }
+
+// acknowledgments, editors etc.
+#let bbf-acknowledgments = bbf-passthrough
+#let bbf-editors = bbf-passthrough
+#let bbf-issue-history = bbf-passthrough
+#let bbf-revision-history = bbf-passthrough
+
+// PSLs and WADs
+#let bbf-psls = bbf-passthrough
+#let bbf-wads = bbf-passthrough
 
 // annexes
 #let bbf-annex1 = bbf-new-page
@@ -42,17 +51,6 @@
 #let bbf-csl-left-margin = box.with(width: 1fr, baseline: 100%)
 #let bbf-csl-right-inline = box.with(width: 15fr, baseline: 100%)
 
-// tablex
-#let bbf-tablex-chain(obj, ..opts) = {
-  if type(obj) == content {
-    cellx(obj, ..opts)
-  } else {
-    // it's expected to be a dictionary
-    assert.eq(opts.pos(), ())
-    obj + opts.named()
-  }
-}
-
 // left / right / clear (intended for use with divs)
 #let bbf-left-state = state("bbf-left")
 #let bbf-right-state = state("bbf-right")
@@ -75,14 +73,28 @@
   args.pos().join()
 }
 
-// WT-181/specification/local.css
-#let bbf-tablex-command = cellx.with(fill: rgb("#66cdaa"))
-#let bbf-tablex-object = cellx.with(fill: rgb("#ffff99"))
+// table support
+#let bbf-table-chain(obj, ..opts) = {
+  if type(obj) == content {
+    table.cell(obj, ..opts)
+  } else {
+    // it's expected to be a dictionary
+    assert.eq(opts.pos(), ())
+    obj + opts.named()
+  }
+}
 
 // XXX these are rather arbitrary
-#let bbf-tablex-blue = obj => bbf-tablex-chain(obj, fill: blue.lighten(50%))
-#let bbf-tablex-red = obj => bbf-tablex-chain(obj, fill: red.lighten(50%))
-#let bbf-tablex-right = obj => bbf-tablex-chain(obj, align: right)
+#let bbf-table-blue = obj => bbf-table-chain(obj, fill: blue.lighten(50%))
+#let bbf-table-red = obj => bbf-table-chain(obj, fill: red.lighten(50%))
+#let bbf-table-right = obj => bbf-table-chain(obj, align: right)
+
+// WT-181/specification/local.css
+#let bbf-table-command = table.cell.with(fill: rgb("#66cdaa"))
+#let bbf-table-object = table.cell.with(fill: rgb("#ffff99"))
+
+// WT-124
+#let bbf-requirements-table = bbf-passthrough
 
 // XXX maybe there's a better solution for things like the following
 
@@ -102,6 +114,9 @@
                            content}
 // XXX need to review this
 #let bbf-ebnf = bbf-code
+
+// XXX using spacing here should be the same, but it doesn't seem to work
+#let bbf-nobreak = block.with(breakable: false, above: 0.6em, below: 0.6em)
 
 // alerts
 #let bbf-alert(width: 100%, inset: 0.5em, radius: 0.3em, color: black,
@@ -133,6 +148,30 @@
                                    label: [*See also:*])
 #let bbf-tip = bbf-alert.with(color: red, icon: "tick.png")
 
+// table styling
+
+#let bbf-nosidelines(content) = {
+  set table(stroke: (x, y) => {
+      let style = 1pt + black
+      (top: style, bottom: style)
+      if x > 0 {
+        (left: style)
+      }
+    }
+  )
+  content
+}
+
+#let bbf-borderless(content) = {
+  set table(stroke: none)
+  content
+}
+
+#let bbf-boldfirst(content) = {
+  show table.cell.where(x: 0): strong
+  content
+}
+
 // XXX some of these are ignored, e.g. authors and abstract
 #let conf(
   title: none,
@@ -140,12 +179,12 @@
   date: none,
   abstract: none,
   cols: 1,
-  margin: (x: 1.25in, y: 1.25in),
+  margin: auto,
   paper: "us-letter",
   lang: "en",
   region: "US",
-  font: (),
-  fontsize: 11pt,
+  font: ("Arial", "Liberation Sans", "Nimbus Sans", "DejaVu Sans"),
+  fontsize: 10pt,
   sectionnumbering: none,
   info: (),
   doc,
@@ -164,14 +203,42 @@
 
   // these can be set as metadata or variables
   let figure-numbering = info.at("figure-numbering", default: false)
-  let hyphenate = info.at("hyphenate", default: true)
-  let justify = info.at("justify", default: false)
+  let hyphenate = info.at("hyphenate", default: false)
+  let justify = info.at("justify", default: true)
 
-  // setting weak to true suppresses the vertical space
-  show heading.where(level: 1): it => {
-    v(1em, weak: false)
-    it
-  }
+  // these approximate the WT-210 recommendations
+  show heading: set block(above: 18pt, below: 12pt)
+  show par: set block(spacing: 12pt)
+
+  show heading.where(level: 1): set text(size: fontsize * 2.0)
+  show heading.where(level: 2): set text(size: fontsize * 1.5)
+  show heading.where(level: 3): set text(size: fontsize * 1.2)
+  show heading.where(level: 4): set text(size: fontsize * 1.2)
+  show heading.where(level: 5): set text(size: fontsize * 1.2)
+  show heading.where(level: 6): set text(size: fontsize * 1.2)
+
+  // TOOLS-193: Headings are colored in WT-210 using the color #204F57
+  // (sort of dark petrol color)
+  show heading: set text(fill: rgb("#204F57"))
+
+  // TOOLS-200: list indent and bullet style
+  // XXX the second two might need to be moved up or scaled?
+  set list(indent: 1em)
+  set list(marker: (sym.circle.filled, sym.circle.stroked.small,
+                    sym.square.filled.tiny, sym.circle.filled.small,
+                    sym.circle.stroked.tiny))
+
+  // XXX these are rather small
+  let bullet = str.from-unicode(0x2022)
+  let white-bullet = str.from-unicode(0x25E6)
+  let black-very-small-square = str.from-unicode(0x2B1D)
+  //#set list(marker: (bullet, white-bullet, black-very-small-square))
+
+  // TOOLS-201: do the same for figure captions
+  show figure.caption: set text(fill: rgb("#204F57"))
+
+  // TOOLS-202: use narrower table stroknes
+  set table(stroke: 0.5pt + black)
 
   set outline(indent: 1em)
 
@@ -196,6 +263,7 @@
 
   show figure.where(kind: table): set figure.caption(position: top)
 
+  // XXX this should honor the pandoc titleDelim metadata variable
   show figure.caption: it => [
     *#if figure-numbering [#it.supplement
                            #it.counter.display(it.numbering):] #it.body*
@@ -250,7 +318,8 @@
       ),
     header: locate(loc => {
       set text(size: 0.9em)
-      if loc.page() > 1 [#bbf-title #h(1fr) #bbf-number]
+      if loc.page() > 1 [
+        #bbf-title #h(1fr) #bbf-number #bbf-issue #bbf-version]
     }),
     footer: locate(loc => {
       set text(size: 0.9em)
@@ -261,8 +330,6 @@
       ]
     })
   )
-
-  show link: underline
 
   set par(justify: justify)
 
