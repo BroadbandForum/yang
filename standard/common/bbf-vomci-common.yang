@@ -20,19 +20,24 @@ module bbf-vomci-common {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Tim Carey, Nokia
+     Editor:      Andre Brizido, Altice Labs
 
-     Editor:      Jeff Hartley, Commscope
+     PS Leader:   Ken Kerpez, DZS
 
      WA Director: Mengmeng Li, China Mobile
 
-     WA Director: Bruno Cornaglia, Vodafone";
+     WA Director: Bruno Cornaglia, Vodafone
+
+     WA Director: Haomian Zheng, Huawei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements for vOMCI
      functionality as described in TR-451.
 
-     Copyright (c) 2019-2022, Broadband Forum
+     Specifically, this module provides common definitions used in the
+     management of vOMCI.
+
+     Copyright (c) 2019-2025, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -72,9 +77,19 @@ module bbf-vomci-common {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-451; see
+     This version of this YANG module is part of TR-451a1; see
      the TR itself for full legal notices.";
 
+  revision 2025-02-03 {
+    description
+      "Amendment 1.
+       * Approval Date:    2025-02-03.
+       * Publication Date: 2025-02-03.";
+    reference
+      "TR-451a1: vOMCI Specification
+               <https://www.broadband-forum.org/technical/download/
+                        TR-451_Amendment-1.pdf>";
+  }
   revision 2022-06-07 {
     description
       "Issue 1.
@@ -86,18 +101,16 @@ module bbf-vomci-common {
                         TR-451_Issue-1.pdf>";
   }
 
-  // Groupings
-
   grouping vomci-onu-header {
     description
       "The vOMCI header information used to identify the ONU.";
     container onu-attachment-point {
       description
-        "The current ONU attachment point";
+        "The current ONU attachment point.";
       leaf olt-name {
         type bbf-vomcit:olt-name;
         description
-          "The OLT name where the ONU is attached";
+          "The OLT name where the ONU is attached.";
       }
       leaf channel-termination-name {
         type string;
@@ -120,7 +133,7 @@ module bbf-vomci-common {
 
   grouping vomci-message-statistics {
     description
-      "Grouping for vOMCI message data statistics";
+      "Grouping for vOMCI message data statistics.";
     leaf out-messages {
       type yang:counter64;
       units "counters";
@@ -139,9 +152,39 @@ module bbf-vomci-common {
       type yang:counter64;
       units "counters";
       description
-        "The number of vOMCI messages that have had errors.  This
+        "The number of vOMCI messages that have had errors. This
          includes both inbound and outbound errors. For example,
          unable to send, or didn't receive expected response.";
+    }
+  }
+
+  grouping endpoint-message-statistics {
+    description
+      "Statistics for monitoring messages between two vOMCI entities
+       at the endpoint level.";
+    leaf in-messages {
+      type yang:counter64;
+      units "messages";
+      config false;
+      description
+        "The number of messages that have been received by the
+         entity.";
+    }
+    leaf out-messages {
+      type yang:counter64;
+      units "messages";
+      config false;
+      description
+        "The number of messages that have been transmitted by the
+         entity.";
+    }
+    leaf in-errored-messages {
+      type yang:counter64;
+      units "messages";
+      config false;
+      description
+        "The number of messages received by the entity that contain
+         errors.";
     }
   }
 }

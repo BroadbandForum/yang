@@ -15,24 +15,32 @@ module bbf-grpc-client {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     SDN/NFV Work Area";
+     Common YANG Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Tim Carey, Nokia
+     Editor:      Nick Hancock, Adtran
 
-     Editor:      Jeff Hartley, Commscope
+     Editor:      Ludwig Pauwels, Nokia
 
-     WA Director: Mengmeng Li, China Mobile
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Bruno Cornaglia, Vodafone";
+     WA Director: Joey Boyd, Adtran
+
+     WA Director: Sven Ooghe, Nokia";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements for gRPC client
-     functionality as described in TR-451.
+     supporting the Broadband Forum requirements on network functions
+     as applicable to access network equipment. As such, this module
+     is specific to access network equipment (e.g., BBF-specified
+     Access Nodes and FTTdp DPUs).
 
-     Copyright (c) 2019-2022, Broadband Forum
+     Specifically, this module defines a set of common groupings to
+     support the gRPC client interface to initiate and maintain gRPC
+     channels to gRPC servers.
+
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -72,9 +80,19 @@ module bbf-grpc-client {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-451; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2022-06-07 {
     description
       "Issue 1.
@@ -86,27 +104,24 @@ module bbf-grpc-client {
                         TR-451_Issue-1.pdf>";
   }
 
-  // Features
-
   feature grpc-client {
     description
-      "Indicates that the client supports gRPC as a message
-       transport protocol.";
+      "Indicates that the system supports a gRPC client interface.";
   }
 
   feature connection-backoff {
     description
-      "Indicates that the server supports managing how a client
-       reconnects to a remote endpoint, after discovering
-       its connection to the remote endpoint has dropped.";
+      "Indicates that the gRPC client interface of a network function
+       supports the gRPC Connection Backoff Protocol that manages how
+       a client attempts to connect to a remote endpoint, if and when
+       the connection fails.";
+    reference
+      "github.com/grpc/grpc/blob/master/doc/connection-backoff.md";
   }
-
-  // Groupings
 
   grouping grpc-client {
     description
-      "Data nodes for configuring a gRPC client, including the IP
-       address and port number it initiates a connection to.
+      "Data nodes to manage gRPC client behavior.
 
        Note that this grouping uses fairly typical descendant node
        names such that a stack of 'uses' statements will have name
@@ -116,31 +131,45 @@ module bbf-grpc-client {
        to provide maximum flexibility to consuming models.";
     container channel {
       description
-        "The gRPC channel properties.";
+        "The gRPC channel properties.
+
+         A gRPC channel is a persistent HTTP/2 connection within a TCP
+         session to a remote gRPC server. Its responsibility is to
+         hold all the connections and reconnect as necessary.";
       leaf ping-interval {
-        type uint32 {
-          range "0..max";
-        }
+        type uint32;
         units "seconds";
         default "300";
         description
-          "Sets the amount of time after which a ping request is sent.
-           A value of 0 disables pings from being sent.";
+          "The interval for the HTTP/2 Pings that the gRPC client is
+           to send to gRPC server.
+
+           A value of 0 disables HTTP/2 Pings.
+
+           Pings are used to keep HTTP/2 connections alive during
+           periods of inactivity to allow initial RPCs to be made
+           quickly without a delay.";
+        reference
+          "grpc.io/docs/guides/keepalive/";
       }
-    } // container channel
+    }
     container connection-backoff {
       if-feature "bbf-grpcc:connection-backoff";
       description
-        "The connection backoff directs how a client reconnects to a
-         remote endpoint after discovering its connection to the
-         remote endpoint has dropped.";
+        "Configuration of the gRPC Connection Backoff Protocol.
+
+         The aim of the gRPC Connection Backoff Protocol is to avoid
+         flooding the network or the server with requests when a
+         connection to a server fails or has dropped. This is achieved
+         by exponentially backing off the start time of connection
+         attempts up to a limit with jitter.";
       reference
-        "github.com/grpc/grpc/blob/master/doc/connection-backoff.md.";
+        "github.com/grpc/grpc/blob/master/doc/connection-backoff.md";
       leaf enable {
         type boolean;
         default "true";
         description
-          "If 'true', connection-backoff is enabled.";
+          "If 'true', the Connection Backoff Protocol is enabled.";
       }
       leaf initial-backoff {
         type uint16 {
@@ -149,8 +178,12 @@ module bbf-grpc-client {
         units "seconds";
         default "30";
         description
-          "The initial wait period after the first failure before
-           retrying.";
+          "The time to wait (backoff) before reattempting to establish
+           a connection to the server after discovering that the
+           initial connection attempt has failed.";
+        reference
+          "github.com/grpc/grpc/blob/master/doc/connection-backoff.md
+           - INITIAL_BACKOFF";
       }
       leaf min-connect-timeout {
         type uint16 {
@@ -159,7 +192,11 @@ module bbf-grpc-client {
         units "seconds";
         default "20";
         description
-          "The minimum time to wait for the connection attempts.";
+          "The minimum time to wait for a connection attempt to
+           complete before deeming the connection attempt failed.";
+        reference
+          "github.com/grpc/grpc/blob/master/doc/connection-backoff.md
+           - MIN_CONNECT_TIMEOUT";
       }
       leaf multiplier {
         type decimal64 {
@@ -167,8 +204,11 @@ module bbf-grpc-client {
         }
         default "1.60";
         description
-          "The factor with which to multiply the backoff after a
+          "The factor with which to multiply the backoff value after a
            failed retry.";
+        reference
+          "github.com/grpc/grpc/blob/master/doc/connection-backoff.md
+           - MULTIPLIER";
       }
       leaf jitter {
         type decimal64 {
@@ -176,24 +216,46 @@ module bbf-grpc-client {
         }
         default "0.20";
         description
-          "The factor with which to randomize the backoff.";
+          "The factor which determines by how much backoffs are to be
+           randomized.
+
+           The range of values from which a value for backoff is to be
+           randomly selected is determined as follows:
+             minimum value = backoff - (backoff * jitter)
+             maximum value = backoff + (backoff * jitter).
+
+           Note that the randomized backoff is used only to determine
+           the deadline for the next connection attempt; the
+           non-randomized value is used to determine the next backoff
+           if the attempt fails.";
+        reference
+          "github.com/grpc/grpc/blob/master/doc/connection-backoff.md
+           - JITTER";
       }
       leaf max-backoff {
         type uint16 {
           range "1..max";
         }
-        default "10";
+        units "seconds";
         description
-          "The number of times the client tries to connect to a
-           specific endpoint before moving on to the next endpoint
-           in the list (round robin).";
+          "The upper bound to the backoff value; backoff is not to be
+           increased beyond this value.
+
+           To support redundant endpoints, the client could move to a
+           different endpoint, if the attempt to connect the remote
+           endpoint fails after the maximum backoff value has been
+           reached.";
+        reference
+          "github.com/grpc/grpc/blob/master/doc/connection-backoff.md
+           - MAX_BACKOFF";
       }
     }
-  } //grouping grpc-client
+  }
 
   grouping grpc-client-transport {
     description
-      "The gRPC specific configuration for the connection.";
+      "Data nodes to manage the transport connections for gRPC
+       channels at the client side.";
     container grpc-client {
       if-feature "bbf-grpcc:grpc-client";
       description
@@ -205,9 +267,12 @@ module bbf-grpc-client {
         min-elements 1;
         ordered-by user;
         description
-          "A user-ordered list of access points that the client will
-           attempt to connect to in the specified sequence. Defining
-           more than one enables high-availability.";
+          "An access point to a gRPC server that a client may attempt
+           to connect to in the order as defined by the user to
+           establish a gRPC channel.
+
+           Defining more than one access point enables high-
+           availability.";
         leaf name {
           type bbf-yang:string-ascii64;
           description
@@ -215,50 +280,54 @@ module bbf-grpc-client {
         }
         container grpc-transport-parameters {
           description
-            "gRPC agent transport parameters.";
+            "Parameters to establish a transport layer from the gRPC
+             client to the gRPC server.";
           choice tcp-client-options {
             description
-              "Replicate some pre-standard IETF client/server
-               options in-file, and provide a place to add IETF
-               client/server stack options post-standard in the
-               future.";
+              "Selects between possible TCP transport layer
+               configuration options.";
             case remote-port {
               container remote-port {
                 description
-                  "The remote port identified by a client.";
+                  "The port on the remote host over which a TCP
+                   session is to be established and an HTTP/2
+                   connection for the gRPC channel is to be started.";
+                leaf remote-address {
+                  type inet:host;
+                  description
+                    "The IP address or hostname of the remote host to
+                     establish a connection with.";
+                }
                 leaf remote-port {
                   type inet:port-number;
                   default "8443";
                   description
-                    "The client will attempt to connect to the
-                     common port value for 'grpc' (8443) if no
-                     value is specified.";
+                    "The destination port on the remote host.";
                 }
               }
-            } // case remote-port
-          } //case tcp-options
-        } //grpc-transport-parameters
+            }
+          }
+        }
         notification remote-endpoint-status-change {
           description
-            "A notification traceable to a client remote-endpoint
-             and access-point. This notification is sent when a
-             remote-endpoint is connected or disconnected.";
+            "A notification traceable to a client remote endpoint
+             and access point. This notification is sent when a
+             remote endpoint is connected or disconnected.";
           leaf connected {
             type boolean;
             mandatory true;
             description
-              "New remote-endpoint status.";
+              "The new remote endpoint status.";
           }
           leaf last-changed {
             type yang:date-and-time;
             mandatory true;
             description
-              "The system date and time when the remote-endpoint was
+              "The system date and time when the remote endpoint was
                connected or disconnected.";
           }
-        } // notification remote-endpoint-status-change
-      } // list access-point for grpc
-    } // grpc-client
-  } // grpc-client-transport
-
+        }
+      }
+    }
+  }
 }

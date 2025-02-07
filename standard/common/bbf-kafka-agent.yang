@@ -15,24 +15,33 @@ module bbf-kafka-agent {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     SDN/NFV Work Area";
+     Common YANG Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Tim Carey, Nokia
+     Editor:      Nick Hancock, Adtran
 
-     Editor:      Jeff Hartley, Commscope
+     Editor:      Ludwig Pauwels, Nokia
 
-     WA Director: Mengmeng Li, China Mobile
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Bruno Cornaglia, Vodafone";
+     WA Director: Joey Boyd, Adtran
+
+     WA Director: Sven Ooghe, Nokia";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements for Kafka agent
-     functionality as described in TR-451.
+     supporting the Broadband Forum requirements on network functions
+     as applicable to access network equipment. As such, this module
+     is specific to access network equipment (e.g., BBF-specified
+     Access Nodes and FTTdp DPUs).
 
-     Copyright (c) 2019-2022, Broadband Forum
+     Specifically, this module defines a set of common groupings to
+     support Kafka agents that operate as Kafka clients to read,
+     write, and process streams of events via Kafka brokers (servers)
+     to communicate between individual network functions.
+
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -72,9 +81,19 @@ module bbf-kafka-agent {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-451; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2022-06-07 {
     description
       "Issue 1.
@@ -86,27 +105,23 @@ module bbf-kafka-agent {
                         TR-451_Issue-1.pdf>";
   }
 
-  // Features
-
   feature message-publication {
     description
-      "Indicates that the agent supports publication of messages to
-       the broker on specific topics.";
+      "Indicates that the agent supports publication of messages
+       (events) to the broker on specific topics.";
   }
 
   feature message-consumption {
     description
-      "Indicates that the agent supports consumption of message from
-       the broker on specific topics.";
+      "Indicates that the agent supports consumption of messages
+       (events) from the broker on specific topics.";
   }
 
   feature kafka-agent {
     description
-      "Indicates that the network function client supports
-       Kafka as a message transport protocol.";
+      "Indicates that the network function supports Kafka agent
+       operating as a Kafka client.";
   }
-
-  // Groupings
 
   grouping kafka-topic-parameters {
     description
@@ -126,8 +141,13 @@ module bbf-kafka-agent {
     leaf partition {
       type string;
       description
-        "For topics that are partitioned, the partition used for
-         production and consumption.";
+        "The partition of the topic to be used for publication and
+         consumption of messages.
+
+         The name of the partition is required if the Kafka topic is
+         divided into several partitions, meaning that the topic is
+         spread over a number of 'buckets' located on different Kafka
+         brokers.";
     }
   }
 
@@ -145,8 +165,9 @@ module bbf-kafka-agent {
       type string;
       mandatory true;
       description
-        "The identifier that the client/consumer (agent) uses
-         to identify the source of a message.";
+        "The identifier that the Kafka agent is to use as a Kafka
+         client to identify itself as a consumer or producer of
+         messages (events).";
     }
     container publication-parameters {
       if-feature "bbf-kafkaa:message-publication";
@@ -155,7 +176,7 @@ module bbf-kafka-agent {
       list topic {
         key "name";
         description
-          "The topics the agent will publish.";
+          "A topic the Kafka agent is to publish.";
         uses kafka-topic-parameters;
       }
     }
@@ -167,13 +188,14 @@ module bbf-kafka-agent {
         type string;
         mandatory true;
         description
-          "The identifier of the group that the consumer can
-           participate in.";
+          "The consumer Group Id that is to associate this consumer
+           with a consumer group, whereby each consumer within the
+           group will ideally read from one partition of the topic.";
       }
       list topic {
         key "name";
         description
-          "The topics the agent will consume.";
+          "A topic the Kafka agent is to consume.";
         uses kafka-topic-parameters;
       }
     }
@@ -193,9 +215,12 @@ module bbf-kafka-agent {
         min-elements 1;
         ordered-by user;
         description
-          "A user-ordered list of access points that the client will
-           attempt to connect to in the specified sequence. Defining
-           more than one enables high-availability.";
+          "An access point to a Kafka broker that a Kafka agent
+           operating as a Kafka client may attempt to connect to in
+           the order defined by the user.
+
+           Defining more than one access point enables high-
+           availability.";
         leaf name {
           type bbf-yang:string-ascii64;
           description
@@ -203,29 +228,29 @@ module bbf-kafka-agent {
         }
         container kafka-agent-transport-parameters {
           description
-            "Kafka agent transport parameters.";
+            "Parameters to establish a transport layer from the Kafka
+             agent (Kafka client) to the Kafka broker.";
           choice tcp-client-options {
             description
-              "Replicate some pre-standard IETF client/server
-               options in-file, and provide a place to add IETF
-               client/server stack options post-standard in the
-               future.";
+              "Selects between possible TCP transport layer
+               configuration options.";
             case remote-port {
               container remote-port {
                 description
-                  "The remote port identified by a client.";
+                  "The port of the remote host over which a TCP
+                   session is to be established to the Kafka broker.";
                 leaf remote-port {
                   type inet:port-number;
                   default "9092";
                   description
-                    "The client will attempt to connect to the
-                     common port value for 'kafka' (9092) if no
-                     value is specified.";
+                    "The destination port on the remote host to which
+                     the Kafka agent as Kafka client is to attempt to
+                     establish a TCP session with the Kafka broker.";
                 }
               }
-            } // case remote-port
-          } //case tcp-options
-        } //kafka-transport-parameters
+            }
+          }
+        }
         notification remote-endpoint-status-change {
           description
             "A notification traceable to a client remote-endpoint
@@ -244,9 +269,8 @@ module bbf-kafka-agent {
               "The system date and time when the
                remote-endpoint was connected or disconnected.";
           }
-        } // notification remote-endpoint-status-change
-      } // list access-point for kafka-agent
-    } // kafka-agent
-  } // kafka-agent-transport
-
+        }
+      }
+    }
+  }
 }

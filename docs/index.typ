@@ -1,11 +1,5 @@
-// Some definitions presupposed by pandoc's typst output.
-#let horizontalrule = [
-  #line(start: (25%,0%), end: (75%,0%))
-]
+#let horizontalrule = line(start: (25%,0%), end: (75%,0%))
 
-#let endnote(num, contents) = [
-  #stack(dir: ltr, spacing: 3pt, super[#num], contents)
-]
 #show terms: it => {
   it.children
     .map(child => [
@@ -15,12 +9,30 @@
     .join()
 }
 
+#set table(
+  inset: 6pt,
+  stroke: none
+)
+
+#show figure.where(
+  kind: table
+): set figure.caption(position: top)
+
+#show figure.where(
+  kind: image
+): set figure.caption(position: bottom)
+
 #import "typst-template.typ": *
+
+#set smartquote(enabled: false)
 
 #show: doc => conf(
   title: [OD\-360 – Broadband Forum YANG Modules],
+  subtitle: [Issue: 1 Amendment 2 ],
   date: [Issue Date: January 2024],
+  pagenumbering: none,
   cols: 1,
+  linenumbering: none,
   info: (
     PYTHONDIR: [..\/..\/..\/install\/pandoc\/\/..\/python],
     analyticstag: [],
@@ -103,12 +115,12 @@ A set of YANG modules for managing access networks],
 
 // scale = 1 will size the image at 1px = 1pt
 #let bbf-image-scale = 1
-#let bbf-image(scale: bbf-image-scale, ..args) = style(styles => {
+#let bbf-image(scale: bbf-image-scale, ..args) = context {
   let named = args.named()
   if "width" in named or "height" in named {
     image(..args)
   } else {
-    let (width, height) = measure(image(..args), styles)
+    let (width, height) = measure(image(..args))
     layout(page => {
       // XXX should allow control over this hard-coded (1.0, 0.9)
       let (max_width, max_height) = (1.0 * page.width, 0.9 * page.height)
@@ -126,7 +138,7 @@ A set of YANG modules for managing access networks],
       image(..args, width: new_width, height: new_height)
     })
   }
-})
+}
 
 #bbf-new-page[
 #heading(level: 3, outlined: false)[
@@ -210,6 +222,8 @@ notices, legends, and other provisions set forth on this page.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #block(
     width: 99.07%)[
     #table(
@@ -1906,6 +1920,8 @@ The following terminology is used throughout these guidelines.
   #show table.cell.where(y: 0): strong
   #set par(justify: false)
   #set text(hyphenate: true)
+  #show regex("\>,"): "," + sym.zws
+  #show regex("\>\."): "." + sym.zws
   #table(
     columns: (auto, auto),
     align: (auto, auto),

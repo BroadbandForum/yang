@@ -1,40 +1,46 @@
-module bbf-grpc-server {
+module bbf-vomci-proxy-grpc-server-tls {
   yang-version 1.1;
-  namespace "urn:bbf:yang:bbf-grpc-server";
-  prefix bbf-grpcs;
+  namespace "urn:bbf:yang:bbf-vomci-proxy-grpc-server-tls";
+  prefix bbf-vomci-proxy-grpcs-tls;
 
-  import ietf-inet-types {
-    prefix inet;
+  import bbf-vomci-proxy {
+    prefix bbf-vomci-proxy;
+  }
+  import bbf-vomci-proxy-grpc-server {
+    prefix bbf-vomci-proxy-grpcs;
+  }
+  import ietf-tcp-server {
+    prefix tcps;
+  }
+  import ietf-tls-server {
+    prefix tlss;
+  }
+  import bbf-vomci-grpc-common {
+    prefix bbf-vomci-grpc-c;
   }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Work Area";
+     SDN/NFV Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Nick Hancock, Adtran
+     Editor:      Andre Brizido, Altice Labs
 
-     Editor:      Ludwig Pauwels, Nokia
+     PS Leader:   Ken Kerpez, DZS
 
-     PS Leader:   Joey Boyd, Adtran
+     WA Director: Mengmeng Li, China Mobile
 
-     WA Director: Joey Boyd, Adtran
+     WA Director: Bruno Cornaglia, Vodafone
 
-     WA Director: Sven Ooghe, Nokia";
+     WA Director: Haomian Zheng, Huawei";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements on network functions
-     as applicable to access network equipment. As such, this module
-     is specific to access network equipment (e.g., BBF-specified
-     Access Nodes and FTTdp DPUs).
+     supporting the Broadband Forum requirements for vOMCI gRPC
+     server functionality over TLS transport as described in TR-451.
 
-     Specifically, this module defines a set of common groupings to
-     support the gRPC server interface to listen for and maintain
-     gRPC channels from gRPC clients.
-
-     Copyright (c) 2017-2023, Broadband Forum
+     Copyright (c) 2019-2025, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -74,62 +80,44 @@ module bbf-grpc-server {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a7; see
+     This version of this YANG module is part of TR-451a1; see
      the TR itself for full legal notices.";
 
-  revision 2023-12-15 {
+  revision 2025-02-03 {
     description
-      "Amendment 7.
-       * Approval Date:    2023-12-15.
-       * Publication Date: 2023-12-15.";
+      "Amendment 1.
+       * Approval Date:    2025-02-03.
+       * Publication Date: 2025-02-03.";
     reference
-      "TR-383a7: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-7.pdf>";
-  }
-  revision 2022-06-07 {
-    description
-      "Issue 1.
-       * Approval Date:    2022-06-07.
-       * Publication Date: 2022-06-07.";
-    reference
-      "TR-451: vOMCI Specification
+      "TR-451a1: vOMCI Specification
                <https://www.broadband-forum.org/technical/download/
-                        TR-451_Issue-1.pdf>";
+                        TR-451_Amendment-1.pdf>";
   }
 
-  feature grpc-server {
+  augment "/bbf-vomci-proxy:vomci"
+        + "/bbf-vomci-proxy:remote-nf"
+        + "/bbf-vomci-proxy:nf-server"
+        + "/bbf-vomci-proxy:listen"
+        + "/bbf-vomci-proxy:listen-endpoint"
+        + "/bbf-vomci-proxy:transport"
+        + "/bbf-vomci-proxy-grpcs:grpc"
+        + "/bbf-vomci-proxy-grpcs:grpc-server"
+        + "/bbf-vomci-proxy-grpcs:tcp-client-options" {
     description
-      "Indicates that the system supports a gRPC server interface.";
-  }
-
-  grouping grpc-server-transport {
-    description
-      "Data nodes to manage the transport connections for gRPC
-       channels at the server side.";
-    container grpc-server {
-      if-feature "bbf-grpcs:grpc-server";
+      "The gRPC server connection parameters for TLS transport.";
+    case tls-transport {
       description
-        "A wrapper around the gRPC server parameters to avoid name
-         collisions.";
-      choice tcp-client-options {
+        "Select TLS transport.";
+      container tcp-server-parameters {
         description
-          "Selects between possible TCP transport layer configuration
-           options.";
-        case remote-port {
-          leaf remote-port {
-            type inet:port-number;
-            default "8443";
-            description
-              "The destination port used by the remote gRPC client to
-               connect to this gRPC server to establish a TCP session
-               and then start an HTTP/2 connection to establish a
-               gRPC channel.
-
-               The local gRPC server listens for incoming TCP
-               connections on this port.";
-          }
-        }
+          "The TCP configuration.";
+        uses tcps:tcp-server-grouping;
+        uses bbf-vomci-grpc-c:server-authentication;
+      }
+      container tls-server-parameters {
+        description
+          "The TLS configuration.";
+        uses tlss:tls-server-grouping;
       }
     }
   }

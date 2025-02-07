@@ -1,5 +1,11 @@
 ## Broadband Forum YANG Modules
 
+### 2025-02-03: [TR-451 Amendment 1](https://www.broadband-forum.org/technical/download/TR-451_Amendment-1.pdf) vOMCI Specification
+*Tag: [TR-451-v1.1.0](https://github.com/BroadbandForum/yang/tree/TR-451-v1.1.0)*
+
+* Add support for extended TCP.
+* Add support for TLS endpoint configuration. 
+
 ### 2024-11-11: [TR-383 Amendment 8](https://www.broadband-forum.org/technical/download/TR-383_Amendment-8.pdf) Common YANG Modules for Access Networks
 *Tag: [TR-383-v1.8.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.8.0)*
 

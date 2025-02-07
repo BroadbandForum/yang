@@ -24,6 +24,9 @@ module bbf-voltmf {
   import bbf-voltmf-message-monitor {
     prefix bbf-voltmf-msg-mon;
   }
+  import bbf-vomci-common {
+    prefix bbf-vomci-c;
+  }
   import bbf-xpon-types {
     prefix bbf-xpon-types;
   }
@@ -41,20 +44,22 @@ module bbf-voltmf {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Tim Carey, Nokia
+     Editor:      Andre Brizido, Altice Labs
 
-     Editor:      Jeff Hartley, Commscope
+     PS Leader:   Ken Kerpez, DZS
 
      WA Director: Mengmeng Li, China Mobile
 
-     WA Director: Bruno Cornaglia, Vodafone";
+     WA Director: Bruno Cornaglia, Vodafone
+
+     WA Director: Haomian Zheng, Huawei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements for the virtual
      OLT management functionality (vOLTMF) functionality as
      described in TR-451.
 
-     Copyright (c) 2019-2022, Broadband Forum
+     Copyright (c) 2019-2025, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -94,9 +99,19 @@ module bbf-voltmf {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-451; see
+     This version of this YANG module is part of TR-451a1; see
      the TR itself for full legal notices.";
 
+  revision 2025-02-03 {
+    description
+      "Amendment 1.
+       * Approval Date:    2025-02-03.
+       * Publication Date: 2025-02-03.";
+    reference
+      "TR-451a1: vOMCI Specification
+               <https://www.broadband-forum.org/technical/download/
+                        TR-451_Amendment-1.pdf>";
+  }
   revision 2022-06-07 {
     description
       "Issue 1.
@@ -108,12 +123,13 @@ module bbf-voltmf {
                         TR-451_Issue-1.pdf>";
   }
 
-  // ONU specific data needed for management of the ONU via vOMCI
+  // 
 
   augment "/bbf-dev-agg:devices/bbf-dev-agg:device" {
     when "derived-from-or-self(bbf-dev-agg:type,'bbf-dvct:onu')" {
       description
-        "Only applicable if the device type is an ONU or derivative
+        "ONU specific data needed for management of the ONU via vOMCI.
+         Only applicable if the device type is an ONU or derivative
          thereof.";
     }
     description
@@ -296,6 +312,25 @@ module bbf-voltmf {
       description
         "The software information obtained as the result of the
          discovery process.";
+    }
+  }
+
+  augment "/bbf-voltmf:voltmf"
+        + "/bbf-voltmf:remote-nf"
+        + "/bbf-voltmf:nf-client"
+        + "/bbf-voltmf:initiate"
+        + "/bbf-voltmf:remote-server" {
+    description
+      "Augment per endpoint statistics on the remote server.";
+    container statistics {
+      config false;
+      description
+        "Statistics associated with the remote server.";
+      action reset {
+        description
+          "Reset the statistics.";
+      }
+      uses bbf-vomci-c:endpoint-message-statistics;
     }
   }
 }

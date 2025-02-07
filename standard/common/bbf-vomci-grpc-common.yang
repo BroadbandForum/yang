@@ -1,10 +1,10 @@
-module bbf-voltmf-message-monitor {
+module bbf-vomci-grpc-common {
   yang-version 1.1;
-  namespace "urn:bbf:yang:bbf-voltmf-message-monitor";
-  prefix bbf-voltmf-msg-mon;
+  namespace "urn:bbf:yang:bbf-vomci-grpc-common";
+  prefix bbf-vomci-grpc-c;
 
-  import ietf-yang-types {
-    prefix yang;
+  import ietf-crypto-types {
+    prefix ct;
   }
 
   organization
@@ -25,9 +25,11 @@ module bbf-voltmf-message-monitor {
      WA Director: Haomian Zheng, Huawei";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements for monitoring
-     the virtual OLT management function(vOLTMF) message interactions
-     between the vOLTMF and vOMCI function as described in TR-451.
+     supporting the Broadband Forum requirements for vOMCI
+     functionality as described in TR-451.
+
+     Specifically, this module provides common definitions used in the
+     management of gRPC.
 
      Copyright (c) 2019-2025, Broadband Forum
 
@@ -82,46 +84,64 @@ module bbf-voltmf-message-monitor {
                <https://www.broadband-forum.org/technical/download/
                         TR-451_Amendment-1.pdf>";
   }
-  revision 2022-06-07 {
+
+  feature tcp-server-username-password {
     description
-      "Issue 1.
-       * Approval Date:    2022-06-07.
-       * Publication Date: 2022-06-07.";
-    reference
-      "TR-451: vOMCI Specification
-               <https://www.broadband-forum.org/technical/download/
-                        TR-451_Issue-1.pdf>";
+      "Indicates that the server supports authenticating using
+       username/password when receiving TCP connections.";
   }
 
-  // Groupings
-
-  grouping voltmf-message-statistics {
+  feature tcp-client-username-password {
     description
-      "Top-level grouping for monitoring vOLTMF to vOMCI function
-       messages.";
-    leaf in-messages {
-      type yang:counter64;
-      units "messages";
-      config false;
+      "Indicates that the client supports authenticating using
+       username/password when initiating TCP connections.";
+  }
+
+  grouping username-password-parameters {
+    description
+      "Grouping for username/password authentication parameters.";
+    container username-password {
+      leaf username {
+        type string;
+        mandatory true;
+        description
+          "The 'username' value to permit for
+           client identification.";
+      }
+      uses ct:password-grouping {
+        description
+          "The password to permit for client authentication.";
+      }
       description
-        "The number of messages that have been received by the
-         entity.";
+        "Contains username/password configuration.";
     }
-    leaf out-messages {
-      type yang:counter64;
-      units "messages";
-      config false;
+  }
+
+  grouping server-authentication {
+    description
+      "Grouping for server authentication parameters.";
+    choice authentication-type {
       description
-        "The number of messages that have been transmitted by the
-         entity.";
+        "A choice among supported authentication
+         mechanisms.";
+      case username-password {
+        if-feature "bbf-vomci-grpc-c:tcp-server-username-password";
+        uses username-password-parameters;
+      }
     }
-    leaf in-errored-messages {
-      type yang:counter64;
-      units "messages";
-      config false;
+  }
+
+  grouping client-authentication {
+    description
+      "Grouping for client authentication parameters.";
+    choice authentication-type {
       description
-        "The number of messages received by the entity that contain
-         errors.";
+        "A choice among supported authentication
+         mechanisms.";
+      case username-password {
+        if-feature "bbf-vomci-grpc-c:tcp-client-username-password";
+        uses username-password-parameters;
+      }
     }
   }
 }

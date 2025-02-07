@@ -26,20 +26,22 @@ module bbf-olt-vomci-state {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Tim Carey, Nokia
+     Editor:      Andre Brizido, Altice Labs
 
-     Editor:      Jeff Hartley, Commscope
+     PS Leader:   Ken Kerpez, DZS
 
      WA Director: Mengmeng Li, China Mobile
 
-     WA Director: Bruno Cornaglia, Vodafone";
+     WA Director: Bruno Cornaglia, Vodafone
+
+     WA Director: Haomian Zheng, Huawei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements for a physical OLT's
      implementation of the vOMCI state data functionality as described
      in TR-451.
 
-     Copyright (c) 2019-2022, Broadband Forum
+     Copyright (c) 2019-2025, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -79,9 +81,19 @@ module bbf-olt-vomci-state {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-451; see
+     This version of this YANG module is part of TR-451a1; see
      the TR itself for full legal notices.";
 
+  revision 2025-02-03 {
+    description
+      "Amendment 1.
+       * Approval Date:    2025-02-03.
+       * Publication Date: 2025-02-03.";
+    reference
+      "TR-451a1: vOMCI Specification
+               <https://www.broadband-forum.org/technical/download/
+                        TR-451_Amendment-1.pdf>";
+  }
   revision 2022-06-07 {
     description
       "Issue 1.
@@ -98,36 +110,52 @@ module bbf-olt-vomci-state {
       "This augmentation defines the state data to support vANI's
        that are managed using vOMCI.";
     container vomci-onu {
-      config false;
       description
         "vOMCI state for an ONU.";
       container vomci-function {
         description
-          "The attributes of a vomci function.";
+          "The attributes of a vOMCI function.";
         leaf remote-endpoint {
           type bbf-yang:string-ascii64;
           description
             "The remote endpoint name associated with the ONU,
              regardless of the way it was assigned (e.g.,
-             configuration, ONU filter).";
+             configuration, ONU filter).
+
+             Note that one OLT may have multiple connections to
+             different vOMCI functions, for example, different ONU
+             vendors' vOMCI instances. Thus this remote-endpoint
+             name matches the specific name used by a specific
+             endpoint, while another ONU may use a different
+             vOMCI endpoint.";
         }
         leaf communication-status {
           type identityref {
             base bbf-vomcit:vomci-communication-status;
           }
           description
-            "The status of the vOMCI communication with the
-             vOMCI function.";
+            "The status of vOMCI communications for this ONU,
+             including conditions beyond network connectivity. For
+             example, if an endpoint is unassigned, or if a non-
+             transport error condition is causing vOMCI
+             communications to fail for an unknown/undocumented
+             reason. Note that such failure conditions may impact a
+             subset of ONUs, whereas a connectivity failure could
+             impact all ONUs.";
         }
       }
       container statistics {
         description
-          "The counters related to vOMCI messages:
+          "The counters related to vOMCI messages specific to this
+           ONU, to and from its named remote-endpoint.  These are
+           distinct from any existing PON-side native OMCI counters,
+           and are distinct from transport-level counters (such as
+           gRPC counters, for example).
 
-           'in-xxx' counters are vOMCI messages sent by the OLT to
-           the vOMCI function.
-           'out-xxx' counters are vOMCI messages received by the OLT
-           from the vOMCI function.";
+           'in-xxx' counters are vOMCI messages received by the OLT
+           from the vOMCI function, for this ONU.
+           'out-xxx' counters are vOMCI messages sent by the OLT to
+           the vOMCI function, for this ONU.";
         uses bbf-vomci-c:vomci-message-statistics;
       }
     }

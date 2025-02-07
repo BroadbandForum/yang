@@ -29,19 +29,21 @@ module bbf-vomci-proxy {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Tim Carey, Nokia
+     Editor:      Andre Brizido, Altice Labs
 
-     Editor:      Jeff Hartley, Commscope
+     PS Leader:   Ken Kerpez, DZS
 
      WA Director: Mengmeng Li, China Mobile
 
-     WA Director: Bruno Cornaglia, Vodafone";
+     WA Director: Bruno Cornaglia, Vodafone
+
+     WA Director: Haomian Zheng, Huawei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements for vOMCI Proxy
      functionality as described in TR-451.
 
-     Copyright (c) 2019-2022, Broadband Forum
+     Copyright (c) 2019-2025, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +83,19 @@ module bbf-vomci-proxy {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-451; see
+     This version of this YANG module is part of TR-451a1; see
      the TR itself for full legal notices.";
 
+  revision 2025-02-03 {
+    description
+      "Amendment 1.
+       * Approval Date:    2025-02-03.
+       * Publication Date: 2025-02-03.";
+    reference
+      "TR-451a1: vOMCI Specification
+               <https://www.broadband-forum.org/technical/download/
+                        TR-451_Amendment-1.pdf>";
+  }
   revision 2022-06-07 {
     description
       "Issue 1.
@@ -302,6 +314,44 @@ module bbf-vomci-proxy {
           }
         }
       }
+    }
+  }
+
+  augment "/bbf-vomci-proxy:vomci"
+        + "/bbf-vomci-proxy:remote-nf"
+        + "/bbf-vomci-proxy:nf-client"
+        + "/bbf-vomci-proxy:initiate"
+        + "/bbf-vomci-proxy:remote-server" {
+    description
+      "Augment per endpoint statistics on the remote server.";
+    container statistics {
+      config false;
+      description
+        "Statistics associated with the remote server.";
+      action reset {
+        description
+          "Reset the statistics.";
+      }
+      uses bbf-vomci-c:endpoint-message-statistics;
+    }
+  }
+
+  augment "/bbf-vomci-proxy:vomci"
+        + "/bbf-vomci-proxy:remote-nf"
+        + "/bbf-vomci-proxy:nf-server"
+        + "/bbf-vomci-proxy:listen"
+        + "/bbf-vomci-proxy:listen-endpoint" {
+    description
+      "Adds per endpoint statistics.";
+    container statistics {
+      config false;
+      description
+        "Statistics associated with the local server endpoint.";
+      action reset {
+        description
+          "Reset the statistics.";
+      }
+      uses bbf-vomci-c:endpoint-message-statistics;
     }
   }
 }

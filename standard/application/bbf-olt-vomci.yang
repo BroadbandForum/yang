@@ -21,6 +21,9 @@ module bbf-olt-vomci {
   import ietf-interfaces {
     prefix if;
   }
+  import bbf-vomci-common {
+    prefix bbf-vomci-c;
+  }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -29,19 +32,21 @@ module bbf-olt-vomci {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Tim Carey, Nokia
+     Editor:      Andre Brizido, Altice Labs
 
-     Editor:      Jeff Hartley, Commscope
+     PS Leader:   Ken Kerpez, DZS
 
      WA Director: Mengmeng Li, China Mobile
 
-     WA Director: Bruno Cornaglia, Vodafone";
+     WA Director: Bruno Cornaglia, Vodafone
+
+     WA Director: Haomian Zheng, Huawei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements for a physical OLT's
      implementation of the vOMCI functionality as described in TR-451.
 
-     Copyright (c) 2019-2022, Broadband Forum
+     Copyright (c) 2019-2025, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +86,19 @@ module bbf-olt-vomci {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-451; see
+     This version of this YANG module is part of TR-451a1; see
      the TR itself for full legal notices.";
 
+  revision 2025-02-03 {
+    description
+      "Amendment 1.
+       * Approval Date:    2025-02-03.
+       * Publication Date: 2025-02-03.";
+    reference
+      "TR-451a1: vOMCI Specification
+               <https://www.broadband-forum.org/technical/download/
+                        TR-451_Amendment-1.pdf>";
+  }
   revision 2022-06-07 {
     description
       "Issue 1.
@@ -94,8 +109,6 @@ module bbf-olt-vomci {
                <https://www.broadband-forum.org/technical/download/
                         TR-451_Issue-1.pdf>";
   }
-
-  // Features
 
   feature nf-client {
     description
@@ -125,7 +138,7 @@ module bbf-olt-vomci {
            capability to connect to network function endpoints.";
       }
       uses bbf-nfc:nf-client;
-    } //nf-client
+    }
     container nf-server {
       if-feature "bbf-olt-vomci:nf-server";
       description
@@ -138,7 +151,7 @@ module bbf-olt-vomci {
            capability to connect to network function endpoints.";
       }
       uses bbf-nfs:nf-server;
-    } //nf-server
+    }
     container nf-endpoint-filter {
       description
         "The network function endpoint filter.";
@@ -190,7 +203,11 @@ module bbf-olt-vomci {
               "Indicates the type of matching criteria.";
           }
           leaf onu-vendor {
-            when "../criteria-type = 'bbf-vomcit:onu-vendor'";
+            when "../criteria-type = 'bbf-vomcit:onu-vendor'" {
+              description
+                "Only applicable when the criteria type is
+                 'onu-vendor'.";
+            }
             type bbf-vomcit:onu-vendor-id;
             mandatory true;
             description
@@ -213,8 +230,8 @@ module bbf-olt-vomci {
              is unspecified as the information transmitted will reach
              the same remote endpoint.";
         }
-      } // rule
-    } //nf-endpoint-filter
+      }
+    }
   }
 
   augment "/if:interfaces/if:interface/bbf-xponvani:v-ani" {
@@ -237,6 +254,42 @@ module bbf-olt-vomci {
              the configured ONU remote endpoint filters.";
         }
       }
+    }
+  }
+
+  augment "/bbf-olt-vomci:remote-nf"
+        + "/bbf-olt-vomci:nf-client"
+        + "/bbf-olt-vomci:initiate"
+        + "/bbf-olt-vomci:remote-server" {
+    description
+      "Augment per endpoint statistics on the remote server.";
+    container statistics {
+      config false;
+      description
+        "Statistics associated with the remote server.";
+      action reset {
+        description
+          "Reset the statistics.";
+      }
+      uses bbf-vomci-c:endpoint-message-statistics;
+    }
+  }
+
+  augment "/bbf-olt-vomci:remote-nf"
+        + "/bbf-olt-vomci:nf-server"
+        + "/bbf-olt-vomci:listen"
+        + "/bbf-olt-vomci:listen-endpoint" {
+    description
+      "Adds per endpoint statistics.";
+    container statistics {
+      config false;
+      description
+        "Statistics associated with the local server endpoint.";
+      action reset {
+        description
+          "Reset the statistics.";
+      }
+      uses bbf-vomci-c:endpoint-message-statistics;
     }
   }
 }

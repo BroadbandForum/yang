@@ -12,24 +12,32 @@ module bbf-network-function-server {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     SDN/NFV Work Area";
+     Common YANG Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Tim Carey, Nokia
+     Editor:      Nick Hancock, Adtran
 
-     Editor:      Jeff Hartley, Commscope
+     Editor:      Ludwig Pauwels, Nokia
 
-     WA Director: Mengmeng Li, China Mobile
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Bruno Cornaglia, Vodafone";
+     WA Director: Joey Boyd, Adtran
+
+     WA Director: Sven Ooghe, Nokia";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements for network function
-     (NF) server functionality as described in TR-451.
+     supporting the Broadband Forum requirements on network functions
+     as applicable to access network equipment. As such, this module
+     is specific to access network equipment (e.g., BBF-specified
+     Access Nodes and FTTdp DPUs).
 
-     Copyright (c) 2019-2022, Broadband Forum
+     Specifically, this module defines a set of common groupings to
+     support server endpoints of network connections between network
+     functions.
+
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -69,9 +77,19 @@ module bbf-network-function-server {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-451; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2022-06-07 {
     description
       "Issue 1.
@@ -83,11 +101,10 @@ module bbf-network-function-server {
                         TR-451_Issue-1.pdf>";
   }
 
-  // Groupings
-
   grouping nf-server {
     description
-      "Data nodes to manage network function servers.";
+      "Data nodes to manage incoming connections to network functions,
+       i.e., when acting as a server to a remote client.";
     container listen {
       presence "Enables server to listen for client connections.";
       description
@@ -97,18 +114,21 @@ module bbf-network-function-server {
         units "seconds";
         default "3600";
         description
-          "The maximum number of seconds that a session may remain
-           idle. A session will be dropped if it is idle for an
-           interval longer than this number of seconds. If set to
-           zero, then the server will never drop a session because
-           it is idle. Sessions that have a notification subscription
-           active are never dropped.";
+          "The maximum number of seconds that a gRPC channel may have
+           no outstanding RPCs, after which the server will close the
+           connection.
+
+           If set to zero, then the server is not to close the
+           connection, if it is idle.
+
+           Note that connections for which sessions have a
+           notification subscription active are never closed.";
       }
       list listen-endpoint {
         key "name";
         min-elements 1;
         description
-          "The endpoints to listen for connections.";
+          "An endpoint to listen for connections.";
         leaf name {
           type bbf-yang:string-ascii64;
           description
@@ -117,16 +137,9 @@ module bbf-network-function-server {
         leaf local-service-endpoint {
           type bbf-yang:string-ascii64;
           description
-            "The name that this network function will use when
-             reporting itself as an endpoint. For example, see section
-             5.8.2.1 Hello vOMCI service in TR-451 for how this
-             parameter is used for vOMCI communication. The value in
-             this leaf is typically the same value as the name of the
-             'listen-endpoint' but could be different for certain
-             deployments. If this leaf is not configured the name of
-             the 'listen-endpoint' is used.";
-          reference
-            "TR-451 section 5.8.2.1";
+            "The service endpoint name the NF is to use to identify
+             this listen endpoint when a remote endpoint attempts to
+             establish a session to it.";
         }
         choice transport {
           mandatory true;
@@ -160,8 +173,7 @@ module bbf-network-function-server {
                listen endpoint.";
             leaf remote-client {
               type leafref {
-                path "../../../remote-clients/remote-client/"
-                   + "local-service-endpoint";
+                path "../../remote-client/local-service-endpoint";
                 require-instance false;
               }
               mandatory true;
@@ -173,7 +185,9 @@ module bbf-network-function-server {
               type boolean;
               mandatory true;
               description
-                "If 'true', the remote endpoint was connected.";
+                "If 'true', the remote endpoint was connected.
+
+                 If 'false', the remote endpoint was disconnected.";
             }
             leaf remote-endpoint-state-last-change {
               type yang:date-and-time;
@@ -186,6 +200,5 @@ module bbf-network-function-server {
         }
       }
     }
-  } // grouping nf-server
-
+  }
 }

@@ -26,13 +26,15 @@ module bbf-voltmf-common {
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Tim Carey, Nokia
+     Editor:      Andre Brizido, Altice Labs
 
-     Editor:      Jeff Hartley, Commscope
+     PS Leader:   Ken Kerpez, DZS
 
      WA Director: Mengmeng Li, China Mobile
 
-     WA Director: Bruno Cornaglia, Vodafone";
+     WA Director: Bruno Cornaglia, Vodafone
+
+     WA Director: Haomian Zheng, Huawei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements for virtual OLT
@@ -40,7 +42,7 @@ module bbf-voltmf-common {
      attributes as well as notifications needed to support
      management of ONUs using vOMCI as defined in TR-451.
 
-     Copyright (c) 2019-2022, Broadband Forum
+     Copyright (c) 2019-2025, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -80,9 +82,19 @@ module bbf-voltmf-common {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-451; see
+     This version of this YANG module is part of TR-451a1; see
      the TR itself for full legal notices.";
 
+  revision 2025-02-03 {
+    description
+      "Amendment 1.
+       * Approval Date:    2025-02-03.
+       * Publication Date: 2025-02-03.";
+    reference
+      "TR-451a1: vOMCI Specification
+               <https://www.broadband-forum.org/technical/download/
+                        TR-451_Amendment-1.pdf>";
+  }
   revision 2022-06-07 {
     description
       "Issue 1.
@@ -93,8 +105,6 @@ module bbf-voltmf-common {
                <https://www.broadband-forum.org/technical/download/
                         TR-451_Issue-1.pdf>";
   }
-
-  // Groupings
 
   grouping discovered-nf-topology {
     description
@@ -174,7 +184,10 @@ module bbf-voltmf-common {
              this rule.";
         }
         leaf onu-vendor {
-          when "../criteria-type = 'bbf-vomcit:onu-vendor'";
+          when "../criteria-type = 'bbf-vomcit:onu-vendor'" {
+            description
+              "Only applies to ONUs.";
+          }
           type bbf-vomcit:onu-vendor-id;
           mandatory true;
           description
@@ -182,8 +195,11 @@ module bbf-voltmf-common {
         }
         leaf onu-software-version {
           when "(../criteria-type = 'bbf-vomcit:onu-vendor') or
-                (../criteria-type = 
-                'bbf-vomcit:onu-software-version')";
+                (../criteria-type =
+                'bbf-vomcit:onu-software-version')" {
+            description
+              "Only applies to ONU vendor or software version.";
+          }
           type bbf-vomcit:onu-software-version;
           mandatory true;
           description
@@ -197,10 +213,8 @@ module bbf-voltmf-common {
           "Data nodes describing the VNF 'flavor' (not instance) being
            used for the ONU. For example, vendor or version info.";
       }
-    } // rule
-  } //nf-filter
-
-  // vOMCI ONU Management information
+    }
+  }
 
   grouping vomci-onu-state {
     description

@@ -9,24 +9,31 @@ module bbf-network-function-types {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     SDN/NFV Work Area";
+     Common YANG Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:help@broadband-forum.org>.
 
-     Editor:      Tim Carey, Nokia
+     Editor:      Nick Hancock, Adtran
 
-     Editor:      Jeff Hartley, Commscope
+     Editor:      Ludwig Pauwels, Nokia
 
-     WA Director: Mengmeng Li, China Mobile
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Bruno Cornaglia, Vodafone";
+     WA Director: Joey Boyd, Adtran
+
+     WA Director: Sven Ooghe, Nokia";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements for network function
-     (NF) shared types used by functionality as described in TR-451.
+     supporting the Broadband Forum requirements on network functions
+     as applicable to access network equipment. As such, this module
+     is specific to access network equipment (e.g., BBF-specified
+     Access Nodes and FTTdp DPUs).
 
-     Copyright (c) 2019-2022, Broadband Forum
+     Specifically, this module defines a set of common types
+     related to network functions and network topologies.
+
+     Copyright (c) 2017-2023, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -66,9 +73,19 @@ module bbf-network-function-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-451; see
+     This version of this YANG module is part of TR-383a7; see
      the TR itself for full legal notices.";
 
+  revision 2023-12-15 {
+    description
+      "Amendment 7.
+       * Approval Date:    2023-12-15.
+       * Publication Date: 2023-12-15.";
+    reference
+      "TR-383a7: Common YANG Modules
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-7.pdf>";
+  }
   revision 2022-06-07 {
     description
       "Issue 1.
@@ -80,9 +97,6 @@ module bbf-network-function-types {
                         TR-451_Issue-1.pdf>";
   }
 
-  // Identities
-  // Network function types
-
   identity nf-type {
     description
       "Base identity for defining network function (NF) types.";
@@ -93,21 +107,30 @@ module bbf-network-function-types {
     base nf-type;
     description
       "Base identity from which physical network function (PNF)
-       types are derived.";
+       types are derived.
+
+       This is an abstract identity and must not be used to identify
+       a network function.";
   }
 
   identity vnf-type {
     base nf-type;
     description
       "Base identity from which specific virtual network function
-       (VNF) types are derived.";
+       (VNF) types are derived.
+
+       This is an abstract identity and must not be used to identify
+       a network function.";
   }
 
   identity access-vnf-type {
     base vnf-type;
     description
       "Base identity from which specific access virtual network
-       function types are derived.";
+       function types are derived.
+
+       This is an abstract identity and must not be used to identify
+       a network function.";
   }
 
   identity vomci-function {
@@ -134,8 +157,6 @@ module bbf-network-function-types {
       "ONU Management Proxy network function.";
   }
 
-  // Network function topologies
-
   identity nf-topology {
     description
       "Base identity for defining the topology which connects network
@@ -157,8 +178,8 @@ module bbf-network-function-types {
   identity point-to-point {
     base nf-topology;
     description
-      "Identity for a point to point type of topology that
-       connects NFs.";
+      "Identity for a point to point type of topology that connects
+       NFs.";
   }
 
   identity other-topology {
