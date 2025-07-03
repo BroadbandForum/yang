@@ -1,15 +1,11 @@
-module bbf-l2-forwarding {
+module bbf-pots-alarm-types {
   yang-version 1.1;
-  namespace "urn:bbf:yang:bbf-l2-forwarding";
-  prefix bbf-l2-fwd;
+  namespace "urn:bbf:yang:bbf-pots-alarm-types";
+  prefix bbf-pots-alt;
 
-  include bbf-l2-forwarding-base;
-  include bbf-l2-forwarding-flooding-policies;
-  include bbf-l2-forwarding-forwarders;
-  include bbf-l2-forwarding-forwarding-databases;
-  include bbf-l2-forwarding-mac-learning;
-  include bbf-l2-forwarding-split-horizon-profiles;
-  include bbf-l2-forwarding-mac-learning-control;
+  import bbf-alarm-types {
+    prefix bbf-alt;
+  }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -33,10 +29,13 @@ module bbf-l2-forwarding {
      WA Director: Haomian Zheng, Huawei";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements on layer 2 forwarding
-     as applicable to access network equipment. As such, this module
-     is specific to access network equipment (e.g., BBF-specified
-     Access Nodes and FTTdp DPUs).
+     supporting the Broadband Forum requirements on voice service
+     management. As such, this module is specific to access
+     network equipment (e.g., BBF-specified Access Nodes and FTTdp
+     DPUs).
+
+     Specifically, this module contains a set of alarm definitions
+     for POTS.
 
      Copyright (c) 2017-2025, Broadband Forum
 
@@ -91,74 +90,29 @@ module bbf-l2-forwarding {
                  <https://www.broadband-forum.org/technical/download/
                           TR-383_Amendment-9.pdf>";
   }
-  revision 2023-12-15 {
+
+  identity pots-alarm-type-id {
+    base bbf-alt:bbf-alarm-type-id;
     description
-      "Amendment 7.
-       * Approval Date:    2023-12-15.
-       * Publication Date: 2023-12-15.";
-    reference
-      "TR-383a7: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-7.pdf>";
+      "Base identity for defining POTS alarm identities.
+
+       This identity is abstract and should not generally be used for
+       alarms. If used to define an alarm that was not known at
+       design time, it must be qualified with an alarm type qualifier
+       string. This practice, however, should be generally avoided to
+       ensure all possible alarms are known at design time.";
   }
-  revision 2023-03-07 {
+
+  identity auxiliary-loop-characteristics-file-not-found {
+    base bbf-pots-alt:pots-alarm-type-id;
     description
-      "Amendment 6.
-       * Approval Date:    2023-03-07.
-       * Publication Date: 2023-03-07.";
+      "A 'auxiliary-loop-characteristics-file-not-found' alarm is
+       raised when an attempt to access the auxiliary loop
+       characteristics file failed.
+
+       The alarm will be cleared as soon as the file can be accessed.
+       This may require a possible misconfiguration to be corrected.";
     reference
-      "TR-383a6: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-6.pdf>";
-  }
-  revision 2022-03-01 {
-    description
-      "Amendment 5.
-       * Approval Date:    2022-03-01.
-       * Publication Date: 2022-03-01.";
-    reference
-      "TR-383a5: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-5.pdf>";
-  }
-  revision 2020-10-13 {
-    description
-      "Amendment 3.
-       * Approval Date:    2020-10-13.
-       * Publication Date: 2020-10-13.";
-    reference
-      "TR-383a3: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-3.pdf>";
-  }
-  revision 2018-12-03 {
-    description
-      "Amendment 2.
-       * Approval Date:    2018-12-03.
-       * Publication Date: 2018-12-03.";
-    reference
-      "TR-383a2: Common YANG Modules
-               <https://www.broadband-forum.org/technical/download/
-                        TR-383_Amendment-2.pdf>";
-  }
-  revision 2018-07-13 {
-    description
-      "Amendment 1.
-       * Approval Date:    2018-06-04.
-       * Publication Date: see revision date above.";
-    reference
-      "TR-383: Common YANG Modules
-               <https://www.broadband-forum.org/technical/download/
-                        TR-383_Amendment-1.pdf>";
-  }
-  revision 2017-05-08 {
-    description
-      "Initial revision.
-       * Approval Date:    see revision date above.
-       * Publication Date: 2017-06-02.";
-    reference
-      "TR-383: Common YANG Modules
-               <https://www.broadband-forum.org/technical/download/
-                        TR-383.pdf>";
+      "ITU-T G.988 Clause 9.9.6 - Alarm number 1";
   }
 }

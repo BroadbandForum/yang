@@ -1,15 +1,11 @@
-module bbf-l2-forwarding {
+module bbf-tone-patterns {
   yang-version 1.1;
-  namespace "urn:bbf:yang:bbf-l2-forwarding";
-  prefix bbf-l2-fwd;
+  namespace "urn:bbf:yang:bbf-tone-patterns";
+  prefix bbf-tp;
 
-  include bbf-l2-forwarding-base;
-  include bbf-l2-forwarding-flooding-policies;
-  include bbf-l2-forwarding-forwarders;
-  include bbf-l2-forwarding-forwarding-databases;
-  include bbf-l2-forwarding-mac-learning;
-  include bbf-l2-forwarding-split-horizon-profiles;
-  include bbf-l2-forwarding-mac-learning-control;
+  import bbf-tone-patterns-common {
+    prefix bbf-tpc;
+  }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -33,10 +29,13 @@ module bbf-l2-forwarding {
      WA Director: Haomian Zheng, Huawei";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements on layer 2 forwarding
-     as applicable to access network equipment. As such, this module
-     is specific to access network equipment (e.g., BBF-specified
-     Access Nodes and FTTdp DPUs).
+     supporting the Broadband Forum requirements on voice service
+     management. As such, this module is specific to access
+     network equipment (e.g., BBF-specified Access Nodes and FTTdp
+     DPUs).
+
+     Specifically, this module supports a stand-alone definition of
+     tone patterns.
 
      Copyright (c) 2017-2025, Broadband Forum
 
@@ -91,74 +90,40 @@ module bbf-l2-forwarding {
                  <https://www.broadband-forum.org/technical/download/
                           TR-383_Amendment-9.pdf>";
   }
-  revision 2023-12-15 {
+
+  feature tone-pattern-file {
     description
-      "Amendment 7.
-       * Approval Date:    2023-12-15.
-       * Publication Date: 2023-12-15.";
-    reference
-      "TR-383a7: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-7.pdf>";
+      "Indicates support for the configuration of tone patterns via a
+       file.";
   }
-  revision 2023-03-07 {
+
+  typedef tone-pattern-ref {
+    type leafref {
+      path "/bbf-tp:tone-patterns"
+         + "/bbf-tp:tone-pattern"
+         + "/bbf-tp:name";
+    }
     description
-      "Amendment 6.
-       * Approval Date:    2023-03-07.
-       * Publication Date: 2023-03-07.";
-    reference
-      "TR-383a6: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-6.pdf>";
+      "A reference to a tone pattern.";
   }
-  revision 2022-03-01 {
-    description
-      "Amendment 5.
-       * Approval Date:    2022-03-01.
-       * Publication Date: 2022-03-01.";
-    reference
-      "TR-383a5: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-5.pdf>";
-  }
-  revision 2020-10-13 {
-    description
-      "Amendment 3.
-       * Approval Date:    2020-10-13.
-       * Publication Date: 2020-10-13.";
-    reference
-      "TR-383a3: Common YANG Modules
-                 <https://www.broadband-forum.org/technical/download/
-                          TR-383_Amendment-3.pdf>";
-  }
-  revision 2018-12-03 {
-    description
-      "Amendment 2.
-       * Approval Date:    2018-12-03.
-       * Publication Date: 2018-12-03.";
-    reference
-      "TR-383a2: Common YANG Modules
-               <https://www.broadband-forum.org/technical/download/
-                        TR-383_Amendment-2.pdf>";
-  }
-  revision 2018-07-13 {
-    description
-      "Amendment 1.
-       * Approval Date:    2018-06-04.
-       * Publication Date: see revision date above.";
-    reference
-      "TR-383: Common YANG Modules
-               <https://www.broadband-forum.org/technical/download/
-                        TR-383_Amendment-1.pdf>";
-  }
-  revision 2017-05-08 {
-    description
-      "Initial revision.
-       * Approval Date:    see revision date above.
-       * Publication Date: 2017-06-02.";
-    reference
-      "TR-383: Common YANG Modules
-               <https://www.broadband-forum.org/technical/download/
-                        TR-383.pdf>";
+
+  uses bbf-tpc:tone-patterns {
+    augment "tone-patterns/tone-pattern" {
+      description
+        "Augment the choice 'source' with cases to manage tone
+         components and tone pattern files.";
+      choice source {
+        mandatory true;
+        description
+          "Selects the source of the tone pattern definition.";
+        case tone-components {
+          uses bbf-tpc:tone-components;
+        }
+        case file {
+          if-feature "bbf-tp:tone-pattern-file";
+          uses bbf-tpc:tone-pattern-files;
+        }
+      }
+    }
   }
 }

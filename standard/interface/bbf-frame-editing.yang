@@ -12,20 +12,24 @@ module bbf-frame-editing {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Work Area";
+     Provider Cloud Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Nick Hancock, Adtran
+     Editor:      Shiya Ashraf, Nokia
 
-     Editor:      Ludwig Pauwels, Nokia
+     Editor:      Kevin Noll, CableLabs
+
+     PS Leader:   Sven Ooghe, Nokia
 
      PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, Adtran
+     WA Director: Bruno Cornaglia, Vodafone
 
-     WA Director: Sven Ooghe, Nokia";
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Haomian Zheng, Huawei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on frame
@@ -36,7 +40,7 @@ module bbf-frame-editing {
      Specifically, this module contains reusable groupings defined for
      frame editing.
 
-     Copyright (c) 2017-2023, Broadband Forum
+     Copyright (c) 2017-2025, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -76,9 +80,19 @@ module bbf-frame-editing {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a6; see
+     This version of this YANG module is part of TR-383a9; see
      the TR itself for full legal notices.";
 
+  revision 2025-07-02 {
+    description
+      "Amendment 9.
+       * Approval Date:    2025-07-02.
+       * Publication Date: 2025-07-02.";
+    reference
+      "TR-383a9: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-9.pdf>";
+  }
   revision 2023-03-07 {
     description
       "Amendment 6.
@@ -106,7 +120,7 @@ module bbf-frame-editing {
           "Tagged and priority-tagged frames contain p-bits. Untagged
            frames do not contain p-bits.
 
-           Provides a simple method to identify what p-bits MUST be
+           Provides a simple method to identify what p-bits must be
            inserted in the output frame that can be applied to all
            frame types. More advanced methods can be provided via
            other cases of the choice 'pbit'.";
@@ -123,7 +137,7 @@ module bbf-frame-editing {
         leaf pbit-from-tag-index {
           type bbf-fpt:tag-index;
           description
-            "Specifies from which tag the p-bits MUST be copied.";
+            "Specifies from which tag the p-bits must be copied.";
         }
       }
       case write-pbit-value {
@@ -170,7 +184,7 @@ module bbf-frame-editing {
            Untagged frames do not contain a DEI bit.
 
            Leaf 'write-dei-0' provides a simple method to identify
-           what DEI MUST be inserted in the output frame that can be
+           what DEI must be inserted in the output frame that can be
            applied to all frame types. More advanced methods can be
            provided via other cases of the choice 'dei'.";
         leaf write-dei-0 {
@@ -186,7 +200,7 @@ module bbf-frame-editing {
         leaf dei-from-tag-index {
           type bbf-fpt:tag-index;
           description
-            "Specifies from which tag the DEI bit MUST be copied.";
+            "Specifies from which tag the DEI bit must be copied.";
         }
       }
       case write-dei-1 {
@@ -195,7 +209,7 @@ module bbf-frame-editing {
            Untagged frames do not contain a DEI bit.
 
            Leaf 'write-dei-1' provides a simple method to identify
-           what DEI MUST be inserted in the output frame that can be
+           what DEI must be inserted in the output frame that can be
            applied to all frame types. More advanced methods can be
            provided via other cases of the choice 'dei'.";
         leaf write-dei-1 {

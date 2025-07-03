@@ -15,24 +15,24 @@ module bbf-hardware-transceivers {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Work Area";
+     Provider Cloud Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
      Editor:      Shiya Ashraf, Nokia
 
-     Editor:      Nick Hancock, Adtran
-
      Editor:      Kevin Noll, CableLabs
 
-     Editor:      Ludwig Pauwels, Nokia
+     PS Leader:   Sven Ooghe, Nokia
 
-     PS Leader:   Aihua Guo, Futurewei
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, Adtran
+     WA Director: Bruno Cornaglia, Vodafone
 
-     WA Director: Sven Ooghe, Nokia";
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Haomian Zheng, Huawei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on hardware
@@ -43,7 +43,7 @@ module bbf-hardware-transceivers {
      Specifically, this module augments the ietf-hardware model with
      management of compact transceivers.
 
-     Copyright (c) 2017-2024, Broadband Forum
+     Copyright (c) 2017-2025, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -83,9 +83,19 @@ module bbf-hardware-transceivers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a8; see
+     This version of this YANG module is part of TR-383a9; see
      the TR itself for full legal notices.";
 
+  revision 2025-07-02 {
+    description
+      "Amendment 9.
+       * Approval Date:    2025-07-02.
+       * Publication Date: 2025-07-02.";
+    reference
+      "TR-383a9: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-9.pdf>";
+  }
   revision 2024-11-11 {
     description
       "Amendment 8.
@@ -2307,6 +2317,490 @@ module bbf-hardware-transceivers {
         description
           "Fibre channel speed (FCS).";
       }
+      leaf-list fibre-channel-speed-2 {
+        type enumeration {
+          enum 64-gfc {
+            description
+              "64 GFC.";
+            reference
+              "SFF-8472 (Revision 12.4) Table 5-3 - Address A0h,
+               Byte 62, bit 0";
+          }
+        }
+        config false;
+        description
+          "Fibre channel speed 2 (FCS).";
+      }
+      leaf-list extended-specification {
+        type enumeration {
+          enum 100g-aoc-or-others-ber-5x10-5 {
+            description
+              "100G AOC (Active Optical Cable), retimed or 25GAUI C2M
+               AOC. Providing a worst BER of 5 x 10^-5.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 01h";
+          }
+          enum 100gbase-sr4-or-25gbase-sr {
+            description
+              "100GBASE-SR4 or 25GBASE-SR.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 02h";
+          }
+          enum 100gbase-lr4-or-25gbase-lr {
+            description
+              "100GBASE-LR4 or 25GBASE-LR.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 03h";
+          }
+          enum 100gbase-er4-or-25gbase-er {
+            description
+              "100GBASE-ER4 or 25GBASE-ER.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 04h";
+          }
+          enum 100gbase-sr10 {
+            description
+              "100GBASE-SR10.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 05h";
+          }
+          enum 100g-cwdm4 {
+            description
+              "100G CWDM4.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 06h";
+          }
+          enum 100g-psm4-parallel-smf {
+            description
+              "100G PSM4 Parallel SMF.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 07h";
+          }
+          enum 100g-acc-or-others-ber-5x10-5 {
+            description
+              "100G ACC (Active Copper Cable), retimed or 25GAUI C2M
+               ACC. Providing a worst BER of 5 x 10^-5.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 08h";
+          }
+          enum 100gbase-cr4-or-others {
+            description
+              "100GBASE-CR4, 25GBASE-CR CA-25G-L or 50GBASE-CR2 with
+               RS (Clause91) FEC.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 0Bh";
+          }
+          enum 25gbase-cr-ca-25g-s-or-others {
+            description
+              "25GBASE-CR CA-25G-S or 50GBASE-CR2 with BASE-R (Clause
+               74 Fire code) FEC.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 0Ch";
+          }
+          enum 25gbase-cr-ca-25g-n-or-others {
+            description
+              "25GBASE-CR CA-25G-N or 50GBASE-CR2 with no FEC.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 0Dh";
+          }
+          enum 10m-single-pair-ethernet {
+            description
+              "10 Mb/s Single Pair Ethernet (802.3cg, Clause 146/147,
+               1000 m copper).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 0Eh";
+          }
+          enum 40gbase-er4 {
+            description
+              "40GBASE-ER4.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 10h";
+          }
+          enum 4x10gbase-sr {
+            description
+              "4 x 10GBASE-SR.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 11h";
+          }
+          enum 40g-psm4-parallel-smf {
+            description
+              "40G PSM4 Parallel SMF.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 12h";
+          }
+          enum g959.1-profile-p1i1-2d1 {
+            description
+              "G959.1 profile P1I1-2D1 (10709 MBd, 2km, 1310 nm SM).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 13h";
+          }
+          enum g959.1-profile-p1s1-2d2 {
+            description
+              "G959.1 profile P1S1-2D2 (10709 MBd, 40km, 1550 nm
+               SM).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 14h";
+          }
+          enum g959.1-profile-p1l1-2d2 {
+            description
+              "G959.1 profile P1L1-2D2 (10709 MBd, 80km, 1550 nm
+               SM).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 15h";
+          }
+          enum 10gbase-t-sfi {
+            description
+              "10GBASE-T with SFI electrical interface.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 16h";
+          }
+          enum 100g-clr4 {
+            description
+              "100G CLR4.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 17h";
+          }
+          enum 100g-aoc-or-others-ber-1x10-12 {
+            description
+              "100G AOC, retimed or 25GAUI C2M AOC. Providing a worst
+               BER of 10^-12 or below.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 18h";
+          }
+          enum 100g-acc-or-others-ber-1x10-12 {
+            description
+              "100G ACC, retimed or 25GAUI C2M ACC. Providing a worst
+               BER of 10^-12 or below.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 19h";
+          }
+          enum 100ge-dwdm2 {
+            description
+              "100GE-DWDM2 (DWDM transceiver using 2 wavelengths on a
+               1550 nm DWDM grid with a reach up to 80 km).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 1Ah";
+          }
+          enum 100g-1550nm-wdm {
+            description
+              "100G 1550nm WDM (4 wavelengths).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 1Bh";
+          }
+          enum 10gbase-t-sr {
+            description
+              "10GBASE-T Short Reach (30 meters).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 1Ch";
+          }
+          enum 5gbase-t {
+            description
+              "5GBASE-T.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 1Dh";
+          }
+          enum 2.5gbase-t {
+            description
+              "2.5GBASE-T.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 1Eh";
+          }
+          enum 40g-swdm4 {
+            description
+              "40G SWDM4.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 1Fh";
+          }
+          enum 100g-swdm4 {
+            description
+              "100G SWDM4.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 20h";
+          }
+          enum 100g-pam4-bidi {
+            description
+              "100G PAM4 BiDi.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 21h";
+          }
+          enum 10gbase-br {
+            description
+              "10GBASE-BR (Clause 158).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 37h";
+          }
+          enum 25gbase-br {
+            description
+              "25GBASE-BR (Clause 159).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 38h";
+          }
+          enum 50gbase-br {
+            description
+              "50GBASE-BR (Clause 160).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 39h";
+          }
+          enum 4wdm-10-msa {
+            description
+              "4WDM-10 MSA (10km version of 100G CWDM4 with same
+               RS(528,514) FEC in host system).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 22h";
+          }
+          enum 4wdm-20-msa {
+            description
+              "4WDM-20 MSA (20km version of 100GBASE-LR4 with
+               RS(528,514) FEC in host system).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 23h";
+          }
+          enum 4wdm-40-msa {
+            description
+              "4WDM-40 MSA (40km reach with APD receiver and
+               RS(528,514) FEC in host system).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 24h";
+          }
+          enum 100gbase-dr-caui-4 {
+            description
+              "100GBASE-DR (Clause 140), CAUI-4 (no FEC).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 25h";
+          }
+          enum 100g-fr-or-100gbase-fr1-caui-4 {
+            description
+              "100G-FR or 100GBASE-FR1 (Clause 140), CAUI-4 (no FEC on
+               host interface).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 26h";
+          }
+          enum 100g-lr-or-100gbase-lr1-caui-4 {
+            description
+              "100G-LR or 100GBASE-LR1 (Clause 140), CAUI-4 (no FEC on
+               host interface).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 27h";
+          }
+          enum 100gbase-sr1-caui-4 {
+            description
+              "100GBASE-SR1 (802.3, Clause 167), CAUI-4 (no FEC on
+               host interface).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 28h";
+          }
+          enum 100gbase-vr1-caui-4 {
+            description
+              "100GBASE-VR1 (802.3, Clause 167), CAUI-4 (no FEC on
+               host interface).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 3Ah";
+          }
+          enum 100gbase-sr1-or-others {
+            description
+              "100GBASE-SR1, 200GBASE-SR2 or 400GBASE-SR4 (802.3,
+               Clause 167).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 29h";
+          }
+          enum 100gbase-vr1-or-others {
+            description
+              "100GBASE-VR1, 200GBASE-VR2 or 400GBASE-VR4 (802.3,
+               Clause 167).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 36h";
+          }
+          enum 100gbase-fr1-or-400gbase-dr4-2 {
+            description
+              "100GBASE-FR1 (802.3, Clause 140) or 400GBASE-DR4-2
+               (P802.3df, Clause 124).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 2Ah";
+          }
+          enum 100gbase-lr1 {
+            description
+              "100GBASE-LR1 (802.3, Clause 140).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 2Bh";
+          }
+          enum 100g-lr1-20-msa-caui-4 {
+            description
+              "100G-LR1-20 MSA, CAUI-4 (no FEC on host interface).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 2Ch";
+          }
+          enum 100g-er1-30-msa-caui-4 {
+            description
+              "100G-ER1-30 MSA, CAUI-4 (no FEC on host interface).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 2Dh";
+          }
+          enum 100g-er1-40-msa-caui-4 {
+            description
+              "100G-ER1-40 MSA, CAUI-4 (no FEC on host interface).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 2Eh";
+          }
+          enum 100g-lr1-20-msa {
+            description
+              "100G-LR1-20 MSA.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 2Fh";
+          }
+          enum 100g-er1-30-msa {
+            description
+              "100G-ER1-30 MSA.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 34h";
+          }
+          enum 100g-er1-40-msa {
+            description
+              "100G-ER1-40 MSA.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 35h";
+          }
+          enum acc-50gaui-or-others-ber-1x10-6 {
+            description
+              "Active Copper Cable with 50GAUI, 100GAUI-2 or 200GAUI-4
+               C2M. Providing a worst BER of 10^-6 or below.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 30h";
+          }
+          enum aoc-50gaui-or-others-ber-1x10-6 {
+            description
+              "Active Optical Cable with 50GAUI, 100GAUI-2 or
+               200GAUI-4 C2M. Providing a worst BER of 10^-6 or
+               below.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 31h";
+          }
+          enum acc-50gaui-or-others-mixed-ber {
+            description
+              "Active Copper Cable with 50GAUI, 100GAUI-2 or 200GAUI-4
+               C2M. Providing a worst BER of 2.6x10^-4 for ACC, 10^-5
+               for AUI, or below.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 32h";
+          }
+          enum aoc-50gaui-or-others-mixed-ber {
+            description
+              "Active Optical Cable with 50GAUI, 100GAUI-2 or
+               200GAUI-4 C2M. Providing a worst BER of 2.6x10^-4 for
+               ACC, 10^-5 for AUI, or below.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 33h";
+          }
+          enum 100gbase-cr1-or-others {
+            description
+              "100GBASE-CR1, 200GBASE-CR2 or 400GBASE-CR4 (P802.3ck,
+               Clause 162).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 3Fh";
+          }
+          enum 50gbase-cr-or-others {
+            description
+              "50GBASE-CR, 100GBASE-CR2, or 200GBASE-CR4.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 40h";
+          }
+          enum 50gbase-sr-or-others {
+            description
+              "50GBASE-SR, 100GBASE-SR2, or 200GBASE-SR4.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 41h";
+          }
+          enum 50gbase-fr-or-200gbase-dr4 {
+            description
+              "50GBASE-FR or 200GBASE-DR4.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 42h";
+          }
+          enum 50gbase-er {
+            description
+              "50GBASE-ER (IEEE 802.3, Clause 139).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 4Ah";
+          }
+          enum 200gbase-fr4 {
+            description
+              "200GBASE-FR4.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 43h";
+          }
+          enum 200g-1550nm-psm4 {
+            description
+              "200G 1550 nm PSM4.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 44h";
+          }
+          enum 50gbase-lr {
+            description
+              "50GBASE-LR.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 45h";
+          }
+          enum 200gbase-lr4 {
+            description
+              "200GBASE-LR4.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 46h";
+          }
+          enum 400gbase-dr4-or-400gaui-4-c2m {
+            description
+              "400GBASE-DR4 (802.3, Clause 124), 400GAUI-4 C2M (Annex
+               120G).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 47h";
+          }
+          enum 400gbase-fr4 {
+            description
+              "400GBASE-FR4 (802.3, Clause 151).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 48h";
+          }
+          enum 400gbase-lr4-6 {
+            description
+              "400GBASE-LR4-6 (802.3, Clause 151).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 49h";
+          }
+          enum 400g-lr4-10 {
+            description
+              "400G-LR4-10.";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 4Bh";
+          }
+          enum 400gbase-zr {
+            description
+              "400GBASE-ZR (P802.3cw, Clause 156).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 4Ch";
+          }
+          enum 256gfc-sw4 {
+            description
+              "256GFC-SW4 (FC-PI-7P).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 7Fh";
+          }
+          enum 64gfc {
+            description
+              "64GFC (FC-PI-7).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 80h";
+          }
+          enum 128gfc {
+            description
+              "128GFC (FC-PI-8).";
+            reference
+              "SFF 8024 (Revision 4.11) Table 4-4 - Code 81h";
+          }
+        }
+        config false;
+        description
+          "Extended specification compliance codes.";
+        reference
+          "SFF 8024 (Revision 4.11) Section 4.5";
+      }
     }
   }
 
@@ -2492,6 +2986,7 @@ module bbf-hardware-transceivers {
         type uint8;
         units "megabaud";
         config false;
+        status deprecated;
         description
           "The nominal bit (signaling) rate (BR, nominal) is specified
            in units of megabaud (MBd). The bit rate includes those
@@ -2507,6 +3002,34 @@ module bbf-hardware-transceivers {
            A value of 0 indicates that the bit rate is not specified
            and must be determined from the transceiver technology. The
            actual information transfer rate will depend on the
+           encoding of the data, as defined by the encoding value.
+
+           This leaf has been deprecated and replaced by
+           'nominal-signaling-rate'.";
+        reference
+          "SFF-8472 (Revision 12.4) Table 5-6 - Address A0h, Byte 12;
+           SFF-8472 (Revision 12.4) Section 8.4 - Address A0h,
+           Byte 66";
+      }
+      leaf nominal-signaling-rate {
+        type uint32;
+        units "megabaud";
+        config false;
+        description
+          "The nominal bit (signaling) rate (BR, nominal) is specified
+           in units of megabaud (MBd). The bit rate includes those
+           bits necessary to encode and delimit the signal as well as
+           those bits carrying data information.
+
+           For bit rates < 25.0 Gbps, the value will be reported to
+           the nearest 100 MBd.
+
+           For bit rates >= 25.0 Gbps, the value will be reported to
+           the nearest 250 MBd.
+
+           A value of 0 indicates that the bit rate is not specified
+           and must be determined from the transceiver technology. The
+           actual information transfer rate will depend on the
            encoding of the data, as defined by the encoding value.";
         reference
           "SFF-8472 (Revision 12.4) Table 5-6 - Address A0h, Byte 12;
@@ -2517,8 +3040,9 @@ module bbf-hardware-transceivers {
         type bbf-yang:percent;
         config false;
         description
-          "The upper bit rate limit above the nominal bit rate at
-           which the transceiver will still meet its specifications.";
+          "The upper bit rate limit above the nominal bit (signaling)
+           rate at which the transceiver will still meet its
+           specifications.";
         reference
           "SFF-8472 (Revision 12.4) Section 8.4 - Address A0h,
            Byte 66";
@@ -2527,8 +3051,9 @@ module bbf-hardware-transceivers {
         type bbf-yang:percent;
         config false;
         description
-          "The lower bit rate limit below the nominal bit rate at
-           which the transceiver will still meet its specifications.";
+          "The lower bit rate limit below the nominal bit (signaling)
+           rate at which the transceiver will still meet its
+           specifications.";
         reference
           "SFF-8472 (Revision 12.4) Section 8.5 - Address A0h,
            Byte 67";
@@ -2822,6 +3347,312 @@ module bbf-hardware-transceivers {
     }
   }
 
+  grouping common-thresholds {
+    description
+      "Transceiver and transceiver-link
+       common thresholds parameters.";
+    leaf tx-bias-high-alarm {
+      type uint32;
+      units "microamperes";
+      config false;
+      description
+        "The bias current above which will trigger a high transmit
+         bias alarm.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 16-17";
+    }
+    leaf tx-bias-low-alarm {
+      type uint32;
+      units "microamperes";
+      config false;
+      description
+        "The bias current below which will trigger a low transmit
+         bias alarm.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 18-19";
+    }
+    leaf tx-bias-high-warning {
+      type uint32;
+      units "microamperes";
+      config false;
+      description
+        "The bias current above which will trigger a high transmit
+         bias warning.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 20-21";
+    }
+    leaf tx-bias-low-warning {
+      type uint32;
+      units "microamperes";
+      config false;
+      description
+        "The bias current below which will trigger a low transmit
+         bias warning.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 22-23";
+    }
+    leaf tx-power-high-alarm {
+      type uint32;
+      units "0.1 microwatts";
+      config false;
+      description
+        "The power above which will trigger a high transmit power
+         alarm.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 24-25";
+    }
+    leaf tx-power-low-alarm {
+      type uint32;
+      units "0.1 microwatts";
+      config false;
+      description
+        "The power below which will trigger a low transmit power
+         alarm.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 26-27";
+    }
+    leaf tx-power-high-warning {
+      type uint32;
+      units "0.1 microwatts";
+      config false;
+      description
+        "The power above which will trigger a high transmit power
+         warning.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 28-29";
+    }
+    leaf tx-power-low-warning {
+      type uint32;
+      units "0.1 microwatts";
+      config false;
+      description
+        "The power below which will trigger a low transmit power
+         warning.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 30-31";
+    }
+    leaf rx-power-high-alarm {
+      type uint32;
+      units "0.1 microwatts";
+      config false;
+      description
+        "The power above which will trigger a high receive power
+         alarm.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 32-33";
+    }
+    leaf rx-power-low-alarm {
+      type uint32;
+      units "0.1 microwatts";
+      config false;
+      description
+        "The power below which will trigger a low receive power
+         alarm.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 34-35";
+    }
+    leaf rx-power-high-warning {
+      type uint32;
+      units "0.1 microwatts";
+      config false;
+      description
+        "The power above which will trigger a high receive power
+         warning.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 36-37";
+    }
+    leaf rx-power-low-warning {
+      type uint32;
+      units "0.1 microwatts";
+      config false;
+      description
+        "The power below which will trigger a low receive power
+         warning.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 38-39";
+    }
+    leaf tx-power-dbm-high-alarm {
+      type power-dbm;
+      config false;
+      description
+        "The power value above which will trigger a high transmit
+         power alarm.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 24-25";
+    }
+    leaf tx-power-dbm-low-alarm {
+      type power-dbm;
+      config false;
+      description
+        "The power value below which will trigger a low transmit
+         power alarm.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 26-27";
+    }
+    leaf tx-power-dbm-high-warning {
+      type power-dbm;
+      config false;
+      description
+        "The power value above which will trigger a high transmit
+         power warning.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 28-29";
+    }
+    leaf tx-power-dbm-low-warning {
+      type power-dbm;
+      config false;
+      description
+        "The power value below which will trigger a low transmit
+         power warning.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 30-31";
+    }
+    leaf rx-power-dbm-high-alarm {
+      type power-dbm;
+      config false;
+      description
+        "The power value above which will trigger a high receive
+         power alarm.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 32-33";
+    }
+    leaf rx-power-dbm-low-alarm {
+      type power-dbm;
+      config false;
+      description
+        "The power value below which will trigger a low receive
+         power alarm.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 34-35";
+    }
+    leaf rx-power-dbm-high-warning {
+      type power-dbm;
+      config false;
+      description
+        "The power value above which will trigger a high receive
+         power warning.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 36-37";
+    }
+    leaf rx-power-dbm-low-warning {
+      type power-dbm;
+      config false;
+      description
+        "The power value below which will trigger a low receive
+         power warning.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 38-39";
+    }
+    leaf laser-temperature-high-alarm {
+      type int32;
+      units "millidegrees Celsius";
+      config false;
+      description
+        "The temperature above which will trigger a high laser
+         temperature alarm.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 40-41";
+    }
+    leaf laser-temperature-low-alarm {
+      type int32;
+      units "millidegrees Celsius";
+      config false;
+      description
+        "The temperature below which will trigger a low laser
+         temperature alarm.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 42-43";
+    }
+    leaf laser-temperature-high-warning {
+      type int32;
+      units "millidegrees Celsius";
+      config false;
+      description
+        "The temperature above which will trigger a high laser
+         temperature warning.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 44-45";
+    }
+    leaf laser-temperature-low-warning {
+      type int32;
+      units "millidegrees Celsius";
+      config false;
+      description
+        "The temperature below which will trigger a low laser
+         temperature warning.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 46-47";
+    }
+    leaf tec-current-high-alarm {
+      type int16;
+      units "0.1 milliamperes";
+      config false;
+      description
+        "The current above which will trigger a high Thermoelectric
+         Cooler (TEC) current alarm.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 48-49";
+    }
+    leaf tec-current-low-alarm {
+      type int16;
+      units "0.1 milliamperes";
+      config false;
+      description
+        "The current below which will trigger a low Thermoelectric
+         Cooler (TEC) current alarm.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 50-51";
+    }
+    leaf tec-current-high-warning {
+      type int16;
+      units "0.1 milliamperes";
+      config false;
+      description
+        "The current above which will trigger a high Thermoelectric
+         Cooler (TEC) current warning.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 52-53";
+    }
+    leaf tec-current-low-warning {
+      type int16;
+      units "0.1 milliamperes";
+      config false;
+      description
+        "The current below which will trigger a low Thermoelectric
+         Cooler (TEC) current warning.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 54-55";
+    }
+  }
+
   grouping thresholds {
     description
       "Transceiver thresholds.";
@@ -2936,306 +3767,37 @@ module bbf-hardware-transceivers {
           "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
            Bytes 14-15";
       }
-      leaf tx-bias-high-alarm {
-        type uint32;
-        units "microamperes";
-        config false;
-        description
-          "The bias current above which will trigger a high transmit
-           bias alarm.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 16-17";
-      }
-      leaf tx-bias-low-alarm {
-        type uint32;
-        units "microamperes";
-        config false;
-        description
-          "The bias current below which will trigger a low transmit
-           bias alarm.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 18-19";
-      }
-      leaf tx-bias-high-warning {
-        type uint32;
-        units "microamperes";
-        config false;
-        description
-          "The bias current above which will trigger a high transmit
-           bias warning.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 20-21";
-      }
-      leaf tx-bias-low-warning {
-        type uint32;
-        units "microamperes";
-        config false;
-        description
-          "The bias current below which will trigger a low transmit
-           bias warning.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 22-23";
-      }
-      leaf tx-power-high-alarm {
-        type uint32;
-        units "0.1 microwatts";
-        config false;
-        description
-          "The power above which will trigger a high transmit power
-           alarm.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 24-25";
-      }
-      leaf tx-power-low-alarm {
-        type uint32;
-        units "0.1 microwatts";
-        config false;
-        description
-          "The power below which will trigger a low transmit power
-           alarm.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 26-27";
-      }
-      leaf tx-power-high-warning {
-        type uint32;
-        units "0.1 microwatts";
-        config false;
-        description
-          "The power above which will trigger a high transmit power
-           warning.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 28-29";
-      }
-      leaf tx-power-low-warning {
-        type uint32;
-        units "0.1 microwatts";
-        config false;
-        description
-          "The power below which will trigger a low transmit power
-           warning.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 30-31";
-      }
-      leaf rx-power-high-alarm {
-        type uint32;
-        units "0.1 microwatts";
-        config false;
-        description
-          "The power above which will trigger a high receive power
-           alarm.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 32-33";
-      }
-      leaf rx-power-low-alarm {
-        type uint32;
-        units "0.1 microwatts";
-        config false;
-        description
-          "The power below which will trigger a low receive power
-           alarm.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 34-35";
-      }
-      leaf rx-power-high-warning {
-        type uint32;
-        units "0.1 microwatts";
-        config false;
-        description
-          "The power above which will trigger a high receive power
-           warning.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 36-37";
-      }
-      leaf rx-power-low-warning {
-        type uint32;
-        units "0.1 microwatts";
-        config false;
-        description
-          "The power below which will trigger a low receive power
-           warning.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 38-39";
-      }
-      leaf tx-power-dbm-high-alarm {
-        type power-dbm;
-        config false;
-        description
-          "The power value above which will trigger a high transmit
-           power alarm.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 24-25";
-      }
-      leaf tx-power-dbm-low-alarm {
-        type power-dbm;
-        config false;
-        description
-          "The power value below which will trigger a low transmit
-           power alarm.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 26-27";
-      }
-      leaf tx-power-dbm-high-warning {
-        type power-dbm;
-        config false;
-        description
-          "The power value above which will trigger a high transmit
-           power warning.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 28-29";
-      }
-      leaf tx-power-dbm-low-warning {
-        type power-dbm;
-        config false;
-        description
-          "The power value below which will trigger a low transmit
-           power warning.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 30-31";
-      }
-      leaf rx-power-dbm-high-alarm {
-        type power-dbm;
-        config false;
-        description
-          "The power value above which will trigger a high receive
-           power alarm.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 32-33";
-      }
-      leaf rx-power-dbm-low-alarm {
-        type power-dbm;
-        config false;
-        description
-          "The power value below which will trigger a low receive
-           power alarm.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 34-35";
-      }
-      leaf rx-power-dbm-high-warning {
-        type power-dbm;
-        config false;
-        description
-          "The power value above which will trigger a high receive
-           power warning.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 36-37";
-      }
-      leaf rx-power-dbm-low-warning {
-        type power-dbm;
-        config false;
-        description
-          "The power value below which will trigger a low receive
-           power warning.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 38-39";
-      }
-      leaf laser-temperature-high-alarm {
-        type int32;
-        units "millidegrees Celsius";
-        config false;
-        description
-          "The temperature above which will trigger a high laser
-           temperature alarm.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 40-41";
-      }
-      leaf laser-temperature-low-alarm {
-        type int32;
-        units "millidegrees Celsius";
-        config false;
-        description
-          "The temperature below which will trigger a low laser
-           temperature alarm.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 42-43";
-      }
-      leaf laser-temperature-high-warning {
-        type int32;
-        units "millidegrees Celsius";
-        config false;
-        description
-          "The temperature above which will trigger a high laser
-           temperature warning.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 44-45";
-      }
-      leaf laser-temperature-low-warning {
-        type int32;
-        units "millidegrees Celsius";
-        config false;
-        description
-          "The temperature below which will trigger a low laser
-           temperature warning.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 46-47";
-      }
-      leaf tec-current-high-alarm {
-        type int16;
-        units "0.1 milliamperes";
-        config false;
-        description
-          "The current above which will trigger a high Thermoelectric
-           Cooler (TEC) current alarm.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 48-49";
-      }
-      leaf tec-current-low-alarm {
-        type int16;
-        units "0.1 milliamperes";
-        config false;
-        description
-          "The current below which will trigger a low Thermoelectric
-           Cooler (TEC) current alarm.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 50-51";
-      }
-      leaf tec-current-high-warning {
-        type int16;
-        units "0.1 milliamperes";
-        config false;
-        description
-          "The current above which will trigger a high Thermoelectric
-           Cooler (TEC) current warning.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 52-53";
-      }
-      leaf tec-current-low-warning {
-        type int16;
-        units "0.1 milliamperes";
-        config false;
-        description
-          "The current below which will trigger a low Thermoelectric
-           Cooler (TEC) current warning.";
-        reference
-          "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
-           Bytes 54-55";
-      }
+      uses common-thresholds;
+    }
+  }
+
+  grouping transceiver-link-thresholds {
+    description
+      "Transceiver-link thresholds.";
+    container thresholds {
+      description
+        "Each diagnostic value has a corresponding high alarm, low
+         alarm, high warning and low warning threshold. These factory
+         preset values allow the user to determine when a particular
+         value is outside of 'normal' limits as determined by the
+         transceiver manufacturer. It is assumed that these values
+         will vary with different technologies and different
+         implementations. When external calibration is used, data may
+         be compared to alarm and warning threshold values before or
+         after calibration by the host. Comparison can be done
+         directly before calibration. If comparison is to be done
+         after calibration, calibration must first be applied to both
+         data and threshold values.
+
+         The values reported in the alarm and warning thresholds area
+         (see below) may be temperature compensated or otherwise
+         adjusted when setting warning and/or alarm flags. Any
+         threshold compensation or adjustment is vendor-specific and
+         optional.";
+      reference
+        "SFF-8472 (Revision 12.4) Table 9-5 - Address A2h,
+         Bytes 16-39";
+      uses common-thresholds;
     }
   }
 
@@ -3444,6 +4006,7 @@ module bbf-hardware-transceivers {
         uses link-diagnostic-parameters;
         uses link-alarm-diagnostic-parameters;
       }
+      uses transceiver-link-thresholds;
     }
   }
 }

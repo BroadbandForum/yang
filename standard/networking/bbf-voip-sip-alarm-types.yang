@@ -1,0 +1,335 @@
+module bbf-voip-sip-alarm-types {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-voip-sip-alarm-types";
+  prefix bbf-voip-sip-alt;
+
+  import bbf-alarm-types {
+    prefix bbf-alt;
+  }
+  import bbf-voip-media {
+    prefix bbf-voip-media;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Provider Cloud Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Shiya Ashraf, Nokia
+
+     Editor:      Kevin Noll, CableLabs
+
+     PS Leader:   Sven Ooghe, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Bruno Cornaglia, Vodafone
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Haomian Zheng, Huawei";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on voice service
+     management. As such, this module is specific to access
+     network equipment (e.g., BBF-specified Access Nodes and FTTdp
+     DPUs).
+
+     Specifically, this module contains a set of alarm definitions for
+     VoIP SIP.
+
+     Copyright (c) 2017-2025, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a9; see
+     the TR itself for full legal notices.";
+
+  revision 2025-07-02 {
+    description
+      "Amendment 9.
+       * Approval Date:    2025-07-02.
+       * Publication Date: 2025-07-02.";
+    reference
+      "TR-383a9: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-9.pdf>";
+  }
+
+  identity voip-sip-alarm-type-id {
+    base bbf-alt:bbf-alarm-type-id;
+    description
+      "Base identity for defining VoIP SIP alarm identities.
+
+       This identity is abstract and should not generally be used for
+       alarms. If used to define an alarm that was not known at design
+       time, it must be qualified with an alarm type qualifier string.
+       This practice, however, should be generally avoided to ensure
+       all possible alarms are known at design time.";
+  }
+
+  identity voip-gateway-alarm-type-id {
+    base bbf-voip-sip-alt:voip-sip-alarm-type-id;
+    description
+      "Base identity for defining VoIP SIP alarm identities per VoIP
+       gateway.
+
+       This identity is abstract and should not generally be used for
+       alarms. If used to define an alarm that was not known at design
+       time, it must be qualified with an alarm type qualifier string.
+       This practice, however, should be generally avoided to ensure
+       all possible alarms are known at design time.";
+  }
+
+  identity voip-access-servers-pool-alarm-type-id {
+    base bbf-voip-sip-alt:voip-sip-alarm-type-id;
+    description
+      "Base identity for defining VoIP SIP alarm identities per VoIP
+       access servers pool.
+
+       This identity is abstract and should not generally be used for
+       alarms. If used to define an alarm that was not known at design
+       time, it must be qualified with an alarm type qualifier string.
+       This practice, however, should be generally avoided to ensure
+       all possible alarms are known at design time.";
+  }
+
+  identity user-termination-alarm-type-id {
+    base bbf-voip-sip-alt:voip-sip-alarm-type-id;
+    description
+      "Base identity for defining VoIP SIP alarm identities per user
+       termination.
+
+       This identity is abstract and should not generally be used for
+       alarms. If used to define an alarm that was not known at design
+       time, it must be qualified with an alarm type qualifier string.
+       This practice, however, should be generally avoided to ensure
+       all possible alarms are known at design time.";
+  }
+
+  identity invalid-dial-plan {
+    base bbf-voip-sip-alt:voip-gateway-alarm-type-id;
+    description
+      "An 'invalid-dial-plan' alarm is raised when the dial plan is
+       invalid.
+
+       The alarm can be cleared by configuring a valid dial plan.
+
+       The alarm will also be cleared if the VoIP gateway is
+       disabled.";
+    reference
+      "ITU-T G.988 Clause 9.9.2 - Alarm number 4";
+  }
+
+  identity sip-server-name-cannot-be-resolved {
+    base bbf-voip-sip-alt:voip-gateway-alarm-type-id;
+    description
+      "A 'sip-server-name-cannot-be-resolved' alarm is raised when
+       the SIP server name cannot be resolved via DNS.
+
+       The alarm is cleared once the SIP server name can be resolved
+       as a result of the adaptation or creation of DNS resource
+       records, or the configuration of the SIP server is adapted and
+       the new name is successfully resolved.
+
+       The alarm is also cleared if the VoIP gateway is disabled.";
+    reference
+      "ITU-T G.988 Clause 9.9.3 - Alarm number 0";
+  }
+
+  identity sip-server-not-reachable {
+    base bbf-voip-sip-alt:voip-gateway-alarm-type-id;
+    description
+      "A 'sip-server-not-reachable' alarm is raised when the SIP
+       server cannot be reached or there are ICMP errors.
+
+       The alarm is cleared once the SIP server can be reached.
+
+       The alarm is also cleared if the VoIP gateway is disabled.";
+    reference
+      "ITU-T G.988 Clause 9.9.3 - Alarm number 1";
+  }
+
+  identity user-agent-cannot-connect {
+    base bbf-voip-sip-alt:voip-gateway-alarm-type-id;
+    description
+      "A 'user-agent-cannot-connect' alarm is raised when the SIP
+       server can not be connected, due to faults after the port has
+       responded.
+
+       The alarm is cleared once the connection to the SIP server is
+       established.
+
+       The alarm is also cleared if the VoIP gateway is disabled.";
+    reference
+      "ITU-T G.988 Clause 9.9.3 - Alarm number 2";
+  }
+
+  identity sip-server-authentication-failed {
+    base bbf-voip-sip-alt:voip-gateway-alarm-type-id;
+    description
+      "A 'sip-server-authentication-failed' alarm is raised when the
+       SIP server cannot be authenticated.
+
+       The alarm is cleared once the authentication of the SIP server
+       is successful.
+
+       The alarm is also cleared if the VoIP gateway is disabled.";
+    reference
+      "ITU-T G.988 Clause 9.9.3 - Alarm number 3";
+  }
+
+  identity referenced-voip-gateway-disabled {
+    base bbf-voip-sip-alt:voip-gateway-alarm-type-id;
+    description
+      "A 'referenced-voip-gateway-disabled' alarm is raised when a
+       VoIP gateway is disabled but is referenced by at least one user
+       termination.
+
+       The alarm is cleared once the VoIP gateway is enabled again.
+
+       The alarm is also cleared if the VoIP gateway is no longer
+       referenced by any user termination.";
+  }
+
+  identity dhcp-config-failure {
+    base bbf-voip-sip-alt:voip-gateway-alarm-type-id;
+    description
+      "A 'dhcp-config-failure' alarm is raised when a VoIP gateway
+       refers to a VoIP access servers pool without SIP server
+       addresses. The SIP server configuration method is based on
+       'dhcp', but no SIP server addresses were received via DHCP.
+
+       The alarm is cleared once the VoIP gateway references a VoIP
+       access servers pool with valid SIP server addresses, received
+       via DHCP or via manual configuration.
+
+       The alarm is also cleared if the VoIP gateway is disabled.";
+  }
+
+  identity referenced-media-forwarder-disabled {
+    if-feature "bbf-voip-media:forwarders";
+    base bbf-voip-sip-alt:voip-gateway-alarm-type-id;
+    description
+      "A 'referenced-media-forwarder-disabled' alarm is raised when
+       the media forwarder is disabled but it is referenced by at
+       least one VoIP gateway.
+
+       The alarm is cleared once the referenced media forwarder is
+       enabled or another enabled media forwarder is referenced.
+
+       The alarm is also cleared if the VoIP gateway is disabled.";
+  }
+
+  identity ssp-file-not-found {
+    base bbf-voip-sip-alt:voip-access-servers-pool-alarm-type-id;
+    description
+      "A 'ssp-file-not-found' alarm is raised when an attempt to
+       access the SIP Service Profile (SSP) file failed.
+
+       The alarm will be cleared as soon as the file can be accessed.
+       This may require a possible mis-configuration to be
+       corrected.";
+  }
+
+  identity register-authentication {
+    base bbf-voip-sip-alt:user-termination-alarm-type-id;
+    description
+      "A 'register-authentication' alarm is raised when the SIP
+       registration authentication of a user termination is currently
+       not possible.
+
+       The alarm is cleared once the registration authentication of a
+       user termination is successful.
+
+       The alarm will also be cleared if the user termination is
+       disabled.";
+    reference
+      "ITU-T G.988 Clause 9.9.2 - Alarm number 0";
+  }
+
+  identity register-timeout {
+    base bbf-voip-sip-alt:user-termination-alarm-type-id;
+    description
+      "A 'register-timeout' alarm is raised when the SIP registrar
+       server is not answering the SIP REGISTER requests of a user
+       termination.
+
+       The alarm is cleared once the registration requests of the user
+       termination are again being answered by the SIP registrar
+       server.
+
+       The alarm will also be cleared if the user termination is
+       disabled.";
+    reference
+      "ITU-T G.988 Clause 9.9.2 - Alarm number 1";
+  }
+
+  identity register-failure-response {
+    base bbf-voip-sip-alt:user-termination-alarm-type-id;
+    description
+      "A 'register-failure-response' alarm is raised when
+       the SIP registrar server sends failure reponses.
+
+       The alarm is cleared once the registration requests of the user
+       termination are successfully answered again by the SIP
+       registrar server.
+
+       The alarm will also be cleared if the user termination is
+       disabled.";
+    reference
+      "ITU-T G.988 Clause 9.9.2 - Alarm number 2";
+  }
+
+  identity register-not-possible {
+    base bbf-voip-sip-alt:user-termination-alarm-type-id;
+    description
+      "A 'register-not-possible' alarm is raised when the SIP
+       registration of a user termination is not possible due to
+       conflicting or missing configuration.
+
+       The alarm is cleared once the registration request of the user
+       termination is successful again.
+
+       The alarm will also be cleared if the user termination is
+       disabled.";
+  }
+}

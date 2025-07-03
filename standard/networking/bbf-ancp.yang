@@ -15,24 +15,24 @@ module bbf-ancp {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Work Area";
+     Provider Cloud Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
      Editor:      Shiya Ashraf, Nokia
 
-     Editor:      Nick Hancock, Adtran
-
      Editor:      Kevin Noll, CableLabs
 
-     Editor:      Ludwig Pauwels, Nokia
+     PS Leader:   Sven Ooghe, Nokia
 
-     PS Leader:   Aihua Guo, Futurewei
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, Adtran
+     WA Director: Bruno Cornaglia, Vodafone
 
-     WA Director: Sven Ooghe, Nokia";
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Haomian Zheng, Huawei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the Access Node
@@ -43,7 +43,7 @@ module bbf-ancp {
      This data model is designed for the Network Management Datastore
      Architecture defined in RFC 8342.
 
-     Copyright (c) 2017-2024, Broadband Forum
+     Copyright (c) 2017-2025, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -83,11 +83,21 @@ module bbf-ancp {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a8; see
+     This version of this YANG module is part of TR-383a9; see
      the TR itself for full legal notices.";
   reference
     "RFC 6320";
 
+  revision 2025-07-02 {
+    description
+      "Amendment 9.
+       * Approval Date:    2025-07-02.
+       * Publication Date: 2025-07-02.";
+    reference
+      "TR-383a9: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-9.pdf>";
+  }
   revision 2024-11-11 {
     description
       "Amendment 8.
@@ -222,7 +232,7 @@ module bbf-ancp {
       "Base identity for defining access line attributes defined in
        the ANCP.
 
-       This is an abstract identity and MUST NOT be used for access
+       This is an abstract identity and must not be used for access
        line attributes.";
     reference
       "RFC 6320 Section 6.5";
@@ -234,7 +244,7 @@ module bbf-ancp {
       "Base identity for defining technology-independent access line
        attributes defined in the ANCP.
 
-       This is an abstract identity and MUST NOT be used for access
+       This is an abstract identity and must not be used for access
        line attributes.";
     reference
       "RFC 6320 Section 6.5";
@@ -254,9 +264,9 @@ module bbf-ancp {
       "Base identity for defining causes that resulted in the
        malfunction of the Adjacency Protocol.
 
-       This identity is abstract and SHOULD NOT generally be used for
+       This identity is abstract and should not generally be used for
        malfunction causes. If used to define a cause that was not
-       known at design time, it MUST be qualified with an associated
+       known at design time, it must be qualified with an associated
        message string. This practice, however, should be generally
        avoided to ensure all possible causes are known at design
        time.";
@@ -931,7 +941,7 @@ module bbf-ancp {
                    TLV shall contain a slot, a port or another
                    variable for which the numbering is defined by the
                    AN, then this leaf determines if the numbering
-                   MUST start from 0 or 1.";
+                   must start from 0 or 1.";
                 reference
                   "TR-178 R-118";
               }
@@ -943,7 +953,7 @@ module bbf-ancp {
                    'access-aggregation-circuit-id-ascii' contain
                    variables for which the value can be multiple
                    digits, then this leaf determines if the
-                   slot/port/VLAN ID numbering MUST use leading 0's
+                   slot/port/VLAN ID numbering must use leading 0's
                    or not, i.e., generate a fixed-length string or a
                    string with only meaningful digits.
 

@@ -1,0 +1,4647 @@
+module bbf-voip-sip {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-voip-sip";
+  prefix bbf-voip-sip;
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ietf-ip {
+    prefix ip;
+  }
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import ietf-tls-client {
+    prefix tlsc;
+  }
+  import ietf-crypto-types {
+    prefix ct;
+  }
+  import ietf-keystore {
+    prefix ks;
+  }
+  import iana-if-type {
+    prefix ianaift;
+  }
+  import iana-crypt-hash {
+    prefix ianach;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import bbf-voip-media {
+    prefix bbf-voip-media;
+  }
+  import bbf-tone-patterns {
+    prefix bbf-tp;
+  }
+  import bbf-voip-types {
+    prefix bbf-voip-tp;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Provider Cloud Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Shiya Ashraf, Nokia
+
+     Editor:      Kevin Noll, CableLabs
+
+     PS Leader:   Sven Ooghe, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Bruno Cornaglia, Vodafone
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Haomian Zheng, Huawei";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on voice service
+     management. As such, this module is specific to access
+     network equipment (e.g., BBF-specified Access Nodes and FTTdp
+     DPUs).
+
+     This data model is designed for the Network Management Datastore
+     Architecture defined in RFC 8342.
+
+     Specifically, this module adds support for the management of
+     Voice over IP (VoIP) Session Initiation Protocol(SIP)and VoIP
+     SIP capabilities defined in ITU-T G.988.
+
+     Copyright (c) 2017-2025, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a9; see
+     the TR itself for full legal notices.";
+
+  revision 2025-07-02 {
+    description
+      "Amendment 9.
+       * Approval Date:    2025-07-02.
+       * Publication Date: 2025-07-02.";
+    reference
+      "TR-383a9: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-9.pdf>";
+  }
+
+  feature redundancy {
+    description
+      "Indicates support for SIP server redundancy.";
+    reference
+      "ITU-T G.988 Clause 9.9.21";
+  }
+
+  feature transaction-timers {
+    description
+      "Indicates support for the management of the SIP transaction
+       timers.";
+    reference
+      "RFC 3261 Table 4;
+       RFC 6026 Section 8.11";
+  }
+
+  feature voice-mail-servers {
+    description
+      "Indicates support for the configuration of voice mail
+       servers.";
+  }
+
+  feature event-package-subscriptions {
+    description
+      "Indicates support for the configuration of event package
+       subscriptions.";
+    reference
+      "RFC 6665 Section 3.1";
+  }
+
+  feature statistics {
+    description
+      "Indicates the support of statistics.";
+  }
+
+  feature authentication-and-key-agreement {
+    description
+      "Indicates the support for the Authentication and Key Agreement
+       (AKA) security protocol.";
+    reference
+      "3GPP TS 33.102 Clause 6.3";
+  }
+
+  feature sip-service-profile {
+    description
+      "Indicates the support of a SIP service profile.";
+  }
+
+  feature configuration-of-t1-based-timers {
+    description
+      "Indicates the support to adapt transaction timers based on
+       timer T1.";
+  }
+
+  feature configuration-of-t4-based-timers {
+    description
+      "Indicates the support to adapt transaction timers based on
+       timer T4.";
+  }
+
+  feature shared-lines {
+    description
+      "Indicates the support of shared lines.";
+  }
+
+  identity redundancy-state {
+    description
+      "Base identity for defining states of SIP server redundancy.";
+  }
+
+  identity initial {
+    base bbf-voip-sip:redundancy-state;
+    description
+      "Initial state, no attempt yet to connect to a SIP server.
+
+       The users are not registering yet to any SIP server.";
+  }
+
+  identity not-connected {
+    base bbf-voip-sip:redundancy-state;
+    description
+      "None of the SIP servers is reachable.
+
+       The users can not register to an active SIP server.";
+  }
+
+  identity connected {
+    base bbf-voip-sip:redundancy-state;
+    description
+      "The active SIP server is reachable.
+
+       All users are registered to this active SIP server.";
+  }
+
+  identity connected-to-primary {
+    base bbf-voip-sip:redundancy-state;
+    description
+      "The highest priority (primary) SIP server is reachable.
+
+       All users are registered to the highest priority (primary) SIP
+       server.";
+  }
+
+  identity server-failover-ongoing {
+    base bbf-voip-sip:redundancy-state;
+    description
+      "The SIP server redundancy failover process is ongoing.
+
+       This means that the previous SIP server with the existing user
+       registrations is no longer reachable. Users are now being
+       registered to a lower priority (backup) SIP server.
+
+       For user termination with ongoing calls, registration
+       with the backup SIP server will be postponed until the ongoing
+       call has been terminated.";
+  }
+
+  identity server-failback-ongoing {
+    base bbf-voip-sip:redundancy-state;
+    description
+      "The SIP server redundancy failback process is ongoing.
+
+       This means that a SIP server with higher priority is now
+       become available and users are being registered to this SIP
+       server.
+
+       For user terminations with ongoing calls, registration with the
+       higher priority SIP server will be postponed until the ongoing
+       call has been terminated.";
+  }
+
+  identity connected-to-backup {
+    base bbf-voip-sip:redundancy-state;
+    description
+      "The active SIP server is now a backup SIP server.
+
+       This means that the SIP server with the highest priority is no
+       longer reachable.
+
+       All users are now registered with this backup server.";
+  }
+
+  identity subscriber-controlled-activation {
+    description
+      "Base identity for subscriber-controlled activation.";
+    reference
+      "ETSI TS 183 043 Annex C.1.2.1 - Service code commands;
+       ITU-T G.988 Clause 9.9.9";
+  }
+
+  identity subscriber-controlled-deactivation {
+    description
+      "Base identity for subscriber-controlled deactivation.";
+    reference
+      "ETSI TS 183 043 Annex C.1.2.1 - Service code commands;
+       ITU-T G.988 Clause 9.9.9";
+  }
+
+  identity subscriber-controlled-interrogation {
+    description
+      "Base identity for subscriber-controlled interrogation.";
+    reference
+      "ETSI TS 183 043 Annex C.1.2.1 - Service code commands;
+       ITU-T G.988 Clause 9.9.9";
+  }
+
+  identity subscriber-controlled-pin-change {
+    description
+      "Base identity for subscriber-controlled PIN change.";
+    reference
+      "ETSI TS 183 043 Annex C.1.2.1 - Service code commands;
+       ITU-T G.988 Clause 9.9.9";
+  }
+
+  identity subscriber-controlled-feature {
+    description
+      "Base identity for defining supplementary services controlled by
+       the subscriber using service code commands.";
+    reference
+      "ETSI TS 183 043 Annex C.1.2.1 - Service code commands;
+       ITU-T G.988 Clause 9.9.9, VoIP feature access codes";
+  }
+
+  identity call-waiting {
+    base bbf-voip-sip:subscriber-controlled-feature;
+    base bbf-voip-sip:subscriber-controlled-activation;
+    base bbf-voip-sip:subscriber-controlled-deactivation;
+    description
+      "Call waiting service.";
+  }
+
+  identity cancel-call-waiting {
+    base bbf-voip-sip:subscriber-controlled-feature;
+    base bbf-voip-sip:subscriber-controlled-activation;
+    description
+      "Cancel call waiting service, to suspend the call waiting
+       feature for the duration of one call.";
+  }
+
+  identity call-hold {
+    base bbf-voip-sip:subscriber-controlled-feature;
+    base bbf-voip-sip:subscriber-controlled-activation;
+    base bbf-voip-sip:subscriber-controlled-deactivation;
+    description
+      "Call hold service.";
+  }
+
+  identity three-party-conference {
+    base bbf-voip-sip:subscriber-controlled-feature;
+    base bbf-voip-sip:subscriber-controlled-activation;
+    base bbf-voip-sip:subscriber-controlled-deactivation;
+    description
+      "The three-party conference service.";
+  }
+
+  identity call-park {
+    base bbf-voip-sip:subscriber-controlled-feature;
+    base bbf-voip-sip:subscriber-controlled-activation;
+    description
+      "The call park service.";
+  }
+
+  identity unattended-call-transfer {
+    base bbf-voip-sip:subscriber-controlled-feature;
+    base bbf-voip-sip:subscriber-controlled-activation;
+    base bbf-voip-sip:subscriber-controlled-deactivation;
+    description
+      "The unattended call transfer service.";
+  }
+
+  identity attended-call-transfer {
+    base bbf-voip-sip:subscriber-controlled-feature;
+    base bbf-voip-sip:subscriber-controlled-activation;
+    base bbf-voip-sip:subscriber-controlled-deactivation;
+    description
+      "The attended call transfer service.";
+  }
+
+  identity do-not-disturb {
+    base bbf-voip-sip:subscriber-controlled-feature;
+    base bbf-voip-sip:subscriber-controlled-activation;
+    base bbf-voip-sip:subscriber-controlled-deactivation;
+    base bbf-voip-sip:subscriber-controlled-interrogation;
+    base bbf-voip-sip:subscriber-controlled-pin-change;
+    description
+      "The Do Not Disturb (DND) service.";
+  }
+
+  identity caller-id {
+    base bbf-voip-sip:subscriber-controlled-feature;
+    base bbf-voip-sip:subscriber-controlled-activation;
+    base bbf-voip-sip:subscriber-controlled-deactivation;
+    description
+      "The caller identity service.";
+    reference
+      "Caller ID activate, Caller ID deactivate";
+  }
+
+  identity direct-connect-delayed {
+    base bbf-voip-sip:subscriber-controlled-feature;
+    base bbf-voip-sip:subscriber-controlled-activation;
+    base bbf-voip-sip:subscriber-controlled-deactivation;
+    base bbf-voip-sip:subscriber-controlled-interrogation;
+    description
+      "The direct connect delayed or warmline service.";
+  }
+
+  identity failure-cause {
+    description
+      "Base identity for defining failure causes.";
+  }
+
+  identity timer-b-expired {
+    base bbf-voip-sip:failure-cause;
+    description
+      "Timer B expired, no response received.";
+  }
+
+  identity call-cancelled {
+    base bbf-voip-sip:failure-cause;
+    description
+      "The call was cancelled/terminated before establishment.";
+  }
+
+  identity final-3xx-failure-response-received {
+    base bbf-voip-sip:failure-cause;
+    description
+      "Received a final 3xx response code (Redirection).";
+    reference
+      "RFC 3261 Section 7.2";
+  }
+
+  identity final-4xx-failure-response-received {
+    base bbf-voip-sip:failure-cause;
+    description
+      "Received a final 4xx response code (Client Error).";
+    reference
+      "RFC 3261 Section 7.2";
+  }
+
+  identity final-5xx-failure-response-received {
+    base bbf-voip-sip:failure-cause;
+    description
+      "Received a final 5xx response code (Server Error).";
+    reference
+      "RFC 3261 Section 7.2";
+  }
+
+  identity final-6xx-failure-response-received {
+    base bbf-voip-sip:failure-cause;
+    description
+      "Received a final 6xx response code (Global Error).";
+    reference
+      "RFC 3261 Section 7.2";
+  }
+
+  identity dial-plan-format {
+    description
+      "Base identity for defining the dial plan format.";
+    reference
+      "ITU-T G.988 Clause 9.9.10 - Dial plan format";
+  }
+
+  identity h248 {
+    base bbf-voip-sip:dial-plan-format;
+    description
+      "H.248 dial plan format.";
+    reference
+      "RFC 5125";
+  }
+
+  identity network-based-call-signaling {
+    base bbf-voip-sip:dial-plan-format;
+    description
+      "Network-based Call Signaling dial plan format.";
+    reference
+      "PacketCable PKT-SP-NCS1.5";
+  }
+
+  identity vendor-specific {
+    base bbf-voip-sip:dial-plan-format;
+    description
+      "Vendor-specific dial plan format.";
+  }
+
+  identity authentication-scheme {
+    description
+      "Authentication scheme.";
+  }
+
+  identity md5-digest {
+    base bbf-voip-sip:authentication-scheme;
+    description
+      "The MD5 Digest authentication.";
+    reference
+      "RFC 2617 Section 3.2;
+       ITU-T G.988 Clause 9.12.4 - Validation scheme, 1";
+  }
+
+  identity aka {
+    if-feature "bbf-voip-sip:authentication-and-key-agreement";
+    base bbf-voip-sip:authentication-scheme;
+    description
+      "The Authentication and Key Agreement (AKA) security protocol.";
+    reference
+      "3GPP TS 33.203 Section 6.1 - Authentication and Key Agreement";
+  }
+
+  identity iana-event-package {
+    description
+      "Event package name defined by IANA.";
+    reference
+      "IANA Registry SIP Event Types Namespace";
+  }
+
+  identity call-completion {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Call-completion event package.";
+    reference
+      "RFC 6910";
+  }
+
+  identity certificate {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Certificate event package.";
+    reference
+      "RFC 6072";
+  }
+
+  identity credential {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Credential event package.";
+    reference
+      "RFC 6072";
+  }
+
+  identity conference {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Conference event package.";
+    reference
+      "RFC 4575";
+  }
+
+  identity consent-pending-additions {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Consent pending additions event package.";
+    reference
+      "RFC 5362";
+  }
+
+  identity dialog {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Dialog event package.";
+    reference
+      "RFC 4235";
+  }
+
+  identity http-monitor {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "HTTP monitor event package.";
+    reference
+      "RFC 5989";
+  }
+
+  identity kpml {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Key Press Stimulus Package using Key Press Markup Language
+       (KPML).";
+    reference
+      "RFC 4730";
+  }
+
+  identity load-control {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Load control event package.";
+    reference
+      "RFC 7200";
+  }
+
+  identity message-summary {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Message summary event package.";
+    reference
+      "RFC 3842";
+  }
+
+  identity poc-settings {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Push-to-Talk (PoC) settings event package.";
+    reference
+      "RFC 4354";
+  }
+
+  identity presence-event {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Presence event package.";
+    reference
+      "RFC 3856";
+  }
+
+  identity reg {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Registrations event package.";
+    reference
+      "RFC 3680";
+  }
+
+  identity refer {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Refer event package.";
+    reference
+      "RFC 3515";
+  }
+
+  identity session-spec-policy {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Session-specific policy event package.";
+    reference
+      "RFC 6795";
+  }
+
+  identity spirits-indpss {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Services in PSTN requesting Internet Services (SPIRITS)
+       Intelligent Network Detection Point Service Switching (INDPSS)
+       event package.";
+    reference
+      "RFC 3910";
+  }
+
+  identity spirits-user-prof {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Services in PSTN requesting Internet Services (SPIRITS)
+       user profile event package.";
+    reference
+      "RFC 3910";
+  }
+
+  identity ua-profile {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "User Agent profile event package.";
+    reference
+      "RFC 6080";
+  }
+
+  identity vq-rtcpxr {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Voice Quality (VQ) derived from RTP Control Protocol
+       Extended Reports (RTCP-XR) event package.";
+    reference
+      "RFC 6035";
+  }
+
+  identity winfo {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Watch Information event template-package.";
+    reference
+      "RFC 3857";
+  }
+
+  identity xcap-diff {
+    base bbf-voip-sip:iana-event-package;
+    description
+      "Extensible Markup Language (XML) Configuration Access Protocol
+       (XCAP) Diff event package.";
+    reference
+      "RFC 5875";
+  }
+
+  identity user-agent-oper-state {
+    description
+      "Base identity of the operational state of the SIP user agent.";
+  }
+
+  identity idle {
+    base bbf-voip-sip:user-agent-oper-state;
+    description
+      "The SIP user agent is idle; no communication with a SIP server
+       is taking place or the SIP server is still unknown.";
+  }
+
+  identity user-agent-initial {
+    base bbf-voip-sip:user-agent-oper-state;
+    description
+      "The SIP user agent is in the initial state and is ready to
+       start communication with the active SIP server.";
+    reference
+      "ITU-T G.988 Clause 9.9.3 - SIP agent config data, SIP status,
+       Ok/initial";
+  }
+
+  identity user-agent-connected {
+    base bbf-voip-sip:user-agent-oper-state;
+    description
+      "The SIP user agent is connected or communicating with a SIP
+       server.";
+    reference
+      "ITU-T G.988 Clause 9.9.3 - SIP agent config data, SIP status,
+       Connected";
+  }
+
+  identity failed-icmp-error {
+    base bbf-voip-sip:user-agent-oper-state;
+    description
+      "The SIP user agent is in the failed state following an ICMP
+       error.";
+    reference
+      "ITU-T G.988 Clause 9.9.3 - SIP agent config data, SIP status,
+       Failed ICMP error";
+  }
+
+  identity failed-malformed-resp {
+    base bbf-voip-sip:user-agent-oper-state;
+    description
+      "The SIP user agent is in the failed state following the receipt
+       of a malformed response from the SIP server.";
+    reference
+      "ITU-T G.988 Clause 9.9.3 - SIP agent config data, SIP status,
+       Failed Malformed response";
+  }
+
+  identity failed-inadequate-info-resp {
+    base bbf-voip-sip:user-agent-oper-state;
+    description
+      "The SIP user agent is in the failed state following the receipt
+       of an inadequate information response.";
+    reference
+      "ITU-T G.988 Clause 9.9.3 - SIP agent config data, SIP status,
+       Failed Inadequate info response";
+  }
+
+  identity failed-timeout {
+    base bbf-voip-sip:user-agent-oper-state;
+    description
+      "The SIP user agent is in the failed state following the timeout
+       of one of the SIP timers or '408 Timeout' responses received
+       from the SIP server.";
+    reference
+      "ITU-T G.988 Clause 9.9.3 - SIP agent config data, SIP status,
+       Failed Timeout";
+  }
+
+  identity failed-unknown-cause {
+    base bbf-voip-sip:user-agent-oper-state;
+    description
+      "The SIP user agent is in the failed state, whereby the cause of
+       the failure of the connection or communication with the server
+       is unknown.";
+  }
+
+  typedef transport-protocol {
+    type enumeration {
+      enum udp {
+        description
+          "Indicates that the transport protocol is User Datagram
+           Protocol (UDP).";
+      }
+      enum tcp {
+        description
+          "Indicates that the transport protocol is Transmission
+           Control Protocol (TCP).";
+      }
+      enum tls {
+        description
+          "Indicates that the transport protocol is Transport Layer
+           Security (TLS) over Transmission Control Protocol.";
+      }
+    }
+    description
+      "Defines available transport protocols.";
+  }
+
+  typedef call-direction {
+    type enumeration {
+      enum incoming {
+        description
+          "Indicates that the established connection is an incoming
+           call.";
+      }
+      enum outgoing {
+        description
+          "Indicates that the established connection is an outgoing
+           call.";
+      }
+    }
+    description
+      "Defines the direction of an established call.";
+  }
+
+  typedef failure-response-code {
+    type uint16 {
+      range "400..699";
+    }
+    description
+      "Defines SIP response codes based on HTTP/1.1 response codes
+       used to report the failure of a SIP request.";
+    reference
+      "RFC 3261 Section 21";
+  }
+
+  typedef supplementary-service-control {
+    type union {
+      type enumeration {
+        enum operator {
+          description
+            "The service is enabled and controlled via configuration
+             by the operator.";
+        }
+        enum subscription {
+          description
+            "The service is controlled by the Next Generation Network
+             (NGN) core, IP Multimedia core network Subsystem (IMS)
+             core or application server. Via subscription to an event
+             package the core network knows it must send notifications
+             whenever the service is activated or deactivated. By
+             subscribing to the 'ua-profile' event package defined by
+             IETF RFC 6080 the core will send such notifications.";
+        }
+      }
+    }
+    description
+      "Defines the supplementary service control options.";
+  }
+
+  typedef supplementary-service-control-with-user {
+    type union {
+      type bbf-voip-sip:supplementary-service-control;
+      type enumeration {
+        enum user {
+          description
+            "The service is controlled by the user. The user dials a
+             service code command to activate or deactivate the
+             service.";
+        }
+      }
+    }
+    description
+      "Defines the supplementary service control with user control as
+       extra option.";
+  }
+
+  typedef service-code-command {
+    type string {
+      pattern '[0-9*#]*';
+    }
+    description
+      "Defines the format of service code commands.";
+    reference
+      "ETSI TS 183 043 Annex C.1.2.1 - Service code commands;
+       ITU-T G.988 Clause 9.9.9, VoIP feature access codes";
+  }
+
+  typedef role {
+    type enumeration {
+      enum proxy {
+        description
+          "SIP proxy server.";
+      }
+      enum registrar {
+        description
+          "SIP registrar.";
+      }
+      enum outbound-proxy {
+        description
+          "Outbound proxy SIP server.";
+      }
+      enum back-to-back {
+        description
+          "SIP back-to-back server.";
+      }
+      enum session-border-controller {
+        description
+          "Session border controller.";
+      }
+      enum emergency-stand-alone {
+        description
+          "Emergency Stand-alone SIP server.";
+      }
+      enum local-stand-alone {
+        description
+          "Local Stand-alone SIP server.";
+      }
+    }
+    description
+      "A role that can be fulfilled by a SIP server.";
+  }
+
+  typedef supplementary-services-profile-ref {
+    type leafref {
+      path "/bbf-voip-sip:sip"
+         + "/bbf-voip-sip:profiles"
+         + "/bbf-voip-sip:supplementary-services-profiles"
+         + "/bbf-voip-sip:supplementary-services-profile"
+         + "/bbf-voip-sip:name";
+    }
+    description
+      "A reference to a supplementary services profile.";
+  }
+
+  typedef dial-plan-profile-ref {
+    type leafref {
+      path "/bbf-voip-sip:sip"
+         + "/bbf-voip-sip:profiles"
+         + "/bbf-voip-sip:dial-plan-profiles"
+         + "/bbf-voip-sip:dial-plan-profile"
+         + "/bbf-voip-sip:name";
+    }
+    description
+      "A reference to a dial plan profile.";
+  }
+
+  typedef event-package-subscriptions-profile-ref {
+    type leafref {
+      path "/bbf-voip-sip:sip"
+         + "/bbf-voip-sip:profiles"
+         + "/bbf-voip-sip:event-package-subscriptions-profiles"
+         + "/bbf-voip-sip:event-package-subscriptions-profile"
+         + "/bbf-voip-sip:name";
+    }
+    description
+      "A reference to an event package subscription profile.";
+  }
+
+  typedef service-code-commands-profile-ref {
+    type leafref {
+      path "/bbf-voip-sip:sip"
+         + "/bbf-voip-sip:profiles"
+         + "/bbf-voip-sip:service-code-commands-profiles"
+         + "/bbf-voip-sip:service-code-commands-profile"
+         + "/bbf-voip-sip:name";
+    }
+    description
+      "A reference to a service code commands profile.";
+  }
+
+  typedef registration-profile-ref {
+    type leafref {
+      path "/bbf-voip-sip:sip"
+         + "/bbf-voip-sip:profiles"
+         + "/bbf-voip-sip:registration-profiles"
+         + "/bbf-voip-sip:registration-profile"
+         + "/bbf-voip-sip:name";
+    }
+    description
+      "A reference to a registration profile.";
+  }
+
+  typedef transaction-timers-profile-ref {
+    type leafref {
+      path "/bbf-voip-sip:sip"
+         + "/bbf-voip-sip:profiles"
+         + "/bbf-voip-sip:transaction-timers-profiles"
+         + "/bbf-voip-sip:transaction-timers-profile"
+         + "/bbf-voip-sip:name";
+    }
+    description
+      "A reference to a SIP transaction timers profile.";
+  }
+
+  typedef transport-profile-ref {
+    type leafref {
+      path "/bbf-voip-sip:sip"
+         + "/bbf-voip-sip:profiles"
+         + "/bbf-voip-sip:transport-profiles"
+         + "/bbf-voip-sip:transport-profile"
+         + "/bbf-voip-sip:name";
+    }
+    description
+      "A reference to a SIP transport profile.";
+  }
+
+  typedef sip-protocol-profile-ref {
+    type leafref {
+      path "/bbf-voip-sip:sip"
+         + "/bbf-voip-sip:profiles"
+         + "/bbf-voip-sip:sip-protocol-profiles"
+         + "/bbf-voip-sip:sip-protocol-profile"
+         + "/bbf-voip-sip:name";
+    }
+    description
+      "A reference to a VoIP protocol profile.";
+  }
+
+  typedef voip-service-profile-ref {
+    type leafref {
+      path "/bbf-voip-sip:sip"
+         + "/bbf-voip-sip:profiles"
+         + "/bbf-voip-sip:voip-service-profiles"
+         + "/bbf-voip-sip:voip-service-profile"
+         + "/bbf-voip-sip:name";
+    }
+    description
+      "A reference to a VoIP service profile.";
+  }
+
+  typedef user-agent-ref {
+    type leafref {
+      path "/bbf-voip-sip:sip"
+         + "/bbf-voip-sip:user-agents"
+         + "/bbf-voip-sip:user-agent"
+         + "/bbf-voip-sip:name";
+    }
+    description
+      "A reference to a SIP user agent.";
+  }
+
+  typedef user-termination-ref {
+    type leafref {
+      path "/bbf-voip-sip:sip"
+         + "/bbf-voip-sip:user-terminations"
+         + "/bbf-voip-sip:user-termination"
+         + "/bbf-voip-sip:username";
+    }
+    description
+      "A reference to a user termination.";
+  }
+
+  typedef voip-gateway-ref {
+    type leafref {
+      path "/bbf-voip-sip:sip"
+         + "/bbf-voip-sip:voip-gateways"
+         + "/bbf-voip-sip:voip-gateway"
+         + "/bbf-voip-sip:name";
+    }
+    description
+      "A reference to a VoIP gateway.";
+  }
+
+  typedef sip-server-pool-ref {
+    type leafref {
+      path "/bbf-voip-sip:sip"
+         + "/bbf-voip-sip:sip-server-pools"
+         + "/bbf-voip-sip:sip-server-pool"
+         + "/bbf-voip-sip:name";
+    }
+    description
+      "A reference to a SIP server pool.";
+  }
+
+  typedef sip-server-ref {
+    type leafref {
+      path "/bbf-voip-sip:sip"
+         + "/bbf-voip-sip:sip-servers"
+         + "/bbf-voip-sip:sip-server"
+         + "/bbf-voip-sip:name";
+    }
+    description
+      "A reference to a SIP server.";
+  }
+
+  typedef voip-access-servers-ref {
+    type leafref {
+      path "/bbf-voip-sip:sip"
+         + "/bbf-voip-sip:voip-access-servers"
+         + "/bbf-voip-sip:voip-access-server"
+         + "/bbf-voip-sip:name";
+    }
+    description
+      "A reference to a pool of VoIP access servers.";
+  }
+
+  typedef voice-mail-server-ref {
+    type leafref {
+      path "/bbf-voip-sip:sip"
+         + "/bbf-voip-sip:voice-mail-servers"
+         + "/bbf-voip-sip:voice-mail-server"
+         + "/bbf-voip-sip:name";
+    }
+    description
+      "A reference to a voice mail server.";
+  }
+
+  grouping common-registration-statistics {
+    description
+      "Data nodes to report registration statistics.";
+    leaf successful-registration-requests {
+      type yang:counter64;
+      mandatory true;
+      description
+        "The number of (re-)registration requests which have been
+         successfully replied to.
+
+         'Successfully replied to' means that a response of '200 OK' ,
+         was received.";
+    }
+    leaf failed-registration-requests {
+      type yang:counter64;
+      mandatory true;
+      description
+        "The number of (re-)registration requests which have failed.
+
+         'Failed' means that a response <> '200 OK' was returned by
+         the SIP server/registrar or that a SIP transaction time-out
+         had occurred.";
+    }
+    leaf active-registrations {
+      type yang:counter64;
+      mandatory true;
+      description
+        "The number of active registrations.
+
+         An active registration is counted when a registration request
+         has been successfully completed ('200 OK' received to
+         register request with Expires header field value not equal to
+         0) and the register expiration interval has not expired.";
+    }
+  }
+
+  grouping session-initiation-statistics {
+    description
+      "Data nodes to report session initiation statistics.";
+    leaf out-call-attempts {
+      type yang:counter64;
+      mandatory true;
+      description
+        "The number of both off-hook events that are recognized as
+         the starting event of outgoing call attempts in the
+         scope of a basic call and hook flashes that are recognized
+         as the starting event of new outgoing call attempts in the
+         scope of a three-party conference call.
+
+         Note that off-hook events resulting from incoming call
+         attempts are not counted.";
+    }
+    leaf out-successful-initial-invites {
+      type yang:counter64;
+      mandatory true;
+      description
+        "The number of initial SIP INVITE requests that the IMS core
+         replies to with a '100 Trying' response code followed by a
+         either a '180 Ringing' or a '183 Session Progress'
+         Provisional Response or a '200 OK' Successful Response,
+         whereby the '18x' Provisional Responses would be received
+         after '100 Trying' Provision Response and the '200 OK'
+         Successful Response.
+
+         Note that the user agent does not consider what response is
+         subsequently received after a '180 Ringing' or '183 Session
+         Progress'. This applies to both, outgoing call attempts made
+         in the scope of the basic call and outgoing call attempts
+         made in the scope of a supplementary service.";
+    }
+    leaf out-answered-calls {
+      type yang:counter64;
+      mandatory true;
+      description
+        "The number of outgoing call attempts for which an initial
+         INVITE request is sent AND for which a specified response is
+         received.
+
+         The following SIP responses may be specified through
+         configuration:
+         - any response received, irrespective of whether it is a
+           successful or unsuccessful response
+         - '180 Ringing'
+         - '200 OK'.
+
+         How the responses are provisioned is out-of-scope of this
+         model.";
+    }
+    leaf out-failed-call-attempts {
+      type yang:counter64;
+      mandatory true;
+      description
+        "The number of outgoing call attempts that could not
+         successfully be completed because of a failure to access the
+         voice network because of:
+         - failed or aborted TCP connection
+         - expiration of Timer B
+
+         Not included in this counter are outgoing call attempts that
+         could not be successfully completed because of an erroneous
+         or abnormal subscriber behavior (no dialing, including
+         incomplete dialing, early on-hook). This applies to both
+         outgoing calls made in the scope of the basic call and
+         outgoing call attempts made in the scope of conference
+         calls.";
+    }
+    leaf out-maximum-port-seizure-duration {
+      type uint16;
+      units "seconds";
+      mandatory true;
+      description
+        "The maximum port seizure duration for outgoing call attempts.
+
+         This counter is only applicable to the outgoing call
+         attempts, where the subscriber dials a valid digit before the
+         starting dial timer expiration, whereby a valid digit is a
+         digit that matches at least partially one digit map pattern
+         in the configured digit map.
+
+         This counter is not applicable to outgoing call attempts that
+         end abnormally due to subscriber action before the dialing
+         supervision timer is started; for call attempts where no dial
+         tone could be applied to the line; or for call attempts where
+         the system interrupts the outgoing call attempt before the
+         subscriber is able to dial the first digit.";
+    }
+    leaf in-call-attempts {
+      type yang:counter64;
+      mandatory true;
+      description
+        "The total number of incoming SIP INVITE requests, considered
+         as being a SIP INVITE request for a new incoming call attempt
+         regardless of whether the incoming call attempt was
+         successfully processed/replied to or not.
+
+         A SIP INVITE request being the retransmission of a SIP INVITE
+         request that has already been handled (and counted) will NOT
+         be counted again.
+
+         Note that the count of the incoming SIP INVITE requests may
+         not be fully correct for the following reasons:
+
+         - Incoming SIP INVITE messages dropped at a lower layer to
+           the SIP stack layer cannot be counted (e.g. caused by high
+           load situations).
+
+         - Incoming SIP INVITE messages without CSEQ are silently
+           dropped by the SIP stack and since the calling side does
+           not receive a response to such SIP INVITE request, the
+           calling side will retry the SIP INVITE. At the called side
+           the SIP stack cannot know whether such SIP INVITE requests
+           are retries or not. Thus, the counter will be increased
+           for the first SIP INVITE request received as well as for
+           subsequent SIP INVITE retries.";
+    }
+    leaf in-answered-calls {
+      type yang:counter64;
+      mandatory true;
+      description
+        "The number of incoming call attempts for which a specified
+         SIP response is sent as a result the detection of an off-hook
+         event.
+
+         One of the following SIP responses may be specified through
+         configuration:
+         - any response
+         - '180 Ringing'
+         - '200 OK'.
+
+         How the responses are provisioned is out of scope of this
+         model.";
+    }
+    leaf in-failed-call-attempts {
+      type yang:counter64;
+      mandatory true;
+      description
+        "The number of received incoming call attempts that could not
+         successfully be completed  because of a lost seizure with the
+         control network. Or in other words, the number of incoming
+         call attempts that fail because of an access failure to the
+         voice network: Failing/aborted TCP connection; Timer B
+         expiration. An incoming call attempt that could not
+         successfully be completed because of an erroneous or abnormal
+         subscriber behavior (early on-hook) shall not be considered
+         by this counter.";
+    }
+    leaf in-maximum-port-seizure-duration {
+      type uint16;
+      units "seconds";
+      mandatory true;
+      description
+        "The maximum port seizure duration for incoming call attempts.
+
+         The port seizure duration is the time elapsed from the moment
+         the called subscriber gets notified that an incoming call
+         attempt has arrived (ringing/call-waiting tone put at
+         the line) until one of the following events is detected:
+         - the receipt of the off-hook;
+         - the receipt of the flash-hook event;
+         - the receipt of the SIP CANCEL request;
+         - the expiration of the ringing tone sequence;
+         - the expiration of the (call forwarding no reply) No Answer
+           Timer;
+         - the receipt of the call-waiting tone sequence;
+         - the transmission of a '487 Request Terminated' (without
+           sending SIP CANCEL request) by the called side before
+           the expiration of the ringing tone (the called side
+           gets e.g., physical failure or 'enabled' status set to
+           false).";
+    }
+  }
+
+  grouping server-monitoring {
+    description
+      "Data nodes to configure how the 'health' or availability of a
+       server is to be monitored.";
+    leaf method {
+      type enumeration {
+        enum register {
+          description
+            "The SIP register method.";
+        }
+        enum options {
+          description
+            "The SIP options method.";
+        }
+      }
+      description
+        "The method to use to monitor the availability of a server.";
+    }
+    leaf interval {
+      type uint32 {
+        range "60..86400";
+      }
+      units "seconds";
+      description
+        "The interval to be applied between attempts to monitor the
+         availability of servers using the method configured for
+         the leaf 'method'.";
+    }
+  }
+
+  grouping media-stream-state {
+    description
+      "Data nodes to report the operational state of a media
+       stream.";
+    container rtp {
+      description
+        "RTP data.";
+      leaf remote-ip-address {
+        type inet:ip-address;
+        mandatory true;
+        description
+          "The remote IP address, being the IP address of the media
+           stream.";
+      }
+      leaf remote-port {
+        type inet:port-number;
+        mandatory true;
+        description
+          "Remote port, being the IP port of the media stream.";
+      }
+      leaf local-port {
+        type inet:port-number;
+        mandatory true;
+        description
+          "Local port, being the port used for the media stream.";
+      }
+    }
+    leaf codec-or-fax-relay {
+      type union {
+        type identityref {
+          base bbf-voip-media:voice-codec;
+        }
+        type identityref {
+          base bbf-voip-media:fax-codec;
+        }
+        type enumeration {
+          enum t38 {
+            description
+              "T.38 fax relay.";
+          }
+        }
+      }
+      mandatory true;
+      description
+        "Indicates the negotiated codec or fax relay for the media
+         stream.";
+    }
+    leaf packet-period {
+      when "../bbf-voip-sip:codec-or-fax-relay != 't38'" {
+        description
+          "Applicable for T.38 fax relay.";
+      }
+      type uint8 {
+        range "10|20|30|40";
+      }
+      units "milliseconds";
+      mandatory true;
+      description
+        "Indicates the packet period for the media stream.";
+    }
+    leaf is-voice-band-data {
+      type boolean;
+      mandatory true;
+      description
+        "If 'true', indicates the session is a voice band data
+         session.
+
+         If 'false', indicates the session is a voice session.";
+    }
+  }
+
+  grouping remote-server {
+    description
+      "Address of a remote server.";
+    leaf remote-address {
+      type inet:ip-address;
+      description
+        "The remote IP address of the SIP server.";
+    }
+    leaf remote-port {
+      type inet:port-number;
+      mandatory true;
+      description
+        "The port at the remote SIP server.
+
+         For outgoing SIP messages, it is the destination port.
+
+         For incoming SIP messages, it is the source port.";
+    }
+    leaf protocol {
+      type bbf-voip-sip:transport-protocol;
+      mandatory true;
+      description
+        "The protocol used to transport the SIP messages.";
+    }
+  }
+
+  grouping tcp-client-grouping {
+    description
+      "The TCP client data nodes.";
+    leaf port {
+      type inet:port-number;
+      description
+        "Defines the TCP port to attempt to use for SIP signaling.";
+    }
+    leaf idle-timeout {
+      type uint16 {
+        range "32..3600";
+      }
+      units "seconds";
+      default "64";
+      description
+        "Defines the maximum period of time that a TCP connection may
+         remain inactive before it is automatically closed by the
+         system.";
+    }
+  }
+
+  grouping session {
+    description
+      "Data nodes reporting a successful session or failed session
+       attempt.";
+    leaf start-date-and-time {
+      type yang:date-and-time;
+      description
+        "Start date and time of the session.
+
+         - For outgoing successful calls : the moment that ACK to
+           '200 OK' (Initial INVITE) is received.
+
+         - For outgoing unsuccessful calls : the moment that the
+           Initial INVITE is sent.
+
+         - For incoming successful calls : the moment that ACK to
+           '200 OK' (Initial INVITE) is sent.
+
+         - For incoming unsuccessful calls: the moment that
+           '180 Ringing' is sent.";
+    }
+    leaf end-date-and-time {
+      type yang:date-and-time;
+      description
+        "The end date and time of the session.";
+    }
+    leaf calling-number {
+      type string;
+      description
+        "For outgoing calls, the calling party number is the SIP
+         address-of-record (AOR) of the calling party.
+
+         For incoming calls, the calling party number is the
+         user@domain present in P-Asserted-Identity or From header
+         of the SIP message.";
+    }
+    leaf called-number {
+      type string;
+      description
+        "For outgoing calls, the called party number is the dialed
+         digits of the called party.
+
+         For incoming calls the called party number is the SIP
+         address-of-record (AOR) of the called party.";
+    }
+    leaf call-direction {
+      type bbf-voip-sip:call-direction;
+      description
+        "The direction of the call in this session or session
+         attempt.";
+    }
+    leaf failure-cause {
+      type identityref {
+        base bbf-voip-sip:failure-cause;
+      }
+      description
+        "If present, indicates that the session failed and the value
+         of the leaf indicates the cause of the failure.";
+    }
+  }
+
+  container sip {
+    description
+      "Management of VoIP SIP.";
+    container profiles {
+      description
+        "SIP profiles.";
+      container dial-plan-profiles {
+        description
+          "Profiles to define dial plans.";
+        list dial-plan-profile {
+          key "name";
+          description
+            "A dial plan profile.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "Identifies the dial plan profile.";
+          }
+          leaf partial-dial-timeout {
+            type uint8 {
+              range "1..60";
+            }
+            units "seconds";
+            default "16";
+            description
+              "Defines the partial dial timeout value for digit map
+               processing.
+
+               The partial dial timer, which is also known as the
+               Long-timer (L), is reset after each received digit, if
+               no match is found in the digit map.
+
+               If a pattern match is found, there is a switch from the
+               partial dial timer to the critical timer.
+
+               Note the 'partial-dial-timeout' expressed in seconds,
+               deviates from G.988 but is aligned with
+               ETSI TS 101 909-4.";
+            reference
+              "ITU-T G.988 Clause 9.9.10 - Partial dial timeout;
+               ETSI TS 101 909-4";
+          }
+          leaf critical-dial-timeout {
+            type uint8 {
+              range "1..60";
+            }
+            units "seconds";
+            default "4";
+            description
+              "Defines the critical dial timeout value for digit map
+               processing.
+
+               The critical dial timer, which is also known as the
+               Short-timer (S), is started when a pattern match is
+               found in the digit map for the previously dialed
+               digits. It is reset after each received digit until a
+               timeout occurs because no digits are received anymore.
+
+               Note the 'critical-dial-timeout' expressed in seconds,
+               deviates from G.988 but is aligned with
+               ETSI TS 101 909-4.";
+            reference
+              "ITU-T G.988 Clause 9.9.10 - Critical dial timeout;
+               ETSI TS 101 909-4";
+          }
+          leaf format {
+            type identityref {
+              base bbf-voip-sip:dial-plan-format;
+            }
+            description
+              "Dial plan format.";
+            reference
+              "ITU-T G.988 Clause 9.9.10 - Dial plan format";
+          }
+          container digit-map {
+            description
+              "The digit map.";
+            leaf-list digit-map-pattern {
+              type string;
+              min-elements 1;
+              description
+                "A digit map pattern. A pattern is specified as
+                 sequence of digit map symbols or a regular expression
+                 of digit map symbols.";
+              reference
+                "ITU-T G.988 Clause 9.9.10 - Dial plan table";
+            }
+          }
+        }
+      }
+      container event-package-subscriptions-profiles {
+        if-feature "bbf-voip-sip:event-package-subscriptions";
+        description
+          "Profiles to manage subscribing to SIP event packages and
+           the handling of how subscribers are notified of events
+           defined by these packages.";
+        list event-package-subscriptions-profile {
+          key "name";
+          description
+            "An event package subscriptions profile.";
+          reference
+            "ETSI TS 183 043 Clause 5.3.1.2;
+             RFC 6665";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the event package subscriptions profile.";
+          }
+          list subscription {
+            key "event-package";
+            min-elements 1;
+            description
+              "Subscription to a SIP event package.";
+            leaf event-package {
+              type identityref {
+                base bbf-voip-sip:iana-event-package;
+              }
+              description
+                "The name of the SIP event package as registered with
+                 IANA.
+
+                 This name will be used as the token in the Event
+                 header in the SIP SUBSCRIBE message.";
+              reference
+                "IANA SIP Event Types Namespace, Event package name";
+            }
+            leaf enabled {
+              type boolean;
+              default "true";
+              description
+                "The subscription for SIP event package can be enabled
+                 or disabled.
+
+                 If 'false', no subscription is sent and the SIP
+                 notifications of the event package will be ignored.
+
+                 If 'true', subscription is sent, if required, and the
+                 SIP notifications of the event package will be
+                 processed.";
+            }
+            container explicit-subscription {
+              presence
+                "Indicates explicit subscription is required.";
+              description
+                "Management of an explicit subscription.";
+              reference
+                "ETSI TS 183 043 Clause 5.3.1.2";
+              leaf request-uri {
+                type bbf-voip-tp:voip-uri;
+                description
+                  "The request URI of the SIP SUBSCRIBE message.";
+              }
+              leaf expiration-time {
+                type union {
+                  type uint32 {
+                    range "60..86400";
+                  }
+                  type enumeration {
+                    enum disabled {
+                      description
+                        "Indicates that the subscription refresh is
+                         disabled even if the server specifies an
+                         expiration interval.";
+                    }
+                  }
+                }
+                units "seconds";
+                default "3600";
+                description
+                  "The SIP SUBSCRIBE method expiration time proposed
+                   by the client, included in the 'Expires' header of
+                   the SIP SUBSCRIBE request and it indicates the
+                   duration of the subscription. To keep the
+                   subscription effective it must be refreshed on a
+                   periodic basis.";
+              }
+              leaf head-start-time {
+                when "../bbf-voip-sip:expiration-time != 'disabled'" {
+                  description
+                    "Applicable when 'expiration-time' is not
+                     disabled.";
+                }
+                type union {
+                  type uint32 {
+                    range "32..86400";
+                  }
+                  type enumeration {
+                    enum disabled {
+                      description
+                        "If 'true', disables the subscription head
+                         start.";
+                    }
+                  }
+                }
+                units "seconds";
+                default "600";
+                description
+                  "The number of seconds prior to the expiration of a
+                   subscription at which the client sends a
+                   SUBSCRIBE request to refresh the subscription.";
+              }
+            }
+            container notifications {
+              description
+                "Configuration to manage the handling of subscription
+                 notifications.";
+              leaf led-enabled {
+                type boolean;
+                default "false";
+                description
+                  "If 'true', a notification of the SIP event triggers
+                   an LED indication on the phone set.";
+              }
+              leaf special-dial-tone-enabled {
+                type boolean;
+                default "false";
+                description
+                  "If 'true', a notification of the SIP event triggers
+                   the generation of a special dial tone.";
+              }
+              leaf short-ringing-tone-enabled {
+                type boolean;
+                default "false";
+                description
+                  "If 'true', a notification of the SIP event triggers
+                   the generation of a short ringing tone.";
+              }
+            }
+          }
+        }
+      }
+      container registration-profiles {
+        description
+          "Profiles to manage SIP registration.";
+        list registration-profile {
+          key "name";
+          description
+            "A SIP registration profile.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the registration profile.";
+          }
+          leaf request-uri {
+            type bbf-voip-tp:voip-uri;
+            mandatory true;
+            description
+              "The REGISTER request URI that names the domain of the
+               location service for which the SIP registration is
+               intended.";
+            reference
+              "RFC 3261 Section 10.2";
+          }
+          leaf realm {
+            type bbf-yang:name-string;
+            mandatory true;
+            description
+              "The authentication realm is a protection space of the
+               registrar, to be used in the authentication header.";
+            reference
+              "RFC 3261 Section 22.1";
+          }
+          leaf registration-expiration-time {
+            type union {
+              type uint32 {
+                range "60..86400";
+              }
+              type enumeration {
+                enum disabled {
+                  description
+                    "Disables re-registration, in which case the SIP
+                     agent does not perform any re-registration;
+                     the user remains registered.";
+                }
+              }
+            }
+            units "seconds";
+            default "3600";
+            description
+              "The desired registration expiration time to be
+               negotiated with the server during registration.
+
+               In case the registrar does not agree with the proposed
+               time interval, the actual registration expiration time
+               defined by the server is reported in the leaf
+               'rcvd-minimum-registration-expiration' in the
+               operational state data of a SIP server.";
+            reference
+              "RFC 3261 Section 10.2;
+               ITU-T G.988 Clause 9.9.3 - SIP reg exp time";
+          }
+          leaf re-registration-head-start-time {
+            when "../bbf-voip-sip:registration-expiration-time != "
+               + "'disabled'" {
+              description
+                "Applicable when 'registration-expiration-time' is not
+                 disabled.";
+            }
+            type union {
+              type uint32 {
+                range "32..86000";
+              }
+              type enumeration {
+                enum disabled {
+                  description
+                    "Disables re-registration head start time.";
+                }
+              }
+            }
+            units "seconds";
+            must ".='disabled' or "
+               + ". < ../bbf-voip-sip:registration-expiration-time" {
+              error-message
+                "The SIP re-registration head start time is greater "
+              + "than the registration expiration time.";
+              description
+                "Ensure that the value of
+                 're-registration-head-start-time' is less than the
+                 value of 'registration-expiration-time'.";
+            }
+            default "360";
+            description
+              "The SIP re-register head start time, i.e., the number
+               of seconds prior to registration expiration that causes
+               the SIP UA to start the re-registration process.
+
+               The time to send the re-registration request is
+               defined as follows:
+
+               In case the 'registration-expiration-time' > 2 *
+               're-register-head-start-time' then the 're-register-
+               head-start-time' seconds prior to the expiry of the
+               'registration-expiration-time' i.e., at
+               ['registration-expiration-time' minus the
+               're-register-head-start-time'].
+
+               Otherwise, the re-register message is sent at
+               [registration-expiration-time interval * 0.5].";
+            reference
+              "ITU-T G.988 Clause 9.9.3 - SIP rereg head start time.";
+          }
+        }
+      }
+      container service-code-commands-profiles {
+        description
+          "Profiles to define sets of service code commands to control
+           features and supplementary services.
+
+           Service code commands are user requests to perform an
+           action that does not result in a call to another party, but
+           trigger the activation, deactivation or interrogation as to
+           the status of features or supplementary services.";
+        reference
+          "ETSI TS 183 043 Annex C.1.2.1 - Service code commands;
+           ITU-T G.988 Clause 9.9.9 - VoIP feature access codes";
+        list service-code-commands-profile {
+          key "name";
+          description
+            "A service code commands profile.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the service code commands profile.";
+          }
+          list service-code-commands {
+            key "service";
+            min-elements 1;
+            description
+              "Service code commands to control the feature or
+               supplementary service specified by the leaf
+               'service'.";
+            reference
+              "ETSI TS 183 043 Annex C.1.2.1 - Service code commands;
+               ITU-T G.988 Clause 9.9.9 - VoIP feature access codes";
+            leaf service {
+              type identityref {
+                base bbf-voip-sip:subscriber-controlled-feature;
+              }
+              description
+                "Enables a feature or a supplementary service that can
+                 be controlled by the subscriber by dialing a service
+                 command code.";
+            }
+            leaf activation-code {
+              when "derived-from(../bbf-voip-sip:service,"
+                 + "'bbf-voip-sip:subscriber-controlled-activation'"
+                 + ")" {
+                description
+                  "An activation code is only applicable to services
+                   that can be activated with a service code
+                   command.";
+              }
+              type bbf-voip-sip:service-code-command;
+              mandatory true;
+              description
+                "The service code command to activate the service.";
+            }
+            leaf deactivation-code {
+              when
+                "derived-from(../bbf-voip-sip:service, "
+              + "'bbf-voip-sip:subscriber-controlled-deactivation')" {
+                description
+                  "A deactivation code is only applicable to services
+                   that can be deactivated with a service code
+                   command.";
+              }
+              type bbf-voip-sip:service-code-command;
+              description
+                "The service code command to deactivate the service.
+
+                 If not configured, the user will not be able to
+                 deactivate the service using a service code
+                 command.";
+            }
+            leaf interrogation-code {
+              when "derived-from (../bbf-voip-sip:service,"
+                 + "'bbf-voip-sip:"
+                 + "subscriber-controlled-interrogation')" {
+                description
+                  "An interrogation code is only applicable to
+                   services that can be interrogated with a service
+                   code.";
+              }
+              type bbf-voip-sip:service-code-command;
+              description
+                "The service code command to interrogate the service,
+                 about the state or about the new destination, if
+                 applicable.
+
+                 If not configured, the user will not be able to
+                 interrogate the service using a service code
+                 command.";
+            }
+            leaf pin-change-code {
+              when "derived-from(../bbf-voip-sip:service,"
+                 + "'bbf-voip-sip:"
+                 + "subscriber-controlled-pin-change')" {
+                description
+                  "A PIN change code is only applicable to
+                   services that can have the PIN changed with a
+                   service code command.";
+              }
+              type bbf-voip-sip:service-code-command;
+              description
+                "The service code command to change the PIN.
+
+                 If not configured, the user will not be able to
+                 change the PIN for the service using a service code
+                 command.";
+            }
+          }
+        }
+      }
+      container transaction-timers-profiles {
+        if-feature "bbf-voip-sip:transaction-timers";
+        description
+          "Profiles to manage the SIP transaction timers.";
+        reference
+          "RFC 3261 Table 4;
+           RFC 6026 Section 8.11";
+        list transaction-timers-profile {
+          key "name";
+          description
+            "A SIP transaction timers profile.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the SIP transaction timers profile.";
+          }
+          leaf timer-t1 {
+            type uint16 {
+              range "200..1000";
+            }
+            units "milliseconds";
+            default "500";
+            description
+              "Defines an estimate of the round-trip time (RTT).";
+            reference
+              "RFC 3261 Table 4 - T1";
+          }
+          leaf timer-t2 {
+            type uint16 {
+              range "1..10";
+            }
+            units "seconds";
+            default "4";
+            description
+              "Defines the maximum retransmit interval for non-INVITE
+               requests and INVITE responses.";
+            reference
+              "RFC 3261 Table 4 - T2";
+          }
+          leaf timer-t4 {
+            type uint16 {
+              range "1..10";
+            }
+            units "seconds";
+            default "5";
+            description
+              "Defines the maximum duration a message will remain in
+               the network.";
+            reference
+              "RFC 3261 Table 4 - T4";
+          }
+          leaf timer-a {
+            if-feature "bbf-voip-sip:"
+                     + "configuration-of-t1-based-timers";
+            type union {
+              type enumeration {
+                enum timer-t1 {
+                  description
+                    "Timer A is initially set to the value of
+                     'timer-t1'.";
+                }
+              }
+              type uint16 {
+                range "200..1000";
+              }
+            }
+            units "milliseconds";
+            default "timer-t1";
+            description
+              "Defines the initial INVITE request retransmit interval.
+
+               Applies to UDP only.";
+            reference
+              "RFC 3261 Table 4 - Timer A";
+          }
+          leaf timer-b {
+            if-feature "bbf-voip-sip:"
+                     + "configuration-of-t1-based-timers";
+            type union {
+              type enumeration {
+                enum t1-multiplied-by-64 {
+                  description
+                    "Timer B is initially set to the value of
+                     'timer-t1' multiplied by 64.";
+                }
+              }
+              type uint16 {
+                range "2000..64000";
+              }
+            }
+            units "milliseconds";
+            default "t1-multiplied-by-64";
+            description
+              "Defines the INVITE transaction timeout timer.";
+            reference
+              "RFC 3261 Table 4 - Timer B";
+          }
+          leaf timer-c {
+            type uint32 {
+              range "181..300";
+            }
+            units "seconds";
+            default "181";
+            description
+              "Defines the proxy INVITE transaction timeout.";
+            reference
+              "RFC 3261 Table 4 - Timer C";
+          }
+          leaf timer-d {
+            type uint32 {
+              range "0..64000";
+            }
+            units "seconds";
+            default "32000";
+            description
+              "Defines the wait time for response retransmits.
+
+               RFC 3261 section 17.1.1.2 recommends that the value of
+               Timer D be set to 32000 (32 seconds) for unreliable
+               transports, such as UDP, and for reliable transports
+               the value of this timer is ignored.";
+            reference
+              "RFC 3261 Section 17.1.1.2;
+               RFC 3261 Table 4 - Timer D";
+          }
+          leaf timer-e {
+            if-feature "bbf-voip-sip:"
+                     + "configuration-of-t1-based-timers";
+            type union {
+              type enumeration {
+                enum timer-t1 {
+                  description
+                    "Timer E is initially set to the value of
+                     'timer-t1'.";
+                }
+              }
+              type uint16 {
+                range "200..1000";
+              }
+            }
+            units "milliseconds";
+            default "timer-t1";
+            description
+              "Defines the Non-INVITE request retransmit interval.
+
+               Applies to UDP only.";
+            reference
+              "RFC 3261 Table 4 - Timer E";
+          }
+          leaf timer-f {
+            if-feature "bbf-voip-sip:"
+                     + "configuration-of-t1-based-timers";
+            type union {
+              type enumeration {
+                enum t1-multiplied-by-64 {
+                  description
+                    "Timer F is initially set to the value of
+                     'timer-t1' multiplied by 64.";
+                }
+              }
+              type uint16 {
+                range "2000..64000";
+              }
+            }
+            units "milliseconds";
+            default "t1-multiplied-by-64";
+            description
+              "Defines the Non-INVITE transaction timeout timer.";
+            reference
+              "RFC 3261 Table 4 - Timer F";
+          }
+          leaf timer-g {
+            if-feature "bbf-voip-sip:"
+                     + "configuration-of-t1-based-timers";
+            type union {
+              type enumeration {
+                enum timer-t1 {
+                  description
+                    "Timer G is initially set to the value of
+                     'timer-t1'.";
+                }
+              }
+              type uint16 {
+                range "200..1000";
+              }
+            }
+            units "milliseconds";
+            default "timer-t1";
+            description
+              "Defines the INVITE response retransmit interval.";
+            reference
+              "RFC 3261 Table 4 - Timer G";
+          }
+          leaf timer-h {
+            if-feature "bbf-voip-sip:"
+                     + "configuration-of-t1-based-timers";
+            type union {
+              type enumeration {
+                enum t1-multiplied-by-64 {
+                  description
+                    "Timer H is initially set to the value of
+                     'timer-t1' multiplied by 64.";
+                }
+              }
+              type uint16 {
+                range "2000..64000";
+              }
+            }
+            units "milliseconds";
+            default "t1-multiplied-by-64";
+            description
+              "Defines the wait time for ACK receipt.";
+            reference
+              "RFC 3261 Table 4, - Timer H";
+          }
+          leaf timer-i {
+            if-feature "bbf-voip-sip:"
+                     + "configuration-of-t4-based-timers";
+            type union {
+              type enumeration {
+                enum timer-t4 {
+                  description
+                    "Timer I is initially set to the value of
+                     'timer-t4'.";
+                }
+              }
+              type uint16 {
+                range "0..10";
+              }
+            }
+            units "seconds";
+            default "timer-t4";
+            description
+              "Defines the wait time for ACK retransmits.
+
+               RFC 3261 section 17.2.1 recommends that the value of
+               Timer I be set to the value of the Timer T4
+               ('timer-t4') for unreliable transports, such as UDP,
+               and for reliable transports the value of this timer is
+               ignored.";
+            reference
+              "RFC 3261 Section 17.2.1;
+               RFC 3261 Table 4 - Timer I";
+          }
+          leaf timer-j {
+            if-feature "bbf-voip-sip:"
+                     + "configuration-of-t1-based-timers";
+            type union {
+              type enumeration {
+                enum t1-multiplied-by-64 {
+                  description
+                    "Timer J is initially set to the value of
+                     'timer-t1' multiplied by 64.";
+                }
+              }
+              type uint16 {
+                range "2000..64000";
+              }
+            }
+            units "milliseconds";
+            default "t1-multiplied-by-64";
+            description
+              "Defines the wait time for non-INVITE request
+               retransmits.
+
+               RFC 3221 section 17.2.2 states that the value of Timer
+               J must be set to the value of 'timer-t1' multiplied by
+               64 ('t1-multiplied-by-64') for unreliable transports,
+               such as UDP, and for reliable transports the value of
+               this timer is ignored.";
+            reference
+              "RFC 3261 Section 17.2.2;
+               RFC 3261 Table 4 - Timer J";
+          }
+          leaf timer-k {
+            if-feature "bbf-voip-sip:"
+                     + "configuration-of-t4-based-timers";
+            type union {
+              type enumeration {
+                enum timer-t4 {
+                  description
+                    "Timer K is initially set to the value of
+                     'timer-t4'.";
+                }
+              }
+              type uint16 {
+                range "0..10";
+              }
+            }
+            units "seconds";
+            default "timer-t4";
+            description
+              "Defines the wait time for response retransmits.
+
+               RFC 3261 section 17.1.2.2 states that the value of
+               Timer K must be set to the value of Timer T4
+               ('timer-t4')for unreliable transports, such as UDP, and
+               for reliable transports the value of this timer is
+               ignored.";
+            reference
+              "RFC 3261 Section 17.1.2.2;
+               RFC 3261 Table 4 - Timer K";
+          }
+          leaf timer-l {
+            if-feature "bbf-voip-sip:"
+                     + "configuration-of-t1-based-timers";
+            type union {
+              type enumeration {
+                enum t1-multiplied-by-64 {
+                  description
+                    "Timer L is initially set to the value of
+                     'timer-t1' multiplied by 64.";
+                }
+              }
+              type uint16 {
+                range "2000..64000";
+              }
+            }
+            units "milliseconds";
+            default "t1-multiplied-by-64";
+            description
+              "Defines the wait time for accepted INVITE request
+               retransmits.";
+            reference
+              "RFC 6026 Section 8.11 - Timer L";
+          }
+          leaf timer-m {
+            if-feature "bbf-voip-sip:"
+                     + "configuration-of-t1-based-timers";
+            type union {
+              type enumeration {
+                enum t1-multiplied-by-64 {
+                  description
+                    "Timer M is initially set to the value of
+                     'timer-t1' multiplied by 64.";
+                }
+              }
+              type uint16 {
+                range "2000..64000";
+              }
+            }
+            units "milliseconds";
+            default "t1-multiplied-by-64";
+            description
+              "Defines the wait time for retransmission of 2xx
+               response to INVITE or additional 2xx responses from
+               other branches of a downstream forked INVITE.";
+            reference
+              "RFC 6026 Section 8.11 - Timer M";
+          }
+        }
+      }
+      container supplementary-services-profiles {
+        description
+          "Profiles to manage the availability of supplementary
+           services and any specific configuration for these
+           services.";
+        reference
+          "ITU-T G.988 Clause 9.9.8 - VoIP application service
+           profile";
+        list supplementary-services-profile {
+          key "name";
+          description
+            "A supplementary services profile.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the supplementary services profile.";
+          }
+          container direct-connect {
+            description
+              "Configuration to manage the Direct Connect
+               feature, which allows a caller to connect to a pre-
+               configured number without having to dial any digits.";
+            reference
+              "ITU-T G.988 Clause 9.9.8 - Voice application service
+               profile, Direct connect";
+            leaf enabled {
+              type boolean;
+              default "false";
+              description
+                "If 'true', the direct connect service is enabled.
+
+                 If 'false', the direct connect service is disabled.";
+            }
+            leaf control {
+              type
+                bbf-voip-sip:supplementary-service-control-with-user;
+              default "operator";
+              description
+                "Defines how the service is to be controlled.";
+            }
+            leaf immediate {
+              when "../bbf-voip-sip:control = 'operator' or "
+                 + "../bbf-voip-sip:control = 'subscription'" {
+                description
+                  "Only applicable, if the immediate direct connect
+                   is controlled by either the operator or per
+                   subscription.";
+              }
+              type boolean;
+              default "false";
+              description
+                "If 'true', the Direct Connect service is to function
+                 as a hotline, i.e., the pre-configured number is
+                 dialed immediately on detection of an off-hook
+                 condition.
+
+                 If 'false', the Direct Connect service is to function
+                 as a warmline, i.e., on detection of an off-hook
+                 condition a delay timer is started (as defined by the
+                 leaf 'delay-timer') and if no digits are dialed,
+                 the pre-configured number is dialed when the delay
+                 timer expires.";
+            }
+            leaf delay-timer {
+              when "../bbf-voip-sip:immediate ='false'" {
+                description
+                  "Only applicable if the configured delayed connect
+                   is not 'immediate', i.e., a delayed direct connect
+                   is being configured.";
+              }
+              type uint8 {
+                range "1..60";
+              }
+              units "seconds";
+              default "10";
+              description
+                "Defines the duration of the delay timer used for the
+                 warmline service, which is started when an off-hook
+                 condition is detected.
+
+                 The warmline service will be activated, only if the
+                 timer expires without any digits being dialed.
+
+                 Note that a value for the delay timer received from
+                 the SIP server or application server will overrule
+                 any configured value.
+
+                 Note also that this timer should not be configured
+                 larger than the pre-dialing timer.";
+              reference
+                "ITU-T G.988 Clause 9.9.8 - Voice application service
+                 profile, Dial tone feature delay/warmline timer";
+            }
+            leaf uri {
+              when "../bbf-voip-sip:control = 'subscription'" {
+                description
+                  "The connect URI is only applicable when the service
+                   is enabled via 'subscription'.";
+              }
+              type bbf-voip-tp:voip-uri;
+              description
+                "Optional direct connect URI for use if an access user
+                 agent is required to explicitly subscribe to receive
+                 notifications about activation/deactivation of the
+                 service in the SIP core.
+
+                 If not configured, the subscription is implicit.";
+              reference
+                "ITU-T G.988 Clause 9.9.8 - Voice application service
+                 profile, Direct connect URI pointer";
+            }
+          }
+          container call-waiting {
+            description
+              "Configuration to manage the Call Waiting supplementary
+               service, which allows a caller connected to a call to
+               be informed of a subsequent incoming call.";
+            reference
+              "ETSI TS 183 043 Annex C.9;
+               ITU-T G.988 Clause 9.9.8 - VoIP application service,
+               Call Waiting features";
+            leaf enabled {
+              type boolean;
+              default "false";
+              description
+                "If 'true', the call waiting service is enabled.
+
+                 If 'false', the call waiting service is disabled.";
+            }
+            leaf control {
+              type
+                bbf-voip-sip:supplementary-service-control-with-user;
+              default "operator";
+              description
+                "Defines how the service is to be controlled.";
+            }
+            leaf no-answer-timer {
+              type uint16 {
+                range "30..300";
+              }
+              units "seconds";
+              default "120";
+              description
+                "This timer limits the amount of time a subscriber may
+                 wait for accepting a waiting call, before the call is
+                 rejected.
+
+                 The timer is started when the subscriber is informed
+                 of a waiting call.
+
+                 The no answer timer prevents waiting calls from
+                 waiting indefinitely.
+
+                 The timer should be configured to be larger than the
+                 call waiting timer set in the core network.";
+              reference
+                "ETSI TS 183 043 Annex C.9 - Call Waiting timer";
+            }
+            leaf reject-response-code {
+              type bbf-voip-sip:failure-response-code;
+              default "603";
+              description
+                "The waiting call can be rejected by the user or by
+                 the expiration of the call waiting timer. In such
+                 cases, the SIP INVITE will be rejected with the
+                 configured SIP response code.
+
+                 The default code is '603 Decline'.";
+              reference
+                "RFC 3261 Section 21";
+            }
+            leaf caller-id-enabled {
+              type boolean;
+              default "false";
+              description
+                "If 'true' enables the identity of the caller of the
+                 waiting call to be displayed on the user's device.";
+              reference
+                "ITU-T G.988 Clause 9.9.8 - VoIP application service
+                 profile, Call waiting features, Caller ID
+                 announcement";
+            }
+          }
+          container attended-call-transfer {
+            description
+              "Configuration to manage the Attended Call Transfer
+               supplementary service, which allows the user to first
+               establish a call to the target of the call transfer,
+               before transferring the call to the target.";
+            reference
+              "RFC 5589;
+               ITU-T G.988 Clause 9.9.9 - VoIP feature access codes,
+               Attended call transfer";
+            leaf enabled {
+              type boolean;
+              default "false";
+              description
+                "If 'true', the attended call transfer service is
+                 enabled.
+
+                 If 'false', the attended call transfer service is
+                 disabled.";
+            }
+            leaf control {
+              type
+                bbf-voip-sip:supplementary-service-control-with-user;
+              default "operator";
+              description
+                "Defines how the service is to be controlled.";
+            }
+          }
+          container unattended-call-transfer {
+            description
+              "Configuration to manage the Unattended Call Transfer
+               supplementary service also known as Blind Call
+               Transfer, which allows the user to transfer an active
+               call to the target of the call transfer without first
+               establishing a call with the target.";
+            reference
+              "RFC 5589;
+               ITU-T G.988 Clause 9.9.9 - VoIP feature access codes,
+               Unattended/blind call transfer";
+            leaf enabled {
+              type boolean;
+              default "false";
+              description
+                "If 'true', the unattended call transfer service is
+                 enabled.
+
+                 If 'false', the unattended call transfer service is
+                 disabled.";
+            }
+            leaf control {
+              type
+                bbf-voip-sip:supplementary-service-control-with-user;
+              default "operator";
+              description
+                "Defines how the service is to be controlled.";
+            }
+          }
+          container three-party-conference {
+            description
+              "Configuration to manage the Three Party Conference
+               supplementary service, which allows a user on a call to
+               call a third party and connect all three parties in a
+               conference.";
+            reference
+              "ETSI TS 183 043 Annex C.14;
+               ITU-T G.988 Clause 9.9.8 - VoIP application service,
+               Call Progress or transfer features, 3way";
+            leaf enabled {
+              type boolean;
+              default "false";
+              description
+                "If 'true', the three-party call conference service is
+                 enabled.
+
+                 If 'false', the three-party call conference service
+                 is disabled.";
+            }
+            leaf control {
+              type bbf-voip-sip:supplementary-service-control;
+              default "operator";
+              description
+                "Defines how the service is to be controlled.";
+            }
+            leaf conference-uri {
+              when "../bbf-voip-sip:control ='operator'" {
+                description
+                  "Only applicable if the Three Party Conference
+                   service is controlled by the operator.";
+              }
+              type bbf-voip-tp:voip-uri;
+              description
+                "The URI of the conference bridge within the core
+                 network.
+
+                 If not configured, no conference bridge is used to
+                 set up conferences.";
+              reference
+                "ITU-T G.988 Clause 9.9.8, VoIP application service
+                 profile, Conference factory URI";
+            }
+          }
+          container call-hold {
+            description
+              "Configuration to manage the Call Hold supplementary
+               service.";
+            reference
+              "ETSI TS 124 410;
+               ITU-T G.988 Clause 9.9.8 - VoIP application service,
+               Call Progress or transfer features, Call hold";
+            leaf enabled {
+              type boolean;
+              default "false";
+              description
+                "If 'true', the call hold service is enabled.";
+            }
+            leaf control {
+              type
+                bbf-voip-sip:supplementary-service-control-with-user;
+              default "operator";
+              description
+                "Defines how the service is to be controlled.";
+            }
+            leaf hold-indication {
+              type enumeration {
+                enum no-connection-address {
+                  description
+                    "Overrules the behavior to set a call on hold as
+                     defined in RFC 6337 Section 5.3. The 'hold' is
+                     indicated in an established session by sending a
+                     new offer with the connection address for media
+                     set to zero (c='0.0.0.0') in the Session
+                     Description Protocol (SDP) message body.";
+                  reference
+                    "RFC 6337 Section 5.3";
+                }
+                enum sendonly {
+                  description
+                    "Overrules the behavior to set a call on hold as
+                     defined in RFC 6337 Section 5.3. The 'hold' is
+                     indicated in an established session by sending a
+                     new offer containing 'a=sendonly' attribute in
+                     the SDP message body for each media stream to be
+                     held.
+
+                     Media is to be transmitted within the media
+                     stream, but not received.";
+                  reference
+                    "RFC 6337 section 5.3";
+                }
+                enum inactive {
+                  description
+                    "Overrules the behavior to set a call on hold as
+                     defined in RFC 6337 Section 5.3. The 'hold' is
+                     indicated in an established session by sending a
+                     new offer containing 'a=inactive' attribute in
+                     the SDP message body for each media stream to be
+                     held.
+
+                     Media is to be neither transmitted within the
+                     media stream nor received.";
+                  reference
+                    "RFC 6337 Section 5.3";
+                }
+                enum dependent-on-media-stream-direction {
+                  description
+                    "The behavior to set a call on hold is as defined
+                     in RFC 6337 Section 5.3. The 'hold' is to be
+                     indicated in an established session dependent on
+                     the direction of the media stream.
+
+                     If the direction is 'sendrecv', hold is to be
+                     indicated in an established session by sending a
+                     new offer containing 'a=sendonly' attribute in
+                     the SDP message for each media stream to be held.
+
+                     If the direction is 'recvonly', hold is to be
+                     indicated in an established session by sending a
+                     new offer containing 'a=inactive' attribute in
+                     the SDP message for each media stream to be
+                     held.";
+                  reference
+                    "RFC 6337 Section 5.3";
+                }
+              }
+              default "dependent-on-media-stream-direction";
+              description
+                "Defines the behavior of the system when established
+                 media streams are to be put on hold by sending a
+                 new offer using the Session Description Protocol
+                 (SDP).";
+              reference
+                "ETSI TS 124 410;
+                 RFC 6337 Section 5.3 - Hold and Resume of Media";
+            }
+            leaf hold-resume-method {
+              type enumeration {
+                enum re-invite {
+                  description
+                    "The SIP re-INVITE method is used to hold or
+                     resume a call.";
+                }
+                enum update {
+                  description
+                    "The SIP UPDATE method is used to hold or resume a
+                     call.";
+                }
+              }
+              default "re-invite";
+              description
+                "Defines how call hold and call resume is to be
+                 requested.";
+              reference
+                "ETSI TS 124 410 Section 4.5.2.1";
+            }
+            leaf conference-hold-timer {
+              when "../bbf-voip-sip:control='subscription'" {
+                description
+                  "Only applicable for call hold controlled via
+                   subscription.";
+              }
+              type union {
+                type uint16 {
+                  range "1..max";
+                }
+                type enumeration {
+                  enum disabled {
+                    description
+                      "No 'conference-hold-timer'.";
+                  }
+                }
+              }
+              units "seconds";
+              default "120";
+              description
+                "This hold timer should be larger than the three-party
+                 conference call waiting timer set in the core
+                 network.
+
+                 This timer prevents held calls within a three-party
+                 conference from being held indefinitely.";
+            }
+            leaf reject-response-code {
+              when "../bbf-voip-sip:control='subscription'" {
+                description
+                  "Applicable when a non-successful SIP response code
+                   must be sent in case the call hold is rejected.";
+              }
+              type bbf-voip-sip:failure-response-code;
+              default "603";
+              description
+                "The call hold can be rejected by the user or by the
+                 expiration of the three-party conference call waiting
+                 timer. In such cases, the call will be rejected with
+                 the configured response code.
+
+                 The default code is '603 Decline'.";
+            }
+          }
+          container call-park {
+            description
+              "Configuration to manage the Call Park supplementary
+               service, which enables the user to park a call (put a
+               call on hold within the network), so that some other
+               subscriber can take the call.";
+            reference
+              "ITU-T G.988 Clause 9.9.8 - VoIP application service,
+               Call Progress or transfer features, Call park";
+            leaf enabled {
+              type boolean;
+              default "false";
+              description
+                "If 'true', the call park service is enabled.
+
+                 If 'false', the call park service is disabled.";
+            }
+            leaf control {
+              type
+                bbf-voip-sip:supplementary-service-control-with-user;
+              default "operator";
+              description
+                "Defines how the service is to be controlled.";
+            }
+          }
+          container do-not-disturb {
+            description
+              "Configuration to manage the Do Not Disturb
+               supplementary service, which enables the user to
+               indicate that they do not wish to be interrupted by
+               incoming calls or other forms of communication.";
+            reference
+              "ITU-T G.988 Clause 9.9.8 - VoIP application service,
+               Call Progress or transfer features, Do not disturb";
+            leaf enabled {
+              type boolean;
+              default "false";
+              description
+                "If 'true', the do not disturb service is enabled.
+
+                 If 'false', the do not disturb service is disabled.";
+            }
+            leaf control {
+              type
+                bbf-voip-sip:supplementary-service-control-with-user;
+              default "operator";
+              description
+                "Defines how the service is to be controlled.";
+            }
+          }
+          container calling-name-delivery {
+            description
+              "Configuration to manage the Calling Name Delivery
+               feature, which controls whether the caller's name
+               can be presented to the called party.
+
+               In outgoing calls the optional 'display name' in the
+               SIP URI gets the user's name.
+
+               For incoming calls the calling user's name is
+               delivered to the telephone set, if any.";
+            reference
+              "ETSI TS 183 043 Annex C.6 - Calling Name Delivery;
+               ITU-T G.988 Clause 9.9.8 - CID features, Calling
+               name";
+            leaf enabled {
+              type boolean;
+              default "false";
+              description
+                "If 'true', the calling name delivery service is
+                 enabled. For incoming calls the calling user's name,
+                 if present, is forwarded to the telephone set.
+
+                 If 'false', the calling name delivery service is
+                 disabled.";
+            }
+            leaf control {
+              type
+                bbf-voip-sip:supplementary-service-control-with-user;
+              default "operator";
+              description
+                "Defines how the service is to be controlled.";
+            }
+            leaf permanent-presentation-status {
+              when "../bbf-voip-sip:control='operator'" {
+                description
+                  "Only applicable when enabled via operator.";
+              }
+              type enumeration {
+                enum public {
+                  description
+                    "The caller identity name is public and
+                     presented.";
+                }
+                enum private {
+                  description
+                    "The caller identity name is private and
+                     restricted.";
+                }
+              }
+              default "public";
+              description
+                "The permanent presentation status of the caller
+                 identity name.";
+              reference
+                "ITU-T G.988 Clause 9.9.8 - VoIP application service
+                 profile, CID features, CID number - Permanent
+                 presentation status for name;
+                 RFC 3323 Section 3.2";
+            }
+          }
+          container calling-number {
+            description
+              "Configuration to manage the Calling Number feature,
+               which controls whether the calling party's number can
+               be presented to the called party.";
+            reference
+              "ETSI TS 183 043 Annex C.6 - Calling line identity
+               Presentation/restriction;
+               ITU-T G.988 Clause 9.9.8 - CID features, Calling
+               number";
+            leaf enabled {
+              type boolean;
+              default "false";
+              description
+                "If 'true', the calling number service is enabled. For
+                 incoming calls the calling number, if present, is
+                 forwarded to the telephone set.
+
+                 If 'false', the calling number service is
+                 disabled.";
+            }
+            leaf permanent-presentation-status {
+              type enumeration {
+                enum public {
+                  description
+                    "The caller identity is public and presented.";
+                }
+                enum private {
+                  description
+                    "The caller identity is private and
+                     restricted.";
+                }
+              }
+              default "public";
+              description
+                "The permanent presentation status of the caller
+                 identity number. The caller identity is presented
+                 or restricted.";
+              reference
+                "ITU-T G.988 Clause 9.9.8 - VoIP application service
+                 profile, CID features, CID number - Permanent
+                 presentation status for number;
+                 RFC 3323 Section 3.2";
+            }
+          }
+          container call-forwarding-indication {
+            description
+              "Configuration to manage the call forwarding indication,
+               which informs the user of a forwarded call.";
+            reference
+              "ITU-T G.988 Clause 9.9.8 - VoIP application service
+               profile, Call presentation features, Call forwarding
+               indication";
+            leaf enabled {
+              type boolean;
+              default "false";
+              description
+                "If 'true', the call forwarding indication service is
+                 enabled.
+
+                 If 'false', the call forwarding indication service is
+                 disabled.";
+            }
+          }
+          container emergency-service-call {
+            description
+              "Configures the behavior of emergency service calls.";
+            leaf hook-flash-enabled {
+              type boolean;
+              default "false";
+              description
+                "Configures hook flash behavior for emergency calls,
+                 i.e., whether hook flash is to be processed during an
+                 emergency service call.
+
+                 If 'true', the flash on emergency service is enabled.
+
+                 If 'false', the flash on emergency service is
+                 disabled.";
+              reference
+                "ITU-T G.988 Clause 9.9.8 - VoIP application service
+                 profile, Call Progress or transfer features, Flash on
+                 emergency service call";
+            }
+            leaf originating-hold-enabled {
+              type boolean;
+              default "false";
+              description
+                "Configures on-hook behavior for emergency calls,
+                 i.e., whether call clearing is to be performed on
+                 on-hook during an emergency service call.
+
+                 If 'true', the emergency service originating hold
+                 service is enabled.
+
+                 If 'false', the emergency service originating hold
+                 service is disabled.";
+              reference
+                "ITU-T G.988 Clause 9.9.8 - VoIP application service
+                 profile, Call Progress or transfer features,
+                 Emergency service originating hold";
+            }
+          }
+        }
+      }
+      container transport-profiles {
+        description
+          "Profiles to manage transport protocols for SIP signaling.";
+        list transport-profile {
+          key "name";
+          description
+            "A transport profile.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the transport profile.";
+          }
+          list transport {
+            key "protocol";
+            min-elements 1;
+            ordered-by user;
+            description
+              "Transport protocol to be used for SIP signaling.
+
+               The system will attempt to establish a connection using
+               the protocols defined in the order of the entries in
+               the list.";
+            leaf protocol {
+              type bbf-voip-sip:transport-protocol;
+              description
+                "The transport protocol to use to attempt to establish
+                 a connection.";
+            }
+            container udp {
+              when "../bbf-voip-sip:protocol = 'udp'" {
+                description
+                  "Applicable for UDP.";
+              }
+              description
+                "The UDP settings.";
+              reference
+                "RFC 768";
+              leaf port {
+                type inet:port-number;
+                default "5060";
+                description
+                  "Defines the UDP port to attempt to use for SIP
+                   signaling.";
+              }
+            }
+            container tcp {
+              when "../bbf-voip-sip:protocol = 'tcp'" {
+                description
+                  "Applicable for TCP.";
+              }
+              description
+                "The TCP settings.";
+              reference
+                "RFC 793";
+              uses bbf-voip-sip:tcp-client-grouping {
+                refine "port" {
+                  default "5060";
+                }
+              }
+            }
+            container tls {
+              when "../bbf-voip-sip:protocol = 'tls'" {
+                description
+                  "Applicable for TLS.";
+              }
+              description
+                "The Transport Layer Security (TLS) settings.";
+              reference
+                "RFC 8446";
+              leaf port {
+                type inet:port-number;
+                default "5061";
+                description
+                  "Defines the TLS port to attempt to use for SIP
+                   signaling.";
+              }
+              uses tlsc:tls-client-grouping;
+              container tcp {
+                description
+                  "Defines the TCP port to attempt to use for SIP
+                   signaling.";
+                uses bbf-voip-sip:tcp-client-grouping {
+                  refine "port" {
+                    description
+                      "If not configured by the user, the default TCP
+                       port is one less than the TLS port.";
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      container sip-protocol-profiles {
+        description
+          "Profiles to manage the SIP protocol.";
+        list sip-protocol-profile {
+          key "name";
+          description
+            "A SIP protocol profile.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the SIP protocol profile.";
+          }
+          leaf dscp-mark {
+            type inet:dscp;
+            default "46";
+            description
+              "The differentiated service code point for outgoing
+               SIP messages.";
+            reference
+              "ITU-T G.988 Clause 9.9.7 - RTP profile data, DSCP
+               mark";
+          }
+          leaf release-timer {
+            type union {
+              type enumeration {
+                enum use-vendor-specific-default {
+                  description
+                    "Use the vendor specific default value.";
+                }
+              }
+              type uint8 {
+                range "1..255";
+              }
+            }
+            units "seconds";
+            default "10";
+            description
+              "The release timer indicates how long the SIP BYE is
+               postponed and the call session is kept alive, even
+               when the subscriber went on hook. When the subscriber
+               goes off hook again before this timer fires and his
+               callee did not went on hook yet, he can continue his
+               conversation.";
+            reference
+              "ITU-T G.988 Clause 9.9.2 - Release timer";
+          }
+          container response-codes {
+            description
+              "SIP response codes.";
+            list sip-response {
+              key "response-code";
+              description
+                "A SIP response modified for this service
+                 provider.";
+              reference
+                "RFC 3261 Section 21;
+                 ITU-T G.988 Clause 9.9.3 - SIP response table";
+              leaf response-code {
+                type uint16 {
+                  range "100..699";
+                }
+                description
+                  "The SIP response code.";
+                reference
+                  "RFC 3261 Section 21;
+                   ITU-T G.988 Clause 9.9.3 - SIP response table,
+                   SIP response code";
+              }
+              leaf reason-phrase {
+                type bbf-yang:string-ascii {
+                  length "1..375";
+                }
+                description
+                  "Text string explaining the reason for the
+                   particular SIP response code. This text
+                   overrides the default reason phrase defined by
+                   the standard.
+
+                   If not configured, the default reason phrase for
+                   the response code defined by the standard is
+                   displayed.";
+                reference
+                  "RFC 3261 Section 27.4;
+                   ITU-T G.988 Clause 9.9.3 - SIP response table,
+                   Text message";
+              }
+              leaf tone-pattern {
+                type bbf-tp:tone-pattern-ref;
+                description
+                  "The optional tone pattern definition to be
+                   associated with the SIP response code.
+
+                   If this leaf is not configured, no specific tone
+                   will be generated.";
+                reference
+                  "ITU-T G.988 Clause 9.9.3 - SIP response table,
+                   Tone";
+              }
+            }
+          }
+        }
+      }
+      container voip-service-profiles {
+        description
+          "Profiles to manage the VoIP services and features for a
+           given VoIP service provider.";
+        list voip-service-profile {
+          key "name";
+          description
+            "A VoIP service profile.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the VoIP service profile.";
+          }
+          leaf dial-plan-profile {
+            type bbf-voip-sip:dial-plan-profile-ref;
+            mandatory true;
+            description
+              "Dial plan profile for a specific VoIP Service
+               Provider.";
+          }
+          leaf service-code-commands-profile {
+            type bbf-voip-sip:service-code-commands-profile-ref;
+            description
+              "The service code commands profile to be used for VoIP
+               services to activate, deactivate or interrogate
+               supplementary services.
+
+               This profile is needed if there are voice services that
+               are controlled by the subscriber by dialing specific
+               service code commands.
+
+               If not configured, there will be no service code
+               commands that can be dialed by the subscriber to
+               activate or deactivate a voice service.";
+          }
+          leaf event-package-subscriptions-profile {
+            if-feature "bbf-voip-sip:event-package-subscriptions";
+            type bbf-voip-sip:event-package-subscriptions-profile-ref;
+            description
+              "The event package subscriptions profile to be used for
+               VoIP services.
+
+               This profile is needed if there are voice services
+               supported via subscriptions and notifications.
+
+               If not configured, VoIP services that require
+               subscriptions will not be available.";
+          }
+          leaf uri-scheme {
+            type enumeration {
+              enum sip {
+                description
+                  "The URI scheme for SIP.";
+                reference
+                  "RFC 3261 Section 19.1";
+              }
+              enum tel {
+                description
+                  "The URI scheme 'tel', which describes resources
+                   identified by telephone numbers.";
+                reference
+                  "RFC 3966 Section 4";
+              }
+              enum sips {
+                description
+                  "The URI scheme for Session Initiation Protocol
+                   Secure (SIPS).";
+                reference
+                  "RFC 3261 Section 19.1;
+                   RFC 5630";
+              }
+            }
+            default "sip";
+            description
+              "The SIP Uniform Resource Identifier (URI) scheme used
+               for all SIP URI headers in initial SIP requests.";
+          }
+        }
+      }
+    }
+    container sip-servers {
+      description
+        "Management of SIP servers.";
+      list sip-server {
+        key "name";
+        description
+          "A SIP server.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "The name of the SIP server.";
+        }
+        leaf host {
+          type inet:host;
+          mandatory true;
+          description
+            "Host is a SIP server domain name or an IP address.
+             The domain name could be fully qualified, if
+             possible.";
+        }
+        leaf transport-profile {
+          type bbf-voip-sip:transport-profile-ref;
+          mandatory true;
+          description
+            "The transport profile defining the means to connect to
+             SIP server.";
+        }
+        container state {
+          config false;
+          description
+            "The operational state of the SIP server.";
+          leaf oper-state {
+            type bbf-voip-tp:oper-state;
+            description
+              "The operational state of the SIP server.
+
+               If 'down', the SIP server is totally inoperable.
+               Probable causes are:
+
+               - The SIP server is not responding,
+
+               - The SIP server is not ready to receive SIP
+               messages and is replying with server failure
+               responses.";
+          }
+        }
+      }
+    }
+    container sip-server-pools {
+      description
+        "Management of pools of SIP servers.";
+      list sip-server-pool {
+        key "name";
+        description
+          "A pool of SIP servers.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "The name of the SIP server pool.";
+        }
+        list sip-server {
+          key "server";
+          min-elements 1;
+          description
+            "A SIP server.";
+          leaf server {
+            type bbf-voip-sip:sip-server-ref;
+            description
+              "The SIP server.";
+          }
+          leaf-list server-role {
+            type bbf-voip-sip:role;
+            default "proxy";
+            description
+              "A role expected to be fulfilled by the SIP server.";
+            reference
+              "RFC 3261, Section 6";
+          }
+          container session-timer {
+            description
+              "Configuration to manage the session timer.";
+            reference
+              "RFC 4028";
+            leaf session-expiration-time {
+              type uint16 {
+                range "90..65535";
+              }
+              units "seconds";
+              default "1800";
+              description
+                "The SIP session expiration time, the time at which
+                 a SIP element, such as a SIP registrar proxy server
+                 or SIP proxy server, will consider the session timed
+                 out, if no successful session refresh transaction
+                 occurs beforehand.
+
+                 This is the 'Session-Expires' header value.";
+              reference
+                "RFC 4028 Section 4";
+            }
+            leaf minimum-session-expiration-time {
+              type uint16 {
+                range "90..65535";
+              }
+              units "seconds";
+              must '. <= ../bbf-voip-sip:session-expiration-time' {
+                error-message
+                  "The minimum session expiration is greater than the"
+                + " leaf 'session-expiration-time'.";
+                description
+                  "Ensure that the 'minimum-session-expiration' is
+                   not greater than the 'session-expiration-time'.";
+              }
+              default "90";
+              description
+                "The minimum session expiration or 'Min-SE' header
+                 value received from the SIP server in a '422 Session
+                 Interval Too Small' SIP response.";
+              reference
+                "RFC 4028 Section 4.";
+            }
+            leaf refresh-by {
+              type enumeration {
+                enum uac {
+                  description
+                    "In case an incoming initial SIP INVITE request
+                     contains a 'Session-Expires' header but does not
+                     include the refresher value, the 'refresher'
+                     parameter of the 'Session-Expires' header in the
+                     outgoing SIP response is set to 'uac', being User
+                     Agent Client.";
+                }
+                enum uas {
+                  description
+                    "In case an incoming initial SIP INVITE request
+                     contains a 'Session-Expires' header but does not
+                     include the refresher value, the 'refresher'
+                     parameter of the 'Session-Expires' header in the
+                     outgoing SIP response is set to 'uas', being User
+                     Agent Server.";
+                }
+              }
+              default "uas";
+              description
+                "Configures the User Agent that will send the periodic
+                 refresh requests.";
+              reference
+                "RFC 4028 Section 7.1";
+            }
+          }
+        }
+        container state {
+          config false;
+          description
+            "Operational state of the SIP server pool.";
+          leaf oper-state {
+            type bbf-voip-tp:oper-state;
+            description
+              "The operational state of the SIP server pool.
+
+               If 'down', the SIP servers in the pool are totally
+               inoperable and unable to process SIP requests and
+               responses.";
+          }
+          leaf received-minimum-registration-expiration-time {
+            type uint16;
+            units "seconds";
+            description
+              "The minimum registration expiration or 'Min-Expires'
+               header value received in a SIP response from the
+               SIP registrar.
+
+               The SIP registrar will not accept registration
+               expiration values smaller than this value.";
+            reference
+              "RFC 3261 Section 20.23";
+          }
+          leaf received-minimum-session-expiration-time {
+            type uint16 {
+              range "90..65535";
+            }
+            units "seconds";
+            description
+              "The minimum session expiration or 'Min-SE' header value
+               received from the SIP server in a '422 Session Interval
+               Too Small' SIP response.
+
+               The SIP server will not accept session expiration
+               values smaller than this value.";
+            reference
+              "RFC 4028 Section 6";
+          }
+        }
+      }
+    }
+    container user-terminations {
+      description
+        "Management of user terminations.";
+      list user-termination {
+        key "username";
+        description
+          "A user termination.";
+        leaf username {
+          type bbf-yang:string-ascii64;
+          description
+            "A string that identifies user associated with this user
+             termination; this may be an alphanumeric string, user's
+             telephone number and is used to populate the 'user' field
+             of the 'userinfo' part of a SIP or SIPS URI component.";
+          reference
+            "RFC 3261 Section 19.1.1;
+             ITU-T G.988 Clause 9.9.2 - User part AOR";
+        }
+        leaf enabled {
+          type boolean;
+          default "true";
+          description
+            "The configured, desired state of the user termination.";
+        }
+        leaf voip-gateway {
+          type bbf-voip-sip:voip-gateway-ref;
+          mandatory true;
+          description
+            "The VoIP gateway to be used with this user termination.";
+        }
+        container authentication {
+          presence
+            "Manages the authentication of the user. If not present,
+             the user is not authenticated.";
+          description
+            "Manages the authentication of the user.";
+          leaf username {
+            type bbf-yang:name-string;
+            description
+              "The username to be used for authentication, if
+               different to the username specified by the leaf
+               'username'.
+
+               If this leaf is not instantiated, the value configured
+               for the leaf '../../username' will be used.";
+            reference
+              "RFC 3261 Section 19.1.1;
+               ITU-T G.988 Clause 9.9.2 - Username";
+          }
+          leaf password {
+            type ianach:crypt-hash;
+            description
+              "The password to be used for authentication.";
+            reference
+              "ITU-T G.988 Clause 9.9.2 - password";
+          }
+          container aka-secret-key {
+            when "derived-from-or-self (/bbf-voip-sip:sip"
+               + "/bbf-voip-sip:voip-gateways"
+               + "/bbf-voip-sip:voip-gateway"
+               + "[bbf-voip-sip:name = current()/../../"
+               + "voip-gateway]"
+               + "/bbf-voip-sip:user-termination"
+               + "/bbf-voip-sip:authentication-scheme,"
+               + "'bbf-voip-sip:aka')" {
+              description
+                "Applicable for the authentication scheme 'aka' and
+                 any scheme based on 'aka'.";
+            }
+            if-feature "bbf-voip-sip:"
+                     + "authentication-and-key-agreement";
+            description
+              "The secret key to be used with the AKA authentication
+               scheme.";
+            container symmetric-key {
+              description
+                "The symmetric key.";
+              choice location {
+                mandatory true;
+                description
+                  "Selects the provisioning of the symmetric key.";
+                case inline {
+                  container inline {
+                    if-feature "ks:inline-definitions-supported";
+                    description
+                      "A locally defined symmetric key.";
+                    uses ct:symmetric-key-grouping;
+                  }
+                }
+                case keystore {
+                  if-feature "ks:central-keystore-supported";
+                  if-feature "ks:symmetric-keys";
+                  container central-keystore {
+                    description
+                      "A central keystore reference.";
+                    leaf symmetric-keystore-ref {
+                      type ks:central-symmetric-key-ref;
+                      description
+                        "Identifies the symmetric key used to encrypt
+                         the associated key.";
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        leaf directory-number {
+          type string {
+            length "1..32";
+            pattern '[+*#0-9]+';
+          }
+          description
+            "The directory number (DN) of this user termination. This
+             'directory-number' can have a national or international
+              number format and can differ from the 'username' format.
+
+             This number is used to form the 'telephone-subscriber'
+             part of the URI when using the 'tel' URI scheme for
+             specific SIP headers.
+
+             An example of such a SIP header is the 'P-Preferred-
+             identity' header. The user agent may add two values in
+             outgoing INVITE requests, one with a 'sip' or 'sips' URI
+             and one with a 'tel' URI.
+
+             If not configured, the 'tel' URI scheme is not
+             applicable.";
+          reference
+            "RFC 3966 Section 4;
+             RFC 3261 Section 19.1.1";
+        }
+        leaf display-name {
+          type bbf-yang:string-ascii {
+            length "1..25";
+          }
+          description
+            "The display name of the user termination.
+
+             If not configured, there is no display name.";
+          reference
+            "ITU-T G.988 Clause 9.9.2 - SIP display name";
+        }
+        leaf uri {
+          type inet:uri {
+            length "1..100";
+          }
+          description
+            "A specific URI of this user termination with a host
+             name that differs from the VoIP Gateway domain name.
+
+             If not configured, the URI is formed with the leaf
+             'username' as 'userinfo' and the leaf 'domain-name' of
+             the VoIP Gateway as host name.";
+        }
+        leaf voice-interface {
+          type if:interface-ref;
+          must "derived-from-or-self(/if:interfaces/if:interface"
+             + "[if:name = current()]/if:type,"
+             + "'ianaift:voiceFXS')" {
+            error-message
+              "The referenced voice interface is neither an "
+            + "interface of type 'ianaift:voiceFXS' nor an interface "
+            + "derived from 'ianaift:voiceFXS'.";
+            description
+              "Ensure that the interface type of the voice interface
+               is either 'ianaift:voiceFXS' or a type derived from
+               'ianaift:voiceFXS'.";
+          }
+          mandatory true;
+          description
+            "The physical voice interface on which this user
+             termination is connected.
+
+             For ordinary subscriber lines a physical voice interface
+             is referenced by just one 'user-termination'.
+
+             A shared physical subscriber line and voice interface is
+             referenced by two 'user-terminations'.";
+        }
+        leaf supplementary-services-profile {
+          type bbf-voip-sip:supplementary-services-profile-ref;
+          description
+            "The supplementary service profile to be used with this
+             user termination.
+
+             If not configured, no supplementary services will be
+             supported, i.e., only basic calls will be supported.";
+        }
+        container fax {
+          description
+            "Fax settings.";
+          leaf try-t38 {
+            type boolean;
+            default "false";
+            description
+              "If 'true', T.38 should be initially tried for fax
+               transmissions with a failback to V.152, if
+               unsuccessful.
+
+               If 'false', V.152 is to be used for fax
+               transmissions.";
+            reference
+              "ITU-T G.988 Clause 9.9.5 - VoIP media profile, Fax
+               mode";
+          }
+        }
+        container state {
+          config false;
+          description
+            "Operational state of the user termination.";
+          leaf call-state {
+            type enumeration {
+              enum on-hook {
+                description
+                  "Idle, on-hook.";
+                reference
+                  "ITU-T G.988 Clause 9.9.11 - VoIP line state";
+              }
+              enum off-hook-dialtone {
+                description
+                  "The subscriber has gone off-hook and dial tone is
+                   being played.";
+                reference
+                  "ITU-T G.988 Clause 9.9.11, VoIP line state";
+              }
+              enum dialing {
+                description
+                  "The subscriber is dialing.";
+                reference
+                  "ITU-T G.988 Clause 9.9.11 - VoIP line state";
+              }
+              enum ringing-or-fsk-alerting {
+                description
+                  "The ringing tone is being played at the subscriber
+                   line or FSK alerting.";
+                reference
+                  "ITU-T G.988 Clause 9.9.11 - VoIP line state";
+              }
+              enum audible-ringback {
+                description
+                  "The ring back tone is being played at the calling
+                   subscriber line.";
+                reference
+                  "ITU-T G.988 Clause 9.9.11 - VoIP line state";
+              }
+              enum connecting {
+                description
+                  "The call is connecting, i.e., a SIP INVITE request
+                   has been sent and the system is awaiting a
+                   response.";
+                reference
+                  "ITU-T G.988 Clause 9.9.11 - VoIP line state";
+              }
+              enum connected {
+                description
+                  "The call has been established and is in a stable
+                   call phase.";
+                reference
+                  "ITU-T G.988 Clause 9.9.11 - VoIP line state";
+              }
+              enum disconnecting {
+                description
+                  "The call has terminated. However, the subscriber
+                   has not yet gone back on hook yet; the subscriber
+                   line is in the process of being released or is
+                   disconnecting.
+
+                   A particular tone may be played on the subscriber
+                   line in this state.";
+                reference
+                  "ITU-T G.988 Clause 9.9.11 - VoIP line state";
+              }
+              enum roh-no-tone {
+                description
+                  "The subscriber line is idle, off-hook or parked;
+                   no receiver off-hook (ROH) tone is being
+                   generated.";
+                reference
+                  "ITU-T G.988 Clause 9.9.11 - VoIP line state";
+              }
+              enum roh-tone {
+                description
+                  "The subscriber line is idle, off-hook or parked; a
+                   receiver off-hook (ROH) tone is being generated.";
+                reference
+                  "ITU-T G.988 Clause 9.9.11 - VoIP line state";
+              }
+              enum unknown-or-undefined {
+                description
+                  "The user termination is in an unknown or undefined
+                   call state.";
+                reference
+                  "ITU-T G.988 Clause 9.9.11 - VoIP line state";
+              }
+              enum shared-cut-off {
+                if-feature "bbf-voip-sip:shared-lines";
+                description
+                  "The user termination is a shared line and the
+                   other SIP user sharing the same subscriber line
+                   is involved in call, resulting in this SIP user
+                   being in the shared cut-off state.
+
+                   When in this state, the SIP user would hear,
+                   silence, if the user goes off-hook. Any incoming
+                   call request for this SIP user will be rejected.";
+              }
+            }
+            mandatory true;
+            description
+              "The call state of the SIP user termination.";
+          }
+          leaf registration-state {
+            type enumeration {
+              enum initial {
+                description
+                  "Initial state, no registration has been sent.";
+              }
+              enum registered {
+                description
+                  "The user termination is successfully registered.";
+              }
+              enum authentication-failure {
+                description
+                  "Registration failed due to an authentication
+                   failure.";
+              }
+              enum timeout-failure {
+                description
+                  "Registration failed due to a message timeout.";
+              }
+              enum server-failure {
+                description
+                  "Registration failed due to a server failure.";
+              }
+            }
+            mandatory true;
+            description
+              "Indicates the user termination registration state.";
+            reference
+              "ITU-T G.988 Clause 9.9.2 - SIP user data,
+               Notifications";
+          }
+          leaf emergency-call-in-progress {
+            type boolean;
+            mandatory true;
+            description
+              "If 'true', indicates an emergency call is ongoing.";
+            reference
+              "ITU-T G.988 Clause 9.9.11 - Emergency call status";
+          }
+          leaf voip-access-servers {
+            when "../bbf-voip-sip:registration-state='registered'" {
+              description
+                "Applicable when the user termination is successfully
+                 registered.";
+            }
+            type bbf-voip-sip:voip-access-servers-ref;
+            mandatory true;
+            description
+              "The pool of VoIP access servers whose SIP Registrar
+               this user termination has been registered to.";
+          }
+          leaf shared-line {
+            if-feature "bbf-voip-sip:shared-lines";
+            type boolean;
+            description
+              "If 'true', indicates a shared line.";
+          }
+          container sessions {
+            description
+              "The operational state of established sessions or failed
+               VoIP session attempts.
+
+               During three-party conference calls there are two
+               simultaneous sessions present.";
+            list session {
+              description
+                "An established or failed session.
+
+                 A session is removed from the list at the moment the
+                 session terminates or if the call has failed, when
+                 the user goes off hook again to start a new
+                 session.";
+              uses bbf-voip-sip:remote-server;
+              uses bbf-voip-sip:session;
+              container media-stream {
+                description
+                  "Media stream.";
+                uses bbf-voip-sip:media-stream-state;
+              }
+            }
+          }
+        }
+        container statistics {
+          if-feature "bbf-voip-sip:statistics";
+          config false;
+          description
+            "User termination statistics.";
+          leaf enabled-duration {
+            type uint32;
+            units "seconds";
+            description
+              "If the user termination is disabled, the total duration
+               the user termination was enabled for.
+
+               If the user termination is enabled, the current
+               duration since the user termination was enabled.";
+          }
+          container registration {
+            description
+              "The SIP registration statistics.";
+            leaf registration-duration {
+              type uint16;
+              units "seconds";
+              description
+                "The total duration a SIP user is considered to be
+                 successfully registered at the IMS core.
+
+                 The registration duration counter of a particular
+                 user termination starts counting upon the receipt of
+                 the '200 OK' on the initial registration request.
+
+                 The register duration stops counting for a particular
+                 user termination upon the receipt of the '200 OK' to
+                 the de-registration request.
+
+                 Note, a registration can autonomously be deleted by
+                 the IMS core, as such the total registration duration
+                 of a user termination at the IMS core can be
+                 different.";
+            }
+            uses bbf-voip-sip:common-registration-statistics;
+          }
+          container session-initiation {
+            description
+              "The SIP session initiation statistics.";
+            uses bbf-voip-sip:session-initiation-statistics;
+            container media-stream {
+              description
+                "The media stream statistics.";
+              leaf out-rtp-packets {
+                type yang:counter64;
+                mandatory true;
+                description
+                  "The total number of RTP packets transmitted.";
+              }
+              leaf in-rtp-packets {
+                type yang:counter64;
+                mandatory true;
+                description
+                  "The total number of RTP packets received.";
+              }
+              leaf rtp-packet-errors {
+                type yang:counter64;
+                mandatory true;
+                description
+                  "The total number of RTP packet errors.";
+              }
+              leaf maximum-time-between-rtcp-packets {
+                type uint32;
+                units "milliseconds";
+                mandatory true;
+                description
+                  "The high-water mark that represents the maximum
+                   time measured between RTCP packets, expressed in
+                   milliseconds.";
+              }
+              leaf maximum-jitter {
+                type yang:counter64;
+                units "RTP timestamp units";
+                mandatory true;
+                description
+                  "The high-water mark that represents the maximum
+                   jitter identified expressed in RTP timestamp
+                   units.";
+              }
+              leaf buffer-underflows {
+                type yang:counter64;
+                mandatory true;
+                description
+                  "Counts the number of times the reassembly buffer
+                   underflows. In case of continuous underflow
+                   caused by a loss of IP packets, a single buffer
+                   underflow should be counted.
+
+                   If multiple buffers are implemented, such as a
+                   packet level buffer and a bit level buffer, then
+                   underflow of either buffer increments this
+                   counter.";
+              }
+              leaf buffer-overflows {
+                type yang:counter64;
+                mandatory true;
+                description
+                  "Counts the number of times the reassembly buffer
+                   overflows.
+
+                   If multiple buffers are implemented, such as a
+                   packet level buffer and a bit level buffer, then
+                   overflow of either buffer increments this
+                   counter.";
+              }
+            }
+          }
+        }
+      }
+    }
+    container user-agents {
+      description
+        "Management of SIP User Agents.
+
+         A SIP user agent comprises a user agent client (UAC), which
+         generates requests, and a user agent server (UAS), which
+         responds to them.
+
+         A UAC generates requests based on some external stimuli
+         (the user clicking a button, or a signal on a PSTN line)
+         and processing a response.
+
+         A UAS responds to requests received based on user input,
+         external stimuli, the result of a program execution, or
+         some other mechanism.";
+      reference
+        "RFC 3261 Section 8.";
+      list user-agent {
+        key "name";
+        description
+          "A SIP user agent.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "The name of the SIP user agent.";
+        }
+        leaf transaction-timers-profile {
+          if-feature "bbf-voip-sip:transaction-timers";
+          type bbf-voip-sip:transaction-timers-profile-ref;
+          description
+            "The SIP transaction timers profile to be used by this
+             user agent.
+
+             If not configured, the default SIP timer values as
+             defined in Table 4 of RFC 3261 are to be used.";
+          reference
+            "RFC 3261 Table 4.";
+        }
+        container signaling {
+          description
+            "Signaling.";
+          leaf ip-interface {
+            type if:interface-ref;
+            must 'boolean(/if:interfaces/if:interface[if:name = '
+               + 'current()]/ip:ipv4) or '
+               + 'boolean(/if:interfaces/if:interface[if:name = '
+               + 'current()]/ip:ipv6)' {
+              error-message
+                "The signaling interface is not an IP interface.";
+              description
+                "Ensure that the interface is an IP interface.";
+            }
+            mandatory true;
+            description
+              "The IP interface that must be associated with a L2
+               termination or a VLAN sub-interface to be used for SIP
+               signaling.";
+          }
+          leaf transport-profile {
+            type bbf-voip-sip:transport-profile-ref;
+            mandatory true;
+            description
+              "The transport profile to be used by the user agent to
+               establish connections.";
+          }
+        }
+        container state {
+          config false;
+          description
+            "Operational state of the SIP user agent.";
+          leaf oper-state {
+            type identityref {
+              base bbf-voip-sip:user-agent-oper-state;
+            }
+            description
+              "Operational state of the SIP user agent.";
+          }
+          container servers {
+            description
+              "Operational state of servers with which this user agent
+               is connected or communicating.";
+            list server {
+              description
+                "A server to which the user agent is connected or
+                 communicating.";
+              choice remote-server {
+                description
+                  "A remote server.";
+                case dhcp {
+                  container dhcp {
+                    description
+                      "SIP server address received via DHCP.";
+                    uses bbf-voip-sip:remote-server;
+                  }
+                }
+                case server-pool {
+                  container server-pool {
+                    description
+                      "SIP server pool configuration.";
+                    leaf sip-server-pool {
+                      type bbf-voip-sip:sip-server-pool-ref;
+                      description
+                        "The SIP server pool to which the SIP server
+                         belongs.";
+                    }
+                    container sip-server {
+                      description
+                        "The SIP server.";
+                      leaf sip-server {
+                        type bbf-voip-sip:sip-server-ref;
+                        description
+                          "The SIP server within the SIP server pool
+                           that the SIP user agent is connected to.";
+                      }
+                      uses bbf-voip-sip:remote-server;
+                    }
+                  }
+                }
+              }
+              container sessions {
+                description
+                  "Operational state of an established or failed SIP
+                   session.";
+                list session {
+                  description
+                    "A session.
+
+                     A session is removed from the list on the moment
+                     that the session has been terminated or failed
+                     and the user goes off hook again to start a new
+                     session attempt.";
+                  uses bbf-voip-sip:session;
+                }
+              }
+            }
+          }
+        }
+        container statistics {
+          if-feature "bbf-voip-sip:statistics";
+          config false;
+          description
+            "SIP user agent statistics.";
+          container protocol {
+            description
+              "The SIP protocol statistics.";
+            leaf total-transactions {
+              type yang:counter64;
+              description
+                "The total number of SIP transactions created by the
+                 SIP user agent.";
+            }
+            leaf in-invite-requests {
+              type yang:counter64;
+              description
+                "The total number of incoming SIP INVITE requests.";
+            }
+            leaf in-invite-retransmit-requests {
+              type yang:counter64;
+              description
+                "The total number of incoming retransmit SIP INVITE
+                 requests.";
+            }
+            leaf in-noninvite-requests {
+              type yang:counter64;
+              description
+                "The total number of incoming SIP non-INVITE
+                 requests.";
+            }
+            leaf in-noninvite-retransmit-requests {
+              type yang:counter64;
+              description
+                "The total number of incoming retransmit SIP non-
+                 INVITE requests.";
+            }
+            leaf in-responses {
+              type yang:counter64;
+              description
+                "The total number of incoming SIP responses.";
+            }
+            leaf in-retransmit-responses {
+              type yang:counter64;
+              description
+                "The total number of incoming SIP responses.";
+            }
+            leaf out-invite-requests {
+              type yang:counter64;
+              description
+                "The total number of outgoing SIP INVITE requests sent
+                 by the SIP user agent.";
+            }
+            leaf out-invite-retransmit-requests {
+              type yang:counter64;
+              description
+                "The total number of outgoing SIP INVITE requests
+                 retransmit by the SIP user agent.";
+            }
+            leaf out-noninvite-requests {
+              type yang:counter64;
+              description
+                "The total number of outgoing SIP non-INVITE requests
+                 sent by the SIP user agent.";
+            }
+            leaf out-noninvite-retransmit-requests {
+              type yang:counter64;
+              description
+                "The total number of outgoing SIP non-INVITE requests
+                 retransmit by the SIP user agent.";
+            }
+            leaf out-responses {
+              type yang:counter64;
+              description
+                "The total number of outgoing SIP responses sent by
+                 the SIP user agent.";
+            }
+            leaf out-retransmit-responses {
+              type yang:counter64;
+              description
+                "The total number of outgoing SIP responses retransmit
+                 by the SIP user agent.";
+            }
+          }
+          container registration {
+            description
+              "The SIP registration statistics.";
+            uses bbf-voip-sip:common-registration-statistics;
+          }
+          container session-initiation {
+            description
+              "The SIP session initiation statistics.";
+            uses bbf-voip-sip:session-initiation-statistics;
+          }
+        }
+      }
+    }
+    container voice-mail-servers {
+      if-feature "bbf-voip-sip:voice-mail-servers";
+      description
+        "Management of the access to service providers' voice mail
+         servers.";
+      list voice-mail-server {
+        key "name";
+        description
+          "A voice mail server.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "The name of the voice mail server.";
+        }
+        leaf request-uri {
+          type bbf-voip-tp:voip-uri;
+          mandatory true;
+          description
+            "The request URI for SIP messages sent to the voice mail
+             server.";
+          reference
+            "RFC 3261 Section 8.1.1.1
+             ITU-T G.988 Clause 9.9.2 - SIP user data, Voicemail
+             server SIP URI";
+        }
+        leaf host {
+          type inet:host;
+          mandatory true;
+          description
+            "Domain name or IP address of the voice mail server.";
+          reference
+            "ITU-T G.988 Clause 9.9.2 - SIP user data, Voicemail
+             server SIP URI";
+        }
+        leaf transport-profile {
+          type bbf-voip-sip:transport-profile-ref;
+          mandatory true;
+          description
+            "The transport profile to be used to access the voice mail
+             server.";
+        }
+        leaf subscription-expiration-time {
+          type uint32 {
+            range "90..max";
+          }
+          units "seconds";
+          default "3600";
+          description
+            "The subscription expiration time value used for the
+             explicit subscription request sent to the voice mail
+             server.";
+          reference
+            "ITU-T G.988 Clause 9.9.2 - SIP user data, Voicemail
+             subscription expiration time";
+        }
+        container state {
+          config false;
+          description
+            "Operational state of the voice mail server.";
+          leaf oper-state {
+            type bbf-voip-tp:oper-state;
+            description
+              "The operational state of the SIP voice mail server.
+
+               If 'down', the voice mail server is not reachable.
+               A probable cause may be a wrong 'host'
+               configuration.";
+          }
+        }
+      }
+    }
+    container voip-access-servers {
+      description
+        "Management of VoIP access servers.
+
+         The VoIP access servers are the SIP servers required to
+         access a specific VoIP service provider, such as registrar
+         server, outbound proxy server, application server, voice mail
+         server.";
+      list voip-access-server {
+        key "name";
+        description
+          "The VoIP access server.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "The name of the VoIP access servers.";
+        }
+        leaf voip-service-profile {
+          type bbf-voip-sip:voip-service-profile-ref;
+          mandatory true;
+          description
+            "The VoIP service profile.";
+        }
+        leaf registration-profile {
+          type bbf-voip-sip:registration-profile-ref;
+          mandatory true;
+          description
+            "The SIP register characteristics profile.";
+        }
+        container sip-service-profile {
+          if-feature "bbf-voip-sip:sip-service-profile";
+          presence
+            "If present, some specific SIP call flows are
+             configured.";
+          description
+            "The SIP service profile (SSP) contains the SIP call flow
+             settings. The SIP call flows can depend on the SIP
+             server.";
+          choice location {
+            mandatory true;
+            description
+              "Selects the location of the SIP service profile.";
+            case file {
+              container ssp-file {
+                description
+                  "The SIP service profile(SSP) file.";
+                leaf file {
+                  type bbf-voip-tp:voip-uri;
+                  description
+                    "The path and file name of the SSP file.";
+                }
+                leaf ssp-retrieval-state {
+                  type bbf-voip-tp:retrieval-state;
+                  config false;
+                  description
+                    "Retrieval state of the additional SIP service
+                     profile settings.";
+                }
+              }
+            }
+          }
+          leaf call-flow-id {
+            type bbf-yang:string-ascii64;
+            description
+              "The call flow identity to be used for this pool of
+               VoIP access servers. An SSP can contain several SIP
+               call flows. The call flow identity selects the correct
+               settings.
+
+               If not configured, there is no need to have several SIP
+               call flows in one SIP service file. Otherwise, the
+               first call flow is considered.";
+          }
+        }
+        container sip-servers {
+          description
+            "Data nodes to manage the SIP servers that provide access
+             to the voice services.";
+          choice sip-server-configuration-method {
+            mandatory true;
+            description
+              "Selects the SIP server configuration method.";
+            case dhcp {
+              leaf dhcp {
+                type empty;
+                description
+                  "SIP server addresses are to be received via a DHCP
+                   server, in which case the SIP servers will have the
+                   the 'registrar' and 'proxy' role.
+
+                   For a list of registrar proxy servers, see the
+                   container 'dhcp-configuration' in state data.";
+              }
+            }
+            case sip-server-pools {
+              container sip-server-pools {
+                description
+                  "SIP server pool(s).";
+                leaf-list sip-server-pool {
+                  type bbf-voip-sip:sip-server-pool-ref;
+                  min-elements 1;
+                  max-elements 2;
+                  ordered-by user;
+                  description
+                    "A SIP server pool forming this VoIP access
+                     servers.
+
+                     If SIP server redundancy is supported and only
+                     one pool is configured, there will be no SIP
+                     server redundancy.
+
+                     If SIP server redundancy is supported and more
+                     than one SIP server pool is configured, the
+                     priorities of the SIP servers received in the DNS
+                     resource records determine the priority of a SIP
+                     server pool.
+
+                     If no priorities are received or if priorities
+                     are equal, the order of the entries in this
+                     leaf-list determines the priorities.";
+                }
+              }
+            }
+          }
+          container redundancy {
+            if-feature "bbf-voip-sip:redundancy";
+            description
+              "The SIP server redundancy parameters.";
+            container foreground-monitoring {
+              presence
+                "If present, indicates foreground monitoring is
+                 enabled.";
+              description
+                "Foreground monitoring checks the connection with the
+                 active SIP server.";
+              uses bbf-voip-sip:server-monitoring {
+                refine "method" {
+                  default "register";
+                  description
+                    "The applied foreground monitoring method. The
+                     Foreground monitoring method checks the
+                     connection with the SIP server that is addressed
+                     for the successful registration of at least 1 SIP
+                     user. Foreground monitoring can be done by means
+                     of the SIP Register method or the SIP Options
+                     method.";
+                }
+                refine "interval" {
+                  default "300";
+                  description
+                    "The foreground monitoring interval.";
+                }
+              }
+            }
+            container background-monitoring {
+              presence
+                "If present, indicates background monitoring is
+                 enabled.";
+              description
+                "The background monitoring checks the connection
+                 status of the SIP server(s) that were not addressed
+                 so far for the registration of a SIP user, the
+                 passive SIP server.";
+              uses bbf-voip-sip:server-monitoring {
+                refine "method" {
+                  default "options";
+                  description
+                    "The applied background monitoring method.";
+                }
+                refine "interval" {
+                  default "3600";
+                  description
+                    "The background monitoring interval.";
+                }
+              }
+            }
+            leaf redundancy-state {
+              type identityref {
+                base bbf-voip-sip:redundancy-state;
+              }
+              config false;
+              description
+                "The SIP server redundancy state, reflecting to which
+                 server or pool of servers the SIP users are
+                 connecting to.";
+            }
+          }
+        }
+        leaf voice-mail-server {
+          if-feature "bbf-voip-sip:voice-mail-servers";
+          type bbf-voip-sip:voice-mail-server-ref;
+          description
+            "The service provider's voice mail server.
+
+             If not configured, there will be no explicit
+             subscriptions to receive notifications from a voice mail
+             server.";
+        }
+        container state {
+          config false;
+          description
+            "The state of the VoIP access servers.";
+          leaf oper-state {
+            type bbf-voip-tp:oper-state;
+            description
+              "The operational state of the pool of VoIP access
+               servers.
+
+               If 'down', the servers in the pool are not reachable.
+               Probable causes are:
+
+               - wrong configuration of SIP servers or voice mail
+                 server,
+
+               - a failing DHCP server,
+
+               - missing SIP server addresses in the DHCP offer.";
+          }
+          container sip-servers {
+            description
+              "The SIP servers.";
+            container dhcp {
+              when '../../../bbf-voip-sip:sip-servers'
+                 + '/bbf-voip-sip:dhcp' {
+                description
+                  "Applicable when SIP servers are received via DHCP
+                   server.";
+              }
+              description
+                "SIP server addresses received via DHCP.";
+              list sip-server {
+                description
+                  "A SIP server assigned via DHCP.";
+                leaf remote-address {
+                  type inet:ip-address;
+                  description
+                    "The remote address of a Registrar proxy server,
+                     received via DHCP.";
+                }
+              }
+            }
+            container sip-server-pools {
+              when 'count(../../..'
+                 + '/bbf-voip-sip:sip-servers'
+                 + '/bbf-voip-sip:sip-server-pools'
+                 + '/bbf-voip-sip:sip-server-pool)!=0' {
+                description
+                  "Applicable when SIP server pools are configured.";
+              }
+              description
+                "SIP server addresses via server pool configuration.";
+              list sip-server-pool {
+                description
+                  "SIP server pools associated with this pool of VoIP
+                   access servers.";
+                leaf name {
+                  type bbf-voip-sip:sip-server-pool-ref;
+                  description
+                    "The name of the SIP server pool.";
+                }
+                list sip-server {
+                  description
+                    "A SIP server associated with the server pool and
+                     pool of VoIP access servers.";
+                  leaf remote-address {
+                    type inet:ip-address;
+                    description
+                      "The IP address of the remote SIP server.";
+                  }
+                  leaf-list server-role {
+                    type bbf-voip-sip:role;
+                    description
+                      "The role(s) that will be fulfilled by the SIP
+                       server.";
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    container voip-gateways {
+      description
+        "Management of VoIP Gateways.
+
+         A VoIP Gateway serves user terminations belonging to the
+         same VoIP Service Provider, having the same service
+         package and the same SIP call flows.";
+      list voip-gateway {
+        key "name";
+        description
+          "A VoIP gateway.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "The name of the VoIP gateway.";
+        }
+        leaf enabled {
+          type boolean;
+          default "true";
+          description
+            "The configured, desired state of the VoIP Gateway.";
+        }
+        container service-provider {
+          description
+            "The service provider contact information.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "A name given to the service provider.";
+          }
+          leaf-list contact {
+            type bbf-yang:string-ascii64;
+            description
+              "The information used to contact the company or
+               provider, such as email address, phone number.";
+          }
+        }
+        leaf user-agent {
+          type bbf-voip-sip:user-agent-ref;
+          mandatory true;
+          description
+            "The SIP user agent to use with this VoIP Gateway.";
+        }
+        leaf media-forwarder {
+          if-feature "bbf-voip-media:forwarders";
+          type bbf-voip-media:forwarder-ref;
+          mandatory true;
+          description
+            "The media forwarder to use with this VoIP Gateway.";
+        }
+        leaf sip-protocol-profile {
+          type bbf-voip-sip:sip-protocol-profile-ref;
+          mandatory true;
+          description
+            "The SIP protocol profile to use with this VoIP Gateway.";
+        }
+        leaf-list voip-access-servers {
+          type bbf-voip-sip:voip-access-servers-ref;
+          min-elements 1;
+          description
+            "The VoIP access servers belonging to this VoIP Gateway.
+             To spread the call load between several SIP servers more
+             than one selection of VoIP access servers can be
+             referenced.";
+        }
+        container user-termination {
+          description
+            "User termination related information.";
+          leaf domain-name {
+            type inet:domain-name;
+            description
+              "This domain name will be the host part of the SIP URI
+               of all user terminations belonging to this VoIP Gateway
+               and identifies the service provider. This domain name
+               does not need to be resolvable via DNS.
+
+               If not configured, the registration domain name is
+               used.";
+            reference
+              "ITU-T G.988 Clause 9.9.3 - SIP agent config data, Host
+               part URI";
+          }
+          leaf authentication-scheme {
+            type identityref {
+              base bbf-voip-sip:authentication-scheme;
+            }
+            mandatory true;
+            description
+              "Authentication validation scheme for user
+               authentication.";
+          }
+        }
+        container state {
+          config false;
+          description
+            "Operational state of the VoIP Gateway.";
+          leaf oper-state {
+            type bbf-voip-tp:oper-state;
+            description
+              "The operational state of the VoIP Gateway.
+
+               If 'down' the VoIP Gateway is totally inoperable and
+               unable to provide service. Probable causes are:
+
+               - the SIP servers referenced by the VoIP access
+               servers are not reachable,
+
+               - the referenced user agent is inoperable.";
+          }
+        }
+      }
+    }
+  }
+}

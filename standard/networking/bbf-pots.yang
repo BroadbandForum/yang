@@ -1,0 +1,1690 @@
+module bbf-pots {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-pots";
+  prefix bbf-pots;
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import iana-if-type {
+    prefix ianaift;
+  }
+  import bbf-tone-patterns {
+    prefix bbf-tp;
+  }
+  import bbf-ringing-patterns {
+    prefix bbf-rp;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import bbf-voip-types {
+    prefix bbf-voip-tp;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Provider Cloud Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Shiya Ashraf, Nokia
+
+     Editor:      Kevin Noll, CableLabs
+
+     PS Leader:   Sven Ooghe, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Bruno Cornaglia, Vodafone
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Haomian Zheng, Huawei";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on voice service
+     management. As such, this module is specific to access
+     network equipment (e.g., BBF-specified Access Nodes and FTTdp
+     DPUs).
+
+     This data model is designed for the Network Management Datastore
+     Architecture defined in RFC 8342.
+
+     Specifically, this module augments the IETF interfaces YANG data
+     model defined in RFC 7223 with data nodes to support the
+     management of physical POTS (Plain Old Telephone Service)
+     interfaces defined in ITU-T G.988.
+
+     Copyright (c) 2017-2025, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a9; see
+     the TR itself for full legal notices.";
+
+  revision 2025-07-02 {
+    description
+      "Amendment 9.
+       * Approval Date:    2025-07-02.
+       * Publication Date: 2025-07-02.";
+    reference
+      "TR-383a9: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-9.pdf>";
+  }
+
+  feature tone-event-profiles {
+    description
+      "Indicates support for tone event profiles.";
+  }
+
+  feature ringing-event-profiles {
+    description
+      "Indicates support for ringing event profiles.";
+  }
+
+  feature dtmf-detection {
+    description
+      "Indicates support for the configuration of Dual-Tone Multi-
+       Frequency (DTMF) detection.";
+  }
+
+  feature loop-voltage-holdover {
+    description
+      "Indicates support for holdover of the POTS loop voltage when a
+       Loss of Signal (LOS) or loss of softswitch connectivity is
+       detected.";
+    reference
+      "National Fire Protection Association (NFPA) NFPA 72, National
+       Fire Alarm and Signaling Code, alarm panel requirements;
+       ITU-T G.988 Clause 9.9.1 - POTS holdover time";
+  }
+
+  feature fast-busy-tone {
+    description
+      "Indicates support of the fast busy tone.";
+  }
+
+  feature statistics {
+    description
+      "Indicates the support of statistics.";
+  }
+
+  feature uni-profiles {
+    description
+      "Indicates the support of POTS User Network interface (UNI)
+       profiles.";
+  }
+
+  feature pstn-protocol-variant {
+    description
+      "Indicates the support of configuration of the POTS UNI based on
+       the Public Switched Telephone Network (PSTN) protocol
+       variant.";
+  }
+
+  identity off-hook-dial-timeout-treatment {
+    description
+      "Base identity for defining treatments applied by the device
+       when the subscriber goes off-hook but does not attempt a call
+       within the dial timeout period.";
+    reference
+      "ITU-T G.988 Clause 9.9.6 - Announcement type";
+  }
+
+  identity apply-silence {
+    base bbf-pots:off-hook-dial-timeout-treatment;
+    description
+      "Apply silence, if the off-hook dial timeout period expires.";
+  }
+
+  identity apply-reorder-tone {
+    base bbf-pots:off-hook-dial-timeout-treatment;
+    description
+      "Apply a reorder tone, if the off-hook dial timeout period
+       expires.";
+  }
+
+  identity apply-fast-busy-tone {
+    if-feature "bbf-pots:fast-busy-tone";
+    base bbf-pots:off-hook-dial-timeout-treatment;
+    description
+      "Apply a fast busy tone, if the off-hook dial timeout period
+       expires.";
+  }
+
+  identity apply-announcement {
+    base bbf-pots:off-hook-dial-timeout-treatment;
+    description
+      "Apply an announcement, if the off-hook dial timeout period
+       expires.";
+  }
+
+  identity tone-event {
+    description
+      "Base identity for defining events to which a tone can be
+       associated.";
+    reference
+      "ITU-T G.988 Clause 9.9.6 - Tone event table";
+  }
+
+  identity busy {
+    base bbf-pots:tone-event;
+    description
+      "The busy tone event.";
+  }
+
+  identity confirmation {
+    base bbf-pots:tone-event;
+    description
+      "The confirmation tone event.";
+  }
+
+  identity dial {
+    base bbf-pots:tone-event;
+    description
+      "The dial tone event.";
+  }
+
+  identity message-waiting {
+    base bbf-pots:tone-event;
+    description
+      "The message waiting tone event.";
+  }
+
+  identity off-hook {
+    base bbf-pots:tone-event;
+    description
+      "The off-hook event.";
+  }
+
+  identity ringback {
+    base bbf-pots:tone-event;
+    description
+      "The ringback (audible ring) tone event.";
+  }
+
+  identity reorder {
+    base bbf-pots:tone-event;
+    description
+      "The reorder tone event.";
+  }
+
+  identity stutter-dial {
+    base bbf-pots:tone-event;
+    description
+      "The stutter dial tone event.";
+  }
+
+  identity call-waiting-tone-event {
+    base bbf-pots:tone-event;
+    description
+      "Abstract identity for defining distinctive call waiting tones
+       identifying different callers.";
+  }
+
+  identity call-waiting-1 {
+    base bbf-pots:call-waiting-tone-event;
+    description
+      "The call waiting tone 1 event.";
+  }
+
+  identity call-waiting-2 {
+    base bbf-pots:call-waiting-tone-event;
+    description
+      "The call waiting tone 2 event.";
+  }
+
+  identity call-waiting-3 {
+    base bbf-pots:call-waiting-tone-event;
+    description
+      "The call waiting tone 3 event.";
+  }
+
+  identity call-waiting-4 {
+    base bbf-pots:call-waiting-tone-event;
+    description
+      "The call waiting tone 4 event.";
+  }
+
+  identity alerting-signal {
+    base bbf-pots:tone-event;
+    description
+      "The alerting signal tone event.";
+  }
+
+  identity special-dial-tone {
+    base bbf-pots:tone-event;
+    description
+      "The special dial tone event.";
+  }
+
+  identity special-information-tone {
+    base bbf-pots:tone-event;
+    description
+      "The special information tone event.";
+  }
+
+  identity release {
+    base bbf-pots:tone-event;
+    description
+      "The release tone event.";
+  }
+
+  identity congestion {
+    base bbf-pots:tone-event;
+    description
+      "The congestion tone event.";
+  }
+
+  identity intrusion {
+    base bbf-pots:tone-event;
+    description
+      "The intrusion tone event.";
+  }
+
+  identity dead {
+    base bbf-pots:tone-event;
+    description
+      "The dead tone event.";
+  }
+
+  identity ringing-event {
+    description
+      "Base identity for defining events to which a ringing tone can
+       be associated.";
+    reference
+      "ITU-T G.988 Clause 9.9.6 - Ringing event table, Event";
+  }
+
+  identity default-ringing {
+    base bbf-pots:ringing-event;
+    description
+      "The default ringing event.";
+    reference
+      "ITU-T G.988 Clause 9.9.6 - Ringing event table, Event=1
+       (Default)";
+  }
+
+  identity splash-ringing {
+    base bbf-pots:ringing-event;
+    description
+      "The splash ringing event is used as a very short ring for call
+       forwarding services and is played for every call that is
+       forwarded.";
+    reference
+      "ITU-T G.988 Clause 9.9.6 - Ringing event table, Event=2
+       (Splash)";
+  }
+
+  identity distinctive-ringing-event {
+    base bbf-pots:ringing-event;
+    description
+      "Abstract identity for defining distinctive ringing events,
+       identifying different callers.";
+    reference
+      "ETSI TR 101 183 Clause 4.3 Distinctive ringing signals;
+       ETSI TS 183 043 Clause C.8 Distinctive Ringing";
+  }
+
+  identity distinctive-ringing-1 {
+    base bbf-pots:distinctive-ringing-event;
+    description
+      "The distinctive ringing 1 ringing event.";
+    reference
+      "ETSI TR 101 183 Clause 4.3 Distinctive ringing signals;
+       ETSI TS 183 043 Clause C.8 Distinctive Ringing";
+  }
+
+  identity distinctive-ringing-2 {
+    base bbf-pots:distinctive-ringing-event;
+    description
+      "The distinctive ringing 2 ringing event.";
+    reference
+      "ETSI TR 101 183 Clause 4.3 Distinctive ringing signals;
+       ETSI TS 183 043 Clause C.8 Distinctive Ringing";
+  }
+
+  identity distinctive-ringing-3 {
+    base bbf-pots:distinctive-ringing-event;
+    description
+      "The distinctive ringing 3 ringing event.";
+    reference
+      "ETSI TR 101 183 Clause 4.3 Distinctive ringing signals;
+       ETSI TS 183 043 Clause C.8 Distinctive Ringing";
+  }
+
+  identity distinctive-ringing-4 {
+    base bbf-pots:distinctive-ringing-event;
+    description
+      "The distinctive ringing 4 ringing event.";
+    reference
+      "ETSI TR 101 183 Clause 4.3 Distinctive ringing signals;
+       ETSI TS 183 043 Clause C.8 Distinctive Ringing";
+  }
+
+  identity distinctive-ringing-5 {
+    base bbf-pots:distinctive-ringing-event;
+    description
+      "The distinctive ringing 5 ringing event.";
+    reference
+      "ETSI TR 101 183 Clause 4.3 Distinctive ringing signals;
+       ETSI TS 183 043 Clause C.8 Distinctive Ringing";
+  }
+
+  identity distinctive-ringing-6 {
+    base bbf-pots:distinctive-ringing-event;
+    description
+      "The distinctive ringing 6 ringing event.";
+    reference
+      "ETSI TR 101 183 Clause 4.3 Distinctive ringing signals;
+       ETSI TS 183 043 Clause C.8 Distinctive Ringing";
+  }
+
+  identity distinctive-ringing-7 {
+    base bbf-pots:distinctive-ringing-event;
+    description
+      "The distinctive ringing 7 ringing event.";
+    reference
+      "ETSI TR 101 183 Clause 4.3 Distinctive ringing signals;
+       ETSI TS 183 043 Clause C.8 Distinctive Ringing";
+  }
+
+  identity distinctive-ringing-8 {
+    base bbf-pots:distinctive-ringing-event;
+    description
+      "The distinctive ringing 8 ringing event.";
+    reference
+      "ETSI TR 101 183 Clause 4.3 Distinctive ringing signals;
+       ETSI TS 183 043 Clause C.8 Distinctive Ringing";
+  }
+
+  identity distinctive-ringing-9 {
+    base bbf-pots:distinctive-ringing-event;
+    description
+      "The distinctive ringing 9 ringing event.";
+    reference
+      "ETSI TR 101 183 Clause 4.3 Distinctive ringing signals;
+       ETSI TS 183 043 Clause C.8 Distinctive Ringing";
+  }
+
+  identity distinctive-ringing-10 {
+    base bbf-pots:distinctive-ringing-event;
+    description
+      "The distinctive ringing 10 ringing event.";
+    reference
+      "ETSI TR 101 183 Clause 4.3 Distinctive ringing signals;
+       ETSI TS 183 043 Clause C.8 Distinctive Ringing";
+  }
+
+  identity distinctive-ringing-11 {
+    base bbf-pots:distinctive-ringing-event;
+    description
+      "The distinctive ringing 11 ringing event.";
+    reference
+      "ETSI TR 101 183 Clause 4.3 Distinctive ringing signals;
+       ETSI TS 183 043 Clause C.8 Distinctive Ringing";
+  }
+
+  identity distinctive-ringing-12 {
+    base bbf-pots:distinctive-ringing-event;
+    description
+      "The distinctive ringing 12 ringing event.";
+    reference
+      "ETSI TR 101 183 Clause 4.3 Distinctive ringing signals;
+       ETSI TS 183 043 Clause C.8 Distinctive Ringing";
+  }
+
+  identity call-waiting {
+    base bbf-pots:ringing-event;
+    description
+      "The call waiting event.";
+    reference
+      "ETSI TS 183 043 Clause C.9 Call Waiting";
+  }
+
+  identity distinctive-call-waiting {
+    base bbf-pots:ringing-event;
+    description
+      "Abstract identity for distinctive call waiting. It allows the
+       served user to designate special telephone numbers that may be
+       identified by a distinctive alerting pattern that differs from
+       standard power ring or call waiting tone.";
+    reference
+      "ETSI TR 101 973-1 Clause B.2.6 Distinctive Ringing/Call
+       Waiting";
+  }
+
+  identity distinctive-call-waiting-1 {
+    base bbf-pots:distinctive-call-waiting;
+    description
+      "The distinctive call waiting 1 ringing event.";
+    reference
+      "ETSI TR 101 973-1 Clause B.2.6 Distinctive Ringing/Call
+       Waiting";
+  }
+
+  identity distinctive-call-waiting-2 {
+    base bbf-pots:distinctive-call-waiting;
+    description
+      "The distinctive call waiting 2 ringing event.";
+    reference
+      "ETSI TR 101 973-1 Clause B.2.6 Distinctive Ringing/Call
+       Waiting";
+  }
+
+  identity distinctive-call-waiting-3 {
+    base bbf-pots:distinctive-call-waiting;
+    description
+      "The distinctive call waiting 3 ringing event.";
+    reference
+      "ETSI TR 101 973-1 Clause B.2.6 Distinctive Ringing/Call
+       Waiting";
+  }
+
+  identity distinctive-call-waiting-4 {
+    base bbf-pots:distinctive-call-waiting;
+    description
+      "The distinctive call waiting 4 ringing event.";
+    reference
+      "ETSI TR 101 973-1 Clause B.2.6 Distinctive Ringing/Call
+       Waiting";
+  }
+
+  identity distinctive-call-waiting-5 {
+    base bbf-pots:distinctive-call-waiting;
+    description
+      "The distinctive call waiting 5 ringing event.";
+    reference
+      "ETSI TR 101 973-1 Clause B.2.6 Distinctive Ringing/Call
+       Waiting";
+  }
+
+  identity distinctive-call-waiting-6 {
+    base bbf-pots:distinctive-call-waiting;
+    description
+      "The distinctive call waiting 6 ringing event.";
+    reference
+      "ETSI TR 101 973-1 Clause B.2.6 Distinctive Ringing/Call
+       Waiting";
+  }
+
+  identity distinctive-call-waiting-7 {
+    base bbf-pots:distinctive-call-waiting;
+    description
+      "The distinctive call waiting 7 ringing event.";
+    reference
+      "ETSI TR 101 973-1 Clause B.2.6 Distinctive Ringing/Call
+       Waiting";
+  }
+
+  identity distinctive-call-waiting-8 {
+    base bbf-pots:distinctive-call-waiting;
+    description
+      "The distinctive call waiting 8 ringing event.";
+    reference
+      "ETSI TR 101 973-1 Clause B.2.6 Distinctive Ringing/Call
+       Waiting";
+  }
+
+  identity distinctive-call-waiting-9 {
+    base bbf-pots:distinctive-call-waiting;
+    description
+      "The distinctive call waiting 9 ringing event.";
+    reference
+      "ETSI TR 101 973-1 Clause B.2.6 Distinctive Ringing/Call
+       Waiting";
+  }
+
+  identity call-completion {
+    base bbf-pots:ringing-event;
+    description
+      "The call completion ringing event.";
+    reference
+      "ETSI TR 101 183 Clause 4.3 CCBS";
+  }
+
+  identity impedance {
+    description
+      "Base identity for defining the impedance to be used for the
+       POTS UNI.";
+    reference
+      "ETSI TS 101 270-1;
+       ITU-T G.988 9.9.1 - Impedance;
+       ITU-T Q.552 Clause 2.2.1.1";
+  }
+
+  identity vendor-specific-default-impedance {
+    base bbf-pots:impedance;
+    description
+      "An impedance defined by the vendor is to be used for the POTS
+       UNI.";
+  }
+
+  identity ohm220 {
+    base bbf-pots:impedance;
+    description
+      "An impedance of 220 ohms is to be used for the POTS UNI.";
+  }
+
+  identity ohm600 {
+    base bbf-pots:impedance;
+    description
+      "An impedance of 600 ohms is to be used for the POTS UNI.";
+  }
+
+  identity ohm900 {
+    base bbf-pots:impedance;
+    description
+      "An impedance of 900 ohms is to be used for the POTS UNI.";
+  }
+
+  identity european-compromise-matching-impedance {
+    base bbf-pots:impedance;
+    description
+      "The European harmonized compromise matching impedance for non-
+       voice terminals is to be used for the POTS UNI (Cp=150 nF,
+       Rp=750 ohms and Rs=270 ohms).";
+    reference
+      "ETSI TS 101 270-1 Annex C;
+       ITU-T G.988 Figure 9.9.1-1;
+       ITU-T Q.552 Table 1";
+  }
+
+  identity german-compromise-matching-impedance {
+    base bbf-pots:impedance;
+    description
+      "The German compromise matching impedance for voice terminals is
+       to be used for the POTS UNI (Cp=115 nF, Rp=820 ohms and Rs=220
+       ohms).";
+    reference
+      "ETSI TS 101 270-1 Annex C.1;
+       ITU-T G.988 Figure 9.9.1-1;
+       ITU-T Q.552 Table 1";
+  }
+
+  identity uk-compromise-matching-impedance {
+    base bbf-pots:impedance;
+    description
+      "The United Kingdom compromise matching impedance for voice
+       terminals is to be used for the POTS UNI (Cp=230 nF,
+       Rp=1050 ohms and Rs=320 ohms).";
+    reference
+      "ETSI TS 101 270-1 Annex C.2;
+       ITU-T G.988 Figure 9.9.1-1;
+       ITU-T Q.552 Table 1";
+  }
+
+  identity splitter-type {
+    description
+      "Base identity for defining types of splitter filter to be used
+       for the POTS UNI.";
+    reference
+      "ETSI TS 101 270-1;
+       ETSI TS 101 952-1";
+  }
+
+  identity xdsl-over-pots-splitter {
+    base bbf-pots:splitter-type;
+    description
+      "An xDSL over POTS splitter filter.";
+    reference
+      "ETSI TR 101 728 Clause 4";
+  }
+
+  typedef tone-event-profile-ref {
+    type leafref {
+      path "/bbf-pots:pots"
+         + "/bbf-pots:profiles"
+         + "/bbf-pots:tone-event-profiles"
+         + "/bbf-pots:tone-event-profile"
+         + "/bbf-pots:name";
+    }
+    description
+      "A reference to a tone event profile.";
+  }
+
+  typedef ringing-event-profile-ref {
+    type leafref {
+      path "/bbf-pots:pots"
+         + "/bbf-pots:profiles"
+         + "/bbf-pots:ringing-event-profiles"
+         + "/bbf-pots:ringing-event-profile"
+         + "/bbf-pots:name";
+    }
+    description
+      "A reference to a ringing event profile.";
+  }
+
+  typedef data-transmission-profile-ref {
+    type leafref {
+      path "/bbf-pots:pots"
+         + "/bbf-pots:profiles"
+         + "/bbf-pots:data-transmission-profiles"
+         + "/bbf-pots:data-transmission-profile"
+         + "/bbf-pots:name";
+    }
+    description
+      "A reference to a data transmission profile.";
+  }
+
+  typedef uni-profile-ref {
+    type leafref {
+      path "/bbf-pots:pots"
+         + "/bbf-pots:profiles"
+         + "/bbf-pots:uni-profiles"
+         + "/bbf-pots:uni-profile"
+         + "/bbf-pots:name";
+    }
+    description
+      "A reference to a POTS User Network Interface (UNI) profile.";
+  }
+
+  container pots {
+    description
+      "Management of POTS.";
+    container profiles {
+      description
+        "POTS profiles.";
+      container tone-event-profiles {
+        if-feature "bbf-pots:tone-event-profiles";
+        description
+          "Profiles to manage the association of tone patterns with
+           tone events.";
+        list tone-event-profile {
+          key "name";
+          description
+            "A tone event profile.";
+          reference
+            "ITU-T G.988 Clause 9.9.6 - Tone event table";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the tone event profile.";
+          }
+          list event {
+            key "name";
+            min-elements 1;
+            description
+              "A tone event to which a tone pattern is to be
+               associated.
+
+               The default tone pattern will be played for events for
+               which no tone pattern is defined.";
+            reference
+              "ITU-T G.988 Clause 9.9.6 - Tone event table";
+            leaf name {
+              type identityref {
+                base bbf-pots:tone-event;
+              }
+              description
+                "The name of the tone event to which a tone pattern is
+                 to be associated.";
+            }
+            leaf tone-pattern {
+              type bbf-tp:tone-pattern-ref;
+              mandatory true;
+              description
+                "The tone pattern definition to be associated with
+                 the event.";
+              reference
+                "ITU-T G.988 Clause 9.9.6 - Tone event table,
+                 Tone pattern";
+            }
+          }
+        }
+      }
+      container ringing-event-profiles {
+        if-feature "bbf-pots:ringing-event-profiles";
+        description
+          "Profiles to associate ringing patterns with ringing
+           events.";
+        list ringing-event-profile {
+          key "name";
+          description
+            "A ringing event profile.";
+          reference
+            "ITU-T G.988 Clause 9.9.6 - Ringing event table";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the ringing event profile.";
+          }
+          list event {
+            key "name";
+            min-elements 1;
+            description
+              "A ringing event to which a ringing pattern is to be
+               associated.
+
+               The default ringing pattern will be played for events
+               for which no ringing pattern is defined.";
+            reference
+              "ITU-T G.988 Clause 9.9.6 - Ringing event table";
+            leaf name {
+              type identityref {
+                base bbf-pots:ringing-event;
+              }
+              description
+                "The name of the ringing event to which a ringing
+                 pattern is to be associated.";
+            }
+            leaf ringing-pattern {
+              type bbf-rp:ringing-pattern-ref;
+              mandatory true;
+              description
+                "The ringing pattern definition to be associated
+                 with the event.";
+              reference
+                "ITU-T G.988 Clause 9.9.6 - Ringing event table,
+                 Ringing pattern";
+            }
+          }
+        }
+      }
+      container data-transmission-profiles {
+        description
+          "Profiles to manage data transmission.";
+        list data-transmission-profile {
+          key "name";
+          description
+            "A data transmission profile.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the data transmission profile.";
+          }
+          choice data-transmission {
+            mandatory true;
+            description
+              "Selects the data transmission method.";
+            case clip-data-transmission {
+              choice clip-data-transmission {
+                description
+                  "Selects the standard to be followed for Calling
+                   Line Identification Presentation (CLIP) data
+                   transmission.";
+                reference
+                  "ITU-T Q.731.3";
+                case etsi {
+                  container etsi {
+                    description
+                      "The ETSI Calling Line Identification
+                       Presentation (CLIP) data transmission
+                       protocol.";
+                    reference
+                      "ETSI EN 300 089";
+                    choice data-transmission-mode {
+                      mandatory true;
+                      description
+                        "Selects the transmission mode for CLIP as
+                         defined by ETSI.";
+                      reference
+                        "ETSI EN 300 659-1;
+                         ETSI EN 300 659-2";
+                      case fsk {
+                        leaf fsk {
+                          type empty;
+                          description
+                            "Frequency Shift Keying (FSK) data
+                             transmission format.";
+                        }
+                      }
+                      case dtmf {
+                        container dtmf {
+                          description
+                            "Dual Tone Multi-Frequency (DTMF) data
+                             transmission format.";
+                          container detection {
+                            if-feature "bbf-pots:dtmf-detection";
+                            description
+                              "Detailed DTMF detector settings.";
+                            leaf positive-twist-threshold {
+                              type uint8 {
+                                range "1..16";
+                              }
+                              units "dB";
+                              default "10";
+                              description
+                                "The threshold for an acceptable
+                                 positive twist for the DTMF signal,
+                                 above which the DTMF signal will not
+                                 be deemed reliable.
+
+                                 A positive twist defines by how much
+                                 higher the amplitude of the high
+                                 frequency component of the two
+                                 frequencies is to the low frequency
+                                 component. For example, a positive
+                                 twist threshold of 6 dB means that
+                                 the high frequency component must not
+                                 be more than 6 dB higher than the low
+                                 frequency component to be considered
+                                 as reliable.";
+                            }
+                            leaf negative-twist-threshold {
+                              type int8 {
+                                range "-16..-1";
+                              }
+                              units "dB";
+                              default "-10";
+                              description
+                                "The threshold for an acceptable
+                                 negative twist for the DTMF signal,
+                                 above which the DTMF signal will not
+                                 be deemed reliable.
+
+                                 A negative twist defines by how much
+                                 higher the amplitude of the low
+                                 frequency component of the two
+                                 frequencies is to the high frequency
+                                 component. For example, a negative
+                                 twist threshold of 6 dB means that
+                                 the low frequency component must not
+                                 be more than 6 dB higher than the
+                                 high frequency component to be
+                                 considered reliable.";
+                            }
+                            leaf minimum-snr-threshold-adjustment {
+                              type int8 {
+                                range "-3..6";
+                              }
+                              units "dB";
+                              default "0";
+                              description
+                                "Adjusts the minimum Signal-to-Noise
+                                 Ratio (SNR) threshold for the DTMF
+                                 detector from the device's default.
+
+                                 The SNR threshold is key for DTMF
+                                 detection. The threshold itself is
+                                 not configurable, only an adjustment
+                                 of the threshold.
+
+                                 For example, a value of 3 dB lowers
+                                 the device's default threshold by
+                                 3 dB, which increases the SNR
+                                 threshold by 3 dB and a value of
+                                 -3 dB raises the device's default
+                                 threshold by 3 dB, which lowers the
+                                 SNR threshold by 3 dB.
+
+                                 Speech and impulse noise should not
+                                 be falsely detected as DTMF signals.
+                                 The SNR threshold is set to ensure
+                                 conformance with all DTMF detection
+                                 requirements, however, it may be
+                                 desirable to tradeoff performance in
+                                 some areas for better false detection
+                                 performance by raising the SNR
+                                 threshold.
+
+                                 An adjustment of the threshold of
+                                 +6 dB can reduce the number of false
+                                 detections but impulse noise or
+                                 in band interference will not be
+                                 detected as such.
+
+                                 The value 0 dB means no adjustment of
+                                 the SNR threshold.";
+                            }
+                            leaf echo-control-enabled {
+                              type boolean;
+                              default "false";
+                              description
+                                "If 'true', enables DTMF echo control.
+
+                                 When enabled, the DTMF detectors
+                                 determine if the echo canceller
+                                 transmit input signal is a near-end
+                                 DTMF signal or only an echo of a
+                                 far-end DTMF signal. If the transmit
+                                 input signal is only an echo of a
+                                 far-end DTMF signal, then the echo
+                                 canceller transmit output signal is
+                                 replaced with silence.";
+                            }
+                            leaf maximum-volume {
+                              type int8 {
+                                range "-63..0";
+                              }
+                              units "dBm";
+                              default "0";
+                              description
+                                "The maximum DTMF volume towards the
+                                 network side in dBm.
+
+                                 The 'maximum-volume' is associated
+                                 with the DTMF tone received from the
+                                 phone set that will be sent towards
+                                 the network side.
+
+                                 For tones sent as defined by
+                                 RFC 4733, it will be the value set in
+                                 the volume field of the message.";
+                              reference
+                                "RFC 4733 Clause 2.3.4";
+                            }
+                          }
+                          leaf minimum-level-threshold {
+                            type int8 {
+                              range "-28..-3";
+                            }
+                            units "dBV";
+                            description
+                              "The minimum level for each of the
+                               received DTMF frequency components.
+
+                               If either component is 2 dB or more
+                               below this level, the signal will be
+                               rejected.";
+                            reference
+                              "ETSI ES 201 235-3 Clause 4.2.1.1";
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                case telcordia {
+                  container telcordia {
+                    description
+                      "The Telcordia Calling Line Identification
+                       Presentation data transmission protocol.";
+                    reference
+                      "Telcordia GR-31-core";
+                    choice data-transmission-mode {
+                      mandatory true;
+                      description
+                        "Selects the transmission mode for CLIP as
+                         defined by Telcordia.";
+                      case fsk {
+                        description
+                          "Use Frequency Shift Keying (FSK) data
+                           transmission format.";
+                        leaf fsk {
+                          type empty;
+                          description
+                            "Frequency Shift Keying (FSK) data
+                             transmission format.";
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      container uni-profiles {
+        if-feature "bbf-pots:uni-profiles";
+        description
+          "Profiles to manage the POTS User Network Interface (UNI).
+
+           This profile allows to configure physical functions and
+           characteristics of a subscriber loop (analog subscriber).";
+        list uni-profile {
+          key "name";
+          description
+            "A POTS UNI profile.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the POTS UNI profile.";
+          }
+          leaf nominal-feed-current {
+            type uint8 {
+              range "24..25|40";
+            }
+            units "milliamperes";
+            description
+              "The nominal feed DC current of the subscriber loop.";
+          }
+          leaf nominal-feed-voltage {
+            type uint8 {
+              range "0..255";
+            }
+            units "volts";
+            default "0";
+            description
+              "The nominal feed DC voltage of the subscriber loop.";
+            reference
+              "ITU-T G.988 Clause 9.9.1 - Nominal feed voltage";
+          }
+          leaf impedance {
+            type identityref {
+              base bbf-pots:impedance;
+            }
+            default "bbf-pots:vendor-specific-default-impedance";
+            description
+              "The impedance to be used for the POTS UNI.
+
+               The impedance used by the system is reported in the
+               leaf '/if:interfaces/if:interface/bbf-pots:pots
+               /bbf-pots:state/bbf-pots:impedance'.";
+            reference
+              "ITU-T G.988 Clause 9.9.1 - Impedance";
+          }
+          leaf splitter-type {
+            type identityref {
+              base bbf-pots:splitter-type;
+            }
+            description
+              "Indicates the type of splitter filter used for POTS
+               UNI, if any.
+
+               If this leaf is not instantiated, no splitter filter is
+               used.";
+          }
+          leaf automatic-gain-control-enabled {
+            type boolean;
+            default "false";
+            description
+              "If 'true', the automatic gain control for receipt and
+               transmission for the subscriber loop is enabled.";
+          }
+          leaf rx-gain {
+            when "../bbf-pots:automatic-gain-control-enabled = "
+               + "'false'" {
+              description
+                "Applicable only when there is no automatic gain
+                 control.";
+            }
+            type decimal64 {
+              fraction-digits 1;
+              range "-12.0..6.0";
+            }
+            units "dB";
+            default "0";
+            description
+              "The subscriber loop receive gain.";
+            reference
+              "ITU-T G.988 Clause 9.9.1 - Rx gain";
+          }
+          leaf tx-gain {
+            when "../bbf-pots:automatic-gain-control-enabled = "
+               + "'false'" {
+              description
+                "Applicable only when there is no automatic gain
+                 control.";
+            }
+            type decimal64 {
+              fraction-digits 1;
+              range "-12.0..6.0";
+            }
+            units "dB";
+            default "0";
+            description
+              "The subscriber loop transmit gain.";
+            reference
+              "ITU-T G.988 Clause 9.9.1 - Tx gain";
+          }
+          leaf transmission-path {
+            type enumeration {
+              enum full-time-on-hook {
+                description
+                  "Full-time on-hook transmission.";
+              }
+              enum part-time-on-hook {
+                description
+                  "Part-time on-hook transmission.";
+              }
+            }
+            default "full-time-on-hook";
+            description
+              "Specifies the transmission path for the POTS UNI.";
+            reference
+              "ITU-T G.988 Clause 9.9.1 - Transmission path";
+          }
+          leaf holdover-time {
+            if-feature "bbf-pots:loop-voltage-holdover";
+            type union {
+              type enumeration {
+                enum use-vendor-specific-behavior {
+                  description
+                    "The behavior of holdover is defined by the
+                     vendor's policy.";
+                  reference
+                    "ITU-T G.988 Clause 9.9.1 - POTS holdover time,
+                     value zero";
+                }
+              }
+              type uint16 {
+                range "1..max";
+              }
+            }
+            units "seconds";
+            default "use-vendor-specific-behavior";
+            description
+              "Determines the time during which the subscriber loop
+               voltage is held up when either a loss of connectivity
+               to the network, e.g., loss of PON connectivity at an
+               ONU, or a loss of connectivity to the softswitch is
+               detected, thus preventing false activation of premises
+               intrusion alarms or fire panel circuits.
+
+               After the holdover time elapses, the subscriber loop
+               voltage will be dropped, and may thereby cause
+               premises intrusion alarm or fire panel circuits to be
+               activated.
+
+               When connectivity is restored, the subscriber loop
+               voltage is to be immediately restored and the
+               associated timer reset to zero.
+
+               Whether holdover behavior is dependent on a loss of
+               connectivity to the network or to a softswitch is
+               controlled by the leaf 'loss-of-softswitch', unless if
+               the value of this leaf is set to 'use-vendor-specific-
+               behavior', in which case it is determined by the
+               vendor.
+
+               The holdover time used by the system is reported in
+               the leaf '/if:interfaces/if:interface/bbf-pots:pots
+               /bbf-pots:state/bbf-pots:holdover-time'.";
+            reference
+              "ITU-T G.988 Clause 9.9.1 - POTS holdover time";
+          }
+          leaf loss-of-softswitch-holdover {
+            when "../bbf-pots:holdover-time != "
+               + "'use-vendor-specific-behavior'" {
+              description
+                "Applicable only when the behavior of holdover is not
+                 defined by the vendor's policy.";
+            }
+            if-feature "bbf-pots:loop-voltage-holdover";
+            type boolean;
+            default "false";
+            description
+              "Controls the subscriber loop voltage holdover
+               initiation criteria.
+
+               If 'false', disables loss of softswitch connectivity
+               detection as criteria for initiating the holdover
+               timer.
+
+               If 'true', enables loss of softswitch connectivity
+               detection as criteria for initiating the holdover
+               timer.";
+            reference
+              "ITU-T G.988 Clause 9.9.1 - Loss of softswitch";
+          }
+          leaf off-hook-no-dial-behavior {
+            type identityref {
+              base bbf-pots:off-hook-dial-timeout-treatment;
+            }
+            default "bbf-pots:apply-silence";
+            description
+              "Specifies the treatment when the subscriber goes off-
+               hook but does not attempt a call within the dial
+               timeout interval.";
+            reference
+              "ITU-T G.988 Clause 9.9.6 - Announcement type";
+          }
+          leaf receiver-off-hook-timer {
+            type union {
+              type enumeration {
+                enum disabled {
+                  description
+                    "The receiver off hook (ROH) timer is disabled and
+                     no ROH tone is generated.";
+                }
+                enum use-vendor-specific-default {
+                  description
+                    "Use vendor specific default.";
+                }
+              }
+              type uint8 {
+                range "1..254";
+              }
+            }
+            units "seconds";
+            default "use-vendor-specific-default";
+            description
+              "Defines the time in seconds for the receiver off hook
+               (ROH) condition before ROH tone is applied.
+
+               If no receiver off-hook timer is configured, a receiver
+               off-hook timer defined by the vendor will be used.
+
+               The receiver-off-hook-timer used by the system is
+               reported in the leaf '/if:interfaces/if:interface
+               /bbf-pots:pots/bbf-pots:state
+               /bbf-pots:receiver-off-hook-timer'.";
+            reference
+              "ITU-T G.988 Clause 9.9.2 - Receiver off hook (ROH)
+               timer";
+          }
+          leaf echo-cancel-enabled {
+            type boolean;
+            default "true";
+            description
+              "If 'true', enables echo cancellation.";
+            reference
+              "ITU-T G.988 Clause 9.9.6 - Echo cancel ind";
+          }
+          leaf hook-flash-minimum-time {
+            type union {
+              type enumeration {
+                enum use-vendor-specific-default {
+                  description
+                    "Use vendor specific default.";
+                }
+              }
+              type uint16 {
+                range "1..max";
+              }
+            }
+            units "milliseconds";
+            default "use-vendor-specific-default";
+            description
+              "Minimum duration to determine a hook flash event.
+
+               If no hook-flash minimum time is configured, a hook-
+               flash minimum time defined by the vendor will be used.
+
+               The hook-flash minimum time used by the system is
+               reported in the leaf '/if:interfaces/if:interface
+               /bbf-pots:pots/bbf-pots:state
+               /bbf-pots:hook-flash-minimum-time'.";
+            reference
+              "ITU-T G.988 Clause 9.9.6 - Hook flash minimum time";
+          }
+          leaf hook-flash-maximum-time {
+            type union {
+              type enumeration {
+                enum use-vendor-specific-default {
+                  description
+                    "Use vendor specific default.";
+                }
+              }
+              type uint16 {
+                range "1..max";
+              }
+            }
+            units "milliseconds";
+            must ".!= 'use-vendor-specific-default' and "
+               + "../bbf-pots:hook-flash-minimum-time != "
+               + "'use-vendor-specific-default' and "
+               + ".>= ../bbf-pots:hook-flash-minimum-time" {
+              error-message
+                "'hook-flash-maximum-time' is smaller than the 'hook-"
+              + "flash-minimum-time'.";
+              description
+                "The 'hook-flash-maximum-time' must be equal to or
+                 larger than the 'hook-flash-minimum-time'.
+
+                 If no hook-flash maximum time is configured, a hook-
+                 flash maximum time defined by the vendor will be
+                 used.
+
+                 The hook-flash maximum time used by the system is
+                 reported in the leaf '/if:interfaces/if:interface
+                 /bbf-pots:pots/bbf-pots:state
+                 /bbf-pots:hook-flash-maximum-time'.";
+            }
+            default "use-vendor-specific-default";
+            description
+              "Maximum duration to determine a hook flash event.";
+            reference
+              "ITU-T G.988 Clause 9.9.6 - Hook flash maximum time";
+          }
+          leaf dtmf-digit-levels {
+            type union {
+              type enumeration {
+                enum use-vendor-specific-default {
+                  description
+                    "Use vendor specific default.";
+                }
+              }
+              type int16 {
+                range "-25..0";
+              }
+            }
+            units "dBm0";
+            default "use-vendor-specific-default";
+            description
+              "The power level of DTMF digits that may be generated
+               towards the subscriber set.
+
+               If no DTMF digit level is configured, a DTMF digit
+               level defined by the vendor will be used.
+
+               The DTMF digit level used by the system is reported in
+               the leaf '/if:interfaces/if:interface/bbf-pots:pots
+               /bbf-pots:state/bbf-pots:dtmf-digit-levels'.";
+            reference
+              "ITU-T G.988 Clause 9.9.6 - DTMF digit levels;
+               Telcordia GR-506-core Section 15.1.5 - Accept and
+               Reject Power levels";
+          }
+          leaf dmtf-digit-duration {
+            type union {
+              type enumeration {
+                enum use-vendor-specific-default {
+                  description
+                    "Use vendor specific default.";
+                }
+              }
+              type uint16 {
+                range "1..max";
+              }
+            }
+            units "milliseconds";
+            default "use-vendor-specific-default";
+            description
+              "The duration of DTMF digits that may be generated
+               towards the subscriber set.
+
+               If no DTMF digit duration is configured, a DTMF digit
+               duration defined by the vendor will be used.
+
+               The DTMF digit duration used by the system is reported
+               in the leaf '/if:interfaces/if:interface/bbf-pots:pots
+               /bbf-pots:state/bbf-pots:dtmf-digit-duration'.";
+            reference
+              "ITU-T G.988 Clause 9.9.6 - DTMF digit duration";
+          }
+        }
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface" {
+    when "derived-from-or-self(/if:interfaces/if:interface/if:type,"
+       + "'ianaift:voiceFXS')" {
+      description
+        "Only applicable when the interface type is or derived from
+         Voice FXS, an interface delivering voice services to an
+         analog subscriber line.";
+    }
+    description
+      "Data nodes for the configuration of physical voice lines.
+
+       There is no voice functionality without this configuration.";
+    container pots {
+      presence "Enables the POTS functionality on the interface.";
+      description
+        "Management of the POTS UNI functionality on the interface.";
+      container uni-configuration {
+        description
+          "The POTS UNI configuration.";
+        choice uni-configuration {
+          mandatory true;
+          description
+            "Selects the method of configuration for the POTS UNI.";
+          case uni-profile {
+            if-feature "bbf-pots:uni-profiles";
+            leaf uni-profile {
+              type bbf-pots:uni-profile-ref;
+              description
+                "The POTS UNI Profile in which the required
+                 configuration for this POTS UNI is defined.";
+            }
+          }
+          case vendor-specific-defaults {
+            leaf vendor-specific-defaults {
+              type empty;
+              description
+                "The configuration of the POTS UNI is based on the
+                 vendor's default values.";
+            }
+          }
+        }
+      }
+      leaf pstn-protocol-variant {
+        if-feature "bbf-pots:pstn-protocol-variant";
+        type union {
+          type uint16 {
+            range "1..max";
+          }
+          type enumeration {
+            enum use-vendor-specific-default {
+              description
+                "The country code defined by the vendor as specific
+                 default value is to be used.";
+            }
+          }
+        }
+        default "use-vendor-specific-default";
+        description
+          "The country code as defined by ITU-T E.164 that is
+           associated with the variant of POTS signaling to be used on
+           this POTS UNI.";
+        reference
+          "ITU-T G.988 Clause 9.9.6 - PSTN protocol variant;
+           ITU-T E.164";
+      }
+      leaf data-transmission-profile {
+        type bbf-pots:data-transmission-profile-ref;
+        description
+          "The data transmission profile to be applied to this
+           interface.
+
+           If not configured, the vendor's default data transmission
+           mode is used.";
+      }
+      leaf tone-event-profile {
+        if-feature "bbf-pots:tone-event-profiles";
+        type bbf-pots:tone-event-profile-ref;
+        description
+          "The tone pattern profile to be applied to this interface.
+
+           If not configured, the vendor's default tone patterns are
+           used.";
+      }
+      leaf ringing-event-profile {
+        if-feature "bbf-pots:ringing-event-profiles";
+        type bbf-pots:ringing-event-profile-ref;
+        description
+          "The ringing pattern profile to be applied to this
+           interface.
+
+           If not configured, the vendor's default ringing patterns
+           are used.";
+      }
+      container auxiliary-loop-characteristics {
+        presence "Auxiliary loop characteristics are to be used.";
+        description
+          "Manages the configuration of the characteristics of the
+           analog subscriber loop, such as HW chipset settings,
+           Z-interface parameters, by means of a remote file.
+
+           Note that parameters that may also be set via an operator
+           configuration would overrule similar parameters when
+           configured via a file.";
+        choice location {
+          mandatory true;
+          description
+            "Selects the location of the analog subscriber loop
+             characteristics.";
+          case file {
+            leaf file {
+              type bbf-voip-tp:voip-uri;
+              description
+                "Path and file name of the file containing HW
+                 settings, Z-interface settings.";
+            }
+            leaf auxiliary-retrieval-state {
+              type bbf-voip-tp:retrieval-state;
+              config false;
+              description
+                "Activation state reflecting the retrieval of the
+                 additional auxiliary loop settings.";
+            }
+          }
+        }
+      }
+      container state {
+        config false;
+        description
+          "Operational state of POTS.";
+        leaf hook-state {
+          type enumeration {
+            enum on-hook {
+              description
+                "The subscriber loop is in on-hook state.";
+            }
+            enum off-hook {
+              description
+                "The subscriber loop is in off-hook state.";
+            }
+          }
+          mandatory true;
+          description
+            "The hook state of the subscriber loop.";
+          reference
+            "ITU-T G.988 Clause 9.9.1 - Hook state";
+        }
+        leaf impedance {
+          type identityref {
+            base bbf-pots:impedance;
+          }
+          description
+            "The impedance used for the POTS UNI.";
+        }
+        leaf holdover-time {
+          type uint16;
+          units "seconds";
+          description
+            "Holdover time used.";
+        }
+        leaf receiver-off-hook-timer {
+          type uint8;
+          units "seconds";
+          description
+            "The receiver off hook timer used.";
+          reference
+            "ITU-T G.988 Clause 9.9.2 - Receiver off hook (ROH)
+             timer";
+        }
+        leaf hook-flash-minimum-time {
+          type uint16 {
+            range "1..max";
+          }
+          units "milliseconds";
+          description
+            "Hook flash minimum duration used.";
+          reference
+            "ITU-T G.988 Clause 9.9.6 - Hook flash minimum time";
+        }
+        leaf hook-flash-maximum-time {
+          type uint16 {
+            range "1..max";
+          }
+          units "milliseconds";
+          description
+            "Hook flash maximum duration used.";
+          reference
+            "ITU-T G.988 Clause 9.9.6 - Hook flash maximum time";
+        }
+        leaf dtmf-digit-levels {
+          type int16 {
+            range "-25..0";
+          }
+          units "dBm0";
+          description
+            "DTMF digits power level used.";
+          reference
+            "ITU-T G.988 Clause 9.9.6 - DTMF digit levels;
+             Telcordia GR-506-core Section 15.1.5 - Accept and
+             Reject Power levels";
+        }
+        leaf dmtf-digit-duration {
+          type uint16 {
+            range "1..max";
+          }
+          units "milliseconds";
+          description
+            "DTMF digits duration used.";
+          reference
+            "ITU-T G.988 Clause 9.9.6 - DTMF digit duration";
+        }
+        leaf dtmf-signal-to-noise-ratio-threshold {
+          type uint8;
+          description
+            "The signal-to-noise-ratio threshold. It is the ratio of
+             the strength of voice and signals, and the strength of
+             unwanted background noise. It is key for DTMF
+             detection.";
+        }
+        leaf pstn-protocol-variant {
+          type uint16 {
+            range "1..max";
+          }
+          description
+            "The PSTN protocol variant used.";
+          reference
+            "ITU-T G.988 Clause 9.9.6 - PSTN protocol variant;
+             ITU-T E.164";
+        }
+      }
+      container statistics {
+        if-feature "bbf-pots:statistics";
+        config false;
+        description
+          "POTS statistics.";
+        leaf maximum-off-hook-duration {
+          type uint32;
+          units "milliseconds";
+          description
+            "Records the longest period of a single off-hook
+             detected on the analogue port. Time is measured in
+             milliseconds.";
+          reference
+            "ITU-T G.988 Clause 9.9.12 - Analog port off-hook timer";
+        }
+        leaf releases-without-dialing {
+          type yang:counter32;
+          description
+            "Indicates the number of analog port releases without
+             dialing detected.";
+          reference
+            "ITU-T G.988 Clause 9.9.12 - Analog port releases";
+        }
+      }
+    }
+  }
+}

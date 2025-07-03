@@ -1,5 +1,11 @@
 ## Broadband Forum YANG Modules
 
+### 2025-07-02: [TR-383 Amendment 9](https://www.broadband-forum.org/technical/download/TR-383_Amendment-9.pdf) Common YANG Modules for Access Networks
+*Tag: [TR-383-v1.9.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.9.0)*
+
+* Enhancements to existing models.
+* New models for management of voice services.
+
 ### 2025-02-03: [TR-451 Amendment 1](https://www.broadband-forum.org/technical/download/TR-451_Amendment-1.pdf) vOMCI Specification
 *Tag: [TR-451-v1.1.0](https://github.com/BroadbandForum/yang/tree/TR-451-v1.1.0)*
 

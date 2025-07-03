@@ -18,20 +18,24 @@ module bbf-software-management {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Work Area";
+     Provider Cloud Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Nick Hancock, Adtran
+     Editor:      Shiya Ashraf, Nokia
 
-     Editor:      Ludwig Pauwels, Nokia
+     Editor:      Kevin Noll, CableLabs
+
+     PS Leader:   Sven Ooghe, Nokia
 
      PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, Adtran
+     WA Director: Bruno Cornaglia, Vodafone
 
-     WA Director: Sven Ooghe, Nokia";
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Haomian Zheng, Huawei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on software
@@ -41,7 +45,7 @@ module bbf-software-management {
 
      This module augments ietf-hardware.
 
-     Copyright (c) 2017-2023, Broadband Forum
+     Copyright (c) 2017-2025, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -81,9 +85,19 @@ module bbf-software-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a7; see
+     This version of this YANG module is part of TR-383a9; see
      the TR itself for full legal notices.";
 
+  revision 2025-07-02 {
+    description
+      "Amendment 9.
+       * Approval Date:    2025-07-02.
+       * Publication Date: 2025-07-02.";
+    reference
+      "TR-383a9: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-9.pdf>";
+  }
   revision 2023-12-15 {
     description
       "Amendment 7.
@@ -144,9 +158,9 @@ module bbf-software-management {
     description
       "Base identity for all error tags defined in this module.
 
-       This identity is abstract and SHOULD NOT generally be used as a
+       This identity is abstract and should not generally be used as a
        value referenced by a leaf when reporting errors. If used to
-       define an error that was not known at design time, it SHOULD be
+       define an error that was not known at design time, it should be
        qualified with a corresponding description provided as
        additional information suitable for human display.";
   }
@@ -156,9 +170,9 @@ module bbf-software-management {
     description
       "Base identity for all error tags reporting general errors.
 
-       This identity is abstract and SHOULD NOT generally be used as a
+       This identity is abstract and should not generally be used as a
        value referenced by a leaf when reporting errors. If used to
-       define an error that was not known at design time, it SHOULD be
+       define an error that was not known at design time, it should be
        qualified with a corresponding description provided as
        additional information suitable for human display.";
   }
@@ -197,9 +211,9 @@ module bbf-software-management {
        during the downloading of a software revision from a file
        server.
 
-       This identity is abstract and SHOULD NOT generally be used as a
+       This identity is abstract and should not generally be used as a
        value referenced by a leaf when reporting errors. If used to
-       define an error that was not known at design time, it SHOULD be
+       define an error that was not known at design time, it should be
        qualified with a corresponding description provided as
        additional information suitable for human display.";
   }
@@ -210,9 +224,9 @@ module bbf-software-management {
       "Base identity for all error tags reporting protocol-related
        errors.
 
-       This identity is abstract and SHOULD NOT generally be used as a
+       This identity is abstract and should not generally be used as a
        value referenced by a leaf when reporting errors. If used to
-       define an error that was not known at design time, it SHOULD be
+       define an error that was not known at design time, it should be
        qualified with a corresponding description provided as
        additional information suitable for human display.";
   }
@@ -236,9 +250,9 @@ module bbf-software-management {
       "Base identity for all error tags reporting errors relating to
        the connection to the remote peer.
 
-       This identity is abstract and SHOULD NOT generally be used as a
+       This identity is abstract and should not generally be used as a
        value referenced by a leaf when reporting errors. If used to
-       define an error that was not known at design time, it SHOULD be
+       define an error that was not known at design time, it should be
        qualified with a corresponding description provided as
        additional information suitable for human display.";
   }
@@ -336,9 +350,9 @@ module bbf-software-management {
       "Base identity for all error tags reporting authentication
        errors.
 
-       This identity is abstract and SHOULD NOT generally be used as a
+       This identity is abstract and should not generally be used as a
        value referenced by a leaf when reporting errors. If used to
-       define an error that was not known at design time, it SHOULD be
+       define an error that was not known at design time, it should be
        qualified with a corresponding description provided as
        additional information suitable for human display.";
   }
@@ -369,9 +383,9 @@ module bbf-software-management {
       "Base identity for all error tags reporting file system errors
        at the remote peer.
 
-       This identity is abstract and SHOULD NOT generally be used as a
+       This identity is abstract and should not generally be used as a
        value referenced by a leaf when reporting errors. If used to
-       define an error that was not known at design time, it SHOULD be
+       define an error that was not known at design time, it should be
        qualified with a corresponding description provided as
        additional information suitable for human display.";
   }
@@ -421,9 +435,9 @@ module bbf-software-management {
       "Base identity for all error tags reporting file system errors
        at the device.
 
-       This identity is abstract and SHOULD NOT generally be used as a
+       This identity is abstract and should not generally be used as a
        value referenced by a leaf when reporting errors. If used to
-       define an error that was not known at design time, it SHOULD be
+       define an error that was not known at design time, it should be
        qualified with a corresponding description provided as
        additional information suitable for human display.";
   }
@@ -448,9 +462,9 @@ module bbf-software-management {
       "Base identity for all error tags reporting processing errors
        occurring at a component.
 
-       This identity is abstract and SHOULD NOT generally be used as a
+       This identity is abstract and should not generally be used as a
        value referenced by a leaf when reporting errors. If used to
-       define an error that was not known at design time, it SHOULD be
+       define an error that was not known at design time, it should be
        qualified with a corresponding description provided as
        additional information suitable for human display.";
   }
@@ -473,9 +487,9 @@ module bbf-software-management {
       "Base identity for all error tags reporting that a revision is
        invalid following its download.
 
-       This identity is abstract and SHOULD NOT generally be used as a
+       This identity is abstract and should not generally be used as a
        value referenced by a leaf when reporting errors. If used to
-       define an error that was not known at design time, it SHOULD be
+       define an error that was not known at design time, it should be
        qualified with a corresponding description provided as
        additional information suitable for human display.";
   }
@@ -539,9 +553,9 @@ module bbf-software-management {
       "Base identity for all error tags reporting errors during the
        installation of a revision.
 
-       This identity is abstract and SHOULD NOT generally be used as a
+       This identity is abstract and should not generally be used as a
        value referenced by a leaf when reporting errors. If used to
-       define an error that was not known at design time, it SHOULD be
+       define an error that was not known at design time, it should be
        qualified with a corresponding description provided as
        additional information suitable for human display.";
   }
@@ -608,7 +622,7 @@ module bbf-software-management {
       "Base identity for defining capabilities indicating support for
        downloading revisions within this YANG data model.
 
-       This identity is abstract and MUST NOT be used to advertise
+       This identity is abstract and must not be used to advertise
        support for a capability.";
   }
 

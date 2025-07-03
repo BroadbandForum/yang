@@ -21,20 +21,24 @@ module bbf-qos-policies {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Work Area";
+     Provider Cloud Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Nick Hancock, Adtran
+     Editor:      Shiya Ashraf, Nokia
 
-     Editor:      Ludwig Pauwels, Nokia
+     Editor:      Kevin Noll, CableLabs
+
+     PS Leader:   Sven Ooghe, Nokia
 
      PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, Adtran
+     WA Director: Bruno Cornaglia, Vodafone
 
-     WA Director: Sven Ooghe, Nokia";
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Haomian Zheng, Huawei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the management of
@@ -45,7 +49,7 @@ module bbf-qos-policies {
      Specifically, this module contains a collection of policies that
      can be used to control the flow of frames.
 
-     Copyright (c) 2017-2023, Broadband Forum
+     Copyright (c) 2017-2025, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -85,9 +89,19 @@ module bbf-qos-policies {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a7; see
+     This version of this YANG module is part of TR-383a9; see
      the TR itself for full legal notices.";
 
+  revision 2025-07-02 {
+    description
+      "Amendment 9.
+       * Approval Date:    2025-07-02.
+       * Publication Date: 2025-07-02.";
+    reference
+      "TR-383a9: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-9.pdf>";
+  }
   revision 2023-12-15 {
     description
       "Amendment 7.
@@ -234,7 +248,7 @@ module bbf-qos-policies {
         key "name";
         ordered-by user;
         description
-          "Provides a lists of classifiers which are evaluated in
+          "Provides a list of classifiers which are evaluated in
            order as specified by the user. When a classifier is
            matched, no other classifiers are evaluated.";
         uses bbf-qos-cls:classifier-entry-ref;

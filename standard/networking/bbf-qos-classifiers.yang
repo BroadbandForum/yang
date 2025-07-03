@@ -24,20 +24,24 @@ module bbf-qos-classifiers {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Work Area";
+     Provider Cloud Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Nick Hancock, Adtran
+     Editor:      Shiya Ashraf, Nokia
 
-     Editor:      Ludwig Pauwels, Nokia
+     Editor:      Kevin Noll, CableLabs
+
+     PS Leader:   Sven Ooghe, Nokia
 
      PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, Adtran
+     WA Director: Bruno Cornaglia, Vodafone
 
-     WA Director: Sven Ooghe, Nokia";
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Haomian Zheng, Huawei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the management of
@@ -49,7 +53,7 @@ module bbf-qos-classifiers {
      that can be used to classify frames and assign actions to be
      applied to those frames.
 
-     Copyright (c) 2017-2023, Broadband Forum
+     Copyright (c) 2017-2025, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -89,9 +93,19 @@ module bbf-qos-classifiers {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a7; see
+     This version of this YANG module is part of TR-383a9; see
      the TR itself for full legal notices.";
 
+  revision 2025-07-02 {
+    description
+      "Amendment 9.
+       * Approval Date:    2025-07-02.
+       * Publication Date: 2025-07-02.";
+    reference
+      "TR-383a9: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-9.pdf>";
+  }
   revision 2023-12-15 {
     description
       "Amendment 7.
@@ -243,8 +257,7 @@ module bbf-qos-classifiers {
         enum copy-from-flow-color {
           if-feature "qos-bac-color-from-flow-color";
           description
-            "The BAC color of a frames is the same as its flow
-             color.";
+            "The BAC color of a frame is the same as its flow color.";
         }
       }
     }
@@ -317,21 +330,26 @@ module bbf-qos-classifiers {
 
   identity action-scope {
     description
-      "This base identity type defines action scopes.";
+      "This base identity type defines action scopes. The instance of
+       an action will be unique with in a scope. Multiple executions
+       of the same action with in the same scope will all share the
+       same instance of the action.";
   }
 
   identity vlan-sub-interface {
     base action-scope;
     description
-      "The scope of the action is the VLAN sub-interface.";
+      "The scope of the action is the VLAN sub-interface
+       from where the action is triggered.";
   }
 
   identity ethernet-interface {
     base action-scope;
     description
-      "The scope of the action is the Ethernet-like interface. This
-       encompasses all VLAN sub-interfaces within the Ethernet-like
-       interface in scope.";
+      "The scope of the action is the Ethernet-like interface within
+       which the action is triggered. This also encompasses actions
+       triggered from any of the VLAN sub-interfaces within the
+       Ethernet-like interface as well.";
   }
 
   typedef action-scope {

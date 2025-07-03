@@ -1,0 +1,930 @@
+module bbf-voip-media {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-voip-media";
+  prefix bbf-voip-media;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ietf-ip {
+    prefix ip;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import bbf-voip-types {
+    prefix bbf-voip-tp;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Provider Cloud Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Shiya Ashraf, Nokia
+
+     Editor:      Kevin Noll, CableLabs
+
+     PS Leader:   Sven Ooghe, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Bruno Cornaglia, Vodafone
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Haomian Zheng, Huawei";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on voice service
+     management. As such, this module is specific to access
+     network equipment (e.g., BBF-specified Access Nodes and FTTdp
+     DPUs).
+
+     This data model is designed for the Network Management Datastore
+     Architecture defined in RFC 8342.
+
+     Specifically, this module adds support for the management of
+     Voice over IP (VoIP) media and media capabilities defined in
+     ITU-T G.988.
+
+     Copyright (c) 2017-2025, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a9; see
+     the TR itself for full legal notices.";
+
+  revision 2025-07-02 {
+    description
+      "Amendment 9.
+       * Approval Date:    2025-07-02.
+       * Publication Date: 2025-07-02.";
+    reference
+      "TR-383a9: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-9.pdf>";
+  }
+
+  feature adaptive-jitter-buffers {
+    description
+      "Indicates that the device supports adaptive jitter buffers
+       that can be configured.";
+  }
+
+  feature forwarders {
+    description
+      "Indicates the support of media forwarders.";
+  }
+
+  identity voice-codec {
+    description
+      "Base identity for defining types of voice codec.";
+  }
+
+  identity fax-codec {
+    description
+      "Base identity for defining types of fax codec.";
+  }
+
+  identity g711-a-law {
+    base bbf-voip-media:voice-codec;
+    base bbf-voip-media:fax-codec;
+    description
+      "Pulse-Code Modulation (PCM) A-law codec.";
+    reference
+      "ITU-T G.711";
+  }
+
+  identity g711-u-law {
+    base bbf-voip-media:voice-codec;
+    base bbf-voip-media:fax-codec;
+    description
+      "Pulse-Code Modulation (PCM) U-law codec.";
+    reference
+      "ITU-T G.711";
+  }
+
+  identity g722 {
+    base bbf-voip-media:voice-codec;
+    description
+      "A codec supporting 64 kilobits per second (7 kHz) audio-coding
+       according to ITU-T G.722.";
+    reference
+      "ITU-T G.722";
+  }
+
+  identity g722.1-24kbps {
+    base bbf-voip-media:voice-codec;
+    description
+      "A codec supporting low complexity audio-coding at 24 kilobits
+       per second according to ITU-T G.722.1.";
+    reference
+      "ITU-T G.722.1";
+  }
+
+  identity g722.1-32kbps {
+    base bbf-voip-media:voice-codec;
+    description
+      "A codec supporting low complexity audio-coding at 32 kilobits
+       per second according to ITU-T G.722.1.";
+    reference
+      "ITU-T G.722.1";
+  }
+
+  identity g722.2 {
+    base bbf-voip-media:voice-codec;
+    description
+      "A codec supporting wideband coding of speech at around
+       16 kilobits per second using Adaptive Multi-Rate Wideband
+       (AMR-WB) according to ITU-T G.722.2.";
+    reference
+      "ITU-T G.722.2";
+  }
+
+  identity g723.1-5.3kbps {
+    base bbf-voip-media:voice-codec;
+    description
+      "ITU-T G.723.1 codec at 5.3 kilobits per second.";
+    reference
+      "ITU-T G.723.1 Clause 1.2 - Lower bit rate codec at 5.3 kbit/s";
+  }
+
+  identity g723.1-6.3kbps {
+    base bbf-voip-media:voice-codec;
+    description
+      "ITU-T G.723.1 codec at 6.3 kilobits per second.";
+    reference
+      "ITU-T G.723.1 Clause 1.2 - Higher bit rate codec at 6.3
+       kbit/s";
+  }
+
+  identity g726-16kbps {
+    base bbf-voip-media:voice-codec;
+    description
+      "ITU-T G.726 codec for 16 kilobits per second channels.";
+    reference
+      "ITU-T G.726 Clause 1 - Adaptive Differential Pulse Code
+       Modulation (ADPCM) codec for 16 kbit/s channels";
+  }
+
+  identity g726-24kbps {
+    base bbf-voip-media:voice-codec;
+    description
+      "ITU-T G.726 codec for 24 kilobits per second channels.";
+    reference
+      "ITU-T G.726 Clause 1 - Adaptive Differential Pulse Code
+       Modulation (ADPCM) codec for 24 kbit/s channels";
+  }
+
+  identity g726-32kbps {
+    base bbf-voip-media:voice-codec;
+    description
+      "ITU-T G.726 codec for 32 kilobits per second channels.";
+    reference
+      "ITU-T G.726 Clause 1 - Adaptive Differential Pulse Code
+       Modulation (ADPCM) codec for 32 kbit/s channels";
+  }
+
+  identity g726-40kbps {
+    base bbf-voip-media:voice-codec;
+    description
+      "ITU-T G.726 codec for 40 kilobits per second channels.";
+    reference
+      "ITU-T G.726 Clause 1 - Adaptive Differential Pulse Code
+       Modulation (ADPCM) codec for 40 kbit/s channels";
+  }
+
+  identity g729 {
+    base bbf-voip-media:voice-codec;
+    description
+      "A codec supporting coding of speech at 8 kilobits per second
+       using conjugate-structure algebraic-code-excited linear
+       prediction (CS-ACELP) according to ITU-T G.729.";
+    reference
+      "ITU-T G.729";
+  }
+
+  identity g729-a {
+    base bbf-voip-media:voice-codec;
+    description
+      "A reduced complexity version of a codec supporting coding of
+       speech at 8 kilobits per second using conjugate-structure
+       algebraic-code-excited linear prediction (CS-ACELP) according
+       to ITU-T G.729 Annex A.";
+    reference
+      "ITU-T G.729 Annex A";
+  }
+
+  identity g729-b {
+    base bbf-voip-media:voice-codec;
+    description
+      "A codec supporting coding of speech at 8 kilobits per second
+       using conjugate-structure algebraic-code-excited linear
+       prediction(CS-ACELP) with silence suppression according to
+       ITU-T G.729 Annex B.";
+    reference
+      "ITU-T G.729 Annex B";
+  }
+
+  identity g729-ab {
+    base bbf-voip-media:voice-codec;
+    description
+      "A reduced complexity version of a codec supporting coding of
+       speech at 8 kilobits per second using conjugate-structure
+       algebraic-code-excited linear prediction (CS-ACELP) with
+       silence suppression according to ITU-T G.729 Annex A and
+       Annex B.";
+    reference
+      "ITU-T G.729 Annex A;
+       ITU-T G.729 Annex B";
+  }
+
+  identity tone-event-transmission {
+    description
+      "Base identity for defining how DTMF digits, telephony tones
+       and events are to be transmitted and received.";
+  }
+
+  identity in-band-audio {
+    base tone-event-transmission;
+    description
+      "DTMF and telephone event tones will be sent in-band by audio.";
+    reference
+      "ITU-T G.988 Clause 9.9.5 - VoIP media profile, OOB DTMF
+       Disabled";
+  }
+
+  identity rtp-payload {
+    base tone-event-transmission;
+    description
+      "DTMF and telephone event tones will be carried in the payload
+       of RTP packets as specified in IETF RFC 4733.";
+    reference
+      "ITU-T G.988 Clause 9.9.5 - VoIP media profile, OOB DTMF
+       Enabled;
+       RFC 4733, Section 2";
+  }
+
+  typedef forwarder-ref {
+    type leafref {
+      path "/bbf-voip-media:media"
+         + "/bbf-voip-media:forwarders"
+         + "/bbf-voip-media:forwarder"
+         + "/bbf-voip-media:name";
+    }
+    description
+      "A reference to a media forwarder.";
+  }
+
+  typedef codec-profile-ref {
+    type leafref {
+      path "/bbf-voip-media:media"
+         + "/bbf-voip-media:profiles"
+         + "/bbf-voip-media:codec-profiles"
+         + "/bbf-voip-media:codec-profile"
+         + "/bbf-voip-media:name";
+    }
+    description
+      "A reference to a codec profile.";
+  }
+
+  typedef voice-profile-ref {
+    type leafref {
+      path "/bbf-voip-media:media"
+         + "/bbf-voip-media:profiles"
+         + "/bbf-voip-media:voice-profiles"
+         + "/bbf-voip-media:voice-profile"
+         + "/bbf-voip-media:name";
+    }
+    description
+      "A reference to a voice profile.";
+  }
+
+  grouping rtp-transport {
+    description
+      "Defines RTP transport-specific settings.";
+    leaf local-port-minimum {
+      type uint16 {
+        range "1..max";
+      }
+      default "50000";
+      description
+        "Defines the lowest local port to be used by the Real-time
+         Transport Protocol (RTP) for voice traffic.";
+      reference
+        "ITU-T G.988 Clause 9.9.7 - RTP profile data, Local port min";
+    }
+    leaf local-port-maximum {
+      type uint16 {
+        range "1..max";
+      }
+      must '. >= ../local-port-minimum' {
+        error-message
+          "The maximum local port value is not equal or greater than "
+        + "the minimum local port value.";
+      }
+      default "64000";
+      description
+        "Defines the highest local port to be used by the Real-time
+         Transport Protocol (RTP) for voice traffic.";
+      reference
+        "ITU-T G.988 Clause 9.9.7 - RTP profile data, Local port max";
+    }
+  }
+
+  grouping jitter {
+    description
+      "Defines jitter-buffer-specific settings.";
+    container jitter-buffer-sizing {
+      description
+        "Jitter buffer sizing.";
+      choice jitter-buffer-sizing {
+        description
+          "Jitter buffer sizing.";
+        case dynamic {
+          leaf dynamic {
+            type empty;
+            description
+              "Dynamic jitter buffer sizing. The system tries to
+               maintain the jitter with internal defaults.";
+          }
+        }
+        case adaptive {
+          container adaptive {
+            description
+              "Adaptive jitter buffer sizing.";
+            leaf initial-depth {
+              type uint16 {
+                range "1..200";
+              }
+              units "milliseconds";
+              default "50";
+              description
+                "The initial data jitter buffer depth for media
+                 working in RTP mode.
+
+                 The 'initial-depth' value controls the initial delay
+                 of the jitter buffer. The DSP holds the 1st received
+                 packet for the time equal to 'initial-depth'(ms)
+                 before playing out samples to the TDM Bus. During a
+                 voice session, the jitter buffer will adapt up and
+                 down based on the observed jitter, within the range
+                 defined by the 'minimum-depth' and 'maximum-depth'.";
+            }
+            leaf minimum-depth {
+              type uint16 {
+                range "1..200";
+              }
+              units "milliseconds";
+              must '.<= ../initial-depth' {
+                error-message "The minimum-depth is larger than the "
+                            + "'initial-depth'.";
+                description
+                  "The minimum-depth must be smaller than or equal to
+                   the 'initial-depth'.";
+              }
+              default "20";
+              description
+                "The minimum data jitter buffer depth for media
+                 working in RTP mode. The system tries to maintain the
+                 minimum data jitter.";
+            }
+            leaf maximum-depth {
+              type uint16 {
+                range "1..200";
+              }
+              units "milliseconds";
+              must '.>= ../initial-depth' {
+                error-message
+                  "The maximum-depth is smaller than the "
+                + "initial-depth";
+                description
+                  "The maximum-depth must be larger than or equal to
+                   the initial-depth.";
+              }
+              default "100";
+              description
+                "The maximum data jitter buffer depth for media
+                 working in RTP mode.";
+            }
+          }
+        }
+        case target {
+          container target {
+            description
+              "Target jitter buffer sizing.";
+            leaf target-jitter {
+              type uint16 {
+                range "1..200";
+              }
+              units "milliseconds";
+              default "20";
+              description
+                "The target jitter buffer value for media working in
+                 RTP mode. The system tries to maintain the jitter
+                 buffer at the target value.";
+              reference
+                "ITU-T G.988 Clause 9.9.6 - Jitter target";
+            }
+            leaf maximum-jitter {
+              type union {
+                type enumeration {
+                  enum use-vendor-specific-default {
+                    description
+                      "Use the vendor's specific default.";
+                  }
+                }
+                type uint16 {
+                  range "1..200";
+                }
+              }
+              units "milliseconds";
+              default "100";
+              description
+                "The maximum jitter buffer depth for media working in
+                 RTP mode.";
+              reference
+                "ITU-T G.988 Clause 9.9.6 - Jitter buffer max";
+            }
+          }
+        }
+      }
+    }
+  }
+
+  container media {
+    description
+      "Management of VoIP Media.";
+    container profiles {
+      description
+        "Configuration of VoIP media profiles.";
+      container codec-profiles {
+        description
+          "Profiles to manage media codecs.";
+        list codec-profile {
+          key "name";
+          description
+            "The name of the codec profile.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the codec profile.";
+          }
+          container codec-selection {
+            description
+              "Codec selection.";
+            list codec {
+              key "codec";
+              min-elements 1;
+              ordered-by user;
+              description
+                "A codec that may be selected when this profile is
+                 used.
+
+                 Note that the order of entries in the list defines
+                 the codec priority to be used by signaling during
+                 session setup.";
+              reference
+                "ITU-T G.988 Clause 9.9.5 - VoIP media profile, Codec
+                 selection (1..4)";
+              leaf codec {
+                type identityref {
+                  base bbf-voip-media:voice-codec;
+                }
+                description
+                  "The selected codec.";
+                reference
+                  "ITU-T G.988 Clause 9.9.5 - VoIP media profile,
+                   Codec selection";
+              }
+              leaf packet-period {
+                type uint8 {
+                  range "5..50";
+                }
+                units "milliseconds";
+                default "10";
+                description
+                  "The length of a period represented by the media in
+                   a packet. For a frame-based codec it is identical
+                   to the frame size or a multiplication of the frame
+                   size. This value is the 'ptime' attribute in the
+                   Session Description Protocol (SDP) message body in
+                   SIP requests and responses.";
+                reference
+                  "RFC 3551, Section 4.2;
+                   ITU-T G.988 Clause 9.9.5 - VoIP media profile,
+                   Packet period selection;
+                   RFC 4566, Section 6;
+                   RFC 4733";
+              }
+              leaf silence-suppression-enabled {
+                type boolean;
+                mandatory true;
+                description
+                  "If 'true', silence suppression is enabled, whereby
+                   packets with just silence (no speech) are not sent
+                   to save bandwidth.";
+                reference
+                  "ITU-T G.988 Clause 9.9.5 - VoIP media profile,
+                   Silence suppression";
+              }
+            }
+          }
+        }
+      }
+      container voice-profiles {
+        description
+          "Profiles to manage voice calls.";
+        list voice-profile {
+          key "name";
+          description
+            "A voice profile.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the voice profile.";
+          }
+          leaf codec-profile {
+            type bbf-voip-media:codec-profile-ref;
+            mandatory true;
+            description
+              "The codec profile to be used for voice calls.";
+          }
+          container jitter-buffer {
+            if-feature "bbf-voip-media:adaptive-jitter-buffers";
+            description
+              "Jitter buffer settings for voice calls.";
+            uses bbf-voip-media:jitter;
+          }
+          leaf voice-activity-detection-enabled {
+            type boolean;
+            default "false";
+            description
+              "If 'true', enables the categorization of received
+               packets into voice, background noise or silence and the
+               replacement of silence with comfort noise packets.";
+          }
+          container rtp {
+            description
+              "Real-time Transport Protocol (RTP) configuration.";
+            leaf symmetric-rtp-rtcp-enabled {
+              type boolean;
+              default "true";
+              description
+                "Enables symmetric Real-time Transport Protocol (RTP)/
+                 Real-time Transport Control Protocol (RTCP).
+
+                 If 'true', the received RTP/RTCP packets whose
+                 source UDP port and/or source IP address do not match
+                 the destination UDP port and/or IP address of the
+                 transmitted RTP/RTCP packets will be discarded.
+
+                 If 'false', RTP/RTCP packets are always accepted
+                 regardless of whether the UDP port and/or source IP
+                 address in the received RTP/RTCP packets match those
+                 in the transmitted packets.";
+              reference
+                "RFC 4961, Section 3";
+            }
+            container transport {
+              description
+                "Transport settings.";
+              uses bbf-voip-media:rtp-transport;
+            }
+          }
+        }
+      }
+    }
+    container forwarders {
+      if-feature "bbf-voip-media:forwarders";
+      description
+        "Management of media forwarders.";
+      list forwarder {
+        key "name";
+        description
+          "A media forwarder.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "The name of the media forwarder.";
+        }
+        leaf enabled {
+          type boolean;
+          default "true";
+          description
+            "The configured, desired state of the media forwarder.";
+        }
+        leaf media-stream-ip-interface {
+          type if:interface-ref;
+          must 'boolean(/if:interfaces/if:interface[if:name = '
+             + 'current()]/ip:ipv4) or '
+             + 'boolean(/if:interfaces/if:interface[if:name = '
+             + 'current()]/ip:ipv6)' {
+            error-message
+              "The referenced interface is not an IP interface.";
+            description
+              "Only allow an IP interface.";
+          }
+          mandatory true;
+          description
+            "The IP interface to be used by this media forwarder.";
+        }
+        container auxiliary-media-settings {
+          presence "Auxiliary media settings are to be used.";
+          description
+            "Management of the auxiliary media-related settings.";
+          choice location {
+            mandatory true;
+            description
+              "Selects the location of the media settings.";
+            case file {
+              leaf file {
+                type bbf-voip-tp:voip-uri;
+                description
+                  "Path and file name of a file that includes
+                   additional configuration for the VoIP media
+                   hardware that is in addition to and not included in
+                   this YANG model.
+
+                   The contents and format of this file is vendor-
+                   specific.";
+              }
+              leaf auxiliary-data-retrieval-state {
+                type bbf-voip-tp:retrieval-state;
+                config false;
+                description
+                  "Data retrieval state of the auxiliary media
+                   settings.";
+              }
+            }
+          }
+        }
+        leaf tone-event-transmission {
+          type identityref {
+            base bbf-voip-media:tone-event-transmission;
+          }
+          default "bbf-voip-media:in-band-audio";
+          description
+            "Defines how DTMF digits and telephone event tones are to
+             be transmitted.
+
+             DTMF digits and telephone event tones can be sent
+             in-band, in the audio stream or they can be sent
+             out-of-band in data packets according to IETF RFC 4733
+             in separate payload formats.";
+          reference
+            "ITU-T G.988 Clause 9.9.5 - VoIP media profile, OOB DTMF;
+             RFC 4733 Clause 3;
+             RFC 4733 Clause 4";
+        }
+        container rtp {
+          when "../bbf-voip-media:tone-event-transmission = "
+             + "'bbf-voip-media:rtp-payload'" {
+            description
+              "Applicable when DTMF digits and telephone event tones
+               are sent out-of-band in RTP packets.";
+          }
+          description
+            "RTP related configuration.";
+          leaf dynamic-rtp-payload-type-number {
+            type uint8 {
+              range "96..127";
+            }
+            default "96";
+            description
+              "The dynamic RTP payload type number to be used for
+               sending DTMF digits, telephony event tones and signals
+               out-of-band.";
+            reference
+              "RFC 4733 Section 2.1 and 4.3.3";
+          }
+          leaf piggyback-events {
+            type boolean;
+            default "false";
+            description
+              "If 'true', enables RTP piggyback events.";
+            reference
+              "ITU-T G.988 Clause 9.9.7 - RTP Profile data, Piggyback
+               events";
+          }
+          leaf dtmf-events {
+            type boolean;
+            default "false";
+            description
+              "If 'true', enables handling of DTMF via RTP DTMF
+               events per IETF RFC 4733.";
+            reference
+              "RFC 4733 Section 2.1;
+               ITU-T G.988 Clause 9.9.7 - RTP Profile data, DTMF
+               events";
+          }
+          leaf tone-events {
+            type boolean;
+            default "false";
+            description
+              "If 'true', enables handling of tones via RTP tone
+               events per IETF RFC 4733.";
+            reference
+              "RFC 4733 Section 2.5.2.2;
+               ITU-T G.988 Clause 9.9.7 - RTP profile data, Tone
+               events";
+          }
+          leaf cas-events {
+            type boolean;
+            default "false";
+            description
+              "If 'true', enables handling of channel-associated
+               signaling (CAS) via RTP Tone events per IETF RFC
+               4733.";
+            reference
+              "RFC 4733 Appendix A;
+               ITU-T G.988 Clause 9.9.7 - RTP profile data, CAS
+               events";
+          }
+        }
+        list media-profile {
+          key "name";
+          min-elements 1;
+          description
+            "A media profile.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the media profile.";
+          }
+          leaf dscp-mark {
+            type inet:dscp;
+            default "46";
+            description
+              "The differentiated service code point (DSCP) for
+               outgoing media traffic for this media profile for
+               the voice calls and voice band data/fax sessions.";
+            reference
+              "ITU-T G.988 Clause 9.9.7 - RTP profile data, DSCP
+               mark";
+          }
+          leaf voice-profile {
+            type bbf-voip-media:voice-profile-ref;
+            mandatory true;
+            description
+              "References the voice call configuration data.";
+          }
+          container fax {
+            description
+              "Fax settings.";
+            container jitter-buffer {
+              if-feature "bbf-voip-media:adaptive-jitter-buffers";
+              presence "If present, an adaptive jitter buffer is
+                        configured.";
+              description
+                "Jitter buffer settings for data sessions.";
+              uses bbf-voip-media:jitter;
+            }
+            container v152 {
+              description
+                "V.152 fax passthrough for fax transmission.";
+              reference
+                "ITU-T G.988 Clause 9.9.5 - VoIP media profile, Fax
+                 mode 0";
+              leaf voice-band-data-mode {
+                type enumeration {
+                  enum auto-switch {
+                    description
+                      "On detection of a fax/modem mid-call, the call
+                       is switched autonomously from voice mode to fax
+                       mode, without signaling or re-negotiation. The
+                       Voice Band Data (VBD) media attributes used are
+                       those negotiated during the call establishment
+                       phase.";
+                  }
+                  enum renegotiation {
+                    description
+                      "On detection of a fax/modem mid-call, the
+                       support of VBD and the selection of VBD codec
+                       and other enhanced functionality is re-
+                       negotiated.";
+                  }
+                }
+                default "auto-switch";
+                description
+                  "The voice band data mode, indicating the mode of
+                   operation in case VBD stimuli are detected during a
+                   voice call.";
+                reference
+                  "ITU-T V.152 Clause 7.3.2.2";
+              }
+              list codec-selection {
+                key "codec";
+                min-elements 1;
+                ordered-by user;
+                description
+                  "A codec selection.
+
+                   Note that the order of entries in the list defines
+                   the codec priority to be used during session
+                   setup.";
+                leaf codec {
+                  type identityref {
+                    base bbf-voip-media:fax-codec;
+                  }
+                  description
+                    "The codec for voice band data sessions.";
+                }
+              }
+            }
+            container t38 {
+              presence "If present,  a T.38 fax relay is configured.";
+              description
+                "T.38 settings.";
+              reference
+                "ITU-T G.988 Clause 9.9.5 - VoIP media profile, Fax
+                 mode 1";
+              container transport {
+                presence
+                  "If present, a different UDP port for voice and T.38
+                   is used.";
+                description
+                  "Transport settings for T.38 sessions.";
+                uses bbf-voip-media:rtp-transport {
+                  refine "local-port-minimum" {
+                    description
+                      "The minimum local port value for T.38
+                       sessions.";
+                  }
+                  refine "local-port-maximum" {
+                    description
+                      "The maximum local port value for T.38
+                       sessions.";
+                  }
+                }
+              }
+            }
+          }
+        }
+        container state {
+          config false;
+          description
+            "Operational state of the forwarder.";
+          leaf oper-state {
+            type bbf-voip-tp:oper-state;
+            description
+              "Operational state of the forwarder.
+
+               If 'down' the forwarder is totally inoperable and
+               unable to provide service. Probable causes are:
+
+               - Failing codec negotiations during session setup,
+               due to missing matching codec profiles.
+
+               - The configuration file is required but missing.
+
+               - The configuration file is required but corrupted,
+               unreadable.";
+          }
+        }
+      }
+    }
+  }
+}

@@ -24,20 +24,24 @@ module bbf-vlan-sub-interface-profile-fp {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Work Area";
+     Provider Cloud Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Nick Hancock, Adtran
+     Editor:      Shiya Ashraf, Nokia
 
-     Editor:      Ludwig Pauwels, Nokia
+     Editor:      Kevin Noll, CableLabs
+
+     PS Leader:   Sven Ooghe, Nokia
 
      PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, Adtran
+     WA Director: Bruno Cornaglia, Vodafone
 
-     WA Director: Sven Ooghe, Nokia";
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Haomian Zheng, Huawei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the management of
@@ -51,7 +55,7 @@ module bbf-vlan-sub-interface-profile-fp {
      VLAN sub-interface, data nodes indicating the associated ingress
      rewrite actions, and data nodes for egress rewrite actions.
 
-     Copyright (c) 2017-2023, Broadband Forum
+     Copyright (c) 2017-2025, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -91,9 +95,19 @@ module bbf-vlan-sub-interface-profile-fp {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a7; see
+     This version of this YANG module is part of TR-383a9; see
      the TR itself for full legal notices.";
 
+  revision 2025-07-02 {
+    description
+      "Amendment 9.
+       * Approval Date:    2025-07-02.
+       * Publication Date: 2025-07-02.";
+    reference
+      "TR-383a9: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-9.pdf>";
+  }
   revision 2023-12-15 {
     description
       "Amendment 7.
@@ -384,24 +398,21 @@ module bbf-vlan-sub-interface-profile-fp {
          overrules the match criteria provided through the
          referenced profile.";
       leaf vlan-id {
-        when "/bbf-vsi-prof:vsi-profiles/bbf-vsi-prof:vsi-profile"
-           + "[bbf-vsi-prof:name = current()/../../bbf-vsi-prof:"
-           + "vsi-profile]/bbf-vsi-prof-fp:frame-processing-rules/"
-           + "bbf-vsi-prof-fp:ingress-rule/bbf-vsi-prof-fp:rule/"
-           + "bbf-vsi-prof-fp:match-criteria/bbf-vsi-prof-fp:vlans/"
-           + "bbf-vsi-prof-fp:tag[bbf-vsi-prof-fp:index = 0]/"
-           + "bbf-vsi-prof-fp:vlan-id = 'vlan-id-is-a-parameter' " {
-          description
-            "Only applicable when the value of the leaf 'vlan-id'
-             within the profile's match criteria is configured to
-             use a parameter defined outside of the profile at the
-             point the profile is referenced.";
-        }
         type bbf-dot1qt:vlan-id-range;
         mandatory true;
         description
           "A list of VLAN IDs, or non overlapping VLAN ranges, in
-           ascending order, between 1 and 4094.";
+           ascending order, between 1 and 4094.
+
+           The value only applicable when the outer VLAN tag within
+           the profile's match criteria is configured to use a
+           parameter defined outside of the profile at the point the
+           profile is referenced.
+
+           If the profile has more than one match criteria with outer
+           VLAN tags configured as 'vlan-id-as-parameter', then all of
+           them will be overridden with the same value configured in
+           this leaf.";
       }
     }
     container tag-1 {
@@ -414,24 +425,21 @@ module bbf-vlan-sub-interface-profile-fp {
          overrules the match criteria provided through the
          referenced profile.";
       leaf vlan-id {
-        when "/bbf-vsi-prof:vsi-profiles/bbf-vsi-prof:vsi-profile"
-           + "[bbf-vsi-prof:name = current()/../../bbf-vsi-prof:"
-           + "vsi-profile]/bbf-vsi-prof-fp:frame-processing-rules/"
-           + "bbf-vsi-prof-fp:ingress-rule/bbf-vsi-prof-fp:rule/"
-           + "bbf-vsi-prof-fp:match-criteria/bbf-vsi-prof-fp:vlans/"
-           + "bbf-vsi-prof-fp:tag[bbf-vsi-prof-fp:index = 1]/"
-           + "bbf-vsi-prof-fp:vlan-id = 'vlan-id-is-a-parameter' " {
-          description
-            "Only applicable when the value of the leaf 'vlan-id'
-             within the profile's match criteria is configured to
-             use a parameter defined outside of the profile at the
-             point the profile is referenced.";
-        }
         type bbf-dot1qt:vlan-id-range;
         mandatory true;
         description
           "A list of VLAN IDs, or non overlapping VLAN ranges, in
-           ascending order, between 1 and 4094.";
+           ascending order, between 1 and 4094.
+
+           The value is only applicable when the inner VLAN tag within
+           the profile's match criteria is configured to use a
+           parameter defined outside of the profile at the point the
+           profile is referenced.
+
+           If the profile has more than one match criteria with inner
+           VLAN tags configured as 'vlan-id-as-parameter', then all of
+           them will be overridden with the same value configured in
+           this leaf.";
       }
     }
     container ingress-rewrite-tag-0 {
@@ -444,24 +452,22 @@ module bbf-vlan-sub-interface-profile-fp {
          frame that overrules the ingress rewrite data provided
          through the referenced profile.";
       leaf vlan-id {
-        when "/bbf-vsi-prof:vsi-profiles/bbf-vsi-prof:vsi-profile"
-           + "[bbf-vsi-prof:name = current()/../../bbf-vsi-prof:"
-           + "vsi-profile]/bbf-vsi-prof-fp:frame-processing-rules/"
-           + "bbf-vsi-prof-fp:ingress-rule/rule/ingress-rewrite/"
-           + "bbf-vsi-prof-fp:push-tag[bbf-vsi-prof-fp:index = 0]/"
-           + "bbf-vsi-prof-fp:vlan-id = 'vlan-id-is-a-parameter' " {
-          description
-            "Only applicable when the value of the leaf 'vlan-id'
-             within the profile's ingress rewrite is configured to
-             use a parameter defined outside of the profile at the
-             point the profile is referenced.";
-        }
         if-feature "vlan-id-translation";
         type bbf-dot1qt:vlan-id-or-0;
         mandatory true;
         description
           "VLAN ID to be put in the VLAN tag that is pushed in the
-           frame.";
+           frame.
+
+           The value is only applicable when the outer VLAN tag within
+           the profile's ingress rewrite is configured to use a
+           parameter defined outside of the profile at the point the
+           profile is referenced.
+
+           If the profile has more than one ingress rewrite with outer
+           VLAN tags configured as 'vlan-id-as-parameter', then all of
+           them will be overridden with the same value configured in
+           this leaf.";
       }
     }
     container ingress-rewrite-tag-1 {
@@ -474,24 +480,22 @@ module bbf-vlan-sub-interface-profile-fp {
          frame that overrules the ingress rewrite data provided
          through the referenced profile.";
       leaf vlan-id {
-        when "/bbf-vsi-prof:vsi-profiles/bbf-vsi-prof:vsi-profile"
-           + "[bbf-vsi-prof:name = current()/../../bbf-vsi-prof:"
-           + "vsi-profile]/bbf-vsi-prof-fp:frame-processing-rules/"
-           + "bbf-vsi-prof-fp:ingress-rule/rule/ingress-rewrite/"
-           + "bbf-vsi-prof-fp:push-tag[bbf-vsi-prof-fp:index = 1]/"
-           + "bbf-vsi-prof-fp:vlan-id = 'vlan-id-is-a-parameter' " {
-          description
-            "Only applicable when the value of the leaf 'vlan-id'
-             within the profile's ingress rewrite is configured to
-             use a parameter defined outside of the profile at the
-             point the profile is referenced.";
-        }
         if-feature "vlan-id-translation";
         type bbf-dot1qt:vlan-id-or-0;
         mandatory true;
         description
           "VLAN ID to be put in the VLAN tag that is pushed in the
-           frame.";
+           frame.
+
+           The value is only applicable when the inner VLAN tag within
+           the profile's ingress rewrite is configured to use a
+           parameter defined outside of the profile at the point the
+           profile is referenced.
+
+           If the profile has more than one ingress rewrite with inner
+           VLAN tags configured as 'vlan-id-as-parameter', then all of
+           them will be overridden with the same value configured in
+           this leaf.";
       }
     }
     container egress-rewrite-tag-0 {
@@ -504,19 +508,6 @@ module bbf-vlan-sub-interface-profile-fp {
          frame that overrules the egress rewrite data provided
          through the referenced profile.";
       leaf vlan-id {
-        when
-          "/bbf-vsi-prof:vsi-profiles/bbf-vsi-prof:vsi-profile"
-        + "[bbf-vsi-prof:name = current()/../../bbf-vsi-prof:"
-        + "vsi-profile]/bbf-vsi-prof-fp:frame-processing-rules/"
-        + "bbf-vsi-prof-fp:egress-rewrite/bbf-vsi-prof-fp:push-tag"
-        + "[bbf-vsi-prof-fp:index = 0]/bbf-vsi-prof-fp:vlan-id = "
-        + "'vlan-id-is-a-parameter' " {
-          description
-            "Only applicable when the value of the leaf 'vlan-id'
-             within the profile's egress rewrite is configured to
-             use a parameter defined outside of the profile at the
-             point the profile is referenced.";
-        }
         if-feature "vlan-id-translation";
         type union {
           type bbf-dot1qt:vlan-id-or-0;
@@ -549,7 +540,12 @@ module bbf-vlan-sub-interface-profile-fp {
         default "vlan-id-from-match";
         description
           "VLAN ID to be put in the VLAN tag that is pushed in the
-           frame.";
+           frame.
+
+           The value is only applicable when the outer VLAN tag within
+           the profile's egress rewrite is configured to use a
+           parameter defined outside of the profile at the point the
+           profile is referenced.";
       }
     }
     container egress-rewrite-tag-1 {
@@ -562,19 +558,6 @@ module bbf-vlan-sub-interface-profile-fp {
          frame that overrules the egress rewrite data provided
          through the referenced profile.";
       leaf vlan-id {
-        when
-          "/bbf-vsi-prof:vsi-profiles/bbf-vsi-prof:vsi-profile"
-        + "[bbf-vsi-prof:name = current()/../../bbf-vsi-prof:"
-        + "vsi-profile]/bbf-vsi-prof-fp:frame-processing-rules/"
-        + "bbf-vsi-prof-fp:egress-rewrite/bbf-vsi-prof-fp:push-tag"
-        + "[bbf-vsi-prof-fp:index = 1]/bbf-vsi-prof-fp:vlan-id = "
-        + "'vlan-id-is-a-parameter' " {
-          description
-            "Only applicable when the value of the leaf 'vlan-id'
-             within the profile's egress rewrite is configured to
-             use a parameter defined outside of the profile at the
-             point the profile is referenced.";
-        }
         if-feature "vlan-id-translation";
         type union {
           type bbf-dot1qt:vlan-id-or-0;
@@ -607,7 +590,12 @@ module bbf-vlan-sub-interface-profile-fp {
         default "vlan-id-from-match";
         description
           "VLAN ID to be put in the VLAN tag that is pushed in the
-           frame.";
+           frame.
+
+           The value is only applicable when the inner VLAN tag within
+           the profile's egress rewrite is configured to use a
+           parameter defined outside of the profile at the point the
+           profile is referenced.";
       }
     }
   }

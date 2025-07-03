@@ -33,24 +33,24 @@ module bbf-qos-policing {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Work Area";
+     Provider Cloud Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
      Editor:      Shiya Ashraf, Nokia
 
-     Editor:      Nick Hancock, Adtran
-
      Editor:      Kevin Noll, CableLabs
 
-     Editor:      Ludwig Pauwels, Nokia
+     PS Leader:   Sven Ooghe, Nokia
 
-     PS Leader:   Aihua Guo, Futurewei
+     PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, Adtran
+     WA Director: Bruno Cornaglia, Vodafone
 
-     WA Director: Sven Ooghe, Nokia";
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Haomian Zheng, Huawei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the management of
@@ -61,7 +61,7 @@ module bbf-qos-policing {
      Specifically, this module augments classifiers to manage the
      policing of flows.
 
-     Copyright (c) 2017-2024, Broadband Forum
+     Copyright (c) 2017-2025, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -101,9 +101,19 @@ module bbf-qos-policing {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a8; see
+     This version of this YANG module is part of TR-383a9; see
      the TR itself for full legal notices.";
 
+  revision 2025-07-02 {
+    description
+      "Amendment 9.
+       * Approval Date:    2025-07-02.
+       * Publication Date: 2025-07-02.";
+    reference
+      "TR-383a9: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-9.pdf>";
+  }
   revision 2024-11-11 {
     description
       "Amendment 8.
@@ -747,7 +757,26 @@ module bbf-qos-policing {
 
   container policing-profiles {
     description
-      "Configuration associated with policing profiles.";
+      "Contains the parameters that are needed to create a policer
+       instance. For example, a reference to a policing profile from
+       a flow as a QoS classifier action, means the following:
+       - If the scope is not configured in the referenced policing
+         profile, then a unique policer instance will be created.
+       - If the scope is configured in the referenced policing
+         profile, then the unique policer instance within this scope
+         will be used. If a unique policer instance within this scope
+         does not yet exist, it will be created.
+       - All associated traffic flows where the policer profile is
+         referenced, will be subject to policing using the selected
+         policer instance based on the criteria above.
+
+       For example, a policing profile whose scope is configured to be
+       'ethernet-interface' can be used to rate-limit the aggregate
+       ingress bandwidth through some of the VLAN sub-interfaces of a
+       lower-layer, Ethernet-like, interface matching a certain p-bit
+       value. This can be done by referencing the same policing
+       profile from a p-bit classifer referenced in the ingress QoS
+       profile associated with each of the VLAN sub-interfaces.";
     list policing-profile {
       key "name";
       description
@@ -760,8 +789,10 @@ module bbf-qos-policing {
       leaf scope {
         type bbf-qos-cls:action-scope;
         description
-          "Identifies the scope of the policer instance sharing is
-           within Ethernet interface or VLAN sub-interface.";
+          "Identifies the scope at which a unique instance of a
+           policer defined by this profile could exist. All
+           references to this profile within the same scope will
+           share the same instance of the policer.";
       }
       choice policing-type {
         mandatory true;

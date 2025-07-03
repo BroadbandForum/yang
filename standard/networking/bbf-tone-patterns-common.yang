@@ -1,0 +1,453 @@
+module bbf-tone-patterns-common {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-tone-patterns-common";
+  prefix bbf-tpc;
+
+  import bbf-voip-types {
+    prefix bbf-voip-tp;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Provider Cloud Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Shiya Ashraf, Nokia
+
+     Editor:      Kevin Noll, CableLabs
+
+     PS Leader:   Sven Ooghe, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Bruno Cornaglia, Vodafone
+
+     WA Director: Mengmeng Li, China Mobile
+
+     WA Director: Haomian Zheng, Huawei";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on voice service
+     management. As such, this module is specific to access
+     network equipment (e.g., BBF-specified Access Nodes and FTTdp
+     DPUs).
+
+     Specifically, this module describes reusable groupings containing
+     configuration and operational data nodes used for managing tone
+     patterns.
+
+     Copyright (c) 2017-2025, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a9; see
+     the TR itself for full legal notices.";
+
+  revision 2025-07-02 {
+    description
+      "Amendment 9.
+       * Approval Date:    2025-07-02.
+       * Publication Date: 2025-07-02.";
+    reference
+      "TR-383a9: Common YANG Modules for Access Networks
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-383_Amendment-9.pdf>";
+  }
+
+  grouping tone-components {
+    description
+      "Data nodes to configure tone components.";
+    container tone-components {
+      must "not(boolean(tone-component))"
+         + " or "
+         + "tone-component["
+         + "not(../tone-component/position"
+         + "> position)]"
+         + "/position <= "
+         + "count(current()/tone-component)" {
+        error-message
+          "The values configured for tone component positions within "
+        + "a tone pattern are not consecutive integers beginning at "
+        + "1.";
+        description
+          "Ensure that all position values are consecutive, beginning
+           with the value 1.";
+      }
+      must "(count(tone-component) != 1)"
+         + " or "
+         + "not(boolean(tone-component[position=1]))"
+         + " or "
+         + "boolean(tone-component[position=1]"
+         + "/tones)" {
+        error-message
+          "The tone pattern comprises only one tone component, but "
+        + "the tone component does not switch on any tones; it is "
+        + "just a period of silence.";
+        description
+          "Ensure that the tone pattern does not define just
+           silence.";
+      }
+      description
+        "Data nodes to manage tone components of a tone pattern.";
+      list tone-component {
+        must "(count(../tone-component) = 1)"
+           + " or "
+           + "(position = 1)"
+           + " or "
+           + "boolean(tones)"
+           + " or "
+           + "not(boolean(../tone-component"
+           + "[position=current()/position - 1]))"
+           + " or "
+           + "(not(boolean(tones))"
+           + " and "
+           + "(boolean(../tone-component[position="
+           + "current()"
+           + "/position - 1]"
+           + "/tones)))" {
+          error-message
+            "The tone pattern defines two sequential tone "
+          + "components that are both periods of silence.";
+          description
+            "Prevent the configuration of two sequential tone
+             components that are both periods of silence.
+
+             This error is not possible if only one tone component has
+             been configured or if the tone component is the first
+             tone component as it will have no preceding tone
+             component, so the must statement evaluates to 'true' in
+             these cases.
+
+             Since this must statement is designed to specifically
+             report to the client that two sequential tone components
+             that are both periods of silence are being configured,
+             the must statement also tests for invalid configurations
+             that will be caught by other must statements or YANG
+             syntax validation to prevent this error from being
+             reported and avoid the client being inundated with
+             irrelevant error messages unnecessarily in the following
+             cases:
+             - if the preceding tone component does not exist as this
+               error will be caught by the must statement that checks
+               for non-consecutive values for leaf 'position'.
+             - if the leaf 'position' is empty, this will be caught by
+               YANG syntax validation.";
+        }
+        key "position";
+        min-elements 1;
+        description
+          "A tone component of the tone pattern.";
+        leaf position {
+          type uint8 {
+            range "1..max";
+          }
+          description
+            "The position of this tone component within the tone
+             pattern, whereby tone components of a tone pattern are to
+             be played in ascending order from the value of 1 based on
+             the value of this leaf.
+
+             Note that the values of position within a tone pattern
+             must be consecutive beginning from the value 1; this aids
+             validation of the tone pattern configuration.";
+        }
+        leaf duration {
+          type union {
+            type enumeration {
+              enum continuous {
+                description
+                  "The tone component is to be played continuously.
+
+                   Note that to be played continuously, the tone
+                   component must be the last tone component within
+                   the tone pattern.";
+              }
+            }
+            type uint16 {
+              range "1..max";
+            }
+          }
+          units "milliseconds";
+          must "(.!='continuous')"
+             + " or "
+             + "(../position = "
+             + "count(../../tone-component))" {
+            error-message
+              "A continuous tone component is not the last tone "
+            + "component defined within a tone pattern.";
+            description
+              "Ensure that if the duration is set to 'continuous',
+               the tone component is the last tone component in the
+               tone pattern.";
+          }
+          mandatory true;
+          description
+            "The duration in milliseconds the tone component is to be
+             played.";
+          reference
+            "ITU-T G.988 Clause 9.9.6 - Tone pattern table, Duration";
+        }
+        container tones {
+          presence
+            "One or more tones are to be switched on for this tone
+             component.";
+          description
+            "The individual tones to be switched on when this tone
+             component is played.
+
+             If this container is not present, the tone component
+             defines a period of silence.";
+          reference
+            "ITU-T G.988 Clause 9.9.6 - Tone pattern table,
+             Tone on";
+          list tone {
+            key "frequency";
+            min-elements 1;
+            description
+              "A tone from which the tone component is comprised.";
+            leaf frequency {
+              type uint16 {
+                range "25..3400";
+              }
+              units "Hz";
+              description
+                "The frequency of this tone.";
+              reference
+                "ITU-T G.988 Clause 9.9.6 - Tone pattern table,
+                 Frequency 1..4;
+                 RFC 4733 Section 4.3.3 - frequency;
+                 RFC 4733 Section 4.1;
+                 ITU Operational Bulletin No.955 (1.V.2010)";
+            }
+            leaf power {
+              type decimal64 {
+                fraction-digits 1;
+                range "-25.5..0";
+              }
+              units "dBm0";
+              mandatory true;
+              description
+                "The power level of this tone.";
+              reference
+                "ITU-T G.988 Clause 9.9.6 - Tone pattern table,
+                 Power 1..4";
+            }
+          }
+          container modulation {
+            presence "Enables modulation of the tone component.";
+            description
+              "Modulation of the complex tone.
+
+               If not this container is not configured, the tone
+               component is not modulated.";
+            leaf frequency {
+              type uint16 {
+                range "1..511";
+              }
+              units "Hz";
+              mandatory true;
+              description
+                "The frequency to be used to modulate the tone
+                 component.";
+              reference
+                "ITU-T G.988 Clause 9.9.6 - Tone pattern table,
+                 Modulation frequency;
+                 RFC 4733 Section 4.3.3 - modulation";
+            }
+            leaf power {
+              type decimal64 {
+                fraction-digits 1;
+                range "-25.5..0";
+              }
+              units "dBm0";
+              mandatory true;
+              description
+                "The power level of the modulating frequency signal.";
+              reference
+                "ITU-T G.988 Clause 9.9.6, Tone pattern table,
+                 Modulation power";
+            }
+          }
+        }
+      }
+      container repetition-behavior {
+        when "(count(../tone-component) > 1)"
+           + " and "
+           + "../tone-component[position="
+           + "count(../tone-component)]"
+           + "/duration != 'continuous'" {
+          description
+            "Only applicable if the tone pattern comprises more than 1
+             tone component and the last tone component is not a
+             continuous tone component.";
+        }
+        description
+          "Manages the repetition behavior for tone patterns
+           comprising more than one tone component, if and only if the
+           last tone component is not to be played continuously.
+
+           Note that if a tone pattern is comprised of a single tone
+           component no configuration for repetition behavior is
+           needed; the tone component will either have a duration set
+           to 'continuous', in which case it is to be repeated
+           continuously, or it has a finite duration, in which case it
+           is to be played only once, i.e., is not to be repeated.";
+        leaf repeat-from-position {
+          type union {
+            type enumeration {
+              enum do-not-repeat {
+                description
+                  "The tone pattern is not to be repeated, i.e.,
+                   the entire tone pattern is played just once.";
+              }
+            }
+            type uint8 {
+              range "1..max";
+            }
+          }
+          must "(.='do-not-repeat')"
+             + " or "
+             + "(. < count(../../tone-component))" {
+            error-message
+              "The position from which the tone pattern is to be "
+            + "repeated is invalid.";
+            description
+              "Ensure that the value for position is valid.";
+          }
+          mandatory true;
+          description
+            "Indicates the position within the tone pattern from
+             which the tone components are to be repeated continuously
+             after being played in their entirety once until
+             interrupted by some other event.
+
+             If set to 1, the entire tone pattern is to be repeated
+             continuously.";
+        }
+      }
+    }
+  }
+
+  grouping tone-pattern-files {
+    description
+      "Data nodes to manage tone pattern definitions located in a
+       file.";
+    container file {
+      description
+        "Configuration to access to the tone pattern file.";
+      choice location {
+        mandatory true;
+        description
+          "Selects the location of the file containing the tone
+           pattern definition.";
+        case url {
+          leaf url {
+            type bbf-voip-tp:voip-uri;
+            description
+              "Path and file name of a file containing a codec
+               sequence to be played out.";
+            reference
+              "ITU-T G.988 Clause 9.9.6 - Tone event table,
+               Tone file";
+          }
+        }
+      }
+      leaf number-of-plays {
+        type union {
+          type uint8 {
+            range "1..max";
+          }
+          type enumeration {
+            enum continuous {
+              description
+                "The pattern defined by the contents of the file is to
+                 be repeated continuously until interrupted by some
+                 other event.";
+            }
+          }
+        }
+        default "1";
+        description
+          "Number of times the tone pattern defined by the contents of
+           the file is to be repeated.";
+        reference
+          "ITU-T G.988 Clause 9.9.6 - Tone event table, Tone file
+           repetitions";
+      }
+    }
+  }
+
+  grouping tone-patterns {
+    description
+      "Data nodes used for configuring the tone patterns.
+
+       Note that this grouping intended to be augmented at the
+       position it is used to add the functionality required of the
+       specific implementation through the use of the other groupings
+       located within this module, i.e., the groupings
+       'tone-components' and/or 'tone-pattern-files'.
+
+       If more than one of these groupings is used then the uses
+       statements should be included within a choice statement, with
+       the choice named 'source' and the cases named according to the
+       name of groupings.
+
+       This strategy enables distinct implementations to add the
+       required functionality according to their specific
+       requirements.";
+    container tone-patterns {
+      description
+        "Data nodes to define and manage tone patterns.";
+      list tone-pattern {
+        key "name";
+        description
+          "A tone pattern.";
+        reference
+          "ITU-T G.988 Clause 9.9.6 - Tone pattern table";
+        leaf name {
+          type string;
+          description
+            "The name of the tone pattern.";
+        }
+      }
+    }
+  }
+}
