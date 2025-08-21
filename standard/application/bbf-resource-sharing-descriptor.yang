@@ -1,0 +1,155 @@
+module bbf-resource-sharing-descriptor {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-resource-sharing-descriptor";
+  prefix bbf-rsd;
+
+  import bbf-resource-sharing {
+    prefix bbf-sharing;
+  }
+  import bbf-dot1q-types {
+    prefix bbf-dot1qt;
+  }
+  import bbf-hardware-types {
+    prefix bbf-hwt;
+  }
+  import ietf-hardware {
+    prefix hw;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Jan Diestelmans, Nokia
+
+     Editor:      Haomian Zheng, Huawei
+
+     PS Leader:   Ken Kerpez, DZS
+
+     WA Director: Bruno Cornaglia, Vodafone
+
+     WA Director: Mengmeng Li, China Mobile";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on Fixed Access
+     Network Sharing (FANS) as applicable to access network equipment
+     (e.g., BBF-specified Access Nodes).
+
+     Specifically, this module augments the framework provided by the
+     bbf-resource-sharing. It defines resource types and the values
+     associated with device share for each type.
+
+     Copyright (c) 2024, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-386i2; see
+     the TR itself for full legal notices.";
+
+  revision 2024-06-10 {
+    description
+      "Issue 2.
+       * Approval Date:    2024-06-10.
+       * Publication Date: 2024-06-10.";
+    reference
+      "TR-386i2: Fixed Access Network Sharing -
+                 Access Network Sharing Interfaces
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-386_Issue-2.pdf>";
+  }
+
+  identity port {
+    base bbf-sharing:resource-type;
+    description
+      "Physical port of a physical access node.";
+  }
+
+  identity vlan-id {
+    base bbf-sharing:resource-type;
+    description
+      "Outer VLAN IDs used at the uplink of the physical access
+       node.";
+  }
+
+  augment "/bbf-sharing:device-shares/bbf-sharing:device-share"
+        + "/bbf-sharing:resources/bbf-sharing:resource"
+        + "/bbf-sharing:value" {
+    when "../bbf-sharing:type = 'bbf-rsd:port'";
+    description
+      "Specifies the identification of a physical port.";
+    leaf-list port {
+      type leafref {
+        path "/hw:hardware/hw:component/hw:name";
+      }
+      must "derived-from-or-self(deref(.)/../hw:class,"
+         + "'bbf-hwt:transceiver-link')" {
+        error-message
+          "The hardware component is not of class 'transceiver-link'
+           or a derivation thereof.";
+        description
+          "The hardware component must be of class 'transceiver-link'
+           or a class derived from 'transceiver-link'.";
+      }
+      description
+        "Reference to the physical port in the physical access node.";
+    }
+  }
+
+  augment "/bbf-sharing:device-shares/bbf-sharing:device-share"
+        + "/bbf-sharing:resources/bbf-sharing:resource"
+        + "/bbf-sharing:value" {
+    when "../bbf-sharing:type = 'bbf-rsd:vlan-id'";
+    description
+      "Specifies the identification of a VLAN ID range.";
+    leaf vlan-id-range {
+      type bbf-dot1qt:vlan-id-range;
+      mandatory true;
+      description
+        "Range of VLAN IDs expressed as a comma-separated list of VLAN
+         ID value or a VLAN ID range, separated by dashes. Every RPC
+         that configures a outer vlan-id (index 0) on the OLT-side
+         will be verified and validated to be part of the configured
+         vlan-id-range.
+           Example: '1-1000,1500,2001-2999'.";
+    }
+  }
+}

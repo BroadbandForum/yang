@@ -1,0 +1,150 @@
+module bbf-resource-sharing {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-resource-sharing";
+  prefix bbf-sharing;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     SDN/NFV Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Jan Diestelmans, Nokia
+
+     Editor:      Haomian Zheng, Huawei
+
+     PS Leader:   Ken Kerpez, DZS
+
+     WA Director: Bruno Cornaglia, Vodafone
+
+     WA Director: Mengmeng Li, China Mobile";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on Fixed Access
+     Network Sharing (FANS) as applicable to access network equipment
+     (e.g., BBF-specified Access Nodes).
+
+     Specifically, this module defines the management of device
+     shares of a physical device. A device share assigns a set of
+     resources that can be managed by clients that are part of the
+     configured user group. This module provides a framework that
+     must be augmented with specific resource types and values.
+
+     Copyright (c) 2024, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-386i2; see
+     the TR itself for full legal notices.";
+
+  revision 2024-06-10 {
+    description
+      "Issue 2.
+       * Approval Date:    2024-06-10.
+       * Publication Date: 2024-06-10.";
+    reference
+      "TR-386i2: Fixed Access Network Sharing -
+                 Access Network Sharing Interfaces
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-386_Issue-2.pdf>";
+  }
+
+  identity resource-type {
+    description
+      "Base identity for access node resource types.";
+  }
+
+  typedef resource-type-ref {
+    type identityref {
+      base resource-type;
+    }
+    description
+      "Reference to the type of an access node resource.";
+  }
+
+  container device-shares {
+    description
+      "Configuration associated with device shares of a physical
+       access node.";
+    list device-share {
+      key "name";
+      description
+        "Device share of a physical access node.";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "Name of the device share.";
+      }
+      leaf user-group {
+        type bbf-yang:string-ascii64;
+        mandatory true;
+        description
+          "Name of the administrative group assigned to the device
+           share, could be pre-configured by administrator
+           (e.g., InP).";
+      }
+      container resources {
+        description
+          "Contains the list of resources of a physical access
+           node that are assigned to the device share.";
+        list resource {
+          key "type";
+          description
+            "Resource identification of a physical access node.";
+          leaf type {
+            type bbf-sharing:resource-type-ref;
+            description
+              "Type of the physical access node resources.";
+          }
+          container value {
+            description
+              "Contains the identification of the resource(s) that
+               are assigned to the node share. The values to be
+               provided is based on the resource type.";
+          }
+        }
+      }
+    }
+  }
+}
