@@ -1,5 +1,10 @@
 ## Broadband Forum YANG Modules
 
+### 2025-09-09: [TR-452.4 Issue 1](https://www.broadband-forum.org/technical/download/TR-452.4.pdf) QED Measurement Formats
+*Tag: [TR-452.4-v1.0.0](https://github.com/BroadbandForum/yang/tree/TR-452.4-v1.0.0)*
+
+TR-452.4 specifies how to collect measurements of quality attenuation.
+
 ### 2025-08-21: [TR-386 Issue 2](https://www.broadband-forum.org/technical/download/TR-386_Issue-2.pdf) Fixed Access Network Sharing - Access Network Sharing Interfaces
 *Tag: [TR-386-v2.0.0](https://github.com/BroadbandForum/yang/tree/TR-386-v2.0.0)*
 
@@ -15,7 +20,7 @@ TR-386 specifies the system interfaces associated with Fixed Access Network Shar
 *Tag: [TR-451-v1.1.0](https://github.com/BroadbandForum/yang/tree/TR-451-v1.1.0)*
 
 * Add support for extended TCP.
-* Add support for TLS endpoint configuration. 
+* Add support for TLS endpoint configuration.
 
 ### 2024-11-11: [TR-383 Amendment 8](https://www.broadband-forum.org/technical/download/TR-383_Amendment-8.pdf) Common YANG Modules for Access Networks
 *Tag: [TR-383-v1.8.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.8.0)*
@@ -52,7 +57,7 @@ TR-477 specifies the necessary architecture, network function (NF) definitions, 
 ### 2023-06-21: [TR-385 Issue 2 Amendment 1](https://www.broadband-forum.org/technical/download/TR-385_Issue-2_Amendment-1.pdf) ITU-T PON YANG Modules
 *Tag: [TR-385-v2.1.0](https://github.com/BroadbandForum/yang/tree/TR-385-v2.1.0)*
 
-* Align 'units' statements to the latest OD-360 guidelines 
+* Align 'units' statements to the latest OD-360 guidelines
 * Add new modules for managing ONU authentication as defined in [TR-489](https://www.broadband-forum.org/technical/download/TR-489.pdf)
 * Add new modules for managing burst profiles
 * Extend existing modules to support defect reporting

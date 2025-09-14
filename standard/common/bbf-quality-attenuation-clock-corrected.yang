@@ -1,0 +1,148 @@
+module bbf-quality-attenuation-clock-corrected {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-quality-attenuation-clock-corrected";
+  prefix bbf-qattn-cc;
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Network Architecture Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Bjoern Ivar Teigen, CUJO AI
+
+     PS Leader:   Xueyan Song, ZTE
+
+     WA Director: Jonathan Newton, Vodafone
+
+     WA Director: Christele Bouchat, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on
+     Quality Attenuation.
+
+     Specifically, this module provides data nodes used to
+     capture Quality Attenuation Observations for broadband
+     networks. It includes data types and structures that
+     facilitate the storage and sharing of attenuation samples
+     and their associated timestamps. This model is primarily
+     intended for network operators and OEMs that require a
+     standardized method to collect and analyze
+     quality attenuation data.
+
+     Copyright (c) 2025, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-452.4; see
+     the TR itself for full legal notices.";
+
+  revision 2025-09-09 {
+    description
+      "Issue 1.
+       * Approval Date:    2025-09-09.
+       * Publication Date: 2025-09-09.";
+    reference
+      "TR-452.4: QED Measurement Formats
+                 <https://www.broadband-forum.org/technical/download/
+                          TR-452.4.pdf>";
+  }
+
+  container samples {
+    description
+      "Data nodes used to report quality attenuation samples.";
+    list sample {
+      key "id";
+      description
+        "A quality attenuation sample.";
+      leaf id {
+        type string;
+        description
+          "ID of the sample.";
+      }
+      leaf first-observation-timestamp {
+        type yang:date-and-time;
+        description
+          "Timestamp of when the sample was generated.";
+        reference
+          "TR-452.1 R-5a";
+      }
+      leaf packet-size {
+        type uint64;
+        units "bytes";
+        description
+          "Packet size.";
+      }
+      list observation-point {
+        key "id";
+        description
+          "An observation point where the sample was observed.";
+        leaf id {
+          type string;
+          description
+            "ID of the observation point.";
+        }
+        list observation {
+          key "id";
+          description
+            "An observation of the sample at the observation point.";
+          leaf id {
+            type string;
+            description
+              "ID of the observation.";
+          }
+          leaf time-since-first-observation {
+            type uint64;
+            units "nanoseconds";
+            description
+              "Length of the interval since
+               first-observation-timestamp in nanoseconds. This does
+               not allow us to represent intervals larger than 614
+               years.";
+          }
+        }
+      }
+    }
+  }
+}
