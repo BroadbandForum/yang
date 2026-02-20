@@ -2,7 +2,7 @@
 
 # XXX environment variable substitution only works for file paths, and doesn't
 #     work for PDF engine options, so in fact we preprocess this file to
-#     substitute ../../../install/pandoc/ etc.
+#     substitute ../../install/pandoc/ etc.
 
 standalone: true
 
@@ -11,9 +11,9 @@ standalone: true
 # PDF generation requires valid paths at build time
 # (the make rules copy CSS files to TARGETDIR but we don't assume this here)
 css:
-  - ../../../install/pandoc//css/bbf.css
-  - ../../../install/pandoc//css/extra.css
-  - ../../../install/pandoc//css/release.css
+  - ../../install/pandoc//css/bbf.css
+  - ../../install/pandoc//css/extra.css
+  - ../../install/pandoc//css/release.css
 
 pdf-engine: wkhtmltopdf
 
@@ -34,13 +34,13 @@ pdf-engine-opts:
   # - '3' (needs to come from the PANDOCTOCDEPTH makefile variable)
 
   - --header-html
-  - ../../../install/pandoc//css/pdf-header.html
+  - ../../install/pandoc//css/pdf-header.html
 
   - --header-spacing
   - '4'
 
   - --footer-html
-  - ../../../install/pandoc//css/pdf-footer.html
+  - ../../install/pandoc//css/pdf-footer.html
 
   - --footer-spacing
   - '4'
@@ -60,7 +60,7 @@ pdf-engine-opts:
   #     - need to honor the watermark background
   #     - need to adjust page-1 header hiding?
   #     - need to suppress the title and subtitle
-  # - cover ../../../install/pandoc//css/pdf-cover.html
+  # - cover ../../install/pandoc//css/pdf-cover.html
 
   # XXX see above for built-in table of contents notes
   # - toc

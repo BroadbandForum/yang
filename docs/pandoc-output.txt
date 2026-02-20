@@ -1,123 +1,77 @@
-make[1]: Entering directory '/mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/YANG-YANG-DOCS/publish/yang'
-ROOTDIR = ./../../
-USERNAME = yang
-installdir = ./../../install/
-publishdir = ./../../publish/yang/
-FIRSTS 
-RESOURCES CNAME
-TARGETS 
-PACKAGE 
-PROJECTYAMLPROJECT 
-INSTALLPYTHON 
-INSTALLPROJECTYAML 
-package 
-yq eval ./../../install/pandoc/metadata/bbf-metadata.yaml
-yq eval ./../../install/pandoc/metadata/no-title-metadata.yaml
-yq eval ./../../install/pandoc/defaults/htm-defaults.yaml
-yq eval ./../../install/pandoc/defaults/html-defaults.yaml
-yq eval ./../../install/pandoc/defaults/_codebraid_preview.yaml
-yq eval ./../../install/pandoc/defaults/codebraid-defaults.yaml
-yq eval ./../../install/pandoc/defaults/common-defaults.yaml
-yq eval ./../../install/pandoc/defaults/typst-defaults.yaml
-yq eval ./../../install/pandoc/defaults/docx-defaults.yaml
-yq eval ./../../install/pandoc/defaults/pdf-defaults.yaml
-yq eval ./../../install/pandoc/defaults/json-defaults.yaml
-yq eval ./../../install/pandoc/csl/itu-extra-csl.yaml
-yq eval ./../../install/pandoc/csl/misc-extra-csl.yaml
-yq eval ./../../install/pandoc/csl/bbf-extra-csl.yaml
-yq eval ./../../install/pandoc/csl/ansi-extra-csl.yaml
-yq eval ./../../install/pandoc/csl/gsma-extra-csl.yaml
-yq eval ./../../install/pandoc/csl/sff-extra-csl.yaml
-yq eval ./../../install/pandoc/csl/w3c-extra-csl.yaml
-yq eval ./../../install/pandoc/csl/ieee-extra-csl.yaml
-yq eval ./../../install/pandoc/csl/iso-extra-csl.yaml
-yq eval ./../../install/pandoc/csl/iana-extra-csl.yaml
-yq eval ./../../install/pandoc/csl/grpc-extra-csl.yaml
-yq eval ./../../install/pandoc/csl/etsi-extra-csl.yaml
-yq eval ./../../install/pandoc/csl/mef-extra-csl.yaml
-yq eval ./../../install/pandoc/csl/ietf-extra-csl.yaml
-yq eval ./../../install/pandoc/csl/3gpp-extra-csl.yaml
-yq eval ./../../install/projectyaml/WT-135/PROJECT.yaml
-yq eval ./../../install/projectyaml/WT-106/PROJECT.yaml
-yq eval ./../../install/projectyaml/WT-262/PROJECT.yaml
-yq eval ./../../install/projectyaml/WT-098/PROJECT.yaml
-yq eval ./../../install/projectyaml/DTP-069/PROJECT.yaml
-yq eval ./../../install/projectyaml/cwmp-data-models/PROJECT.yaml
-yq eval ./../../install/projectyaml/WT-196/PROJECT.yaml
-yq eval ./../../install/projectyaml/WT-232/PROJECT.yaml
-yq eval ./../../install/projectyaml/WT-104/PROJECT.yaml
-yq eval ./../../install/projectyaml/WT-124/PROJECT.yaml
-yq eval ./../../install/projectyaml/WT-140/PROJECT.yaml
-yq eval ./../../install/projectyaml/WT-181/PROJECT.yaml
-yq eval ./../../install/projectyaml/DTP-469/PROJECT.yaml
-yq eval ./../../install/projectyaml/WT-369/PROJECT.yaml
-yq eval ./../../install/projectyaml/WT-157/PROJECT.yaml
-yq eval ./../../install/projectyaml/usp-data-models/PROJECT.yaml
-yq eval ./../../install/projectyaml/WT-143/PROJECT.yaml
-yq eval ./../../install/projectyaml/WT-069/PROJECT.yaml
-yq eval ./../../install/cwmp/dm-units.yaml
-make[1]: Leaving directory '/mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/YANG-YANG-DOCS/publish/yang'
-make[1]: Entering directory '/mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/YANG-YANG-DOCS/publish/yang'
-ROOTDIR = ./../../
-USERNAME = yang
-installdir = ./../../install/
-publishdir = ./../../publish/yang/
-FIRSTS 
-RESOURCES CNAME
-TARGETS 
-PACKAGE 
-PROJECTYAMLPROJECT 
-INSTALLPYTHON 
-INSTALLPROJECTYAML 
-package 
-make -C OD-360 all
-make[2]: Entering directory '/mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/YANG-YANG-DOCS/publish/yang/OD-360'
-ROOTDIR = ../../../
-USERNAME = yang
-installdir = ../../../install/
-publishdir = ../../../publish/yang/
-FIRSTS 
-RESOURCES 
-TARGETS index.htm index.html index.docx index.pdf YANG-develop-118.pdf
-PACKAGE 
-PROJECTYAMLPROJECT 
-INSTALLPYTHON 
-INSTALLPROJECTYAML 
-package 
-rm -f ../docs/index.md
-sed -e'<relocate-image-links>' 01-intro.md >>../docs/index.md
-sed -e'<relocate-image-links>' 02-ietf.md >>../docs/index.md
-sed -e'<relocate-image-links>' 03-bbf.md >>../docs/index.md
-sed -e'<relocate-image-links>' 04-deviation.md >>../docs/index.md
-sed -e'<relocate-image-links>' 05-units.md >>../docs/index.md
-sed -e '/span\.release::before/s|{ *content:.*; *}|{ content: "(develop-118)"; }|' -e 's|${USERDATA}|../../../install/pandoc/|g' -e 's|${PROJECTYAMLTARGETDIR}|../docs|g' -e 's|${TARGETDIR}|../docs|g' <../../../install/pandoc/css/release.css >../docs/release.css
-sed -e '/span\.release::before/s|{ *content:.*; *}|{ content: "(develop-118)"; }|' -e 's|${USERDATA}|../../../install/pandoc/|g' -e 's|${PROJECTYAMLTARGETDIR}|../docs|g' -e 's|${TARGETDIR}|../docs|g' <../../../install/pandoc/defaults/json-defaults.yaml >../docs/json-defaults.yaml
-sed -e '/span\.release::before/s|{ *content:.*; *}|{ content: "(develop-118)"; }|' -e 's|${USERDATA}|../../../install/pandoc/|g' -e 's|${PROJECTYAMLTARGETDIR}|../docs|g' -e 's|${TARGETDIR}|../docs|g' <../../../install/pandoc/defaults/docx-defaults.yaml >../docs/docx-defaults.yaml
-sed -e '/span\.release::before/s|{ *content:.*; *}|{ content: "(develop-118)"; }|' -e 's|${USERDATA}|../../../install/pandoc/|g' -e 's|${PROJECTYAMLTARGETDIR}|../docs|g' -e 's|${TARGETDIR}|../docs|g' <../../../install/pandoc/defaults/pdf-defaults.yaml >../docs/pdf-defaults.yaml
-sed -e '/span\.release::before/s|{ *content:.*; *}|{ content: "(develop-118)"; }|' -e 's|${USERDATA}|../../../install/pandoc/|g' -e 's|${PROJECTYAMLTARGETDIR}|../docs|g' -e 's|${TARGETDIR}|../docs|g' <../../../install/pandoc/defaults/typst-defaults.yaml >../docs/typst-defaults.yaml
-sed -e '/span\.release::before/s|{ *content:.*; *}|{ content: "(develop-118)"; }|' -e 's|${USERDATA}|../../../install/pandoc/|g' -e 's|${PROJECTYAMLTARGETDIR}|../docs|g' -e 's|${TARGETDIR}|../docs|g' <../../../install/pandoc/custom/typst-template.typ >../docs/typst-template.typ
-sed -e '/span\.release::before/s|{ *content:.*; *}|{ content: "(develop-118)"; }|' -e 's|${USERDATA}|../../../install/pandoc/|g' -e 's|${PROJECTYAMLTARGETDIR}|../docs|g' -e 's|${TARGETDIR}|../docs|g' <../../../install/pandoc/custom/typst-stringify.typ >../docs/typst-stringify.typ
-'../../../install/pandoc/css/bbf.css' -> '../docs/bbf.css'
-'../../../install/pandoc/css/bbflogo-bw.png' -> '../docs/bbflogo-bw.png'
-'../../../install/pandoc/css/bbflogo-reverse-dark.png' -> '../docs/bbflogo-reverse-dark.png'
-'../../../install/pandoc/css/bee.png' -> '../docs/bee.png'
-'../../../install/pandoc/css/broadband-forum-logo.png' -> '../docs/broadband-forum-logo.png'
-'../../../install/pandoc/css/extra.css' -> '../docs/extra.css'
-'../../../install/pandoc/css/github.css' -> '../docs/github.css'
-'../../../install/pandoc/css/missing.png' -> '../docs/missing.png'
-'../../../install/pandoc/css/pencil.png' -> '../docs/pencil.png'
-'../../../install/pandoc/css/permalink.png' -> '../docs/permalink.png'
-'../../../install/pandoc/css/right.png' -> '../docs/right.png'
-'../../../install/pandoc/css/tick.png' -> '../docs/tick.png'
-'../../../install/pandoc/css/toc.css' -> '../docs/toc.css'
-'../../../install/pandoc/css/watermark-pdf.css' -> '../docs/watermark-pdf.css'
-'../../../install/pandoc/css/watermark.css' -> '../docs/watermark.css'
-'./images/ecosystem.png' -> '../docs/./images/ecosystem.png'
-pandoc --data-dir=../../../install/pandoc/ --defaults=../docs/json-defaults.yaml  ../docs/index.md --output=../docs/index.json
-pandoc --data-dir=../../../install/pandoc/ --defaults=htm-defaults.yaml   --css=toc.css  --toc ../docs/index.json --output=../docs/index.htm
-pandoc --data-dir=../../../install/pandoc/ --defaults=html-defaults.yaml    --css=toc.css --toc ../docs/index.json --output=../docs/index.html
-pandoc --data-dir=../../../install/pandoc/ --defaults=../docs/docx-defaults.yaml --toc ../docs/index.json --output=../docs/index.docx
-pandoc --data-dir=../../../install/pandoc/ --defaults=../docs/typst-defaults.yaml ../docs/index.json --output=../docs/index.typ
+make[1]: Entering directory '/opt/atlassian/pipelines/agent/build/project/OD-360'
+yq eval ../../install/pandoc/defaults/codebraid-defaults.yaml
+yq eval ../../install/pandoc/defaults/_codebraid_preview.yaml
+yq eval ../../install/pandoc/defaults/pdf-defaults.yaml
+yq eval ../../install/pandoc/defaults/html-defaults.yaml
+yq eval ../../install/pandoc/defaults/common-defaults.yaml
+yq eval ../../install/pandoc/defaults/docx-defaults.yaml
+yq eval ../../install/pandoc/defaults/json-defaults.yaml
+yq eval ../../install/pandoc/defaults/htm-defaults.yaml
+yq eval ../../install/pandoc/defaults/typst-defaults.yaml
+yq eval ../../install/pandoc/metadata/no-title-metadata.yaml
+yq eval ../../install/pandoc/metadata/bbf-metadata.yaml
+yq eval ../../install/pandoc/csl/w3c-extra-csl.yaml
+yq eval ../../install/pandoc/csl/ieee-extra-csl.yaml
+yq eval ../../install/pandoc/csl/misc-extra-csl.yaml
+yq eval ../../install/pandoc/csl/itu-extra-csl.yaml
+yq eval ../../install/pandoc/csl/gsma-extra-csl.yaml
+yq eval ../../install/pandoc/csl/iana-extra-csl.yaml
+yq eval ../../install/pandoc/csl/sff-extra-csl.yaml
+yq eval ../../install/pandoc/csl/3gpp-extra-csl.yaml
+yq eval ../../install/pandoc/csl/iso-extra-csl.yaml
+yq eval ../../install/pandoc/csl/ansi-extra-csl.yaml
+yq eval ../../install/pandoc/csl/etsi-extra-csl.yaml
+yq eval ../../install/pandoc/csl/mef-extra-csl.yaml
+yq eval ../../install/pandoc/csl/grpc-extra-csl.yaml
+yq eval ../../install/pandoc/csl/ietf-extra-csl.yaml
+yq eval ../../install/pandoc/csl/bbf-extra-csl.yaml
+yq eval ../../install/cwmp/dm-units.yaml
+yq eval ../../install/projectyaml/WT-181/PROJECT.yaml
+yq eval ../../install/projectyaml/cwmp-data-models/PROJECT.yaml
+yq eval ../../install/projectyaml/WT-124/PROJECT.yaml
+yq eval ../../install/projectyaml/WT-135/PROJECT.yaml
+yq eval ../../install/projectyaml/DTP-069/PROJECT.yaml
+yq eval ../../install/projectyaml/WT-232/PROJECT.yaml
+yq eval ../../install/projectyaml/WT-369/PROJECT.yaml
+yq eval ../../install/projectyaml/WT-157/PROJECT.yaml
+yq eval ../../install/projectyaml/DTP-469/PROJECT.yaml
+yq eval ../../install/projectyaml/WT-140/PROJECT.yaml
+yq eval ../../install/projectyaml/WT-262/PROJECT.yaml
+yq eval ../../install/projectyaml/WT-098/PROJECT.yaml
+yq eval ../../install/projectyaml/WT-106/PROJECT.yaml
+yq eval ../../install/projectyaml/usp-data-models/PROJECT.yaml
+yq eval ../../install/projectyaml/WT-196/PROJECT.yaml
+yq eval ../../install/projectyaml/WT-104/PROJECT.yaml
+yq eval ../../install/projectyaml/WT-069/PROJECT.yaml
+yq eval ../../install/projectyaml/WT-143/PROJECT.yaml
+make[1]: Leaving directory '/opt/atlassian/pipelines/agent/build/project/OD-360'
+make[1]: Entering directory '/opt/atlassian/pipelines/agent/build/project/OD-360'
+sed -e '/span\.release::before/s|{ *content:.*; *}|{ content: "(develop)"; }|' -e 's|${USERDATA}|../../install/pandoc/|g' -e 's|${PROJECTYAMLTARGETDIR}|../docs|g' -e 's|${TARGETDIR}|../docs|g' <../../install/pandoc/css/release.css >../docs/release.css
+sed -e '/span\.release::before/s|{ *content:.*; *}|{ content: "(develop)"; }|' -e 's|${USERDATA}|../../install/pandoc/|g' -e 's|${PROJECTYAMLTARGETDIR}|../docs|g' -e 's|${TARGETDIR}|../docs|g' <../../install/pandoc/defaults/json-defaults.yaml >../docs/json-defaults.yaml
+sed -e '/span\.release::before/s|{ *content:.*; *}|{ content: "(develop)"; }|' -e 's|${USERDATA}|../../install/pandoc/|g' -e 's|${PROJECTYAMLTARGETDIR}|../docs|g' -e 's|${TARGETDIR}|../docs|g' <../../install/pandoc/defaults/docx-defaults.yaml >../docs/docx-defaults.yaml
+sed -e '/span\.release::before/s|{ *content:.*; *}|{ content: "(develop)"; }|' -e 's|${USERDATA}|../../install/pandoc/|g' -e 's|${PROJECTYAMLTARGETDIR}|../docs|g' -e 's|${TARGETDIR}|../docs|g' <../../install/pandoc/defaults/pdf-defaults.yaml >../docs/pdf-defaults.yaml
+sed -e '/span\.release::before/s|{ *content:.*; *}|{ content: "(develop)"; }|' -e 's|${USERDATA}|../../install/pandoc/|g' -e 's|${PROJECTYAMLTARGETDIR}|../docs|g' -e 's|${TARGETDIR}|../docs|g' <../../install/pandoc/defaults/typst-defaults.yaml >../docs/typst-defaults.yaml
+sed -e '/span\.release::before/s|{ *content:.*; *}|{ content: "(develop)"; }|' -e 's|${USERDATA}|../../install/pandoc/|g' -e 's|${PROJECTYAMLTARGETDIR}|../docs|g' -e 's|${TARGETDIR}|../docs|g' <../../install/pandoc/custom/typst-template.typ >../docs/typst-template.typ
+sed -e '/span\.release::before/s|{ *content:.*; *}|{ content: "(develop)"; }|' -e 's|${USERDATA}|../../install/pandoc/|g' -e 's|${PROJECTYAMLTARGETDIR}|../docs|g' -e 's|${TARGETDIR}|../docs|g' <../../install/pandoc/custom/typst-stringify.typ >../docs/typst-stringify.typ
+'../../install/pandoc/css/bbf.css' -> '../docs/bbf.css'
+'../../install/pandoc/css/bbflogo-bw.png' -> '../docs/bbflogo-bw.png'
+'../../install/pandoc/css/bbflogo-reverse-dark.png' -> '../docs/bbflogo-reverse-dark.png'
+'../../install/pandoc/css/bee.png' -> '../docs/bee.png'
+'../../install/pandoc/css/broadband-forum-logo.png' -> '../docs/broadband-forum-logo.png'
+'../../install/pandoc/css/extra.css' -> '../docs/extra.css'
+'../../install/pandoc/css/github.css' -> '../docs/github.css'
+'../../install/pandoc/css/missing.png' -> '../docs/missing.png'
+'../../install/pandoc/css/pencil.png' -> '../docs/pencil.png'
+'../../install/pandoc/css/permalink.png' -> '../docs/permalink.png'
+'../../install/pandoc/css/right.png' -> '../docs/right.png'
+'../../install/pandoc/css/tick.png' -> '../docs/tick.png'
+'../../install/pandoc/css/toc.css' -> '../docs/toc.css'
+'../../install/pandoc/css/watermark-pdf.css' -> '../docs/watermark-pdf.css'
+'images/ecosystem.png' -> '../docs/images/ecosystem.png'
+pandoc --data-dir=../../install/pandoc/ --defaults=../docs/json-defaults.yaml --metadata-file=../docs/METADATA.yaml index.md --output=../docs/index.json
+pandoc --data-dir=../../install/pandoc/ --defaults=htm-defaults.yaml   --css=toc.css  --toc ../docs/index.json --output=../docs/index.htm
+pandoc --data-dir=../../install/pandoc/ --defaults=html-defaults.yaml    --css=toc.css --toc ../docs/index.json --output=../docs/index.html
+pandoc --data-dir=../../install/pandoc/ --defaults=../docs/typst-defaults.yaml --columns=256 ../docs/index.json --output=../docs/index.typ
 typst compile ../docs/index.typ ../docs/index.pdf
 warning: unknown font family: arial
     ┌─ ../docs/typst-template.typ:379:17
@@ -125,7 +79,5 @@ warning: unknown font family: arial
 379 │            font: font,
     │                  ^^^^
 
-'../docs/index.pdf' -> '../docs/YANG-develop-118.pdf'
-make[2]: Leaving directory '/mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/YANG-YANG-DOCS/publish/yang/OD-360'
-'CNAME' -> 'docs/CNAME'
-make[1]: Leaving directory '/mnt/ebs/bamboo-agent-home-alpha/xml-data/build-dir/YANG-YANG-DOCS/publish/yang'
+pandoc --data-dir=../../install/pandoc/ --defaults=../docs/docx-defaults.yaml --toc ../docs/index.json --output=../docs/index.docx
+make[1]: Leaving directory '/opt/atlassian/pipelines/agent/build/project/OD-360'

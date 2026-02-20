@@ -1,5 +1,13 @@
 ## Broadband Forum YANG Modules
 
+### 2026-02-09: [OD-360 Issue 1 Amendment 3](https://yang.broadband-forum.org) BBF YANG Best Current Practices
+*Tag: [OD-360-v1.3.0](https://github.com/BroadbandForum/yang/tree/OD-360-v1.3.0)*
+
+*  Add new IETF guideline IETF-23.
+*  Add new BBF guidelines BBF-30 through BBF-33.
+*  Add new deviation guideline DEV-7.
+*  Address minor corrections to existing guidelines.
+
 ### 2025-09-09: [TR-452.4 Issue 1](https://www.broadband-forum.org/technical/download/TR-452.4.pdf) QED Measurement Formats
 *Tag: [TR-452.4-v1.0.0](https://github.com/BroadbandForum/yang/tree/TR-452.4-v1.0.0)*
 
