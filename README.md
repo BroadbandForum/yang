@@ -1,5 +1,10 @@
 ## Broadband Forum YANG Modules
 
+### 2026-03-04: [TR-403 Amendment 1](https://www.broadband-forum.org/technical/download/TR-403_Amendment-1.pdf) PON Abstraction Interface for Time-critical Applications
+*Tag: [TR-403-v1.1.0](https://github.com/BroadbandForum/yang/tree/TR-403-v1.1.0)*
+
+TR-403 Amendment 1 specifies the PON abstraction interface for time-critical applications as defined in TR-402 along with the YANG models used to manage it.
+
 ### 2026-02-09: [OD-360 Issue 1 Amendment 3](https://yang.broadband-forum.org) BBF YANG Best Current Practices
 *Tag: [OD-360-v1.3.0](https://github.com/BroadbandForum/yang/tree/OD-360-v1.3.0)*
 
