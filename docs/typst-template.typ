@@ -70,8 +70,8 @@
 #let bbf-references = bbf-passthrough
 #let bbf-csl-entry = bbf-passthrough
 #let bbf-csl-bib-body = block.with(spacing: 0.25em)
-#let bbf-csl-left-margin = box.with(width: 1fr, baseline: 100%)
-#let bbf-csl-right-inline = box.with(width: 15fr, baseline: 100%)
+#let bbf-csl-left-margin = box.with(width: 1fr)
+#let bbf-csl-right-inline = box.with(width: 15fr)
 
 // left / right / clear (intended for use with divs)
 #let bbf-left-state = state("bbf-left")
@@ -286,13 +286,12 @@
     if it.element.func() == heading {
       v(12pt, weak: true)
       strong(it)
-    } else [
-      #let location = it.element.location()
-      #link(location)[
-        #if figure-numbering [#it.body] else [#it.element.caption.body]]
-      #box(width: 1fr, repeat[.])
-      #link(location)[#it.page]
-    ]
+    } else {
+      link(
+        it.element.location(),
+        it.indented(if figure-numbering { it.prefix() } else { none }, it.inner())
+      )
+    }
   }
 
   // why aren't figures breakable by default? blocks are

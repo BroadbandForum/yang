@@ -1,5 +1,12 @@
 ## Broadband Forum YANG Modules
 
+### 2026-07-02: [TR-383 Amendment 10](https://www.broadband-forum.org/technical/download/TR-383_Amendment-10.pdf) Common YANG Modules for Access Networks
+*Tag: [TR-383-v1.10.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.10.0)*
+
+* Enhancements to existing models.
+* Refactor of bbf-l2-forwarding to consolidate submodules into a single module.
+* New models for IPv4 address security, egress frame processing, and L2 forwarding profile reusability.
+
 ### 2026-03-04: [TR-403 Amendment 1](https://www.broadband-forum.org/technical/download/TR-403_Amendment-1.pdf) PON Abstraction Interface for Time-critical Applications
 *Tag: [TR-403-v1.1.0](https://github.com/BroadbandForum/yang/tree/TR-403-v1.1.0)*
 
