@@ -3,13 +3,27 @@ module bbf-l2-forwarding {
   namespace "urn:bbf:yang:bbf-l2-forwarding";
   prefix bbf-l2-fwd;
 
-  include bbf-l2-forwarding-base;
-  include bbf-l2-forwarding-flooding-policies;
-  include bbf-l2-forwarding-forwarders;
-  include bbf-l2-forwarding-forwarding-databases;
-  include bbf-l2-forwarding-mac-learning;
-  include bbf-l2-forwarding-split-horizon-profiles;
-  include bbf-l2-forwarding-mac-learning-control;
+  import iana-if-type {
+    prefix ianaift;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import bbf-if-type {
+    prefix bbfift;
+  }
+  import bbf-frame-classification {
+    prefix bbf-classif;
+  }
+  import bbf-l2-forwarding-profile-common {
+    prefix bbf-l2-fwd-pc;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
@@ -20,17 +34,13 @@ module bbf-l2-forwarding {
 
      Editor:      Shiya Ashraf, Nokia
 
-     Editor:      Kevin Noll, CableLabs
-
      PS Leader:   Sven Ooghe, Nokia
 
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Bruno Cornaglia, Vodafone
 
-     WA Director: Mengmeng Li, China Mobile
-
-     WA Director: Haomian Zheng, Huawei";
+     WA Director: Aihua Guo, Futurewei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on layer 2 forwarding
@@ -38,7 +48,7 @@ module bbf-l2-forwarding {
      is specific to access network equipment (e.g., BBF-specified
      Access Nodes and FTTdp DPUs).
 
-     Copyright (c) 2017-2025, Broadband Forum
+     Copyright (c) 2017-2026, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -78,9 +88,19 @@ module bbf-l2-forwarding {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a9; see
+     This version of this YANG module is part of TR-383a10; see
      the TR itself for full legal notices.";
 
+  revision 2026-07-02 {
+    description
+      "Amendment 10.
+       * Approval Date:    2026-07-02.
+       * Publication Date: 2026-07-02.";
+    reference
+      "TR-383a10: Common YANG Modules for Access Networks
+                  <https://www.broadband-forum.org/technical/download/
+                           TR-383_Amendment-10.pdf>";
+  }
   revision 2025-07-02 {
     description
       "Amendment 9.
@@ -160,5 +180,1089 @@ module bbf-l2-forwarding {
       "TR-383: Common YANG Modules
                <https://www.broadband-forum.org/technical/download/
                         TR-383.pdf>";
+  }
+
+  feature forwarder-port-groups {
+    description
+      "Indicates support for a grouping of forwarder ports.";
+  }
+
+  feature flooding-policies {
+    description
+      "Indicates support for flooding policies.";
+  }
+
+  feature flooding-policies-profiles {
+    description
+      "Indicates support for flooding policies profiles.";
+  }
+
+  feature split-horizon-profiles {
+    description
+      "Indicates support for split horizon profiles.";
+  }
+
+  feature forwarding-databases {
+    description
+      "Indicates support for forwarding databases.";
+  }
+
+  feature shared-forwarding-databases {
+    description
+      "Indicates support for a single forwarding database being shared
+       by multiple forwarders.";
+  }
+
+  feature mac-learning {
+    description
+      "This feature indicates whether the network element supports MAC
+       learning.";
+  }
+
+  feature remaining-aging-time {
+    if-feature "mac-learning";
+    description
+      "Indicates support for reporting the time remaining before a MAC
+       address entry in a forwarding database is automatically
+       removed.";
+  }
+
+  feature clear-fdb-actions {
+    if-feature "forwarding-databases";
+    description
+      "Indicates support for actions that clear all or part of a
+       forwarding database.";
+  }
+
+  feature interface-for-forwarding-database-port {
+    if-feature "forwarding-databases";
+    description
+      "Indicates that in the case of independent MAC learning the
+       forwarding database state data contains a reference to the VLAN
+       sub-interface per MAC address.";
+  }
+
+  feature read-system-fdb-capacity {
+    description
+      "Provides the system's capacity for forwarding databases, i.e.,
+       the total number of entries for all forwarding databases
+       together.";
+  }
+
+  feature mac-learning-control-profiles {
+    description
+      "Indicates support for MAC address learning control profiles.";
+  }
+
+  typedef forwarder-ref {
+    type leafref {
+      path "/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarders/bbf-l2-"
+         + "fwd:forwarder/bbf-l2-fwd:name";
+    }
+    description
+      "This type is used by data models that need to reference
+       configured forwarders.";
+  }
+
+  typedef forwarder-state-ref {
+    type leafref {
+      path "/bbf-l2-fwd:forwarding-state/bbf-l2-fwd:forwarders/bbf-"
+         + "l2-fwd:forwarder/bbf-l2-fwd:name";
+    }
+    description
+      "This type is used by data models that need to reference
+       operational data of forwarders.";
+  }
+
+  grouping forwarder-port {
+    description
+      "This grouping is used by data models that need to reference
+       configured forwarder ports.";
+    leaf forwarder {
+      type forwarder-ref;
+      description
+        "This leaf references a forwarder.";
+    }
+    leaf port {
+      type leafref {
+        path "/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarders/bbf-l2-"
+           + "fwd:forwarder[bbf-l2-fwd:name = current()/../"
+           + "forwarder]/bbf-l2-fwd:ports/bbf-l2-fwd:port/bbf-l2-"
+           + "fwd:name";
+      }
+      description
+        "This leaf references a port within the forwarder identified
+         by the leaf 'forwarder'.";
+    }
+  }
+
+  grouping forwarder-port-state {
+    description
+      "This grouping is used by data models that need to reference
+       operational forwarder ports.";
+    leaf forwarder {
+      type forwarder-state-ref;
+      description
+        "This leaf references a forwarder.";
+    }
+    leaf port {
+      type leafref {
+        path "/bbf-l2-fwd:forwarding-state/bbf-l2-fwd:forwarders/"
+           + "bbf-l2-fwd:forwarder[bbf-l2-fwd:name = current()/../"
+           + "forwarder]/bbf-l2-fwd:ports/bbf-l2-fwd:port/bbf-l2-"
+           + "fwd:name";
+      }
+      description
+        "This leaf references a port within the forwarder identified
+         by the leaf 'forwarder'.";
+    }
+  }
+
+  grouping forwarder-port-group {
+    description
+      "This grouping is used by data models that need to reference
+       configured forwarder port-groups.";
+    leaf forwarder {
+      type forwarder-ref;
+      description
+        "This leaf references a forwarder.";
+    }
+    leaf group {
+      type leafref {
+        path "/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarders/bbf-l2-"
+           + "fwd:forwarder[bbf-l2-fwd:name = current()/../"
+           + "forwarder]/bbf-l2-fwd:port-groups/bbf-l2-fwd:port-"
+           + "group/bbf-l2-fwd:name";
+      }
+      description
+        "This leaf references a port-group within the forwarder
+         identified by the leaf 'forwarder'.";
+    }
+  }
+
+  grouping forwarder-split-horizon-profiles {
+    description
+      "Grouping of configuration data nodes to add a reference to a
+       split horizon profile from a forwarder.";
+    container split-horizon-profiles {
+      description
+        "A split-horizon-profile allows to restrict forwarding between
+         its forwarder ports based on their interface usages.
+
+         Without split-horizon-profile, frames can be forwarded
+         within a forwarder from any of its forwarder ports to any
+         other of its forwarder ports.";
+      leaf split-horizon-profile {
+        type leafref {
+          path "/bbf-l2-fwd:forwarding/bbf-l2-fwd:split-horizon-"
+             + "profiles/bbf-l2-fwd:split-horizon-profile/bbf-l2-"
+             + "fwd:name";
+        }
+        description
+          "A reference to a split horizon profile associated with a
+           forwarder.";
+      }
+    }
+  }
+
+  grouping forwarder-flooding-policies {
+    description
+      "Augment the forwarder configuration with configuration for
+       flooding policies.";
+    container flooding-policies {
+      description
+        "The flooding-policies define how the system shall forward
+         frames in case the other forwarding mechanisms did not come
+         to a forwarding decision.
+
+         For example, when the destination unicast MAC address is not
+         available in the forwarding database. For multicast frames
+         this applies when there is no corresponding entry found in
+         the (IGMP controlled) multicast tree. For broadcast frames
+         this applies when there is no other protocol specific
+         behavior knowledge.
+
+         The default behavior for when there is no flooding policy is
+         that the frame is flooded to all ports of the forwarder,
+         except to the port on which the frame is received. In other
+         words, a flooding-policy intends to restrict this flooding.";
+      choice flooding-policy-type {
+        description
+          "Provides alternative ways to define flooding policies.";
+        case profile-based {
+          leaf flooding-policies-profile {
+            type leafref {
+              path "/bbf-l2-fwd:forwarding/bbf-l2-fwd:flooding-"
+                 + "policies-profiles/bbf-l2-fwd:flooding-policies-"
+                 + "profile/bbf-l2-fwd:name";
+            }
+            description
+              "A reference to a flooding policies profile.";
+          }
+        }
+      }
+    }
+  }
+
+  grouping forwarding-db-mac-learn-ctrls {
+    description
+      "Group of configuration data nodes for referencing MAC
+       address learning control from a forwarding database.";
+    container mac-learning-control {
+      description
+        "The MAC learning control defines how the system shall act
+         when a frame is received for which the source MAC address was
+         not learned before on the port or interface where the frame
+         is received.";
+      leaf mac-learning-control-profile {
+        type leafref {
+          path "/bbf-l2-fwd:forwarding/bbf-l2-fwd:mac-learning-"
+             + "control-profiles/bbf-l2-fwd:mac-learning-control-"
+             + "profile/bbf-l2-fwd:name";
+        }
+        description
+          "A reference to a MAC address learning control profile.";
+      }
+      leaf generate-mac-learning-alarm {
+        type boolean;
+        description
+          "If true, an alarm shall be generated on an attempt of a not
+           allowed MAC movement. Allowed / not allowed MAC movements
+           are controlled via the referenced entry in the list
+           mac-learning-control-profile.";
+      }
+    }
+  }
+
+  grouping forwarder-mac-learning {
+    description
+      "Group of configuration data nodes for MAC address management
+       with in a forwarder.";
+    container mac-learning {
+      description
+        "The forwarding decision for each frame shall result in an
+         unambiguous decision on the outgoing forwarder port(s). This
+         combined with the dynamic behavior of MAC address learning
+         results in the need for a unique learning decision or static
+         configuration of MAC addresses.
+
+         In case the same source MAC address is used on multiple
+         interfaces, then various strategies can be applied:
+         - learn the MAC address the first time it is used, and at the
+           occasion of a second attempt, do not move the MAC address
+           from the first forwarder port to another, instead generate
+           an alarm for attempts of an undesired MAC movement.
+         - learn/move the MAC address on/to the forwarder port where
+           it is used the last time.
+         - perform MAC address translation into a unique MAC address.
+         This strategy is also port specific: e.g. in case a MAC
+         address is learned on a user port, then it might be forbidden
+         to move it to another user port, while it is acceptable to
+         move it to the network port.";
+    }
+  }
+
+  grouping mac-learning-per-interface {
+    description
+      "Group of interface MAC learning configuration data nodes.";
+    container mac-learning {
+      description
+        "Data nodes for MAC learning configuration.";
+      leaf max-number-mac-addresses {
+        type uint32;
+        description
+          "The maximum number of MAC addresses that can be stored in
+           the forwarding database for this interface.";
+      }
+      leaf number-committed-mac-addresses {
+        type uint32;
+        description
+          "The number of MAC addresses for which resources are
+           reserved in the forwarding database. In this way the system
+           guarantees that for this interface it will always be able
+           to support that amount of MAC addresses.";
+      }
+      leaf mac-learning-enable {
+        type boolean;
+        description
+          "Enabling MAC learning means that the MAC address will be
+           learned from the source MAC address from frames received
+           over this interface. MAC learning disabled means that the
+           MAC address will not be learned from the source MAC address
+           from frames received over this interface. For example, this
+           allows to provide a 1:1 VLAN without any MAC learning from
+           frames forwarded within it.
+
+           Note: A VLAN sub-interface can be contained within a
+           hierarchy of one or more lower-layer interfaces, and the
+           ability to enable/disable MAC learning is possible on both
+           the VLAN sub-interface and the lower-layer interface(s).
+           Therefore, for MAC learning to be executed on a VLAN
+           sub-interface, the following conditions should be true:
+
+            - 'mac-learning-enable' is 'true' for the VLAN
+              sub-interface.
+            - 'mac-learning-enable' is 'true' for the lower-layer
+              interface(s) that contains the VLAN sub-interface.";
+      }
+      leaf mac-learning-failure-action {
+        type enumeration {
+          enum forward {
+            description
+              "The frame is forwarded despite the source MAC address
+               can not be learned.";
+            reference
+              "IEEE 802.1Q-2014 Table 8-7";
+          }
+          enum discard {
+            description
+              "The frame from which the source MAC address could not
+               be learned is discarded.";
+            reference
+              "TR-101i2 R-114;
+               TR-101i2 R-115";
+          }
+        }
+        description
+          "When the MAC learning from the source MAC address of a
+           frame is not possible because for example the maximum
+           number of MAC addresses that can be learned on the
+           interface is reached, or for example the forwarding
+           database is full, then the system's behavior is as
+           configured with this leaf.
+
+           Normal IEEE behavior is to forward the frame without MAC
+           learning. BBF expected behavior is to discard the frame.";
+      }
+    }
+  }
+
+  grouping forwarding {
+    description
+      "Configuration nodes associated with layer 2 forwarding.";
+    container forwarding {
+      description
+        "Configuration nodes associated with layer 2 forwarding.";
+      container forwarders {
+        description
+          "A forwarder is used to forward traffic between
+           interfaces.";
+        list forwarder {
+          key "name";
+          description
+            "A list of forwarders.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of the forwarder.";
+          }
+          container ports {
+            description
+              "Configuration for ports associated with this
+               forwarder.";
+            list port {
+              key "name";
+              description
+                "The list of ports associated with this forwarder.";
+              leaf name {
+                type bbf-yang:string-ascii64;
+                description
+                  "The name of the forwarder port.";
+              }
+            }
+          }
+          container port-groups {
+            description
+              "A group of ports associated with this forwarder that
+               have common forwarding characteristics.";
+            list port-group {
+              key "name";
+              description
+                "A list of port groups.";
+              leaf name {
+                type bbf-yang:string-ascii64;
+                description
+                  "The name of the group.";
+              }
+              leaf-list port {
+                type leafref {
+                  path "../../../ports/port/name";
+                }
+                description
+                  "A grouping of ports associated with this
+                   forwarder.";
+              }
+            }
+          }
+          uses forwarder-flooding-policies;
+          uses forwarder-mac-learning;
+          uses forwarder-split-horizon-profiles;
+        }
+      }
+    }
+  }
+
+  grouping forwarding-database-state {
+    description
+      "Grouping of state data nodes associated with layer 2
+       forwarding with forwarding database data nodes.";
+    container forwarding-databases {
+      description
+        "The following data nodes allow to read out the forwarding
+         database (FDB), i.e., the MAC addresses being learned within
+         the system.
+
+         The strategy is to offer the same flexibility as in IEEE:
+          - Allows at one extreme that each VLAN has its own FDB, this
+            allows the same MAC address to be learned independently
+            within different VLANs.
+          - Allows at the other extreme that the system has one FDB
+            shared by all VLANs, this allows the same MAC address to
+            be learned only once over all VLANs.
+          - Allows everything in between, i.e., an FDB for a set of
+            VLANs, a 2nd FDB for another set.
+         To support this concept it is possible to have multiple
+         forwarders assigned to a single FDB.";
+      leaf max-number-mac-addresses {
+        type uint32;
+        description
+          "Provides the system's capacity for forwarding databases,
+           i.e., the total number of entries for all forwarding
+           databases together.";
+      }
+      action clear-mac-addresses {
+        if-feature "clear-fdb-actions";
+        description
+          "Remove all dynamically learned MAC addresses from all
+           forwarding databases that match the given filter.";
+        input {
+          container filter {
+            presence
+              "Restricts the set of MAC addresses to be cleared from
+               the forwarding databases.";
+            description
+              "Contains a filter to be applied.";
+            choice filter {
+              mandatory true;
+              description
+                "Selects a filter to restrict the scope of the action
+                 compared with the all forwarding databases context in
+                 which the action is executed.";
+              case interface {
+                description
+                  "An interface is provided as filter.";
+                leaf interface {
+                  type if:interface-ref;
+                  description
+                    "A reference to an interface.
+
+                     An interface is provided as filter. In other
+                     words, only MAC addresses dynamically learned
+                     above that interface are cleared.
+
+                     For independent forwarding databases:
+                     The action applies to MAC addresses learned on a
+                     forwarder port referencing the given input
+                     interface, and on MAC addresses learned on a
+                     forwarder port for which the given input
+                     interface is a lower-layer interface of the
+                     interface referenced by the forwarder port.
+
+                     For shared forwarding databases:
+                     The action applies to MAC addresses learned on
+                     the given input interface.";
+                }
+              }
+            }
+          }
+        }
+      }
+      list forwarding-database {
+        key "name";
+        description
+          "The state data of a specific forwarding database.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "The name of the forwarding database.";
+        }
+        action clear-mac-addresses {
+          if-feature "clear-fdb-actions";
+          description
+            "Remove all dynamically learned MAC addresses from this
+             forwarding database that match the given filter.";
+          input {
+            container filter {
+              presence
+                "Restricts the set of MAC addresses to be cleared from
+                 the forwarding database.";
+              description
+                "Contains a filter to be applied.";
+              choice filter {
+                mandatory true;
+                description
+                  "Selects a filter to restrict the scope of the
+                   action compared with the full forwarding database
+                   context in which the action is executed.";
+                case interface {
+                  description
+                    "An interface is provided as filter. In other
+                     words, only MAC addresses dynamically learned
+                     above the given input interface are cleared.
+
+                     For independent forwarding databases:
+                     The action applies to MAC addresses learned on a
+                     forwarder port referencing the given input
+                     interface, and on MAC addresses learned on a
+                     forwarder port for which the given input
+                     interface is a lower-layer interface of the
+                     interface referenced by the forwarder port.
+
+                     For shared forwarding databases:
+                     The action applies to MAC addresses learned on
+                     the given input interface.";
+                  leaf interface {
+                    type if:interface-ref;
+                    description
+                      "A reference to an interface.";
+                  }
+                }
+                case port {
+                  description
+                    "A forwarder port is provided as filter. In other
+                     words, only MAC addresses dynamically learned on
+                     the forwarder port are cleared.
+
+                     This filter is valid only for an independent
+                     forwarding database.";
+                  uses bbf-l2-fwd:forwarder-port-state;
+                }
+              }
+            }
+          }
+        }
+        container mac-addresses {
+          description
+            "MAC address data in the forwarding database state.";
+          list mac-address {
+            key "mac-address";
+            description
+              "The list of MAC addresses that are stored in the
+               forwarding database.";
+            leaf mac-address {
+              type yang:mac-address;
+              description
+                "A specific MAC address that is stored in the
+                 forwarding database.";
+            }
+            leaf remaining-aging-time {
+              type uint32;
+              units "seconds";
+              description
+                "The current time remaining before this MAC address is
+                 automatically removed from its forwarding database
+                 unless a frame is received that contains this MAC
+                 address as the source MAC address.
+
+                 Note: There is no requirement nor expectation
+                 that implementations update this timer once per
+                 second for every MAC address. Thus, the actual
+                 update interval is implementation dependent.";
+            }
+            choice learned-on {
+              description
+                "In case of a shared forwarding database the MAC
+                 address is stored on an 'Ethernet-like' interface
+                 In case of a not-shared forwarding database the MAC
+                 address is stored on a forwarder port of the single
+                 forwarder that uses the forwarding database.";
+              case forwarder-port {
+                description
+                  "Forwarder port identification.";
+                uses forwarder-port-state;
+                leaf sub-interface {
+                  if-feature "interface-for-forwarding-database-port";
+                  type if:interface-state-ref;
+                  must "derived-from-or-self(/if:interfaces-state"
+                     + "/if:interface[if:name = current()]/if:type,"
+                     + "'bbfift:vlan-sub-interface' ) or "
+                     + "derived-from-or-self( /if:interfaces-state"
+                     + "/if:interface[if:name = current()]/if:type,"
+                     + "'bbfift:l2-termination')" {
+                    description
+                      "The type of interface being referenced must be
+                       a VLAN sub-interface or a Layer 2
+                       termination.";
+                  }
+                  description
+                    "The interface supporting the port on which the
+                     MAC address is learned.
+
+                     Referencing the interface from within the
+                     forwarding database duplicates the information
+                     available in the forwarder, but is added to
+                     provide a more efficient mechanism to retrieve
+                     the MAC addresses learned on a particular
+                     interface compared with having this data spread
+                     over the forwarding database and the forwarder.";
+                }
+              }
+            }
+            action clear-mac-address {
+              if-feature "clear-fdb-actions";
+              description
+                "Remove this MAC address from the forwarding
+                 database.";
+            }
+          }
+        }
+      }
+    }
+  }
+
+  uses forwarding {
+    refine "forwarding/forwarders/forwarder/port-groups" {
+      if-feature "forwarder-port-groups";
+    }
+    refine "forwarding/forwarders/forwarder/flooding-policies" {
+      if-feature "flooding-policies";
+    }
+    refine "forwarding/forwarders/forwarder/flooding-policies"
+         + "/flooding-policy-type/profile-based" {
+      if-feature "flooding-policies-profiles";
+    }
+    refine "forwarding/forwarders/forwarder/split-horizon-profiles" {
+      if-feature "split-horizon-profiles";
+    }
+    refine "forwarding/forwarders/forwarder/mac-learning" {
+      if-feature "forwarding-databases";
+    }
+  }
+  container forwarding-state {
+    config false;
+    description
+      "State data nodes associated with layer 2 forwarding.";
+    container forwarders {
+      description
+        "A forwarder is used to forward traffic between interfaces.";
+      list forwarder {
+        key "name";
+        description
+          "A list of forwarders.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "The name of the forwarder.";
+        }
+        container ports {
+          description
+            "Configuration for ports associated with this forwarder.";
+          list port {
+            key "name";
+            description
+              "The list of ports associated with this forwarder.";
+            leaf name {
+              type bbf-yang:string-ascii64;
+              description
+                "The name of the forwarder port.";
+            }
+            leaf sub-interface {
+              type if:interface-state-ref;
+              must "derived-from-or-self(/if:interfaces-state"
+                 + "/if:interface[if:name = current()]/if:type,"
+                 + "'bbfift:vlan-sub-interface' ) or "
+                 + "derived-from-or-self( /if:interfaces-state"
+                 + "/if:interface[if:name = current()]/if:type,"
+                 + "'bbfift:l2-termination')" {
+                description
+                  "The type of interface being referenced must be a
+                   VLAN sub-interface or a Layer 2 termination.";
+              }
+              description
+                "The VLAN sub-interface or Layer 2 termination
+                 associated with this port.";
+            }
+          }
+        }
+        container forwarding-databases {
+          if-feature "forwarding-databases";
+          description
+            "Forwarder state data nodes for forwarding databases.";
+          leaf forwarding-database {
+            type leafref {
+              path "/bbf-l2-fwd:forwarding-state/"
+                 + "bbf-l2-fwd:forwarding-databases/bbf-l2-fwd:"
+                 + "forwarding-database/bbf-l2-fwd:name";
+            }
+            description
+              "A reference to a forwarding database associated with a
+               forwarder.";
+          }
+        }
+      }
+    }
+    uses forwarding-database-state {
+      refine "forwarding-databases" {
+        if-feature "forwarding-databases";
+      }
+      refine "forwarding-databases/max-number-mac-addresses" {
+        if-feature "read-system-fdb-capacity";
+      }
+      refine "forwarding-databases/forwarding-database/"
+           + "mac-addresses/mac-address/remaining-aging-time" {
+        if-feature "remaining-aging-time";
+      }
+    }
+  }
+
+  augment "/forwarding/forwarders/forwarder/ports/port" {
+    description
+      "Augments forwarder port with reference to sub-interface.";
+    leaf sub-interface {
+      type if:interface-ref;
+      must "derived-from-or-self(
+            /if:interfaces/if:interface[if:name = current()]
+            /if:type, 'bbfift:vlan-sub-interface') or
+            derived-from-or-self(
+            /if:interfaces/if:interface[if:name = current()]
+            /if:type, 'bbfift:l2-termination')" {
+        error-message
+          "The type of the interface being referenced is not "
+        + "a 'vlan-sub-interface', nor a 'l2-termination',  "
+        + "nor is it derived from one of them.";
+        description
+          "The type of interface being referenced must either
+           be a 'vlan-sub-interface', 'l2-termination' or a
+           derivation of either type.";
+      }
+      description
+        "The VLAN sub-interface or layer 2 termination
+         associated with this port.
+
+         Note that a VLAN sub-interface or layer 2
+         termination cannot be referenced by more
+         than one forwarder port.";
+    }
+  }
+
+  augment "/forwarding/forwarders/forwarder/mac-learning" {
+    description
+      "Augments forwarder with reference to forwarding database.";
+    leaf forwarding-database {
+      type leafref {
+        path "/bbf-l2-fwd:forwarding/bbf-l2-fwd:forwarding-"
+           + "databases/bbf-l2-fwd:forwarding-database/bbf-l2-"
+           + "fwd:name";
+      }
+      description
+        "A reference to a forwarding database.
+
+         The absence of a reference to a forwarding database
+         automatically means that MAC addresses are not learned.";
+    }
+  }
+
+  augment "/forwarding/forwarders/forwarder/flooding-policies/"
+        + "flooding-policy-type" {
+    description
+      "Augments forwarder specific flooding policy type.";
+    case forwarder-specific {
+      list flooding-policy {
+        key "name";
+        ordered-by user;
+        description
+          "A flooding-policy defines for the tuple (list of
+           in-ports, a frame classification), if and to which
+           other ports the frame shall be flooded.
+
+           The absence of data for a particular combination
+           results in the default forwarding behavior to flood
+           the frame to all ports of the forwarder, except the
+           one on which the frame is received.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "The name of the flooding policy.";
+        }
+        container in-ports {
+          description
+            "List of forwarder ports on which the frame
+             classification applies.";
+          choice list-type {
+            description
+              "Provides alternatives to provide a single or a
+               set of forwarder ports.
+
+               If no case is configured, the classification is
+               not applied to any forwarding ports resulting in
+               a non-functional flooding policy.";
+            case forwarder-port {
+              leaf forwarder-port {
+                type leafref {
+                  path "../../../../bbf-l2-fwd:ports/bbf-l2-"
+                     + "fwd:port/bbf-l2-fwd:name";
+                }
+                description
+                  "A reference to a forwarder port within this
+                   forwarder.";
+              }
+            }
+            case forwarder-port-group {
+              if-feature "forwarder-port-groups";
+              leaf forwarder-port-group {
+                type leafref {
+                  path "../../../../bbf-l2-fwd:port-groups/bbf-"
+                     + "l2-fwd:port-group/bbf-l2-fwd:name";
+                }
+                description
+                  "A reference to a forwarder port group within
+                   this forwarder.";
+              }
+            }
+          }
+        }
+        container destination-address {
+          description
+            "The frame classification to be performed on the
+             destination MAC or IP address. Note that the MAC
+             filter also allows specification of unicast
+             addresses. If used this will apply to frames for
+             which there was no forwarding decision identified
+             via other means.";
+          uses bbf-classif:frame-destination-match {
+            augment "frame-filter/destination-ipv6-address"
+                  + "/ipv6-address" {
+              description
+                "Augments specific IPv6 destination addresses to
+                 the flooding policies.";
+              case ipv6-all-bbf-access-nodes-multicast-address {
+                description
+                  "This case applies when the to be classified
+                   IPv6 address is classified as the all BBF
+                   access nodes multicast address.";
+                leaf ipv6-all-bbf-access-nodes-multicast-address {
+                  type empty;
+                  description
+                    "The IPv6 address is classified as the IPv6
+                     all BBF access nodes multicast address,
+                     i.e., the IPv6 multicast address
+                     ff02::10.";
+                }
+              }
+              case ipv6-solicited-node-multicast-address {
+                description
+                  "This case applies when the to be classified
+                   IPv6 address is classified as an IPv6
+                   solicited node multicast address.";
+                leaf ipv6-solicited-node-multicast-address {
+                  type empty;
+                  description
+                    "The IPv6 address is classified as an IPv6
+                     solicited node multicast address. This is
+                     an IPv6 address in the range covered by the
+                     mask ff02::1:ff00:0/104. These address are
+                     assembled starting from ff02::1:ff00:0 with
+                     the least significant 24 bits replaced by
+                     the least significant 24 bits of the
+                     unicast address the sender plans to
+                     assign.";
+                }
+              }
+            }
+          }
+        }
+        choice frame-forwarding {
+          description
+            "Identifies the action to be performed on frames
+             that match the classification. Not configuring a
+             frame forwarding case means that the frames in
+             scope shall be discarded. In order not to discard
+             these frames one shall configure a non-empty
+             'out-ports' container.";
+          case discard {
+            leaf discard {
+              type empty;
+              description
+                "The frame shall be discarded.";
+            }
+          }
+          case forward {
+            container out-ports {
+              description
+                "List of ports to which the frame shall be
+                  forwarded.";
+              choice list-type {
+                description
+                  "Specifies how to where to forward the
+                   frames.";
+                case forwarder-port {
+                  leaf forwarder-port {
+                    type leafref {
+                      path "../../../../bbf-l2-fwd:ports/bbf-"
+                         + "l2-fwd:port/bbf-l2-fwd:name";
+                    }
+                    description
+                      "A reference to a forwarder port within
+                       the same forwarder.";
+                  }
+                }
+                case forwarder-port-group {
+                  if-feature "forwarder-port-groups";
+                  leaf forwarder-port-group {
+                    type leafref {
+                      path "../../../../bbf-l2-fwd:port-groups/"
+                         + "bbf-l2-fwd:port-group/bbf-l2-fwd:"
+                         + "name";
+                    }
+                    description
+                      "A reference to a forwarder port group
+                       within the same forwarder.";
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  augment "/forwarding" {
+    description
+      "Augments forwarder with different forwarding profiles.";
+    uses bbf-l2-fwd-pc:flooding-policies-profiles {
+      refine "flooding-policies-profiles" {
+        if-feature "flooding-policies-profiles";
+      }
+    }
+    uses bbf-l2-fwd-pc:forwarding-databases {
+      refine "forwarding-databases" {
+        if-feature "forwarding-databases";
+      }
+      refine "forwarding-databases/forwarding-database/aging-timer" {
+        if-feature "mac-learning";
+      }
+      refine "forwarding-databases/forwarding-database/"
+           + "shared-forwarding-database" {
+        if-feature "shared-forwarding-databases";
+      }
+      augment "bbf-l2-fwd:forwarding-databases/"
+            + "bbf-l2-fwd:forwarding-database" {
+        if-feature "forwarding-databases";
+        description
+          "Augment forwarding database  with configuration for MAC
+           address learning control.";
+        uses forwarding-db-mac-learn-ctrls {
+          refine "mac-learning-control" {
+            if-feature "mac-learning and "
+                     + "mac-learning-control-profiles";
+          }
+          refine "mac-learning-control/generate-mac-learning-alarm" {
+            default "false";
+          }
+        }
+      }
+      augment "bbf-l2-fwd:forwarding-databases/"
+            + "bbf-l2-fwd:forwarding-database/static-mac-address/"
+            + "learning-constraint" {
+        description
+          "Augments forwarding database with more choices for learning
+           mac address.";
+        case allowed-to-learn-on {
+          if-feature "mac-learning";
+          choice allow-to-learn-on {
+            description
+              "The source MAC address of the frame can be learned
+               on any of the ports or interfaces as identified
+               further.";
+            case forwarder-port {
+              container forwarder-port-ref {
+                description
+                  "The reference to a forwarder port on which the
+                   MAC address can be learned.";
+                uses forwarder-port;
+              }
+            }
+            case forwarder-port-group {
+              if-feature "forwarder-port-groups";
+              container forwarder-port-group-ref {
+                description
+                  "The reference to a group of forwarder ports,
+                   the MAC address can be learned on any of these
+                   forwarder ports.";
+                uses forwarder-port-group;
+              }
+            }
+          }
+        }
+        case install-in-fdb-on {
+          choice install-on {
+            description
+              "The source MAC address is statically configured in
+               the forwarding database on a specified port or
+               interface.";
+            case static-port {
+              description
+                "The MAC address is added statically to a
+                 forwarder port.";
+              container static-forwarder-port-ref {
+                description
+                  "The reference to a forwarder port on which the
+                   MAC address will be statically installed and as
+                   such affect the forwarding behavior
+                   immediately.";
+                uses forwarder-port;
+              }
+            }
+          }
+        }
+      }
+    }
+    uses bbf-l2-fwd-pc:split-horizon-profiles {
+      refine "split-horizon-profiles" {
+        if-feature "split-horizon-profiles";
+      }
+    }
+    uses bbf-l2-fwd-pc:mac-learning-control-profiles {
+      refine "mac-learning-control-profiles" {
+        if-feature "forwarding-databases and mac-learning and "
+                 + "mac-learning-control-profiles";
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface" {
+    when
+      "derived-from-or-self(if:type, 'ianaift:ethernetCsmacd') or
+       derived-from-or-self(if:type, 'ianaift:ieee8023adLag') or
+       derived-from-or-self(if:type, 'ianaift:ptm') or
+       derived-from-or-self(if:type, 'bbfift:vlan-sub-interface') or
+       derived-from-or-self(if:type, 'bbfift:l2-termination') or
+       derived-from(if:type, 'bbfift:ethernet-like')" {
+      description
+        "Ethernet / Ethernet-like interfaces on which MAC address are
+         learned can have a maximum number for what can be learned for
+         the full interface. MAC addresses are typically learned in
+         the scope of a VLAN. Therefore it is also possible to
+         restrict the number of MAC addresses that can be learned per
+         VLAN per Ethernet (-like) interface.";
+    }
+    if-feature "forwarding-databases and mac-learning";
+    description
+      "Augment the interface list with MAC learning configuration.";
+    uses mac-learning-per-interface {
+      refine "mac-learning/max-number-mac-addresses" {
+        default "4294967295";
+      }
+      refine "mac-learning/number-committed-mac-addresses" {
+        default "1";
+      }
+      refine "mac-learning/mac-learning-enable" {
+        default "true";
+      }
+      refine "mac-learning/mac-learning-failure-action" {
+        default "forward";
+      }
+    }
   }
 }

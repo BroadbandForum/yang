@@ -52,17 +52,13 @@ module bbf-voip-sip {
 
      Editor:      Shiya Ashraf, Nokia
 
-     Editor:      Kevin Noll, CableLabs
-
      PS Leader:   Sven Ooghe, Nokia
 
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Bruno Cornaglia, Vodafone
 
-     WA Director: Mengmeng Li, China Mobile
-
-     WA Director: Haomian Zheng, Huawei";
+     WA Director: Aihua Guo, Futurewei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on voice service
@@ -77,7 +73,7 @@ module bbf-voip-sip {
      Voice over IP (VoIP) Session Initiation Protocol(SIP)and VoIP
      SIP capabilities defined in ITU-T G.988.
 
-     Copyright (c) 2017-2025, Broadband Forum
+     Copyright (c) 2017-2026, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -117,9 +113,19 @@ module bbf-voip-sip {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a9; see
+     This version of this YANG module is part of TR-383a10; see
      the TR itself for full legal notices.";
 
+  revision 2026-07-02 {
+    description
+      "Amendment 10.
+       * Approval Date:    2026-07-02.
+       * Publication Date: 2026-07-02.";
+    reference
+      "TR-383a10: Common YANG Modules for Access Networks
+                  <https://www.broadband-forum.org/technical/download/
+                           TR-383_Amendment-10.pdf>";
+  }
   revision 2025-07-02 {
     description
       "Amendment 9.
@@ -1645,8 +1651,7 @@ module bbf-voip-sip {
                  processed.";
             }
             container explicit-subscription {
-              presence
-                "Indicates explicit subscription is required.";
+              presence "Indicates explicit subscription is required.";
               description
                 "Management of an explicit subscription.";
               reference
@@ -4278,11 +4283,23 @@ module bbf-voip-sip {
           description
             "The SIP register characteristics profile.";
         }
+        leaf vendor {
+          type bbf-yang:string-ascii {
+            length "4";
+            pattern '[a-zA-Z]*';
+          }
+          description
+            "Identifies the vendor. The format is four ASCII coded
+             alphabetical characters [A-Z] as defined in
+             [ATIS-0300220]. If not present, the vendor is not
+             specified or unknown.";
+          reference
+            "ITU-T G.988 Clause 9.9.3 - Softswitch";
+        }
         container sip-service-profile {
           if-feature "bbf-voip-sip:sip-service-profile";
-          presence
-            "If present, some specific SIP call flows are
-             configured.";
+          presence "If present, some specific SIP call flows are
+                    configured.";
           description
             "The SIP service profile (SSP) contains the SIP call flow
              settings. The SIP call flows can depend on the SIP
@@ -4378,9 +4395,8 @@ module bbf-voip-sip {
             description
               "The SIP server redundancy parameters.";
             container foreground-monitoring {
-              presence
-                "If present, indicates foreground monitoring is
-                 enabled.";
+              presence "If present, indicates foreground monitoring is
+                        enabled.";
               description
                 "Foreground monitoring checks the connection with the
                  active SIP server.";
@@ -4404,9 +4420,8 @@ module bbf-voip-sip {
               }
             }
             container background-monitoring {
-              presence
-                "If present, indicates background monitoring is
-                 enabled.";
+              presence "If present, indicates background monitoring is
+                        enabled.";
               description
                 "The background monitoring checks the connection
                  status of the SIP server(s) that were not addressed

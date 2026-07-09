@@ -21,24 +21,20 @@ module bbf-ipfix-data-export {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Work Area";
+     Provider Cloud Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
      Editor:      Shiya Ashraf, Nokia
 
-     Editor:      Nick Hancock, Adtran
+     PS Leader:   Sven Ooghe, Nokia
 
-     Editor:      Kevin Noll, CableLabs
+     PS Leader:   Joey Boyd, Adtran
 
-     Editor:      Ludwig Pauwels, Nokia
+     WA Director: Bruno Cornaglia, Vodafone
 
-     PS Leader:   Aihua Guo, Futurewei
-
-     WA Director: Joey Boyd, Adtran
-
-     WA Director: Sven Ooghe, Nokia";
+     WA Director: Aihua Guo, Futurewei";
   description
     "This module contains a collection of YANG definitions to manage
      exporting data using the Internet Protocol Flow Information
@@ -47,7 +43,7 @@ module bbf-ipfix-data-export {
      This data model is designed for the Network Management Datastore
      Architecture defined in RFC 8342.
 
-     Copyright (c) 2017-2024, Broadband Forum
+     Copyright (c) 2017-2026, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -87,9 +83,19 @@ module bbf-ipfix-data-export {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a8; see
+     This version of this YANG module is part of TR-383a10; see
      the TR itself for full legal notices.";
 
+  revision 2026-07-02 {
+    description
+      "Amendment 10.
+       * Approval Date:    2026-07-02.
+       * Publication Date: 2026-07-02.";
+    reference
+      "TR-383a10: Common YANG Modules for Access Networks
+                  <https://www.broadband-forum.org/technical/download/
+                           TR-383_Amendment-10.pdf>";
+  }
   revision 2024-11-11 {
     description
       "Amendment 8.
@@ -105,6 +111,12 @@ module bbf-ipfix-data-export {
     description
       "Indicates support for the device to be used as an exporter
        allowing for configuration of exporting processes.";
+  }
+
+  feature on-change {
+    description
+      "Indicates support for on-change mode of reporting by the
+       exporter.";
   }
 
   identity export-mode {
@@ -420,6 +432,35 @@ module bbf-ipfix-data-export {
           "The mode of operation of the exporting process.";
         reference
           "RFC 6728 Section 4.4 - exportMode";
+      }
+      leaf audit-check-interval {
+        if-feature "on-change";
+        type union {
+          type enumeration {
+            enum disabled {
+              description
+                "Audit check is disabled.";
+            }
+          }
+          type uint16 {
+            range "30..1440";
+          }
+        }
+        units "minutes";
+        default "disabled";
+        description
+          "Interval at which the on-change templates should be audited
+           when no on-change data is exported in the interval. An
+           audit check message will be exported to the collector at
+           the end of the audit interval (after a random offset) when
+           no on-change data is exported in the interval. In the audit
+           check message, the on-change Information Element will be
+           filled with value 4 ('audit check'). This audit check
+           message can be used by the collector to determine if it is
+           still in sync with the exporter, and to trigger a full sync
+           of data of templates configured as on-change if required.
+           The value 'disabled' is used to disable the export of audit
+           check messages.";
       }
       container destinations {
         description
@@ -898,6 +939,24 @@ module bbf-ipfix-data-export {
            records are to be exported by the exporting processes
            referenced by the leaf 'exporting-process'.";
       }
+      leaf export-frequency {
+        type enumeration {
+          enum periodic {
+            description
+              "The export for this template will happen
+               periodically.";
+          }
+          enum on-change {
+            if-feature "on-change";
+            description
+              "The export for this template will happen when a
+               change occurs for one or more data instances.";
+          }
+        }
+        default "periodic";
+        description
+          "Specifies when to export this template.";
+      }
       leaf export-interval {
         type uint32;
         units "seconds";
@@ -926,6 +985,50 @@ module bbf-ipfix-data-export {
            domain.";
         reference
           "RFC 7011 Section 3.1";
+      }
+      container on-change {
+        when "../bbf-ipfix-de:export-frequency = 'on-change'" {
+          description
+            "Only applicable when the 'export-frequency' is set to
+             'on-change'.";
+        }
+        if-feature "on-change";
+        presence
+          "Indicates changed data-instances will be exported to the
+           collector when a change occurs for the instance.";
+        description
+          "Indicates the template is for on-change reporting.";
+        leaf periodic-full-sync-interval {
+          type union {
+            type enumeration {
+              enum no-periodic-export {
+                description
+                  "No periodic export will happen for the on-change
+                   template, i.e., periodic full-sync is not
+                   applicable.";
+              }
+            }
+            type uint16 {
+              range "60..10080";
+            }
+          }
+          units "minutes";
+          default "no-periodic-export";
+          description
+            "This parameter configures the interval, in minutes, for
+             periodical export of data associated with templates
+             configured as on-change (in addition to exporting the
+             data on-change). The value 'no-periodic-export' indicates
+             periodic full-sync is not applicable, i.e., no periodic
+             export will happen for the on-change template.";
+        }
+        action full-data-sync {
+          description
+            "Trigger a full data sync for the template configured as
+             on-change. The full data associated with the template at
+             the time the action is invoked will be exported to the
+             collector.";
+        }
       }
       container fields {
         description

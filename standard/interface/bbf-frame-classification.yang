@@ -24,20 +24,20 @@ module bbf-frame-classification {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Work Area";
+     Provider Cloud Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Nick Hancock, Adtran
+     Editor:      Shiya Ashraf, Nokia
 
-     Editor:      Ludwig Pauwels, Nokia
+     PS Leader:   Sven Ooghe, Nokia
 
      PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Joey Boyd, Adtran
+     WA Director: Bruno Cornaglia, Vodafone
 
-     WA Director: Sven Ooghe, Nokia";
+     WA Director: Aihua Guo, Futurewei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on frame
@@ -48,7 +48,7 @@ module bbf-frame-classification {
      Specifically, this module contains reusable groupings defined for
      frame classification.
 
-     Copyright (c) 2017-2023, Broadband Forum
+     Copyright (c) 2017-2026, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -88,9 +88,19 @@ module bbf-frame-classification {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a7; see
+     This version of this YANG module is part of TR-383a10; see
      the TR itself for full legal notices.";
 
+  revision 2026-07-02 {
+    description
+      "Amendment 10.
+       * Approval Date:    2026-07-02.
+       * Publication Date: 2026-07-02.";
+    reference
+      "TR-383a10: Common YANG Modules for Access Networks
+                  <https://www.broadband-forum.org/technical/download/
+                           TR-383_Amendment-10.pdf>";
+  }
   revision 2023-12-15 {
     description
       "Amendment 7.
@@ -368,6 +378,17 @@ module bbf-frame-classification {
           description
             "A mask to be applied on the to be evaluated MAC address.
              The mask is applied as a bit-wise AND operation.";
+        }
+      }
+      case interface-host-mac {
+        description
+          "This case applies when the to-be-classified MAC address is
+           classified as the interfaces host MAC address.";
+        leaf interface-host-mac {
+          type empty;
+          description
+            "The MAC address is classified as the MAC address of the
+             interface on which this classification is applied.";
         }
       }
     }

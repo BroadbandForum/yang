@@ -1,0 +1,487 @@
+module bbf-l2-forwarding-profile-common {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-l2-forwarding-profile-common";
+  prefix bbf-l2-fwd-pc;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import bbf-interface-usage {
+    prefix bbf-if-usg;
+  }
+  import bbf-frame-classification {
+    prefix bbf-classif;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Provider Cloud Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Shiya Ashraf, Nokia
+
+     PS Leader:   Sven Ooghe, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Bruno Cornaglia, Vodafone
+
+     WA Director: Aihua Guo, Futurewei";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on layer 2 forwarding
+     as applicable to access network equipment. As such, this module
+     is specific to access network equipment (e.g., BBF-specified
+     Access Nodes and FTTdp DPUs).
+
+     Specifically, this module contains a collection of YANG groupings
+     that can be used for defining L2 forwarding profiles.
+
+     Copyright (c) 2017-2026, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a10; see
+     the TR itself for full legal notices.";
+
+  revision 2026-07-02 {
+    description
+      "Amendment 10.
+       * Approval Date:    2026-07-02.
+       * Publication Date: 2026-07-02.";
+    reference
+      "TR-383a10: Common YANG Modules for Access Networks
+                  <https://www.broadband-forum.org/technical/download/
+                           TR-383_Amendment-10.pdf>";
+  }
+
+  grouping flooding-policies-profiles {
+    description
+      "Group of configuration data nodes associated with layer 2
+       forwarding with flooding policies profile data nodes.";
+    container flooding-policies-profiles {
+      description
+        "Contains a set of flooding policies profiles.
+
+         The flooding policies define how the system shall forward
+         frames in case the other forwarding mechanisms did not come
+         to a forwarding decision, e.g. when the destination unicast
+         MAC address is not available in the forwarding database.
+
+         For multicast frames this applies when there is no
+         corresponding entry found in the (IGMP controlled) multicast
+         tree.
+
+         For broadcast frames this applies when there is no other
+         protocol specific behavior knowledge.";
+      list flooding-policies-profile {
+        key "name";
+        description
+          "The configuration of a flooding policies profile.
+           One flooding policies profile can contain multiple
+           policies.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "The name of a flooding policies profile.";
+        }
+        list flooding-policy {
+          key "name";
+          ordered-by user;
+          description
+            "A flooding-policy defines for the tuple (list of
+             in-interface-usages, a frame classification), if and to
+             which other interface usages the frame shall be flooded.
+
+             The absence of data for a particular combination results
+             in the default forwarding behavior to flood the frame to
+             all ports of the forwarder, except the one on which the
+             frame is received.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "The name of a flooding policy.";
+          }
+          container in-interface-usages {
+            description
+              "Identifies the forwarder ports on which the
+               classification shall apply. The actual identification
+               is indirect: a forwarder port references a VLAN
+               sub-interface and this VLAN sub-interface has an
+               interface usage.";
+            leaf-list interface-usages {
+              type bbf-if-usg:interface-usage;
+              description
+                "List of interface-usages to which the frame
+                 classification applies.
+
+                 An empty list means that the classification is not
+                 applied to any interface usage resulting in a
+                 non-functional flooding policy.";
+            }
+          }
+          container destination-address {
+            description
+              "The frame classification to be performed on the
+               destination MAC or IP address. Note that the MAC filter
+               also allows specification of unicast addresses. If used
+               this will apply to frames for which there was no
+               forwarding decision identified via other means.";
+            uses bbf-classif:frame-destination-match {
+              augment "frame-filter/destination-ipv6-address"
+                    + "/ipv6-address" {
+                description
+                  "Augments specific IPv6 destination addresses to the
+                   flooding policies.";
+                case ipv6-all-bbf-access-nodes-multicast-address {
+                  description
+                    "This case applies when the to be classified IPv6
+                     address is classified as the all BBF access nodes
+                     multicast address.";
+                  leaf ipv6-all-bbf-access-nodes-multicast-address {
+                    type empty;
+                    description
+                      "The IPv6 address is classified as the IPv6 all
+                       BBF access nodes multicast address, i.e., the
+                       IPv6 multicast address ff02::10.";
+                  }
+                }
+                case ipv6-solicited-node-multicast-address {
+                  description
+                    "This case applies when the to be classified IPv6
+                     address is classified as an IPv6 solicited node
+                     multicast address.";
+                  leaf ipv6-solicited-node-multicast-address {
+                    type empty;
+                    description
+                      "The IPv6 address is classified as an IPv6
+                       solicited node multicast address. This is an
+                       IPv6 address in the range covered by the mask
+                       ff02::1:ff00:0/104. These address are assembled
+                       starting from ff02::1:ff00:0 with the least
+                       significant 24 bits replaced by the least
+                       significant 24 bits of the unicast address the
+                       sender plans to assign.";
+                  }
+                }
+              }
+            }
+          }
+          choice frame-forwarding {
+            description
+              "Identifies the action to be performed on frames that
+               match the classification. Not configuring a frame
+               forwarding case means that the frames in scope shall be
+               discarded. In order not to discard these frames one
+               shall configure a non-empty 'out-interface-usages'
+               leaf-list.";
+            case discard {
+              leaf discard {
+                type empty;
+                description
+                  "The frame will be discarded.";
+              }
+            }
+            case forward {
+              container out-interface-usages {
+                description
+                  "Identifies the forwarder ports to which the frame
+                   shall be forwarded. The actual identification is
+                   indirect: a forwarder port references a
+                   VLAN sub-interface and this VLAN sub-interface has
+                   an interface usage.";
+                leaf-list interface-usages {
+                  type bbf-if-usg:interface-usage;
+                  description
+                    "List of interface usages to which the frame shall
+                     be forwarded.";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  grouping split-horizon-profiles {
+    description
+      "Group of configuration data nodes associated with layer 2
+       forwarding with split horizon profile data nodes.";
+    container split-horizon-profiles {
+      description
+        "Split horizon profile configuration.";
+      list split-horizon-profile {
+        key "name";
+        description
+          "A profile manages (not) allowed forwarding between various
+           forwarder ports based on their underlying interface usage.
+           The absence of data for a particular in-interface-usage has
+           a result that from that type of forwarder ports frames are
+           allowed to be forwarded to any other forwarder port.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "The name of the profile.";
+        }
+        list split-horizon {
+          key "in-interface-usage";
+          description
+            "Frame forwarding is not allowed from interfaces/ports
+             that have an interface usage as specified in
+             in-interface-usage to interfaces/ports that have an
+             interface usage for which the value is in the leaf-list
+             'out-interface-usage'.";
+          leaf in-interface-usage {
+            type bbf-if-usg:interface-usage;
+            description
+              "The interface usage from which forwarding is specified
+               here.";
+          }
+          leaf-list out-interface-usage {
+            type bbf-if-usg:interface-usage;
+            description
+              "The interface usage to which frames coming from the
+               'in-interface-usage' are not allowed to be forwarded.
+               Frame forwarding to interface usages not configured is
+               allowed.";
+          }
+        }
+      }
+    }
+  }
+
+  grouping forwarding-databases {
+    description
+      "Group of configuration data nodes associated with layer 2
+       forwarding with forwarding database data nodes.";
+    container forwarding-databases {
+      description
+        "Forwarding databases configuration.";
+      list forwarding-database {
+        key "name";
+        description
+          "The configuration of a specific forwarding database.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "The name associated with the forwarding database.";
+        }
+        leaf max-number-mac-addresses {
+          type uint32;
+          default "4294967295";
+          description
+            "Limits the number of MAC addresses that can be stored in
+             this forwarding database.";
+        }
+        leaf aging-timer {
+          type uint32;
+          units "seconds";
+          default "300";
+          description
+            "MAC addresses are learned in the forwarding database
+             against a forwarder port or against an interface. When no
+             incoming traffic on this forwarder port or interface is
+             received with a particular MAC address as source MAC
+             address for a period specified in this aging timer, then
+             this MAC address is removed from the forwarding
+             database.";
+        }
+        leaf shared-forwarding-database {
+          type boolean;
+          default "false";
+          description
+            "If true, the forwarding database instance can be
+             referenced by multiple forwarder instances.
+
+             If false it can be referenced from only one forwarder
+             instance.";
+        }
+        list static-mac-address {
+          key "mac-address";
+          description
+            "A policy for a configured MAC address specifies a
+             learning constraint for it. The static configuration of
+             MAC addresses serves multiple purposes:
+             - it can be configured with a rule that forbids to learn
+               this MAC address
+             - it can be configured with a list of ports or interfaces
+               on which the MAC address can be learned
+             - it can be statically assigned to a specific port or
+               interface.
+             The absence of a policy for a particular MAC address
+             means that there is no MAC learning constraint, i.e., the
+             MAC address can be learned on any port or interface.";
+          leaf mac-address {
+            type yang:mac-address;
+            description
+              "The MAC address to which the constraint applies.";
+          }
+          choice learning-constraint {
+            description
+              "Provides alternative frame processing decisions for
+               when the source MAC address of a frame matches the
+               value of the leaf mac-address. Not configuring a
+               learning-constraint case means that the frame will be
+               discarded and the source MAC address will not be
+               learned. In order not to discard the frame, and/or to
+               learn the MAC address, one shall configure a data node
+               different from 'discard-frame'.";
+            case do-not-learn-and-discard-frame {
+              leaf discard-frame {
+                type empty;
+                description
+                  "The frame shall be discarded.";
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  grouping mac-learning-control-profiles {
+    description
+      "Group of configuration data nodes associated with layer 2
+       forwarding with MAC address learning control profile data
+       nodes.";
+    container mac-learning-control-profiles {
+      description
+        "Contains a set of MAC address learning control profiles.";
+      list mac-learning-control-profile {
+        key "name";
+        description
+          "The configuration of a MAC address learning control
+           profile.
+
+           A profile controls the MAC address learning behavior that
+           deviates from the default MAC learning in an IEEE bridge,
+           i.e. that behavior that deviates from 'learn on the last
+           port or interface on which a frame with the corresponding
+           source MAC address is received'. This implies that the
+           default behavior is that the MAC address is always learned
+           and that MAC movement is allowed from any port or interface
+           to any other port or interface, except if this would be in
+           conflict with static MAC address configuration.";
+        leaf name {
+          type bbf-yang:string-ascii64;
+          description
+            "The name of a MAC address learning control profile.";
+        }
+        list mac-learning-rule {
+          key "receiving-interface-usage";
+          description
+            "Defines what to do when a frame is received with a
+             particular source MAC address and this MAC address is not
+             yet stored on that port or interface.";
+          leaf receiving-interface-usage {
+            type bbf-if-usg:interface-usage;
+            description
+              "Defines MAC address learning rules for frames received
+               on a port for which the interface usage of the
+               underlying interface is of this value.";
+          }
+          choice mac-learning-action {
+            description
+              "Specifies how to learn a MAC address on a port or
+               interface that has a usage specified by the leaf
+               receiving-interface-usage.";
+            case learn-and-translate {
+              description
+                "In case this is not in conflict with static MAC
+                 address configuration, then the (source) MAC address
+                 will be learned on the port or interface where the
+                 frame is received, and the system will perform
+                 (source) MAC address translation before forwarding
+                 the frame.
+
+                 Note, the case exists because of the referenced
+                 requirement implying MAC address translation.
+                 However, there is no standardized method for MAC
+                 address translation. Therefore, defining data nodes
+                 is for further study.";
+              reference
+                "TR-101i2 R-111";
+            }
+            case learn-but-do-not-move {
+              description
+                "In case the source MAC address is not known in the
+                 forwarding database on any other port or interface,
+                 and in case a possible learning is not in conflict
+                 with any static MAC address configuration
+                 then it is learned on the port or interface on which
+                 the frame is received (in case other criteria such as
+                 specified by the leaf max-number-mac-addresses
+                 allow).
+
+                 In case the MAC address was already known in the
+                 forwarding database, where it was associated to a
+                 port or interface, and a possible learning is not in
+                 conflict with any static MAC address configuration
+                 then MAC movement is restricted:
+                 the MAC address can not move and the frame will be
+                 discarded in case the interface usage of the port or
+                 interface where the frame is received is part of the
+                 leaf-list mac-can-not-move-to of the list entry
+                 identified by the interface usage of the port or
+                 interface where the MAC address was already
+                 associated to. The MAC address can move in case the
+                 interface usage of the port or interface where the
+                 frame is received is not part of this list.";
+              reference
+                "TR-101i2 R-112;
+                 TR-101i2 R-113";
+              leaf-list mac-can-not-move-to {
+                type bbf-if-usg:interface-usage;
+                description
+                  "Provides a list of interface-usage values to which
+                   MAC addresses can not move.";
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

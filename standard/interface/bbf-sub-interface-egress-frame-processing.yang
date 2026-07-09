@@ -1,0 +1,236 @@
+module bbf-sub-interface-egress-frame-processing {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-sub-interface-egress-frame-processing";
+  prefix bbf-subif-egrsfp;
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import bbf-sub-interfaces {
+    prefix bbf-subif;
+  }
+  import bbf-frame-classification {
+    prefix bbf-classif;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Provider Cloud Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Shiya Ashraf, Nokia
+
+     PS Leader:   Sven Ooghe, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Bruno Cornaglia, Vodafone
+
+     WA Director: Aihua Guo, Futurewei";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on the management of
+     sub-interfaces as applicable to access network equipment. As
+     such, this module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module defines data nodes related to egress
+     frame classification and frame processing.
+
+     Copyright (c) 2017-2026, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a10; see
+     the TR itself for full legal notices.";
+
+  revision 2026-07-02 {
+    description
+      "Amendment 10.
+       * Approval Date:    2026-07-02.
+       * Publication Date: 2026-07-02.";
+    reference
+      "TR-383a10: Common YANG Modules for Access Networks
+                  <https://www.broadband-forum.org/technical/download/
+                           TR-383_Amendment-10.pdf>";
+  }
+
+  identity egress-frame-classification-type {
+    description
+      "Base identity specifying the type of classification to be
+       applied to a frame at an egress interface.";
+  }
+
+  identity match-vlan-from-ingress-rewrite {
+    base egress-frame-classification-type;
+    description
+      "Classify egress frame by matching the VLAN tags in the egress
+       frame to the tags specified in any of the ingress-rewrite
+       action. i.e.,
+       egress match vlan[0] = ingress-rewrite/push-tag[0]
+       egress match vlan[1] = ingress-rewrite/push-tag[1].";
+  }
+
+  identity egress-frame-tag-actions {
+    description
+      "Base identity specifying the type of tag actions to be
+       performed on the frame at an egress interface after matching an
+       egress frame classification.";
+  }
+
+  identity reverse-ingress-rewrite {
+    base egress-frame-tag-actions;
+    description
+      "Apply tag manipulation symmetric to the actions specified
+       in the ingress match-criteria and ingress-rewrite.i.e.,
+       egress pop tag = number of push-tag entries in ingress-rewrite
+       egress push tag[0] = ingress-rule match-criteria tag[0]
+       egress push tag[1] = ingress-rule match-criteria tag[1].
+
+       What elements of the VLAN tag are symmetrically reversed is
+       also based on the egress classification type configured.
+       If classification is set as 'match-vlan-from-ingress-rewrite',
+       then reverse only the VLAN id at egress. If the classification
+       is set as 'match-vlanpbit-from-ingress-rewrite', then reverse
+       both VLAN id and p-bit at egress.";
+  }
+
+  identity apply-egress-rewrite {
+    base egress-frame-tag-actions;
+    description
+      "Apply manipulation as specified in the egress-rewrite.";
+  }
+
+  identity applicable-frame-source-types {
+    description
+      "Base type for indentifying applicable frame source types.";
+  }
+
+  identity frames-from-all-sources {
+    base applicable-frame-source-types;
+    description
+      "Selects frames coming from anywhere with in the forwarding
+       pipeline.";
+  }
+
+  grouping egress-frame-processing {
+    description
+      "Provides a generic framework of frame-processing, i.e., define
+       the data nodes supporting a list of ingress rules with a
+       corresponding ingress-rewrite, and an egress-rewrite.
+
+       The frame processing refers to both directions:
+       - Ingress, which refers to frames received from the
+         lower-layer interface.
+       - Egress, which refers to frames received from a higher-layer
+         interface, or from a forwarder, and to be transmitted to the
+         lower-layer interface.
+       - In the ingress direction classification criteria identify
+         whether a received frame shall be offered to this
+         sub-interface.
+       - For both the ingress and egress direction tag manipulations
+         can be supported.";
+    container egress-frame-processing {
+      presence
+        "The presence of this container denotes existance of an egress
+         frame processing at the VLAN sub-interface.";
+      description
+        "Specifies the frame processing to classify egress frames to
+         a VLAN sub-interfaces and the corresponding VLAN tag actions
+         to be applied on the frame. By configuring the leaf
+         'applicable-frame-source', the frame processing can be
+         limited to frames only from specific flows in the pipeline.
+         All other frames will skip this egress frame
+         classification.";
+      leaf applicable-frame-source {
+        type identityref {
+          base applicable-frame-source-types;
+        }
+        description
+          "Tag match symmetric to the tags configured in ingress
+           rewrite.";
+      }
+      choice match-criteria {
+        mandatory true;
+        description
+          "Selects the type of match criteria for classifying the
+           egress frame in to a VLAN sub-interface.";
+        case from-ingress-rewrite {
+          leaf match-type {
+            type identityref {
+              base egress-frame-classification-type;
+            }
+            description
+              "Tag match symmetric to the tags configured in ingress
+               rewrite.";
+          }
+        }
+        case inline-criteria {
+          uses bbf-classif:multiple-vlan-tag-match {
+            augment "vlan-tag-match-type/vlan-tagged/tag" {
+              description
+                "Defines match criteria for all the fields of VLAN
+                 tags, being the TPID, the VLAN ID, the p-bits, and
+                 the DEI bit.";
+              uses bbf-classif:dot1q-tag-ranges-or-any;
+            }
+          }
+        }
+      }
+      leaf tag-action {
+        type identityref {
+          base egress-frame-tag-actions;
+        }
+        mandatory true;
+        description
+          "Type of frame classiifcation.";
+      }
+    }
+  }
+
+  augment "/if:interfaces/if:interface/bbf-subif:frame-processing/"
+        + "bbf-subif:inline-frame-processing/"
+        + "bbf-subif:inline-frame-processing" {
+    description
+      "Add data nodes for a VLAN sub-interface.";
+    uses egress-frame-processing;
+  }
+}

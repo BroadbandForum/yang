@@ -5,22 +5,20 @@ module bbf-device-types {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Common YANG Work Area";
+     Provider Cloud Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
-     should be directed to <mailto:help@broadband-forum.org>.
+     should be directed to <mailto:info@broadband-forum.org>.
 
-     Editor:      Nick Hancock, ADTRAN
+     Editor:      Shiya Ashraf, Nokia
 
-     Editor:      Ludwig Pauwels, Nokia
+     PS Leader:   Sven Ooghe, Nokia
 
-     PS Leader:   Joey Boyd, ADTRAN
+     PS Leader:   Joey Boyd, Adtran
 
-     PS Leader:   Sowrirajan Padmanabhan, Nokia
+     WA Director: Bruno Cornaglia, Vodafone
 
-     WA Director: Joey Boyd, ADTRAN
-
-     WA Director: Sven Ooghe, Nokia";
+     WA Director: Aihua Guo, Futurewei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on managing physical
@@ -29,7 +27,7 @@ module bbf-device-types {
      Specifically, this module defines common types associated with
      device management.
 
-     Copyright (c) 2017-2021, Broadband Forum
+     Copyright (c) 2017-2026, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -69,9 +67,19 @@ module bbf-device-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a4; see
+     This version of this YANG module is part of TR-383a10; see
      the TR itself for full legal notices.";
 
+  revision 2026-07-02 {
+    description
+      "Amendment 10.
+       * Approval Date:    2026-07-02.
+       * Publication Date: 2026-07-02.";
+    reference
+      "TR-383a10: Common YANG Modules for Access Networks
+                  <https://www.broadband-forum.org/technical/download/
+                           TR-383_Amendment-10.pdf>";
+  }
   revision 2021-06-02 {
     description
       "Amendment 4.
@@ -140,6 +148,41 @@ module bbf-device-types {
     base access-device-type;
     description
       "The Very High-speed Digital Subscriber Line 2 (VDSL2) CPE.";
+  }
+
+  identity splitter {
+    base access-device-type;
+    description
+      "An optical splitter, which typically has an a-port and several
+       z-ports.";
+  }
+
+  identity subscriber-demarcation-point {
+    base access-device-type;
+    description
+      "A subscriber demarcation point usually in the form factor of a
+       box typically installed outside the house, and provides a
+       testing and flexibility point as well as storage for cable
+       slack.";
+  }
+
+  identity coexistence-element {
+    base access-device-type;
+    description
+      "A coexistence element is a passive device that allows to
+       multiplex two or more xPON technologies/services transported
+       together on the same fiber by using wavelength division
+       multiplexing (WDM) technologies (filters) to overlay the
+       different wavelengths of the multiple services.";
+  }
+
+  identity odf {
+    base access-device-type;
+    description
+      "An Optical Distribution Frame. The ODF acts as a central hub
+       in a PON's infrastructure, where fiber optic cables from an
+       OLT are terminated, and cross-connected to splitters or other
+       components of the Optical Distribution Network.";
   }
 
   // Device Subcategory

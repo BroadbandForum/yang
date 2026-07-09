@@ -1,0 +1,303 @@
+module bbf-ipv4-address-security {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-ipv4-address-security";
+  prefix bbf-ipv4-addrsec;
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ietf-ip {
+    prefix ip;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import bbf-if-type {
+    prefix bbfift;
+  }
+  import bbf-interface-usage {
+    prefix bbf-if-usg;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Provider Cloud Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Shiya Ashraf, Nokia
+
+     PS Leader:   Sven Ooghe, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Bruno Cornaglia, Vodafone
+
+     WA Director: Aihua Guo, Futurewei";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on hardware
+     management as applicable to access network equipment. As such,
+     this module is specific to access network equipment (e.g.,
+     BBF-specified Access Nodes and FTTdp DPUs).
+
+     Specifically, this module augments the the IETF interfaces YANG
+     data model defined in RFC 7223 with data nodes to support the
+     management of IPv4 address security.
+
+     Copyright (c) 2017-2026, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a10; see
+     the TR itself for full legal notices.";
+
+  revision 2026-07-02 {
+    description
+      "Amendment 10.
+       * Approval Date:    2026-07-02.
+       * Publication Date: 2026-07-02.";
+    reference
+      "TR-383a10: Common YANG Modules for Access Networks
+                  <https://www.broadband-forum.org/technical/download/
+                           TR-383_Amendment-10.pdf>";
+  }
+
+  augment "/if:interfaces/if:interface" {
+    when
+      'derived-from-or-self(if:type, "bbfift:vlan-sub-interface")'
+    + 'and (current()/bbf-if-usg:interface-usage/'
+    + 'bbf-if-usg:interface-usage = "user-port" or current()/'
+    + 'bbf-if-usg:interface-usage/bbf-if-usg:interface-usage = '
+    + '"inherit")' {
+      description
+        "IPv4 address related configuration is needed only on VLAN
+         sub-interfaces at the user side.";
+    }
+    description
+      "This augments configuration data for VLAN sub-interfaces.";
+    container ipv4-address-security {
+      presence
+        "Presence of this container indicates IPv4 address security
+         is managed on this interface.";
+      description
+        "Configuration data related to IPv4 antispoofing and data
+         that assures that there is knowledge on the interface on
+         the IPv4 addresses used by the device connected to the
+         interface.";
+      leaf prevent-ipv4-address-spoofing {
+        type boolean;
+        default "false";
+        description
+          "If 'true', the system will perform IPv4 address antispoof
+           checks on incoming packets on the VLAN sub-interface. To do
+           these checks it needs to know which IPv4 addresses are
+           assigned to the VLAN sub-interface. How addresses get
+           assigned is subject to other configuration defined in this
+           container.
+
+           The checks performed are :
+           - Only accept incoming IPv4 packets when the IPv4 source
+             address is assigned to the interface.
+           - Only accept incoming ARP packets when the 'protocol
+             address of the sender of this packet' is assigned to the
+             interface.
+           - Only accept incoming GARP packets when the 'protocol
+             address of the sender of this packet' is assigned to the
+             interface.
+           Packets with an IPv4 address not passing the test are
+           discarded.
+
+           If 'false', no checks on the IPv4 address are
+           performed.";
+        reference
+          "TR-178i2 R-156;
+           TR-178i2 R-157;
+           TR-178i2 R-158;
+           TR-101i2 R-135;
+           TR-101i2 R-136;
+           TR-101i2 R-137;
+           RFC 826";
+      }
+      leaf learn-addresses-from-dhcp {
+        type empty;
+        must '../bbf-ipv4-addrsec:prevent-ipv4-address-spoofing = '
+           + '"true"' {
+          error-message
+            "'learn-addresses-from-dhcp' can be enabled only when"
+          + "'bbf-ipv4-addrsec:prevent-ipv4-address-spoofing' is "
+          + "enabled.";
+        }
+        description
+          "When present, the system will learn the IPv4 address of the
+           user and associate it with the VLAN sub-interface by
+           checking the DHCPv4 protocol messages exchanged through the
+           VLAN sub-interface for a DHCPv4 session initiated from the
+           user.
+
+           For example, the IP address assigned to a user can be
+           learned by checking the 'yiaddr' field of the DS DHCP ACK
+           message that egresses the VLAN sub-interface towards the
+           user. Similarly, the system shall remove the IP address
+           associated with a user VLAN sub-interface when a DHCP
+           RELEASE message is received from the user through the
+           VLAN sub-interface.";
+        reference
+          "TR-178i2 R-154;
+           TR-101i2 R-134;
+           RFC 2131 Section 3";
+      }
+      leaf max-address {
+        type union {
+          type enumeration {
+            enum no-limit {
+              description
+                "Used to indicate that there is no limit on the number
+                 of IPv4 addresses allowed on this interface.";
+            }
+          }
+          type uint32;
+        }
+        default "no-limit";
+        description
+          "Specifies the maximum number of IP address allowed for
+           VLAN sub-interfaces where the default value 'no-limit'
+           specifies there is no restriction.";
+      }
+    }
+  }
+
+  augment "/if:interfaces-state/if:interface" {
+    when
+      'derived-from-or-self(if:type, "bbfift:vlan-sub-interface")' {
+      description
+        "Applies only to VLAN sub-interfaces.";
+    }
+    description
+      "Augments IPv4 address security state data for VLAN
+       sub-interfaces.";
+    container ipv4-address-security {
+      description
+        "Provides state data for IPv4 address assigned to VLAN
+         sub-interfaces. Addresses can be assigned dynamically, by
+         learning from inspected DHCP messages.";
+      list address {
+        key "ip";
+        description
+          "An IPv4 address assigned to the interface.";
+        leaf ip {
+          type inet:ipv4-address;
+          description
+            "An IPv4 address assigned to the interface.";
+        }
+        choice subnet {
+          description
+            "The subnet is optional.
+
+             If no subnet is configured, then the spoofing prevention
+             applies to the IP address identified by the leaf 'ip'.
+             When a subnet is configured then the spoofing prevention
+             applies to all the IP addresses identified by the IP
+             address identified by the leaf ip, combined with the
+             subnet. The subnet can be specified as a prefix-length,
+             or, if the server supports non-contiguous netmasks, as a
+             netmask.";
+          case prefix-length {
+            leaf prefix-length {
+              type uint8 {
+                range "0..32";
+              }
+              description
+                "The length of the subnet prefix.";
+            }
+          }
+          case netmask {
+            leaf netmask {
+              if-feature "ip:ipv4-non-contiguous-netmasks";
+              type yang:dotted-quad;
+              description
+                "The subnet specified as a netmask.";
+            }
+          }
+        }
+        leaf ip-address-origin {
+          type ip:ip-address-origin;
+          description
+            "The origin of this address.";
+        }
+        leaf lease-time {
+          when '../ip-address-origin = "dhcp"' {
+            description
+              "Applies when the origin of the IP address is DHCP. In
+               other cases the IP address does not expire.";
+          }
+          type uint32;
+          units "seconds";
+          description
+            "Reports the latest lease time, that is assigned to the IP
+             address.";
+        }
+        leaf ip-address-expiry-time {
+          when '../ip-address-origin = "dhcp"' {
+            description
+              "Applies when the origin of the IP address is DHCP. In
+               other cases the IP address does not expire.";
+          }
+          type yang:date-and-time;
+          description
+            "The time the IP address will expire.";
+        }
+        leaf client-mac-address {
+          when '../ip-address-origin = "dhcp"' {
+            description
+              "Applies when the origin of the IP address is DHCP.";
+          }
+          type yang:mac-address;
+          description
+            "Provides the chaddr (i.e. MAC address) used to request
+             this IP address.";
+        }
+      }
+    }
+  }
+}

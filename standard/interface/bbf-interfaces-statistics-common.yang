@@ -1,0 +1,186 @@
+module bbf-interfaces-statistics-common {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-interfaces-statistics-common";
+  prefix bbf-if-statc;
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Provider Cloud Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Shiya Ashraf, Nokia
+
+     PS Leader:   Sven Ooghe, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     WA Director: Bruno Cornaglia, Vodafone
+
+     WA Director: Aihua Guo, Futurewei";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements specific to access
+     network equipment (e.g., BBF-specified Access Nodes and FTTdp
+     DPUs).
+
+     Specifically, this module defines groupings containing data nodes
+     for the maangement of interface statistics.
+
+     Copyright (c) 2017-2026, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-383a10; see
+     the TR itself for full legal notices.";
+
+  revision 2026-07-02 {
+    description
+      "Amendment 10.
+       * Approval Date:    2026-07-02.
+       * Publication Date: 2026-07-02.";
+    reference
+      "TR-383a10: Common YANG Modules for Access Networks
+                  <https://www.broadband-forum.org/technical/download/
+                           TR-383_Amendment-10.pdf>";
+  }
+
+  grouping statistics-config {
+    description
+      "Configuration data nodes for the management of interface
+       statistics.";
+    leaf statistics-accumulation {
+      type enumeration {
+        enum enable {
+          description
+            "Enable accumulation of statistics that are reported
+             under '/if:interfaces-state/if:interface/if:
+             statistics'.
+
+             Note that some interfaces may not accumulate certain
+             types of statistics due to limitations associated
+             with the hardware and/or type of interface. However,
+             accumulation set to 'enable' means that all possible
+             statistics will be provided, i.e., there is not any
+             device condition in which the non-provided statistics
+             can be provided.";
+        }
+        enum disable {
+          description
+            "Disable accumulation of statistics that are reported
+             under '/if:interfaces-state/if:interface/if:
+             statistics'.";
+        }
+        enum system-conditional {
+          description
+            "Enable the potential to accumulate statistics that
+             are reported under '/if:interfaces-state/if:interface
+             /if:statistics'. However, accumulation may not be
+             possible depending on the current state of the
+             system. For example, hardware resources used for
+             statistics may be exhausted.
+
+             Note that some interfaces may not accumulate certain
+             types of statistics due to limitations associated
+             with the hardware and/or type of interface.
+
+             Note that accumulation of statistics on an interface
+             in this state is under control of the system with no
+             guarantee as to which statistics, if any, are
+             accumulating. Further, the level of accumulation may
+             change over time depending on the current state of
+             the system. For example, explicit enabling of
+             statistic accumulation on one or more interfaces may
+             cause the system to shift resources as to fully
+             support explicitly enabled interfaces while reducing
+             the amount of accumulation support on an interface
+             when set to 'system-conditional'.";
+        }
+      }
+      description
+        "Configuration that controls the accumulation of
+         statistics for this interface.";
+    }
+  }
+
+  grouping statistics-state {
+    description
+      "State data nodes associated with the reporting of interface
+       statistics.";
+    leaf in-pkts {
+      type yang:counter64;
+      units "frames";
+      description
+        "The total number of frames received on the interface.";
+    }
+    leaf out-pkts {
+      type yang:counter64;
+      units "frames";
+      description
+        "The total number of frames transmitted out of the
+         interface.";
+    }
+    leaf accumulating {
+      type boolean;
+      description
+        "If true, statistics are accumulating on this interface.
+
+         Note that some interfaces may not accumulate certain
+         types of statistics due to limitations associated
+         with the hardware and/or type of interface.";
+    }
+  }
+
+  grouping reset-statistics {
+    description
+      "Data nodes for resetting statistics.";
+    action reset-statistics {
+      description
+        "When this action is invoked, the counters of this
+         interface which are defined and/or augmented to the
+         container '/if:interfaces-state/if:interface/if:statistics'
+         are cleared.";
+    }
+  }
+}

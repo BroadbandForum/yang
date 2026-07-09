@@ -31,17 +31,13 @@ module bbf-vlan-sub-interface-profile-fp {
 
      Editor:      Shiya Ashraf, Nokia
 
-     Editor:      Kevin Noll, CableLabs
-
      PS Leader:   Sven Ooghe, Nokia
 
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Bruno Cornaglia, Vodafone
 
-     WA Director: Mengmeng Li, China Mobile
-
-     WA Director: Haomian Zheng, Huawei";
+     WA Director: Aihua Guo, Futurewei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on the management of
@@ -55,7 +51,7 @@ module bbf-vlan-sub-interface-profile-fp {
      VLAN sub-interface, data nodes indicating the associated ingress
      rewrite actions, and data nodes for egress rewrite actions.
 
-     Copyright (c) 2017-2025, Broadband Forum
+     Copyright (c) 2017-2026, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -95,9 +91,19 @@ module bbf-vlan-sub-interface-profile-fp {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a9; see
+     This version of this YANG module is part of TR-383a10; see
      the TR itself for full legal notices.";
 
+  revision 2026-07-02 {
+    description
+      "Amendment 10.
+       * Approval Date:    2026-07-02.
+       * Publication Date: 2026-07-02.";
+    reference
+      "TR-383a10: Common YANG Modules for Access Networks
+                  <https://www.broadband-forum.org/technical/download/
+                           TR-383_Amendment-10.pdf>";
+  }
   revision 2025-07-02 {
     description
       "Amendment 9.
@@ -138,6 +144,212 @@ module bbf-vlan-sub-interface-profile-fp {
     description
       "Indicates support for the use of DSCP values as match
        criteria.";
+  }
+
+  grouping parameterized-vlan-tag {
+    description
+      "Group of configuration data nodes to define VLAN tags
+       as parameters outside of the VSI profile.";
+    container tag-0 {
+      presence
+        "Indicates that the 'vlan-id' within the profile's match
+         criteria is configured to use a parameter defined outside
+         of the profile at the point the profile is referenced.";
+      description
+        "Match criteria for the outer VLAN tag of a frame that
+         overrules the match criteria provided through the
+         referenced profile.";
+      leaf vlan-id {
+        type bbf-dot1qt:vlan-id-range;
+        description
+          "A list of VLAN IDs, or non overlapping VLAN ranges, in
+           ascending order, between 1 and 4094.
+
+           The value only applicable when the outer VLAN tag within
+           the profile's match criteria is configured to use a
+           parameter defined outside of the profile at the point the
+           profile is referenced.
+
+           If the profile has more than one match criteria with outer
+           VLAN tags configured as 'vlan-id-as-parameter', then all of
+           them will be overridden with the same value configured in
+           this leaf.";
+      }
+    }
+    container tag-1 {
+      presence
+        "Indicates that the 'vlan-id' within the profile's match
+         criteria is configured to use a parameter defined outside
+         of the profile at the point the profile is referenced.";
+      description
+        "Match criteria for the inner VLAN tag of a frame that
+         overrules the match criteria provided through the
+         referenced profile.";
+      leaf vlan-id {
+        type bbf-dot1qt:vlan-id-range;
+        description
+          "A list of VLAN IDs, or non overlapping VLAN ranges, in
+           ascending order, between 1 and 4094.
+
+           The value is only applicable when the inner VLAN tag within
+           the profile's match criteria is configured to use a
+           parameter defined outside of the profile at the point the
+           profile is referenced.
+
+           If the profile has more than one match criteria with inner
+           VLAN tags configured as 'vlan-id-as-parameter', then all of
+           them will be overridden with the same value configured in
+           this leaf.";
+      }
+    }
+    container ingress-rewrite-tag-0 {
+      presence
+        "Indicates that the 'vlan-id' within the profile's ingress
+         rewrite is configured to use a parameter defined outside of
+         the profile at the point the profile is referenced.";
+      description
+        "Frame field values to be put in the outer VLAN tag of a
+         frame that overrules the ingress rewrite data provided
+         through the referenced profile.";
+      leaf vlan-id {
+        type bbf-dot1qt:vlan-id-or-0;
+        description
+          "VLAN ID to be put in the VLAN tag that is pushed in the
+           frame.
+
+           The value is only applicable when the outer VLAN tag within
+           the profile's ingress rewrite is configured to use a
+           parameter defined outside of the profile at the point the
+           profile is referenced.
+
+           If the profile has more than one ingress rewrite with outer
+           VLAN tags configured as 'vlan-id-as-parameter', then all of
+           them will be overridden with the same value configured in
+           this leaf.";
+      }
+    }
+    container ingress-rewrite-tag-1 {
+      presence
+        "Indicates that the 'vlan-id' within the profile's ingress
+         rewrite is configured to use a parameter defined outside of
+         the profile at the point the profile is referenced.";
+      description
+        "Frame field values to be put in the inner VLAN tag of a
+         frame that overrules the ingress rewrite data provided
+         through the referenced profile.";
+      leaf vlan-id {
+        type bbf-dot1qt:vlan-id-or-0;
+        description
+          "VLAN ID to be put in the VLAN tag that is pushed in the
+           frame.
+
+           The value is only applicable when the inner VLAN tag within
+           the profile's ingress rewrite is configured to use a
+           parameter defined outside of the profile at the point the
+           profile is referenced.
+
+           If the profile has more than one ingress rewrite with inner
+           VLAN tags configured as 'vlan-id-as-parameter', then all of
+           them will be overridden with the same value configured in
+           this leaf.";
+      }
+    }
+    container egress-rewrite-tag-0 {
+      presence
+        "Indicates that the 'vlan-id' within the profile's egress
+         rewrite is configured to use a parameter defined outside of
+         the profile at the point the profile is referenced.";
+      description
+        "Frame field values to be put in the outer VLAN tag of a
+         frame that overrules the egress rewrite data provided
+         through the referenced profile.";
+      leaf vlan-id {
+        type union {
+          type bbf-dot1qt:vlan-id-or-0;
+          type enumeration {
+            enum vlan-id-from-match {
+              description
+                "The same value that is configured in
+                 'tag-0/vlan-id' is pushed into the frame.";
+            }
+          }
+        }
+        must
+          "current() != 'vlan-id-from-match' or not(boolean(contains"
+        + "(current()/../../tag-0/vlan-id, '-')) or boolean(contains"
+        + "(current()/../../tag-0/vlan-id, ',')))" {
+          error-message
+            "The 'egress-rewrite-tag-0/vlan-id' is configured with "
+          + "the value 'vlan-id-from-match' while 'tag-0/vlan-id' is "
+          + "not configured with a unique value.";
+          description
+            "It is possible to configure a single VLAN ID in the
+             ingress match criterion and to configure for reuse of
+             the VLAN ID in the egress rewrite. This is to obtain
+             symmetrical VLAN IDs.
+
+             If the ingress match criteria is configured as a range
+             or a list of VLAN IDs, then reuse of this value is not
+             possible in the egress rewrite.";
+        }
+        description
+          "VLAN ID to be put in the VLAN tag that is pushed in the
+           frame.
+
+           The value is only applicable when the outer VLAN tag within
+           the profile's egress rewrite is configured to use a
+           parameter defined outside of the profile at the point the
+           profile is referenced.";
+      }
+    }
+    container egress-rewrite-tag-1 {
+      presence
+        "Indicates that the 'vlan-id' within the profile's egress
+         rewrite is configured to use a parameter defined outside of
+         the profile at the point the profile is referenced.";
+      description
+        "Frame field values to be put in the inner VLAN tag of a
+         frame that overrules the egress rewrite data provided
+         through the referenced profile.";
+      leaf vlan-id {
+        type union {
+          type bbf-dot1qt:vlan-id-or-0;
+          type enumeration {
+            enum vlan-id-from-match {
+              description
+                "The same value that is configured in
+                 'tag-0/vlan-id' is pushed into the frame.";
+            }
+          }
+        }
+        must
+          "current() != 'vlan-id-from-match' or not(boolean(contains"
+        + "(current()/../../tag-1/vlan-id, '-')) or boolean(contains"
+        + "(current()/../../tag-1/vlan-id, ',')) )" {
+          error-message
+            "The 'egress-rewrite-tag-1/vlan-id' is configured with "
+          + "the value 'vlan-id-from-match' while 'tag-1/vlan-id' is "
+          + "not configured with a unique value.";
+          description
+            "It is possible to configure a single VLAN ID in the
+             ingress match criterion and to configure for reuse of the
+             VLAN ID in the egress rewrite. This is to obtain
+             symmetrical VLAN IDs.
+
+             If the ingress match criteria is configured as a range or
+             a list of VLAN IDs, then reuse of this value is not
+             possible in the egress rewrite.";
+        }
+        description
+          "VLAN ID to be put in the VLAN tag that is pushed in the
+           frame.
+
+           The value is only applicable when the inner VLAN tag within
+           the profile's egress rewrite is configured to use a
+           parameter defined outside of the profile at the point the
+           profile is referenced.";
+      }
+    }
   }
 
   grouping match-criteria {
@@ -388,214 +600,28 @@ module bbf-vlan-sub-interface-profile-fp {
     description
       "Provides configuration data nodes for using the VLAN
        sub-interface profile.";
-    container tag-0 {
-      presence
-        "Indicates that the 'vlan-id' within the profile's match
-         criteria is configured to use a parameter defined outside
-         of the profile at the point the profile is referenced.";
-      description
-        "Match criteria for the outer VLAN tag of a frame that
-         overrules the match criteria provided through the
-         referenced profile.";
-      leaf vlan-id {
-        type bbf-dot1qt:vlan-id-range;
+    uses parameterized-vlan-tag {
+      refine "tag-0/vlan-id" {
         mandatory true;
-        description
-          "A list of VLAN IDs, or non overlapping VLAN ranges, in
-           ascending order, between 1 and 4094.
-
-           The value only applicable when the outer VLAN tag within
-           the profile's match criteria is configured to use a
-           parameter defined outside of the profile at the point the
-           profile is referenced.
-
-           If the profile has more than one match criteria with outer
-           VLAN tags configured as 'vlan-id-as-parameter', then all of
-           them will be overridden with the same value configured in
-           this leaf.";
       }
-    }
-    container tag-1 {
-      presence
-        "Indicates that the 'vlan-id' within the profile's match
-         criteria is configured to use a parameter defined outside
-         of the profile at the point the profile is referenced.";
-      description
-        "Match criteria for the inner VLAN tag of a frame that
-         overrules the match criteria provided through the
-         referenced profile.";
-      leaf vlan-id {
-        type bbf-dot1qt:vlan-id-range;
+      refine "tag-1/vlan-id" {
         mandatory true;
-        description
-          "A list of VLAN IDs, or non overlapping VLAN ranges, in
-           ascending order, between 1 and 4094.
-
-           The value is only applicable when the inner VLAN tag within
-           the profile's match criteria is configured to use a
-           parameter defined outside of the profile at the point the
-           profile is referenced.
-
-           If the profile has more than one match criteria with inner
-           VLAN tags configured as 'vlan-id-as-parameter', then all of
-           them will be overridden with the same value configured in
-           this leaf.";
       }
-    }
-    container ingress-rewrite-tag-0 {
-      presence
-        "Indicates that the 'vlan-id' within the profile's ingress
-         rewrite is configured to use a parameter defined outside of
-         the profile at the point the profile is referenced.";
-      description
-        "Frame field values to be put in the outer VLAN tag of a
-         frame that overrules the ingress rewrite data provided
-         through the referenced profile.";
-      leaf vlan-id {
+      refine "ingress-rewrite-tag-0/vlan-id" {
         if-feature "vlan-id-translation";
-        type bbf-dot1qt:vlan-id-or-0;
         mandatory true;
-        description
-          "VLAN ID to be put in the VLAN tag that is pushed in the
-           frame.
-
-           The value is only applicable when the outer VLAN tag within
-           the profile's ingress rewrite is configured to use a
-           parameter defined outside of the profile at the point the
-           profile is referenced.
-
-           If the profile has more than one ingress rewrite with outer
-           VLAN tags configured as 'vlan-id-as-parameter', then all of
-           them will be overridden with the same value configured in
-           this leaf.";
       }
-    }
-    container ingress-rewrite-tag-1 {
-      presence
-        "Indicates that the 'vlan-id' within the profile's ingress
-         rewrite is configured to use a parameter defined outside of
-         the profile at the point the profile is referenced.";
-      description
-        "Frame field values to be put in the inner VLAN tag of a
-         frame that overrules the ingress rewrite data provided
-         through the referenced profile.";
-      leaf vlan-id {
+      refine "ingress-rewrite-tag-1/vlan-id" {
         if-feature "vlan-id-translation";
-        type bbf-dot1qt:vlan-id-or-0;
         mandatory true;
-        description
-          "VLAN ID to be put in the VLAN tag that is pushed in the
-           frame.
-
-           The value is only applicable when the inner VLAN tag within
-           the profile's ingress rewrite is configured to use a
-           parameter defined outside of the profile at the point the
-           profile is referenced.
-
-           If the profile has more than one ingress rewrite with inner
-           VLAN tags configured as 'vlan-id-as-parameter', then all of
-           them will be overridden with the same value configured in
-           this leaf.";
       }
-    }
-    container egress-rewrite-tag-0 {
-      presence
-        "Indicates that the 'vlan-id' within the profile's egress
-         rewrite is configured to use a parameter defined outside of
-         the profile at the point the profile is referenced.";
-      description
-        "Frame field values to be put in the outer VLAN tag of a
-         frame that overrules the egress rewrite data provided
-         through the referenced profile.";
-      leaf vlan-id {
+      refine "egress-rewrite-tag-0/vlan-id" {
         if-feature "vlan-id-translation";
-        type union {
-          type bbf-dot1qt:vlan-id-or-0;
-          type enumeration {
-            enum vlan-id-from-match {
-              description
-                "The same value that is configured in
-                 'tag-0/vlan-id' is pushed into the frame.";
-            }
-          }
-        }
-        must
-          "current() != 'vlan-id-from-match' or not(boolean(contains"
-        + "(current()/../../tag-0/vlan-id, '-')) or boolean(contains"
-        + "(current()/../../tag-0/vlan-id, ',')))" {
-          error-message
-            "The 'egress-rewrite-tag-0/vlan-id' is configured with "
-          + "the value 'vlan-id-from-match' while 'tag-0/vlan-id' is "
-          + "not configured with a unique value.";
-          description
-            "It is possible to configure a single VLAN ID in the
-             ingress match criterion and to configure for reuse of
-             the VLAN ID in the egress rewrite. This is to obtain
-             symmetrical VLAN IDs.
-
-             If the ingress match criteria is configured as a range
-             or a list of VLAN IDs, then reuse of this value is not
-             possible in the egress rewrite.";
-        }
         default "vlan-id-from-match";
-        description
-          "VLAN ID to be put in the VLAN tag that is pushed in the
-           frame.
-
-           The value is only applicable when the outer VLAN tag within
-           the profile's egress rewrite is configured to use a
-           parameter defined outside of the profile at the point the
-           profile is referenced.";
       }
-    }
-    container egress-rewrite-tag-1 {
-      presence
-        "Indicates that the 'vlan-id' within the profile's egress
-         rewrite is configured to use a parameter defined outside of
-         the profile at the point the profile is referenced.";
-      description
-        "Frame field values to be put in the inner VLAN tag of a
-         frame that overrules the egress rewrite data provided
-         through the referenced profile.";
-      leaf vlan-id {
+      refine "egress-rewrite-tag-1/vlan-id" {
         if-feature "vlan-id-translation";
-        type union {
-          type bbf-dot1qt:vlan-id-or-0;
-          type enumeration {
-            enum vlan-id-from-match {
-              description
-                "The same value that is configured in
-                 'tag-0/vlan-id' is pushed into the frame.";
-            }
-          }
-        }
-        must
-          "current() != 'vlan-id-from-match' or not(boolean(contains"
-        + "(current()/../../tag-1/vlan-id, '-')) or boolean(contains"
-        + "(current()/../../tag-1/vlan-id, ',')) )" {
-          error-message
-            "The 'egress-rewrite-tag-1/vlan-id' is configured with "
-          + "the value 'vlan-id-from-match' while 'tag-1/vlan-id' is "
-          + "not configured with a unique value.";
-          description
-            "It is possible to configure a single VLAN ID in the
-             ingress match criterion and to configure for reuse of the
-             VLAN ID in the egress rewrite. This is to obtain
-             symmetrical VLAN IDs.
-
-             If the ingress match criteria is configured as a range or
-             a list of VLAN IDs, then reuse of this value is not
-             possible in the egress rewrite.";
-        }
         default "vlan-id-from-match";
-        description
-          "VLAN ID to be put in the VLAN tag that is pushed in the
-           frame.
-
-           The value is only applicable when the inner VLAN tag within
-           the profile's egress rewrite is configured to use a
-           parameter defined outside of the profile at the point the
-           profile is referenced.";
       }
     }
   }

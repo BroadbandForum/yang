@@ -25,17 +25,13 @@ module bbf-software-management {
 
      Editor:      Shiya Ashraf, Nokia
 
-     Editor:      Kevin Noll, CableLabs
-
      PS Leader:   Sven Ooghe, Nokia
 
      PS Leader:   Joey Boyd, Adtran
 
      WA Director: Bruno Cornaglia, Vodafone
 
-     WA Director: Mengmeng Li, China Mobile
-
-     WA Director: Haomian Zheng, Huawei";
+     WA Director: Aihua Guo, Futurewei";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on software
@@ -45,7 +41,7 @@ module bbf-software-management {
 
      This module augments ietf-hardware.
 
-     Copyright (c) 2017-2025, Broadband Forum
+     Copyright (c) 2017-2026, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -85,9 +81,19 @@ module bbf-software-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-383a9; see
+     This version of this YANG module is part of TR-383a10; see
      the TR itself for full legal notices.";
 
+  revision 2026-07-02 {
+    description
+      "Amendment 10.
+       * Approval Date:    2026-07-02.
+       * Publication Date: 2026-07-02.";
+    reference
+      "TR-383a10: Common YANG Modules for Access Networks
+                  <https://www.broadband-forum.org/technical/download/
+                           TR-383_Amendment-10.pdf>";
+  }
   revision 2025-07-02 {
     description
       "Amendment 9.
@@ -610,6 +616,18 @@ module bbf-software-management {
       "The component is not responding to requests.";
   }
 
+  identity cannot-deactivate-revision {
+    base processing-error;
+    description
+      "The revision could not be deactivated.";
+  }
+
+  identity cannot-uncommit-revision {
+    base processing-error;
+    description
+      "The revision could not be uncommitted.";
+  }
+
   identity capability {
     description
       "Base identity for defining capabilities available to a client
@@ -664,6 +682,17 @@ module bbf-software-management {
        be possible via an alternative management interface.";
   }
 
+  identity deactivate {
+    base capability;
+    description
+      "Indicates that the software supports deactivating revisions.
+
+       Note that a system may advertise the support for deactivating
+       revisions even if the feature 'software-management-actions' is
+       not supported by the system. In this case deactivation may only
+       be possible via an alternative management interface.";
+  }
+
   identity commit {
     base capability;
     description
@@ -673,6 +702,18 @@ module bbf-software-management {
        revisions even if the feature 'software-management-actions' is
        not supported by the system. In this case committing a revision
        may only be possible via an alternative management interface.";
+  }
+
+  identity uncommit {
+    base capability;
+    description
+      "Indicates that the software supports uncommitting revisions.
+
+       Note that a system may advertise the support for uncommitting
+       revisions even if the feature 'software-management-actions' is
+       not supported by the system. In this case uncommitting a
+       revision may only be possible via an alternative management
+       interface.";
   }
 
   identity delete {
@@ -1567,6 +1608,75 @@ module bbf-software-management {
                 }
               }
             }
+            container deactivate {
+              when "boolean(../../../bbf-swm:capability="
+                 + "'bbf-swm:deactivate')"
+                 + " and "
+                 + "boolean(../../../bbf-swm:capability="
+                 + "'bbf-swm:activate')"
+                 + " and "
+                 + "../bbf-swm:state='in-use'" {
+                description
+                  "Only applicable if both the 'activate' and
+                   'deactivate' capabilities are supported and then
+                   only if the revision can be deactivated.";
+              }
+              description
+                "Actions and notifications associated with
+                 deactivating a software revision.";
+              leaf last-deactivated {
+                type yang:date-and-time;
+                description
+                  "The date and time when this revision was last
+                   deactivated, that is, the leaf 'is-active'
+                   transitioned from 'true' to 'false', i.e., only
+                   a successful deactivation of the revision affects
+                   this date and time.
+
+                   Note that this leaf is not to be instantiated, if
+                   no date and time is available. However, where
+                   possible an implementation could persist such
+                   information, for example, across a restart of the
+                   component or system.";
+              }
+              action deactivate {
+                if-feature "software-management-actions";
+                description
+                  "Deactivate this revision.
+
+                   The system performs whatever steps are required to
+                   deactivate the revision. For example, this may
+                   include restarting the component or device, if this
+                   is necessary to deactivate the revision and would
+                   be performed as part of the activity initiated by a
+                   successful invocation of this action.
+
+                   The leaf 'is-active' and 'last-deactivated', if
+                   supported, will only be set on successful
+                   completion of the deactivation activity.";
+              }
+              notification revision-deactivated {
+                description
+                  "Indicates that the specified revision has
+                   successfully deactivated on the target component.";
+              }
+              notification deactivate-failed {
+                description
+                  "Indicates that the specified revision failed to
+                   deactivate on its target component.
+
+                   This may be reported if the specified revision
+                   cannot be deactivated without activating another
+                   revision at the same time, using the 'activate'
+                   action.";
+                container error {
+                  description
+                    "Data nodes describing the error that caused the
+                     deactivation to fail.";
+                  uses error;
+                }
+              }
+            }
             container commit {
               when "boolean(../../../bbf-swm:capability="
                  + "'bbf-swm:commit')"
@@ -1608,7 +1718,7 @@ module bbf-software-management {
                   "Commit this revision.
 
                    A successful commit of this revision, will
-                   automatically un-commit any other revision of the
+                   automatically uncommit any other revision of the
                    software that was previously committed, i.e., set
                    the value of the leaf 'is-committed' of the other
                    revision to 'false').
@@ -1633,6 +1743,68 @@ module bbf-software-management {
                   description
                     "Data nodes describing the error that caused the
                      commit to fail.";
+                  uses error;
+                }
+              }
+            }
+            container uncommit {
+              when "boolean(../../../bbf-swm:capability="
+                 + "'bbf-swm:uncommit')"
+                 + " and "
+                 + "boolean(../../../bbf-swm:capability="
+                 + "'bbf-swm:commit')"
+                 + " and "
+                 + "../bbf-swm:state='in-use'" {
+                description
+                  "Only applicable if both the 'commit' and 'uncommit'
+                   capabilities are supported and then only if the
+                   revision can be uncommitted.";
+              }
+              description
+                "Actions and notifications associated with
+                 uncommitting a software revision.";
+              leaf last-uncommitted {
+                type yang:date-and-time;
+                description
+                  "The date and time when this revision last was
+                   uncommitted, that is, the leaf 'is-committed'
+                   transitioned from 'true' to 'false', i.e., only a
+                   successful uncommit of the revision affects this
+                   date and time.
+
+                   Note that this leaf is not to be instantiated, if
+                   no date and time is available. However, where
+                   possible an implementation could persist such
+                   information, for example, across a restart of the
+                   component or system.";
+              }
+              action uncommit {
+                if-feature "software-management-actions";
+                description
+                  "Uncommit this revision.
+
+                   The leaf 'is-committed' and 'last-uncommitted',
+                   if supported, will only be set on successful
+                   completion of the uncommit activity.";
+              }
+              notification revision-uncommitted {
+                description
+                  "Indicates that the specified revision has
+                   successfully uncommitted on the target component.";
+              }
+              notification uncommit-failed {
+                description
+                  "Indicates that the revision software failed to
+                   uncommit on its target component.
+
+                   This may be reported if the specified revision
+                   cannot be uncommitted without committing another
+                   revision at the same time, using the 'commit'
+                   action.";
+                container error {
+                  description
+                    "Data nodes describing the error that caused the
+                     uncommit to fail.";
                   uses error;
                 }
               }
