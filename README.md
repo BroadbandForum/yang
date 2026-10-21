@@ -1,5 +1,10 @@
 ## Broadband Forum YANG Modules
 
+### 2026-10-19: [TR-383 Amendment 11](https://www.broadband-forum.org/technical/download/TR-383_Amendment-11.pdf) Common YANG Modules for Access Networks
+*Tag: [TR-383-v1.11.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.11.0)*
+
+* New model for the management of hardware power saving.
+
 ### 2026-07-02: [TR-383 Amendment 10](https://www.broadband-forum.org/technical/download/TR-383_Amendment-10.pdf) Common YANG Modules for Access Networks
 *Tag: [TR-383-v1.10.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.10.0)*
 
