@@ -29,7 +29,7 @@ submodule bbf-xponvani-v-ani-body {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Fiber Access Networks Work Area";
+     Access Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
@@ -38,14 +38,18 @@ submodule bbf-xponvani-v-ani-body {
 
      PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Marta Seda, Calix";
+     PS Leader:   Sven Ooghe, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Herman Verbueken, Nokia";
   description
     "This submodule contains the data for managing the virtual Access
      Network Interface (vANI). A vANI belongs to the Optical Line
      Termination (OLT) and represents an Optical Network Unit (ONU) as
      seen from the perspective of the OLT.
 
-     Copyright (c) 2018-2024, Broadband Forum
+     Copyright (c) 2018-2026, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -85,9 +89,19 @@ submodule bbf-xponvani-v-ani-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i3; see
+     This version of this YANG module is part of TR-385i3a1; see
      the TR itself for full legal notices.";
 
+  revision 2026-11-02 {
+    description
+      "Issue 3 Amendment 1.
+       * Approval Date:    2026-11-02.
+       * Publication Date: 2026-11-02.";
+    reference
+      "TR-385i3a1: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3_Amendment-1.pdf>";
+  }
   revision 2024-04-23 {
     description
       "Issue 3.
@@ -148,8 +162,8 @@ submodule bbf-xponvani-v-ani-body {
 
   feature configurable-v-ani-management-gem-port-id {
     description
-      "Indicates support for configuration of the management
-       G-PON Encapsulation Method (GEM) port.";
+      "Indicates support for configuration of the management G-PON
+       Encapsulation Method (GEM) port.";
   }
 
   feature v-ani-defect-notifications {
@@ -171,6 +185,7 @@ submodule bbf-xponvani-v-ani-body {
          Optical Line Termination (OLT) must assign to an Optical
          Network Unit (ONU) during the ONU's activation using the
          Assign_ONU-ID PLOAM message.
+
          For G-PON, range is 0..253.
          For XG-PON, range is 0..1022.
          For XGS-PON, range is 0..1020.
@@ -203,9 +218,8 @@ submodule bbf-xponvani-v-ani-body {
          to retrieve from the Optical Network Unit (ONU). The serial
          number is unique for each ONU. It contains the vendor ID and
          vendor specific serial number. The first four bytes are an
-         ASCII-encoded vendor ID four letter mnemonic. The second four
-         bytes are a binary encoded serial number, under the control
-         of the ONU vendor.";
+         ASCII-encoded vendor ID. The second four bytes are a binary
+         encoded serial number, under the control of the ONU vendor.";
       reference
         "ITU-T G.984.3 Clause 9.2.4.1;
          ITU-T G.987.3 Clause 11.3.3.2;
@@ -231,12 +245,12 @@ submodule bbf-xponvani-v-ani-body {
          hexadecimal characters, therefore the leaf must contain an
          even number of characters.
 
-         For ITU-T G.984.3, the leaf can only be up to 20 characters
-         long (refer to 'password' 10 bytes long).
+         For G-PON, the leaf can only be up to 20 characters long
+         (refer to 'password' which is 10 bytes long).
 
-         For ITU-T G.987.3, ITU-T G.9807.1, ITU-T G.989.3, and
-         ITU-T G.9804.2, the leaf can be up to 72 characters long
-         (refer to 'registration id' 36 bytes long).";
+         For XG-PON, XGS-PON, NG-PON2 and 50G-PON, the leaf can be up
+         to 72 characters long (refer to 'registration id' which is 36
+         bytes long).";
       reference
         "ITU-T G.984.3 Clause 9.2.4.2;
          ITU-T G.987.3 Clause 11.3.4.2;
@@ -261,13 +275,16 @@ submodule bbf-xponvani-v-ani-body {
       }
       description
         "The preferred channel pair is the channel pair that an
-         activating Optical Network Unit (ONU) is intended to use.
-         If the preferred channel pair interface is not available,
-         the ONU should use the protection channel pair if it is
-         provisioned and available. Modification of the preferred
-         channel pair has no effect on the ONU when it is activated
-         (e.g., reconfiguration of the preferred channel pair should
-         not cause an activated ONU to need to retune its receiver).";
+         activating NG-PON2 Optical Network Unit (ONU) is intended
+         to use. If the preferred channel pair interface is not
+         available, the ONU should use the protection channel pair if
+         it is provisioned and available. Modification of the
+         preferred channel pair has no effect on the ONU when it is
+         activated (e.g., reconfiguration of the preferred channel
+         pair should not cause an activated ONU to need to retune its
+         receiver). The preferred channel pair is specific to NG-PON2
+         operation. If configured, it should be ignored in case of a
+         non-NG-PON2 ONU.";
     }
     leaf protection-channel-pair {
       type if:interface-ref;
@@ -284,15 +301,18 @@ submodule bbf-xponvani-v-ani-body {
       }
       description
         "The protection channel pair is the channel pair that an
-         activating Optical Network Unit (ONU) is intended to use if
-         the preferred channel pair is not available. When the ONU is
-         activated on a given current channel pair, the protection
-         channel pair is also the channel pair which the ONU will tune
-         to if the current channel pair becomes not available.
-         Modification of the protection channel pair has no effect on
-         the ONU when it is activated (e.g., reconfiguration of the
-         protection channel pair should not cause an activated ONU to
-         need to retune its receiver).";
+         activating NG-PON2 Optical Network Unit (ONU) is intended
+         to use if the preferred channel pair is not available. When
+         the ONU is activated on a given current channel pair, the
+         protection channel pair is also the channel pair which the
+         ONU will tune to if the current channel pair becomes not
+         available. Modification of the protection channel pair has
+         no effect on the ONU when it is activated (e.g.,
+         reconfiguration of the protection channel pair should not
+         cause an activated ONU to need to retune its receiver).
+         The protection channel pair is specific to NG-PON2
+         operation. If configured, it should be ignored in case of a
+         non-NG-PON2 ONU.";
     }
     leaf upstream-channel-speed {
       type yang:gauge64;
@@ -305,10 +325,10 @@ submodule bbf-xponvani-v-ani-body {
       type boolean;
       default "false";
       description
-        "If 'true', enable Forward Error Correction (FEC) in
-         the upstream direction for this specific Optical Network
-         Unit (ONU). If 'false', disable FEC in the upstream
-         direction for this specific ONU.";
+        "If 'true', enable Forward Error Correction (FEC) in the
+         upstream direction for this specific Optical Network Unit
+         (ONU). If 'false', disable FEC in the upstream direction for
+         this specific ONU.";
       reference
         "ITU-T G.984.3 Clause 13.3.1.1;
          ITU-T G.987.3 Clause 10.2;
@@ -338,9 +358,9 @@ submodule bbf-xponvani-v-ani-body {
          port ID. If this leaf is not configured the management GEM
          port ID must be numerically equal to the ONU-ID.
 
-         This configuration is ignored for XG-PON, XGS-PON,
-         NG-PON2, 50G-PON and 25GS-PON as the 'management-gemport-id'
-         is implicitly configured to be the same as the ONU-ID.";
+         This configuration is ignored for XG-PON, XGS-PON, NG-PON2,
+         50G-PON and 25GS-PON as the 'management-gemport-id' is
+         implicitly configured to be the same as the ONU-ID.";
       reference
         "ITU-T G.984.3 Clause 5.5.5;
          ITU-T G.987.3 Clause 6.4.4;
@@ -353,10 +373,10 @@ submodule bbf-xponvani-v-ani-body {
       type boolean;
       default "false";
       description
-        "If 'true', enable Advanced Encryption Standard (AES)
-         for the management G-PON Encapsulation Method (GEM) port
-         of this Optical Network Unit (ONU). If 'false', disable
-         AES for the management GEM port of this ONU.
+        "If 'true', enable Advanced Encryption Standard (AES) for the
+         management G-PON Encapsulation Method (GEM) port of this
+         Optical Network Unit (ONU). If 'false', disable AES for the
+         management GEM port of this ONU.
 
          For G-PON, this applies in the downstream direction. For
          XG-PON, XGS-PON, NG-PON2, and 50G-PON, this applies to both
@@ -370,13 +390,14 @@ submodule bbf-xponvani-v-ani-body {
     }
     action in-service-onu-tune-request {
       description
-        "Requests an Optical Network Unit (ONU) which is in
-         service on a current channel termination to tune to a
-         specific target channel termination. The action must be
-         directed to the Optical Line Termination (OLT) currently
-         providing service to the ONU. The target channel termination
-         must relate to a channel pair which belongs to the specific
-         channel partition on which the ONU is configured.
+        "Requests an Optical Network Unit (ONU) which is in service on
+         a current channel termination to tune to a specific target
+         channel termination. The action must be directed to the
+         Optical Line Termination (OLT) currently providing service to
+         the ONU. The target channel termination must relate to a
+         channel pair which belongs to the specific channel partition
+         on which the ONU is configured.
+
          If the target channel termination is the same as the channel
          ternmination currently used by the ONU, the action will have
          no effect but will nevertheless be reported as successful. If
@@ -444,14 +465,14 @@ submodule bbf-xponvani-v-ani-body {
         "Optical Line Termination (OLT) is expected to generate a
          'defect-state-change' notification each time defect(s)
          listed in this leaf-list are raised or cleared.
-         If 'notifiable-defect' includes an identity which
-         is the base value for other defect(s) identity(ies),
-         the OLT will generate a single notification when status of
-         any defect derived from this base value changes.
+
+         If 'notifiable-defect' includes an identity which is the base
+         value for other defect(s) identity(ies), the OLT will
+         generate a single notification when status of any defect
+         derived from this base value changes.
 
          In case the leaf-list is empty (as by default) the OLT
-         should not generate any 'defect-state-change'
-         notification.";
+         should not generate any 'defect-state-change' notification.";
     }
   }
 
@@ -510,18 +531,17 @@ submodule bbf-xponvani-v-ani-body {
         base bbf-xpon-onu-types:onu-presence-state-base;
       }
       description
-        "Presence state data which the Optical Line Termination
-         (OLT) can form about an Optical Network Unit (ONU) for
-         which a virtual Access Network Interface (vANI) is
-         configured. The most specific applicable identity should be
-         reported.";
+        "Presence state data which the Optical Line Termination (OLT)
+         can form about an Optical Network Unit (ONU) for which a
+         virtual Access Network Interface (vANI) is configured. The
+         most specific applicable identity should be reported.";
     }
     leaf-list active-defects {
       type identityref {
         base bbf-xpon-def:items-detected-at-olt-for-v-ani;
       }
       description
-        "Defects detected by Optical Line Termination (OLT) for
+        "Defects detected by Optical Line Termination (OLT) for a
          given Optical Network Unit (ONU) for which a virtual Access
          Network Interface (vANI) is configured. All applicable
          identities should be reported.";
@@ -546,8 +566,8 @@ submodule bbf-xponvani-v-ani-body {
          the optical signal of one of its local channel terminations
          as early as it receives from the ONU a PLOAM
          Serial_Number_ONU message or as early as it receives a PLOAM
-         Tuning_Resp(Complete_u) message and as long as the channel
-         termination is not in LOBi state for this ONU (i.e in
+         Tuning_Resp (Complete_u) message and as long as the channel
+         termination is not in LOBi state for this ONU (i.e., in
          practice the ONU keeps responding to downstream OLT bandwidth
          map messages).";
       description
@@ -620,10 +640,14 @@ submodule bbf-xponvani-v-ani-body {
            may be useful in identifying a particular ONU installed
            at a particular location. Each octet is represented as 2
            hexadecimal characters, therefore the leaf must contain an
-           even number of characters. For ITU-T G.984.3, the leaf
-           can only be up to 20 octets long (refer to 'password'),
-           for ITU-T G.987.3, ITU-T G.9807.1, ITU-T G.989.3, and
-           ITU-T G.9804.2, the leaf can be up to 72 octets long.";
+           even number of characters.
+
+           For ITU-T G-PON, the leaf can only be up to 20 octets long
+           (refer to 'password' which is 10 bytes long).
+
+           For XG-PON, XGS-PON, NG-PON2 and 50G-PON, the leaf can be
+           up to 72 octets long (refer to 'registration id' which is
+           36 bytes long).";
         reference
           "ITU-T G.984.3 Clause 9.2.4.2;
            ITU-T G.987.3 Clause 11.3.4.2;
@@ -677,8 +701,8 @@ submodule bbf-xponvani-v-ani-body {
       list defect {
         key "type";
         description
-          "A notifiable defect that has changed state since
-           the previous 'defect-state-change' notification.";
+          "A notifiable defect that has changed state since the
+           previous 'defect-state-change' notification.";
         leaf type {
           type identityref {
             base bbf-xpon-def:items-detected-at-olt-for-v-ani;
@@ -696,9 +720,9 @@ submodule bbf-xponvani-v-ani-body {
           type yang:date-and-time;
           mandatory true;
           description
-            "The Optical Line Termination (OLT) system date and
-             time when the OLT has declared that the defect
-             state has changed.";
+            "The Optical Line Termination (OLT) system date and time
+             when the OLT has declared that the defect state has
+             changed.";
         }
       }
     }

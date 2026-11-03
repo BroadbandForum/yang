@@ -5,7 +5,7 @@ module bbf-xpon-onu-types {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Fiber Access Networks Work Area";
+     Access Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
@@ -14,19 +14,22 @@ module bbf-xpon-onu-types {
 
      PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Marta Seda, Calix";
+     PS Leader:   Sven Ooghe, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Herman Verbueken, Nokia";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements on management of
-     ITU-T Passive Optical Network (PON) interfaces as defined in
-     ITU-T G.984.x, G.987.x, ITU-T G.989.x and ITU-T G.9807.x. As
-     such, this module is specific to access network equipment (e.g.,
-     BBF-specified Access Nodes and FTTdp DPUs).
+     supporting the Broadband Forum requirements on the management of
+     Passive Optical Network (PON) interfaces. As such, this module
+     is specific to access network equipment (e.g., BBF-specified
+     Access Nodes and FTTdp DPUs).
 
      Specifically, this module defines common YANG types used in the
      management of Optical Network Units (ONU).
 
-     Copyright (c) 2018-2024, Broadband Forum
+     Copyright (c) 2018-2026, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -66,9 +69,19 @@ module bbf-xpon-onu-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i3; see
+     This version of this YANG module is part of TR-385i3a1; see
      the TR itself for full legal notices.";
 
+  revision 2026-11-02 {
+    description
+      "Issue 3 Amendment 1.
+       * Approval Date:    2026-11-02.
+       * Publication Date: 2026-11-02.";
+    reference
+      "TR-385i3a1: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3_Amendment-1.pdf>";
+  }
   revision 2024-04-23 {
     description
       "Issue 3.
@@ -129,25 +142,55 @@ module bbf-xpon-onu-types {
        Serial_Number_ONU message or as early as it receives a PLOAM
        Tuning_Resp(Complete_u) message and as long as the ONU keeps
        sending optical signal to the OLT though this channel
-       termination, either spontaneously or upon OLT solicitation
-       (for instance consistently responding to Downstream PLOAM
-       messages or consistently responding to bandwidth map messages).
+       termination, either spontaneously or upon OLT solicitation (for
+       instance consistently responding to Downstream PLOAM messages
+       or consistently responding to bandwidth map messages).
+
        If an ONU has shown initial optical activity and is not
        solicited by the OLT, e.g., after it failed to reach O5, it
        will be considered not present if it does not spontaneously
        show optical activity anymore after some time limit
-       (recommended value for time limit is in the order of 10s
-       or 20s, compatible with TO1 Ranging Time). As an exception,
-       an ONU put in ITU-T 'Emergency Stop state' because the OLT
-       sent it a 'Disable_Serial_Number' downstream PLOAM when it
-       was present on a channel termination is still considered
-       'present' on the channel termination.";
+       (recommended value for time limit is in the order of 10s or
+       20s, compatible with TO1 Ranging Time). As an exception, an ONU
+       put in ITU-T 'Emergency Stop state' because the OLT sent it a
+       'Disable_Serial_Number' downstream PLOAM when it was present on
+       a channel termination is still considered 'present' on the
+       channel termination.";
     reference
       "ITU-T G.984.3 Clause 10.2.1;
        ITU-T G.987.3 Clause 12.2.1;
        ITU-T G.9807.1 Table C.12.2;
        ITU-T G.989.3 Table 12-2;
        ITU-T G.9804.2 Table 12-2";
+  }
+
+  identity onu-present-with-v-ani-pending-sma-verification {
+    base onu-present;
+    description
+      "This identity applies to an Optical Network Unit (ONU) which
+        - is present on a channel termination local to this Optical
+          Line Termination (OLT),(Refer to 'inside-olt') and
+        - has reached ONU Transmission Convergence (TC) state O5 and
+        - tentatively corresponds to a locally configured virtual
+          Access Network Interface (vANI) that still needs to be
+          authenticated by Secure Mutual Authentication (SMA).";
+  }
+
+  identity onu-present-with-v-ani-pending-sma-needs-802dot1x-channel {
+    base onu-present-with-v-ani-pending-sma-verification;
+    description
+      "This identity applies to an Optical Network Unit (ONU) which
+        - is present on a channel termination local to this Optical
+          Line Termination (OLT),(Refer to 'inside-olt') and
+        - has reached ONU Transmission Convergence (TC) state O5 and
+        - tentatively corresponds to a locally configured virtual
+          Access Network Interface (vANI) that still needs to be
+          authenticated by Secure Mutual Authentication (SMA)
+
+       This identity further reflects that an 802.1x communication
+       channel between the OLT and the ONU is missing to run OLT-ONU
+       SMA, more specifically, the GEM port to be used for 802.1x
+       frames and/or the T-CONT that should be used for it.";
   }
 
   identity onu-present-and-on-intended-channel-termination {
@@ -163,12 +206,16 @@ module bbf-xpon-onu-types {
        In case of NG-PON2 this identity applies to an ONU which is
        present on a channel termination local to this OLT (Refer to
        'inside-olt') and which corresponds to a local virtual Access
-       Network Interface (vANI) and has reached ONU TC state O5
-       and for which it has been confirmed (e.g., by Inter Channel
+       Network Interface (vANI) and has reached ONU TC state O5 and
+       for which it has been confirmed (e.g., by Inter Channel
        Termination Protocol (ICTP) procedures) that the ONU is using
        the intended channel-termination based on the configured
        preferred and/or protection channel pair or resulting from the
-       execution of an 'in-service-onu-tune-request' action.";
+       execution of an 'in-service-onu-tune-request' action.
+
+       If the vANI indicates that Secure Mutual Authentication (SMA)
+       is required, this identity reflects that SMA has been
+       successfully executed, confirming that the ONU is legitimate.";
   }
 
   identity onu-present-and-in-wavelength-discovery {
@@ -268,12 +315,29 @@ module bbf-xpon-onu-types {
   identity onu-present-and-no-v-ani-known-and-in-o5 {
     base onu-present;
     description
-      "This identity applies to a G-PON, XG-PON or XGS-PON Optical
-       Network Unit (ONU) which is present on a channel termination
-       local to this Optical Line Termination (OLT) (Refer to
-       'inside-olt') and which has reached ONU Transmission
-       Convergence (TC) state O5 but for which no corresponding
-       virtual Access Network Interface (vANI) could be identified.";
+      "This identity applies to an Optical Network Unit (ONU) which
+       is present on a channel termination local to this Optical Line
+       Termination (OLT) (Refer to 'inside-olt') and which has reached
+       ONU Transmission Convergence (TC) state O5 but for which no
+       corresponding virtual Access Network Interface (vANI) could be
+       identified. This could be because there is no configured vANI
+       that matches the ONU credentials (such as the ONU Serial Number
+       or a Registration Id) or because Secure Mutual Authentication
+       (SMA) failed, thus invalidating the vANI that was pending SMA
+       verification for this ONU.";
+  }
+
+  identity onu-present-and-no-v-ani-known-and-in-o5-sma-failed {
+    base onu-present-and-no-v-ani-known-and-in-o5;
+    description
+      "This identity applies to an Optical Network Unit (ONU) which is
+       present on a channel termination local to this Optical Line
+       Termination (OLT) (Refer to 'inside-olt') and which has reached
+       ONU Transmission Convergence (TC) state O5 but for which no
+       corresponding virtual Access Network Interface (vANI) could be
+       identified because Secure Mutual Authentication failed, thus
+       invalidating the vANI that was pending SMA verification for
+       this ONU.";
   }
 
   identity onu-present-and-no-v-ani-known-and-unclaimed {

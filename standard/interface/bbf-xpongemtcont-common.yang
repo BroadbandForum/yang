@@ -1,0 +1,233 @@
+module bbf-xpongemtcont-common {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-xpongemtcont-common";
+  prefix bbf-xpongemtcontc;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Access Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Robert Peschi, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     PS Leader:   Sven Ooghe, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Herman Verbueken, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on the management of
+     Passive Optical Network (PON) interfaces. As such, this module
+     is specific to access network equipment (e.g., BBF-specified
+     Access Nodes and FTTdp DPUs).
+
+     Specifically, this module defines types and groupings for use
+     when defining data nodes for managing G-PON Encapsulation
+     Method (GEM) ports and T-Conts.
+
+     Copyright (c) 2018-2026, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385i3a1; see
+     the TR itself for full legal notices.";
+
+  revision 2026-11-02 {
+    description
+      "Issue 3 Amendment 1.
+       * Approval Date:    2026-11-02.
+       * Publication Date: 2026-11-02.";
+    reference
+      "TR-385i3a1: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3_Amendment-1.pdf>";
+  }
+
+  grouping tconts-gemports-config {
+    description
+      "Transmission Containers (T-CONTs) and G-PON Encapsulation
+       Method (GEM) ports configuration.";
+    container xpongemtcont {
+      description
+        "Configuration associated with G-PON Encapsulation Method
+         (GEM) ports, T-CONTs, and traffic descriptors.";
+      container tconts {
+        description
+          "Transmission Containers (T-CONT) configuration
+           data nodes.";
+        list tcont {
+          key "name";
+          description
+            "A Transmission Container (T-CONT).";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "Name of the Transmission Container (T-CONT).";
+          }
+        }
+      }
+      container gemports {
+        description
+          "G-PON Encapsulation Method (GEM) port configuration
+           data nodes.";
+        list gemport {
+          key "name";
+          description
+            "A G-PON Encapsulation Method (GEM) port.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "Name of the G-PON Encapsulation Method (GEM) port.";
+          }
+          leaf traffic-class {
+            type uint8 {
+              range "0..7";
+            }
+            description
+              "Traffic Class value.";
+          }
+          leaf downstream-aes-indicator {
+            type boolean;
+            description
+              "Used to designate whether Advanced Encryption Standard
+               (AES) should be enabled/disabled for this G-PON
+               Encapsulation Method (GEM) port for the downstream
+               direction.";
+            reference
+              "ITU-T G.984.3 Clause 12.1;
+               ITU-T G.987.3 Clause 15.5.1;
+               ITU-T G.9807.1 Clause C.15.5.1;
+               ITU-T G.989.3 Clause 15.5.1";
+          }
+          leaf upstream-aes-indicator {
+            type boolean;
+            description
+              "Used to designate whether Advanced Encryption Standard
+               (AES) should be enabled/disabled for this G-PON
+               Encapsulation Method (GEM) port for the upstream
+               direction.
+
+               This is not applicable for G-PON. Any configured value
+               will be ignored.";
+            reference
+              "ITU-T G.987.3 Clause 15.5.1;
+               ITU-T G.9807.1 Clause C.15.5.1;
+               ITU-T G.989.3 Clause 15.5.1";
+          }
+          leaf tcont-ref {
+            type leafref {
+              path "../../../tconts/tcont/name";
+            }
+            description
+              "For the purpose of upstream scheduling in the
+               Optical Network Unit (ONU), a G-PON Encapsulation
+               Method (GEM) port needs to refer to the Transmission
+               Container (T-CONT) into which it feeds upstream
+               traffic.";
+          }
+        }
+      }
+    }
+  }
+
+  grouping tconts-gemports-state {
+    description
+      "State data associated with Transmission Containers (T-CONTs)
+       and G-PON Encapsulation Method (GEM) ports.";
+    container xpongemtcont-state {
+      config false;
+      description
+        "State data associated with xPON G-PON Encapsulation Method
+         (GEM) ports, T-CONTs, and traffic descriptors.";
+      container tconts {
+        description
+          "State data associated with Transmission Containers
+           (T-CONTs).";
+        list tcont {
+          key "name";
+          description
+            "A Transmission Container (T-CONT).";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "Name of the Transmission Container (T-CONT).";
+          }
+        }
+      }
+      container gemports {
+        description
+          "State data associated with G-PON Encapsulation Method
+           (GEM) ports.";
+        list gemport {
+          key "name";
+          description
+            "A G-PON Encapsulation Method (GEM) port.";
+          leaf name {
+            type bbf-yang:string-ascii64;
+            description
+              "Name of the G-PON Encapsulation Method (GEM) port.";
+          }
+          leaf actual-gemport-id {
+            type uint32;
+            description
+              "TC layer ID of the G-PON Encapsulation Method (GEM)
+               port. This is the value which is actually used
+               between the Optical Line Termination (OLT) device
+               and Optical Network Unit (ONU) device for this
+               GEM port.";
+            reference
+              "ITU-T G.984.3 Clause 5.5.5;
+               ITU-T G.987.3 Clause 6.4.4;
+               ITU-T G.9807.1 Clause C.6.1.5.8;
+               ITU-T G.989.3 Clause 6.1.5.8";
+          }
+        }
+      }
+    }
+  }
+}

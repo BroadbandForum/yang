@@ -1,0 +1,341 @@
+module bbf-xponani-power-shedding-common {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-xponani-power-shedding-common";
+  prefix bbf-xponani-pwr-shedc;
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Access Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Robert Peschi, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     PS Leader:   Sven Ooghe, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Herman Verbueken, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on the management of
+     Passive Optical Network (PON) interfaces. As such, this module
+     is specific to access network equipment (e.g., BBF-specified
+     Access Nodes and FTTdp DPUs).
+
+     Specifically, this module defines a feature, groupings and
+     typedefs used in the management of power shedding.
+
+     Copyright (c) 2018-2026, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385i3a1; see
+     the TR itself for full legal notices.";
+
+  revision 2026-11-02 {
+    description
+      "Issue 3 Amendment 1.
+       * Approval Date:    2026-11-02.
+       * Publication Date: 2026-11-02.";
+    reference
+      "TR-385i3a1: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3_Amendment-1.pdf>";
+  }
+
+  feature xpon-power-shedding {
+    description
+      "Indicates support for Optical Network Unit (ONU) power
+       shedding.";
+    reference
+      "ITU-T G.988 Clause 9.1.7";
+  }
+
+  typedef power-shedding-delay {
+    type union {
+      type uint16 {
+        range "2..max";
+      }
+      type enumeration {
+        enum disabled {
+          description
+            "Disable power shedding.";
+        }
+        enum immediate {
+          description
+            "Immediately apply power shedding after AC power fails.";
+        }
+      }
+    }
+    units "seconds";
+    default "disabled";
+    description
+      "The amount of delay, in seconds, before applying power shedding
+       after AC power fails. A special value, 'disabled', disables
+       power shedding. Another special value, 'immediate', immediately
+       applies power shedding after AC power fails.";
+    reference
+      "ITU-T G.988 Clause 9.1.7";
+  }
+
+  typedef power-shedding-status {
+    type enumeration {
+      enum active {
+        description
+          "Indicates that an ONU service is currently interrupted
+           because the ONU has entered a power shedding condition
+           impacting this service.";
+      }
+      enum inactive {
+        description
+          "Indicates that an ONU service is currently not subjected
+           to power shedding. This can be because the ONU has not
+           entered power shedding condition at all, or because the ONU
+           has entered a power shedding condition that does not
+           (yet) impact this service.";
+      }
+    }
+    description
+      "Indicates the status of the power shedding
+       function on an ONU service.";
+    reference
+      "ITU-T G.988 Clause 9.1.7";
+  }
+
+  grouping power-shedding-profiles-list {
+    description
+      "Optical Network Unit (ONU) power shedding configuration.";
+    reference
+      "ITU-T G.988 Clause 9.1.7";
+    list power-shedding-profile {
+      key "name";
+      description
+        "Optical Network Unit (ONU) power shedding profile list.";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "Optical Network Unit (ONU) power shedding profile name.";
+      }
+      container delay-per-class-of-service {
+        description
+          "The delay before applying power shedding per class of
+           service.";
+        leaf data {
+          type power-shedding-delay;
+          description
+            "The power sheding delay for the data class. This includes
+             the Ethernet, IEEE 802.11 and MoCA Physical Path
+             Termination Points (PPTP).";
+        }
+        leaf voice {
+          type power-shedding-delay;
+          description
+            "The power shedding delay for the voice class.
+             This includes the POTS, ISDN, xDSL+POTS and VDSL+POTS
+             Physical Path Termination Points (PPTP).";
+          reference
+            "ITU-T G.988 Clause 9.1.7 - Voice class shedding
+             interval";
+        }
+        leaf video-overlay {
+          type power-shedding-delay;
+          description
+            "The power shedding delay for the video overlay class.
+             This includes the Video ANI Physical Path Termination
+             Point (PPTP).";
+          reference
+            "ITU-T G.988 Clause 9.1.7 - Video overlay class shedding
+             delay";
+        }
+        leaf video-return {
+          type power-shedding-delay;
+          description
+            "The power shedding delay for the video return class.
+             This includes the Physical Path Termination Point (PPTP)
+             for the video Return Path Data (RPD).";
+          reference
+            "ITU-T G.988 Clause 9.1.7 - Video return class shedding
+             delay";
+        }
+        leaf atm {
+          type power-shedding-delay;
+          description
+            "The power shedding delay for the Asynchronous Transfer
+             Mode (ATM) class. This includes the ATM Physical Path
+             Termination Point (PPTP).";
+          reference
+            "ITU-T G.988 Clause 9.1.7 - Asynchronous Transfer Mode
+             class shedding delay";
+        }
+        leaf dsl {
+          type power-shedding-delay;
+          description
+            "The power shedding delay for the Digital Subscriber
+             Line (DSL) class. This includes the xDSL, SHDSL,
+             and VDSL Physical Path Termination Points (PPTP).";
+          reference
+            "ITU-T G.988 Clause 9.1.7 - Digital Subscriber Line
+             class shedding delay";
+        }
+        leaf ces {
+          type power-shedding-delay;
+          description
+            "The power shedding delay for the Circuit Emulation
+             Service (CES) class. This includes the CES Physical
+             Path Termination Point (PPTP).";
+          reference
+            "ITU-T G.988 Clause 9.1.7 - Circuit Emulation Service
+             class shedding delay";
+        }
+        leaf frame {
+          type power-shedding-delay;
+          description
+            "The power shedding delay for the frame class.";
+          reference
+            "ITU-T G.988 Clause 9.1.7 - Frame class shedding delay";
+        }
+        leaf sdh-sonet {
+          type power-shedding-delay;
+          description
+            "The power shedding delay for the SDH-SONET class.
+             This includes the SDH-SONET Physical Path Termination
+             Point (PPTP).";
+          reference
+            "ITU-T G.988 Clause 9.1.7 - SDH-SONET class shedding
+             delay";
+        }
+      }
+      leaf power-restored-reset-delay {
+        type uint16;
+        units "seconds";
+        default "0";
+        description
+          "The power restored reset delay, in seconds, before
+           resetting the power shedding timers after full power
+           restoration.";
+        reference
+          "ITU-T G.988 Clause 9.1.7 - Power restored reset delay";
+      }
+    }
+  }
+
+  grouping power-shedding-status-data {
+    description
+      "ONU power shedding class status.";
+    reference
+      "ITU-T G.988 Clause 9.1.7";
+    leaf data {
+      type power-shedding-status;
+      description
+        "Power shedding status for the data class.";
+      reference
+        "ITU-T G.988 Clause 9.1.7 - Shedding status";
+    }
+    leaf voice {
+      type power-shedding-status;
+      description
+        "Power shedding status for the voice class.";
+      reference
+        "ITU-T G.988 Clause 9.1.7 - Voice class shedding status";
+    }
+    leaf video-overlay {
+      type power-shedding-status;
+      description
+        "Power shedding status for the video overlay class.";
+      reference
+        "ITU-T G.988 Clause 9.1.7 - Video overlay shedding status";
+    }
+    leaf video-return {
+      type power-shedding-status;
+      description
+        "Power shedding status for the video return class.";
+      reference
+        "ITU-T G.988 Clause 9.1.7 - Video return shedding status";
+    }
+    leaf dsl {
+      type power-shedding-status;
+      description
+        "Power shedding status for the Digital Subscriber Line (DSL)
+         class.";
+      reference
+        "ITU-T G.988 Clause 9.1.7 - Digital Subscriber Line shedding
+         status";
+    }
+    leaf atm {
+      type power-shedding-status;
+      description
+        "Power shedding status for the Asynchronous Transfer
+         Mode (ATM) class.";
+      reference
+        "ITU-T G.988 Clause 9.1.7 - Asynchronous Transfer Mode
+         shedding status";
+    }
+    leaf ces {
+      type power-shedding-status;
+      description
+        "Power shedding status for the Circuit Emulation Service (CES)
+         class.";
+      reference
+        "ITU-T G.988 Clause 9.1.7 - Circuit Emulation Service shedding
+         status";
+    }
+    leaf frame {
+      type power-shedding-status;
+      description
+        "Power shedding status for the frame class.";
+      reference
+        "ITU-T G.988 Clause 9.1.7 - Frame shedding status";
+    }
+    leaf sdh-sonet {
+      type power-shedding-status;
+      description
+        "Power shedding status for the SDH-SONET class.";
+      reference
+        "ITU-T G.988 Clause 9.1.7 - SDH-SONET shedding status";
+    }
+  }
+}

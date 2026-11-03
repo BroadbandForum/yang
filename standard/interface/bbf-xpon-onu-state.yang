@@ -21,7 +21,7 @@ module bbf-xpon-onu-state {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Fiber Access Networks Work Area";
+     Access Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
@@ -30,19 +30,22 @@ module bbf-xpon-onu-state {
 
      PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Marta Seda, Calix";
+     PS Leader:   Sven Ooghe, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Herman Verbueken, Nokia";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements on management of
-     ITU-T Passive Optical Network (PON) interfaces as defined in
-     ITU-T G.984.x, G.987.x, ITU-T G.989.x and ITU-T G.9807.x. As
-     such, this module is specific to access network equipment (e.g.,
-     BBF-specified Access Nodes and FTTdp DPUs).
+     supporting the Broadband Forum requirements on the management of
+     Passive Optical Network (PON) interfaces. As such, this module
+     is specific to access network equipment (e.g., BBF-specified
+     Access Nodes and FTTdp DPUs).
 
      Specifically, this module defines state data and notifications
      related to each Optical Network Unit (ONU).
 
-     Copyright (c) 2018-2024, Broadband Forum
+     Copyright (c) 2018-2026, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -82,9 +85,19 @@ module bbf-xpon-onu-state {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i3; see
+     This version of this YANG module is part of TR-385i3a1; see
      the TR itself for full legal notices.";
 
+  revision 2026-11-02 {
+    description
+      "Issue 3 Amendment 1.
+       * Approval Date:    2026-11-02.
+       * Publication Date: 2026-11-02.";
+    reference
+      "TR-385i3a1: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3_Amendment-1.pdf>";
+  }
   revision 2024-04-23 {
     description
       "Issue 3.
@@ -128,9 +141,9 @@ module bbf-xpon-onu-state {
 
   feature notify-previous-onu-presence-state {
     description
-      "Indicates support for providing the previous
-       Optical Network Unit (ONU) presence state in
-       in the 'onu-presence-state-change' notification.";
+      "Indicates support for providing the previous Optical Network
+       Unit (ONU) presence state in in the 'onu-presence-state-change'
+       notification.";
   }
 
   grouping onu-state-data {
@@ -169,14 +182,19 @@ module bbf-xpon-onu-state {
          identifying a particular ONU installed at a particular
          location. Each octet is represented as 2 hexadecimal
          characters, therefore the leaf must contain an even number of
-         characters. For ITU-T G.984.3, the leaf can only be up to
-         20 octets long (refer to 'password'), for ITU-T G.987.3,
-         ITU-T G.9807.1, ITU-T G.989.3 and ITU-G G.9804.2,
-         the leaf can be up to 72 octets long.";
+         characters.
+
+         For ITU-T G-PON, the leaf can only be up to 20 octets long
+         (refer to 'password' which is 10 bytes long).
+
+         For XG-PON, XGS-PON, 25GS-PON, NG-PON2, and 50G-PON, the leaf
+         can be up to 72 octets long (refer to 'registration id' which
+         is 36 bytes long).";
       reference
         "ITU-T G.984.3 Clause 9.2.4.2;
          ITU-T G.987.3 Clause 11.3.4.2;
          ITU-T G.9807.1 Clause C.11.3.4.2;
+         MSA 25GS-PON Section 2;
          ITU-T G.989.3 Clause 11.3.4.2;
          ITU-T G.9804.2 Clause 11.3.4.2";
     }
@@ -204,14 +222,14 @@ module bbf-xpon-onu-state {
          (vANI) is configured in the OLT are accounted.
 
          An ONU is considered present on a channel termination when it
-         is using the optical signal of this channel termination i.e.
+         is using the optical signal of this channel termination i.e.,
          as early as the channel termination receives from the ONU a
          Physical Layer Operations, Administrations and Maintenance
          (PLOAM) Serial_Number_ONU message or as early as it receives
          a PLOAM Tuning_Resp(Complete_u) message and as long as the
-         channel termination is not in LOBi state for this ONU (i.e in
-         practice the ONU keeps responding to downstream OLT bandwidth
-         map messages).";
+         channel termination is not in LOBi state for this ONU (i.e.,
+         in practice the ONU keeps responding to downstream OLT
+         bandwidth map messages).";
       list onu {
         key "detected-serial-number";
         description
@@ -268,21 +286,22 @@ module bbf-xpon-onu-state {
         "The Optical Line Termination (OLT) is expected to generate a
          'onu-presence-state-change' notification each time any
          Optical Network Unit (ONU) transitions in any of the presence
-         states listed in the leaf-list. If
-         'notifiable-onu-presence-states' includes an identity which
-         is the base value for other presence state(s) identity(ies),
-         the OLT will generate a single notification if it detects
-         that an ONU undergoes a transition into the configured
-         presence state, directly or indirectly via one of its derived
-         presence states.
+         states listed in the leaf-list.
+
+         If 'notifiable-onu-presence-states' includes an identity
+         which is the base value for other presence state(s)
+         identity(ies), the OLT will generate a single notification if
+         it detects that an ONU undergoes a transition into the
+         configured presence state, directly or indirectly via one of
+         its derived presence states.
 
          For example, if 'notifiable-onu-presence-states' list
          includes the identity
          'onu-present-and-v-ani-known-and-o5-failed' and the OLT
          detects that an ONU undergoes a transition into
          'onu-present-and-v-ani-known-and-o5-failed-no-onu-id',
-         the OLT will generate a single notification reporting
-         the ONU transition into
+         the OLT will generate a single notification reporting the ONU
+         transition into
          'onu-present-and-v-ani-known-and-o5-failed-no-onu-id'.
 
          In case the leaf-list is empty (as by default) the OLT
@@ -310,7 +329,7 @@ module bbf-xpon-onu-state {
        Physical Layer Operations, Administrations and Maintenance
        (PLOAM) Serial_Number_ONU message or as early as it receives a
        PLOAM Tuning_Resp(Complete_u) message and as long as the
-       channel termination is not in LOBi state for this ONU (i.e in
+       channel termination is not in LOBi state for this ONU (i.e., in
        practice the ONU keeps responding to downstream OLT bandwidth
        map messages).";
     uses onus-present-on-local-channel-termination;

@@ -21,7 +21,7 @@ submodule bbf-xpon-channel-group-body {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Fiber Access Networks Work Area";
+     Access Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
@@ -30,12 +30,16 @@ submodule bbf-xpon-channel-group-body {
 
      PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Marta Seda, Calix";
+     PS Leader:   Sven Ooghe, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Herman Verbueken, Nokia";
   description
     "This submodule contains a collection of YANG definitions for
      managing channel groups.
 
-     Copyright (c) 2018-2024, Broadband Forum
+     Copyright (c) 2018-2026, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -75,9 +79,19 @@ submodule bbf-xpon-channel-group-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i3; see
+     This version of this YANG module is part of TR-385i3a1; see
      the TR itself for full legal notices.";
 
+  revision 2026-11-02 {
+    description
+      "Issue 3 Amendment 1.
+       * Approval Date:    2026-11-02.
+       * Publication Date: 2026-11-02.";
+    reference
+      "TR-385i3a1: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3_Amendment-1.pdf>";
+  }
   revision 2024-04-23 {
     description
       "Issue 3.
@@ -254,7 +268,9 @@ submodule bbf-xpon-channel-group-body {
       description
         "The period between two consecutive times the auto-detection
          procedure on each pair in the group is executed.
+
          Used in NG-PON2 for quiet window control.
+
          Value represents tenths of seconds.
          (e.g., 1 = 0.1 second, 864000 = 24 hours).";
     }
@@ -275,6 +291,7 @@ submodule bbf-xpon-channel-group-body {
         "A 20-bit number that identifies a specific NG-PON2 system
          (typically a channel group) among multiple NG-PON2 systems
          under a common administration.
+
          It is defined as NGSYS ID in G.989.3 clause 6.1.5.2 and may
          be coded to support administration such as name, geographical
          location, service profile (see also G.989.3 table VIII.2).";
@@ -286,10 +303,10 @@ submodule bbf-xpon-channel-group-body {
       if-feature "bbf-xpon:pon-pools";
       description
         "Manages per channel termination PON resources allocation.
-         A channel termination can only be a member of a
-         single channel group. Within a channel group, PON resources
-         should not overlap and only be assigned to a single
-         channel termination.";
+         A channel termination can only be a member of a single
+         channel group. Within a channel group, PON resources should
+         not overlap and only be assigned to a single channel
+         termination.";
       list pon-pool {
         key "name";
         min-elements 1;
@@ -354,8 +371,9 @@ submodule bbf-xpon-channel-group-body {
           description
             "The list of assignable G-PON Encapsulation Method (GEM)
              port Identifiers (IDs).
-             For G-PON, range is 0..4095 and not conflicting
-             with the 'management-gemport-id'.
+
+             For G-PON, range is 0..4095 and not conflicting with the
+             'management-gemport-id'.
              For XG-PON, range is 1023..65534.
              For XGS-PON, range is 1021..65534.
              For NG-PON2, range is 1021..65534.
@@ -426,19 +444,20 @@ submodule bbf-xpon-channel-group-body {
     container allocated-upstream-channel-ids {
       description
         "The list maintained by the system of all the upstream
-         channel-id's which are already in use on the channel
-         group. For NG-PON2, the applicable values are [0..7], for
+         channel-id's which are already in use on the channel group.
+         For NG-PON2, the applicable values are [0..7], for
          XGS-PON and 25GS-PON, a dedicated value 'xgs' or
-         'twentyfivegs', respectively is applicable rather than
-         value '0': this is to allow the coexistence of XGS-PON
-         and 25GS-PON with NG-PON2 using channel-id=0. This list
-         can be used to avoid upstream channel-id conflicts when
-         allocating channel pairs to a channel group when the OLT
-         is already in operation.";
+         'twentyfivegs', respectively is applicable rather than value
+         '0': this is to allow the coexistence of XGS-PON and 25GS-PON
+         with NG-PON2 using channel-id=0. This list can be used to
+         avoid upstream channel-id conflicts when allocating channel
+         pairs to a channel group when the OLT is already in
+         operation.";
       leaf-list channel-id {
         type bbf-xpon-types:composite-channel-id-type;
         description
           "An upstream channel-id in use on the channel group.
+
            For NG-PON2, value must be in [0..7].
            For XGS-PON, value must be 'xgs'.
            For 25GS-PON, value must be 'twentyfivegs'.";
@@ -447,19 +466,21 @@ submodule bbf-xpon-channel-group-body {
     container allocated-downstream-channel-ids {
       description
         "The list maintained by the system of all the downstream
-         channel-id's which are already in use on the
-         channel group. For NG-PON2, the applicable values are
-         in [0..7], for XGS-PON and 25GS-PON, a dedicated value
-         'xgs' or 'twentyfivegs', respectively is applicable
-         rather than value '0': this is to allow the coexistence
-         of XGS-PON and 25GS-PON with NG-PON2 using channel-id=0.
+         channel-id's which are already in use on the channel group.
+         For NG-PON2, the applicable values are in [0..7], for XGS-PON
+         and 25GS-PON, a dedicated value 'xgs' or 'twentyfivegs',
+         respectively is applicable rather than value '0': this is to
+         allow the coexistence of XGS-PON and 25GS-PON with NG-PON2
+         using channel-id=0.
+
          This list can be used to avoid downstream channel-id
-         conflicts when allocating channel pairs to a channel
-         group when the OLT is already in operation.";
+         conflicts when allocating channel pairs to a channel group
+         when the OLT is already in operation.";
       leaf-list downstream-channel-id {
         type bbf-xpon-types:composite-channel-id-type;
         description
           "A downstream channel-id in use on the channel group.
+
            For NG-PON2, value must be in [0..7].
            For XGS-PON, value must be 'xgs'.
            For 25GS-PON, value must be 'twentyfivegs'.";
@@ -469,21 +490,24 @@ submodule bbf-xpon-channel-group-body {
       description
         "The list maintained by the system of all the downstream
          wavelengths already in use on the channel group.
-         This list can be used to avoid wavelength conflicts
-         when allocating channel pairs to a channel group when
-         the OLT is already in operation.";
+
+         This list can be used to avoid wavelength conflicts when
+         allocating channel pairs to a channel group when the OLT is
+         already in operation.";
       leaf-list wavelength {
         type bbf-xpon-types:composite-downstream-wavelength-type;
         description
-          "A downstream wavelength used for 25GS-PON, NG-PON2
-           or XGS should be reported as a numeric value expressed
-           in hundredths of nm to fit ITU-T precision requirements.
+          "A downstream wavelength used for 25GS-PON, NG-PON2 or
+           XGS-PON should be reported as a numeric value expressed in
+           hundredths of nm to fit ITU-T precision requirements.
+
            A wavelength used for XG-PON or G-PON can be reported as
            a numeric value expressed in hundredths of nm or
            alternately with enum value 'xgpon' or 'gpon',
            respectively.
+
            The enum value 'xgs' should be avoided: it makes sense
-           only when the OLT supports only one of the XGS 'Basic'
+           only when the OLT supports only one of the XGS-PON 'Basic'
            or 'Optional' wavelength sets; the 'xgs' enum value is
            ambiguous otherwise.";
         reference
@@ -500,10 +524,10 @@ submodule bbf-xpon-channel-group-body {
         min-elements 1;
         max-elements 8;
         description
-          "A channel termination's current pool
-           of Allocation Identifiers (Alloc-ID), G-PON
-           Encapsulation Method port Identifiers (GEM port-ID) and
-           Optical Network Unit Identifiers (ONU-ID).";
+          "A channel termination's current pool of Allocation
+           Identifiers (Alloc-ID), G-PON Encapsulation Method port
+           Identifiers (GEM port-ID) and Optical Network Unit
+           Identifiers (ONU-ID).";
         leaf name {
           type bbf-yang:string-ascii64;
           description
@@ -515,8 +539,8 @@ submodule bbf-xpon-channel-group-body {
              + "/if:interface[if:name = current()]/if:type,"
              + "'bbf-xponift:channel-termination')";
           description
-            "Reference the configured channel termination
-             that is being reported against.";
+            "Reference the configured channel termination that is
+             being reported against.";
         }
         container consumed-resources {
           description

@@ -1,0 +1,200 @@
+module bbf-xponani-tr069-server-common {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-xponani-tr069-server-common";
+  prefix bbf-xponani-tr069-servc;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+  import iana-crypt-hash {
+    prefix ianach;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Access Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Robert Peschi, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     PS Leader:   Sven Ooghe, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Herman Verbueken, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on the management of
+     Passive Optical Network (PON) interfaces. As such, this module
+     is specific to access network equipment (e.g., BBF-specified
+     Access Nodes and FTTdp DPUs).
+
+     Specifically, this module defines a feature, groupings and
+     typedefs used in the management of a TR-069 Management Server.
+
+     Copyright (c) 2018-2026, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385i3a1; see
+     the TR itself for full legal notices.";
+
+  revision 2026-11-02 {
+    description
+      "Issue 3 Amendment 1.
+       * Approval Date:    2026-11-02.
+       * Publication Date: 2026-11-02.";
+    reference
+      "TR-385i3a1: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3_Amendment-1.pdf>";
+  }
+
+  feature bbf-xpon-tr069-server {
+    description
+      "Indicates support for Optical Network Unit (ONU) TR-069
+       management server.";
+    reference
+      "ITU-T G.988 Clause 9.12.16";
+  }
+
+  grouping tr069-server-profiles-list {
+    description
+      "ONU-side configuration data for Optical Network Unit (ONU)
+       TR-069 management server.";
+    list tr069-server-profile {
+      key "name";
+      description
+        "Optical Network Unit (ONU) TR-069 management server
+         configuration parameters.";
+      reference
+        "ITU-T G.988 Clause 9.12.3;
+         ITU-T G.988 Clause 9.12.4;
+         ITU-T G.988 Clause 9.12.16";
+      leaf name {
+        type bbf-yang:string-ascii64;
+        description
+          "TR-069 management server profile name.";
+      }
+      leaf url {
+        type inet:uri {
+          length "0..375";
+        }
+        mandatory true;
+        description
+          "TR-069 management server URL.";
+        reference
+          "ITU-T G.988 Clause 9.12.3;
+           ITU-T G.988 Clause 9.12.16";
+      }
+      leaf username {
+        type bbf-yang:string-ascii64;
+        mandatory true;
+        description
+          "TR-069 management server authentication username.";
+        reference
+          "ITU-T G.988 Clause 9.12.3;
+           ITU-T G.988 Clause 9.12.4;
+           ITU-T G.988 Clause 9.12.16";
+      }
+      leaf password {
+        type ianach:crypt-hash;
+        mandatory true;
+        description
+          "TR-069 management server authentication password.";
+        reference
+          "ITU-T G.988 Clause 9.12.3;
+           ITU-T G.988 Clause 9.12.4;
+           ITU-T G.988 Clause 9.12.16";
+      }
+      leaf validation-scheme {
+        type enumeration {
+          enum disabled {
+            description
+              "Disable validation.";
+          }
+          enum md5-digest-authentication {
+            description
+              "Validate using MD5 digest authentication.";
+            reference
+              "RFC 2617 Section 3";
+          }
+          enum basic-authentication {
+            description
+              "Validate using basic authentication.";
+            reference
+              "RFC 2617 Section 2";
+          }
+        }
+        mandatory true;
+        description
+          "The validation scheme used when the ONU validates a
+           challenge.";
+        reference
+          "ITU-T G.988 Clause 9.12.4;
+           RFC 2617 Section 2;
+           RFC 2617 Section 3";
+      }
+      leaf realm {
+        when "../validation-scheme = 'md5-digest-authentication'";
+        type string {
+          length "0..25";
+        }
+        mandatory true;
+        description
+          "Indicates the realm of the TR-069 management server
+           in user digest authentication. This string is to be
+           displayed to users so they know which username and
+           password to use, ref to RFC 2617, Section 3 for details.";
+        reference
+          "ITU-T G.988 Clause 9.12.3;
+           ITU-T G.988 Clause 9.12.4;
+           ITU-T G.988 Clause 9.12.16
+           RFC 2617 Section 3.2.1";
+      }
+    }
+  }
+}

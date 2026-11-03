@@ -1,0 +1,455 @@
+module bbf-xpon-onu-activation-common {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-xpon-onu-activation-common";
+  prefix bbf-xpon-onu-activc;
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import bbf-xpon-types {
+    prefix bbf-xpon-types;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
+  import bbf-xpon-if-type {
+    prefix bbf-xponift;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Access Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Robert Peschi, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     PS Leader:   Sven Ooghe, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Herman Verbueken, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on the management of
+     Passive Optical Network (PON) interfaces. As such, this module
+     is specific to access network equipment (e.g., BBF-specified
+     Access Nodes and FTTdp DPUs).
+
+     Specifically, this module defines groupings that can be used
+     for controlling the activation of an ONU. One example is to
+     give the possibility for the OLT to enable or disable an ONU
+     via PLOAM.
+
+     Copyright (c) 2018-2026, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385i3a1; see
+     the TR itself for full legal notices.";
+
+  revision 2026-11-02 {
+    description
+      "Issue 3 Amendment 1.
+       * Approval Date:    2026-11-02.
+       * Publication Date: 2026-11-02.";
+    reference
+      "TR-385i3a1: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3_Amendment-1.pdf>";
+  }
+
+  feature onu-activation-control-timers {
+    description
+      "Indicates support of timers for ONU activation control.";
+  }
+
+  feature inter-channel-group-onu-activation-control {
+    description
+      "Indicates support for the OLT to take into account on a given
+       channel group the 'per ONU' 'onu-activation-config' data nodes
+       configured on other channel goups.";
+  }
+
+  grouping onu-controlled-activation-config {
+    description
+      "Configuration data to control the activation of an Optical
+       Network Unit (ONU).";
+    container onu-controlled-activation {
+      presence
+        "Explicit activation control is required for one or more
+         ONUs.";
+      description
+        "Provides the means to explicit control the activation of one
+         or more ONUs, known by serial number.";
+      leaf onu-enable-disable-ploam-steady-timer {
+        if-feature "onu-activation-control-timers";
+        type bbf-xpon-types:timer-uint32-or-disabled;
+        units "hours";
+        default "disabled";
+        description
+          "The time after which the
+           'onu-enabled-disabled-steady-timeout' notification should
+           be issued for a given ONU. This notification could give the
+           operator the opportunity to decide to keep the ONU under
+           'onu-enable-disable-ploam' activation control or not, in
+           the latter case assuming for instance that the ONU has been
+           decommissioned by the subscriber. The value 'disabled'
+           means that the OLT never sends this notification.";
+      }
+      leaf onu-enable-disable-ploam-abort-timer {
+        if-feature "onu-activation-control-timers";
+        type bbf-xpon-types:timer-uint32-or-disabled;
+        units "hours";
+        default "disabled";
+        description
+          "The time after which the OLT should silently stop
+           attempting to enable or disable an ONU as instructed in the
+           'onu-enable-disable-ploam-function' data node. This timer
+           provides a mechanism for the OLT to autonomoulsly consider
+           an ONU as being decommisionned and hence not worth of
+           spending OLT resources any longer. The value 'disabled'
+           means that the OLT never stops its attempts.";
+      }
+      list onu {
+        key "serial-number";
+        description
+          "An ONU for which activation is explicitly controlled.
+
+           The ONU to be controlled is identified by its serial number
+           and does not need to be associated with a locally
+           configured virtual ANI.";
+        leaf serial-number {
+          type bbf-xpon-types:onu-serial-number;
+          description
+            "The ONU serial number.";
+        }
+        leaf onu-enable-disable-ploam-function {
+          type identityref {
+            base
+              bbf-xpon-types:onu-ploam-enable-disable-function-base;
+          }
+          description
+            "When configured with 'send-ploam-to-disable-onu',
+             indicates that the OLT must send a
+             'Disable_Serial_Number' downstream PLOAM message on the
+             channel termination used by the ONU to disable it,
+               - immediately if the ONU is in 'onu-present' state,
+                 (ref 'bbf-xpon-onu-types' module) fibre, or
+               - as soon as the ONU is connected and sends its
+                 initial 'Serial_Number_ ONU' upstream PLOAM
+                 message.
+
+             When configured with 'send-ploam-to-enable-onu',
+             indicates that the OLT must regularly send a
+             'Disable_Serial_Number' downstream PLOAM message on the
+             channel pairs(s) indicated by the 'onu-xpon-type' data
+             node, to enable the ONU, until the ONU sends upstream
+             messages again, e.g., a 'Serial_Number_ ONU' upstream
+             PLOAM message. If the 'onu-xpon-type' is not configured,
+             the OLT must send the 'Disable_Serial_Number' downstream
+             PLOAM message to all channel pairs of the channel group.
+             The repeated transmission is to give a chance to enable
+             ONUs that would have been once disabled but are now only
+             sporadically connected to the fiber. Retransmission
+             period is implementation specific and should be a slow
+             pace with suggested period not shorter than 30 minutes.";
+          reference
+            "ITU-T G.984.3 Clause 9.2.1;
+             ITU-T G.987.3 Table 11.2;
+             ITU-T G.9807.1 Table C11.2;
+             ITU-T G.989.3 Table 11-9";
+        }
+        leaf xpon-type {
+          type identityref {
+            base bbf-xpon-types:xpon-type-base;
+          }
+          description
+            "The xPON type of the ONU to be controlled.";
+        }
+      }
+    }
+  }
+
+  grouping onu-controlled-activation-state {
+    description
+      "State data associated with Optical Network Units (ONU) that are
+       under the activation control.";
+    container onu-controlled-activation-state {
+      config false;
+      description
+        "Reflects the activation state of one or more ONUs, known by
+         serial number, managed by explicit activation control.";
+      list onu {
+        key "serial-number";
+        description
+          "An ONU for which activation is explicitly controlled by
+           configuration. The ONU under activation control is
+           identified by its serial number.";
+        leaf serial-number {
+          type bbf-xpon-types:onu-serial-number;
+          description
+            "The ONU serial number.";
+        }
+        leaf onu-ploam-enabled-disabled-state {
+          type identityref {
+            base bbf-xpon-types:onu-ploam-enabled-disabled-state-base;
+          }
+          description
+            "The current state of an ONU under
+             'onu-enable-disable-ploam' activation control.";
+          reference
+            "ITU-T G.984.3 Clause 9.2.1;
+             ITU-T G.987.3 Table 11.2;
+             ITU-T G.9807.1 Table C11.2;
+             ITU-T G.989.3 Table 11-9";
+        }
+        leaf onu-ploam-enabled-disabled-state-last-change-date {
+          type yang:date-and-time;
+          description
+            "The Optical Line Termination (OLT) system date and time
+             when 'onu-ploam-enabled-disable-state' last changed
+             states. Upon OLT restart, this data node must take the
+             time-of-the-day value at OLT restart.";
+        }
+      }
+      notification onu-ploam-enabled-disabled-success {
+        description
+          "A notification that signifies that a
+           'Disable_Serial_Number' downstream PLOAM message has been
+           successfully applied to a given ONU as a result of the ONU
+           activation control configuration.
+
+           A 'Disable_Serial_Number' downstream PLOAM message with the
+           'enable' option is considered successfully applied to an
+           ONU when the ONU resumes the sending of upstream messages
+           such as a 'Serial_Number_ONU' upstream PLOAM message. A
+           'Disable_Serial_Number' downstream PLOAM message with the
+           'disable' option is considered successfully applied when
+           transmitted to an ONU that is 'present' on a channel
+           termination.";
+        leaf serial-number {
+          type bbf-xpon-types:onu-serial-number;
+          description
+            "The serial number of the Optical Network Unit (ONU) for
+             which the reporting is done.";
+        }
+        leaf onu-ploam-enabled-disabled-success {
+          type identityref {
+            base bbf-xpon-types:onu-enabled-disabled-success-base;
+          }
+          description
+            "The Optical Line Termination (OLT) has successfully
+             applied to the indicated ONU a 'Disable_Serial_Number'
+             downstream PLOAM message leading the ONU to be
+             'disabled' or 'enabled-again' as indicated by the value
+             of the 'onu-ploam-enabled-disabled' data node.
+
+             If an ONU has been confirmed to be re-enabled, the
+             operator might consider removing it from
+              'onu-enable-disable-ploam' activation control.
+
+             If an ONU has been confirmed to be disabled, the operator
+             should keep the ONU under 'onu-enable-disable-ploam'
+             activation control as a reminder that it may need one day
+             to be re-enabled.";
+          reference
+            "ITU-T G.984.3 Clause 9.2.1;
+             ITU-T G.987.3 Table 11.2;
+             ITU-T G.9807.1 Table C11.2;
+             ITU-T G.989.3 Table 11-9";
+        }
+        leaf last-success-date {
+          type yang:date-and-time;
+          description
+            "The Optical Line Termination (OLT) system date and time
+             when the successful PLOAM operation took place.";
+        }
+        leaf on-channel-termination {
+          type if:interface-ref;
+          must "derived-from-or-self(/if:interfaces"
+             + "/if:interface[if:name=current()]/if:type,"
+             + "'bbf-xponift:channel-termination')" {
+            error-message "Must reference a channel termination.";
+          }
+          description
+            "The channel termination on which the successful PLOAM
+             operation took place.";
+        }
+      }
+      notification onu-enabled-disabled-steady-timout {
+        if-feature "onu-activation-control-timers";
+        description
+          "A notification traceable to a channel group that signifies
+           that an ONU currently subjected to an
+           'onu-enable-disable-ploam' control has undergone an
+           'onu-ploam-enabled-disabled' state that has remained
+           unchanged for more than the duration of
+           'onu-enable-disable-ploam-steady-timer'. Depending on the
+           actual ONU 'onu-ploam-enabled-disabled' state this
+           notification could lead the operator to perform additional
+           administrative or management actions such removing the ONU
+           from from 'onu-enable-disable-ploam' activation control.
+           For instance,
+           - onu-is-to-be-disabled:
+               OLT unsuccessfully trying to disable ONU for too long.
+               Operator might consider the ONU as permanently
+               decomissioned and remove it from
+               'onu-enable-disable-ploam' activation control.
+           - onu-has-been-disabled
+               A disabled ONU. Operator may decide to keep the ONU
+               under 'onu-enable-disable-ploam' activation control or
+               not. In the former case, the operator could still
+               consider the ONU as a risk. In the latter case, the
+               operator could consider that the ONU has been
+               decommissioned by the subscriber.
+           - onu-is-to-be-enabled
+               OLT unsuccessfully trying to enable ONU for too long.
+               Operator may decide to keep trying or instead decide to
+               remove the ONU from 'onu-enable-disable-ploam' control
+               because the ONU can be considerd decommissioned by the
+               subscriber.
+           - onu-has-been-enabled-again
+               A reminder that the ONU can be immediately removed from
+               'onu-enable-disable-ploam' control.
+           - olt-gave-up-attempting-to-enable-onu
+               An indication that the operator should immediately
+               remove the ONU from 'onu-enable-disable-ploam'
+               control.
+           - olt-gave-up-attempting-to-disable-onu
+               An indication that the operator should immediately
+               remove the ONU from 'onu-enable-disable-ploam'
+               control.";
+        leaf serial-number {
+          type bbf-xpon-types:onu-serial-number;
+          description
+            "The serial number of the Optical Network Unit (ONU) for
+             which the reporting is done.";
+        }
+        leaf onu-ploam-enabled-disabled-steady-state {
+          type identityref {
+            base bbf-xpon-types:onu-ploam-enabled-disabled-state-base;
+          }
+          description
+            "The current steady state for 'onu-enable-disable-ploam'
+             activation control for the ONU.";
+          reference
+            "ITU-T G.984.3 Clause 9.2.1;
+             ITU-T G.987.3 Table 11.2;
+             ITU-T G.9807.1 Table C11.2;
+             ITU-T G.989.3 Table 11-9";
+        }
+      }
+    }
+  }
+
+  grouping inter-channel-group-onu-activation-config {
+    description
+      "Configuration data associated with the control of Optical
+       Network Unit (ONU) activation.";
+    container inter-channel-group-onu-controlled-activation {
+      if-feature "inter-channel-group-onu-activation-control";
+      description
+        "Determines whether the OLT should take into account on a
+         given channel group the 'per ONU' 'onu-activation-config'
+         data nodes configured on other channel groups.";
+      leaf enable-inter-channel-group-activation-control {
+        type boolean;
+        description
+          "If 'true', the OLT will apply on a given OLT channel group
+           the 'per-ONU' ONU activation data nodes configured on other
+           channel groups. For instance, when the data node is 'true'
+           the OLT would PLOAM disable an ONU that is present on
+           'chn-group-a' if this ONU is configured to be PLOAM
+           disabled on 'chan-group-b'.
+
+           If 'false', the OLT will apply ONU activation control on a
+           channel group only as exclusively configured on this
+           channel group.
+
+           Careful consideration should be exercised before enabling
+           this function, as this may cause extra processing overhead
+           in the OLT, for instance during ONU activation or when
+           periodic transmission of PLOAM message is involved, e.g.,
+           when attempting to re-enable an ONU that was previous
+           disabled.";
+      }
+    }
+  }
+
+  grouping inter-channel-group-onu-activation-state {
+    description
+      "State data associated with the control of Optical Network
+       Unit (ONU) activation.";
+    container inter-channel-group-onu-controlled-activation-state {
+      presence "This container may only exist if the boolean
+                'enable-inter-channel-group-activation-control' is
+                configured with the value 'true'.";
+      config false;
+      description
+        "Reflects that one or more ONUs, known by their serial
+         number undergo explicit activation control per
+         'onu-activation-control' container on one or more channel
+         groups in the OLT.";
+      list onu {
+        key "serial-number";
+        description
+          "An ONU that has its activation explicitly controlled on one
+           or more channel groups in the OLT.";
+        leaf serial-number {
+          type bbf-xpon-types:onu-serial-number;
+          description
+            "The ONU serial number.";
+        }
+        leaf-list channel-groups {
+          type if:interface-ref;
+          must "derived-from-or-self(/if:interfaces"
+             + "/if:interface[if:name=current()]/if:type,"
+             + "'bbf-xponift:channel-group')";
+          description
+            "The channel groups in the OLT on which the ONU undergoes
+             activation control.";
+        }
+      }
+    }
+  }
+}

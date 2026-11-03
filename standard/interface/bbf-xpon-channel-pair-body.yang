@@ -18,7 +18,7 @@ submodule bbf-xpon-channel-pair-body {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Fiber Access Networks Work Area";
+     Access Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
@@ -27,12 +27,16 @@ submodule bbf-xpon-channel-pair-body {
 
      PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Marta Seda, Calix";
+     PS Leader:   Sven Ooghe, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Herman Verbueken, Nokia";
   description
     "This submodule contains a collection of YANG definitions for
      managing channel pairs.
 
-     Copyright (c) 2018-2024, Broadband Forum
+     Copyright (c) 2018-2026, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -72,9 +76,19 @@ submodule bbf-xpon-channel-pair-body {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i3; see
+     This version of this YANG module is part of TR-385i3a1; see
      the TR itself for full legal notices.";
 
+  revision 2026-11-02 {
+    description
+      "Issue 3 Amendment 1.
+       * Approval Date:    2026-11-02.
+       * Publication Date: 2026-11-02.";
+    reference
+      "TR-385i3a1: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3_Amendment-1.pdf>";
+  }
   revision 2024-04-23 {
     description
       "Issue 3.
@@ -127,13 +141,15 @@ submodule bbf-xpon-channel-pair-body {
         error-message "Must reference a channel group.";
       }
       description
-        "Reference to channel group. Note that it is not allowed
-         to have several channel-pairs with identical downstream
+        "Reference to channel group. Note that it is not allowed to
+         have several channel-pairs with identical downstream
          channel-ID or upstream channel-ID or transmit wavelength
          simultaneously active on the same chnanel-group.
+
          In particular there may be only a maximum of one 25GS-PON,
          one XGS-PON, one XG-PON and one G-PON active on the same
          channel group.
+
          The YANG model does not enforce these constraints which are
          assumed to be enforced or verified by the OLT network
          element software.";
@@ -242,8 +258,9 @@ submodule bbf-xpon-channel-pair-body {
       units "seconds";
       default "0";
       description
-        "Specifies the frequency of transmission of the
-         periodic downstream PON-ID PLOAM message for this G-PON.
+        "Specifies the frequency of transmission of the periodic
+         downstream PON-ID PLOAM message for this G-PON.
+
          See ITU-T G.984.3 C.1. The default value '0' allows not
          to generate this PLOAM message, fulfilling ITU-T G.984.3
          C.2 requirement. This is only applicable to G-PON.";
@@ -261,16 +278,16 @@ submodule bbf-xpon-channel-pair-body {
       units "0.01 nanometers";
       default "0";
       description
-        "Represents the Actual Downstream wavelength of the
-         channel pair. It is expressed in hundredths of nanometer
-         to fit ITU-T precision requirements.";
+        "Represents the Actual Downstream wavelength of the channel
+         pair. It is expressed in hundredths of nanometer to fit ITU-T
+         precision requirements.";
     }
     leaf primary-ct-assigned {
       type boolean;
       default "false";
       description
-        "If 'true', a channel termination with Primary type B
-         role has been assigned to this channel pair.";
+        "If 'true', a channel termination with Primary type B role has
+         been assigned to this channel pair.";
       reference
         "ITU-T G.989.3 Clause 18.2";
     }
@@ -278,8 +295,8 @@ submodule bbf-xpon-channel-pair-body {
       type boolean;
       default "false";
       description
-        "If 'true', a channel termination with Secondary type B
-         role has been assigned to this channel pair.";
+        "If 'true', a channel termination with Secondary type B role
+         has been assigned to this channel pair.";
       reference
         "ITU-T G.989.3 Clause 18.2";
     }

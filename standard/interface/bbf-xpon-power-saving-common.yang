@@ -1,0 +1,221 @@
+module bbf-xpon-power-saving-common {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-xpon-power-saving-common";
+  prefix bbf-xpon-pwr-savc;
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Access Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Robert Peschi, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     PS Leader:   Sven Ooghe, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Herman Verbueken, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on the management of
+     Passive Optical Network (PON) interfaces. As such, this module
+     is specific to access network equipment (e.g., BBF-specified
+     Access Nodes and FTTdp DPUs).
+
+     Specifically, this module defines common data to manage xPON
+     power saving in the OLT, such as power saving applied to
+     transceivers and transceiver links.
+
+     Copyright (c) 2018-2026, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385i3a1; see
+     the TR itself for full legal notices.";
+
+  revision 2026-11-02 {
+    description
+      "Issue 3 Amendment 1.
+       * Approval Date:    2026-11-02.
+       * Publication Date: 2026-11-02.";
+    reference
+      "TR-385i3a1: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3_Amendment-1.pdf>";
+  }
+
+  feature xpon-transceiver-power-saving {
+    description
+      "Indicates that the xPON transceiver power saving feature is
+       supported.";
+  }
+
+  feature xpon-cyclic-transceiver-wake-up {
+    description
+      "Indicates support for periodically switching the xPON
+       transceiver link laser on and off while in power-saving.";
+  }
+
+  identity power-saving-xpon-transceiver-criteria {
+    description
+      "Base identity for power saving criteria supported by xPON
+       transceiver.";
+  }
+
+  identity none {
+    base power-saving-xpon-transceiver-criteria;
+    description
+      "No power saving criteria is used, i.e., power saving is
+       disabled.";
+  }
+
+  identity if-no-vani-configured {
+    base power-saving-xpon-transceiver-criteria;
+    description
+      "Power saving will take place on the xPON transceiver or
+       transceiver link if no vANI is configured on a channel
+       partition that is (indirectly) using the transceiver or
+       transceiver link.";
+  }
+
+  identity if-no-onu-present {
+    base power-saving-xpon-transceiver-criteria;
+    description
+      "Power saving will take place on the xPON transceiver or
+       transceiver link if there is no ONU present on the channel
+       termination using the transceiver or transceiver link.";
+  }
+
+  grouping power-saving-xpon-transceiver-config-data {
+    description
+      "Grouping of power saving config data for an xPON transceiver.";
+    leaf-list xpon-transceiver-criteria {
+      type identityref {
+        base power-saving-xpon-transceiver-criteria;
+      }
+      description
+        "Determines under what criteria power saving should be
+         applied (or not) to xPON transceiver(s) and, by inheritance,
+         to their child transceiver link(s). The leaf-list realizes
+         a logical OR'ing of criteria leading the transceiver(s) and
+         their transceiver link(s) to be in power saving: as long as
+         any criteria leading to power saving listed in the leaf-list
+         is met, power saving will take place.
+
+         The value 'none' does not lead by itself to power saving:
+           - if no other value than 'none' is configured in the
+             leaf-list, the transceiver and its child transceiver
+             link(s) will not be in power saving. It is equivalent
+             to not configuring the leaf-list at all.
+           - if the leaf-list contains the value 'none' together
+             with other values leading to power saving, then the
+             value 'none' will be ignored as a consequence of
+             logical OR'ing of powers saving criteria.
+
+         More specifically,
+           - value 'if-no-vani-configured', means that the
+             transceiver-link laser transmitters feeding channel
+             terminations on which no vANI is (indirectly)
+             configured will be switched off, possibly modulated
+             by an optional cyclic wake-up mechanism.
+           - value 'if-no-onu-present', means that the
+             transceiver-link laser transmitters feeding channel
+             terminations on which no ONU is present will be
+             switched off, possibly modulated by an optional
+             cyclic wake-up mechanism.
+
+         Finally, it should be noted that if the laser transmitter
+         of (all) the transceiver link(s) of the transceiver are
+         switched off, the whole transceiver can be switched off.";
+    }
+    container wake-up {
+      presence
+        "Parameters to control wake-up of the xPON transceiver
+         laser during power saving. wake-up of an xPON transceiver
+         link laser allows the OLT to detect ONU(s) that connects
+         on the fiber attached to this transceiver link, even when
+         the transceiver link is in power saving.
+
+         When this container is not present, the laser of transceiver
+         link remains off as long as the transceiver link is in a
+         power saving.";
+      description
+        "The means to explicitly control wake-up of the xPON
+         transceiver when in power saving.";
+      choice wake-up-method {
+        mandatory true;
+        description
+          "Provides a choice of wake-up methods.";
+        case cyclic-wake-up {
+          if-feature
+            "bbf-xpon-pwr-savc:xpon-cyclic-transceiver-wake-up";
+          description
+            "The xPON transceiver link laser is periodically switched
+             on and off while in power-saving.";
+          leaf xpon-transceiver-link-off-time {
+            type decimal64 {
+              fraction-digits 1;
+              range "5.0..3600";
+            }
+            units "seconds";
+            mandatory true;
+            description
+              "How long the transceiver link laser must remain off,
+               while in power saving, before being turned on.";
+          }
+          leaf xpon-transceiver-link-on-time {
+            type decimal64 {
+              fraction-digits 1;
+              range "5.0..3600";
+            }
+            units "seconds";
+            mandatory true;
+            description
+              "How long the transceiver link laser must remain on
+               while in power saving, before being turned off.";
+          }
+        }
+      }
+    }
+  }
+}

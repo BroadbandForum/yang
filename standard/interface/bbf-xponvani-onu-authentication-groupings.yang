@@ -15,7 +15,7 @@ module bbf-xponvani-onu-authentication-groupings {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Fiber Access Networks Work Area";
+     Access Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
@@ -24,21 +24,24 @@ module bbf-xponvani-onu-authentication-groupings {
 
      PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Marta Seda, Calix";
+     PS Leader:   Sven Ooghe, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Herman Verbueken, Nokia";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements on management of
-     ITU-T Passive Optical Network (PON) interfaces as defined in
-     ITU-T G.984.x, G.987.x, ITU-T G.989.x and ITU-T G.9807.x. As
-     such, this module is specific to access network equipment (e.g.,
-     BBF-specified Access Nodes and FTTdp DPUs).
+     supporting the Broadband Forum requirements on the management of
+     Passive Optical Network (PON) interfaces. As such, this module
+     is specific to access network equipment (e.g., BBF-specified
+     Access Nodes and FTTdp DPUs).
 
      Specifically, this module defines groupings that can be used
      for Virtual Access Network Interface (vANI) data nodes about
      Optical Network Unit (ONU) authentication and the decision
      to apply an OMCI function.
 
-     Copyright (c) 2018-2024, Broadband Forum
+     Copyright (c) 2018-2026, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -78,9 +81,19 @@ module bbf-xponvani-onu-authentication-groupings {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i3; see
+     This version of this YANG module is part of TR-385i3a1; see
      the TR itself for full legal notices.";
 
+  revision 2026-11-02 {
+    description
+      "Issue 3 Amendment 1.
+       * Approval Date:    2026-11-02.
+       * Publication Date: 2026-11-02.";
+    reference
+      "TR-385i3a1: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3_Amendment-1.pdf>";
+  }
   revision 2024-04-23 {
     description
       "Issue 3.
@@ -104,22 +117,21 @@ module bbf-xponvani-onu-authentication-groupings {
 
   grouping v-ani-onu-authentication {
     description
-      "Virtual Access Network Interface (vANI) configuration
-       data for Optical Network Unit (ONU) authentication and
-       decision for eOMCI or vOMCI management mode.";
+      "Virtual Access Network Interface (vANI) configuration data for
+       Optical Network Unit (ONU) authentication and decision for
+       eOMCI or vOMCI management mode.";
     leaf onu-name {
       if-feature "bbf-xpon-onu-authf:"
                + "configurable-onu-name";
       type bbf-yang:string-ascii64;
       description
         "The name of the Optical Network Unit (ONU) device
-         corresponding to this virtual Access Network
-         Interface (vANI). This 'onu-name' could be used as
-         means to help correlating the ONU authentication
-         function with the ONU management function.
-         It could be used as a direct ONU key in the (ONU) device
-         aggegation function in the management plane and/or in
-         the Optical Line Termination (OLT), as for instance
+         corresponding to this virtual Access Network Interface
+         (vANI). This 'onu-name' could be used as means to help
+         correlating the ONU authentication function with the ONU
+         management function. It could be used as a direct ONU key in
+         the (ONU) device aggegation function in the management plane
+         and/or in the Optical Line Termination (OLT), as for instance
          in TR-489 for Scenarios 2, 3 or 4.";
       reference
         "TR-489 Section 6.2;
@@ -139,9 +151,11 @@ module bbf-xponvani-onu-authentication-groupings {
         "The Logical ONU ID (LOID) value that the Optical Line
          Termination (OLT) expects to retrieve from the Optical
          Network Unit (ONU).
+
          It is a string that has been assigned to the subscriber
          by the Management Plane, entered into and stored in
          non-volatile storage at the ONU.
+
          The LOID could be useful in identifying a particular ONU
          installed at a particular location, for instance in an
          failed ONU replacement scenario.";
@@ -150,6 +164,25 @@ module bbf-xponvani-onu-authentication-groupings {
          TR-489 Section 4.1.1;
          TR-489 R-OLT_1";
     }
+    leaf expected-logical-password {
+      when '../expected-loid';
+      if-feature "bbf-xpon-onu-authf:"
+               + "can-retrieve-loid-pre-auth";
+      type bbf-yang:string-ascii {
+        length "0..12";
+      }
+      description
+        "The Logical password (LPW) value that the Optical Line
+         Termination (OLT) expects to retrieve from the Optical
+         Network Unit (ONU).
+         The LOID with LPW provides a way for the ONU to submit
+         authentication credentials.
+         It is a string that has been assigned to the subscriber
+         by the Management Plane, entered into and stored in
+         non-volatile storage at the ONU.";
+      reference
+        "ITU-T G.988 Clause 9.1.1";
+    }
     leaf expected-onu-management-mode {
       if-feature "bbf-xpon-onu-authf:"
                + "configurable-expected-onu-management-mode";
@@ -157,11 +190,11 @@ module bbf-xponvani-onu-authentication-groupings {
         base bbf-xpon-onu-autht:onu-management-config-base;
       }
       description
-        "Indicates to the OLT whether the Optical Network Unit
-         (ONU) corresponding to this virtual Access Network
-         Interface (vANI) must be managed via an OMCI function
-         embedded in the OLT (eOMCI) or by an OMCI function
-         virtualized in the Management Plane (vOMCI).";
+        "Indicates to the OLT whether the Optical Network Unit (ONU)
+         corresponding to this virtual Access Network Interface (vANI)
+         must be managed via an OMCI function embedded in the OLT
+         (eOMCI) or by an OMCI function virtualized in the Management
+         Plane (vOMCI).";
       reference
         "TR-489 Section 6.2.1";
     }
@@ -169,9 +202,9 @@ module bbf-xponvani-onu-authentication-groupings {
 
   grouping v-ani-onu-authentication-state {
     description
-      "Virtual Access Network Interface (vANI) state
-       data for Optical Network Unit (ONU) authentication and
-       decision for eOMCI or vOMCI management mode.";
+      "Virtual Access Network Interface (vANI) state data for Optical
+       Network Unit (ONU) authentication and decision for eOMCI or
+       vOMCI management mode.";
     leaf detected-loid {
       if-feature "(bbf-xpon-onu-authf:"
                + "can-retrieve-loid-pre-auth or "
@@ -181,25 +214,55 @@ module bbf-xponvani-onu-authentication-groupings {
         length "1..24";
       }
       description
-        "The Logical Identifier (LOID) value currently used
-         by an Optical Network Unit (ONU) that the Optical
-         Line Termination (OLT) has successfully authenticated
-         and has associated to this vANI. The OLT could directly
-         retrieve the LOID from the ONU (if able to do so before
-         the ONU is authenticated) or indirectly from
-         the Management Plane reporting the ONU authentication
-         results).
-         This data node is not present if the ONU is not using
-         any LOID or if the OLT lacks the capability to
-         query the ONU for its LOID before the ONU is authenticated
-         and didn't receive it either in an ONU authentication report
-         from the Management Plane.
+        "The Logical Identifier (LOID) value currently used by an
+         Optical Network Unit (ONU) that the Optical Line Termination
+         (OLT) has successfully authenticated and has associated to
+         this vANI. The OLT could directly retrieve the LOID from the
+         ONU (if able to do so before the ONU is authenticated) or
+         indirectly from the Management Plane reporting the ONU
+         authentication results.
+
+         This data node is not present if the ONU is not using any
+         LOID or if the OLT lacks the capability to query the ONU for
+         its LOID before the ONU is authenticated and did not receive
+         it either in an ONU authentication report from the Management
+         Plane.
          The LOID may be useful in identifying a particular ONU
          installed at a particular location, for instance in an
          failed ONU replacement scenario.";
       reference
         "ITU-T G.988 Clause 9.1.1;
          TR-489 R-OLT_11";
+    }
+    leaf detected-logical-password {
+      when '../detected-loid';
+      if-feature "(bbf-xpon-onu-authf:"
+               + "can-retrieve-loid-pre-auth or "
+               + "bbf-xpon-onu-authf:"
+               + "support-onu-authentication-report)";
+      type bbf-yang:string-ascii {
+        length "0..12";
+      }
+      description
+        "The Logical password (LPW) value currently used by an
+         Optical Network Unit (ONU) that the Optical Line Termination
+         (OLT) has successfully authenticated and has associated to
+         this vANI. The OLT could directly retrieve the LPW from the
+         ONU (if able to do so before the ONU is authenticated) or
+         indirectly from the Management Plane reporting the ONU
+         authentication results.
+
+         This data node is not present if the ONU is not using any
+         LPW or if the OLT lacks the capability to query the ONU for
+         its LPW before the ONU is authenticated and did not receive
+         it either in an ONU authentication report from the Management
+         Plane.
+
+         The LPW may be useful in identifying a particular ONU
+         installed at a particular location, for instance in an
+         failed ONU replacement scenario.";
+      reference
+        "ITU-T G.988 Clause 9.1.1";
     }
     leaf determined-onu-management-mode {
       type identityref {

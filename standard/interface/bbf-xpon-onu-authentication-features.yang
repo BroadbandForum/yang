@@ -5,18 +5,20 @@ module bbf-xpon-onu-authentication-features {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Fiber Access Networks Work Area";
+     Access Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
 
      Editor:      Robert Peschi, Nokia
 
-     Editor:      Kevin Noll, Vecima
-
      PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Marta Seda, Calix";
+     PS Leader:   Sven Ooghe, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Herman Verbueken, Nokia";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on management of
@@ -29,7 +31,7 @@ module bbf-xpon-onu-authentication-features {
      Network Unit (ONU) authentication and the decision to apply
      an OMCI function.
 
-     Copyright (c) 2018-2023, Broadband Forum
+     Copyright (c) 2018-2026, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -69,9 +71,19 @@ module bbf-xpon-onu-authentication-features {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i2a1; see
+     This version of this YANG module is part of TR-385i3a1; see
      the TR itself for full legal notices.";
 
+  revision 2026-11-02 {
+    description
+      "Issue 3 Amendment 1.
+       * Approval Date:    2026-11-02.
+       * Publication Date: 2026-11-02.";
+    reference
+      "TR-385i3a1: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3_Amendment-1.pdf>";
+  }
   revision 2023-06-21 {
     description
       "Issue 2 Amendment 1.
@@ -85,9 +97,9 @@ module bbf-xpon-onu-authentication-features {
 
   feature support-onu-authentication-report {
     description
-      "Indicates support for an action reporting the results
-       of Optical Network Unit (ONU) authentication by the
-       Management Plane.";
+      "Indicates support for an action reporting the results of
+       Optical Network Unit (ONU) authentication by the Management
+       Plane.";
   }
 
   feature can-retrieve-onu-eqpt-id-hw-and-sw-version-pre-auth {
@@ -95,6 +107,7 @@ module bbf-xpon-onu-authentication-features {
       "Indicates that the OLT is capable to retrieve the equipment
        ID, the hardware version and the software version from an ONU
        before the ONU is already authenticated.
+
        Note that this feature has to be understood in the strict
        sense: when supported this feature does not necessary imply
        that the OLT is capable to (fully) manage an ONU with an
@@ -103,24 +116,24 @@ module bbf-xpon-onu-authentication-features {
 
   feature can-retrieve-loid-pre-auth {
     description
-      "Indicates that the OLT is capable to retrieve the ONU
-       LogicalID (LOID) from an ONU before the ONU is already
-       authenticated. Note that this feature has to be
-       understood in the strict sense: when supported this feature
-       does not necessary imply that the OLT is capable to (fully)
-       manage an ONU with an embedded OMCI function (eOMCI).";
+      "Indicates that the OLT is capable to retrieve the ONU Logical
+       Identifier (LOID) from an ONU before the ONU is already
+       authenticated. Note that this feature has to be understood in
+       the strict sense: when supported this feature does not
+       necessary imply that the OLT is capable to (fully) manage an
+       ONU with an embedded OMCI function (eOMCI).";
   }
 
   feature configurable-onu-name {
     description
-      "Indicates support for configuring an 'onu-name'
-       at a virtual Access Network Interface (vANI).";
+      "Indicates support for configuring an 'onu-name' at a virtual
+       Access Network Interface (vANI).";
   }
 
   feature configurable-expected-onu-management-mode {
     description
       "Indicates support for configuring an
-       'expected-onu-management-mode' at a virtual
-       Access Network Interface (vANI).";
+       'expected-onu-management-mode' at a virtual Access Network
+       Interface (vANI).";
   }
 }

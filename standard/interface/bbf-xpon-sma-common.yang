@@ -1,0 +1,258 @@
+module bbf-xpon-sma-common {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-xpon-sma-common";
+  prefix bbf-xpon-smac;
+
+  import bbf-xpon-types {
+    prefix bbf-xpon-types;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import ieee802-dot1x {
+    prefix dot1x;
+  }
+  import ietf-interfaces {
+    prefix if;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Access Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Robert Peschi, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     PS Leader:   Sven Ooghe, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Herman Verbueken, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on the management of
+     Passive Optical Network (PON) interfaces. As such, this module
+     is specific to access network equipment (e.g., BBF-specified
+     Access Nodes and FTTdp DPUs).
+
+     Specifically, this module defines groupings, types and
+     identities that can be used for controlling Secure Mutual
+     Authentication (SMA) in an xPON access network. It extends the
+     standard IEEE 802.1x YANG module.
+
+     Copyright (c) 2018-2026, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385i3a1; see
+     the TR itself for full legal notices.";
+
+  revision 2026-11-02 {
+    description
+      "Issue 3 Amendment 1.
+       * Approval Date:    2026-11-02.
+       * Publication Date: 2026-11-02.";
+    reference
+      "TR-385i3a1: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3_Amendment-1.pdf>";
+  }
+
+  identity allowed-sma-methods-base {
+    description
+      "Base identity used to reflects the allowed Secure Mutual
+       Authentication (SMA) method(s) for the OLT Port Authentication
+       Entity (PAE) authenticator.";
+    reference
+      "IEEE 802.1X (2020) Clause 12.9.2;
+       IEEE 802.1X (2020) Clause 6.4;
+       IEEE 802.1X (2020) Figure 6-6;
+       www.iana.org/assignments/eap-numbers
+       /eap-numbers.xhtml#eap-numbers-4 - IANA Extensible
+       Authentication Protocol (EAP) Registry;
+       RFC 3748 Figure 1;
+       RFC 3748 Figure 2;
+       RFC 5433;
+       RFC 5216;
+       RFC 5247;
+       ITU-T G.988 Clause 9.13.11";
+  }
+
+  identity local-omci {
+    base allowed-sma-methods-base;
+    description
+      "The OLT locally supports the Secure Mutual Authentication (SMA)
+       method provided by OMCI.";
+    reference
+      "ITU-T G.988 Clause 9.13.11;";
+  }
+
+  identity local-eap-gpsk {
+    base allowed-sma-methods-base;
+    description
+      "The OLT locally supports the Secure Mutual Authentication (SMA)
+       EAP-GPSK method.";
+    reference
+      "RFC 5433";
+  }
+
+  identity external-eap-server {
+    base allowed-sma-methods-base;
+    description
+      "The OLT relies on an external Extensible Authentication
+       Protocol (EAP) server to support Secure Mutual Authentication
+       (SMA).";
+    reference
+      "RFC 3748 Figure 2";
+  }
+
+  grouping sma-xpon-pae-session-control {
+    description
+      "Configuration data nodes complementing IEEE 802.1x Port Access
+       Entity (PAE) data nodes to control Secure Mutual Authentication
+       (SMA) in the specific case of xPON access.";
+    leaf-list allowed-sma-methods {
+      type identityref {
+        base bbf-xpon-smac:allowed-sma-methods-base;
+      }
+      ordered-by user;
+      description
+        "Determines the allowed Secure Mutual Authentication (SMA)
+         method(s) for the OLT Port Authentication Entity (PAE)
+         authenticator. The leaf-list indicates
+            - that the OLT authenticator can locally terminate one or
+              another SMA method in function of the supplicant
+              capabilities, such as OMCI SMA or GPSK or
+            - that the OLT authenticator should run in
+              Extensible Authentication Protocol (EAP) pass-though
+              mode in which case, the actual authentication method is
+              left to a negotiation between the EAP server and the
+              supplicant, such as TLS.
+
+         The leaf-list order indicates the priority order to attempt
+         an SMA method.";
+      reference
+        "IEEE 802.1X (2020) Clause 12.9.2;
+         IEEE 802.1X (2020) Clause 6.4;
+         IEEE 802.1X (2020) Figure 6-6;
+         www.iana.org/assignments/eap-numbers
+         /eap-numbers.xhtml#eap-numbers-4 - IANA Extensible
+         Authentication Protocol (EAP) Registry;
+         RFC 3748 Figure 1;
+         RFC 3748 Figure 2;
+         RFC 5433;
+         ITU-T G.988 Clause 9.13.11";
+    }
+    leaf actual-sma-method {
+      type identityref {
+        base bbf-xpon-smac:allowed-sma-methods-base;
+      }
+      config false;
+      description
+        "The actual SMA method out of the 'allowed-sma-method' that
+         is being applied or has been applied to the interface.";
+    }
+    leaf actual-eap-method-type {
+      when "derived-from-or-self "
+         + "(../actual-sma-method, 'local-eap-gpsk') or "
+         + "derived-from-or-self "
+         + "(../actual-sma-method, 'external-eap-server')" {
+        description
+          "Data node relevant only when an EAP method is actually
+           used.";
+      }
+      type bbf-xpon-types:uint8-or-unknown;
+      config false;
+      description
+        "The actual EAP SMA method that is or was applied to the
+         interface, when known.";
+      reference
+        "www.iana.org/assignments/eap-numbers
+         /eap-numbers.xhtml#eap-numbers-4 - IANA Extensible
+         Authentication Protocol (EAP) Registry";
+    }
+    container expanded-eap-method-type {
+      when '../actual-eap-method-type = 254' {
+        description
+          "When eap-method-type means 'expanded'.";
+      }
+      config false;
+      description
+        "Contains the detailed expanded EAP method type.";
+      reference
+        "www.iana.org/assignments/eap-numbers
+         /eap-numbers.xhtml#eap-numbers-4 - IANA Extensible
+         Authentication Protocol (EAP) Registry;
+         RFC 3748 section-5.7";
+      leaf vendor-id {
+        type uint32;
+        description
+          "The vendor-ID.";
+      }
+      leaf vendor-type {
+        type uint32;
+        description
+          "The vendor type.";
+      }
+    }
+    leaf authentication-timestamp {
+      when
+        "/if:interfaces/if:interface/dot1x:pae/dot1x:authenticator"
+      + "/dot1x:authenticated = 'true'" {
+        description
+          "The data node does not exist if the interface is not
+           currently authenticated.";
+      }
+      type yang:date-and-time;
+      config false;
+      description
+        "The date and time of when the last successful SMA
+         authentication was started. This data node is only relevant
+         when the interface is currently authenticated as reflected
+         by the /if:interfaces/if:interface/dot1x:pae
+         /dot1x:authenticator/dot1x:authenticated' data node.
+         Note that re-authenticating an already authenticated
+         interface does not modify this data node.";
+    }
+  }
+}

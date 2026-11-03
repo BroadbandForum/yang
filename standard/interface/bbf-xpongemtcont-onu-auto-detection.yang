@@ -1,0 +1,171 @@
+module bbf-xpongemtcont-onu-auto-detection {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-xpongemtcont-onu-auto-detection";
+  prefix bbf-xpongemtcont-onu-ad;
+
+  import bbf-xpongemtcont-onu-auto-detection-common {
+    prefix bbf-xpongemtcont-onu-adc;
+  }
+  import bbf-xpongemtcont {
+    prefix bbf-xpongemtcont;
+  }
+  import bbf-xpon-onu-auto-detection-common {
+    prefix bbf-xpon-onu-adc;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Access Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Robert Peschi, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     PS Leader:   Sven Ooghe, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Herman Verbueken, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on the management of
+     Passive Optical Network (PON) interfaces. As such, this module
+     is specific to access network equipment (e.g., BBF-specified
+     Access Nodes and FTTdp DPUs).
+
+     Specifically, this module defines data nodes for managing G-PON
+     Encapsulation Method (GEM) ports and T-CONTs when the ONU xPON
+     type is auto-detected.
+
+     Copyright (c) 2018-2026, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385i3a1; see
+     the TR itself for full legal notices.";
+
+  revision 2026-11-02 {
+    description
+      "Issue 3 Amendment 1.
+       * Approval Date:    2026-11-02.
+       * Publication Date: 2026-11-02.";
+    reference
+      "TR-385i3a1: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3_Amendment-1.pdf>";
+  }
+
+  augment "/bbf-xpongemtcont:xpongemtcont/bbf-xpongemtcont:tconts"
+        + "/bbf-xpongemtcont:tcont" {
+    description
+      "Complements each T-CONT with configuration data for the
+       support of the auto-detection of the xPON type of an Optical
+       Network Unit (ONU).";
+    container auto-detection {
+      if-feature "bbf-xpon-onu-adc:onu-xpontype-auto-detection";
+      presence
+        "Enables the management of auto-detection of the xPON type of
+         the ONU.";
+      description
+        "T-CONT configuration data for the support of the
+         auto-detection of the xPON type of an Optical Network Unit
+         (ONU).";
+      uses bbf-xpongemtcont-onu-adc:alloc-ids {
+        refine "alloc-id" {
+          must 'not(../../bbf-xpongemtcont:alloc-id)' {
+            error-message
+              "xPON type specific Allocation Identifier (Alloc-ID) "
+            + "cannot be configured when the non-xPON type specific "
+            + "'tcont[name]/alloc-id' data node is already "
+            + "configured.";
+          }
+          if-feature "bbf-xpongemtcont:configurable-alloc-id and "
+                   + "bbf-xpon-onu-adc:onu-xpontype-auto-detection";
+        }
+      }
+      uses bbf-xpongemtcont-onu-adc:traffic-descriptor-profile-refs {
+        refine "traffic-descriptor-profile-ref" {
+          must 'not(../..'
+             + '/bbf-xpongemtcont:traffic-descriptor-profile-ref)' {
+            error-message
+              "xPON type specific Traffic Descriptor Profiles "
+            + "references cannot be configured when the non-xPON "
+            + "type specific 'tcontt[name]/descriptor-profile-ref' "
+            + "data node is already configured.";
+          }
+          if-feature "bbf-xpon-onu-adc:onu-xpontype-auto-detection";
+        }
+      }
+    }
+  }
+
+  augment "/bbf-xpongemtcont:xpongemtcont/bbf-xpongemtcont:gemports"
+        + "/bbf-xpongemtcont:gemport" {
+    description
+      "Complements each GEM port with configuration data for the
+       support of the auto-detection of the xPON type of an Optical
+       Network Unit (ONU).";
+    container auto-detection {
+      if-feature "bbf-xpon-onu-adc:onu-xpontype-auto-detection";
+      presence
+        "Enables the management of auto-detection of the xPON type of
+         the ONU.";
+      description
+        "GEM port configuration data for the support of the
+         auto-detection of the xPON type of an Optical Network Unit
+         (ONU).";
+      uses bbf-xpongemtcont-onu-adc:gemport-ids {
+        refine "gemport-id" {
+          must 'not(../../bbf-xpongemtcont:gemport-id)' {
+            error-message
+              "xPON type specific GEM port IDs cannot be configured "
+            + "when the non-xPON type specific "
+            + "'gemport[name]/gemport-id' data node is already "
+            + "configured.";
+          }
+          if-feature "bbf-xpongemtcont:configurable-gemport-id and "
+                   + "bbf-xpon-onu-adc:onu-xpontype-auto-detection";
+        }
+      }
+    }
+  }
+}

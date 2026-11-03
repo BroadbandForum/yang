@@ -16,7 +16,7 @@ module bbf-xpongemtcont-gemport-performance-management {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Fiber Access Networks Work Area";
+     Access Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
@@ -25,7 +25,11 @@ module bbf-xpongemtcont-gemport-performance-management {
 
      PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Marta Seda, Calix";
+     PS Leader:   Sven Ooghe, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Herman Verbueken, Nokia";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on management of
@@ -37,7 +41,7 @@ module bbf-xpongemtcont-gemport-performance-management {
      Specifically, this module defines the management of performance
      monitoring of G-PON Encapsulation Method (GEM) ports.
 
-     Copyright (c) 2018-2024, Broadband Forum
+     Copyright (c) 2018-2026, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -77,9 +81,19 @@ module bbf-xpongemtcont-gemport-performance-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i3; see
+     This version of this YANG module is part of TR-385i3a1; see
      the TR itself for full legal notices.";
 
+  revision 2026-11-02 {
+    description
+      "Issue 3 Amendment 1.
+       * Approval Date:    2026-11-02.
+       * Publication Date: 2026-11-02.";
+    reference
+      "TR-385i3a1: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3_Amendment-1.pdf>";
+  }
   revision 2024-04-23 {
     description
       "Issue 3.
@@ -113,8 +127,8 @@ module bbf-xpongemtcont-gemport-performance-management {
 
   grouping gemport-performance-counters {
     description
-      "Counters associated with current and historical 15 minute and
-       24 hour performance counters.";
+      "Counters associated with current and historical 15-minute and
+       24-hour performance counters.";
     reference
       "ITU-T G.987.3 (01/2014) Table 14.1;
        ITU-T G.989.3 (2015)/Amd.2 (11/2018) Table 14-1;
@@ -182,7 +196,7 @@ module bbf-xpongemtcont-gemport-performance-management {
           "If true, enables counting of performance statistics.
            Then performance statistics will be available in
            /xpongemtcont-state/gemports/gemport/performance,
-           i.e., 15 minutes statistics and 24 hours statistics,
+           i.e., 15-minute statistics and 24-hour statistics,
            and for both there are current statistics and history
            data.
 
@@ -201,10 +215,10 @@ module bbf-xpongemtcont-gemport-performance-management {
          Method (GEM) ports.";
       container intervals-15min {
         description
-          "15 minute interval performance history.";
+          "15-minute interval performance history.";
         container current {
           description
-            "Current 15 minute interval counters.";
+            "Current 15-minute interval counters.";
           uses gemport-performance;
         }
         uses bbf-if-pm:performance-15min-history-parameters;
@@ -212,7 +226,7 @@ module bbf-xpongemtcont-gemport-performance-management {
           key "interval-number";
           max-elements 96;
           description
-            "A history of 15 minute intervals.";
+            "A history of 15-minute intervals.";
           leaf interval-number {
             type bbf-if-pm:performance-15min-history-interval;
             description
@@ -227,10 +241,10 @@ module bbf-xpongemtcont-gemport-performance-management {
       container intervals-24hr {
         if-feature "bbf-if-pm:performance-24hr";
         description
-          "24 hour interval performance history.";
+          "24-hour interval performance history.";
         container current {
           description
-            "Current 24 hour interval counters.";
+            "Current 24-hour interval counters.";
           uses gemport-performance;
         }
         uses bbf-if-pm:performance-24hr-history-parameters;
@@ -238,7 +252,7 @@ module bbf-xpongemtcont-gemport-performance-management {
           key "interval-number";
           max-elements 7;
           description
-            "A history of 24 hour intervals.";
+            "A history of 24-hour intervals.";
           leaf interval-number {
             type bbf-if-pm:performance-24hr-history-interval;
             description

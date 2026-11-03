@@ -21,7 +21,7 @@ module bbf-xponvani-power-management {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Fiber Access Networks Work Area";
+     Access Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
@@ -30,7 +30,11 @@ module bbf-xponvani-power-management {
 
      PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Marta Seda, Calix";
+     PS Leader:   Sven Ooghe, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Herman Verbueken, Nokia";
   description
     "This module contains a collection of YANG definitions for
      supporting the Broadband Forum requirements on management of
@@ -42,7 +46,7 @@ module bbf-xponvani-power-management {
      Specifically, this module defines Optical Network Unit (ONU)
      power management at the virtual Access Network Interface (vANI).
 
-     Copyright (c) 2018-2024, Broadband Forum
+     Copyright (c) 2018-2026, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -82,9 +86,19 @@ module bbf-xponvani-power-management {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i3; see
+     This version of this YANG module is part of TR-385i3a1; see
      the TR itself for full legal notices.";
 
+  revision 2026-11-02 {
+    description
+      "Issue 3 Amendment 1.
+       * Approval Date:    2026-11-02.
+       * Publication Date: 2026-11-02.";
+    reference
+      "TR-385i3a1: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3_Amendment-1.pdf>";
+  }
   revision 2024-04-23 {
     description
       "Issue 3.
@@ -182,9 +196,10 @@ module bbf-xponvani-power-management {
            of zero indicates that the sleeping ONU can respond to a
            bandwidth grant without delay.
 
-           itransinit value must be not less than the itransinit value
-           reported in /interface-state/interface/bbf-xponani:ani/
-           power-management/itransinit leaf of the associated ONU.";
+           The Itransinit value must not be less than the Itransinit
+           value reported in /interface-state/interface/
+           bbf-xponani:ani/power-management/itransinit of the
+           associated ONU.";
         reference
           "ITU-T G.984.3 Annex E;
            ITU-T G.987.3 Clause 16;
@@ -205,7 +220,7 @@ module bbf-xponvani-power-management {
            that the dozing ONU can respond to a bandwidth grant
            without delay. This leaf is ignored for G.989.x ONU.
 
-           itxinit value must be not less than the itxinit value
+           The Itxinit value must not be less than the Itxinit value
            reported in /interface-state/interface/bbf-xponani:ani/
            power-management/itxinit leaf of the associated ONU.";
         reference

@@ -1,0 +1,146 @@
+module bbf-xponani-sma {
+  yang-version 1.1;
+  namespace "urn:bbf:yang:bbf-xponani-sma";
+  prefix bbf-xponani-sma;
+
+  import ietf-interfaces {
+    prefix if;
+  }
+  import bbf-xponani {
+    prefix bbf-xponani;
+  }
+  import bbf-xpongemtcont {
+    prefix bbf-xpongemtcont;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Access Work Area";
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:info@broadband-forum.org>.
+
+     Editor:      Robert Peschi, Nokia
+
+     PS Leader:   Joey Boyd, Adtran
+
+     PS Leader:   Sven Ooghe, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Herman Verbueken, Nokia";
+  description
+    "This module contains a collection of YANG definitions for
+     supporting the Broadband Forum requirements on the management of
+     Passive Optical Network (PON) interfaces. As such, this module
+     is specific to access network equipment (e.g., BBF-specified
+     Access Nodes and FTTdp DPUs).
+
+     Specifically, this module defines data nodes providing the
+     Optical Network Unit (ONU) with the means to exchange IEEE
+     802.1x frames with the OLT in view of OLT-ONU Secure Mutual
+     Authentication (SMA). This module is only applicable to ONUs
+     managed in the TR-385 Separated-NE mode.
+
+     Copyright (c) 2018-2026, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials
+        provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products
+        derived from this software without specific prior written
+        permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of TR-385i3a1; see
+     the TR itself for full legal notices.";
+
+  revision 2026-11-02 {
+    description
+      "Issue 3 Amendment 1.
+       * Approval Date:    2026-11-02.
+       * Publication Date: 2026-11-02.";
+    reference
+      "TR-385i3a1: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3_Amendment-1.pdf>";
+  }
+
+  augment "/if:interfaces/if:interface/bbf-xponani:ani" {
+    description
+      "Data nodes used for ONU Secure Mutual Authentication (SMA).";
+    container gemport-802dot1x-required {
+      presence
+        "When present indicates that the ANI may need to exchange
+         802.1x frames with the ONU to perform Secure Mutual
+         Authentication (SMA) of the ONU.";
+      description
+        "In order to exchange 802.1x frames with the ONU for
+         ONU SMA, the ANI is required to be configured with
+         a reference to a GEM port exclusively meant for such
+         802.1x frames.
+
+         This GEM port may not refer to any interface in order
+         not to overlap or interfere with GEM ports used for
+         subscriber traffic, that are configured on a VSI or
+         on a UNI/olt-v-enet interface.";
+      leaf gemport-802dot1x {
+        type leafref {
+          path "/bbf-xpongemtcont:xpongemtcont"
+             + "/bbf-xpongemtcont:gemports"
+             + "/bbf-xpongemtcont:gemport"
+             + "/bbf-xpongemtcont:name";
+        }
+        must 'not(/bbf-xpongemtcont:xpongemtcont'
+           + '/bbf-xpongemtcont:gemports'
+           + '/bbf-xpongemtcont:gemport'
+           + '[bbf-xpongemtcont:name = current()]'
+           + '/bbf-xpongemtcont:interface)' {
+          error-message
+            "The referenced GEM port may not point to an interface.";
+          description
+            "The referenced GEM port may not point to an interface.";
+        }
+        mandatory true;
+        description
+          "A GEM port exclusively intended for the transport
+           of 802.1x frames for ONU SMA.
+
+           This GEM port may not refer to any interface in order
+           not to overlap or interfere with GEM ports used for
+           subscriber traffic, that are configured on a VSI or
+           on a UNI/olt-v-enet interface.";
+      }
+    }
+  }
+}

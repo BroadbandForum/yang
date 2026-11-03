@@ -5,7 +5,7 @@ module bbf-xpon-onu-authentication-types {
 
   organization
     "Broadband Forum <https://www.broadband-forum.org>
-     Fiber Access Networks Work Area";
+     Access Work Area";
   contact
     "Comments or questions about this Broadband Forum YANG module
      should be directed to <mailto:info@broadband-forum.org>.
@@ -14,20 +14,23 @@ module bbf-xpon-onu-authentication-types {
 
      PS Leader:   Joey Boyd, Adtran
 
-     WA Director: Marta Seda, Calix";
+     PS Leader:   Sven Ooghe, Nokia
+
+     WA Director: Marta Seda, Calix
+
+     WA Director: Herman Verbueken, Nokia";
   description
     "This module contains a collection of YANG definitions for
-     supporting the Broadband Forum requirements on management of
-     ITU-T Passive Optical Network (PON) interfaces as defined in
-     ITU-T G.984.x, G.987.x, ITU-T G.989.x and ITU-T G.9807.x. As
-     such, this module is specific to access network equipment (e.g.,
-     BBF-specified Access Nodes and FTTdp DPUs).
+     supporting the Broadband Forum requirements on the management of
+     Passive Optical Network (PON) interfaces. As such, this module
+     is specific to access network equipment (e.g., BBF-specified
+     Access Nodes and FTTdp DPUs).
 
      Specifically, this module defines YANG types used for Optical
      Network Unit (ONU) authentication and the decision to apply
      an OMCI function.
 
-     Copyright (c) 2018-2024, Broadband Forum
+     Copyright (c) 2018-2026, Broadband Forum
 
      Redistribution and use in source and binary forms, with or
      without modification, are permitted provided that the following
@@ -67,9 +70,19 @@ module bbf-xpon-onu-authentication-types {
      Any moral rights which are necessary to exercise under the above
      license grant are also deemed granted under this license.
 
-     This version of this YANG module is part of TR-385i3; see
+     This version of this YANG module is part of TR-385i3a1; see
      the TR itself for full legal notices.";
 
+  revision 2026-11-02 {
+    description
+      "Issue 3 Amendment 1.
+       * Approval Date:    2026-11-02.
+       * Publication Date: 2026-11-02.";
+    reference
+      "TR-385i3a1: YANG Modules for PON Management
+               <https://www.broadband-forum.org/technical/download/
+                        TR-385_Issue-3_Amendment-1.pdf>";
+  }
   revision 2024-04-23 {
     description
       "Issue 3.
@@ -93,15 +106,15 @@ module bbf-xpon-onu-authentication-types {
 
   identity onu-management-config-base {
     description
-      "Base identity used to reflects the expected
-       management mode for an Optical Network Unit (ONU).";
+      "Base identity used to reflects the expected management mode for
+       an Optical Network Unit (ONU).";
   }
 
   identity use-vomci {
     base onu-management-config-base;
     description
-      "The Optical Network Unit (ONU) should be managed
-       via a virtualized OMCI (vOMCI) function.";
+      "The Optical Network Unit (ONU) should be managed via a
+       virtualized OMCI (vOMCI) function.";
     reference
       "TR-489 Section 5.1;
        TR-489 Section 5.2";
@@ -110,9 +123,9 @@ module bbf-xpon-onu-authentication-types {
   identity use-eomci {
     base onu-management-config-base;
     description
-      "The Optical Network Unit (ONU) should be managed
-       via an OMCI function embedded in the Optical Line
-       Termination (OLT),(eOMCI).";
+      "The Optical Network Unit (ONU) should be managed via an OMCI
+       function embedded in the Optical Line ermination (OLT),
+       (eOMCI).";
     reference
       "TR-489 Section 5.3;
        TR-489 Section 5.4";
@@ -120,26 +133,25 @@ module bbf-xpon-onu-authentication-types {
 
   identity onu-management-state-base {
     description
-      "Base identity used to reflect how an Optical Line
-       Termination (OLT) perceives the way that a specific
-       Optical Network Unit (ONU) should be managed.";
+      "Base identity used to reflect how an Optical Line Termination
+       (OLT) perceives the way that a specific Optical Network Unit
+       (ONU) should be managed.";
   }
 
   identity onu-management-mode-ok {
     base onu-management-state-base;
     description
-      "The Optical Line Termination (OLT) could
-       successfully determine the management mode
-       to be applied to a specific Optical Network
-       Unit (ONU).";
+      "The Optical Line Termination (OLT) could successfully
+       determine the management mode to be applied to a specific
+       Optical Network Unit (ONU).";
   }
 
   identity vomci-required {
     base onu-management-mode-ok;
     description
-      "The Optical Line Termination (OLT) expects that
-       a specific Optical Network Unit (ONU) should be
-       managed via a virtualized OMCI (vOMCI) function.";
+      "The Optical Line Termination (OLT) expects that a specific
+       Optical Network Unit (ONU) should be managed via a virtualized
+       OMCI (vOMCI) function.";
     reference
       "TR-489 Section 5.1;
        TR-489 Section 5.2";
@@ -148,9 +160,9 @@ module bbf-xpon-onu-authentication-types {
   identity eomci-in-use {
     base onu-management-mode-ok;
     description
-      "The Optical Line Termination (OLT) has engaged
-       its embedded OMCI function (eOMCI) to manage a
-       specific Optical Network Unit (ONU).";
+      "The Optical Line Termination (OLT) has engaged its embedded
+       OMCI function (eOMCI) to manage a specific Optical Network Unit
+       (ONU).";
     reference
       "TR-489 Section 5.3;
        TR-489 Section 5.4";
@@ -159,10 +171,9 @@ module bbf-xpon-onu-authentication-types {
   identity onu-management-mode-not-ok {
     base onu-management-state-base;
     description
-      "The Optical Line Termination (OLT) has found some
-       error when attempting to determine the management
-       mode to be applied to a specific Optical Network
-       Unit (ONU).";
+      "The Optical Line Termination (OLT) has found some error when
+       attempting to determine the management mode to be applied to a
+       specific Optical Network Unit (ONU).";
     reference
       "TR-489 Figure 6-6;
        TR-489 Figure 6-7;
@@ -172,11 +183,10 @@ module bbf-xpon-onu-authentication-types {
   identity vani-management-mode-mismatch-with-requested-mode {
     base onu-management-mode-not-ok;
     description
-      "The Optical Line Termination (OLT) has found a
-       mismatch between the 'expected-onu-management-mode'
-       configured on a given vANI and the
-       'requested-onu-management-mode' that it received
-       for this Optical Network Unit (ONU) from an
+      "The Optical Line Termination (OLT) has found a mismatch between
+       the 'expected-onu-management-mode' configured on a given vANI
+       and the 'requested-onu-management-mode' that it received for
+       this Optical Network Unit (ONU) from an
        'report-onu-authentication-results' action.";
     reference
       "TR-489 R-OLT_9";
@@ -185,11 +195,10 @@ module bbf-xpon-onu-authentication-types {
   identity eomci-per-olt-vomci-per-mgmt-plane {
     base vani-management-mode-mismatch-with-requested-mode;
     description
-      "The Optical Line Termination (OLT) has determined
-       that a given ONU should be managed via eOMCI but
-       it has received an 'report-onu-authentication-results'
-       action from the Management Plane indicating vOMCI as
-       'requested-onu-management-mode'.";
+      "The Optical Line Termination (OLT) has determined that a given
+       ONU should be managed via eOMCI but it has received an
+       'report-onu-authentication-results' action from the Management
+       Plane indicating vOMCI as 'requested-onu-management-mode'.";
     reference
       "TR-489 Section 6.2.2";
   }
@@ -197,11 +206,10 @@ module bbf-xpon-onu-authentication-types {
   identity vomci-per-olt-eomci-per-mgmt-plane {
     base vani-management-mode-mismatch-with-requested-mode;
     description
-      "The Optical Line Termination (OLT) has determined
-       that a given ONU should be managed via vOMCI but
-       it has received an 'report-onu-authentication-results'
-       action from the Management Plane indicating eOMCI as
-       'requested-onu-management-mode'.";
+      "The Optical Line Termination (OLT) has determined that a given
+       ONU should be managed via vOMCI but it has received an
+       'report-onu-authentication-results' action from the Management
+       Plane indicating eOMCI as 'requested-onu-management-mode'.";
     reference
       "TR-489 Section 6.2.4";
   }
@@ -209,10 +217,10 @@ module bbf-xpon-onu-authentication-types {
   identity eomci-expected-but-missing-onu-configuration {
     base onu-management-mode-not-ok;
     description
-      "The Optical Line Termination (OLT) has determined
-       that eOMCI should be engaged for a given Optical
-       Network Unit (ONU) but it misses data to do so,
-       for instance the ANI or the ONU configuration.";
+      "The Optical Line Termination (OLT) has determined that eOMCI
+       should be engaged for a given Optical Network Unit (ONU) but it
+       misses data to do so, for instance the ANI or the ONU
+       configuration.";
     reference
       "TR-489 R-OLT_10";
   }
@@ -220,11 +228,10 @@ module bbf-xpon-onu-authentication-types {
   identity onu-name-mismatch-olt-mgmt-plane {
     base onu-management-mode-not-ok;
     description
-      "The Optical Line Termination (OLT) has found
-       a mismatch between the 'onu-name' configured on
-       a given vANI and the 'onu-name' that it received
-       for this Optical Network Unit (ONU) from
-       an 'report-onu-authentication-results' action.";
+      "The Optical Line Termination (OLT) has found a mismatch between
+       the 'onu-name' configured on a given vANI and the 'onu-name'
+       that it received for this Optical Network Unit (ONU) from an
+       'report-onu-authentication-results' action.";
     reference
       "TR-489 Section 6.2.4";
   }
@@ -232,10 +239,10 @@ module bbf-xpon-onu-authentication-types {
   identity undetermined {
     base onu-management-mode-not-ok;
     description
-      "The Optical Line Termination (OLT) has not determined
-       at this stage whether the Network Unit (ONU) should
-       be managed via an embedded OMCI function (eOMCI) or
-       a virtualized OMCI function (vOMCI).";
+      "The Optical Line Termination (OLT) has not determined at this
+       stage whether the Network Unit (ONU) should be managed via an
+       embedded OMCI function (eOMCI) or a virtualized OMCI function
+       (vOMCI).";
     reference
       "TR-489 Section 6.2.2;
        TR-489 Section 6.2.4;
@@ -244,9 +251,8 @@ module bbf-xpon-onu-authentication-types {
 
   identity action-error-tag {
     description
-      "Base identity used for defining failures with the
-       invocation of an 'report-onu-authentication-results'
-       action.";
+      "Base identity used for defining failures with the invocation of
+       an 'report-onu-authentication-results' action.";
     reference
       "TR-489 R-OLT_8";
   }
@@ -260,16 +266,15 @@ module bbf-xpon-onu-authentication-types {
   identity onu-not-present {
     base parameter-error;
     description
-      "The Optical Network Unit (ONU) is not present or
-       not present anymore on the channel termination.";
+      "The Optical Network Unit (ONU) is not present or not present
+       anymore on the channel termination.";
   }
 
   identity onu-management-mode-mismatch-with-v-ani {
     base parameter-error;
     description
-      "The required ONU management mode conflicts
-       with an explicitely configured
-       'expected-onu-magement-mode' on the vANI.";
+      "The required ONU management mode conflicts with an explicitely
+       configured 'expected-onu-magement-mode' on the vANI.";
     reference
       "TR-489 Section 6.2.2;
        TR-489 Section 6.2.4";
@@ -278,8 +283,8 @@ module bbf-xpon-onu-authentication-types {
   identity onu-name-mismatch-with-v-ani {
     base parameter-error;
     description
-      "The provided 'onu-name' conflicts with an
-       explicitely configured 'onu-name' on the vANI.";
+      "The provided 'onu-name' conflicts with an explicitely
+       configured 'onu-name' on the vANI.";
     reference
       "TR-489 Section 6.2.4";
   }
@@ -292,21 +297,35 @@ module bbf-xpon-onu-authentication-types {
 
   identity onu-authentication-results-base {
     description
-      "Base identity used to reflect the results of
-       ONU authentication.";
+      "Base identity used by the management plane to report to the
+       OLT the results of its ONU authentication process.";
   }
 
   identity onu-authentication-successful {
     base onu-authentication-results-base;
     description
-      "The ONU authentication is successful: a vANI
-       corresponding to the ONU could be identified.";
+      "The management plane could identify a vANI corresponding to
+       the ONU. Note that if the vANI configuration in the OLT
+       indicates that Secure Mutual Authentication (SMA) is required,
+       the OLT will consider the ONU authenticated only after SMA
+       has been successfully executed. Until then the OLT will
+       consider the vANI identified by the management plane only as
+       tentatively corresponding to the ONU.";
   }
 
   identity onu-authentication-failed {
     base onu-authentication-results-base;
     description
-      "The ONU authentication failed: a vANI
-       corresponding to the ONU could not be identified.";
+      "The management plane could not identify a vANI corresponding
+       to the ONU.";
+  }
+
+  identity onu-pre-authentication-pending-sma-success {
+    base onu-authentication-results-base;
+    description
+      "ONU pre-authentication could be done identifying a tentatve
+       vANI. However, Secure Mutual Authentication (SMA) between the
+       OLT and ONU must still be successfully executed before the ONU
+       can be confirmed successfully authenticated.";
   }
 }
