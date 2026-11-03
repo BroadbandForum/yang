@@ -1,5 +1,10 @@
 ## Broadband Forum YANG Modules
 
+### 2026-11-02: [TR-385 Issue 3 Amendment 1](https://www.broadband-forum.org/technical/download/TR-385_Issue-3_Amendment-1.pdf) YANG Modules for PON Management
+*Tag: [TR-385-v3.1.0](https://github.com/BroadbandForum/yang/tree/TR-385-v3.1.0)*
+
+* New models for Secure Mutual Authentication (SMA), xPON type auto-detection, and VLAN tag manipulation at the ONU UNIs.
+
 ### 2026-10-19: [TR-383 Amendment 11](https://www.broadband-forum.org/technical/download/TR-383_Amendment-11.pdf) Common YANG Modules for Access Networks
 *Tag: [TR-383-v1.11.0](https://github.com/BroadbandForum/yang/tree/TR-383-v1.11.0)*
 
