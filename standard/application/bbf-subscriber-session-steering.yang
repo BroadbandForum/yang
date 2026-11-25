@@ -1,0 +1,1195 @@
+module bbf-subscriber-session-steering {
+  yang-version 1.1;
+
+  namespace "urn:bbf:yang:bbf-subscriber-session-steering";
+
+  prefix "bbf-3s";
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import bbf-yang-types {
+    prefix bbf-yang;
+  }
+
+  import bbf-frame-classification {
+    prefix bbf-classif;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import bbf-dot1q-types {
+    prefix bbf-dot1qt;
+  }
+
+  organization
+    "Broadband Forum <https://www.broadband-forum.org>
+     Network Architecture Work Area";
+
+  contact
+    "Comments or questions about this Broadband Forum YANG module
+     should be directed to <mailto:help@broadband-forum.org>.
+
+     Editor:      Jonathan Newton, Vodafone
+
+     Editor:      Hans-Joerg Kolbe, Radisys
+
+     PS Leader:   Hans-Joerg Kolbe, Radisys
+
+     WA Director: Jonathan Newton, Vodafone
+
+     WA Director: Christele Bouchat, Nokia";
+
+  description
+    "This module contains a collection of YANG definitions
+     supporting Broadband Forum requirements for
+     Subscriber Session Steering (3S).
+
+     Copyright (c) 2017-2025, Broadband Forum
+
+     Redistribution and use in source and binary forms, with or
+     without modification, are permitted provided that the following
+     conditions are met:
+
+     1. Redistributions of source code must retain the above copyright
+       notice, this list of conditions and the following disclaimer.
+
+     2. Redistributions in binary form must reproduce the above
+       copyright notice, this list of conditions and the following
+       disclaimer in the documentation and/or other materials
+       provided with the distribution.
+
+     3. Neither the name of the copyright holder nor the names of its
+       contributors may be used to endorse or promote products
+       derived from this software without specific prior written
+       permission.
+
+     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+     CONTRIBUTORS \"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+     CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+     SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+     NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+     CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+     STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+     ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+     The above license is used as a license under copyright only.
+     Please reference the Forum IPR Policy for patent licensing terms
+     <https://www.broadband-forum.org/ipr-policy>.
+
+     Any moral rights which are necessary to exercise under the above
+     license grant are also deemed granted under this license.
+
+     This version of this YANG module is part of WT-474; see
+     the WT itself for full legal notices.";
+
+  revision "2026-03-16" {
+    description
+      "TBD.
+      * Approval Date:    TBD.
+      * Publication Date: TBD.";
+    reference
+      "TBD";
+  }
+
+  identity ssc-type {
+    description
+      "Base identity for Session Steering Context types, identifying
+       the role of the session context within the 3S domain.";
+  }
+
+  identity in-domain {
+    base ssc-type;
+    description
+      "The session terminates within this 3S domain.";
+  }
+
+  identity handover {
+    base ssc-type;
+    description
+      "The session is handed over to another domain.";
+  }
+
+  identity default-ssc {
+    base ssc-type;
+    description
+      "A default Session Steering Context provides the path for
+       subscribers matched by a default AC.";
+  }
+
+  identity session-type {
+    description
+      "Base identity for session types according to TR-146.";
+    reference
+      "TR-146";
+  }
+
+  identity pppoe {
+    base session-type;
+    description
+      "Identifies a PPPoE session type.";
+  }
+
+  identity ipoe {
+    base session-type;
+    description
+      "Identifies an IPoE session type.";
+  }
+
+  identity ethernet {
+    base session-type;
+    description
+      "Identifies an Ethernet session type.";
+  }
+
+  identity endpoint-type {
+    description
+      "Base identity for endpoint types.";
+  }
+
+  identity vtep {
+    base endpoint-type;
+    description
+      "Identifies a VXLAN Tunnel Endpoint (VTEP).";
+  }
+
+  identity l2vpn {
+    base endpoint-type;
+    description
+      "Identifies a generic L2VPN endpoint.";
+  }
+
+  identity port-vlan {
+    base endpoint-type;
+    description
+      "Identifies an endpoint by a combination of port and VLAN.";
+  }
+
+  typedef entity-oper-state {
+    type enumeration {
+      enum unknown {
+        description
+          "Item state is unknown or undeterminable.";
+      }
+      enum inactive {
+        description
+          "Item exists but is not playing any active role in the
+           3S domain.";
+      }
+      enum active {
+        description
+          "Item is active and available for subscriber allocation.";
+      }
+      enum updating {
+        description
+          "Item exists, but requires the underlying network to execute
+           a change.";
+      }
+    }
+    description
+      "Identifies the operational state of a dynamically changing
+       Subscriber Session Steering entity.";
+  }
+
+  typedef entity-admin-state {
+    type enumeration {
+      enum disabled {
+        description
+          "Item is not available to be used by 3S.";
+      }
+      enum enabled {
+        description
+          "Item is available to be used by 3S.";
+      }
+    }
+    description
+      "Identifies the state of a base 3S entity.";
+  }
+
+  typedef required-maintenance {
+    type enumeration {
+      enum none {
+        description
+          "The entity has no maintenance required.";
+      }
+      enum drain {
+        description
+          "All dependent entities should be moved away from this
+           entity.";
+      }
+      enum drain-and-delete {
+        description
+          "All dependent entities should be moved away from this
+           entity and it should then be automatically deleted.";
+      }
+    }
+    description
+      "Identifies the required maintenance for subscriber session
+       steering entity.";
+  }
+
+  typedef service-profile {
+    type bbf-yang:string-ascii64;
+    description
+      "An abstract string identifying a service profile.";
+  }
+
+  typedef qos-profile {
+    type bbf-yang:string-ascii64;
+    description
+      "An abstract string identifying a QoS profile.";
+  }
+
+  grouping entity-information {
+    description
+      "A set of information to be applied to every
+       entity in the session steering architecture.";
+    leaf admin-state {
+      type entity-admin-state;
+      mandatory true;
+      description
+        "The administrative state of the entity.";
+    }
+    leaf id {
+      type bbf-yang:string-ascii64;
+      mandatory true;
+      description
+        "A unique identifier for the entity within the
+         Subscriber Session Steering domain.";
+    }
+    leaf description {
+      type bbf-yang:string-ascii64;
+      description
+        "A textual description of the entity.";
+    }
+    container metadata {
+      description
+        "Data about the information stored in the session steering
+         database.";
+      leaf time-created {
+        type yang:date-and-time;
+        config false;
+        description
+          "The time when the entity was created in the session
+           steering database.";
+      }
+      leaf time-last-changed {
+        type yang:date-and-time;
+        config false;
+        description
+          "The time when the entity was last changed in
+           the session steering database.";
+      }
+    }
+  }
+
+  grouping common-operational-state {
+    description
+      "A set of common operational state that applies to every
+       applicable entity in the session steering architecture.";
+    leaf status {
+      type entity-oper-state;
+      description
+        "Provides the derived state of the entity.";
+    }
+  }
+
+  grouping endpoint-reference-list {
+    description
+      "Common definition to map to Endpoints and Logical Ports.";
+    leaf-list sgup-logical-port {
+      type leafref {
+        path "/subscriber-session-steering-domain"
+           + "/sgup-logical-port/id";
+      }
+      description
+        "Reference to the Logical Port instance.";
+    }
+    leaf-list endpoint {
+      type leafref {
+        path "/subscriber-session-steering-domain"
+           + "/tsf-up-endpoint/id";
+      }
+      description
+        "Reference to the Endpoint instance.";
+    }
+  }
+
+  grouping endpoint-classifier {
+    description
+      "Common definition for the port and classifier on
+       TSF-UP Endpoints and SG-UP Logical Ports.";
+    leaf port-id {
+      type bbf-yang:string-ascii64;
+      description
+        "The physical or logical port identifier for this
+         endpoint.";
+    }
+    choice classifier {
+      description
+        "The classifier value that identifies the endpoint on
+         the network connection. The type of classifier depends
+         on the endpoint-type.";
+      case vtep {
+        when "endpoint-type = 'bbf-3s:vtep'" {
+          description
+            "The VTEP classifier is only applicable when the
+             endpoint-type is 'vtep'.";
+        }
+        container vtep {
+          description
+            "VXLAN Tunnel Endpoint (VTEP) classifier.";
+          leaf ip-address {
+            type inet:ip-address;
+            description
+              "The IP address of the VTEP.";
+          }
+          leaf udp-port {
+            type inet:port-number;
+            default 4789;
+            description
+              "The UDP port of the VTEP.";
+          }
+          leaf vni {
+            type uint32 {
+              range "0..16777215";
+            }
+            description
+              "The VXLAN Network Identifier.";
+            reference
+              "RFC 7348: Virtual eXtensible Local Area Network
+               (VXLAN).";
+          }
+        }
+      }
+      case l2vpn {
+        when "endpoint-type = 'bbf-3s:l2vpn'" {
+          description
+            "The L2VPN classifier is only applicable when the
+             endpoint-type is 'l2vpn'.";
+        }
+        leaf l2vpn-id {
+          type bbf-yang:string-ascii64;
+          description
+            "The L2VPN identifier.";
+        }
+      }
+      case port-vlan {
+        when "endpoint-type = 'bbf-3s:port-vlan'" {
+          description
+            "The port and VLAN classifier is only applicable when
+             the endpoint-type is 'port-vlan'.";
+        }
+        container port-vlan {
+          description
+            "Port and VLAN classifier.";
+          leaf s-vlan {
+            type bbf-dot1qt:vlan-id;
+            description
+              "The service VLAN identifier.";
+          }
+          leaf c-vlan {
+            type bbf-dot1qt:vlan-id;
+            description
+              "The customer VLAN identifier.";
+          }
+        }
+      }
+    }
+  }
+
+  container subscriber-session-steering-domain {
+    description
+      "A 3S (Subscriber Session Steering) domain.";
+
+    list service-gateway-control-plane {
+      key id;
+      description
+        "A Service Gateway Control Plane (SG-CP) instance.";
+      uses entity-information;
+      container state {
+        config false;
+        description
+          "Operational state for the SG-CP.";
+        uses common-operational-state;
+        leaf-list sg-up {
+          type leafref {
+            path "/subscriber-session-steering-domain"
+               + "/service-gateway-user-plane/id";
+          }
+          description
+            "A list of associated Service Gateway User Planes.";
+        }
+        leaf mbb-capable {
+          type boolean;
+          default false;
+          description
+            "If 'true', Make Before Break (MBB) procedures are
+             supported.";
+        }
+      }
+    }
+
+    list service-gateway-user-plane {
+      key id;
+      description
+        "A Service Gateway User Plane (SG-UP) instance.";
+      uses entity-information;
+      leaf sg-cp {
+        type leafref {
+          path "/subscriber-session-steering-domain"
+             + "/service-gateway-control-plane/id";
+        }
+        mandatory true;
+        description
+          "The controlling entity (SG-CP) of this SG-UP.";
+      }
+      leaf maintenance {
+        type required-maintenance;
+        default none;
+        description
+          "The required maintenance for the entity.";
+      }
+      leaf max-ssc-count {
+        type uint32;
+        mandatory true;
+        description
+          "The maximum number of Session Steering Context supported
+           by this SG-UP.";
+      }
+      list supported-service-profile {
+        key service-profile;
+        description
+          "A service profile that is supported by this SG-UP.";
+        leaf service-profile {
+          type service-profile;
+          description
+            "A service profile.";
+        }
+      }
+      container state {
+        config false;
+        description
+          "Operational state for the SG-UP.";
+        uses common-operational-state;
+        leaf allocated-ssc-count {
+          type uint32;
+          description
+            "The number of Session Steering Context currently
+             allocated to this SG-UP.";
+        }
+        leaf-list lp {
+          type leafref {
+            path "/subscriber-session-steering-domain"
+               + "/sgup-logical-port/id";
+          }
+          description
+            "The logical ports associated with this SG-UP instance.";
+        }
+        leaf mbb-capable {
+          type boolean;
+          default false;
+          description
+            "Identifies that Make Before Break (MBB) procedures are
+             supported.";
+        }
+      }
+    }
+
+    list sgup-logical-port {
+      key id;
+      description
+        "An SG-UP logical port (LP) instance.";
+      uses entity-information;
+      leaf service-gateway-user-plane {
+        type leafref {
+          path "/subscriber-session-steering-domain"
+             + "/service-gateway-user-plane/id";
+        }
+        mandatory true;
+        description
+          "Reference to the containing SG-UP instance.";
+      }
+      container state {
+        config false;
+        description
+          "Operational state for the logical port (LP).";
+        uses common-operational-state;
+        leaf-list sgrp {
+          type leafref {
+            path "/subscriber-session-steering-domain"
+               + "/subscriber-group/id";
+          }
+          description
+            "A Subscriber Group that use this logical port (LP).";
+        }
+      }
+      leaf network-connection {
+        type leafref {
+          path "/subscriber-session-steering-domain"
+             + "/network-connection/id";
+        }
+        description
+          "Reference to the network connection related to this
+           logical port (LP).";
+      }
+      leaf endpoint-type {
+        type identityref {
+          base endpoint-type;
+        }
+        mandatory true;
+        description
+          "The type of endpoint.";
+      }
+      uses endpoint-classifier;
+      leaf-list supported-qos-profile {
+        type qos-profile;
+        description
+          "A QoS profile supported by this logical port (LP).";
+      }
+    }
+
+    list traffic-steering-function-control-plane {
+      key id;
+      description
+        "A Traffic Steering Function Control Plane (TSF-CP)
+         instance.";
+      uses entity-information;
+      container state {
+        config false;
+        description
+          "Operational state for the TSF-CP.";
+        uses common-operational-state;
+        leaf-list tsf-up {
+          type leafref {
+            path "/subscriber-session-steering-domain"
+               + "/traffic-steering-function-user-plane/id";
+          }
+          description
+            "Reference to the associated TSF-UP.";
+        }
+        leaf mbb-capable {
+          type boolean;
+          default false;
+          description
+            "If 'true', Make Before Break (MBB) procedures are
+             supported.";
+        }
+      }
+    }
+
+    list traffic-steering-function-user-plane {
+      key id;
+      description
+        "A Traffic Steering Function User Plane (TSF-UP) instance.";
+      uses entity-information;
+      leaf traffic-steering-function-control-plane {
+        type leafref {
+          path "/subscriber-session-steering-domain"
+             + "/traffic-steering-function-control-plane/id";
+        }
+        mandatory true;
+        description
+          "The controlling entity (TSF-CP) of this TSF-UP.";
+      }
+      leaf maintenance {
+        type required-maintenance;
+        default none;
+        description
+          "The required maintenance for the entity.";
+      }
+      container state {
+        config false;
+        description
+          "Operational state for the TSF-UP.";
+        uses common-operational-state;
+        leaf-list endpoint {
+          type leafref {
+            path "/subscriber-session-steering-domain"
+               + "/tsf-up-endpoint/id";
+          }
+          description
+            "The endpoints associated with this TSF-UP instance.";
+        }
+        leaf mbb-capable {
+          type boolean;
+          default false;
+          description
+            "If 'true', Make Before Break (MBB) procedures are
+             supported.";
+        }
+      }
+    }
+
+    list tsf-up-endpoint {
+      key id;
+      description
+        "A TSF-UP endpoint instance.";
+      uses entity-information;
+      leaf traffic-steering-function-user-plane {
+        type leafref {
+          path "/subscriber-session-steering-domain"
+             + "/traffic-steering-function-user-plane/id";
+        }
+        mandatory true;
+        description
+          "Reference to the containing TSF-UP instance.";
+      }
+      leaf network-connection {
+        type leafref {
+          path "/subscriber-session-steering-domain"
+             + "/network-connection/id";
+        }
+        mandatory true;
+        description
+          "Back-reference to the network connection for this
+           endpoint.";
+      }
+      leaf endpoint-type {
+        type identityref {
+          base endpoint-type;
+        }
+        mandatory true;
+        description
+          "The type of network endpoint.";
+      }
+      uses endpoint-classifier;
+      leaf-list supported-qos-profile {
+        type qos-profile;
+        description
+          "A QoS profile supported by this endpoint.";
+      }
+      container state {
+        config false;
+        description
+          "Operational state for the TSF-UP endpoint.";
+        uses common-operational-state;
+        leaf-list sgrp {
+          type leafref {
+            path "/subscriber-session-steering-domain"
+               + "/subscriber-group/id";
+          }
+          description
+            "A Subscriber Group that use this endpoint.";
+        }
+      }
+    }
+
+    list access-connection {
+      key id;
+      description
+        "An Access Connection (AC) instance.";
+      uses entity-information;
+      leaf traffic-steering-function-user-plane {
+        type leafref {
+          path "/subscriber-session-steering-domain"
+             + "/traffic-steering-function-user-plane/id";
+        }
+        mandatory true;
+        description
+          "Reference to the containing TSF-UP instance.";
+      }
+      leaf qos-profile {
+        type qos-profile;
+        description
+          "The QoS profile for this AC, which can be used by the
+           UPSF in its steering decision.";
+      }
+      container session-context-filter {
+        leaf port-id {
+          type bbf-yang:string-ascii64;
+          description
+            "Physical or logical port, or MAC learning domain ID
+             (e.g., VLAN ID) used to identify the access node facing
+             interface for this access connection.";
+        }
+        leaf source-mac-address {
+          type yang:mac-address;
+          description
+            "The source MAC address for the access connection.";
+        }
+        uses bbf-classif:vlan-tag-match {
+          augment "vlan-tag-match-type/vlan-tagged/tag" {
+            description
+              "Adds the VLAN tag to match.";
+            uses bbf-classif:dot1q-tag-ranges-or-any;
+          }
+        }
+        description
+          "The filter that can be applied on the TSF-UP to match for
+           this specific AC. An absent leaf, or a VLAN tag field set
+           to 'any', matches any value. A default AC may use such
+           wildcards to map unidentified subscribers to a default
+           Session Steering Context.";
+      }
+      container state {
+        config false;
+        description
+          "Operational state for the AC.";
+        uses common-operational-state;
+        leaf associated-ssc {
+          type leafref {
+            path "/subscriber-session-steering-domain"
+               + "/session-steering-context/id";
+          }
+          description
+            "The Session Steering Context associated to this AC.";
+        }
+      }
+    }
+
+    list network-connection {
+      key id;
+      description
+        "A Network Connection (NC) instance.";
+      uses entity-information;
+      leaf maintenance {
+        type required-maintenance;
+        default none;
+        description
+          "The required maintenance for the entity.";
+      }
+      leaf sgrp-independent-steering {
+        type boolean;
+        default false;
+        description
+          "If 'true', the NC technology supports steering Subscriber
+           Groups individually.";
+      }
+      leaf topology {
+        type enumeration {
+          enum point-to-point {
+            description
+              "A point-to-point NC with one TSF-UP endpoint and one
+               active SG-UP logical port.";
+          }
+          enum point-to-multipoint {
+            description
+              "A point-to-multipoint NC with multiple TSF-UP endpoint
+               and one active SG-UP logical port.";
+          }
+          enum multipoint-to-multipoint {
+            description
+              "A multipoint-to-multipoint NC with multiple TSF-UP
+               endpoint and multiple active SG-UP.";
+          }
+        }
+        mandatory true;
+        description
+          "Identifies the topology of the NC.";
+      }
+      leaf-list supported-qos-profile {
+        type qos-profile;
+        description
+          "A QoS profile supported by this NC.";
+      }
+
+      container state {
+        config false;
+        description
+          "Operational state for the NC.";
+        uses common-operational-state;
+        container associated-endpoints {
+          uses endpoint-reference-list;
+          description
+            "Identifies the SG-UP LP and TSF-UP Endpoints
+             associated with this network connection.";
+        }
+      }
+    }
+
+    list subscriber-group {
+      key id;
+      description
+        "A Subscriber Group (SGRP) instance.";
+      uses entity-information;
+      container config {
+        description
+          "Configuration for the Subscriber Group.";
+        leaf maintenance {
+          type required-maintenance;
+          default none;
+          description
+            "The required maintenance for the entity.";
+        }
+        leaf enable-make-before-break {
+          type boolean;
+          description
+            "Identifies that Make Before Break (MBB) procedures
+             should be performed for this Subscriber Group.";
+        }
+        leaf sgrp-mobility {
+          type enumeration {
+            enum lp-switchover {
+              description
+                "The active logical port changes; the NCs are
+                 unchanged.";
+            }
+            enum tsf-re-map {
+              description
+                "The Subscriber Group moves to different NCs.";
+            }
+          }
+          mandatory true;
+          description
+            "How the Subscriber Group is moved between SG-UPs.";
+        }
+        leaf max-session-count {
+          type uint32;
+          mandatory true;
+          description
+            "The maximum number of sessions supported by this
+             Subscriber Group.";
+        }
+        leaf-list supported-service-profile {
+          type service-profile;
+          description
+            "A service profile supported by this Subscriber Group.";
+        }
+        leaf-list supported-qos-profile {
+          type qos-profile;
+          description
+            "A QoS profile supported by this Subscriber Group.";
+        }
+        container desired-mapping {
+          description
+            "The desired mapping to SG-UP LP and TSF-UP Endpoints.";
+          uses endpoint-reference-list;
+        }
+      }
+      container state {
+        config false;
+        description
+          "Operational state for the Subscriber Group.";
+        uses common-operational-state;
+        leaf-list ssc {
+          type leafref {
+            path "/subscriber-session-steering-domain"
+               + "/session-steering-context/id";
+          }
+          description
+            "A Session Steering Context associated with this
+             Subscriber Group.";
+        }
+        leaf-list nc {
+          type leafref {
+            path "/subscriber-session-steering-domain"
+               + "/network-connection/id";
+          }
+          description
+            "A Network Connection associated with this
+             Subscriber Group, derived from its SG-UP logical port.";
+        }
+        leaf allocated-session-count {
+          type uint32;
+          description
+            "The number of sessions currently allocated to this
+             Subscriber Group.";
+        }
+        leaf mbb-capable {
+          type boolean;
+          default false;
+          description
+            "If 'true', Make Before Break (MBB) procedures are
+             supported.";
+        }
+        container degraded {
+          presence
+            "Indicates that an underlying resource that the
+             Subscriber Group depends on no longer supports its
+             requirements.";
+          description
+            "If present, the Subscriber Group is degraded. The
+             contents identify the cause.";
+          leaf-list service-profile {
+            type leafref {
+              path "../../../config/supported-service-profile";
+            }
+            description
+              "A service profile of this Subscriber Group that is no
+               longer supported by its current SG-UP.";
+          }
+          leaf-list qos-profile {
+            type leafref {
+              path "../../../config/supported-qos-profile";
+            }
+            description
+              "A QoS profile of this Subscriber Group that is no
+               longer supported by its current NC(s).";
+          }
+        }
+        container current-mapping {
+          description
+            "The current state of the entity which is to be compared
+             with the desired state.";
+          uses endpoint-reference-list;
+          leaf mbb-state {
+            type enumeration {
+              enum disabled {
+                description
+                  "Make Before Break (MBB) has not been enabled.";
+              }
+              enum not-supported {
+                description
+                  "Make Before Break (MBB) procedures are not
+                   supported by the underlying network.";
+              }
+              enum userplane-mbb-initiation-required {
+                description
+                  "Step 1: Waiting for the SG-CP to prepare the new
+                   desired userplane.";
+              }
+              enum upstream-switchover-required {
+                description
+                  "Step 2: Waiting for the TSF-CP to switch over the
+                   upstream traffic. If the TSF needs no change,
+                   steps 3 and 4 are skipped.";
+              }
+              enum downstream-switchover-required {
+                description
+                  "Step 3: Waiting for the SG-CP to switch over the
+                   downstream traffic.";
+              }
+              enum upstream-finalization-required {
+                description
+                  "Step 4: Waiting for the TSF-CP to remove any
+                   forwarding rules that are no longer required.";
+              }
+              enum failed {
+                description
+                  "Make Before Break (MBB) process has failed.";
+              }
+              enum idle {
+                description
+                  "Step 0 or 5: Make Before Break (MBB) process is
+                   not active.";
+              }
+            }
+            mandatory true;
+            description
+              "Identifies the current status of Make Before Break
+               (MBB) operation.";
+          }
+          leaf time-last-mbb-state-changed {
+            type yang:date-and-time;
+            config false;
+            description
+              "Timestamp for the last Make Before Break (MBB)
+               state change.";
+          }
+          leaf time-last-successful-mbb {
+            type yang:date-and-time;
+            config false;
+            description
+              "Timestamp for the last successful Make Before Break
+               (MBB) completion.";
+          }
+        }
+      }
+    }
+
+    list session-steering-context {
+      key id;
+      description
+        "A Session Steering Context (SSC) instance.";
+      uses entity-information;
+      container config {
+        description
+          "The identifiers and desired state of this Session
+           Steering Context.";
+        leaf ssc-type {
+          type identityref {
+            base ssc-type;
+          }
+          mandatory true;
+          description
+            "The type of Session Steering Context, identifying
+             whether the session terminates in-domain, is handed over
+             to another domain, or is a default Session Steering
+             Context.";
+        }
+        leaf session-type {
+          type identityref {
+            base session-type;
+          }
+          description
+            "The type of session according to TR-146 types
+             (e.g., PPPoE, IPoE, Ethernet).";
+        }
+        leaf access-connection {
+          type leafref {
+            path "/subscriber-session-steering-domain"
+               + "/access-connection/id";
+          }
+          mandatory true;
+          description
+            "The Access Connection related to the Session Steering
+             Context.";
+        }
+        container nc-session-headers {
+          leaf source-mac-address {
+            type yang:mac-address;
+            description
+              "The source MAC address on the network connection side.
+               If not present, then the MAC is unchanged.";
+          }
+          leaf s-vlan {
+            type bbf-dot1qt:vlan-id;
+            description
+              "The service VLAN identifier on the network connection
+               side. If not present, then the S-VLAN is unchanged.";
+          }
+          leaf s-vlan-pbit {
+            type bbf-dot1qt:pbit;
+            description
+              "The priority (802.1p PCP) to set in the S-VLAN tag on
+               the network connection side. If not present, then the
+               S-VLAN priority is unchanged.";
+          }
+          leaf c-vlan {
+            type bbf-dot1qt:vlan-id;
+            description
+              "The customer VLAN identifier on the network connection
+               side. If not present, then the C-VLAN is unchanged.";
+          }
+          leaf c-vlan-pbit {
+            type bbf-dot1qt:pbit;
+            description
+              "The priority (802.1p PCP) to set in the C-VLAN tag on
+               the network connection side. If not present, then the
+               C-VLAN priority is unchanged.";
+          }
+          description
+            "The session headers on the network connection side.
+             The TSF-CP uses these in combination with the
+             access-side session-context-filter on the AC to
+             derive the required header rewrite rules. If any item is
+             not present, then no change to the corresponding headers
+             will be made.";
+        }
+        container customer-reference {
+          description
+            "Information identifying the customer or CPE associated
+             with this session context, such as CPE/ONU serial number
+             and/or Line ID.";
+          leaf circuit-id {
+            type bbf-yang:string-ascii63-or-empty;
+            default "";
+            description
+              "The circuit ID related to the Session Steering
+               Context.";
+            reference
+              "TR-178 - R-117;
+               TR-177 - R-08";
+          }
+          leaf remote-id {
+            type bbf-yang:string-ascii63-or-empty;
+            default "";
+            description
+              "The remote-id related to the Session Steering
+               Context.";
+            reference
+              "TR-178 - R-120;
+               TR-177 - R-10";
+          }
+          leaf mac-address {
+            type yang:mac-address;
+            description
+              "The MAC address of the CPE or RG.";
+          }
+          leaf serial-number {
+            type bbf-yang:string-ascii64;
+            description
+              "The serial number of the CPE or ONU.";
+          }
+          leaf description {
+            type bbf-yang:string-ascii64;
+            description
+              "Free-text customer reference information.";
+          }
+        }
+        leaf required-service-profile {
+          type service-profile;
+          description
+            "The service profile required by this Session Steering
+             Context.";
+        }
+        leaf required-qos-profile {
+          type qos-profile;
+          description
+            "The QoS profile required by this Session Steering
+             Context.";
+        }
+        container desired-mapping {
+          leaf sgrp {
+            type leafref {
+              path "/subscriber-session-steering-domain"
+                 + "/subscriber-group/id";
+            }
+            mandatory true;
+            description
+              "The desired Subscriber Group on which the Session
+               Steering Context is to be placed.";
+          }
+          description
+            "The desired state of the entity which is to be compared
+             with the current state.";
+        }
+      }
+      container state {
+        config false;
+        description
+          "The currently reported state of this Session Steering
+           Context.";
+        uses common-operational-state;
+        container current-mapping {
+          description
+            "The current status of the Session Steering Context
+             mapping to Subscriber Group.";
+          leaf sg-sgrp {
+            type leafref {
+              path "/subscriber-session-steering-domain"
+                 + "/subscriber-group/id";
+            }
+            description
+              "The current Subscriber Group on which the Session
+               Steering Context is placed from the perspective of the
+               SG-CP.";
+          }
+          leaf tsf-sgrp {
+            type leafref {
+              path "/subscriber-session-steering-domain"
+                 + "/subscriber-group/id";
+            }
+            description
+              "The current Subscriber Group on which the Session
+               Steering Context is placed from the perspective of
+               the TSF-CP.";
+          }
+        }
+        leaf subscriber-session-status {
+          type enumeration {
+            enum active {
+              description
+                "The subscriber session is active.";
+            }
+            enum inactive {
+              description
+                "The subscriber session is inactive.";
+            }
+          }
+          description
+            "The state of the subscriber session, where applicable.";
+        }
+      }
+    }
+  }
+}
