@@ -1,5 +1,10 @@
 ## Broadband Forum YANG Modules
 
+### 2026-11-25: [TR-474 Issue 1](https://www.broadband-forum.org/technical/download/TR-474.pdf) Subscriber Session Steering
+*Tag: [TR-474-v1.0.0](https://github.com/BroadbandForum/yang/tree/TR-474-v1.0.0)*
+
+TR-474 defines the Subscriber Session Steering (3S) architecture and framework.
+
 ### 2026-11-02: [TR-385 Issue 3 Amendment 1](https://www.broadband-forum.org/technical/download/TR-385_Issue-3_Amendment-1.pdf) YANG Modules for PON Management
 *Tag: [TR-385-v3.1.0](https://github.com/BroadbandForum/yang/tree/TR-385-v3.1.0)*
 
